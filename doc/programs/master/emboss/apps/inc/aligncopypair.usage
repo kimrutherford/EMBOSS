@@ -5,7 +5,7 @@ Here is a sample session with <b>aligncopypair</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>aligncopypair </b>
-Reads and writes pairs from alignments
+Read and write pairs from alignments
 Input (aligned) sequence set: <b>globins.msf</b>
 Output alignment [globins.aligncopypair]: <b></b>
 

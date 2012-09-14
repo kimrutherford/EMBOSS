@@ -4,14 +4,17 @@
 <p><h3>File: qatests.server.tdbfetch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# qatests.server.tdbfetch 2011-07-15 12:00:00
+# qatests.server.tdbfetch 2012-07-15 12:00:00
 
 DB edam [
   method: dbfetch
   hasacc: N
   format: "obo"
+  edamfmt: "EDAM_format:2549"
+  edamdat: "EDAM_data:2858"
+  edamtpc: "EDAM_topic:0770"
   type: "text, obo"
-  example: "0000352, 0001223"
+  example: "0338, 1929, EDAM_operation:0338, EDAM_format:1929, 0000338, 0001929"
   comment: "EMBRACE Data and Methods (EDAM) Ontology."
 ]
 
@@ -19,6 +22,9 @@ DB embl [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2183, EDAM_format:1954, EDAM_format:2330, EDAM_format:2185, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "M10051, K00650, D87894, AJ242600, HSINSR, HSFOS, ROD894, LOP242600, J00231.1, K00650.1, D87894.1, AJ242600.1"
   comment: "EMBL Nucleotide Sequence Database, Europe's primary nucleotide sequence resource. The main sources of the DNA and RNA sequences in the database are submissions from individual researchers, genome sequencing projects and patent applications."
@@ -28,6 +34,9 @@ DB emblcds [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2184, EDAM_format:1954, EDAM_format:2330, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "AAA59452, AAA59452.1"
   comment: "EMBLCDS is a database of nucleotide sequences of the CDS (coding sequence) features, as annotated in EMBL database. EMBLCDS record contains the nucleotide sequence of the CDS region, accompanying annotation from the parent nucleotide entry and the additional automatically generated annotation."
@@ -37,39 +46,18 @@ DB emblcon [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2183, EDAM_format:1954, EDAM_format:2330, EDAM_format:2185, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "CH003588, CH003588.1"
   comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries."
 ]
 
-DB emblconexp [
-  method: dbfetch
-  hasacc: N
-  format: "embl, fasta"
-  type: "text, sequence, features"
-  example: "AL672111, AL672111.1"
-  comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries. Expanded entries including the complete sequence."
-]
-
-DB emblsva [
-  method: dbfetch
-  hasacc: N
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-  format: "fasta, gff3, uniprot, uniprotxml"
-  type: "text, features, sequence"
-  example: "P06213, P29306, P68255, INSR_HUMAN, 1433X_MAIZE, 1433T_RAT"
-  comment: "The UniProt Knowledgebase (UniProtKB) is the central access point for extensive curated protein information, including function, classification, and cross-references. Search UniProtKB to retrieve “everything that is known” about a particular sequence."
-]
-
-DB uniref100 [
-  method: dbfetch
-  hasacc: N
-  format: "fasta"
-  type: "sequence"
-  example: "UniRef100_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
 ]
 
@@ -77,6 +65,9 @@ DB uniref50 [
   method: dbfetch
   hasacc: N
   format: "fasta"
+  edamfmt: "EDAM_format:1954, EDAM_format:2332"
+  edamdat: "EDAM_data:2047, EDAM_data:0849, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "sequence"
   example: "UniRef50_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
@@ -86,6 +77,9 @@ DB uniref90 [
   method: dbfetch
   hasacc: N
   format: "fasta"
+  edamfmt: "EDAM_format:1954, EDAM_format:2332"
+  edamdat: "EDAM_data:2047, EDAM_data:0849, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "sequence"
   example: "UniRef90_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
@@ -95,6 +89,9 @@ DB unisave [
   method: dbfetch
   hasacc: N
   format: "fasta, uniprot"
+  edamfmt: "EDAM_format:1954, EDAM_format:1977"
+  edamdat: "EDAM_data:2047, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "text, features, sequence"
   example: "P06213, P06213.157, P06213.3, INSR_HUMAN"
   comment: "The UniProtKB Sequence/Annotation Version Archive (UniSave) is a repository of UniProtKB/Swiss-Prot and UniProtKB/TrEMBL entry versions."
@@ -104,6 +101,9 @@ DB uspto_prt [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2330, EDAM_format:1954, EDAM_format:2332"
+  edamdat: "EDAM_data:0855, EDAM_data:2888, EDAM_data:2018, EDAM_data:2047"
+  edamtpc: "EDAM_topic:3043"
   type: "text, sequence, features"
   example: "AAA00053, I02590, AAA00053.1"
   comment: "Protein sequences appearing in patents from the United States Patent and Trademark Office (USPTO)."

@@ -1,10 +1,37 @@
+/* @include ensvariation ******************************************************
+**
+** Ensembl Genetic Variation functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.30 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSVARIATION_H
 #define ENSVARIATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvdata.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPGvtranscriptvariationadaptor ************************************
 **
@@ -31,10 +58,34 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEGvconsequenceType ***********************************************
+/* @enum EnsEGvconsequenceType ************************************************
 **
-** Ensembl Genetic Variation Consequence Type enumeration.
+** Ensembl Genetic Variation Consequence Type enumeration
 **
+** @value ensEGvconsequenceTypeNULL Null
+** @value ensEGvconsequenceTypeEssentialsplicesite Essential splice site
+** @value ensEGvconsequenceTypeStopgained Stop codon gained
+** @value ensEGvconsequenceTypeStoplost Top codon lost
+** @value ensEGvconsequenceTypeComplexindel Complex insertion or deletion
+** @value ensEGvconsequenceTypeFrameshiftcoding Frameshift in coding sequence
+** @value ensEGvconsequenceTypeSplicesite Splice site
+** @value ensEGvconsequenceTypePartialcodon Partial codon
+** @value ensEGvconsequenceTypeSynonymouscoding Synonymous
+** @value ensEGvconsequenceTypeRegulatoryregion Regulatory region
+** @value ensEGvconseqeunceTypeWithinmaturemirna Within a mature miRNA
+** @value ensEGvconsequenceType5primeutr 5-prime untranslated region
+** @value ensEGvconsequenceType3primeutr 3-prime untranslated region
+** @value ensEGvconsequenceTypeUtr Untranslated region
+** @value ensEGvconsequenceTypeIntronic Intronic
+** @value ensEGvconsequenceTypeNmdtranscript Nonsense-mediated decay transcript
+** @value ensEGvconsequenceTypeWithinnoncodinggene Non-coding gene
+** @value ensEGvconsequenceTypeUpstream Upstream
+** @value ensEGvconsequenceTypeDownstream Downstream
+** @value ensEGvconsequenceTypeHgmdmutation HGMD Mutation
+** @value ensEGvconsequenceTypeNoconsequence No consequence
+** @value ensEGvconsequenceTypeIntergenic Intergenic
+** @value ensEGvconsequenceType_ _
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvconsequenceType
@@ -67,9 +118,9 @@ typedef enum EnsOGvconsequenceType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPGvconsequence ****************************************************
 **
@@ -160,9 +211,9 @@ typedef struct EnsSGvtranscriptvariation
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -180,7 +231,7 @@ EnsPGvconsequence ensGvconsequenceNewIni(ajuint transcriptid,
 
 EnsPGvconsequence ensGvconsequenceNewRef(EnsPGvconsequence gvc);
 
-void ensGvconsequenceDel(EnsPGvconsequence* Pgvc);
+void ensGvconsequenceDel(EnsPGvconsequence *Pgvc);
 
 ajint ensGvconsequenceGetEnd(
     const EnsPGvconsequence gvc);
@@ -222,12 +273,12 @@ size_t ensGvconsequenceCalculateMemsize(const EnsPGvconsequence gvc);
 EnsEGvconsequenceType ensGvconsequenceTypeFromStr(
     const AjPStr consequencetype);
 
-const char* ensGvconsequenceTypeToChar(
+const char *ensGvconsequenceTypeToChar(
     EnsEGvconsequenceType gvct);
 
 ajuint ensGvconsequenceTypesFromSet(const AjPStr gvctset);
 
-AjBool ensGvconsequenceTypesToSet(ajuint gvctbf, AjPStr* Pgvctset);
+AjBool ensGvconsequenceTypesToSet(ajuint gvctbf, AjPStr *Pgvctset);
 
 /* Ensembl Genetic Variation Transcript Variation */
 
@@ -251,7 +302,7 @@ EnsPGvtranscriptvariation ensGvtranscriptvariationNewIni(
 EnsPGvtranscriptvariation ensGvtranscriptvariationNewRef(
     EnsPGvtranscriptvariation gvtv);
 
-void ensGvtranscriptvariationDel(EnsPGvtranscriptvariation* Pgvtv);
+void ensGvtranscriptvariationDel(EnsPGvtranscriptvariation *Pgvtv);
 
 EnsPGvtranscriptvariationadaptor ensGvtranscriptvariationGetAdaptor(
     const EnsPGvtranscriptvariation gvtv);
@@ -345,7 +396,7 @@ EnsPGvtranscriptvariationadaptor ensGvtranscriptvariationadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensGvtranscriptvariationadaptorDel(
-    EnsPGvtranscriptvariationadaptor* Pgvtva);
+    EnsPGvtranscriptvariationadaptor *Pgvtva);
 
 /*
 ** End of prototype definitions

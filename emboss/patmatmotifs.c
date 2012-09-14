@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 			       (float) length, ' ', 0);
 
 		ajFmtPrintS(&tmpstr, "*motif %S", name);
-		ajFeatTagAdd(gf, NULL, tmpstr);
+		ajFeatTagAddSS(gf, NULL, tmpstr);
 
 		if(start-5<0)
 		    zstart = 0;

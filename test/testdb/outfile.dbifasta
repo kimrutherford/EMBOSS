@@ -1,19 +1,19 @@
 ########################################
 # Program: dbifasta
-# Rundate: Thu 15 Jul 2010 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Dbname: TESTDB
 # Release: 0.0
-# Date: 15/07/10
-# CurrentDirectory: /homes/pmr/devemboss/test/testdb/
+# Date: 15/07/12
+# CurrentDirectory: /home/emboss/devemboss/test/testdb/
 # IndexDirectory: ./
-# IndexDirectoryPath: /homes/pmr/devemboss/test/testdb/
+# IndexDirectoryPath: /home/emboss/devemboss/test/testdb/
 # Maxindex: 0
 # Fields: 3
 #   Field 1: id
 #   Field 2: acc
 #   Field 3: des
 # Directory: ./
-# DirectoryPath: /homes/pmr/devemboss/test/testdb/
+# DirectoryPath: /home/emboss/devemboss/test/testdb/
 # Filenames: testdb.fasta
 # Exclude: 
 # Files: 1

@@ -1,10 +1,37 @@
+/* @include ensassemblyexception **********************************************
+**
+** Ensembl Assembly Exception functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.24 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSASSEMBLYEXCEPTION_H
 #define ENSASSEMBLYEXCEPTION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdatabaseadaptor.h"
 
@@ -13,14 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @const EnsEAssemblyexceptionType *******************************************
+/* @enum EnsEAssemblyexceptionType ********************************************
 **
-** Ensembl Assembly Exception Type enumeration.
+** Ensembl Assembly Exception Type enumeration
 **
+** @value ensEAssemblyexceptionTypeNULL Null
+** @value ensEAssemblyexceptionTypeHAP Haplotype Region
+** @value ensEAssemblyexceptionTypePAR Pseudo-Autosomal Region
+** @value ensEAssemblyexceptionTypePatchFix Sequence Patch Region
+** @value ensEAssemblyexceptionTypePatchNovel Novel Patch Region
+** @value ensEAssemblyexceptionTypeHAPRef Haplotype Reference Region
+** @value ensEAssemblyexceptionTypePatchFixRef Sequence Patch Reference Region
+** @value ensEAssemblyexceptionTypePatchNovelRef Novel Patch Reference Region
+** @@
 ******************************************************************************/
 
 typedef enum EnsOAssemblyexceptionType
@@ -38,9 +74,9 @@ typedef enum EnsOAssemblyexceptionType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPAssemblyexceptionadaptor *****************************************
 **
@@ -50,10 +86,9 @@ typedef enum EnsOAssemblyexceptionType
 ** @alias EnsOAssemblyexceptionadaptor
 **
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @attr CacheByReferenceSeqregion [AjPTable] Ensembl Assembly Exception cache
-**                                            indexed on reference
-**                                            Ensembl Sequence Region
-**                                            identifiers
+** @attr CacheByReferenceSeqregion [AjPTable]
+** AJAX Table of AJAX unsigned integer (Ensembl Sequence Region identifier) key
+** and Ensembl Assembly Exception value data
 ** @@
 ******************************************************************************/
 
@@ -123,9 +158,9 @@ typedef struct EnsSAssemblyexception
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -150,7 +185,7 @@ EnsPAssemblyexception ensAssemblyexceptionNewIni(
 
 EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae);
 
-void ensAssemblyexceptionDel(EnsPAssemblyexception* Pae);
+void ensAssemblyexceptionDel(EnsPAssemblyexception *Pae);
 
 EnsPAssemblyexceptionadaptor ensAssemblyexceptionGetAdaptor(
     const EnsPAssemblyexception ae);
@@ -224,7 +259,7 @@ ajuint ensAssemblyexceptionCalculateReferenceLength(
 
 EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(const AjPStr type);
 
-const char* ensAssemblyexceptionTypeToChar(
+const char *ensAssemblyexceptionTypeToChar(
     const EnsEAssemblyexceptionType aet);
 
 AjBool ensListAssemblyexceptionSortReferenceEndAscending(AjPList aes);
@@ -242,7 +277,7 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionadaptorNew(
 EnsPDatabaseadaptor ensAssemblyexceptionadaptorGetDatabaseadaptor(
     EnsPAssemblyexceptionadaptor aea);
 
-void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor* Paea);
+void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor *Paea);
 
 AjBool ensAssemblyexceptionadaptorFetchAll(
     const EnsPAssemblyexceptionadaptor aea,

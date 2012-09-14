@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -36,7 +36,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Reports on signal cleavage sites in a protein sequence
+Report on signal cleavage sites in a protein sequence
 
 <H2>
     Description
@@ -61,7 +61,7 @@ Here is a sample session with <b>sigcleave</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sigcleave </b>
-Reports on signal cleavage sites in a protein sequence
+Report on signal cleavage sites in a protein sequence
 Input protein sequence(s): <b>tsw:ach2_drome</b>
 Minimum weight [3.5]: <b></b>
 Output report [ach2_drome.sig]: <b></b>
@@ -76,8 +76,8 @@ Output report [ach2_drome.sig]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Reports on signal cleavage sites in a protein sequence
-Version: EMBOSS:6.4.0.0
+Report on signal cleavage sites in a protein sequence
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -104,7 +104,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -205,7 +208,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -274,11 +277,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -322,7 +349,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -566,7 +593,7 @@ ID   ACH2_DROME              Reviewed;         576 AA.
 AC   P17644; Q0KI18; Q9VC73;
 DT   01-AUG-1990, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1990, sequence version 1.
-DT   15-JUN-2010, entry version 110.
+DT   18-APR-2012, entry version 123.
 DE   RecName: Full=Acetylcholine receptor subunit alpha-like 2;
 DE   Flags: Precursor;
 GN   Name=nAcRalpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
@@ -616,15 +643,15 @@ RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0004889; F:acetylcholine-activated cation-selective channel activity; IEA:InterPro.
 DR   GO; GO:0004872; F:receptor activity; IEA:UniProtKB-KW.
-DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
-DR   InterPro; IPR006202; Neur_chan_lig_bd.
+DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
+DR   InterPro; IPR006202; Neur_chan_lig-bd.
 DR   InterPro; IPR006201; Neur_channel.
 DR   InterPro; IPR006029; Neurotrans-gated_channel_TM.
 DR   InterPro; IPR018000; Neurotransmitter_ion_chnl_CS.
-DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt_N.
-DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
+DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt.
 DR   PANTHER; PTHR18945; Neur_channel; 1.
 DR   Pfam; PF02931; Neur_chan_LBD; 1.
 DR   Pfam; PF02932; Neur_chan_memb; 1.
@@ -634,11 +661,11 @@ DR   SUPFAM; SSF90112; Neu_channel_TM; 1.
 DR   SUPFAM; SSF63712; Neur_chan_LBD; 1.
 DR   TIGRFAMs; TIGR00860; LIC; 1.
 DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
-PE   1: Evidence at protein level;
+PE   2: Evidence at transcript level;
 KW   Cell junction; Cell membrane; Complete proteome; Disulfide bond;
-KW   Glycoprotein; Ion transport; Ionic channel; Membrane;
-KW   Postsynaptic cell membrane; Receptor; Signal; Synapse; Transmembrane;
-KW   Transport.
+KW   Glycoprotein; Ion transport; Ionic channel; Ligand-gated ion channel;
+KW   Membrane; Postsynaptic cell membrane; Receptor; Reference proteome;
+KW   Signal; Synapse; Transmembrane; Transmembrane helix; Transport.
 FT   SIGNAL        1     21       Probable.
 FT   CHAIN        22    576       Acetylcholine receptor subunit alpha-like
 FT                                2.
@@ -711,7 +738,7 @@ By default the output is in 'motif' format.
 <pre>
 ########################################
 # Program: sigcleave
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: sigcleave
 #    -sequence tsw:ach2_drome
 # Report_format: motif
@@ -946,12 +973,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
+<td>Find antigenic sites in proteins</td>
 </tr>
 
 <tr>
 <td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+<td>Find PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
 
 <tr>
@@ -966,7 +993,7 @@ None.
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
+<td>Search protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
@@ -981,7 +1008,7 @@ None.
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+<td>Scan protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>

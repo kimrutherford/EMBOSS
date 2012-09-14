@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -26,9 +26,9 @@
 #
 #=======================================
 
-  Start     End  Strand Pattern         Mismatch Sequence
-      1       6       + pattern: AAGCTT        . aagctt
-   1267    1272       + pattern: AAGCTT        . aagctt
+  Start     End  Strand Pattern        Mismatch Sequence
+      1       6       + pattern:AAGCTT        . aagctt
+   1267    1272       + pattern:AAGCTT        . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -49,7 +49,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -69,9 +69,9 @@
 #
 #=======================================
 
-  Start     End  Strand Pattern                             Mismatch Sequence
-    429     448       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    491     510       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+  Start     End  Strand Pattern                            Mismatch Sequence
+    429     448       + targetseq:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    491     510       + targetseq:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -92,7 +92,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -114,20 +114,20 @@
 #
 #=======================================
 
-  Start     End  Strand Pattern              Mismatch Sequence
-    429     438       + test1: cg(2)c(3)taac        . cggccctaac
-    491     500       + test1: cg(2)c(3)taac        . cggccctaac
-    535     544       + test1: cg(2)c(3)taac        . cggccctaac
-    605     614       + test1: cg(2)c(3)taac        . cggccctaac
-    631     640       + test1: cg(2)c(3)taac        . cggccctaac
-    695     704       + test1: cg(2)c(3)taac        . cggccctaac
-    721     730       + test1: cg(2)c(3)taac        . cggccctaac
-    753     762       + test1: cg(2)c(3)taac        . cggccctaac
-    293     302       + test2: cctagc(3)ta          . cctagcccta
-    439     448       + test2: cctagc(3)ta          . cctagcccta
-    469     478       + test2: cctagc(3)ta          . cctagcccta
-    501     510       + test2: cctagc(3)ta          . cctagcccta
-    801     810       + test2: cctagc(3)ta          . cctagcccta
+  Start     End  Strand Pattern             Mismatch Sequence
+    429     438       + test1:cg(2)c(3)taac        . cggccctaac
+    491     500       + test1:cg(2)c(3)taac        . cggccctaac
+    535     544       + test1:cg(2)c(3)taac        . cggccctaac
+    605     614       + test1:cg(2)c(3)taac        . cggccctaac
+    631     640       + test1:cg(2)c(3)taac        . cggccctaac
+    695     704       + test1:cg(2)c(3)taac        . cggccctaac
+    721     730       + test1:cg(2)c(3)taac        . cggccctaac
+    753     762       + test1:cg(2)c(3)taac        . cggccctaac
+    293     302       + test2:cctagc(3)ta          . cctagcccta
+    439     448       + test2:cctagc(3)ta          . cctagcccta
+    469     478       + test2:cctagc(3)ta          . cctagcccta
+    501     510       + test2:cctagc(3)ta          . cctagcccta
+    801     810       + test2:cctagc(3)ta          . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -148,7 +148,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -159,7 +159,7 @@
 #=======================================
 #
 # Sequence: L46634     from: 1   to: 1272
-# HitCount: 19
+# HitCount: 27
 #
 # Pattern_name Mismatch Pattern
 # pat1                0 cggccctaaccctagcccta
@@ -170,26 +170,34 @@
 #
 #=======================================
 
-  Start     End  Strand Pattern                        Mismatch Sequence
-    429     448       + pat1: cggccctaaccctagcccta            . cggccctaaccctagcccta
-    491     510       + pat1: cggccctaaccctagcccta            . cggccctaaccctagcccta
-    429     448       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    491     510       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    535     554       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    605     624       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    631     650       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    695     714       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    721     740       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    753     772       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    791     810       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggcccgaaccctagcccta
-    753     764       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    721     732       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    695     706       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    631     642       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    605     616       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    535     546       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    491     502       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    429     440       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+  Start     End  Strand Pattern                       Mismatch Sequence
+    429     448       + pat1:cggccctaaccctagcccta            . cggccctaaccctagcccta
+    491     510       + pat1:cggccctaaccctagcccta            . cggccctaaccctagcccta
+    429     448       + pat2:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    491     510       + pat2:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    535     554       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    605     624       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    631     650       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    695     714       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    721     740       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    753     772       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    791     810       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggcccgaaccctagcccta
+    753     763       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    753     764       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    721     731       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    721     732       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    695     705       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    695     706       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    631     641       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    631     642       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    605     615       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    605     616       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    535     545       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    535     546       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    491     501       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    491     502       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    429     439       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    429     440       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------
@@ -198,7 +206,7 @@
 # Total_sequences: 1
 # Total_length: 1272
 # Reported_sequences: 1
-# Reported_hitcount: 19
+# Reported_hitcount: 27
 #---------------------------------------
 </pre>
 </td></tr></table><p>

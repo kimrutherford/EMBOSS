@@ -2,6 +2,11 @@
 
 use English;
 
+#
+# Reads the doc/programs/html/index.html file
+#
+# writes the Appdocs page
+
 $text = "";
 while (<>) {
     $text .= $_;

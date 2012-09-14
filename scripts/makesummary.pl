@@ -14,7 +14,7 @@ print "========================\n\n";
 
 printf "%15s %6s %6s\n\n", "Package", "Errors", "Warn";
 
-$myerr = int(`grep -c error: $ENV{HOME}/out/emboss.out`);
+$myerr = int(`egrep -c 'undefined reference|error:' $ENV{HOME}/out/emboss.out`);
 $mywarn = int(`grep -c warning: $ENV{HOME}/out/emboss.out`);
 $tote = $myerr;
 $totw = $mywarn;
@@ -37,7 +37,7 @@ $embassylist = `ls -1 embassy/*/Makefile.am`;
 foreach $x (@embassy) {
     $x =~ /^embassy\/([^\/]+)\/Makefile.am/;
     $name = $1;
-    $myerr = int(`grep -c error: $ENV{HOME}/out/embassy-$name.out`);
+    $myerr = int(`grep -c 'undefined reference|error:' $ENV{HOME}/out/embassy-$name.out`);
     $mywarn =  int(`grep -c warning: $ENV{HOME}/out/embassy-$name.out`);
     $tote += $myerr;
     $totw += $mywarn;

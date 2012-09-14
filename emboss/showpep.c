@@ -428,7 +428,7 @@ static AjBool showpep_MatchFeature(const AjPFeature gf, AjPFeature newgf,
     ** is this a child of a join() ?
     ** if it is a child, then we use the previous result of MatchPatternTags
     */
-    if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+    if(!ajFeatIsMultiple(gf))
 	*tagsmatch = showpep_MatchPatternTags(gf, newgf, tag, value,
 					      stricttags);
 
@@ -550,12 +550,12 @@ static AjBool showpep_MatchPatternTags(const AjPFeature gf,
 	    ** that match the criteria
 	    */
 	    if(stricttags)
-	    	ajFeatTagAdd(newgf, tagnam, tagval);
+	    	ajFeatTagAddSS(newgf, tagnam, tagval);
         }
 
         /* if not strict tags then need to see all the tags */
         if(!stricttags)
-            ajFeatTagAdd(newgf, tagnam, tagval);
+            ajFeatTagAddSS(newgf, tagnam, tagval);
     }
     ajListIterDel(&titer);
 

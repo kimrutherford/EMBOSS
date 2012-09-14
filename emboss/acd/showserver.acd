@@ -1,8 +1,8 @@
 application: showserver [
-  documentation: "Displays information on configured servers"
+  documentation: "Display information on configured servers"
   groups: "Data resources"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input [
@@ -10,12 +10,12 @@ section: input [
   type: "page"
 ]
 
-  string: server [
+  string: servername [
     default: ""
     additional: "Y"
     information: "Name of a single server to give information on"
     knowntype: "emboss database name"
-    relations: "EDAM:0001056 identifier Database name"
+    relations: "EDAM_identifier:1056 Database name"
   ]
 
 endsection: input
@@ -53,14 +53,14 @@ section: additional [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
    boolean: full [
     additional: "Y"
     default: "N"
     information: "Display all columns"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: methods [
@@ -69,28 +69,28 @@ section: additional [
     information: "Display 'methods' column"
     help: "This displays the access methods that can be used on this
            server, for all, query or ID access"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: count [
     additional: "Y"
     default: "Y"
     information: "Display 'count' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: cachefile [
     additional: "Y"
     default: "Y"
     information: "Display 'cachefile' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: url [
     additional: "Y"
     default: "Y"
     information: "Display 'URL' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: fields [
@@ -99,7 +99,7 @@ section: additional [
     information: "Display 'fields' column"
     help: "This displays the search fields that can be used on this
            server, other than the standard 'id' or 'acc' fields."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: defined [
@@ -108,14 +108,14 @@ section: additional [
     information: "Display 'defined' column"
     help: "This displays a short name for the file containing the
            server definition"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: serverversion [
     additional: "Y"
     default: "$(full)"
     information: "Display 'version' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: sortby [
@@ -145,49 +145,49 @@ section: advanced [
            '-nohead -notype -noid -noquery -noall' \
            to get only the comment output, you can specify \
            '-only -comment'"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: scope [
     default: "@(!$(only))"
     information: "Display 'scope' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: id [
     default: "@(!$(only))"
     information: "Display 'id' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: query [
     default: "@(!$(only))"
     information: "Display 'qry' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: all [
     default: "@(!$(only))"
     information: "Display 'all' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: comment [
     default: "@(!$(only))"
     information: "Display 'comment' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -201,7 +201,7 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "showserver output"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: output

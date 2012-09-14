@@ -1,14 +1,61 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embest ************************************************************
+**
+** NUCLEUS EST alignment functions
+**
+** @author Copyright (C) 1996 Richard Mott
+** @author Copyright (C) 1998 Peter Rice revised for EMBOSS
+** @version $Revision: 1.13 $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embest_h
-#define embest_h
+#ifndef EMBEST_H
+#define EMBEST_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajseqdata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 /* Definition of the padding-character in CAF */
 
 #define padding_char '-'
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -37,9 +84,34 @@ HASH_LIST;
 
 
 
+/* @enum directions ***********************************************************
+**
+** Path matrix cell type and direction
+**
+** @value INTRON Intron
+** @value DIAGONAL Diagonal in path
+** @value DELETE_EST Delete in EST sequence
+** @value DELETE_GENOME Delete in genome sequence
+** @value FORWARD_SPLICED_INTRON Forward spliced intron
+** @value REVERSE_SPLICED_INTRON Reverse spliced intron
+******************************************************************************/
+
 typedef enum { INTRON=0, DIAGONAL=1, DELETE_EST=2, DELETE_GENOME=3,
 	       FORWARD_SPLICED_INTRON=-1, REVERSE_SPLICED_INTRON=-2
 } directions;
+
+
+
+
+/* @enum donor_acceptor *******************************************************
+**
+** Donors and acceptors for slice site junctions
+**
+** @value NOT_A_SITE Not a splice site
+** @value DONOR      Donor site
+** @value ACCEPTOR   Acceptor site
+******************************************************************************/
+
 typedef enum { NOT_A_SITE=1, DONOR=2, ACCEPTOR=4 } donor_acceptor;
 
 
@@ -87,6 +159,12 @@ enum base_types /* just defines a, c, g, t as 0-3, for indexing purposes. */
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -128,8 +206,6 @@ AjPSeq       embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed );
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBEST_H */

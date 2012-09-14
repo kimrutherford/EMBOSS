@@ -32,7 +32,9 @@ RA   Delius H., Cortese R.;
 RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
-DR   EPD; EP11112; HS_FTH1.
+DR   Ensembl-Gn; ENSG00000167996; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000273550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000406545; Homo_sapiens.
 DR   RFAM; RF00037; IRE.
 XX
 FH   Key             Location/Qualifiers
@@ -73,6 +75,9 @@ FT                   /db_xref="PDB:2CN7"
 FT                   /db_xref="PDB:2FHA"
 FT                   /db_xref="PDB:2IU2"
 FT                   /db_xref="PDB:2Z6M"
+FT                   /db_xref="PDB:3AJO"
+FT                   /db_xref="PDB:3AJP"
+FT                   /db_xref="PDB:3AJQ"
 FT                   /db_xref="PDB:3ERZ"
 FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
@@ -128,7 +133,9 @@ RA   Delius H., Cortese R.;
 RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
-DR   EPD; EP11112; HS_FTH1.
+DR   Ensembl-Gn; ENSG00000167996; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000273550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000406545; Homo_sapiens.
 DR   RFAM; RF00037; IRE.
 XX
 FH   Key             Location/Qualifiers
@@ -169,6 +176,9 @@ FT                   /db_xref="PDB:2CN7"
 FT                   /db_xref="PDB:2FHA"
 FT                   /db_xref="PDB:2IU2"
 FT                   /db_xref="PDB:2Z6M"
+FT                   /db_xref="PDB:3AJO"
+FT                   /db_xref="PDB:3AJP"
+FT                   /db_xref="PDB:3AJQ"
 FT                   /db_xref="PDB:3ERZ"
 FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"

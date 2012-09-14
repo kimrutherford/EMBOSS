@@ -1,12 +1,64 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embpat ************************************************************
+**
+** General routines for pattern matching.
+**
+** @author Copyright (C) Alan Bleasby 1999
+** @version $Revision: 1.24 $
+** @modified $Date: 2011/10/18 14:24:25 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embpat_h
-#define embpat_h
+#ifndef EMBPAT_H
+#define EMBPAT_H
 
 
+
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajlist.h"
+#include "ajfile.h"
+#include "ajpat.h"
+#include "ajseqdata.h"
+#include "ajarr.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -86,6 +138,12 @@ typedef struct EmbSPatRestrict
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -143,6 +201,18 @@ void            embPatFuzzSearch(ajuint type, ajuint begin,
 				 ajuint * const *skipm,
 				 ajuint *hits, ajuint m, const void **tidy);
 
+void            embPatFuzzSearchAll(ajuint type, ajuint begin,
+                                    const AjPStr pattern,
+                                    const AjPStr name,
+                                    const AjPStr text, AjPList l,
+                                    ajuint plen, ajuint mismatch,
+                                    AjBool left, AjBool right,
+                                    ajint *buf, EmbPPatBYPNode off,
+                                    const ajuint *sotable,
+                                    ajuint solimit, const AjPStr regexp,
+                                    ajuint * const *skipm,
+                                    ajuint *hits, ajuint m, const void **tidy);
+
 ajuint          embPatGetType(const AjPStr pattern, AjPStr *cleanpat,
 			      ajuint mismatch,
 			      AjBool protein,
@@ -153,6 +223,10 @@ void		embPatFuzzSearchII (AjPPatComp thys, ajuint begin,
 				   const AjPStr name, const AjPStr text,
 				   AjPList l, ajuint mismatch, ajuint *hits,
 				   const void **tidy);
+void		embPatFuzzSearchAllII (AjPPatComp thys, ajuint begin,
+                                       const AjPStr name, const AjPStr text,
+                                       AjPList l, ajuint mismatch, ajuint *hits,
+                                       const void **tidy);
 ajuint   	embPatGetTypeII (AjPPatComp thys, const AjPStr pattern,
 				 ajuint mismatch, AjBool protein);
 
@@ -166,6 +240,10 @@ EmbPPatMatch    embPatMatchFind  (const AjPStr regexp, const AjPStr strng,
 				  AjBool left, AjBool right);
 EmbPPatMatch    embPatMatchFindC (const AjPStr regexp, const char *sptr,
 				  AjBool left, AjBool right);
+EmbPPatMatch    embPatMatchFindAll  (const AjPStr regexp, const AjPStr strng,
+                                     AjBool left, AjBool right);
+EmbPPatMatch    embPatMatchFindAllC (const AjPStr regexp, const char *sptr,
+                                     AjBool left, AjBool right);
 ajuint          embPatMatchGetEnd (const EmbPPatMatch data, ajuint indexnum);
 ajuint          embPatMatchGetLen (const EmbPPatMatch data, ajuint indexnum);
 ajuint          embPatMatchGetNumber (const EmbPPatMatch data);
@@ -208,6 +286,8 @@ ajint           embPatRestrictNameCompare(const void *a, const void *b);
 ajint           embPatRestrictStartCompare(const void *a, const void *b);
 EmbPPatMatch    embPatSeqMatchFind  (const AjPSeq seq, const AjPStr reg);
 EmbPPatMatch    embPatSeqMatchFindC (const AjPSeq seq, const char *reg);
+EmbPPatMatch    embPatSeqMatchFindAll  (const AjPSeq seq, const AjPStr reg);
+EmbPPatMatch    embPatSeqMatchFindAllC (const AjPSeq seq, const char *reg);
 AjPStr          embPatSeqCreateRegExp  (const AjPStr thys, AjBool protein);
 AjPStr          embPatSeqCreateRegExpC (const char *ptr, AjBool protein);
 
@@ -248,8 +328,6 @@ ajuint          embPatVariablePattern (const AjPStr pattern,
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBPAT_H */

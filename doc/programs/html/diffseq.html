@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -95,7 +95,7 @@ Second features output [AY411291.diffgff]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Compare and report features of two similar sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -150,7 +150,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -166,7 +169,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -308,7 +314,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -377,11 +383,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -425,7 +455,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -494,11 +524,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -542,7 +596,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -635,7 +689,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-aoutfeat" associated featout qualifiers
+<td align="left" colspan=5>"-aoutfeat" associated featout qualifiers
 </td>
 </tr>
 
@@ -688,7 +742,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-boutfeat" associated featout qualifiers
+<td align="left" colspan=5>"-boutfeat" associated featout qualifiers
 </td>
 </tr>
 
@@ -906,7 +960,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -918,7 +972,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -938,12 +1000,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -1007,7 +1071,7 @@ RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
 RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
 RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
 RT   ;
-RL   Submitted (16-NOV-2003) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-NOV-2003) to the INSDC.
 RL   Celera Genomics, 45 West Gude Drive, Rockville, MD 20850, USA
 XX
 CC   This sequence was made by sequencing genomic exons and ordering
@@ -1074,7 +1138,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: diffseq
 #    [-asequence] tembl:x65923
 #    [-bsequence] tembl:ay411291
@@ -1100,7 +1164,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 
 
 X65923 284-284 Length: 1
-Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P35544' db_xref='GOA:P62861' db_xref='HGNC:3597' db_xref='InterPro:IPR000626' db_xref='InterPro:IPR006846' db_xref='InterPro:IPR019954' db_xref='InterPro:IPR019955' db_xref='InterPro:IPR019956' db_xref='UniProtKB/Swiss-Prot:P35544' db_xref='UniProtKB/Swiss-Prot:P62861' protein_id='CAA46716.1'
+Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P35544' db_xref='GOA:P62861' db_xref='H-InvDB:HIT000322806.14' db_xref='HGNC:3597' db_xref='InterPro:IPR000626' db_xref='InterPro:IPR006846' db_xref='InterPro:IPR019954' db_xref='InterPro:IPR019955' db_xref='InterPro:IPR019956' db_xref='PDB:2L7R' db_xref='UniProtKB/Swiss-Prot:P35544' db_xref='UniProtKB/Swiss-Prot:P62861' protein_id='CAA46716.1'
 Feature: misc_feature 279-458 note='S30 part'
 Sequence: t
 Sequence: c
@@ -1131,10 +1195,10 @@ AY411291 228-228 Length: 1
 <pre>
 ##gff-version 3
 ##sequence-region AY411291 1 402
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.4.0.0
-AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID=AY411291.1;note=SNP in X65923;replace=t
+#!Source-version EMBOSS 6.5.0.0
+AY411291	diffseq	sequence_conflict	228	228	1	+	.	ID=AY411291.1;note=SNP in X65923;replace=t
 </pre>
 </td></tr></table><p>
 <p><h3>File: X65923.diffgff</h3>
@@ -1142,10 +1206,10 @@ AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID=AY411291.1;note=SNP in X
 <pre>
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.4.0.0
-X65923	diffseq	sequence_conflict	284	284	1.000	+	.	ID=X65923.1;note=SNP in AY411291;replace=c
+#!Source-version EMBOSS 6.5.0.0
+X65923	diffseq	sequence_conflict	284	284	1	+	.	ID=X65923.1;note=SNP in AY411291;replace=c
 </pre>
 </td></tr></table><p>
 

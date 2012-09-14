@@ -96,8 +96,8 @@ int main(int argc, char **argv)
     embInit("dottup", argc, argv);
 
     wordlen = ajAcdGetInt("wordsize");
-    seq1    = ajAcdGetSeq("asequence");
-    seq2    = ajAcdGetSeq("bsequence");
+    seq1    = ajAcdGetSeq("bsequence");
+    seq2    = ajAcdGetSeq("asequence");
     graph   = ajAcdGetGraph("graph");
     boxit   = ajAcdGetBoolean("boxit");
     stretch = ajAcdGetToggle("stretch");
@@ -297,7 +297,7 @@ static void dottup_drawPlotlines(void *x, void *cl)
 
 static void dottup_plotMatches(const AjPList list)
 {
-    ajListMapread(list,dottup_drawPlotlines, NULL);
+    ajListMapread(list, &dottup_drawPlotlines, NULL);
 
     return;
 }

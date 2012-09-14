@@ -1,0 +1,442 @@
+                                  featmerge
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Merge two overlapping feature tables
+
+Description
+
+   featmerge reads two feature tables for the same sequence and combines
+   them into a single table.
+
+Algorithm
+
+   The second feature table is appended to the first, retaining the
+   original order.
+
+Usage
+
+   This run merges the GFF format output of one of the antigenic examples
+   with the original feature table read from SwissProt. Here is a sample
+   session with featmerge
+
+
+% featmerge
+Merge two overlapping feature tables
+Input feature table: tsw:actb1_takru
+Second input feature table: ../antigenic-keep/actb1_takru.antigenic
+Features output [actb1_takru.gff]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Merge two overlapping feature tables
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-afeatures]         features   (no help text) features value
+  [-bfeatures]         features   (no help text) features value
+  [-outfeat]           featout    [unknown.gff] Output features UFO
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-afeatures" associated qualifiers
+   -fformat1           string     Features format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -fopenfile1         string     Features file name
+   -fask1              boolean    Prompt for begin/end/reverse
+   -fbegin1            integer    Start of the features to be used
+   -fend1              integer    End of the features to be used
+   -freverse1          boolean    Reverse (if DNA)
+   -fcircular1         boolean    Circular sequence features
+
+   "-bfeatures" associated qualifiers
+   -fformat2           string     Features format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
+   -fopenfile2         string     Features file name
+   -fask2              boolean    Prompt for begin/end/reverse
+   -fbegin2            integer    Start of the features to be used
+   -fend2              integer    End of the features to be used
+   -freverse2          boolean    Reverse (if DNA)
+   -fcircular2         boolean    Circular sequence features
+
+   "-outfeat" associated qualifiers
+   -offormat3          string     Output feature format
+   -ofopenfile3        string     Features file name
+   -ofextension3       string     File name extension
+   -ofdirectory3       string     Output directory
+   -ofname3            string     Base file name
+   -ofsingle3          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   The input is a standard EMBOSS feaure query.
+
+   Data can also be read from feaure output in any supported format format
+   written by an EMBOSS application. featmerge reads two feature UFOs.
+
+  Input files for usage example
+
+   'tsw:actb1_takru' is a sequence entry in the example protein database
+   'tsw'
+
+  File: ../antigenic-keep/actb1_takru.antigenic
+
+##gff-version 3
+##sequence-region ACTB1_TAKRU 1 375
+#!Date 2012-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.5.0.0
+ACTB1_TAKRU     antigenic       epitope 214     222     1.207   .       .
+ID=ACTB1_TAKRU.1;note=*pos 218
+ACTB1_TAKRU     antigenic       epitope 131     145     1.187   .       .
+ID=ACTB1_TAKRU.2;note=*pos 137
+ACTB1_TAKRU     antigenic       epitope 5       12      1.166   .       .
+ID=ACTB1_TAKRU.3;note=*pos 8
+ACTB1_TAKRU     antigenic       epitope 27      38      1.164   .       .
+ID=ACTB1_TAKRU.4;note=*pos 32
+ACTB1_TAKRU     antigenic       epitope 160     183     1.136   .       .
+ID=ACTB1_TAKRU.5;note=*pos 173
+ACTB1_TAKRU     antigenic       epitope 367     372     1.135   .       .
+ID=ACTB1_TAKRU.6;note=*pos 372
+ACTB1_TAKRU     antigenic       epitope 93      108     1.116   .       .
+ID=ACTB1_TAKRU.7;note=*pos 103
+ACTB1_TAKRU     antigenic       epitope 295     301     1.113   .       .
+ID=ACTB1_TAKRU.8;note=*pos 296
+ACTB1_TAKRU     antigenic       epitope 256     266     1.11    .       .
+ID=ACTB1_TAKRU.9;note=*pos 264
+ACTB1_TAKRU     antigenic       epitope 336     352     1.107   .       .
+ID=ACTB1_TAKRU.10;note=*pos 347
+ACTB1_TAKRU     antigenic       epitope 62      76      1.102   .       .
+ID=ACTB1_TAKRU.11;note=*pos 68
+ACTB1_TAKRU     antigenic       epitope 232     250     1.086   .       .
+ID=ACTB1_TAKRU.12;note=*pos 245
+ACTB1_TAKRU     antigenic       epitope 327     332     1.083   .       .
+ID=ACTB1_TAKRU.13;note=*pos 330
+ACTB1_TAKRU     antigenic       epitope 317     323     1.074   .       .
+ID=ACTB1_TAKRU.14;note=*pos 320
+ACTB1_TAKRU     antigenic       epitope 186     192     1.068   .       .
+ID=ACTB1_TAKRU.15;note=*pos 191
+ACTB1_TAKRU     antigenic       epitope 40      46      1.066   .       .
+ID=ACTB1_TAKRU.16;note=*pos 43
+ACTB1_TAKRU     antigenic       epitope 269     275     1.045   .       .
+ID=ACTB1_TAKRU.17;note=*pos 269
+ACTB1_TAKRU     antigenic       epitope 51      57      1.034   .       .
+ID=ACTB1_TAKRU.18;note=*pos 52
+
+  Database entry: tsw:actb1_takru
+
+ID   ACTB1_TAKRU             Reviewed;         375 AA.
+AC   P68142; P53484;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   16-MAY-2012, entry version 49.
+DE   RecName: Full=Actin, cytoplasmic 1;
+DE   AltName: Full=Beta-actin A;
+DE   Contains:
+DE     RecName: Full=Actin, cytoplasmic 1, N-terminally processed;
+GN   Name=actba;
+OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND TISSUE SPECIFICITY.
+RX   MEDLINE=96275651; PubMed=8683572; DOI=10.1006/jmbi.1996.0347;
+RA   Venkatesh B., Tay B.H., Elgar G., Brenner S.;
+RT   "Isolation, characterization and evolution of nine pufferfish (Fugu
+RT   rubripes) actin genes.";
+RL   J. Mol. Biol. 259:655-665(1996).
+CC   -!- FUNCTION: Actins are highly conserved proteins that are involved
+CC       in various types of cell motility and are ubiquitously expressed
+CC       in all eukaryotic cells.
+CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
+CC       structural filament (F-actin) in the form of a two-stranded helix.
+CC       Each actin can bind to 4 others.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm, cytoskeleton.
+CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
+CC       muscle.
+CC   -!- PTM: Oxidation of Met-44 by MICALs (MICAL1, MICAL2 or MICAL3) to
+CC       form methionine sulfoxide promotes actin filament
+CC       depolymerization. Methionine sulfoxide is produced
+CC       stereospecifically, but it is not known whether the (S)-S-oxide or
+CC       the (R)-S-oxide is produced (By similarity).
+CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
+CC       alpha, beta and gamma have been identified. The alpha actins are
+CC       found in muscle tissues and are a major constituent of the
+CC       contractile apparatus. The beta and gamma actins coexist in most
+CC       cell types as components of the cytoskeleton and as mediators of
+CC       internal cell motility.
+CC   -!- MISCELLANEOUS: There are three different beta-cytoplasmic actins
+CC       in Fugu rubripes.
+CC   -!- SIMILARITY: Belongs to the actin family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
+DR   PIR; S71124; S71124.
+DR   ProteinModelPortal; P68142; -.
+DR   SMR; P68142; 2-375.
+DR   Ensembl; ENSTRUT00000013141; ENSTRUP00000013080; ENSTRUG00000005447.
+DR   eggNOG; COG5277; -.
+DR   GeneTree; ENSGT00630000089629; -.
+DR   InParanoid; P68142; -.
+DR   OMA; IKNLMER; -.
+DR   OrthoDB; EOG41JZC9; -.
+DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-KW.
+DR   GO; GO:0005856; C:cytoskeleton; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   InterPro; IPR004000; Actin-like.
+DR   InterPro; IPR020902; Actin/actin-like_CS.
+DR   InterPro; IPR004001; Actin_CS.
+DR   PANTHER; PTHR11937; Actin_like; 1.
+DR   Pfam; PF00022; Actin; 1.
+DR   PRINTS; PR00190; ACTIN.
+DR   SMART; SM00268; ACTIN; 1.
+DR   PROSITE; PS00406; ACTINS_1; 1.
+DR   PROSITE; PS00432; ACTINS_2; 1.
+DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
+PE   2: Evidence at transcript level;
+KW   Acetylation; ATP-binding; Complete proteome; Cytoplasm; Cytoskeleton;
+KW   Methylation; Nucleotide-binding; Oxidation; Reference proteome.
+FT   CHAIN         1    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000367094.
+FT   INIT_MET      1      1       Removed; alternate (By similarity).
+FT   CHAIN         2    375       Actin, cytoplasmic 1, N-terminally
+FT                                processed.
+FT                                /FTId=PRO_0000000809.
+FT   MOD_RES       1      1       N-acetylmethionine; in Actin, cytoplasmic
+FT                                1; alternate (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate; in Actin, cytoplasmic
+FT                                1, N-terminally processed (By
+FT                                similarity).
+FT   MOD_RES      44     44       Methionine sulfoxide (By similarity).
+FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
+SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
+     MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
+     KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
+     QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL
+     AGRDLTDYLM KILTERGYSF TTTAEREIVR DIKEKLCYVA LDFEQEMGTA ASSSSLEKSY
+     ELPDGQVITI GNERFRCPEA LFQPSFLGME SCGIHETTYN SIMKCDVDIR KDLYANTVLS
+     GGTTMYPGIA DRMQKEITAL APSTMKIKII APPERKYSVW IGGSILASLS TFQQMWISKQ
+     EYDESGPSIV HRKCF
+//
+
+Output file format
+
+   The output is a standard EMBOSS feature file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -offormat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: gff
+   (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+   (nbrf), swissprot (swiss, sw), dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/FeatureFormats.html for further
+   information on feature formats.
+
+   featmerge writes a single feature table. By default the output is in
+   'gff' feature format.
+
+  Output files for usage example
+
+  File: actb1_takru.gff
+
+##gff-version 3
+##sequence-region ACTB1_TAKRU 1 375
+#!Date 2012-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.5.0.0
+ACTB1_TAKRU     SWISSPROT       mature_protein_region   1       375     .
+.       .       ID=ACTB1_TAKRU.1;note=Actin%2C cytoplasmic 1;ftid=PRO_0000367094
+ACTB1_TAKRU     SWISSPROT       cleaved_initiator_methionine    1       1
+.       .       .       ID=ACTB1_TAKRU.2;note=Removed%3B alternate;comment=By si
+milarity
+ACTB1_TAKRU     SWISSPROT       mature_protein_region   2       375     .
+.       .       ID=ACTB1_TAKRU.3;note=Actin%2C cytoplasmic 1%2C N-terminally pro
+cessed;ftid=PRO_0000000809
+ACTB1_TAKRU     SWISSPROT       post_translationally_modified_region    1
+1       .       .       .       ID=ACTB1_TAKRU.4;note=N-acetylmethionine%3B in A
+ctin%2C cytoplasmic 1%3B alternate;comment=By similarity
+ACTB1_TAKRU     SWISSPROT       post_translationally_modified_region    2
+2       .       .       .       ID=ACTB1_TAKRU.5;note=N-acetylglutamate%3B in Ac
+tin%2C cytoplasmic 1%2C N-terminally processed;comment=By similarity
+ACTB1_TAKRU     SWISSPROT       post_translationally_modified_region    44
+44      .       .       .       ID=ACTB1_TAKRU.6;note=Methionine sulfoxide;comme
+nt=By similarity
+ACTB1_TAKRU     SWISSPROT       post_translationally_modified_region    73
+73      .       .       .       ID=ACTB1_TAKRU.7;note=Tele-methylhistidine;comme
+nt=By similarity
+ACTB1_TAKRU     antigenic       epitope 214     222     1.207   .       .
+ID=ACTB1_TAKRU.1;note=*pos 218
+ACTB1_TAKRU     antigenic       epitope 131     145     1.187   .       .
+ID=ACTB1_TAKRU.2;note=*pos 137
+ACTB1_TAKRU     antigenic       epitope 5       12      1.166   .       .
+ID=ACTB1_TAKRU.3;note=*pos 8
+ACTB1_TAKRU     antigenic       epitope 27      38      1.164   .       .
+ID=ACTB1_TAKRU.4;note=*pos 32
+ACTB1_TAKRU     antigenic       epitope 160     183     1.136   .       .
+ID=ACTB1_TAKRU.5;note=*pos 173
+ACTB1_TAKRU     antigenic       epitope 367     372     1.135   .       .
+ID=ACTB1_TAKRU.6;note=*pos 372
+ACTB1_TAKRU     antigenic       epitope 93      108     1.116   .       .
+ID=ACTB1_TAKRU.7;note=*pos 103
+ACTB1_TAKRU     antigenic       epitope 295     301     1.113   .       .
+ID=ACTB1_TAKRU.8;note=*pos 296
+ACTB1_TAKRU     antigenic       epitope 256     266     1.11    .       .
+ID=ACTB1_TAKRU.9;note=*pos 264
+ACTB1_TAKRU     antigenic       epitope 336     352     1.107   .       .
+ID=ACTB1_TAKRU.10;note=*pos 347
+ACTB1_TAKRU     antigenic       epitope 62      76      1.102   .       .
+ID=ACTB1_TAKRU.11;note=*pos 68
+ACTB1_TAKRU     antigenic       epitope 232     250     1.086   .       .
+ID=ACTB1_TAKRU.12;note=*pos 245
+ACTB1_TAKRU     antigenic       epitope 327     332     1.083   .       .
+ID=ACTB1_TAKRU.13;note=*pos 330
+ACTB1_TAKRU     antigenic       epitope 317     323     1.074   .       .
+ID=ACTB1_TAKRU.14;note=*pos 320
+ACTB1_TAKRU     antigenic       epitope 186     192     1.068   .       .
+ID=ACTB1_TAKRU.15;note=*pos 191
+ACTB1_TAKRU     antigenic       epitope 40      46      1.066   .       .
+ID=ACTB1_TAKRU.16;note=*pos 43
+ACTB1_TAKRU     antigenic       epitope 269     275     1.045   .       .
+ID=ACTB1_TAKRU.17;note=*pos 269
+ACTB1_TAKRU     antigenic       epitope 51      57      1.034   .       .
+ID=ACTB1_TAKRU.18;note=*pos 52
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Read and write alignments
+   aligncopypair    Read and write pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Remove a section from a sequence
+   degapseq         Remove non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieve sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Read and write a feature table
+   featreport       Read and write a feature table
+   feattext         Return a feature table original text
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Mask all ambiguity characters in nucleotide sequences with
+                    N
+   maskambigprot    Mask all ambiguity characters in protein sequences with X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Read and write (return) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqcount         Read and count sequences
+   seqret           Read and write (return) sequences
+   seqretsetall     Read and write (return) many sets of sequences
+   seqretsplit      Read sequences and write them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Read and write (return) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Remove vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Peter Rice
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

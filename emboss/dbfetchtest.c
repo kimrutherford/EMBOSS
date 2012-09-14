@@ -23,6 +23,18 @@
 
 
 
+/* @datastatic dbinfo *********************************************************
+**
+** Database information for cachedbfetch
+**
+** @attr name [AjPStr] Name on server
+** @attr displayname [AjPStr] Displayed name
+** @attr format [AjPStr] Format
+** @attr dbtype [AjPStr] Database type
+** @attr description [AjPStr] Description
+** @attr example [AjPStr] Example
+******************************************************************************/
+
 typedef struct dbinfo
 {
     AjPStr name;
@@ -129,7 +141,7 @@ int main(int argc, char **argv)
 	}
 
 	ajFmtPrintF(outf,
-		"#dbs: %d    #tested: %d    #no-sequence-returned: %d\n",
+		"#dbs: %Lu    #tested: %d    #no-sequence-returned: %d\n",
 		ajListGetLength(l), tested, noseqret);
 
 	ajListFree(&l);

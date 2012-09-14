@@ -4,22 +4,22 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="cachedas.html">cachedas</a></td>
-<td>Generates server cache file for DAS servers or for the DAS registry</td>
+<td>Generate server cache file for DAS servers or for the DAS registry</td>
 </tr>
 
 <tr>
 <td><a href="cachedbfetch.html">cachedbfetch</a></td>
-<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
+<td>Generate server cache file for Dbfetch/WSDbfetch data sources</td>
 </tr>
 
 <tr>
 <td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
-<td>Generates server cache file for EB-eye search domains</td>
+<td>Generate server cache file for EB-eye search domains</td>
 </tr>
 
 <tr>
 <td><a href="cacheensembl.html">cacheensembl</a></td>
-<td>Generates server cache file for an Ensembl server</td>
+<td>Generate server cache file for an Ensembl server</td>
 </tr>
 
 <tr>
@@ -34,7 +34,7 @@
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
+<td>Display information on configured databases</td>
 </tr>
 
 </table>

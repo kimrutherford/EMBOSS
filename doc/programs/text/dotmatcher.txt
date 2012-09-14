@@ -54,7 +54,7 @@ Created dotmatcher.ps
 Command line arguments
 
 Draw a threshold dotplot of two sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -96,7 +96,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -112,7 +115,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -189,10 +195,10 @@ ID   HBA_HUMAN               Reviewed;         142 AA.
 AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   15-JUN-2010, entry version 86.
+DT   13-JUN-2012, entry version 108.
 DE   RecName: Full=Hemoglobin subunit alpha;
-DE   AltName: Full=Hemoglobin alpha chain;
 DE   AltName: Full=Alpha-globin;
+DE   AltName: Full=Hemoglobin alpha chain;
 GN   Name=HBA1;
 GN   and
 GN   Name=HBA2;
@@ -298,10 +304,10 @@ AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
 AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   15-JUN-2010, entry version 88.
+DT   13-JUN-2012, entry version 108.
 DE   RecName: Full=Hemoglobin subunit beta;
-DE   AltName: Full=Hemoglobin beta chain;
 DE   AltName: Full=Beta-globin;
+DE   AltName: Full=Hemoglobin beta chain;
 DE   Contains:
 DE     RecName: Full=LVV-hemorphin-7;
 GN   Name=HBB;
@@ -491,7 +497,7 @@ See also
 
                     Program name                          Description
                     dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
-                    dottup       Displays a wordmatch dotplot of two sequences
+                    dottup       Display a wordmatch dotplot of two sequences
                     polydot      Draw dotplots for all-against-all comparison of a sequence set
 
                     dottup, by comparison, has no threshold, using a wordmatch-style

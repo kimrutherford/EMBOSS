@@ -1,8 +1,8 @@
 application: wordmatch [
-  documentation: "Finds regions of identity (exact matches) of two sequences"
+  documentation: "Find regions of identity (exact matches) of two sequences"
   groups: "Alignment:Local"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000288 operation Sequence word comparison"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0288 Sequence word comparison"
 ]
 
 section: input [
@@ -14,13 +14,13 @@ section: input [
     parameter: "Y"
     aligned: "N"  
     type: "any"                                         
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqall: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -35,7 +35,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
-    relations: "EDAM:0001250 data Word size"
+    relations: "EDAM_data:1250 Word size"
   ]
 
 endsection: required
@@ -49,7 +49,7 @@ section: output [
     default: "Y"
     additional: "Y"
     information: "Dump matches as alignments"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
   
   align: outfile [
@@ -57,7 +57,7 @@ section: output [
     nullok: "@(!$(dumpalign))"
     aformat: "match"
     minseqs: "2"
-    relations: "EDAM:0001381 data Sequence alignment (pair)"
+    relations: "EDAM_data:1381 Sequence alignment (pair)"
   ]
  
   outfile: logfile [
@@ -66,14 +66,14 @@ section: output [
     knowntype: "wordmatch log"
     information: "Wordmatch log output file"
     help: "Statistics on distribution of kmers and matches"
-    relations: "EDAM:0001678 data Tool log"
+    relations: "EDAM_data:1678 Tool log"
   ]
   
   toggle: dumpfeat [
     default: "Y"
     additional: "Y"
     information: "Dump matches as feature files"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   featout: aoutfeat [
@@ -81,7 +81,7 @@ section: output [
     nullok: "@(!$(dumpfeat))"
     ofname: "$(asequence.name)"
     offormat: "gff"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
   featout: boutfeat [
@@ -89,7 +89,7 @@ section: output [
     ofname: "$(bsequence.name)"
     offormat: "gff"
     nullok: "@(!$(dumpfeat))"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
  
 endsection: output

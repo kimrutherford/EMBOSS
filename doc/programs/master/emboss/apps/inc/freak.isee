@@ -34,7 +34,7 @@
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
+<td>Calculate nucleic acid melting temperature</td>
 </tr>
 
 <tr>
@@ -49,7 +49,7 @@
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in DNA sequences</td>
+<td>Plot isochores in DNA sequences</td>
 </tr>
 
 <tr>
@@ -69,7 +69,7 @@
 
 <tr>
 <td><a href="pepdigest.html">pepdigest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
+<td>Report on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -79,7 +79,7 @@
 
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
-<td>Calculates statistics of protein properties</td>
+<td>Calculate statistics of protein properties</td>
 </tr>
 
 <tr>

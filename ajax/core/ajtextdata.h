@@ -1,24 +1,103 @@
-#ifdef __cplusplus
-extern "C"
+/* @include ajtextdata ********************************************************
+**
+** AJAX TEXT data structures
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.15 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
+
+#ifndef AJTEXTDATA_H
+#define AJTEXTDATA_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajfile.h"
+#include "ajquerydata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @enum AjETextqryType *******************************************************
+**
+** Enumerated text query type
+**
+** @value TEXTQRY_UNKNOWN Unknown
+** @value TEXTQRY_ENTRY   Single entry
+** @value TEXTQRY_QUERY   Query
+** @value TEXTQRY_ALL     All entries
+******************************************************************************/
+
+typedef enum AjOTextqryType
 {
-#endif
+    TEXTQRY_UNKNOWN,
+    TEXTQRY_ENTRY,
+    TEXTQRY_QUERY,
+    TEXTQRY_ALL
+} AjETextqryType;
 
-#ifndef ajtextdata_h
-#define ajtextdata_h
 
 
-#define NULLFPOS -1
 
-enum AjETextqryType {TEXTQRY_UNKNOWN, TEXTQRY_ENTRY,
-                     TEXTQRY_QUERY, TEXTQRY_ALL};
+/* @enum AjETextqryLink *******************************************************
+**
+** Text query link operators
+**
+** @value TEXTQRY_INIT Undefined
+** @value TEXTQRY_OR   Current OR next
+** @value TEXTQRY_AND  Current AND next
+** @value TEXTQRY_NOT  Current but NOT next
+** @value TEXTQRY_EOR  Current EOR next
+** @value TEXTQRY_MAX  Beyond last defined value
+******************************************************************************/
 
-typedef enum {
-    TEXTQRY_INIT, TEXTQRY_OR,
-    TEXTQRY_AND, TEXTQRY_NOT, TEXTQRY_EOR
-}
-    AjETextqryLink;
+typedef enum AjOTextqryLink
+{
+    TEXTQRY_INIT,
+    TEXTQRY_OR,
+    TEXTQRY_AND,
+    TEXTQRY_NOT,
+    TEXTQRY_EOR,
+    TEXTQRY_MAX
+} AjETextqryLink;
 
-typedef struct AjSTextAccess AjSTextAccess;
 
 
 
@@ -46,7 +125,8 @@ typedef struct AjSTextAccess AjSTextAccess;
 ** @@
 ******************************************************************************/
 
-typedef struct AjSText {
+typedef struct AjSText
+{
     AjPStr  Id;
     AjPStr  Db;
     AjPStr  Setdb;
@@ -65,7 +145,7 @@ typedef struct AjSText {
 
 
 
-/* @data AjPTextin *************************************************************
+/* @data AjPTextin ************************************************************
 **
 ** Ajax Text Input object.
 **
@@ -78,6 +158,7 @@ typedef struct AjSText {
 ** @attr Db [AjPStr] Database name (from commandline, replace on reading)
 ** @attr Qry [AjPStr] Querystring for the entry
 ** @attr Formatstr [AjPStr] Input format name
+** @attr QryFields [AjPStr] Query fields or ID list
 ** @attr Filename [AjPStr] Original filename
 ** @attr List [AjPList] List of USAs to be read
 ** @attr Filebuff [AjPFilebuff] Input buffered file
@@ -91,38 +172,48 @@ typedef struct AjSText {
 ** @attr Text [AjBool] true: save full text of entry
 ** @attr ChunkEntries [AjBool] true: access method returns entries in chunks
 **                             and should be called again when input is empty
+** @attr Dataread [AjBool] true: input through a loader has started to read
+** @attr Datadone [AjBool] true: input through a loader has read everything
 ** @attr Count [ajuint] count of entries so far. Used when ACD reads first
 **                     entry and we need to reuse it in a Next loop
 ** @attr Filecount [ajuint] Number of files read
 ** @attr Entrycount [ajuint] Number of entries in file
+** @attr Datacount [ajuint] Number of data values read in current entry
 ** @attr Records [ajuint] Records processed
 ** @attr Format [AjEnum] Text input format enum
 ** @attr TextFormat [AjEnum] Text input format enum
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-typedef struct AjSTextin {
-  AjPStr Db;
-  AjPStr Qry;
-  AjPStr Formatstr;
-  AjPStr Filename;
-  AjPList List;
-  AjPFilebuff Filebuff;
-  ajlong Fpos;
-  AjPQuery Query;
-  void *TextData;
-  AjBool Search;
-  AjBool Single;
-  AjBool Multi;
-  AjBool CaseId;
-  AjBool Text;
-  AjBool ChunkEntries;
-  ajuint Count;
-  ajuint Filecount;
-  ajuint Entrycount;
-  ajuint Records;
-  AjEnum Format;
-  AjEnum TextFormat;
+typedef struct AjSTextin
+{
+    AjPStr Db;
+    AjPStr Qry;
+    AjPStr Formatstr;
+    AjPStr QryFields;
+    AjPStr Filename;
+    AjPList List;
+    AjPFilebuff Filebuff;
+    ajlong Fpos;
+    AjPQuery Query;
+    void *TextData;
+    AjBool Search;
+    AjBool Single;
+    AjBool Multi;
+    AjBool CaseId;
+    AjBool Text;
+    AjBool ChunkEntries;
+    AjBool Dataread;
+    AjBool Datadone;
+    ajuint Count;
+    ajuint Filecount;
+    ajuint Entrycount;
+    ajuint Datacount;
+    ajuint Records;
+    AjEnum Format;
+    AjEnum TextFormat;
+    ajuint Padding;
 } AjOTextin;
 
 #define AjPTextin AjOTextin*
@@ -166,7 +257,8 @@ typedef struct AjSTextall
 
 
 
-/* @data AjPTextAccess *********************************************************
+
+/* @data AjPTextAccess ********************************************************
 **
 ** Ajax Text Access database reading object.
 **
@@ -184,8 +276,8 @@ typedef struct AjSTextall
 ** @alias AjOTextAccess
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -193,14 +285,15 @@ typedef struct AjSTextall
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSTextAccess
 {
     const char *Name;
-    AjBool (*Access) (AjPTextin textin);
-    AjBool (*AccessFree) (void* qry);
+    AjBool (*Access)(AjPTextin textin);
+    AjBool (*AccessFree)(void* qry);
     const char* Qlink;
     const char* Desc;
     AjBool Alias;
@@ -208,6 +301,7 @@ typedef struct AjSTextAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    ajuint Padding;
 } AjOTextAccess;
 
 #define AjPTextAccess AjOTextAccess*
@@ -215,8 +309,24 @@ typedef struct AjSTextAccess
 
 
 
-#endif
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
-#ifdef __cplusplus
-}
-#endif
+
+
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJTEXTDATA_H */

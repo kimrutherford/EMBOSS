@@ -1,32 +1,62 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajseqbam ***********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX BAM format sequence processing functions
+**
+** These functions control all aspects of AJAX BAM file processing
+**
+** @author Copyright (C) 2010 Peter Rice ported from samtools
+** @version $Revision: 1.36 $
+** @modified 2010-2011 Peter Rice
+** @modified $Date: 2012/06/27 08:07:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajseqbam.h"
+#include "ajassert.h"
+#include "ajlist.h"
+#include "ajtable.h"
+#include "ajutil.h"
+#include "ajsys.h"
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
 
+
 #ifndef WIN32
 #include <sys/file.h>
-#else
+#else /* WIN32 */
+#include <io.h>
 #define open _open
-#endif
+#define fileno _fileno
+#endif /* !WIN32 */
 
-#include "ajseqbam.h"
+
+
+/* Don't define this as a const static int if used in array def */
+#define AJSEQBAM_BLOCK_HEADER_LENGTH 18
+
 
 const char *cigarcode = "MIDNSHP";
 const char *bam_nt16_rev_table = "=ACMGRSVTWYHKDBN";
@@ -77,6 +107,17 @@ unsigned char bam_nt16_table[256] =
 };
 
 
+
+
+/* @datastatic BamPHeaderTag **************************************************
+**
+** BAM header tag
+**
+** @attr value [char*] Value
+** @attr key [char[2]] Key
+** @attr Padding [char[6]] Padding for alignment
+******************************************************************************/
+
 typedef struct BamSHeaderTag
 {
     char *value;
@@ -85,6 +126,18 @@ typedef struct BamSHeaderTag
 } BamOHeaderTag;
 
 #define BamPHeaderTag BamOHeaderTag*
+
+
+
+
+/* @datastatic BamPHeaderLine *************************************************
+**
+** BAM header line
+**
+** @attr tags [AjPList] List of tags
+** @attr type [char[2]] Type
+** @attr Padding [char[6]] Padding for alignment
+******************************************************************************/
 
 typedef struct BamSHeaderLine
 {
@@ -108,6 +161,7 @@ static void           bamHeaderFree(AjPList *header);
 static BamPHeaderTag  bamHeaderLineHasTag(const BamPHeaderLine hline,
                                          const char *key);
 static BamPHeaderLine bamHeaderLineParse(const char *headerLine);
+static AjPTable	      bamHeaderLineToTablemap(const BamPHeaderLine hline);
 static void           bamHeaderLineFree(BamPHeaderLine *hline);
 static int            bamHeaderLineValidate(BamPHeaderLine hline);
 static AjPList        bamHeaderParse2(const char *headerText);
@@ -127,18 +181,50 @@ static int            bamTagExists(const char *tag, const char **tags);
 
 
 
+/* @func ajSeqBamCalend *****************************************************
+**
+** Calculate the rightmost coordinate of an alignment on the reference genome
+**
+** @param [r] c [const AjPSeqBamCore] pointer to the AjPSeqBamCore structure
+** @param [r] cigar [const ajuint*] the corresponding CIGAR array
+** @return [ajuint] the rightmost coordinate, 0-based
+**
+** @release 6.5.0
+******************************************************************************/
 
-/* #funcstatic bam_reg2bin ***************************************************
+ajuint ajSeqBamCalend(const AjPSeqBamCore c, const ajuint *cigar)
+{
+	ajuint k;
+	ajuint end;
+	ajint op;
+	
+	end = c->pos;
+	
+	for (k = 0; k < c->n_cigar; ++k)
+	{
+		op = cigar[k] & BAM_CIGAR_MASK;
+		if (op == BAM_CMATCH || op == BAM_CDIFF || op == BAM_CEQUAL
+			|| op == BAM_CDEL || op == BAM_CREF_SKIP)
+			end += cigar[k] >> BAM_CIGAR_SHIFT;
+	}
+	
+	return end;
+}
+
+
+
+
+/* @func ajSeqBamReg2bin ******************************************************
 **
 ** Calculate the minimum bin that contains a region [beg,end).
 **
-** #param [r] beg [ajuint] start of the region, 0-based
-** #param [r] end [ajuint] end of the region, 0-based
-** #return [int] bin
+** @param [r] beg [ajuint] start of the region, 0-based
+** @param [r] end [ajuint] end of the region, 0-based
+** @return [int] bin
 **
 ******************************************************************************/
 
-static inline int bam_reg2bin(ajuint beg, ajuint end)
+int ajSeqBamReg2bin(ajuint beg, ajuint end)
 {
     --end;
 
@@ -172,51 +258,82 @@ static inline int bam_reg2bin(ajuint beg, ajuint end)
 ** #return [AjPSeqBam] pointer to the destination alignment struct
 **
 ******************************************************************************/
+/*
+//static inline AjPSeqBam bam_copy1(AjPSeqBam bdst, const AjPSeqBam bsrc)
+//{
+//    unsigned char *data = NULL;
+//    int m_data;
+//
+//    /# backup data and m_data #/
+//    data = bdst->data;
+//    m_data = bdst->m_data;
+//    
+//    
+//    /# double the capacity #/
+//    if (m_data < bsrc->m_data)
+//    {
+//        m_data = bsrc->m_data; kroundup32(m_data);
+//        data = (unsigned char*)realloc(data, m_data);
+//    }
+//
+//    /# copy var-len data #/
+//    memcpy(data, bsrc->data, bsrc->data_len);
+//
+//    /# copy the rest #/
+//    *bdst = *bsrc;
+//
+//    /# restore the backup #/
+//    bdst->m_data = m_data;
+//    bdst->data = data;
+//
+//    return bdst;
+//}
+*/
 
-static inline AjPSeqBam bam_copy1(AjPSeqBam bdst, const AjPSeqBam bsrc)
+
+
+
+/* @funcstatic bam_aux_type2size **********************************************
+**
+** Returns size of the array elements in optional fields of alignment records
+**
+** @param [r] x [int] type of the array elements
+** @return [int] size of the array elements
+**
+******************************************************************************/
+
+static inline int bam_aux_type2size(int x)
 {
-    unsigned char *data = NULL;
-    int m_data;
-
-    /* backup data and m_data */
-    data = bdst->data;
-    m_data = bdst->m_data;
-    
-    
-    /* double the capacity */
-    if (m_data < bsrc->m_data)
-    {
-        m_data = bsrc->m_data; kroundup32(m_data);
-        data = (unsigned char*)realloc(data, m_data);
-    }
-
-    /* copy var-len data */
-    memcpy(data, bsrc->data, bsrc->data_len);
-
-    /* copy the rest */
-    *bdst = *bsrc;
-
-    /* restore the backup */
-    bdst->m_data = m_data;
-    bdst->data = data;
-
-    return bdst;
+	if (x == 'C' || x == 'c' || x == 'A')
+	    return 1;
+	else if (x == 'S' || x == 's')
+	    return 2;
+	else if (x == 'I' || x == 'i' || x == 'f')
+	    return 4;
+	else
+	    return 0;
 }
 
 
 
 
-/* @func ajSeqBamHeaderNew *****************************************************
+/* @func ajSeqBamHeaderNew ****************************************************
 **
 ** Create an empty BAM header object
 **
 ** @return [AjPSeqBamHeader] BAM header object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPSeqBamHeader ajSeqBamHeaderNew(void)
 {
-    return (AjPSeqBamHeader)calloc(1, sizeof(AjOSeqBamHeader));
+    AjPSeqBamHeader header=NULL;
+
+    AJNEW0(header);
+
+    return header;
 }
 
 
@@ -224,11 +341,13 @@ AjPSeqBamHeader ajSeqBamHeaderNew(void)
 
 /* @func ajSeqBamHeaderNewTextC ***********************************************
 **
-** Create an empty BAM header object
+** Create an empty BAM header object with given header text
 **
 ** @param [r]  txt [const char*] BAM/SAM header text string
 ** @return [AjPSeqBamHeader] BAM header object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPSeqBamHeader ajSeqBamHeaderNewTextC(const char* txt)
@@ -246,6 +365,89 @@ AjPSeqBamHeader ajSeqBamHeaderNewTextC(const char* txt)
 
 
 
+/* @func ajSeqBamHeaderSetTextC ***********************************************
+**
+** Set BAM header text
+**
+** @param [u]  header [AjPSeqBamHeader] BAM header
+** @param [r]  txt [const char*] header text
+** @return [void]
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+void ajSeqBamHeaderSetTextC(AjPSeqBamHeader header, const char* txt)
+{
+
+    if(header->text)
+	AJFREE(header->text);
+
+    header->l_text = strlen(txt);
+    header->text = ajCharNewResC(txt, header->l_text + 1);
+
+    return;
+}
+
+
+
+
+/* @func ajSeqBamHeaderNewN ***************************************************
+**
+** Create an empty BAM header object with n reference sequences
+**
+** @param [r] n [ajint] Number of target/reference sequences
+** @return [AjPSeqBamHeader] BAM header object
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+AjPSeqBamHeader ajSeqBamHeaderNewN(ajint n)
+{
+    AjPSeqBamHeader ret;
+
+    AJNEW0(ret);
+
+    ret->n_targets = n;
+    AJCNEW0(ret->target_name, n);
+    AJCNEW0(ret->target_len, n);
+
+    return ret;
+}
+
+
+
+
+/* @func ajSeqBamDel **********************************************************
+**
+** Deletes a BAM alignment object
+**
+** @param [d] Pbam [AjPSeqBam*] BAM alignment object
+** @return [void]
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+void ajSeqBamDel(AjPSeqBam *Pbam)
+{
+    AjPSeqBam bam = NULL;
+
+    bam = *Pbam;
+
+    if(bam == 0)
+        return;
+
+    AJFREE(bam->data);
+    AJFREE(*Pbam);
+
+    return;
+}
+
+
+
+
 /* @func ajSeqBamHeaderDel ****************************************************
 **
 ** Destructor for a BAM header object
@@ -253,6 +455,8 @@ AjPSeqBamHeader ajSeqBamHeaderNewTextC(const char* txt)
 ** @param [d] Pheader [AjPSeqBamHeader*] BAM header object
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajSeqBamHeaderDel(AjPSeqBamHeader *Pheader)
@@ -277,7 +481,7 @@ void ajSeqBamHeaderDel(AjPSeqBamHeader *Pheader)
     AJFREE(header->text);
 
     if(header->dict)
-        ajListstrFree(&header->dict);
+        bamHeaderFree(&header->dict);
 
     if(header->rg2lib)
         ajTableFree(&header->rg2lib);
@@ -300,6 +504,8 @@ void ajSeqBamHeaderDel(AjPSeqBamHeader *Pheader)
 ** @param [r] header [const AjPSeqBamHeader] Header structure
 ** @return [int] Always 0 currently
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 int ajSeqBamHeaderWrite(AjPSeqBamBgzf fp, const AjPSeqBamHeader header)
@@ -379,7 +585,7 @@ int ajSeqBamHeaderWrite(AjPSeqBamBgzf fp, const AjPSeqBamHeader header)
 
 
 
-/* @funcstatic bamSwapEndianData ***********************************************
+/* @funcstatic bamSwapEndianData **********************************************
 **
 ** Swap bigendian data in a BAM core data buffer
 **
@@ -388,6 +594,8 @@ int ajSeqBamHeaderWrite(AjPSeqBamBgzf fp, const AjPSeqBamHeader header)
 ** @param [u] data [unsigned char*] Data buffer
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamSwapEndianData(const AjPSeqBamCore c, int data_len,
@@ -434,6 +642,23 @@ static void bamSwapEndianData(const AjPSeqBamCore c, int data_len,
 
             ++s;
         }
+        else if (type == 'B')
+        {
+            ajuint n;
+            ajint Bsize = bam_aux_type2size(*s);
+            memcpy(&n, s + 1, 4);
+
+            if (1 == Bsize) {
+            } else if (2 == Bsize) {
+        	for (i = 0; i < n; i += 2)
+        	    ajByteRevShort((ajshort*)s + 5 + i);
+            } else if (4 == Bsize) {
+        	for (i = 0; i < n; i += 4)
+        	    ajByteRevUint((ajuint*)s + 5 + i);
+            }
+            ajByteRevUint((ajuint*)s+1);
+        }
+
     }
 
     return;
@@ -444,7 +669,7 @@ static void bamSwapEndianData(const AjPSeqBamCore c, int data_len,
 
 /* @func ajSeqBamRead *********************************************************
 **
-** Read a BAM file record
+** Read a BAM alignment record of a read(query sequence)
 **
 ** The file position indicator must be placed right before an
 ** alignment. Upon success, this function will set the position
@@ -454,6 +679,8 @@ static void bamSwapEndianData(const AjPSeqBamCore c, int data_len,
 ** @param [u] fp [AjPSeqBamBgzf] BAM file handler
 ** @param [u] b [AjPSeqBam] read alignment; all members are updated.
 ** @return [int] Number of bytes read from the file
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -464,6 +691,7 @@ int ajSeqBamRead(AjPSeqBamBgzf fp, AjPSeqBam b)
     ajint ret;
     ajint i;
     ajuint x[8];
+    ajint oldsize;
 
     if(!bamInitialized)
     {
@@ -510,9 +738,10 @@ int ajSeqBamRead(AjPSeqBamBgzf fp, AjPSeqBam b)
 
     if(b->m_data < b->data_len)
     {
+	oldsize = b->m_data;
         b->m_data = b->data_len;
         kroundup32(b->m_data);
-        b->data = (unsigned char*)realloc(b->data, b->m_data);
+        AJRESIZE0(b->data, oldsize, b->m_data);
     }
 
     if(ajSeqBamBgzfRead(fp, b->data, b->data_len) != b->data_len)
@@ -533,7 +762,7 @@ int ajSeqBamRead(AjPSeqBamBgzf fp, AjPSeqBam b)
 
 
 
-/* @func ajSeqBamWrite *******************************************************
+/* @func ajSeqBamWrite ********************************************************
 **
 ** Writes BAM alignment data to a BGZ file
 **
@@ -541,6 +770,8 @@ int ajSeqBamRead(AjPSeqBamBgzf fp, AjPSeqBam b)
 ** @param [r] b [const AjPSeqBam] alignment to write
 ** @return [int] number of bytes written to the file
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 int ajSeqBamWrite(AjPSeqBamBgzf fp, const AjPSeqBam b)
@@ -609,6 +840,8 @@ int ajSeqBamWrite(AjPSeqBamBgzf fp, const AjPSeqBam b)
 ** @param [r] b [const AjPSeqBam] BAM record
 ** @return [const char*] Library name
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 const char* ajSeqBamGetLibrary(AjPSeqBamHeader h, const AjPSeqBam b)
@@ -656,36 +889,64 @@ typedef struct BamSCache
 #define BamPCache BamOCache*
 
 
-static const int DEFAULT_BLOCK_SIZE = 64 * 1024;
-static const int MAX_BLOCK_SIZE = 64 * 1024;
+/* @conststatic BAM variables *************************************************
+**
+** Variables defined for BAM processing
+**
+** @value AJSEQBAM_DEFAULT_BLOCK_SIZE [int] Default block size of 64k
+** @value AJSEQBAM_MAX_BLOCK_SIZE [int] Maximum block size also 64k
+** @value AJSEQBAM_BLOCK_FOOTER_LENGTH [int] Block footer length
+** @value AJSEQBAM_GZIP_ID1 [int] Gzip magic id 1
+** @value AJSEQBAM_GZIP_ID2 [int] Gzip magic id 2
+** @value AJSEQBAM_CM_DEFLATE [int] CM deflate
+** @value AJSEQBAM_FLG_FEXTRA [int] Fextra flag
+** @value AJSEQBAM_OS_UNKNOWN [int] Unkown OS value
+** @value AJSEQBAM_BGZF_ID1 [int] Bgfz magic id 1 'B'
+** @value AJSEQBAM_BGZF_ID2 [int] Bgfz magic id 2 'C'
+** @value AJSEQBAM_BGZF_LEN [int] Bgzf length
+** @value AJSEQBAM_BGZF_XLEN [int] Bgzf xlength (length plus 4)
+** @value AJSEQBAM_GZIP_WINDOW_BITS [int] Gzip window bits (-15 - no zlib header
+** @value AJSEQBAM_Z_DEFAULT_MEM_LEVEL [int] Z default memory level
+******************************************************************************/
 
-#define BLOCK_HEADER_LENGTH 18
-static const int BLOCK_FOOTER_LENGTH = 8;
+static const int AJSEQBAM_DEFAULT_BLOCK_SIZE = 64 * 1024;
+static const int AJSEQBAM_MAX_BLOCK_SIZE = 64 * 1024;
 
-static const int GZIP_ID1 = 31;
-static const int GZIP_ID2 = 139;
-static const int CM_DEFLATE = 8;
-static const int FLG_FEXTRA = 4;
-static const int OS_UNKNOWN = 255;
-static const int BGZF_ID1 = 66; /* 'B' */
-static const int BGZF_ID2 = 67; /* 'C' */
-static const int BGZF_LEN = 2;
-static const int BGZF_XLEN = 6; /* BGZF_LEN+4 */
+static const int AJSEQBAM_BLOCK_FOOTER_LENGTH = 8;
 
-static const int GZIP_WINDOW_BITS = -15; /* no zlib header */
-static const int Z_DEFAULT_MEM_LEVEL = 8;
+static const int AJSEQBAM_GZIP_ID1 = 31;
+static const int AJSEQBAM_GZIP_ID2 = 139;
+static const int AJSEQBAM_CM_DEFLATE = 8;
+static const int AJSEQBAM_FLG_FEXTRA = 4;
+static const int AJSEQBAM_OS_UNKNOWN = 255;
+static const int AJSEQBAM_BGZF_ID1 = 66;
+static const int AJSEQBAM_BGZF_ID2 = 67;
+static const int AJSEQBAM_BGZF_LEN = 2;
+static const int AJSEQBAM_BGZF_XLEN = 6;
+
+static const int AJSEQBAM_GZIP_WINDOW_BITS = -15;
+static const int AJSEQBAM_Z_DEFAULT_MEM_LEVEL = 8;
+
+
+
+
 
 static inline void packInt16(unsigned char* buffer, ajushort value);
-static inline int unpackInt16(const unsigned char* buffer);
+
 static inline void packInt32(unsigned char* buffer, ajuint value);
-static inline int BAMBGZFMIN(int x, int y);
+static inline int  unpackInt16(const unsigned char* buffer);
+static inline int  BAMBGZFMIN(int x, int y);
 
 
 
 
-/* #funcstatic packInt16 *****************************************************
+/* @funcstatic packInt16 *****************************************************
 **
-** Undocumented
+** Pack a 2-byte integer
+**
+** @param [u] buffer [unsigned char*] Buffer of at least 2 bytes
+** @param [r] value [ajushort] Unsigned integer value
+** @return [void]
 ******************************************************************************/
 
 static inline void packInt16(unsigned char* buffer, ajushort value)
@@ -696,9 +957,14 @@ static inline void packInt16(unsigned char* buffer, ajushort value)
 
 
 
-/* #funcstatic upackInt16 ****************************************************
+
+/* @funcstatic unpackInt16 ****************************************************
 **
-** Undocumented
+** Unpack a 2-byte integer
+**
+** @param [r] buffer [const unsigned char*] Buffer of at least 2 bytes
+** @return [int] Integer value from first 2 bytes of buffer
+**
 ******************************************************************************/
 
 static inline int unpackInt16(const unsigned char* buffer)
@@ -709,9 +975,14 @@ static inline int unpackInt16(const unsigned char* buffer)
 
 
 
-/* #funcstatic packInt32 *****************************************************
+
+/* @funcstatic packInt32 *****************************************************
 **
-** Undocumented
+** Pack a 4-byte integer
+**
+** @param [u] buffer [unsigned char*] Buffer of at least 4 bytes
+** @param [r] value [ajuint] Unsigned integer value
+** @return [void]
 ******************************************************************************/
 
 static inline void packInt32(unsigned char* buffer, ajuint value)
@@ -725,9 +996,14 @@ static inline void packInt32(unsigned char* buffer, ajuint value)
 
 
 
-/* #funcstatic BAMBGZFMIN ****************************************************
+
+/* @funcstatic BAMBGZFMIN ****************************************************
 **
-** Undocumented
+** Return minimum of two integers
+**
+** @param [r] x [int] First integer
+** @param [r] y [int] Second integer
+** @return [int] Lowest integer value
 ******************************************************************************/
 
 static inline int BAMBGZFMIN(int x, int y)
@@ -738,7 +1014,8 @@ static inline int BAMBGZFMIN(int x, int y)
 
 
 
-/* @funcstatic bamReportError **************************************************
+
+/* @funcstatic bamReportError *************************************************
 **
 ** Save error message in the BGZ file error attribute
 **
@@ -746,11 +1023,13 @@ static inline int BAMBGZFMIN(int x, int y)
 ** @param [r] message [const char*] message text
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamReportError(AjPSeqBamBgzf fp, const char* message)
 {
-    ajUser("++bamReportError '%s'", message);
+    ajWarn("++bamReportError '%s'", message);
     fp->error = message;
 
     return;
@@ -765,6 +1044,8 @@ static void bamReportError(AjPSeqBamBgzf fp, const char* message)
 **
 ** @return [AjPSeqBamBgzf] BGZ file object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPSeqBamBgzf bamBgzfNew(void)
@@ -772,12 +1053,12 @@ static AjPSeqBamBgzf bamBgzfNew(void)
     AjPSeqBamBgzf fp;
 
     fp = calloc(1, sizeof(AjOSeqBamBgzf));
-    fp->uncompressed_block_size = MAX_BLOCK_SIZE;
-    fp->uncompressed_block = malloc(MAX_BLOCK_SIZE);
-    fp->compressed_block_size = MAX_BLOCK_SIZE;
-    fp->compressed_block = malloc(MAX_BLOCK_SIZE);
+    fp->uncompressed_block_size = AJSEQBAM_MAX_BLOCK_SIZE;
+    fp->uncompressed_block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
+    fp->compressed_block_size = AJSEQBAM_MAX_BLOCK_SIZE;
+    fp->compressed_block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
     fp->cache_size = 0;
-    fp->cache = ajTableNew(512);
+    fp->cache = NULL;
 
     return fp;
 }
@@ -792,6 +1073,8 @@ static AjPSeqBamBgzf bamBgzfNew(void)
 ** @param [r] fd [int] File descriptor of opened file
 ** @return [AjPSeqBamBgzf] BGZ file object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPSeqBamBgzf bamBgzfOpenfdRead(int fd)
@@ -808,6 +1091,8 @@ static AjPSeqBamBgzf bamBgzfOpenfdRead(int fd)
     fp->file_descriptor = fd;
     fp->open_mode = 'r';
     fp->file = file;
+    fp->cache = ajTableNew(512);
+
     fseek(fp->file, 0L, SEEK_SET);
 
     return fp;
@@ -824,6 +1109,8 @@ static AjPSeqBamBgzf bamBgzfOpenfdRead(int fd)
 ** @param [r] is_uncompressed [char] If non-zero, file is uncompressed
 ** @return [AjPSeqBamBgzf] BGZ file object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPSeqBamBgzf bamBgzfOpenfdWrite(int fd, char is_uncompressed)
@@ -842,10 +1129,10 @@ static AjPSeqBamBgzf bamBgzfOpenfdWrite(int fd, char is_uncompressed)
     fp->owned_file = 0;
     fp->is_uncompressed = is_uncompressed;
     fp->file = file;
-    fp->uncompressed_block_size = DEFAULT_BLOCK_SIZE;
+    fp->uncompressed_block_size = AJSEQBAM_DEFAULT_BLOCK_SIZE;
     fp->uncompressed_block = NULL;
-    fp->compressed_block_size = MAX_BLOCK_SIZE;
-    fp->compressed_block = malloc(MAX_BLOCK_SIZE);
+    fp->compressed_block_size = AJSEQBAM_MAX_BLOCK_SIZE;
+    fp->compressed_block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
     fp->block_address = 0;
     fp->block_offset = 0;
     fp->block_length = 0;
@@ -862,13 +1149,14 @@ static AjPSeqBamBgzf bamBgzfOpenfdWrite(int fd, char is_uncompressed)
 ** Open a named BGZ file for reading or writing
 **
 ** @param [r] path [const char*] File path
-** @param [r] mode [const char*] Fil eopen mode 'r' 'R' 'w' or 'W'
+** @param [r] mode [const char*] File open mode 'r' 'R' 'w' or 'W'
 ** @return [AjPSeqBamBgzf] BGZ file object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
-AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path,
-                                const char*  mode)
+AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path, const char*  mode)
 {
     AjPSeqBamBgzf fp = NULL;
     int fd;
@@ -880,7 +1168,7 @@ AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path,
         oflag = O_RDONLY;
 #ifdef WIN32
         oflag |= O_BINARY;
-#endif
+#endif /* WIN32 */
         fd = open(path, oflag);
 
         if(fd == -1)
@@ -893,7 +1181,7 @@ AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path,
         oflag = O_WRONLY | O_CREAT | O_TRUNC;
 #ifdef WIN32
         oflag |= O_BINARY;
-#endif
+#endif /* WIN32 */
         fd = open(path, oflag, 0666);
 
         if(fd == -1)
@@ -919,6 +1207,8 @@ AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path,
 ** @param [r] mode [const char*] File open mode 'r' 'R' 'w' or 'W'
 ** @return [AjPSeqBamBgzf] BGZip BAM file
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPSeqBamBgzf ajSeqBamBgzfOpenfd(int fd, const char * mode)
@@ -937,6 +1227,115 @@ AjPSeqBamBgzf ajSeqBamBgzfOpenfd(int fd, const char * mode)
 
 
 
+/* @func ajSeqBamBgzfSetInfile ************************************************
+**
+** Sets data structure to read from an open BGZip BAM file 
+**
+** @param [u] gzfile [AjPSeqBamBgzf] BGZip BAM file
+** @param [u] inf [AjPFile] Open input file object 
+** @return [AjBool] True on success
+** @release 6.5.0
+******************************************************************************/
+
+AjBool ajSeqBamBgzfSetInfile(AjPSeqBamBgzf gzfile, AjPFile inf)
+{
+    if(!inf)
+        return ajFalse;
+
+    gzfile->file_descriptor = fileno(ajFileGetFileptr(inf));
+    gzfile->open_mode = 'r';
+    gzfile->owned_file = 0;
+    gzfile->is_uncompressed = '\0';
+    gzfile->file = ajFileGetFileptr(inf);
+    gzfile->uncompressed_block_size = AJSEQBAM_DEFAULT_BLOCK_SIZE;
+    gzfile->uncompressed_block = NULL;
+    gzfile->compressed_block_size = AJSEQBAM_MAX_BLOCK_SIZE;
+    gzfile->compressed_block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
+    gzfile->block_address = 0;
+    gzfile->block_offset = 0;
+    gzfile->block_length = 0;
+    gzfile->error = NULL;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajSeqBamBgzfSetOutfile ***********************************************
+**
+** Sets data structure to write to an open BGZip BAM file 
+**
+** @param [u] gzfile [AjPSeqBamBgzf] BGZip BAM file
+** @param [u] outf [AjPFile] Open output file object 
+** @return [AjBool] True on success
+** @release 6.5.0
+******************************************************************************/
+
+AjBool ajSeqBamBgzfSetOutfile(AjPSeqBamBgzf gzfile, AjPFile outf)
+{
+    if(!outf)
+        return ajFalse;
+
+    gzfile->file_descriptor = fileno(ajFileGetFileptr(outf));
+    gzfile->open_mode = 'w';
+    gzfile->owned_file = 0;
+    gzfile->is_uncompressed = '\0';
+    gzfile->file = ajFileGetFileptr(outf);
+    gzfile->uncompressed_block_size = AJSEQBAM_DEFAULT_BLOCK_SIZE;
+    gzfile->uncompressed_block = NULL;
+    gzfile->compressed_block_size = AJSEQBAM_MAX_BLOCK_SIZE;
+    gzfile->compressed_block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
+    gzfile->block_address = 0;
+    gzfile->block_offset = 0;
+    gzfile->block_length = 0;
+    gzfile->error = NULL;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajSeqBamBgzfNew *****************************************************
+**
+** Constructs a BGZip BAM file by file
+**
+** @param [u] file [FILE*] open file
+** @param [r] mode [const char*] File open mode 'r' 'R' 'w' or 'W'
+** @return [AjPSeqBamBgzf] BGZip BAM file
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+AjPSeqBamBgzf ajSeqBamBgzfNew(FILE* file, const char*  mode)
+{
+    AjPSeqBamBgzf fp;
+
+    if(file == 0)
+        return 0;
+
+    fp = bamBgzfNew();
+    fp->file_descriptor = fileno(file);
+
+    if(mode[0] == 'r' || mode[0] == 'R')
+    {
+	fp->open_mode = 'r';
+	fp->cache = ajTableNew(512);
+    }
+    else
+	fp->open_mode = 'w';
+
+    fp->file = file;
+    fseek(fp->file, 0L, SEEK_SET);
+
+    return fp;
+}
+
+
+
+
 /* @funcstatic bamDeflateBlock ************************************************
 **
 ** Deflate an uncompressed block
@@ -945,6 +1344,8 @@ AjPSeqBamBgzf ajSeqBamBgzfOpenfd(int fd, const char * mode)
 ** @param [r] block_length [int] Uncompressed block length
 ** @return [int] Length of compressed block
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamDeflateBlock(AjPSeqBamBgzf fp, int block_length)
@@ -968,21 +1369,21 @@ static int bamDeflateBlock(AjPSeqBamBgzf fp, int block_length)
     buffer_size = fp->compressed_block_size;
     
     /* Init gzip header */
-    buffer[0] = GZIP_ID1;
-    buffer[1] = GZIP_ID2;
-    buffer[2] = CM_DEFLATE;
-    buffer[3] = FLG_FEXTRA;
+    buffer[0] = AJSEQBAM_GZIP_ID1;
+    buffer[1] = AJSEQBAM_GZIP_ID2;
+    buffer[2] = AJSEQBAM_CM_DEFLATE;
+    buffer[3] = AJSEQBAM_FLG_FEXTRA;
     buffer[4] = 0; /* mtime */
     buffer[5] = 0;
     buffer[6] = 0;
     buffer[7] = 0;
     buffer[8] = 0;
-    buffer[9] = OS_UNKNOWN;
-    buffer[10] = BGZF_XLEN;
+    buffer[9] = AJSEQBAM_OS_UNKNOWN;
+    buffer[10] = AJSEQBAM_BGZF_XLEN;
     buffer[11] = 0;
-    buffer[12] = BGZF_ID1;
-    buffer[13] = BGZF_ID2;
-    buffer[14] = BGZF_LEN;
+    buffer[12] = AJSEQBAM_BGZF_ID1;
+    buffer[13] = AJSEQBAM_BGZF_ID2;
+    buffer[14] = AJSEQBAM_BGZF_LEN;
     buffer[15] = 0;
     buffer[16] = 0; /* placeholder for block length */
     buffer[17] = 0;
@@ -993,16 +1394,19 @@ static int bamDeflateBlock(AjPSeqBamBgzf fp, int block_length)
 
     while(1)
     {
-        compress_level = fp->is_uncompressed ? 0 : Z_DEFAULT_COMPRESSION;
+	compress_level = fp->is_uncompressed ? Z_NO_COMPRESSION :
+		Z_DEFAULT_COMPRESSION;
         zs.zalloc = NULL;
         zs.zfree  = NULL;
         zs.next_in   = fp->uncompressed_block;
         zs.avail_in  = input_length;
-        zs.next_out  = (void*)&buffer[BLOCK_HEADER_LENGTH];
-        zs.avail_out = buffer_size - BLOCK_HEADER_LENGTH - BLOCK_FOOTER_LENGTH;
+        zs.next_out  = (void*)&buffer[AJSEQBAM_BLOCK_HEADER_LENGTH];
+        zs.avail_out = buffer_size - AJSEQBAM_BLOCK_HEADER_LENGTH -
+            AJSEQBAM_BLOCK_FOOTER_LENGTH;
 
         status = deflateInit2(&zs, compress_level, Z_DEFLATED,
-                              GZIP_WINDOW_BITS, Z_DEFAULT_MEM_LEVEL,
+                              AJSEQBAM_GZIP_WINDOW_BITS,
+                              AJSEQBAM_Z_DEFAULT_MEM_LEVEL,
                               Z_DEFAULT_STRATEGY);
 
         if(status != Z_OK)
@@ -1050,9 +1454,10 @@ static int bamDeflateBlock(AjPSeqBamBgzf fp, int block_length)
         }
 
         compressed_length = zs.total_out;
-        compressed_length += BLOCK_HEADER_LENGTH + BLOCK_FOOTER_LENGTH;
+        compressed_length += AJSEQBAM_BLOCK_HEADER_LENGTH +
+            AJSEQBAM_BLOCK_FOOTER_LENGTH;
 
-        if(compressed_length > MAX_BLOCK_SIZE)
+        if(compressed_length > AJSEQBAM_MAX_BLOCK_SIZE)
         {
             /* should never happen */
             bamReportError(fp, "deflate overflow");
@@ -1100,6 +1505,8 @@ static int bamDeflateBlock(AjPSeqBamBgzf fp, int block_length)
 ** @param [r] block_length  [int] Compressed block length
 ** @return [int] Uncompressed block length
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamInflateBlock(AjPSeqBamBgzf fp, int block_length)
@@ -1115,7 +1522,7 @@ static int bamInflateBlock(AjPSeqBamBgzf fp, int block_length)
     zs.next_out = fp->uncompressed_block;
     zs.avail_out = fp->uncompressed_block_size;
 
-    status = inflateInit2(&zs, GZIP_WINDOW_BITS);
+    status = inflateInit2(&zs, AJSEQBAM_GZIP_WINDOW_BITS);
 
     if(status != Z_OK)
     {
@@ -1153,18 +1560,22 @@ static int bamInflateBlock(AjPSeqBamBgzf fp, int block_length)
 ** @param [r] header [const char*] Header buffer
 ** @return [int] 0 on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamHeaderCheck(const char *header)
 {
-    return (header[0] == GZIP_ID1 &&
-            header[1] == (char) GZIP_ID2 &&
+    return (header[0] == AJSEQBAM_GZIP_ID1 &&
+            header[1] == (char) AJSEQBAM_GZIP_ID2 &&
             header[2] == Z_DEFLATED &&
-            (header[3] & FLG_FEXTRA) != 0 &&
-            unpackInt16((const unsigned char*)&header[10]) == BGZF_XLEN &&
-            header[12] == BGZF_ID1 &&
-            header[13] == BGZF_ID2 &&
-            unpackInt16((const unsigned char*)&header[14]) == BGZF_LEN);
+            (header[3] & AJSEQBAM_FLG_FEXTRA) != 0 &&
+            unpackInt16((const unsigned char*)&header[10]) ==
+            AJSEQBAM_BGZF_XLEN &&
+            header[12] == AJSEQBAM_BGZF_ID1 &&
+            header[13] == AJSEQBAM_BGZF_ID2 &&
+            unpackInt16((const unsigned char*)&header[14]) ==
+            AJSEQBAM_BGZF_LEN);
 }
 
 
@@ -1177,31 +1588,19 @@ static int bamHeaderCheck(const char *header)
 ** @param [u] fp [AjPSeqBamBgzf] BGZ file object
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamCacheFree(AjPSeqBamBgzf fp)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
-    ajint i;
 
-    if(fp->open_mode != 'r')
-        return;
+    /* if fp->open_mode is not 'r' then fp->cache is expected to be null */
 
     if(!fp->cache)
         return;
 
-    ajTableToarrayKeysValues(fp->cache, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-	AJFREE(keyarray[i]);		/* the key   */
-	AJFREE(valarray[i]);		/* the value */
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-    ajTableFree(&fp->cache);
+    ajTableDel(&fp->cache);
 
     return;
 }
@@ -1217,6 +1616,8 @@ static void bamCacheFree(AjPSeqBamBgzf fp)
 ** @param [r] block_address [ajlong] Block offset in file
 ** @return [int] Size of block
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamCacheLoadBlock(AjPSeqBamBgzf fp, ajlong block_address)
@@ -1233,7 +1634,7 @@ static int bamCacheLoadBlock(AjPSeqBamBgzf fp, ajlong block_address)
 
 	fp->block_address = block_address;
 	fp->block_length = p->size;
-	memcpy(fp->uncompressed_block, p->block, MAX_BLOCK_SIZE);
+	memcpy(fp->uncompressed_block, p->block, AJSEQBAM_MAX_BLOCK_SIZE);
 	fseek(fp->file, p->end_offset, SEEK_SET);
 
 	return p->size;
@@ -1251,6 +1652,8 @@ static int bamCacheLoadBlock(AjPSeqBamBgzf fp, ajlong block_address)
 ** @param [r] size [int] Cache size of data from current position
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamCacheBlock(AjPSeqBamBgzf fp, int size)
@@ -1258,10 +1661,11 @@ static void bamCacheBlock(AjPSeqBamBgzf fp, int size)
     BamPCache p;
     BamPCache oldp;
 
-    if(MAX_BLOCK_SIZE >= fp->cache_size)
+    if(AJSEQBAM_MAX_BLOCK_SIZE >= fp->cache_size)
         return;
 
-    if((ajint) ajTableGetLength(fp->cache) * MAX_BLOCK_SIZE > fp->cache_size)
+    if((ajint) ajTableGetLength(fp->cache) * AJSEQBAM_MAX_BLOCK_SIZE >
+       fp->cache_size)
     {
         /*
         ** A better way would be to remove the oldest block in the
@@ -1275,8 +1679,8 @@ static void bamCacheBlock(AjPSeqBamBgzf fp, int size)
     AJNEW0(p);
     p->size = fp->block_length;
     p->end_offset = fp->block_address + size;
-    p->block = malloc(MAX_BLOCK_SIZE);
-    memcpy(p->block, fp->uncompressed_block, MAX_BLOCK_SIZE);
+    p->block = malloc(AJSEQBAM_MAX_BLOCK_SIZE);
+    memcpy(p->block, fp->uncompressed_block, AJSEQBAM_MAX_BLOCK_SIZE);
     oldp = ajTablePut(fp->cache, &fp->block_address, p);
 
     if(oldp)
@@ -1291,18 +1695,20 @@ static void bamCacheBlock(AjPSeqBamBgzf fp, int size)
 
 
 
-/* @funcstatic bamReadBlock ****************************************************
+/* @funcstatic bamReadBlock ***************************************************
 **
 ** Read the next block of data from a BGZ file
 **
 ** @param [u] fp [AjPSeqBamBgzf] BGZ file handler
 ** @return [int] Zeo on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamReadBlock(AjPSeqBamBgzf fp)
 {
-    char header[BLOCK_HEADER_LENGTH];
+    char header[AJSEQBAM_BLOCK_HEADER_LENGTH];
     int size = 0;
     ajlong block_address;
     int count;
@@ -1333,15 +1739,15 @@ static int bamReadBlock(AjPSeqBamBgzf fp)
 
     if(!bamHeaderCheck(header))
     {
-        bamReportError(fp, "invalid block header");
+      /*bamReportError(fp, "invalid block header");*/
         return -1;
     }
 
     block_length = unpackInt16((unsigned char*)&header[16]) + 1;
     compressed_block = (char*) fp->compressed_block;
-    memcpy(compressed_block, header, BLOCK_HEADER_LENGTH);
-    remaining = block_length - BLOCK_HEADER_LENGTH;
-    count = fread(&compressed_block[BLOCK_HEADER_LENGTH], 1,
+    memcpy(compressed_block, header, AJSEQBAM_BLOCK_HEADER_LENGTH);
+    remaining = block_length - AJSEQBAM_BLOCK_HEADER_LENGTH;
+    count = fread(&compressed_block[AJSEQBAM_BLOCK_HEADER_LENGTH], 1,
                   remaining, fp->file);
 
     if(count != remaining)
@@ -1381,9 +1787,11 @@ static int bamReadBlock(AjPSeqBamBgzf fp)
 ** @param [r] length [int] length of buffer
 ** @return [int] Number of bytes read
 **               -1 on error
+**
+** @release 6.3.0
 ******************************************************************************/
 
-int ajSeqBamBgzfRead(AjPSeqBamBgzf fp, void* data, int length)
+int ajSeqBamBgzfRead(AjPSeqBamBgzf fp, void *data, int length)
 {
     int bytes_read;
     char *output;
@@ -1411,7 +1819,7 @@ int ajSeqBamBgzfRead(AjPSeqBamBgzf fp, void* data, int length)
         {
             if(bamReadBlock(fp) != 0)
             {
-                ajErr("bamReadBlock failed");
+                ajDebug("bamReadBlock failed\n");
                 return -1;
             }
 
@@ -1442,15 +1850,17 @@ int ajSeqBamBgzfRead(AjPSeqBamBgzf fp, void* data, int length)
 
 
 
-/* @funcstatic flush_block ***************************************************
+/* @func ajSeqBamBgzfFlush ****************************************************
 **
 ** Flush block to output file
 **
 ** @param [u] fp [AjPSeqBamBgzf] Output file
 ** @return [int] 0 on success, -1 on failure
+**
+** @release 6.3.0
 ******************************************************************************/
 
-static int flush_block(AjPSeqBamBgzf fp)
+int ajSeqBamBgzfFlush(AjPSeqBamBgzf fp)
 {
     int count;
     int block_length;
@@ -1481,7 +1891,7 @@ static int flush_block(AjPSeqBamBgzf fp)
 
 
 
-/* @func ajSeqBamBgzfWrite *****************************************************
+/* @func ajSeqBamBgzfWrite ****************************************************
 **
 ** Write length bytes from data to the file.
 **
@@ -1490,6 +1900,8 @@ static int flush_block(AjPSeqBamBgzf fp)
 ** @param [r] length [int] Length of data buffer to be written
 ** @return [int] Returns the number of bytes written.
 **               Returns -1 on error.
+**
+** @release 6.3.0
 ******************************************************************************/
 
 int ajSeqBamBgzfWrite(AjPSeqBamBgzf fp, const void* data, int length)
@@ -1526,7 +1938,7 @@ int ajSeqBamBgzfWrite(AjPSeqBamBgzf fp, const void* data, int length)
 
         if(fp->block_offset == block_length)
         {
-            if(flush_block(fp) != 0)
+            if(ajSeqBamBgzfFlush(fp) != 0)
                 break;
         }
     }
@@ -1546,17 +1958,21 @@ int ajSeqBamBgzfWrite(AjPSeqBamBgzf fp, const void* data, int length)
 ** @param [u] fp [AjPSeqBamBgzf] BGZ file
 ** @return [int] Returns zero on success, -1 on error.
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 int ajSeqBamBgzfClose(AjPSeqBamBgzf fp)
 {
     int block_length;
 
+    if(!fp) return 0;
+
     if(fp->open_mode == 'w')
     {
-        if(flush_block(fp) != 0)
+        if(ajSeqBamBgzfFlush(fp) != 0)
             return -1;
-
+        /* add an empty last block */
         block_length = bamDeflateBlock(fp, 0);
         fwrite(fp->compressed_block, 1, block_length, fp->file);
 
@@ -1593,6 +2009,8 @@ int ajSeqBamBgzfClose(AjPSeqBamBgzf fp)
 **               0 if we are higher in the file
 **               -1 for an error
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 int ajSeqBamBgzfEof(AjPSeqBamBgzf fp)
@@ -1607,16 +2025,146 @@ int ajSeqBamBgzfEof(AjPSeqBamBgzf fp)
 
     status = fseek(fp->file, -28, SEEK_END);
     if(status != 0)
+    {
+        ajDebug("seqBamBgzfEof seek end-28 failed errno %d: %s\n",
+                errno, strerror(errno));
         return -1;
+    }
 
     /* Ubuntu warns if retval of fread is not tested */
     if(!fread(buf, 1, 28, fp->file))
     {
+        ajDebug("seqBamBgzfEof fread failed errno %d: %s\n",
+                errno, strerror(errno));
     }
     
-    fseek(fp->file, offset, SEEK_SET);
+    status = fseek(fp->file, offset, SEEK_SET); /* back where we started */
+    if(status != 0)
+    {
+        ajDebug("seqBamBgzfEof seek %d failed errno %d: %s\n",
+                offset,  errno, strerror(errno));
+        return -1;
+    }
 
     return (memcmp(magic, buf, 28) == 0) ? 1 : 0;
+}
+
+
+
+
+/* @func ajSeqBamHeaderRead ***************************************************
+**
+** Read header section of BAM files
+**
+** @param [u] gzfile [AjPSeqBamBgzf] BAM file handler
+** @return [AjPSeqBamHeader] header object
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPSeqBamHeader ajSeqBamHeaderRead(AjPSeqBamBgzf gzfile)
+{
+    AjPSeqBamHeader header=NULL;
+    char bambuf [4] = "   ";
+    char* targetname;
+    ajint status;
+    ajuint i;
+    ajuint ilen;
+    ajuint ntargets;
+    ajuint targetlen;
+    ajuint namelen = 0;
+
+    static AjBool bigendian = ajFalse;
+
+    bigendian = ajUtilGetBigendian();
+
+    status = ajSeqBamBgzfEof(gzfile);
+    ajDebug("called ajSeqBamBgzfEof status %d errno %d ESPIPE %d\n",
+            status, errno, ESPIPE);
+
+    if (status < 0 && (errno == ESPIPE))
+    {
+	/*
+	 ** If the file is a pipe, checking the EOF marker will *always* fail
+	 ** with ESPIPE.  Suppress the error message in this case.
+	 */
+    }
+    else if (status < 0) /* allow 0 - older BAM files have no EOF block */
+    {
+	/* failed and not a PIPE */
+	return NULL;
+    }
+
+    status = ajSeqBamBgzfRead(gzfile, bambuf, 4);
+
+    ajDebug("called ajSeqBamBgzfRead status %d\n", status);
+
+    if(status < 0)
+    {
+	return NULL;
+    }
+
+    if (strncmp(bambuf, "BAM\001", 4))
+    {
+	return NULL;
+    }
+
+    /* BAM header */
+
+    /* read plain text and the number of reference sequences */
+    status = ajSeqBamBgzfRead(gzfile, &ilen, 4);
+
+    if(status != 4)
+	ajErr("seqReadBam failed to read reference length");
+
+    if(bigendian)
+	ajByteRevUint(&ilen);
+
+    header = ajSeqBamHeaderNew();
+
+    header->text = ajCharNewRes(ilen+1);
+    ajSeqBamBgzfRead(gzfile, header->text, ilen);
+    ajDebug("header plain text %u '%s'\n", ilen, header->text);
+
+    header->dict = bamHeaderParse2(header->text);
+    header->rg2lib = bamHeaderTotable(header->dict, "RG", "ID", "LB");
+
+    ajSeqBamBgzfRead(gzfile, &ntargets, 4);
+
+    if(bigendian)
+	ajByteRevUint(&ntargets);
+
+    ajDebug("bam_header_read: # bam targets = %u\n", ntargets);
+    header->n_targets = ntargets;
+
+    AJCNEW0(header->target_name, header->n_targets);
+    AJCNEW0(header->target_len, header->n_targets);
+
+    /* read reference sequence names and lengths */
+
+    for(i=0; i < ntargets; i++)
+    {
+	ajSeqBamBgzfRead(gzfile, &namelen, 4);
+
+	if(bigendian)
+	    ajByteRevUint(&namelen);
+
+	targetname = ajCharNewRes(namelen+1);
+	ajSeqBamBgzfRead(gzfile, targetname, namelen);
+	ajSeqBamBgzfRead(gzfile, &targetlen, 4);
+
+	if(bigendian)
+	    ajByteRevUint(&targetlen);
+
+	header->target_name[i] = targetname;
+	header->target_len[i] = targetlen;
+
+	ajDebug("bam target[%u] %u '%s'\n", i, targetlen, targetname);
+    }
+
+    return header;
+
 }
 
 
@@ -1629,6 +2177,8 @@ int ajSeqBamBgzfEof(AjPSeqBamBgzf fp)
 ** @param [u] header [AjPSeqBamHeader] Header object
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamDestroyHeaderHash(AjPSeqBamHeader header)
@@ -1649,6 +2199,8 @@ static void bamDestroyHeaderHash(AjPSeqBamHeader header)
 ** @param [d] header [AjPList*] Header list object
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamHeaderFree(AjPList *header)
@@ -1657,8 +2209,10 @@ static void bamHeaderFree(AjPList *header)
 
     while(ajListGetLength(*header))
     {
-        ajListPop(*header, (void*)hline);
-        bamHeaderLineFree(&hline);
+        ajListPop(*header, (void**)&hline);
+
+        if(hline)
+            bamHeaderLineFree(&hline);
     }
 
     ajListFree(header);
@@ -1676,6 +2230,8 @@ static void bamHeaderFree(AjPList *header)
 ** @param [d] Phline [BamPHeaderLine*] Header line object
 ** @return [void]
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void bamHeaderLineFree(BamPHeaderLine *Phline)
@@ -1686,7 +2242,7 @@ static void bamHeaderLineFree(BamPHeaderLine *Phline)
 
     while(ajListGetLength(tags))
     {
-        ajListPop(tags, (void*)htag);
+        ajListPop(tags, (void**)&htag);
         AJFREE(htag->value);
         AJFREE(htag);
     }
@@ -1707,6 +2263,8 @@ static void bamHeaderLineFree(BamPHeaderLine *Phline)
 ** @param [r] headerText [const char*] Header text
 ** @return [AjPList] list of header records
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPList bamHeaderParse2(const char *headerText)
@@ -1721,6 +2279,7 @@ static AjPList bamHeaderParse2(const char *headerText)
         return 0;
 
     text = headerText;
+    hlines = ajListNew();
 
     while((text=bamNextline(&buf, &nbuf, text)))
     {
@@ -1758,6 +2317,8 @@ static AjPList bamHeaderParse2(const char *headerText)
 ** @param [r] value_tag [const char[2]] Value tag
 ** @return [AjPTable] Table of BAM header tags and values
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPTable bamHeaderTotable(const AjPList dict, const char type[2],
@@ -1770,7 +2331,7 @@ static AjPTable bamHeaderTotable(const AjPList dict, const char type[2],
     BamPHeaderTag key;
     BamPHeaderTag value;
 
-    tbl = ajTableNew(512);
+    tbl = ajTablecharNew(512);
 
     if(dict == 0)       /* return an empty (not null) hash table */
         return tbl;
@@ -1805,17 +2366,19 @@ static AjPTable bamHeaderTotable(const AjPList dict, const char type[2],
 
 /* @funcstatic bamNextline ****************************************************
 **
-**  mimics the behaviour of getline, except it returns pointer to the
-**  next chunk of the text or NULL if everything has been read.
+** Mimics the behaviour of getline, except it returns pointer to the
+** next chunk of the text or NULL if everything has been read.
 **
-**  The lineptr should be freed by the caller. The newline character is
-**  stripped.
+** The lineptr should be freed by the caller. The newline character is
+** stripped.
 **
 ** @param [u] lineptr [char**] Buffer
 ** @param [u] n [size_t*] Buffer current size, can be extended
 ** @param [r] text [const char*] Text starting at current position
 ** @return [const char*] Next chunk of text, NULL when all is done.
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static const char* bamNextline(char **lineptr, size_t *n, const char *text)
@@ -1868,6 +2431,86 @@ static const char* bamNextline(char **lineptr, size_t *n, const char *text)
 
 
 
+/* @func ajSeqBamHeaderLineParse **********************************************
+**
+** Parse a header line and creates a table with tag-value pairs
+** in the header line
+**
+** @param [r] headerLine [const char*] Header line
+** @return [AjPTable] Table with tag-value pairs
+**
+**
+** @release 6.3.0
+******************************************************************************/
+
+AjPTable ajSeqBamHeaderLineParse(const char *headerLine)
+{
+    BamPHeaderLine hline=NULL;
+    AjPTable ret=NULL;
+
+    hline = bamHeaderLineParse(headerLine);
+
+    if(!hline)
+	return NULL;
+
+    bamHeaderLineValidate(hline);
+
+    ret = bamHeaderLineToTablemap(hline);
+
+    if(!ret)
+	return NULL;
+
+    ajTablePut(ret,
+	    ajCharNewC("type"),
+	    ajCharNewResLenC(hline->type,3,2));
+
+    bamHeaderLineFree(&hline);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic bamHeaderLineToTablemap ****************************************
+**
+** Looks for a tag key and returns the tags and values in a
+** table
+**
+** @param [r] hline [const BamPHeaderLine] Header line
+** @return [AjPTable] Table of tags and values
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+static AjPTable bamHeaderLineToTablemap(const BamPHeaderLine hline)
+{
+    AjPList tags = hline->tags;
+    BamPHeaderTag tag = NULL;
+    AjPTable hlinemap = NULL;
+    AjIList iter = NULL;
+
+    iter = ajListIterNewread(tags);
+    hlinemap = ajTablecharNew(16);
+    ajTableSetDestroyvalue(hlinemap, &ajMemFree);
+
+    while(!ajListIterDone(iter))
+    {
+        tag = ajListIterGet(iter);
+
+        ajTablePut(hlinemap, ajCharNewResLenC(tag->key,3,2),
+        	   ajCharNewC(tag->value));
+    }
+
+    ajListIterDel(&iter);
+
+    return hlinemap;
+}
+
+
+
+
 /* @funcstatic bamHeaderLineParse *********************************************
 **
 ** Parse a header line and creates a header line object
@@ -1875,6 +2518,8 @@ static const char* bamNextline(char **lineptr, size_t *n, const char *text)
 ** @param [r] headerLine [const char*] Header line
 ** @return [BamPHeaderLine] Header line object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static BamPHeaderLine bamHeaderLineParse(const char *headerLine)
@@ -1903,7 +2548,7 @@ static BamPHeaderLine bamHeaderLineParse(const char *headerLine)
         return 0;
     }
     
-    hline = malloc(sizeof(BamOHeaderLine));
+    AJNEW(hline);
     hline->type[0] = from[0];
     hline->type[1] = from[1];
     hline->tags = NULL;
@@ -1938,6 +2583,9 @@ static BamPHeaderLine bamHeaderLineParse(const char *headerLine)
             ajWarn("The tag '%c%c' is present (at least) twice on line [%s]\n",
                    tag->key[0],tag->key[1], headerLine);
 
+        if(!hline->tags)
+            hline->tags = ajListNew();
+
         ajListPushAppend(hline->tags, tag);
 
         from = to;
@@ -1971,6 +2619,8 @@ static BamPHeaderLine bamHeaderLineParse(const char *headerLine)
 ** @param [u] hline [BamPHeaderLine] Header line object
 ** @return [int] 1 on success, 0 and  a message on failure
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamHeaderLineValidate(BamPHeaderLine hline)
@@ -2021,9 +2671,14 @@ static int bamHeaderLineValidate(BamPHeaderLine hline)
         {
             ajWarn("Unknown tag [%c%c] for [%c%c].\n",
                    tag->key[0],tag->key[1], hline->type[0],hline->type[1]);
+
+            ajListIterDel(&iter);
+
             return 0;
         }
     }
+
+    ajListIterDel(&iter);
 
     return 1;
 }
@@ -2038,15 +2693,18 @@ static int bamHeaderLineValidate(BamPHeaderLine hline)
 **
 ** @param [r] hline [const BamPHeaderLine] Header line
 ** @param [r] key [const char*] Key to look for
-** @return [BamPHeaderTag] Header tag if found, NULL i fnot
+** @return [BamPHeaderTag] Header tag if found, NULL if not
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static BamPHeaderTag bamHeaderLineHasTag(const BamPHeaderLine hline,
                                          const char *key)
 {
     AjPList tags = hline->tags;
-    BamPHeaderTag tag;
+    BamPHeaderTag tag = NULL;
+    BamPHeaderTag ret = NULL;
     AjIList iter = NULL;
 
     iter = ajListIterNewread(tags);
@@ -2056,10 +2714,15 @@ static BamPHeaderTag bamHeaderLineHasTag(const BamPHeaderLine hline,
         tag = ajListIterGet(iter);
 
         if(tag->key[0]==key[0] && tag->key[1]==key[1])
-            return tag;
+        {
+            ret = tag;
+            break;
+        }
     }
 
-    return NULL;
+    ajListIterDel(&iter);
+
+    return ret;
 }
 
 
@@ -2073,6 +2736,8 @@ static BamPHeaderTag bamHeaderLineHasTag(const BamPHeaderLine hline,
 ** @param [r] tags [const char**] array of tage names
 ** @return [int] tag number on success, -1 on failure
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int bamTagExists(const char *tag, const char **tags)
@@ -2103,19 +2768,21 @@ static int bamTagExists(const char *tag, const char **tags)
 **  value string.
 **
 ** @param [r] name [const char*] tag name
-** @param [r] value_from [const char*] first charecter of value
+** @param [r] value_from [const char*] first character of value
 ** @param [r] value_to [const char*] last character of value
 ** @return [BamPHeaderTag] Header tag object
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static BamPHeaderTag bamTagNew(const char *name, const char *value_from,
-                             const char *value_to)
+                               const char *value_to)
 {
     BamPHeaderTag tag = NULL;
     int len;
 
-    tag = malloc(sizeof(BamOHeaderTag));
+    AJNEW0(tag);
     len = value_to-value_from+1;
     
     tag->key[0] = name[0];
@@ -2153,14 +2820,52 @@ static BamPHeaderTag bamTagNew(const char *name, const char *value_from,
 
 
 
-/* @funcstatic bamGetAux *******************************************************
+/* @func ajSeqBamAuxAppend ****************************************************
 **
-** Get auxilliary data tag from a BAM record
+** Append auxiliary data tag to a BAM record
+**
+** @param [u] b [AjPSeqBam] BAM record
+** @param [r] tag [const char[2]] Tag name
+** @param [r] type [char] Tag type
+** @param [r] len [int] data length
+** @param [r] data [const unsigned char*] Tag type
+** @return [void]
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+void ajSeqBamAuxAppend(AjPSeqBam b, const char tag[2],
+		       char type, int len, const unsigned char* data)
+{
+    int ori_len = b->data_len;
+
+    b->data_len += 3 + len;
+    b->l_aux += 3 + len;
+
+    if (b->m_data < b->data_len) {
+	b->m_data = b->data_len;
+	kroundup32(b->m_data);
+	b->data = (unsigned char*)realloc(b->data, b->m_data);
+    }
+    b->data[ori_len] = tag[0]; b->data[ori_len + 1] = tag[1];
+    b->data[ori_len + 2] = type;
+    memcpy(b->data + ori_len + 3, data, len);
+}
+
+
+
+
+/* @funcstatic bamGetAux ******************************************************
+**
+** Get auxiliary data tag from a BAM record
 **
 ** @param [r] b [const AjPSeqBam] BAM record
 ** @param [r] tag [const char[2]] Tag name
 ** @return [unsigned char*] Tag value
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static unsigned char* bamGetAux(const AjPSeqBam b, const char tag[2])
@@ -2171,7 +2876,7 @@ static unsigned char* bamGetAux(const AjPSeqBam b, const char tag[2])
 
     y = tag[0]<<8 | tag[1];
     
-    s = bam1_aux(b);
+    s = MAJSEQBAMAUX(b);
 
     while(s < b->data + b->data_len)
     {
@@ -2185,4 +2890,296 @@ static unsigned char* bamGetAux(const AjPSeqBam b, const char tag[2])
     }
 
     return 0;
+}
+
+
+
+
+/* @func ajSeqBamBgzfSeek *****************************************************
+**
+** Seek function for a BAM file
+**
+** @param [u] fp [AjPSeqBamBgzf] BGZ file object
+** @param [r] pos [ajlong] Buffer
+** @param [r] where [int] length of buffer
+** @return [ajlong] Number of bytes read,
+**                  -1 on error
+**
+** @release 6.5.0
+******************************************************************************/
+
+ajlong ajSeqBamBgzfSeek(AjPSeqBamBgzf fp, ajlong pos, int where)
+{
+    int block_offset;
+    ajlong block_address;
+
+    if (fp->open_mode != 'r')
+    {
+	ajErr("file not open for read");
+	return -1;
+    }
+
+    if (where != SEEK_SET)
+    {
+	ajErr("unimplemented seek option");
+	return -1;
+    }
+
+    block_offset = pos & 0xFFFF;
+    block_address = (pos >> 16) & 0xFFFFFFFFFFFFLL;
+
+    if (fseek(fp->file, block_address, SEEK_SET) != 0)
+    {
+	ajErr("seek failed");
+	return -1;
+    }
+
+    fp->block_length = 0;  /* indicates current block is not loaded */
+    fp->block_address = block_address;
+    fp->block_offset = block_offset;
+
+    return 0;
+}
+
+
+
+
+/* @func ajSeqBamValidate *****************************************************
+**
+** Simple validation of a BAM record
+**
+** Other fields could also be checked, especially the auxiliary data
+**
+** @param [r] header [const AjPSeqBamHeader] header object
+** @param [r] b [const AjPSeqBam] BAM alignment record
+** @return [int] 1 on success, 0 otherwise
+**
+** @release 6.5.0
+******************************************************************************/
+
+int ajSeqBamValidate(const AjPSeqBamHeader header, const AjPSeqBam b)
+{
+    char *s;
+
+    if (b->core.tid < -1 || b->core.mtid < -1)
+	return 0;
+
+    if (header && (b->core.tid >= header->n_targets
+	    || b->core.mtid >= header->n_targets))
+	return 0;
+
+    if (b->data_len < b->core.l_qname)
+	return 0;
+
+    s = memchr(MAJSEQBAMQNAME(b), '\0', b->core.l_qname);
+
+    if (s != &MAJSEQBAMQNAME(b)[b->core.l_qname-1])
+	return 0;
+
+    return 1;
+}
+
+
+
+
+/* @func ajSeqBamHeaderGetRefseqTags ******************************************
+**
+** Return reference sequence tags, in a table which includes sub-tables for
+** each individual reference sequence.
+** Each sub-table including tag value pairs for a reference sequence.
+**
+** @param [r] header [const AjPSeqBamHeader] BAM header
+** @return [AjPTable] Table of tables for reference sequence tags
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+AjPTable ajSeqBamHeaderGetRefseqTags(const AjPSeqBamHeader header)
+{
+    AjPTable ret = NULL;
+    BamPHeaderLine hline = NULL;
+    AjIList k = NULL;
+    BamPHeaderTag uri = NULL;
+    BamPHeaderTag md5 = NULL;
+    BamPHeaderTag species = NULL;
+    BamPHeaderTag seqname = NULL;
+    BamPHeaderTag assemid = NULL;
+    AjPTable tags = NULL;
+    const AjPList dict = NULL;
+
+    dict = header->dict;
+
+    if(dict == NULL)
+	return ret;
+
+    ret = ajTablecharNewConst(16);
+
+    k = ajListIterNewread(dict);
+
+    while(!ajListIterDone(k))
+    {
+	hline = ajListIterGet(k);
+
+	if(hline->type[0] != 'S' || hline->type[1] != 'Q')
+	    continue;
+
+	seqname = bamHeaderLineHasTag(hline,"SN");
+
+	if(!seqname)
+	{
+	    ajErr("ajSeqBamHeaderGetRefseqTags: missing SN tag"
+		  " in SQ header line");
+	    return NULL;
+	}
+
+	tags = ajTablecharNew(8);
+
+	assemid = bamHeaderLineHasTag(hline,"AS");
+	if(assemid)
+	    ajTablePut(tags, ajCharNewC(assemid->key), assemid->value);
+
+	uri   = bamHeaderLineHasTag(hline,"UR");
+	if(uri)
+	    ajTablePut(tags, ajCharNewC(uri->key), uri->value);
+
+	md5 = bamHeaderLineHasTag(hline,"M5");
+	if(md5)
+	    ajTablePut(tags, ajCharNewC(md5->key), md5->value);
+
+	species = bamHeaderLineHasTag(hline,"SP");
+	if(species)
+	    ajTablePut(tags, ajCharNewC(species->key), species->value);
+
+	ajTablePut(ret, seqname->value, tags);
+
+    }
+
+    ajListIterDel(&k);
+
+    return ret;
+}
+
+
+
+
+/* @func ajSeqBamHeaderGetReadgroupTags****************************************
+**
+** Return read group tags, in a table which includes sub-tables for
+** each individual read group.
+** Each sub-table including tag value pairs for a read group.
+**
+** @param [r] header [const AjPSeqBamHeader] BAM header
+** @return [AjPTable] Table of tables for read-group tags
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+AjPTable ajSeqBamHeaderGetReadgroupTags(const AjPSeqBamHeader header)
+{
+    AjPTable ret = NULL;
+    BamPHeaderLine hline = NULL;
+    AjIList k = NULL;
+    BamPHeaderTag tag = NULL;
+    AjPTable tags = NULL;
+    AjIList iter = NULL;
+    const AjPList dict = NULL;
+    char* id = NULL;
+
+    dict = header->dict;
+
+    if(dict == NULL)
+	return ret;
+
+    ret = ajTablecharNewConst(16);
+
+    k = ajListIterNewread(dict);
+
+    while(!ajListIterDone(k))
+    {
+	hline = ajListIterGet(k);
+
+	if(hline->type[0] != 'R' || hline->type[1] != 'G') /* RG header line */
+	    continue;
+
+	tags = ajTablecharNew(8);
+
+	iter = ajListIterNewread(hline->tags);
+
+	while(!ajListIterDone(iter))
+	{
+	    tag = ajListIterGet(iter);
+
+	    if(tag->key[0]=='I' && tag->key[1]=='D') /* ID tag for RG line */
+	    {
+		id = tag->value;
+		continue;
+	    }
+	    ajTablePut(tags, ajCharNewResLenC(tag->key, 3, 2), tag->value);
+	}
+
+	ajListIterDel(&iter);
+
+	if(!id)
+	{
+	    ajErr("ajSeqBamHeaderGetReadgroupTags: missing ID tag"
+		    " in RG header line");
+	    return NULL;
+	}
+
+	ajTablePut(ret, id, tags);
+
+    }
+
+    ajListIterDel(&k);
+
+    return ret;
+}
+
+
+
+
+/* @func ajSeqBamHeaderGetSortorder *******************************************
+**
+** Return sort-order defined in header
+**
+** @param [r] header [const AjPSeqBamHeader] BAM header
+** @return [const char*] sort order for the BAM file
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+const char* ajSeqBamHeaderGetSortorder(const AjPSeqBamHeader header)
+{
+    const char* ret = NULL;
+    BamPHeaderLine hline = NULL;
+    AjIList k = NULL;
+    BamPHeaderTag so = NULL;
+
+    if(!header || !header->dict)
+	return NULL;
+
+    k = ajListIterNewread(header->dict);
+
+    while(!ajListIterDone(k))
+    {
+	hline = ajListIterGet(k);
+
+	if(hline->type[0] != 'H' || hline->type[1] != 'D')
+	    continue;
+
+	so = bamHeaderLineHasTag(hline,"SO");
+
+	if(so)
+	    ret = so->value;
+
+	break;
+
+    }
+
+    ajListIterDel(&k);
+
+    return ret;
 }

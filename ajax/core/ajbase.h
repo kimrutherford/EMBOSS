@@ -1,13 +1,66 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajbase ************************************************************
+**
+** AJAX IUB base nucleic acid functions
+**
+** @author Copyright (C) 1999 Alan Bleasby
+** @version $Revision: 1.15 $
+** @modified Feb 28 ajb First version
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajbase_h
-#define ajbase_h
+#ifndef AJBASE_H
+#define AJBASE_H
 
-#include "ajax.h"
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+
 #include <ctype.h>
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
 
 
 /*
@@ -45,14 +98,18 @@ AjBool        ajResidueExistsChar(char c);
 ** End of prototype definitions
 */
 
-/*
-** deprecated prototype  definitions
-*/
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+#ifdef AJ_COMPILE_DEPRECATED
 
 __deprecated AjBool        ajBaseAa1ToAa3(char aa1, AjPStr *aa3);
 __deprecated AjBool        ajBaseAa3ToAa1(char *aa1, const AjPStr aa3);
 __deprecated const AjPStr  ajBaseCodes(ajint ibase);
-__deprecated char          ajSeqBaseComp (char base);
+__deprecated char          ajSeqBaseComp(char base);
 __deprecated ajint         ajAZToInt(ajint c);
 __deprecated ajint         ajAZToBin(ajint c);
 __deprecated char          ajAZToBinC(char c);
@@ -61,9 +118,11 @@ __deprecated ajint         ajIntToAZ(ajint n);
 __deprecated char          ajBaseComp(char base);
 __deprecated float         ajBaseProb(ajint base1, ajint base2);
 
-#endif
+#endif /* AJ_COMPILE_DEPRECATED */
 
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJBASE_H */

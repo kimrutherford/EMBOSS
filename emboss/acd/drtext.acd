@@ -1,8 +1,8 @@
 application: drtext [
   documentation: "Get data resource entries complete text"
   groups: "Data retrieval:Resource data, Data retrieval:Text data"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
      default: ""
      parameter: "Y"
      entry: "Y"
-     relations: "EDAM:0000957 data Database metadata"
+     relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: input
@@ -53,7 +53,7 @@ section: output [
     parameter: "Y"
     information: "Full text output file"
     knowntype: "entry full text"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: output

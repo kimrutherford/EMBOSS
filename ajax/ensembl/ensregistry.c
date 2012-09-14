@@ -1,54 +1,57 @@
-/* @source Ensembl Registry functions
+/* @source ensregistry ********************************************************
+**
+** Ensembl Registry functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.64 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/08 11:43:41 $ by $Author: mks $
-** @version $Revision: 1.46 $
+** @modified $Date: 2012/04/26 06:39:46 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensregistry.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 /* @datastatic RegistryPComparativeGenomics ***********************************
 **
@@ -220,15 +223,15 @@ typedef struct RegistrySCoreStyle
 ** @alias RegistrySEntry
 ** @alias RegistryOEntry
 **
-** @attr Registry [void*[EnsMDatabaseadaptorGroups]] Array of database-specific
-**                Registry Entry objects, indexed by the
-**                Ensembl Database Adaptor Group enumeration.
+** @attr Registry [void*[EnsMDatabaseadaptorGroups]]
+** Array of database-specific Registry Entry objects, indexed by the
+** Ensembl Database Adaptor Group enumeration.
 ** @@
 ******************************************************************************/
 
 typedef struct RegistrySEntry
 {
-    void* Registry[EnsMDatabaseadaptorGroups];
+    void *Registry[EnsMDatabaseadaptorGroups];
 } RegistryOEntry;
 
 #define RegistryPEntry RegistryOEntry*
@@ -279,6 +282,8 @@ typedef struct RegistrySFunctionalGenomics
 ** Ensembl Genetic Variation Attribute Adaptor
 ** @attr Gvdatabaseadaptor [EnsPGvdatabaseadaptor]
 ** Ensembl Genetic Variation Database Adaptor
+** @attr Gvgenotypecodeadaptor [EnsPGvgenotypecodeadaptor]
+** ENsembl Genetic Variation Genotype Code Adaptor
 ** @attr Gvindividualadaptor [EnsPGvindividualadaptor]
 ** Ensembl Genetic Variation Individual Adaptor
 ** @attr Gvpopulationadaptor [EnsPGvpopulationadaptor]
@@ -291,6 +296,8 @@ typedef struct RegistrySFunctionalGenomics
 ** Ensembl Genetic Variation Source Adaptor
 ** @attr Gvtranscriptvariationadaptor [EnsPGvtranscriptvariationadaptor]
 ** Ensembl Genetic Variation Transcript Variation Adaptor
+** @attr Gvvariationadaptor [EnsPGvvariationadaptor]
+** Ensembl Genetic Variation Variation Adaptor
 ** @attr Gvvariationfeatureadaptor [EnsPGvvariationfeatureadaptor]
 ** Ensembl Genetic Variation Variation Feature Adaptor
 ** @attr Gvvariationsetadaptor [EnsPGvvariationsetadaptor]
@@ -304,12 +311,14 @@ typedef struct RegistrySGeneticVariation
     EnsPGvalleleadaptor Gvalleleadaptor;
     EnsPGvattributeadaptor Gvattributeadaptor;
     EnsPGvdatabaseadaptor Gvdatabaseadaptor;
+    EnsPGvgenotypecodeadaptor Gvgenotypecodeadaptor;
     EnsPGvindividualadaptor Gvindividualadaptor;
     EnsPGvpopulationadaptor Gvpopulationadaptor;
     EnsPGvpopulationgenotypeadaptor Gvpopulationgenotypeadaptor;
     EnsPGvsampleadaptor Gvsampleadaptor;
     EnsPGvsourceadaptor Gvsourceadaptor;
     EnsPGvtranscriptvariationadaptor Gvtranscriptvariationadaptor;
+    EnsPGvvariationadaptor Gvvariationadaptor;
     EnsPGvvariationfeatureadaptor Gvvariationfeatureadaptor;
     EnsPGvvariationsetadaptor Gvvariationsetadaptor;
 } RegistryOGeneticVariation;
@@ -331,7 +340,7 @@ typedef struct RegistrySGeneticVariation
 ** @alias RegistryOIdentifier
 **
 ** @attr RegularExpression [AjPStr] Regular expression
-** @attr SpeciesName [AjPStr] Ensembl Database Adaptor species element
+** @attr SpeciesName [AjPStr] Ensembl Database Adaptor species name
 ** @attr Group [EnsEDatabaseadaptorGroup]
 ** Ensembl Database Adaptor Group enumeration
 ** @attr Padding [ajuint] Padding to alignment boundary
@@ -363,12 +372,18 @@ typedef struct RegistrySIdentifier
 **
 ** @attr Databaseadaptor [EnsPDatabaseadaptor]
 ** Ensembl Database Adaptor
+** @attr Ontologyadaptor [EnsPOntologyadaptor]
+** Ensembl Ontology Adaptor
+** @attr Ontologytermadaptor [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor
 ** @@
 ******************************************************************************/
 
 typedef struct RegistrySOntology
 {
     EnsPDatabaseadaptor Databaseadaptor;
+    EnsPOntologyadaptor Ontologyadaptor;
+    EnsPOntologytermadaptor Ontologytermadaptor;
 } RegistryOOntology;
 
 #define RegistryPOntology RegistryOOntology*
@@ -419,34 +434,34 @@ typedef struct RegistrySQualityCheck
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic registryAliasMetaKey ******************************************
+/* @conststatic registryKAliasMetaKey *****************************************
 **
 ** Register species aliases from the following Ensembl Meta-Information keys.
 **
 ******************************************************************************/
 
-static const char* const registryAliasMetaKey[] =
+static const char *const registryKAliasMetaKey[] =
 {
     "assembly.name",
     "species.alias",
     "species.common_name",
     "species.stable_id_prefix",
     "species.taxonomy_id",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
-/* #varstatic registryAlias ***************************************************
+/* #varstatic registryGAlias **************************************************
 **
 ** AJAX Table storing
 ** AJAX String object (alias) key data and
@@ -457,12 +472,12 @@ static const char* const registryAliasMetaKey[] =
 **
 ******************************************************************************/
 
-static AjPTable registryAlias = NULL;
+static AjPTable registryGAlias = NULL;
 
 
 
 
-/* #varstatic registryEntry ***************************************************
+/* #varstatic registryGEntry **************************************************
 **
 ** AJAX Table storing
 ** AJAX String object (species name) key data and
@@ -473,23 +488,23 @@ static AjPTable registryAlias = NULL;
 **
 ******************************************************************************/
 
-static AjPTable registryEntry = NULL;
+static AjPTable registryGEntry = NULL;
 
 
 
 
-/* #varstatic registryIdentifier **********************************************
+/* #varstatic registryGIdentifier *********************************************
 **
 ** AJAX List storing Registry Identifier objects.
 **
 ******************************************************************************/
 
-static AjPList registryIdentifier = NULL;
+static AjPList registryGIdentifier = NULL;
 
 
 
 
-/* #varstatic registrySource **************************************************
+/* #varstatic registryGSource *************************************************
 **
 ** AJAX List storing AJAX String objects representing sources that have been
 ** used to populate the Ensembl Registry. Keeping track of sources prevents
@@ -500,17 +515,19 @@ static AjPList registryIdentifier = NULL;
 **
 **   * AJAX String object representation of Ensembl Database Connection object
 **     URLs used in ensRegistryLoadDatabaseconnection.
+**   * AJAX String object representation of AJAX Server chache file
+**     URLs used in ensRegistryLoadServername.
 **
 ******************************************************************************/
 
-static AjPList registrySource = NULL;
+static AjPList registryGSource = NULL;
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static void registryEntryDel(
     RegistryPEntry *Pentry);
@@ -569,37 +586,29 @@ static AjBool registryQualityCheckTrace(
     const RegistryPQualityCheck rqc,
     ajuint level);
 
-static AjPStr registryAliasRegister(const AjPStr alias);
-
 static AjBool registryAliasLoadDatabaseconnection(
     EnsPDatabaseconnection dbc,
     EnsPDatabaseadaptor dba);
 
-static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
+static ajuint registryEntryLoadCollection(EnsPDatabaseconnection dbc,
                                           AjPStr dbname,
                                           EnsEDatabaseadaptorGroup dbag);
 
-static void tableRegistryAliasClear(void** key,
-                                    void** value,
-                                    void* cl);
-
-static void tableRegistryEntryClear(void** key,
-                                    void** value,
-                                    void* cl);
-
 static AjBool registrySourceRegister(const AjPStr source,
-                                     AjBool* Pregistered);
+                                     AjBool *Pregistered);
 
-static int registryStringCompareCase(const void* P1, const void* P2);
+static int registryStringCompareCase(
+    const void *item1,
+    const void *item2);
 
-static void registryStringDelete(void** PP1, void* cl);
+static void registryStringDelete(void **Pitem, void *cl);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -618,10 +627,12 @@ static void registryStringDelete(void** PP1, void* cl);
 **
 ** Default destructor for a Registry Comparative Genomics object.
 **
-** @param [d] Prcg [RegistryPComparativeGenomics*] Registry Comparative
-**                                                 Genomics object address
+** @param [d] Prcg [RegistryPComparativeGenomics*]
+** Registry Comparative Genomics object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -630,13 +641,10 @@ static void registryComparativeGenomicsDel(
 {
     RegistryPComparativeGenomics pthis = NULL;
 
-    if(!Prcg)
+    if (!Prcg)
         return;
 
-    if(!*Prcg)
-        return;
-
-    if(ajDebugTest("registryComparativeGenomicsDel"))
+    if (ajDebugTest("registryComparativeGenomicsDel"))
     {
         ajDebug("registryComparativeGenomicsDel\n"
                 "  *Prcg %p\n",
@@ -644,6 +652,9 @@ static void registryComparativeGenomicsDel(
 
         registryComparativeGenomicsTrace(*Prcg, 1);
     }
+
+    if (!*Prcg)
+        return;
 
     pthis = *Prcg;
 
@@ -672,6 +683,8 @@ static void registryComparativeGenomicsDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -681,7 +694,7 @@ static AjBool registryComparativeGenomicsTrace(
 {
     AjPStr indent = NULL;
 
-    if(!rcg)
+    if (!rcg)
         return ajFalse;
 
     indent = ajStrNew();
@@ -710,6 +723,8 @@ static AjBool registryComparativeGenomicsTrace(
 ** @param [d] Prcs [RegistryPCoreStyle*] Registry Core-Style object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -718,13 +733,10 @@ static void registryCoreStyleDel(
 {
     RegistryPCoreStyle pthis = NULL;
 
-    if(!Prcs)
+    if (!Prcs)
         return;
 
-    if(!*Prcs)
-        return;
-
-    if(ajDebugTest("registryCoreStyleDel"))
+    if (ajDebugTest("registryCoreStyleDel"))
     {
         ajDebug("registryCoreStyleDel\n"
                 "  *Prcs %p\n",
@@ -732,6 +744,9 @@ static void registryCoreStyleDel(
 
         registryCoreStyleTrace(*Prcs, 1);
     }
+
+    if (!*Prcs)
+        return;
 
     pthis = *Prcs;
 
@@ -870,6 +885,8 @@ static void registryCoreStyleDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -879,7 +896,7 @@ static AjBool registryCoreStyleTrace(
 {
     AjPStr indent = NULL;
 
-    if(!rcs)
+    if (!rcs)
         return ajFalse;
 
     indent = ajStrNew();
@@ -959,9 +976,11 @@ static AjBool registryCoreStyleTrace(
 **
 ** Default destructor for a Registry Entry object.
 **
-** @param [d] Pentry [RegistryPEntry*] Registry Entry object address
+** @param [d] Pentry [RegistryPEntry*] Registry Entry address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -970,13 +989,10 @@ static void registryEntryDel(
 {
     RegistryPEntry pthis = NULL;
 
-    if(!Pentry)
+    if (!Pentry)
         return;
 
-    if(!*Pentry)
-        return;
-
-    if(ajDebugTest("registryEntryDel"))
+    if (ajDebugTest("registryEntryDel"))
     {
         ajDebug("registryEntryDel\n"
                 "  *Pentry %p\n",
@@ -984,6 +1000,9 @@ static void registryEntryDel(
 
         registryEntryTrace(*Pentry, 1);
     }
+
+    if (!*Pentry)
+        return;
 
     pthis = *Pentry;
 
@@ -1041,6 +1060,8 @@ static void registryEntryDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1050,7 +1071,7 @@ static AjBool registryEntryTrace(
 {
     AjPStr indent = NULL;
 
-    if(!entry)
+    if (!entry)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1092,10 +1113,12 @@ static AjBool registryEntryTrace(
 **
 ** Default destructor for a Registry Functional Genomics object.
 **
-** @param [d] Prfg [RegistryPFunctionalGenomics*] Registry Functional Genomics
-**                                                object address
+** @param [d] Prfg [RegistryPFunctionalGenomics*]
+** Registry Functional Genomics address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1104,13 +1127,10 @@ static void registryFunctionalGenomicsDel(
 {
     RegistryPFunctionalGenomics pthis = NULL;
 
-    if(!Prfg)
+    if (!Prfg)
         return;
 
-    if(!*Prfg)
-        return;
-
-    if(ajDebugTest("registryFunctionalGenomicsDel"))
+    if (ajDebugTest("registryFunctionalGenomicsDel"))
     {
         ajDebug("registryFunctionalGenomicsDel\n"
                 "  *Prfg %p\n",
@@ -1118,6 +1138,9 @@ static void registryFunctionalGenomicsDel(
 
         registryFunctionalGenomicsTrace(*Prfg, 1);
     }
+
+    if (!*Prfg)
+        return;
 
     pthis = *Prfg;
 
@@ -1146,6 +1169,8 @@ static void registryFunctionalGenomicsDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1155,7 +1180,7 @@ static AjBool registryFunctionalGenomicsTrace(
 {
     AjPStr indent = NULL;
 
-    if(!rfg)
+    if (!rfg)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1181,10 +1206,12 @@ static AjBool registryFunctionalGenomicsTrace(
 **
 ** Default destructor for a Registry Genetic Variation object.
 **
-** @param [d] Prgv [RegistryPGeneticVariation*] Registry Genetic Variation
-**                                              object address
+** @param [d] Prgv [RegistryPGeneticVariation*]
+** Registry Genetic Variation address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1193,13 +1220,10 @@ static void registryGeneticVariationDel(
 {
     RegistryPGeneticVariation pthis = NULL;
 
-    if(!Prgv)
+    if (!Prgv)
         return;
 
-    if(!*Prgv)
-        return;
-
-    if(ajDebugTest("registryGeneticVariationDel"))
+    if (ajDebugTest("registryGeneticVariationDel"))
     {
         ajDebug("registryGeneticVariationDel\n"
                 "  *Prgv %p\n",
@@ -1207,6 +1231,9 @@ static void registryGeneticVariationDel(
 
         registryGeneticVariationTrace(*Prgv, 1);
     }
+
+    if (!*Prgv)
+        return;
 
     pthis = *Prgv;
 
@@ -1217,6 +1244,9 @@ static void registryGeneticVariationDel(
 
     ensGvattributeadaptorDel(
         &pthis->Gvattributeadaptor);
+
+    ensGvgenotypecodeadaptorDel(
+        &pthis->Gvgenotypecodeadaptor);
 
     ensGvindividualadaptorDel(
         &pthis->Gvindividualadaptor);
@@ -1232,6 +1262,9 @@ static void registryGeneticVariationDel(
 
     ensGvsourceadaptorDel(
         &pthis->Gvsourceadaptor);
+
+    ensGvvariationadaptorDel(
+        &pthis->Gvvariationadaptor);
 
     ensGvvariationfeatureadaptorDel(
         &pthis->Gvvariationfeatureadaptor);
@@ -1266,6 +1299,8 @@ static void registryGeneticVariationDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1275,7 +1310,7 @@ static AjBool registryGeneticVariationTrace(
 {
     AjPStr indent = NULL;
 
-    if(!rgv)
+    if (!rgv)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1321,10 +1356,12 @@ static AjBool registryGeneticVariationTrace(
 **
 ** @param [u] expression [AjPStr] Regular expression
 ** @param [u] species [AjPStr] Ensembl Database Adaptor species
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 **
 ** @return [RegistryPIdentifier] Registry Identifier object or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1335,13 +1372,13 @@ static RegistryPIdentifier registryIdentifierNew(
 {
     RegistryPIdentifier ri = NULL;
 
-    if(!expression)
+    if (!expression)
         return NULL;
 
-    if(!species)
+    if (!species)
         return NULL;
 
-    if(!dbag)
+    if (!dbag)
         return NULL;
 
     AJNEW0(ri);
@@ -1363,6 +1400,8 @@ static RegistryPIdentifier registryIdentifierNew(
 ** @param [d] Pri [RegistryPIdentifier*] Registry Identifier object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1371,10 +1410,10 @@ static void registryIdentifierDel(
 {
     RegistryPIdentifier pthis = NULL;
 
-    if(!Pri)
+    if (!Pri)
         return;
 
-    if(!*Pri)
+    if (!*Pri)
         return;
 
     pthis = *Pri;
@@ -1399,6 +1438,8 @@ static void registryIdentifierDel(
 ** @param [d] Pro [RegistryPOntology*] Registry Ontology object address
 **
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1407,13 +1448,10 @@ static void registryOntologyDel(
 {
     RegistryPOntology pthis = NULL;
 
-    if(!Pro)
+    if (!Pro)
         return;
 
-    if(!*Pro)
-        return;
-
-    if(ajDebugTest("registryOntologyDel"))
+    if (ajDebugTest("registryOntologyDel"))
     {
         ajDebug("registryOntologyDel\n"
                 "  *Pro %p\n",
@@ -1422,9 +1460,18 @@ static void registryOntologyDel(
         registryOntologyTrace(*Pro, 1);
     }
 
+    if (!*Pro)
+        return;
+
     pthis = *Pro;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
+
+    ensOntologyadaptorDel(
+        &pthis->Ontologyadaptor);
+
+    ensOntologytermadaptorDel(
+        &pthis->Ontologytermadaptor);
 
     /* Finally, delete the Ensembl Database Adaptor. */
 
@@ -1448,6 +1495,8 @@ static void registryOntologyDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1457,7 +1506,7 @@ static AjBool registryOntologyTrace(
 {
     AjPStr indent = NULL;
 
-    if(!ro)
+    if (!ro)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1465,9 +1514,13 @@ static AjBool registryOntologyTrace(
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%registryOntologyTrace %p\n"
-            "%S  Databaseadaptor %p\n",
+            "%S  Databaseadaptor %p\n"
+            "%S  Ontologyadaptor %p\n"
+            "%S  Ontologytermadaptor %p\n",
             indent, ro,
-            indent, ro->Databaseadaptor);
+            indent, ro->Databaseadaptor,
+            indent, ro->Ontologyadaptor,
+            indent, ro->Ontologytermadaptor);
 
     ensDatabaseadaptorTrace(ro->Databaseadaptor, level + 1);
 
@@ -1483,10 +1536,11 @@ static AjBool registryOntologyTrace(
 **
 ** Default destructor for a Registry Quality Check object.
 **
-** @param [d] Prqc [RegistryPQualityCheck*] Registry Quality Check
-**                                          object address
+** @param [d] Prqc [RegistryPQualityCheck*] Registry Quality Check address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1495,13 +1549,10 @@ static void registryQualityCheckDel(
 {
     RegistryPQualityCheck pthis = NULL;
 
-    if(!Prqc)
+    if (!Prqc)
         return;
 
-    if(!*Prqc)
-        return;
-
-    if(ajDebugTest("registryQualityCheckDel"))
+    if (ajDebugTest("registryQualityCheckDel"))
     {
         ajDebug("registryQualityCheckDel\n"
                 "  *Prqc %p\n",
@@ -1509,6 +1560,9 @@ static void registryQualityCheckDel(
 
         registryQualityCheckTrace(*Prqc, 1);
     }
+
+    if (!*Prqc)
+        return;
 
     pthis = *Prqc;
 
@@ -1555,6 +1609,8 @@ static void registryQualityCheckDel(
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1564,7 +1620,7 @@ static AjBool registryQualityCheckTrace(
 {
     AjPStr indent = NULL;
 
-    if(!rqc)
+    if (!rqc)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1603,8 +1659,8 @@ static AjBool registryQualityCheckTrace(
 ** Functions to control Ensembl Registry Internals
 **
 ** @cc Bio::EnsEMBL::Registry
-** @cc CVS Revision: 1.165
-** @cc CVS Tag:
+** @cc CVS Revision: 1.214
+** @cc CVS Tag: branch-ensembl-65
 **
 ******************************************************************************/
 
@@ -1632,6 +1688,8 @@ static AjBool registryQualityCheckTrace(
 ** Clear Ensembl Registry internals.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1654,6 +1712,8 @@ void ensRegistryClear(void)
 ** Clear and free Ensembl Registry internals.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1663,23 +1723,23 @@ void ensRegistryExit(void)
 
     /* Free the AJAX Table of Registry Alias objects. */
 
-    if(registryAlias)
-        ajTableFree(&registryAlias);
+    if (registryGAlias)
+        ajTableFree(&registryGAlias);
 
     /* Clear and free the AJAX Table of Registry Entry objects. */
 
-    if(registryEntry)
-        ajTableFree(&registryEntry);
+    if (registryGEntry)
+        ajTableFree(&registryGEntry);
 
     /* Clear and free the AJAX List of Registry Identifier objects. */
 
-    if(registryIdentifier)
-        ajListFree(&registryIdentifier);
+    if (registryGIdentifier)
+        ajListFree(&registryGIdentifier);
 
     /* Clear and free the AJAX List of Registry Source objects. */
 
-    if(registrySource)
-        ajListstrFreeData(&registrySource);
+    if (registryGSource)
+        ajListstrFreeData(&registryGSource);
 
     return;
 }
@@ -1692,18 +1752,26 @@ void ensRegistryExit(void)
 ** Initialise Ensembl Registry internals.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void ensRegistryInit(void)
 {
-    registryAlias = ensTablestrNewLen(0);
+    registryGAlias = ajTablestrNew(0);
 
-    registryEntry = ensTablestrNewLen(0);
+    ajTableSetDestroyvalue(registryGAlias,
+                           (void (*)(void **)) &ajStrDel);
 
-    registryIdentifier = ajListNew();
+    registryGEntry = ajTablestrNew(0);
 
-    registrySource = ajListstrNew();
+    ajTableSetDestroyvalue(registryGEntry,
+                           (void (*)(void **Pvalue)) &registryEntryDel);
+
+    registryGIdentifier = ajListNew();
+
+    registryGSource = ajListstrNew();
 
     return;
 }
@@ -1725,7 +1793,7 @@ void ensRegistryInit(void)
 ** @argrule Filename filename [const AjPStr] EMBOSS data file name
 ** @argrule Servername servername [AjPStr] AJAX Server name
 **
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+** @valrule * [ajuint] Number of Ensembl Database Adaptor objects registered
 **
 ** @fcategory internals
 ******************************************************************************/
@@ -1739,7 +1807,9 @@ void ensRegistryInit(void)
 **
 ** @param [u] dbc [EnsPDatabaseconnection] Ensembl Database Connection
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @return [ajuint] Number of Ensembl Database Adaptor objects registered
+**
+** @release 6.4.0
 ** @@
 ** NOTE: In this implementation the reference adaptor is not set during
 ** registration of core-sytle, but non-core databases (i.e. cdna,
@@ -1755,14 +1825,16 @@ void ensRegistryInit(void)
 ** Ensembl Database Adaptor members.
 ******************************************************************************/
 
-AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
+ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 {
+    ajuint result = 0U;
+
     AjBool debug      = AJFALSE;
     AjBool registered = AJFALSE;
 
-    AjPRegexp multire      = NULL;
-    AjPRegexp speciesre    = NULL;
-    AjPRegexp collectionre = NULL;
+    AjPRegexp rec = NULL;
+    AjPRegexp rem = NULL;
+    AjPRegexp res = NULL;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1782,7 +1854,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
     debug = ajDebugTest("ensRegistryLoadDatabaseconnection");
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryLoadDatabaseconnection\n"
                 "  dbc %p\n",
@@ -1792,10 +1864,10 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
         ajDebug("ensRegistryLoadDatabaseconnection "
                 "software version '%s'.\n",
-                ensSoftwareVersion);
+                ensKSoftwareVersion);
     }
 
-    if(!dbc)
+    if (!dbc)
         return ajFalse;
 
     /* Check if this Ensembl Database Connection has been used before. */
@@ -1806,25 +1878,20 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
     ajStrDel(&source);
 
-    if(registered)
+    if (registered)
         return ajTrue;
 
     multi = ajStrNewC("default");
 
-    collectionre =
-        ajRegCompC("^\\w+_collection_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
-
-    multire =
-        ajRegCompC("^ensembl_([a-z]+)(_\\w+?)*?(?:_\\d+)?_(\\d+)$");
-
-    speciesre =
-        ajRegCompC("^([a-z]+_[a-z0-9]+)_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
+    rec = ajRegCompC(ensKDatabaseadaptorRegCollection);
+    rem = ajRegCompC(ensKDatabaseadaptorRegMulti);
+    res = ajRegCompC(ensKDatabaseadaptorRegSpecies);
 
     statement = ajStrNewC("SHOW DATABASES");
 
     sqls = ensDatabaseconnectionSqlstatementNew(dbc, statement);
 
-    if(!sqls)
+    if (!sqls)
         ajFatal("ensRegistryLoadDatabaseconnection "
                 "SQL statement failed.\n"
                 "Please check the SQL server address '%S', "
@@ -1835,7 +1902,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         dbname = ajStrNew();
 
@@ -1843,27 +1910,27 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
         ajSqlcolumnToStr(sqlr, &dbname);
 
-        if(ajRegExec(collectionre, dbname))
+        if (ajRegExec(rec, dbname))
         {
             /* Ensembl Collection databases have to be matched first. */
 
             group     = ajStrNew();
             swversion = ajStrNew();
 
-            ajRegSubI(collectionre, 1, &group);
-            ajRegSubI(collectionre, 2, &swversion);
+            ajRegSubI(rec, 2, &group);
+            ajRegSubI(rec, 3, &swversion);
 
-            if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+            if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "collection matched\n",
                             dbname);
 
                 dbag = ensDatabaseadaptorGroupFromStr(group);
 
-                if(dbag)
-                    registryEntryLoadCollection(dbc, dbname, dbag);
+                if (dbag)
+                    result += registryEntryLoadCollection(dbc, dbname, dbag);
                 else
                     ajDebug("ensRegistryLoadDatabaseconnection got unexpected "
                             "group string '%S' for database name '%S'.\n",
@@ -1871,7 +1938,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             }
             else
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "collection\n",
                             dbname);
@@ -1880,7 +1947,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             ajStrDel(&group);
             ajStrDel(&swversion);
         }
-        else if(ajRegExec(multire, dbname))
+        else if (ajRegExec(rem, dbname))
         {
             /* Multi-species databases */
 
@@ -1888,38 +1955,43 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             prefix    = ajStrNew();
             swversion = ajStrNew();
 
-            ajRegSubI(multire, 1, &group);
+            ajRegSubI(rem, 1, &group);
 
-            if(ajRegLenI(multire, 3))
+            if (ajRegLenI(rem, 3))
             {
-                ajRegSubI(multire, 2, &prefix);
-                ajRegSubI(multire, 3, &swversion);
+                ajRegSubI(rem, 2, &prefix);
+                ajRegSubI(rem, 3, &swversion);
 
                 /* Remove leading underscores from the species prefix. */
 
-                if(ajStrPrefixC(prefix, "_"))
+                if (ajStrPrefixC(prefix, "_"))
                     ajStrCutStart(&prefix, 1);
             }
             else
-                ajRegSubI(multire, 2, &swversion);
+                ajRegSubI(rem, 2, &swversion);
 
-            if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+            if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "multi-species matched\n",
                             dbname);
 
                 dbag = ensDatabaseadaptorGroupFromStr(group);
 
-                if(dbag)
-                    ensRegistryNewDatabaseadaptor(dbc,
-                                                  dbname,
-                                                  (ajStrGetLen(prefix))
-                                                  ? prefix : multi,
-                                                  dbag,
-                                                  ajFalse,
-                                                  0);
+                if (dbag)
+                {
+                    dba = ensRegistryNewDatabaseadaptor(
+                        dbc,
+                        dbname,
+                        (ajStrGetLen(prefix)) ? prefix : multi,
+                        dbag,
+                        ajFalse,
+                        0);
+
+                    if (dba)
+                        result++;
+                }
                 else
                     ajDebug("ensRegistryLoadDatabaseconnection got unexpected "
                             "group string '%S' for database name '%S'.\n",
@@ -1927,7 +1999,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             }
             else
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "multi-species\n",
                             dbname);
@@ -1937,7 +2009,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             ajStrDel(&prefix);
             ajStrDel(&swversion);
         }
-        else if(ajRegExec(speciesre, dbname))
+        else if (ajRegExec(res, dbname))
         {
             /* Species-specific databases */
 
@@ -1945,29 +2017,35 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             group     = ajStrNew();
             swversion = ajStrNew();
 
-            ajRegSubI(speciesre, 1, &prefix);
-            ajRegSubI(speciesre, 2, &group);
-            ajRegSubI(speciesre, 3, &swversion);
+            ajRegSubI(res, 1, &prefix);
+            ajRegSubI(res, 2, &group);
+            ajRegSubI(res, 3, &swversion);
 
-            if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+            if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "species-specific matched\n",
                             dbname);
 
                 dbag = ensDatabaseadaptorGroupFromStr(group);
 
-                if(dbag)
+                if (dbag)
                 {
-                    dba = ensRegistryNewDatabaseadaptor(dbc,
-                                                        dbname,
-                                                        prefix,
-                                                        dbag,
-                                                        ajFalse,
-                                                        0);
+                    dba = ensRegistryNewDatabaseadaptor(
+                        dbc,
+                        dbname,
+                        prefix,
+                        dbag,
+                        ajFalse,
+                        0);
 
-                    registryAliasLoadDatabaseconnection(dbc, dba);
+                    if (dba)
+                    {
+                        registryAliasLoadDatabaseconnection(dbc, dba);
+
+                        result++;
+                    }
                 }
                 else
                     ajDebug("ensRegistryLoadDatabaseconnection got unexpected "
@@ -1976,7 +2054,7 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
             }
             else
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensRegistryLoadDatabaseconnection '%S' "
                             "species-specific\n",
                             dbname);
@@ -1997,21 +2075,22 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
     ensDatabaseconnectionSqlstatementDel(dbc, &sqls);
 
-    ajRegFree(&collectionre);
-    ajRegFree(&multire);
-    ajRegFree(&speciesre);
+    ajRegFree(&rec);
+    ajRegFree(&rem);
+    ajRegFree(&res);
 
     ajStrDel(&statement);
     ajStrDel(&multi);
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryLoadDatabaseconnection\n");
 
         ensRegistryEntryTrace(1);
+        ensRegistryAliasTrace(1);
     }
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2023,12 +2102,17 @@ AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 **
 ** @param [u] servername [AjPStr] AJAX Server name
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @return [ajuint] Number of Ensembl Database Adaptor objects registered
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensRegistryLoadServername(AjPStr servername)
+ajuint ensRegistryLoadServername(AjPStr servername)
 {
+    ajuint dbid   = 0U;
+    ajuint result = 0U;
+
     AjBool debug      = AJFALSE;
     AjBool registered = AJFALSE;
 
@@ -2048,7 +2132,7 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
     debug = ajDebugTest("ensRegistryLoadServername");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryLoadServername\n"
                 "  servername '%S'\n",
                 servername);
@@ -2063,14 +2147,14 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
     svrnames = ajListstrNew();
 
-    if((servername != NULL) && (ajStrGetLen(servername) > 0))
+    if ((servername != NULL) && (ajStrGetLen(servername) > 0))
         ajListstrPushAppend(svrnames, servername);
     else
         ajNamListListServers(svrnames);
 
     svriter = ajListIterNewread(svrnames);
 
-    while(!ajListIterDone(svriter))
+    while (!ajListIterDone(svriter))
     {
         svrname = ajListstrIterGet(svriter);
 
@@ -2078,39 +2162,53 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
         ajNamSvrGetAttrC(svrname, "method", &value);
 
-        if(debug)
+        if (debug)
             ajDebug("ensRegistryLoadServername got "
                     "server name '%S' method '%S'.\n",
                     svrname, value);
 
-        if(ajStrMatchC(value, "ensembl"))
+        if (ajStrMatchC(value, "ensembl"))
         {
             /* Register the AJAX Server as Registry Source entry via a URL. */
 
             ajNamSvrGetAttrC(svrname, "cachefile", &value);
 
-            /*
-            ** FIXME: It would be good to get the full path for this file.
-            ** Does the AJAX Name module keep track of the server file it
-            ** actually loaded?
-            */
-            source = ajFmtStr("file:///%S", value);
+            source = ajStrNew();
 
-            if(debug)
+            /*
+            ** TODO: It would be good to get the absolute location of the
+            ** cache file that was used for configuration. An ajNamSvrDetails
+            ** function exists, but it is quite verbose.
+
+            ajStrAssignC(&source, "file:///");
+            */
+
+            ajStrAppendS(&source, value);
+
+            if (debug)
                 ajDebug("ensRegistryLoadServername register '%S' from "
                         "source '%S'.\n",
                         svrname, source);
 
             registrySourceRegister(source, &registered);
 
+            if ((debug == ajTrue) && (registered == ajTrue))
+                ajDebug("ensRegistryLoadServername '%S' already "
+                        "registered via source '%S'.\n",
+                        svrname, source);
+
             ajStrDel(&source);
 
-            if(registered == ajTrue)
+            if (registered == ajTrue)
             {
-                if(debug)
-                    ajDebug("ensRegistryLoadServername '%S' already "
-                            "registered.\n",
-                            svrname);
+                /*
+                ** FIXME: Even if a server has already been registered,
+                ** the result needs incrementing since seqEnsemblQryFirst
+                ** depends on a value greater zero. It would be good to get
+                ** the actual number of Ensembl Database Adaptors
+                ** linked to a particular server.
+                */
+                result++;
 
                 continue;
             }
@@ -2124,7 +2222,7 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
             dbc = ensDatabaseconnectionNewUrl(value);
 
-            if(!dbc)
+            if (!dbc)
             {
                 ajDebug("ensRegistryLoadServer could not create an "
                         "Ensembl Database Connection for server name '%S' "
@@ -2142,7 +2240,7 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
             dbniter = ajListIterNew(dbnames);
 
-            while(!ajListIterDone(dbniter))
+            while (!ajListIterDone(dbniter))
             {
                 dbname = ajListstrIterGet(dbniter);
 
@@ -2150,40 +2248,72 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
                 dba = ensDatabaseadaptorNewUrl(value);
 
-                if((ensDatabaseadaptorGetMultispecies(dba) == ajTrue) &&
-                   (ensDatabaseadaptorGetIdentifier(dba) == 0))
+                if (ensDatabaseadaptorGetMultispecies(dba) == ajTrue)
                 {
                     /*
-                    ** Expand an Ensembl Database Adaptor representing a
-                    ** collection database into species-specific
-                    ** Ensembl Database Adaptor objects before registering.
-                    ** Delete the Ensembl Database Adaptor for the collection.
+                    ** For Ensembl Database Adaptors representing collection
+                    ** databases, the species name needs resetting to the AJAX
+                    ** database name and the species identifier needs parsing
+                    ** from the "special" field of the AJAX server database
+                    ** definition.
                     */
 
-                    registryEntryLoadCollection(
-                        dbc,
-                        ensDatabaseconnectionGetDatabasename(
-                            ensDatabaseadaptorGetDatabaseconnection(dba)),
-                        ensDatabaseadaptorGetGroup(dba));
+                    ensDatabaseadaptorSetSpecies(dba, dbname);
 
-                    ensDatabaseadaptorDel(&dba);
+                    if (ajNamSvrGetdbAttrSpecialC(
+                            svrname, dbname, "SpeciesIdentifier", &value) == 1)
+                    {
+                        /* Trim a trailing ';' character. */
+                        
+                        if (ajStrGetCharLast(value) == ';')
+                            ajStrCutEnd(&value, 1);
+
+                        dbid = 0U;
+
+                        if (ajStrToUint(value, &dbid))
+                            ensDatabaseadaptorSetIdentifier(dba, dbid);
+                        else
+                        {
+                            ajDebug("ensRegistryLoadServer could not parse a "
+                                    "valid unsigned integer from the "
+                                    "\"SpeciesIdentifer=INTEGER\" expression "
+                                    "'%S' in the \"special\" field of AJAX "
+                                    "database definition for "
+                                    "Ensembl collection database '%S'.\n",
+                                    value, dbname);
+
+                            ensDatabaseadaptorDel(&dba);
+
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        ajDebug("ensRegistryLoadServer could not find a "
+                                "\"SpeciesIdentifer=INTEGER\" entry in the "
+                                "\"special\" field of AJAX database "
+                                "definition for "
+                                "Ensembl collection database '%S'.\n",
+                                dbname);
+
+                        ensDatabaseadaptorDel(&dba);
+
+                        continue;
+                    }
+                }
+
+                if (ensRegistryAddDatabaseadaptor(dba) == ajTrue)
+                {
+                    /* Get and add the stable identifier prefix. */
+
+                    if (ajNamSvrGetdbAttrSpecialC(
+                            svrname, dbname, "SpeciesPrefix", &value) == 1)
+                        ensRegistryAddStableidentifierprefix(dba, value);
+
+                    result++;
                 }
                 else
-                {
-                    /*
-                    ** Register Ensembl Database Adaptor objects for
-                    ** multi-species and species-specific databases.
-                    ** Add the species as alias if registered or delete the
-                    ** Ensembl Database Adaptor if not registered,
-                    ** successfully.
-                    */
-
-                    if(ensRegistryAddDatabaseadaptor(dba))
-                        ensRegistryAliasAdd(ensDatabaseadaptorGetSpecies(dba),
-                                            ensDatabaseadaptorGetSpecies(dba));
-                    else
-                        ensDatabaseadaptorDel(&dba);
-                }
+                    ensDatabaseadaptorDel(&dba);
             }
 
             ajListIterDel(&dbniter);
@@ -2198,7 +2328,7 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 
     ajStrDel(&value);
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryLoadServername\n");
 
@@ -2206,7 +2336,7 @@ AjBool ensRegistryLoadServername(AjPStr servername)
         ensRegistryAliasTrace(1);
     }
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2236,33 +2366,34 @@ AjBool ensRegistryLoadServername(AjPStr servername)
 ** Comparison function to sort AJAX String objects case-insensitively in
 ** ascending order.
 **
-** @param [r] P1 [const void*] AJAX String 1
-** @param [r] P2 [const void*] AJAX String 2
+** @param [r] item1 [const void*] AJAX String 1
+** @param [r] item2 [const void*] AJAX String 2
 ** @see ajListSortUnique
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int registryStringCompareCase(const void* P1, const void* P2)
+static int registryStringCompareCase(
+    const void *item1,
+    const void *item2)
 {
-    const AjPStr string1 = NULL;
-    const AjPStr string2 = NULL;
+    AjPStr string1 = *(AjOStr *const *) item1;
+    AjPStr string2 = *(AjOStr *const *) item2;
 
-    string1 = *(AjPStr const*) P1;
-    string2 = *(AjPStr const*) P2;
-
-#if AJFALSE
-    if(ajDebugTest("registryStringCompareCase"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("registryStringCompareCase"))
         ajDebug("registryStringCompareCase\n"
                 "  string1 %u\n"
                 "  string2 %u\n",
                 string1,
                 string2);
-#endif
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     return ajStrCmpCaseS(string1, string2);
 }
@@ -2272,27 +2403,27 @@ static int registryStringCompareCase(const void* P1, const void* P2)
 
 /* @funcstatic registryStringDelete *******************************************
 **
-** ajListSortUnique nodedelete function to delete AJAX String objects
+** ajListSortUnique "itemdel" function to delete AJAX String objects
 ** that are redundant.
 **
-** @param [r] PP1 [void**] AJAX String address 1
+** @param [r] Pitem [void**] AJAX String address
 ** @param [r] cl [void*] Standard. Passed in from ajListSortUnique
 ** @see ajListSortUnique
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static void registryStringDelete(void** PP1, void* cl)
+static void registryStringDelete(void **Pitem, void *cl)
 {
-    if(!PP1)
+    if (!Pitem)
         return;
 
     (void) cl;
 
-    ajStrDel((AjPStr*) PP1);
-
-    *PP1 = NULL;
+    ajStrDel((AjPStr *) Pitem);
 
     return;
 }
@@ -2307,26 +2438,30 @@ static void registryStringDelete(void** PP1, void* cl)
 ** @param [u] species [AjPList] AJAX List of AJAX String (species name) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryRetrieveAllSpecies(AjPList species)
 {
-    void** keyarray = NULL;
+    void **keyarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
-    if(!species)
+    if (!species)
         return ajFalse;
 
-    ajTableToarrayKeys(registryEntry, &keyarray);
+    ajTableToarrayKeys(registryGEntry, &keyarray);
 
-    for(i = 0; keyarray[i]; i++)
+    for (i = 0U; keyarray[i]; i++)
         ajListstrPushAppend(species, ajStrNewS((AjPStr) keyarray[i]));
 
     AJFREE(keyarray);
 
-    ajListSortUnique(species, registryStringCompareCase, registryStringDelete);
+    ajListSortUnique(species,
+                     &registryStringCompareCase,
+                     &registryStringDelete);
 
     return ajTrue;
 }
@@ -2370,70 +2505,6 @@ AjBool ensRegistryRetrieveAllSpecies(AjPList species)
 
 
 
-/* @funcstatic registryAliasRegister ******************************************
-**
-** Check, whether an alias name can be resolved directly or after replacing
-** underscore characters into a species name. If not, register the alias
-** without underscore characters and set the alias with underscores as alias.
-**
-** @param [r] alias [const AjPStr] Alias name
-**
-** @return [AjPStr] Species name or NULL
-** @@
-******************************************************************************/
-
-static AjPStr registryAliasRegister(const AjPStr alias)
-{
-    AjPStr species = NULL;
-    AjPStr unalias = NULL;
-
-    if(!(alias && ajStrGetLen(alias)))
-        return NULL;
-
-    /* Resolve an eventual alias to the species name. */
-
-    ensRegistryAliasResolve(alias, &species);
-
-    if(!species)
-    {
-        /*
-        ** If this alias has not been registered before, test if it has been
-        ** registered without underscores.
-        */
-
-        unalias = ajStrNewS(alias);
-
-        /*
-        ** FIXME: Since EMBOSS DBNAMES cannot cope with spaces species names
-        ** must include underscores.
-        ajStrExchangeCC(&unalias, "_", " ");
-        */
-
-        ensRegistryAliasResolve(unalias, &species);
-
-        if(!species)
-        {
-            /*
-            ** If the alias without underscores has also not been registered
-            ** before, register it as species before registering the one
-            ** with underscores as alias.
-            */
-
-            ensRegistryAliasAdd(unalias, unalias);
-            ensRegistryAliasAdd(unalias, alias);
-
-            ensRegistryAliasResolve(alias, &species);
-        }
-
-        ajStrDel(&unalias);
-    }
-
-    return species;
-}
-
-
-
-
 /* @func ensRegistryAliasAdd **************************************************
 **
 ** Add a Registry Alias entry to the Ensembl Registry.
@@ -2442,6 +2513,8 @@ static AjPStr registryAliasRegister(const AjPStr alias)
 ** @param [r] alias [const AjPStr] Alias name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2453,26 +2526,26 @@ AjBool ensRegistryAliasAdd(const AjPStr species, const AjPStr alias)
 
     debug = ajDebugTest("ensRegistryAliasAdd");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryAliasAdd\n"
                 "  species '%S'\n"
                 "  alias '%S'\n",
                 species,
                 alias);
 
-    if(!species)
+    if (!species)
         return ajFalse;
 
-    if(!alias)
+    if (!alias)
         return ajFalse;
 
-    current = (AjPStr) ajTableFetchmodV(registryAlias, (const void*) alias);
+    current = (AjPStr) ajTableFetchmodV(registryGAlias, (const void *) alias);
 
-    if(current)
+    if (current)
     {
-        if(ajStrMatchCaseS(current, species))
+        if (ajStrMatchCaseS(current, species))
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensRegistryAliasAdd has already added alias '%S' for "
                         "this species '%S'.\n", alias, current);
 
@@ -2480,7 +2553,7 @@ AjBool ensRegistryAliasAdd(const AjPStr species, const AjPStr alias)
         }
         else
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensRegistryAliasAdd has already added alias '%S' for "
                         "a different species '%S'.\n", alias, current);
 
@@ -2488,60 +2561,15 @@ AjBool ensRegistryAliasAdd(const AjPStr species, const AjPStr alias)
         }
     }
 
-    ajTablePut(registryAlias,
-               (void*) ajStrNewS(alias),
-               (void*) ajStrNewS(species));
+    ajTablePut(registryGAlias,
+               (void *) ajStrNewS(alias),
+               (void *) ajStrNewS(species));
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryAliasAdd added alias '%S' for species '%S'.\n",
                 alias, species);
 
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic tableRegistryAliasClear ****************************************
-**
-** An ajTableMapDel "apply" function to clear an AJAX Table of
-** AJAX String key data and
-** AJAX String value data.
-**
-** @param [u] key [void**] AJAX String address
-** @param [u] value [void**] AJAX String address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void tableRegistryAliasClear(void** key,
-                                    void** value,
-                                    void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    ajStrDel((AjPStr*) key);
-    ajStrDel((AjPStr*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
 }
 
 
@@ -2552,15 +2580,17 @@ static void tableRegistryAliasClear(void** key,
 ** Clear all Registry Alias entries from the Ensembl Registry.
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryAliasClear(void)
 {
-    if(!registryAlias)
+    if (!registryGAlias)
         return ajFalse;
 
-    ajTableMapDel(registryAlias, tableRegistryAliasClear, NULL);
+    ajTableClearDelete(registryGAlias);
 
     return ajTrue;
 }
@@ -2580,31 +2610,33 @@ AjBool ensRegistryAliasClear(void)
 ** @param [u] aliases [AjPList] AJAX List of AJAX String (alias) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryAliasFetchAllbySpecies(const AjPStr species,
                                          AjPList aliases)
 {
-    void** keyarray = NULL;
-    void** valarray = NULL;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
-    if(!aliases)
+    if (!aliases)
         return ajFalse;
 
-    ajTableToarrayKeysValues(registryAlias, &keyarray, &valarray);
+    ajTableToarrayKeysValues(registryGAlias, &keyarray, &valarray);
 
-    for(i = 0; keyarray[i]; i++)
+    for (i = 0U; keyarray[i]; i++)
     {
         /* If a species name has been passed in, skip non-matching ones. */
-        if((species != NULL) &&
-           (ajStrMatchS(species, (AjPStr) valarray[i]) == ajFalse))
+        if ((species != NULL) &&
+            (ajStrMatchS(species, (AjPStr) valarray[i]) == ajFalse))
             continue;
 
         /* Skip identical species and alias names. */
-        if(ajStrMatchS((AjPStr) keyarray[i], (AjPStr) valarray[i]) == ajTrue)
+        if (ajStrMatchS((AjPStr) keyarray[i], (AjPStr) valarray[i]) == ajTrue)
             continue;
 
         ajListstrPushAppend(aliases, ajStrNewS((AjPStr) keyarray[i]));
@@ -2629,6 +2661,8 @@ AjBool ensRegistryAliasFetchAllbySpecies(const AjPStr species,
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** NOTE: This function uses the Ensembl Database Connection to avoid
 ** connecting and disconnecting for each database.
@@ -2638,9 +2672,9 @@ static AjBool registryAliasLoadDatabaseconnection(
     EnsPDatabaseconnection dbc,
     EnsPDatabaseadaptor dba)
 {
-    char* txtdbname = NULL;
+    char *txtdbname = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -2650,13 +2684,13 @@ static AjBool registryAliasLoadDatabaseconnection(
     AjPStr dbname    = NULL;
     AjPStr statement = NULL;
 
-    if(!dbc)
+    if (!dbc)
         return ajFalse;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -2673,7 +2707,7 @@ static AjBool registryAliasLoadDatabaseconnection(
 
             ensDatabaseconnectionEscapeC(dbc, &txtdbname, dbname);
 
-            for(i = 0; registryAliasMetaKey[i]; i++)
+            for (i = 0U; registryKAliasMetaKey[i]; i++)
             {
                 statement = ajFmtStr(
                     "SELECT "
@@ -2686,14 +2720,14 @@ static AjBool registryAliasLoadDatabaseconnection(
                     "%s.meta.species_id = %u",
                     txtdbname,
                     txtdbname,
-                    txtdbname, registryAliasMetaKey[i],
+                    txtdbname, registryKAliasMetaKey[i],
                     txtdbname, ensDatabaseadaptorGetIdentifier(dba));
 
                 sqls = ensDatabaseconnectionSqlstatementNew(dbc, statement);
 
                 sqli = ajSqlrowiterNew(sqls);
 
-                while(!ajSqlrowiterDone(sqli))
+                while (!ajSqlrowiterDone(sqli))
                 {
                     metavalue = ajStrNew();
 
@@ -2701,8 +2735,8 @@ static AjBool registryAliasLoadDatabaseconnection(
 
                     ajSqlcolumnToStr(sqlr, &metavalue);
 
-                    if(ajCharMatchC(registryAliasMetaKey[i],
-                                    "species.stable_id_prefix"))
+                    if (ajCharMatchC(registryKAliasMetaKey[i],
+                                     "species.stable_id_prefix"))
                         ensRegistryAddStableidentifierprefix(dba, metavalue);
                     else
                         ensRegistryAliasAdd(ensDatabaseadaptorGetSpecies(dba),
@@ -2775,12 +2809,14 @@ static AjBool registryAliasLoadDatabaseconnection(
 ** @param [rN] filename [const AjPStr] EMBOSS data file name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 {
-    const char* txtname = "EnsemblAliases.dat";
+    const char *txtname = "EnsemblAliases.dat";
 
     AjBool block = AJFALSE;
     AjBool debug = AJFALSE;
@@ -2792,17 +2828,17 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
     debug = ajDebugTest("ensRegistryAliasLoadFile");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryAliasLoadFile\n"
                 "  filename: '%S'\n",
                 filename);
 
-    if(filename && ajStrGetLen(filename))
+    if (filename && ajStrGetLen(filename))
         infile = ajDatafileNewInNameS(filename);
     else
         infile = ajDatafileNewInNameC(txtname);
 
-    if(!infile)
+    if (!infile)
     {
         ajWarn("ensRegistryAliasLoadFile could not load "
                "Ensembl Registry Aliases data file '%s'.",
@@ -2816,7 +2852,7 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
     species = ajStrNew();
 
-    while(ajReadlineTrim(infile, &line))
+    while (ajReadlineTrim(infile, &line))
     {
         /*
         ** Remove excess white space and ignore all lines that start with
@@ -2825,7 +2861,7 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
         ajStrRemoveWhiteSpaces(&line);
 
-        if(ajStrGetCharFirst(line) == '#')
+        if (ajStrGetCharFirst(line) == '#')
             continue;
 
         /*
@@ -2840,7 +2876,7 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
         ajStrRemoveWhiteSpaces(&line);
 
-        if(!ajStrGetLen(line))
+        if (!ajStrGetLen(line))
         {
             /* An empty line indicates the end of a block. */
 
@@ -2849,7 +2885,7 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
             continue;
         }
 
-        if(block)
+        if (block)
         {
             /* This is a subsequent line of a block, which is an alias. */
 
@@ -2861,8 +2897,6 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
             ajStrAssignS(&species, line);
 
-            ensRegistryAliasAdd(species, species);
-
             block = ajTrue;
         }
     }
@@ -2872,7 +2906,7 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 
     ajFileClose(&infile);
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryAliasLoadFile\n");
 
@@ -2892,23 +2926,21 @@ AjBool ensRegistryAliasLoadFile(const AjPStr filename)
 ** @param [r] alias [const AjPStr] Alias name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryAliasRemove(const AjPStr alias)
 {
-    AjPStr key = NULL;
-    AjPStr val = NULL;
+    AjPStr value = NULL;
 
-    if(!alias)
+    if (!alias)
         return ajFalse;
 
-    val = (AjPStr) ajTableRemoveKey(registryAlias,
-                                    (const void*) alias,
-                                    (void**) &key);
+    value = (AjPStr) ajTableRemove(registryGAlias, (const void *) alias);
 
-    ajStrDel(&key);
-    ajStrDel(&val);
+    ajStrDel(&value);
 
     return ajTrue;
 }
@@ -2924,18 +2956,20 @@ AjBool ensRegistryAliasRemove(const AjPStr alias)
 ** @param [wP] Pspecies [AjPStr*] Species name adress or NULL
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensRegistryAliasResolve(const AjPStr alias, AjPStr* Pspecies)
+AjBool ensRegistryAliasResolve(const AjPStr alias, AjPStr *Pspecies)
 {
-    if(!alias)
+    if (!alias)
         return ajFalse;
 
-    if(!Pspecies)
+    if (!Pspecies)
         return ajFalse;
 
-    *Pspecies = (AjPStr) ajTableFetchmodV(registryAlias, (const void*) alias);
+    *Pspecies = (AjPStr) ajTableFetchmodV(registryGAlias, (const void *) alias);
 
     return ajTrue;
 }
@@ -2950,6 +2984,8 @@ AjBool ensRegistryAliasResolve(const AjPStr alias, AjPStr* Pspecies)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2962,9 +2998,9 @@ AjBool ensRegistryAliasTrace(ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%SensRegistryAliasTrace %p\n",
-            indent, registryAlias);
+            indent, registryGAlias);
 
-    ajTablestrTrace(registryAlias);
+    ajTablestrTrace(registryGAlias);
 
     ajStrDel(&indent);
 
@@ -3008,6 +3044,8 @@ AjBool ensRegistryAliasTrace(ajuint level)
 ** Clear all Registry Identifier entries from the Ensembl Registry.
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3015,10 +3053,10 @@ AjBool ensRegistryIdentifierClear(void)
 {
     RegistryPIdentifier ri = NULL;
 
-    if(!registryIdentifier)
+    if (!registryGIdentifier)
         return ajFalse;
 
-    while(ajListPop(registryIdentifier, (void**) &ri))
+    while (ajListPop(registryGIdentifier, (void **) &ri))
         registryIdentifierDel(&ri);
 
     return ajTrue;
@@ -3036,12 +3074,14 @@ AjBool ensRegistryIdentifierClear(void)
 ** @param [rN] filename [const AjPStr] EMBOSS data file name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 {
-    const char* txtname = "EnsemblIdentifiers.dat";
+    const char *txtname = "EnsemblIdentifiers.dat";
 
     AjBool debug = AJFALSE;
 
@@ -3062,15 +3102,15 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 
     debug = ajDebugTest("ensRegistryIdentifierLoadFile");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryIdentifierLoadFile\n");
 
-    if(filename && ajStrGetLen(filename))
+    if (filename && ajStrGetLen(filename))
         infile = ajDatafileNewInNameS(filename);
     else
         infile = ajDatafileNewInNameC(txtname);
 
-    if(!infile)
+    if (!infile)
     {
         ajWarn("ensRegistryIdentifierLoadFile could not load "
                "Ensembl Registry Identifiers data file '%s'.",
@@ -3088,40 +3128,40 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
     group = ajStrNew();
     space = ajStrNew();
 
-    while(ajReadlineTrim(infile, &line))
+    while (ajReadlineTrim(infile, &line))
     {
-        if(debug)
+        if (debug)
             ajDebug("ensRegistryIdentifierLoadFile original line '%S'\n",
                     line);
 
-        if(!ajStrCutComments(&line))
+        if (!ajStrCutComments(&line))
             continue;
 
         ajStrTokenAssignC(&token, line, "\"");
 
-        if(!ajStrTokenNextFind(&token, &expression))
+        if (!ajStrTokenNextFind(&token, &expression))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "regular expression from line '%S'.\n", line);
 
-        if(!ajStrTokenNextFind(&token, &space))
+        if (!ajStrTokenNextFind(&token, &space))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "begin of species from line '%S'.\n", line);
 
-        if(!ajStrTokenNextFind(&token, &alias))
+        if (!ajStrTokenNextFind(&token, &alias))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "species from line '%S'.\n", line);
 
-        if(!ajStrTokenNextFind(&token, &space))
+        if (!ajStrTokenNextFind(&token, &space))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "begin of group from line '%S'.\n", line);
 
-        if(!ajStrTokenNextFind(&token, &group))
+        if (!ajStrTokenNextFind(&token, &group))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "group from line '%S'.\n", line);
 
         ajStrTokenDel(&token);
 
-        if(debug)
+        if (debug)
             ajDebug("ensRegistryIdentifierLoadFile "
                     "regular expression '%S' "
                     "alias '%S' "
@@ -3132,7 +3172,7 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 
         ensRegistryAliasResolve(alias, &species);
 
-        if(!species)
+        if (!species)
         {
             ajWarn("ensRegistryIdentifierLoadFile could not resolve '%S' "
                    "to valid species name.\n", alias);
@@ -3142,7 +3182,7 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 
         dbag = ensDatabaseadaptorGroupFromStr(group);
 
-        if(!dbag)
+        if (!dbag)
         {
             ajWarn("ensRegistryIdentifierLoadFile could not get group for "
                    "string '%S'.\n", group);
@@ -3152,7 +3192,7 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 
         ri = registryIdentifierNew(expression, species , dbag);
 
-        ajListPushAppend(registryIdentifier, (void*) ri);
+        ajListPushAppend(registryGIdentifier, (void *) ri);
     }
 
     ajStrDel(&expression);
@@ -3180,12 +3220,14 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 ** Ensembl Database Adaptor Group enumeration address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryIdentifierResolve(const AjPStr identifier,
-                                    AjPStr* Pspecies,
-                                    EnsEDatabaseadaptorGroup* Pdbag)
+                                    AjPStr *Pspecies,
+                                    EnsEDatabaseadaptorGroup *Pdbag)
 {
     AjIList iter = NULL;
 
@@ -3193,28 +3235,28 @@ AjBool ensRegistryIdentifierResolve(const AjPStr identifier,
 
     RegistryPIdentifier ri = NULL;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pspecies)
+    if (!Pspecies)
         return ajFalse;
 
-    if(!Pdbag)
+    if (!Pdbag)
         return ajFalse;
 
     ajStrAssignClear(Pspecies);
 
     *Pdbag = ensEDatabaseadaptorGroupNULL;
 
-    iter = ajListIterNew(registryIdentifier);
+    iter = ajListIterNew(registryGIdentifier);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         ri = (RegistryPIdentifier) ajListIterGet(iter);
 
         re = ajRegComp(ri->RegularExpression);
 
-        if(ajRegExec(re, identifier))
+        if (ajRegExec(re, identifier))
         {
             ajStrAssignS(Pspecies, ri->SpeciesName);
 
@@ -3254,66 +3296,22 @@ AjBool ensRegistryIdentifierResolve(const AjPStr identifier,
 
 
 
-/* @funcstatic tableRegistryEntryClear ****************************************
-**
-** An ajTableMapDel "apply" function to clear an AJAX Table of
-** AJAX String key data and
-** Registry Entry object value data.
-**
-** @param [u] key [void**] AJAX String address
-** @param [u] value [void**] Registry Entry object address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void tableRegistryEntryClear(void** key,
-                                    void** value,
-                                    void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    ajStrDel((AjPStr*) key);
-
-    registryEntryDel((RegistryPEntry *) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
-
-
-
-
 /* @func ensRegistryEntryClear ************************************************
 **
 ** Clear all Registry Entry objects from the Ensembl Registry.
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryEntryClear(void)
 {
-    if(!registryEntry)
+    if (!registryGEntry)
         return ajFalse;
 
-    ajTableMapDel(registryEntry, tableRegistryEntryClear, NULL);
+    ajTableClearDelete(registryGEntry);
 
     return ajTrue;
 }
@@ -3332,17 +3330,20 @@ AjBool ensRegistryEntryClear(void)
 ** @param [u] dbag [EnsEDatabaseadaptorGroup]
 ** Ensembl Database Adaptor Group enumeration
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @return [ajuint] Number of Ensembl Database Adaptor objects registered
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
+static ajuint registryEntryLoadCollection(EnsPDatabaseconnection dbc,
                                           AjPStr dbname,
                                           EnsEDatabaseadaptorGroup dbag)
 {
-    char* txtdbname = NULL;
+    char *txtdbname = NULL;
 
-    ajuint identifier = 0;
+    ajuint identifier = 0U;
+    ajuint result     = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -3353,7 +3354,7 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!dbc)
+    if (!dbc)
         return ajFalse;
 
     ensDatabaseconnectionEscapeC(dbc, &txtdbname, dbname);
@@ -3377,7 +3378,7 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         species = ajStrNew();
@@ -3387,8 +3388,6 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
         ajSqlcolumnToUint(sqlr, &identifier);
         ajSqlcolumnToStr(sqlr, &species);
 
-        ensRegistryAliasAdd(species, species);
-
         dba = ensRegistryNewDatabaseadaptor(dbc,
                                             dbname,
                                             species,
@@ -3396,7 +3395,12 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
                                             ajTrue,
                                             identifier);
 
-        registryAliasLoadDatabaseconnection(dbc, dba);
+        if (dba)
+        {
+            registryAliasLoadDatabaseconnection(dbc, dba);
+
+            result++;
+        }
 
         ajStrDel(&species);
     }
@@ -3407,7 +3411,7 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -3420,15 +3424,17 @@ static AjBool registryEntryLoadCollection(EnsPDatabaseconnection dbc,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryEntryTrace(ajuint level)
 {
-    void** keyarray = NULL;
-    void** valarray = NULL;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPStr indent = NULL;
 
@@ -3437,11 +3443,11 @@ AjBool ensRegistryEntryTrace(ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%SensRegistryEntryTrace %p\n",
-            indent, registryEntry);
+            indent, registryGEntry);
 
-    ajTableToarrayKeysValues(registryEntry, &keyarray, &valarray);
+    ajTableToarrayKeysValues(registryGEntry, &keyarray, &valarray);
 
-    for(i = 0; keyarray[i]; i++)
+    for (i = 0U; keyarray[i]; i++)
     {
         ajDebug("%S  Species '%S'\n", indent, (AjPStr) keyarray[i]);
 
@@ -3494,31 +3500,33 @@ AjBool ensRegistryEntryTrace(ajuint level)
 **                                  ajTrue if registered before, ajFalse if not
 **
 ** @return [AjBool] ajTrue opon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool registrySourceRegister(const AjPStr source,
-                                     AjBool* Pregistered)
+                                     AjBool *Pregistered)
 {
     AjIList iterator = NULL;
 
     AjPStr entry = NULL;
 
-    if(!Pregistered)
+    if (!Pregistered)
         return ajFalse;
 
     *Pregistered = ajFalse;
 
-    if(!(source && ajStrGetLen(source)))
+    if (!(source && ajStrGetLen(source)))
         return ajFalse;
 
-    iterator = ajListIterNew(registrySource);
+    iterator = ajListIterNew(registryGSource);
 
-    while(!ajListIterDone(iterator))
+    while (!ajListIterDone(iterator))
     {
         entry = ajListstrIterGet(iterator);
 
-        if(ajStrMatchCaseS(entry, source))
+        if (ajStrMatchCaseS(entry, source))
         {
             *Pregistered = ajTrue;
 
@@ -3530,8 +3538,8 @@ static AjBool registrySourceRegister(const AjPStr source,
 
     /* If this source has not been seen before, add it to the AJAX List. */
 
-    if(!*Pregistered)
-        ajListstrPushAppend(registrySource, ajStrNewS(source));
+    if (!*Pregistered)
+        ajListstrPushAppend(registryGSource, ajStrNewS(source));
 
     return ajTrue;
 }
@@ -3546,6 +3554,8 @@ static AjBool registrySourceRegister(const AjPStr source,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3561,11 +3571,11 @@ AjBool ensRegistrySourceTrace(ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%ensRegistrySourceTrace %p\n",
-            indent, registrySource);
+            indent, registryGSource);
 
-    iterator = ajListIterNew(registrySource);
+    iterator = ajListIterNew(registryGSource);
 
-    while(!ajListIterDone(iterator))
+    while (!ajListIterDone(iterator))
     {
         entry = ajListstrIterGet(iterator);
 
@@ -3638,7 +3648,7 @@ AjBool ensRegistrySourceTrace(ajuint level)
 ** Create an Ensembl Database Adaptor and add it to the Ensembl Registry.
 **
 ** @param [u] dbc [EnsPDatabaseconnection] Ensembl Database Connection
-** @param [u] database [AjPStr] Database name (optional). If not provided, the
+** @param [uN] database [AjPStr] Database name (optional). If not provided, the
 **                              database name in the Database Connection will
 **                              be used.
 ** @param [u] alias [AjPStr] Species name or alias name
@@ -3648,6 +3658,8 @@ AjBool ensRegistrySourceTrace(ajuint level)
 ** @param [r] identifier [ajuint] Species identifier
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ** This function aims to resolve an eventual alias to a valid species name.
 ** If the alias has not been registered before, it will strip underscores from
@@ -3671,7 +3683,7 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(ajDebugTest("ensRegistryNewDatabaseadaptor"))
+    if (ajDebugTest("ensRegistryNewDatabaseadaptor"))
     {
         ajDebug("ensRegistryNewDatabaseadaptor\n"
                 "  dbc %p\n"
@@ -3690,16 +3702,19 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
         ensDatabaseconnectionTrace(dbc, 1);
     }
 
-    if(!dbc)
+    if (!dbc)
         return NULL;
 
-    if(!database)
+    if (!database)
         return NULL;
 
-    if(!alias)
+    if ((alias == NULL) || (ajStrGetLen(alias) == 0))
         return NULL;
 
-    species = registryAliasRegister(alias);
+    ensRegistryAliasResolve(alias, &species);
+
+    if (species == NULL)
+        species = alias;
 
     dba = ensDatabaseadaptorNewIni(dbc,
                                    database,
@@ -3708,12 +3723,8 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
                                    multi,
                                    identifier);
 
-    if(!ensRegistryAddDatabaseadaptor(dba))
-    {
+    if (ensRegistryAddDatabaseadaptor(dba) == ajFalse)
         ensDatabaseadaptorDel(&dba);
-
-        dba = NULL;
-    }
 
     return dba;
 }
@@ -3742,6 +3753,8 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
 ** @param [r] identifier [ajuint] Species identifier
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ** This function aims to resolve an eventual alias to a valid species name.
 ** If the alias has not been registered before, it will strip underscores from
@@ -3766,7 +3779,7 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
 
     EnsPDatabaseadaptor rsa = NULL;
 
-    if(ajDebugTest("ensRegistryNewReferenceadaptor"))
+    if (ajDebugTest("ensRegistryNewReferenceadaptor"))
     {
         ajDebug("ensRegistryNewReferenceadaptor\n"
                 "  dba %p\n"
@@ -3789,19 +3802,22 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
         ensDatabaseconnectionTrace(dbc, 1);
     }
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(!dbc)
+    if (!dbc)
         return NULL;
 
-    if(!database)
+    if (!database)
         return NULL;
 
-    if(!alias)
+    if (!alias)
         return NULL;
 
-    species = registryAliasRegister(alias);
+    ensRegistryAliasResolve(alias, &species);
+
+    if (species == NULL)
+        species = alias;
 
     rsa = ensDatabaseadaptorNewIni(dbc,
                                    database,
@@ -3810,12 +3826,8 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
                                    multi,
                                    identifier);
 
-    if(!ensRegistryAddReferenceadaptor(dba, rsa))
-    {
+    if (ensRegistryAddReferenceadaptor(dba, rsa) == ajFalse)
         ensDatabaseadaptorDel(&rsa);
-
-        rsa = NULL;
-    }
 
     return rsa;
 }
@@ -3823,7 +3835,7 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
 
 
 
-/* @section element addition **************************************************
+/* @section member addition ***************************************************
 **
 ** Functions for adding members to the Ensembl Registry.
 **
@@ -3857,6 +3869,8 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3873,7 +3887,7 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
     RegistryPComparativeGenomics rcg = NULL;
     RegistryPOntology            ro  = NULL;
 
-    if(ajDebugTest("ensRegistryAddDatabaseadaptor"))
+    if (ajDebugTest("ensRegistryAddDatabaseadaptor"))
     {
         ajDebug("ensRegistryAddDatabaseadaptor\n"
                 "  dba %p\n",
@@ -3882,25 +3896,25 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
         ensDatabaseadaptorTrace(dba, 1);
     }
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
     {
         AJNEW0(entry);
 
-        ajTablePut(registryEntry,
-                   (void*) ajStrNewRef(ensDatabaseadaptorGetSpecies(dba)),
-                   (void*) entry);
+        ajTablePut(registryGEntry,
+                   (void *) ajStrNewRef(ensDatabaseadaptorGetSpecies(dba)),
+                   (void *) entry);
     }
 
     dbag = ensDatabaseadaptorGetGroup(dba);
 
-    switch(dbag)
+    switch (dbag)
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -3910,16 +3924,16 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 
         case ensEDatabaseadaptorGroupCopyDNA:
 
-            if(entry->Registry[dbag])
+            if (entry->Registry[dbag])
                 rcs = (RegistryPCoreStyle) entry->Registry[dbag];
             else
             {
                 AJNEW0(rcs);
 
-                entry->Registry[dbag] = (void*) rcs;
+                entry->Registry[dbag] = (void *) rcs;
             }
 
-            if(rcs->Databaseadaptor)
+            if (rcs->Databaseadaptor)
                 ajWarn("ensRegistryAddDatabaseadaptor already has an "
                        "Ensembl Database Adaptor of the same "
                        "species '%S' and group '%s' registered.",
@@ -3936,16 +3950,16 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 
         case ensEDatabaseadaptorGroupGeneticVariation:
 
-            if(entry->Registry[dbag])
+            if (entry->Registry[dbag])
                 rgv = (RegistryPGeneticVariation) entry->Registry[dbag];
             else
             {
                 AJNEW0(rgv);
 
-                entry->Registry[dbag] = (void*) rgv;
+                entry->Registry[dbag] = (void *) rgv;
             }
 
-            if(rgv->Databaseadaptor)
+            if (rgv->Databaseadaptor)
                 ajWarn("ensRegistryAddDatabaseadaptor already has an "
                        "Ensembl Database Adaptor of the same "
                        "species '%S' and group '%s' registered.",
@@ -3962,16 +3976,16 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 
         case ensEDatabaseadaptorGroupFunctionalGenomics:
 
-            if(entry->Registry[dbag])
+            if (entry->Registry[dbag])
                 rfg = (RegistryPFunctionalGenomics) entry->Registry[dbag];
             else
             {
                 AJNEW0(rfg);
 
-                entry->Registry[dbag] = (void*) rfg;
+                entry->Registry[dbag] = (void *) rfg;
             }
 
-            if(rfg->Databaseadaptor)
+            if (rfg->Databaseadaptor)
                 ajWarn("ensRegistryAddDatabaseadaptor already has an "
                        "Ensembl Database Adaptor of the same "
                        "species '%S' and group '%s' registered.",
@@ -3988,16 +4002,16 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 
         case ensEDatabaseadaptorGroupComparativeGenomics:
 
-            if(entry->Registry[dbag])
+            if (entry->Registry[dbag])
                 rcg = (RegistryPComparativeGenomics) entry->Registry[dbag];
             else
             {
                 AJNEW0(rcg);
 
-                entry->Registry[dbag] = (void*) rcg;
+                entry->Registry[dbag] = (void *) rcg;
             }
 
-            if(rcg->Databaseadaptor)
+            if (rcg->Databaseadaptor)
                 ajWarn("ensRegistryAddDatabaseadaptor already has an "
                        "Ensembl Database Adaptor of the same "
                        "species '%S' and group '%s' registered.",
@@ -4014,16 +4028,16 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 
         case ensEDatabaseadaptorGroupOntology:
 
-            if(entry->Registry[dbag])
+            if (entry->Registry[dbag])
                 ro = (RegistryPOntology) entry->Registry[dbag];
             else
             {
                 AJNEW0(ro);
 
-                entry->Registry[dbag] = (void*) ro;
+                entry->Registry[dbag] = (void *) ro;
             }
 
-            if(ro->Databaseadaptor)
+            if (ro->Databaseadaptor)
                 ajWarn("ensRegistryAddDatabaseadaptor already has an "
                        "Ensembl Database Adaptor of the same "
                        "species '%S' and group '%s' registered.",
@@ -4084,6 +4098,8 @@ AjBool ensRegistryAddDatabaseadaptor(EnsPDatabaseadaptor dba)
 ** @param [u] rsa [EnsPDatabaseadaptor] Reference sequence adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -4095,7 +4111,7 @@ AjBool ensRegistryAddReferenceadaptor(EnsPDatabaseadaptor dba,
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle ecs = NULL;
 
-    if(ajDebugTest("ensRegistryAddReferenceAdaptor"))
+    if (ajDebugTest("ensRegistryAddReferenceAdaptor"))
     {
         ajDebug("ensRegistryAddReferenceAdaptor\n"
                 "  dba %p\n"
@@ -4107,20 +4123,20 @@ AjBool ensRegistryAddReferenceadaptor(EnsPDatabaseadaptor dba,
         ensDatabaseadaptorTrace(rsa, 1);
     }
 
-    if(!dba)
+    if (!dba)
         return result;
 
-    if(!rsa)
+    if (!rsa)
         return result;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return result;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -4132,7 +4148,7 @@ AjBool ensRegistryAddReferenceadaptor(EnsPDatabaseadaptor dba,
 
             ecs = entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if((ecs != NULL) && (ecs->Referenceadaptor == NULL))
+            if ((ecs != NULL) && (ecs->Referenceadaptor == NULL))
             {
                 ecs->Referenceadaptor = rsa;
 
@@ -4186,6 +4202,8 @@ AjBool ensRegistryAddReferenceadaptor(EnsPDatabaseadaptor dba,
 ** @param [r] prefix [const AjPStr] Stable identifier prefix
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -4197,7 +4215,7 @@ AjBool ensRegistryAddStableidentifierprefix(EnsPDatabaseadaptor dba,
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle ecs = NULL;
 
-    if(ajDebugTest("ensRegistryAddStableidentifierprefix"))
+    if (ajDebugTest("ensRegistryAddStableidentifierprefix"))
     {
         ajDebug("ensRegistryAddStableidentifierprefix\n"
                 "  dba %p\n"
@@ -4208,20 +4226,20 @@ AjBool ensRegistryAddStableidentifierprefix(EnsPDatabaseadaptor dba,
         ensDatabaseadaptorTrace(dba, 1);
     }
 
-    if(!dba)
+    if (!dba)
         return result;
 
-    if(!(prefix && ajStrGetLen(prefix)))
+    if (!(prefix && ajStrGetLen(prefix)))
         return result;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return result;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -4233,9 +4251,9 @@ AjBool ensRegistryAddStableidentifierprefix(EnsPDatabaseadaptor dba,
 
             ecs = entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(ecs != NULL)
+            if (ecs != NULL)
             {
-                if(ecs->Stableidentifierprefix == NULL)
+                if (ecs->Stableidentifierprefix == NULL)
                     ecs->Stableidentifierprefix = ajStrNewS(prefix);
                 else
                     ajStrAssignS(&ecs->Stableidentifierprefix, prefix);
@@ -4277,7 +4295,7 @@ AjBool ensRegistryAddStableidentifierprefix(EnsPDatabaseadaptor dba,
 
 
 
-/* @section element removal ***************************************************
+/* @section member removal ****************************************************
 **
 ** Functions for removing members from the Ensembl Registry.
 **
@@ -4304,15 +4322,16 @@ AjBool ensRegistryAddStableidentifierprefix(EnsPDatabaseadaptor dba,
 ** @param [d] Pdba [EnsPDatabaseadaptor*] Ensembl Database Adaptor address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
+AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor *Pdba)
 {
     AjBool registered = AJFALSE;
 
-    AjPStr key     = NULL;
-    AjPStr truekey = NULL;
+    AjPStr key = NULL;
 
     EnsEDatabaseadaptorGroup dbag = ensEDatabaseadaptorGroupNULL;
 
@@ -4323,18 +4342,19 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
     RegistryPComparativeGenomics rcg = NULL;
     RegistryPOntology ro             = NULL;
 
-    if(!Pdba)
+    if (!Pdba)
         return ajFalse;
 
-    if(!*Pdba)
+    if (!*Pdba)
         return ajFalse;
 
     key = ajStrNewS(ensDatabaseadaptorGetSpecies(*Pdba));
 
-    entry = (RegistryPEntry) ajTableFetchmodV(registryEntry,
-                                              (const void*) key);
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) key);
 
-    if(!entry)
+    if (!entry)
     {
         ajWarn("ensRegistryRemoveDatabaseadaptor could not get "
                "a Registry Entry for species '%S'.\n",
@@ -4347,7 +4367,7 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
     dbag = ensDatabaseadaptorGetGroup(*Pdba);
 
-    switch(dbag)
+    switch (dbag)
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -4359,10 +4379,10 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
             rcs = (RegistryPCoreStyle) entry->Registry[dbag];
 
-            if(rcs)
+            if (rcs)
             {
-                if(rcs->Databaseadaptor == *Pdba)
-                    registryCoreStyleDel((RegistryPCoreStyle*)
+                if (rcs->Databaseadaptor == *Pdba)
+                    registryCoreStyleDel((RegistryPCoreStyle *)
                                          &entry->Registry[dbag]);
             }
             else
@@ -4376,9 +4396,9 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
             rgv = (RegistryPGeneticVariation) entry->Registry[dbag];
 
-            if(rgv)
+            if (rgv)
             {
-                if(rgv->Databaseadaptor == *Pdba)
+                if (rgv->Databaseadaptor == *Pdba)
                     registryGeneticVariationDel((RegistryPGeneticVariation *)
                                                 &entry->Registry[dbag]);
             }
@@ -4393,9 +4413,9 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
             rfg = (RegistryPFunctionalGenomics) entry->Registry[dbag];
 
-            if(rfg)
+            if (rfg)
             {
-                if(rfg->Databaseadaptor == *Pdba)
+                if (rfg->Databaseadaptor == *Pdba)
                     registryFunctionalGenomicsDel(
                         (RegistryPFunctionalGenomics *)
                         &entry->Registry[dbag]);
@@ -4411,9 +4431,9 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
             rcg = (RegistryPComparativeGenomics) entry->Registry[dbag];
 
-            if(rcg)
+            if (rcg)
             {
-                if(rcg->Databaseadaptor == *Pdba)
+                if (rcg->Databaseadaptor == *Pdba)
                     registryComparativeGenomicsDel(
                         (RegistryPComparativeGenomics *)
                         &entry->Registry[dbag]);
@@ -4429,9 +4449,9 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
             ro = (RegistryPOntology) entry->Registry[dbag];
 
-            if(ro)
+            if (ro)
             {
-                if(ro->Databaseadaptor == *Pdba)
+                if (ro->Databaseadaptor == *Pdba)
                     registryOntologyDel((RegistryPOntology *)
                                         &entry->Registry[dbag]);
             }
@@ -4472,22 +4492,20 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
     ** remove it from the AJAX Table.
     */
 
-    for(dbag = ensEDatabaseadaptorGroupCore;
-        dbag < EnsMDatabaseadaptorGroups;
-        dbag++)
-        if(entry->Registry[dbag])
+    for (dbag = ensEDatabaseadaptorGroupCore;
+         dbag < EnsMDatabaseadaptorGroups;
+         dbag++)
+        if (entry->Registry[dbag])
             registered = ajTrue;
 
-    if(!registered)
+    if (!registered)
     {
-        ajTableRemoveKey(registryEntry,
-                         (const void*) key,
-                         (void**) &truekey);
+        entry = (RegistryPEntry) ajTableRemove(registryGEntry,
+                                               (const void *) key);
 
         registryEntryDel(&entry);
 
         ajStrDel(&key);
-        ajStrDel(&truekey);
     }
 
     /* Clear the Ensembl Database Adaptor pointer. */
@@ -4500,9 +4518,9 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements from the
+** Functions for returning members from the
 ** Ensembl Registry.
 **
 ** @fdata [EnsPDatabaseadaptor]
@@ -4510,20 +4528,18 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 ** @nam3rule Get Return Registry member(s)
 ** @nam4rule All Return all Registry members
 ** @nam5rule Databaseadaptors Return all Ensembl Database Adaptors
-** @nam4rule Databaseadaptor Return the
-**             Ensembl Database Adaptor
-** @nam4rule Referenceadaptor Return the
-**             Ensembl Reference Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Referenceadaptor Return the Ensembl Reference Adaptor
 **
 ** @argrule AllDatabaseadaptors dbag [EnsEDatabaseadaptorGroup]
 ** Ensembl Database Adaptor Group enumeration
-** @argrule AllDatabaseadaptors alias [const AjPStr]
+** @argrule AllDatabaseadaptors alias [AjPStr]
 ** Ensembl Database Adaptor alias name or species name
 ** @argrule AllDatabaseadaptors dbas [AjPList] AJAX List of
 ** Ensembl Database Adaptor objects
 ** @argrule Databaseadaptor dbag [EnsEDatabaseadaptorGroup]
 ** Ensembl Database Adaptor Group enumeration
-** @argrule Databaseadaptor alias [const AjPStr]
+** @argrule Databaseadaptor alias [AjPStr]
 ** Ensembl Database Adaptor alias name or species name
 ** @argrule Referenceadaptor dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
@@ -4542,29 +4558,31 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba)
 /* @func ensRegistryGetAllDatabaseadaptors ************************************
 **
 ** Get all Ensembl Database Adaptors from the Ensembl Registry
-** and optionally filter them by species or group elements.
+** and optionally filter them by species or group members.
 **
 ** The caller is responsible for deleting the AJAX List, but *must not* delete
 ** the Ensembl Database Adaptor objects.
 **
-** @param [uN] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
-** @param [rN] alias [const AjPStr] Ensembl Database Adaptor alias name or
-** species name
+** @param [uN] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
+** @param [uN] alias [AjPStr]
+** Ensembl Database Adaptor alias name or species name
 ** @param [u] dbas [AjPList] AJAX List of Ensembl Database Adaptor objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
-                                         const AjPStr alias,
+                                         AjPStr alias,
                                          AjPList dbas)
 {
-    void** keyarray = NULL;
-    void** valarray = NULL;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
     register EnsEDatabaseadaptorGroup j = ensEDatabaseadaptorGroupNULL;
 
     AjBool debug = AJFALSE;
@@ -4581,7 +4599,7 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
 
     debug = ajDebugTest("ensRegistryGetAllDatabaseadaptors");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryGetAllDatabaseadaptors\n"
                 "  dbag %d\n"
                 "  alias '%S'\n"
@@ -4590,23 +4608,32 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                 alias,
                 dbas);
 
-    if(!dbas)
+    if (!dbas)
         return ajFalse;
+
+    /*
+    ** Resolve an alias name into a valid species name. If the alias did not
+    ** resolve into a species name, use the alias directly. If an alias was
+    ** not passed in, it is still NULL, implying all species.
+    */
 
     ensRegistryAliasResolve(alias, &species);
 
-    ajTableToarrayKeysValues(registryEntry, &keyarray, &valarray);
+    if (species == NULL)
+        species = alias;
 
-    for(i = 0; keyarray[i]; i++)
+    ajTableToarrayKeysValues(registryGEntry, &keyarray, &valarray);
+
+    for (i = 0U; keyarray[i]; i++)
     {
-        for(j = ensEDatabaseadaptorGroupCore;
-            j < EnsMDatabaseadaptorGroups;
-            j++)
+        for (j = ensEDatabaseadaptorGroupCore;
+             j < EnsMDatabaseadaptorGroups;
+             j++)
         {
-            if(dbag && (dbag != j))
+            if (dbag && (dbag != j))
                 continue;
 
-            switch(j)
+            switch (j)
             {
                 case ensEDatabaseadaptorGroupCore:
 
@@ -4619,18 +4646,18 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                     rcs = (RegistryPCoreStyle)
                         (((RegistryPEntry) valarray[i])->Registry[j]);
 
-                    if(rcs && rcs->Databaseadaptor)
+                    if (rcs && rcs->Databaseadaptor)
                     {
                         dba = rcs->Databaseadaptor;
 
-                        if(alias)
+                        if (alias)
                         {
-                            if(ajStrMatchS(species,
-                                           ensDatabaseadaptorGetSpecies(dba)))
-                                ajListPushAppend(dbas, (void*) dba);
+                            if (ajStrMatchS(species,
+                                            ensDatabaseadaptorGetSpecies(dba)))
+                                ajListPushAppend(dbas, (void *) dba);
                         }
                         else
-                            ajListPushAppend(dbas, (void*) dba);
+                            ajListPushAppend(dbas, (void *) dba);
                     }
 
                     break;
@@ -4640,18 +4667,18 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                     rgv = (RegistryPGeneticVariation)
                         (((RegistryPEntry) valarray[i])->Registry[j]);
 
-                    if(rgv && rgv->Databaseadaptor)
+                    if (rgv && rgv->Databaseadaptor)
                     {
                         dba = rgv->Databaseadaptor;
 
-                        if(alias)
+                        if (alias)
                         {
-                            if(ajStrMatchS(species,
-                                           ensDatabaseadaptorGetSpecies(dba)))
-                                ajListPushAppend(dbas, (void*) dba);
+                            if (ajStrMatchS(species,
+                                            ensDatabaseadaptorGetSpecies(dba)))
+                                ajListPushAppend(dbas, (void *) dba);
                         }
                         else
-                            ajListPushAppend(dbas, (void*) dba);
+                            ajListPushAppend(dbas, (void *) dba);
                     }
 
                     break;
@@ -4661,18 +4688,18 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                     rfg = (RegistryPFunctionalGenomics)
                         (((RegistryPEntry) valarray[i])->Registry[j]);
 
-                    if(rfg && rfg->Databaseadaptor)
+                    if (rfg && rfg->Databaseadaptor)
                     {
                         dba = rfg->Databaseadaptor;
 
-                        if(alias)
+                        if (alias)
                         {
-                            if(ajStrMatchS(species,
-                                           ensDatabaseadaptorGetSpecies(dba)))
-                                ajListPushAppend(dbas, (void*) dba);
+                            if (ajStrMatchS(species,
+                                            ensDatabaseadaptorGetSpecies(dba)))
+                                ajListPushAppend(dbas, (void *) dba);
                         }
                         else
-                            ajListPushAppend(dbas, (void*) dba);
+                            ajListPushAppend(dbas, (void *) dba);
                     }
 
                     break;
@@ -4682,18 +4709,18 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                     rcg = (RegistryPComparativeGenomics)
                         (((RegistryPEntry) valarray[i])->Registry[j]);
 
-                    if(rcg && rcg->Databaseadaptor)
+                    if (rcg && rcg->Databaseadaptor)
                     {
                         dba = rcg->Databaseadaptor;
 
-                        if(alias)
+                        if (alias)
                         {
-                            if(ajStrMatchS(species,
-                                           ensDatabaseadaptorGetSpecies(dba)))
-                                ajListPushAppend(dbas, (void*) dba);
+                            if (ajStrMatchS(species,
+                                            ensDatabaseadaptorGetSpecies(dba)))
+                                ajListPushAppend(dbas, (void *) dba);
                         }
                         else
-                            ajListPushAppend(dbas, (void*) dba);
+                            ajListPushAppend(dbas, (void *) dba);
                     }
 
                     break;
@@ -4703,18 +4730,18 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                     ro = (RegistryPOntology)
                         (((RegistryPEntry) valarray[i])->Registry[j]);
 
-                    if(ro && ro->Databaseadaptor)
+                    if (ro && ro->Databaseadaptor)
                     {
                         dba = ro->Databaseadaptor;
 
-                        if(alias)
+                        if (alias)
                         {
-                            if(ajStrMatchS(species,
-                                           ensDatabaseadaptorGetSpecies(dba)))
-                                ajListPushAppend(dbas, (void*) dba);
+                            if (ajStrMatchS(species,
+                                            ensDatabaseadaptorGetSpecies(dba)))
+                                ajListPushAppend(dbas, (void *) dba);
                         }
                         else
-                            ajListPushAppend(dbas, (void*) dba);
+                            ajListPushAppend(dbas, (void *) dba);
                     }
 
                     break;
@@ -4759,17 +4786,19 @@ AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
 ** Get an Ensembl Database Adaptor from the Ensembl Registry.
 **
 ** @cc Bio::EnsEMBL::Registry::get_DBAdaptor
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
-** @param [r] alias [const AjPStr] Scientific species name or alias name
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
+** @param [u] alias [AjPStr] Scientific species name or alias name
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
     EnsEDatabaseadaptorGroup dbag,
-    const AjPStr alias)
+    AjPStr alias)
 {
     AjBool debug = AJFALSE;
 
@@ -4784,29 +4813,39 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
     debug = ajDebugTest("ensRegistryGetDatabaseadaptor");
 
-    if(debug)
+    if (debug)
         ajDebug("ensRegistryGetDatabaseadaptor\n"
                 "  dbag %d\n"
                 "  alias '%S'\n",
                 dbag,
                 alias);
 
-    if(!dbag)
+    if (!dbag)
         return NULL;
 
-    if(!alias)
+    if (!alias)
         return NULL;
+
+    /*
+    ** Resolve an alias name into a valid species name. If the alias did not
+    ** resolve into a species name, use the alias directly.
+    */
 
     ensRegistryAliasResolve(alias, &species);
 
-    if(debug)
-        ajDebug("ensRegistryGetDatabaseadaptor alias '%S' -> species '%S'\n",
+    if (species == NULL)
+        species = alias;
+
+    if (debug)
+        ajDebug("ensRegistryGetDatabaseadaptor resolved alias '%S' "
+                "into species '%S'.\n",
                 alias, species);
 
-    entry = (RegistryPEntry) ajTableFetchmodV(registryEntry,
-                                              (const void*) species);
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) species);
 
-    if(!entry)
+    if (!entry)
     {
         ajDebug("ensRegistryGetDatabaseadaptor could not get a "
                 "Registry Entry for group '%s' and species '%S'.\n",
@@ -4815,7 +4854,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
         return NULL;
     }
 
-    switch(dbag)
+    switch (dbag)
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -4827,7 +4866,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
             rcs = (RegistryPCoreStyle) entry->Registry[dbag];
 
-            if(rcs)
+            if (rcs)
                 return rcs->Databaseadaptor;
             else
             {
@@ -4845,7 +4884,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
             rgv = (RegistryPGeneticVariation) entry->Registry[dbag];
 
-            if(rgv)
+            if (rgv)
                 return rgv->Databaseadaptor;
             else
             {
@@ -4863,7 +4902,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
             rfg = (RegistryPFunctionalGenomics) entry->Registry[dbag];
 
-            if(rfg)
+            if (rfg)
                 return rfg->Databaseadaptor;
             else
             {
@@ -4881,7 +4920,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
             rcg = (RegistryPComparativeGenomics) entry->Registry[dbag];
 
-            if(rcg)
+            if (rcg)
                 return rcg->Databaseadaptor;
             else
             {
@@ -4899,7 +4938,7 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 
             ro = (RegistryPOntology) entry->Registry[dbag];
 
-            if(ro)
+            if (ro)
                 return ro->Databaseadaptor;
             else
             {
@@ -4978,6 +5017,8 @@ EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -4993,7 +5034,7 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 
     debug = ajDebugTest("ensRegistryGetReferenceadaptor");
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryGetReferenceadaptor\n"
                 "  dba %p\n",
@@ -5002,24 +5043,24 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
         ensDatabaseadaptorTrace(dba, 1);
     }
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
             rsa = (rcs->Referenceadaptor) ?
@@ -5037,10 +5078,10 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(rcs->Referenceadaptor)
+            if (rcs->Referenceadaptor)
                 rsa = rcs->Referenceadaptor;
             else
             {
@@ -5052,11 +5093,11 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
                 rcs = (RegistryPCoreStyle)
                     entry->Registry[ensEDatabaseadaptorGroupCore];
 
-                if(rcs)
+                if (rcs)
                 {
                     rsa = ensRegistryGetReferenceadaptor(rcs->Databaseadaptor);
 
-                    if(!rsa)
+                    if (!rsa)
                     {
                         /*
                         ** If neither Reference nor Database Adaptor for the
@@ -5067,7 +5108,7 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
                         rcs = (RegistryPCoreStyle)
                             entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-                        if(rcs)
+                        if (rcs)
                             rsa = rcs->Databaseadaptor;
                     }
                 }
@@ -5080,13 +5121,13 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensEDatabaseadaptorGroupCore];
 
-            if(rcs)
+            if (rcs)
                 rsa = ensRegistryGetReferenceadaptor(rcs->Databaseadaptor);
 
         default:
@@ -5097,7 +5138,7 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
                    ensDatabaseadaptorGetGroup(dba));
     }
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensRegistryGetReferenceadaptor dba %p rsa %p\n", dba, rsa);
 
@@ -5284,6 +5325,8 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 **
 ** @return [EnsPAnalysisadaptor]
 ** Ensembl Analysis Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5292,17 +5335,17 @@ EnsPAnalysisadaptor ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba)
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5315,10 +5358,10 @@ EnsPAnalysisadaptor ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba)
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Analysisadaptor)
+            if (!rcs->Analysisadaptor)
                 rcs->Analysisadaptor =
                     ensAnalysisadaptorNew(dba);
 
@@ -5352,6 +5395,8 @@ EnsPAnalysisadaptor ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba)
 **
 ** @return [EnsPAssemblyexceptionadaptor]
 ** Ensembl Assembly Exception Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5363,19 +5408,19 @@ EnsPAssemblyexceptionadaptor ensRegistryGetAssemblyexceptionadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5388,10 +5433,10 @@ EnsPAssemblyexceptionadaptor ensRegistryGetAssemblyexceptionadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Assemblyexceptionadaptor)
+            if (!rcs->Assemblyexceptionadaptor)
                 rcs->Assemblyexceptionadaptor =
                     ensAssemblyexceptionadaptorNew(rsa);
 
@@ -5425,6 +5470,8 @@ EnsPAssemblyexceptionadaptor ensRegistryGetAssemblyexceptionadaptor(
 **
 ** @return [EnsPAssemblyexceptionfeatureadaptor]
 ** Ensembl Assembly Exception Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5436,19 +5483,19 @@ EnsPAssemblyexceptionfeatureadaptor ensRegistryGetAssemblyexceptionfeatureadapto
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5461,10 +5508,10 @@ EnsPAssemblyexceptionfeatureadaptor ensRegistryGetAssemblyexceptionfeatureadapto
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Assemblyexceptionfeatureadaptor)
+            if (!rcs->Assemblyexceptionfeatureadaptor)
                 rcs->Assemblyexceptionfeatureadaptor =
                     ensAssemblyexceptionfeatureadaptorNew(rsa);
 
@@ -5498,6 +5545,8 @@ EnsPAssemblyexceptionfeatureadaptor ensRegistryGetAssemblyexceptionfeatureadapto
 **
 ** @return [EnsPAssemblymapperadaptor]
 ** Ensembl Assembly Mapper Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5509,19 +5558,19 @@ EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5534,10 +5583,10 @@ EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Assemblymapperadaptor)
+            if (!rcs->Assemblymapperadaptor)
                 rcs->Assemblymapperadaptor =
                     ensAssemblymapperadaptorNew(rsa);
 
@@ -5569,16 +5618,18 @@ EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
 **
 ** @return [EnsPAttributeadaptor]
 ** Ensembl Attribute Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 EnsPAttributeadaptor ensRegistryGetAttributeadaptor(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5614,6 +5665,8 @@ EnsPAttributeadaptor ensRegistryGetAttributeadaptor(
 **
 ** @return [EnsPAttributetypeadaptor]
 ** Ensembl Attribute Type Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5623,17 +5676,17 @@ EnsPAttributetypeadaptor ensRegistryGetAttributetypeadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5648,10 +5701,10 @@ EnsPAttributetypeadaptor ensRegistryGetAttributetypeadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Attributetypeadaptor)
+            if (!rcs->Attributetypeadaptor)
                 rcs->Attributetypeadaptor =
                     ensAttributetypeadaptorNew(dba);
 
@@ -5685,6 +5738,8 @@ EnsPAttributetypeadaptor ensRegistryGetAttributetypeadaptor(
 **
 ** @return [EnsPCoordsystemadaptor]
 ** Ensembl Coordinate System Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5696,19 +5751,19 @@ EnsPCoordsystemadaptor ensRegistryGetCoordsystemadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5721,10 +5776,10 @@ EnsPCoordsystemadaptor ensRegistryGetCoordsystemadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Coordsystemadaptor)
+            if (!rcs->Coordsystemadaptor)
                 rcs->Coordsystemadaptor =
                     ensCoordsystemadaptorNew(rsa);
 
@@ -5754,6 +5809,8 @@ EnsPCoordsystemadaptor ensRegistryGetCoordsystemadaptor(
 **
 ** @return [EnsPDatabaseentryadaptor]
 ** Ensembl Database Entry Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5763,17 +5820,17 @@ EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5786,10 +5843,10 @@ EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Databaseentryadaptor)
+            if (!rcs->Databaseentryadaptor)
                 rcs->Databaseentryadaptor =
                     ensDatabaseentryadaptorNew(dba);
 
@@ -5819,6 +5876,8 @@ EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
 **
 ** @return [EnsPDensityfeatureadaptor]
 ** Ensembl Density Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5828,17 +5887,17 @@ EnsPDensityfeatureadaptor ensRegistryGetDensityfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5851,10 +5910,10 @@ EnsPDensityfeatureadaptor ensRegistryGetDensityfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Densityfeatureadaptor)
+            if (!rcs->Densityfeatureadaptor)
                 rcs->Densityfeatureadaptor =
                     ensDensityfeatureadaptorNew(dba);
 
@@ -5884,6 +5943,8 @@ EnsPDensityfeatureadaptor ensRegistryGetDensityfeatureadaptor(
 **
 ** @return [EnsPDensitytypeadaptor]
 ** Ensembl Density Type Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5893,17 +5954,17 @@ EnsPDensitytypeadaptor ensRegistryGetDensitytypeadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5916,10 +5977,10 @@ EnsPDensitytypeadaptor ensRegistryGetDensitytypeadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Densitytypeadaptor)
+            if (!rcs->Densitytypeadaptor)
                 rcs->Densitytypeadaptor =
                     ensDensitytypeadaptorNew(dba);
 
@@ -5951,6 +6012,8 @@ EnsPDensitytypeadaptor ensRegistryGetDensitytypeadaptor(
 **
 ** @return [EnsPDitagadaptor]
 ** Ensembl Ditag Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -5960,17 +6023,17 @@ EnsPDitagadaptor ensRegistryGetDitagadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -5983,10 +6046,10 @@ EnsPDitagadaptor ensRegistryGetDitagadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Ditagadaptor)
+            if (!rcs->Ditagadaptor)
                 rcs->Ditagadaptor =
                     ensDitagadaptorNew(dba);
 
@@ -6016,6 +6079,8 @@ EnsPDitagadaptor ensRegistryGetDitagadaptor(
 **
 ** @return [EnsPDitagfeatureadaptor]
 ** Ensembl Ditag Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6025,17 +6090,17 @@ EnsPDitagfeatureadaptor ensRegistryGetDitagfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6048,10 +6113,10 @@ EnsPDitagfeatureadaptor ensRegistryGetDitagfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Ditagfeatureadaptor)
+            if (!rcs->Ditagfeatureadaptor)
                 rcs->Ditagfeatureadaptor =
                     ensDitagfeatureadaptorNew(dba);
 
@@ -6081,6 +6146,8 @@ EnsPDitagfeatureadaptor ensRegistryGetDitagfeatureadaptor(
 **
 ** @return [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6090,17 +6157,17 @@ EnsPDnaalignfeatureadaptor ensRegistryGetDnaalignfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6113,10 +6180,10 @@ EnsPDnaalignfeatureadaptor ensRegistryGetDnaalignfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Dnaalignfeatureadaptor)
+            if (!rcs->Dnaalignfeatureadaptor)
                 rcs->Dnaalignfeatureadaptor =
                     ensDnaalignfeatureadaptorNew(dba);
 
@@ -6146,6 +6213,8 @@ EnsPDnaalignfeatureadaptor ensRegistryGetDnaalignfeatureadaptor(
 **
 ** @return [EnsPExonadaptor]
 ** Ensembl Exon Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6155,17 +6224,17 @@ EnsPExonadaptor ensRegistryGetExonadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6178,10 +6247,10 @@ EnsPExonadaptor ensRegistryGetExonadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Exonadaptor)
+            if (!rcs->Exonadaptor)
                 rcs->Exonadaptor =
                     ensExonadaptorNew(dba);
 
@@ -6211,6 +6280,8 @@ EnsPExonadaptor ensRegistryGetExonadaptor(
 **
 ** @return [EnsPExternaldatabaseadaptor]
 ** Ensembl External Database Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6220,17 +6291,17 @@ EnsPExternaldatabaseadaptor ensRegistryGetExternaldatabaseadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6243,10 +6314,10 @@ EnsPExternaldatabaseadaptor ensRegistryGetExternaldatabaseadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Externaldatabaseadaptor)
+            if (!rcs->Externaldatabaseadaptor)
                 rcs->Externaldatabaseadaptor =
                     ensExternaldatabaseadaptorNew(dba);
 
@@ -6276,6 +6347,8 @@ EnsPExternaldatabaseadaptor ensRegistryGetExternaldatabaseadaptor(
 **
 ** @return [EnsPGeneadaptor]
 ** Ensembl Gene Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6285,17 +6358,17 @@ EnsPGeneadaptor ensRegistryGetGeneadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6308,10 +6381,10 @@ EnsPGeneadaptor ensRegistryGetGeneadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Geneadaptor)
+            if (!rcs->Geneadaptor)
                 rcs->Geneadaptor =
                     ensGeneadaptorNew(dba);
 
@@ -6345,6 +6418,8 @@ EnsPGeneadaptor ensRegistryGetGeneadaptor(
 **
 ** @return [EnsPKaryotypebandadaptor]
 ** Ensembl Karyotype Band Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6356,19 +6431,19 @@ EnsPKaryotypebandadaptor ensRegistryGetKaryotypebandadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6381,10 +6456,10 @@ EnsPKaryotypebandadaptor ensRegistryGetKaryotypebandadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Karyotypebandadaptor)
+            if (!rcs->Karyotypebandadaptor)
                 rcs->Karyotypebandadaptor =
                     ensKaryotypebandadaptorNew(rsa);
 
@@ -6414,6 +6489,8 @@ EnsPKaryotypebandadaptor ensRegistryGetKaryotypebandadaptor(
 **
 ** @return [EnsPMarkeradaptor]
 ** Ensembl Marker Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6423,17 +6500,17 @@ EnsPMarkeradaptor ensRegistryGetMarkeradaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6446,10 +6523,10 @@ EnsPMarkeradaptor ensRegistryGetMarkeradaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Markeradaptor)
+            if (!rcs->Markeradaptor)
                 rcs->Markeradaptor =
                     ensMarkeradaptorNew(dba);
 
@@ -6479,6 +6556,8 @@ EnsPMarkeradaptor ensRegistryGetMarkeradaptor(
 **
 ** @return [EnsPMarkerfeatureadaptor]
 ** Ensembl Marker Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6488,17 +6567,17 @@ EnsPMarkerfeatureadaptor ensRegistryGetMarkerfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6511,10 +6590,10 @@ EnsPMarkerfeatureadaptor ensRegistryGetMarkerfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Markerfeatureadaptor)
+            if (!rcs->Markerfeatureadaptor)
                 rcs->Markerfeatureadaptor =
                     ensMarkerfeatureadaptorNew(dba);
 
@@ -6544,6 +6623,8 @@ EnsPMarkerfeatureadaptor ensRegistryGetMarkerfeatureadaptor(
 **
 ** @return [EnsPMetacoordinateadaptor]
 ** Ensembl Meta-Coordinate Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6553,17 +6634,17 @@ EnsPMetacoordinateadaptor ensRegistryGetMetacoordinateadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6576,10 +6657,10 @@ EnsPMetacoordinateadaptor ensRegistryGetMetacoordinateadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Metacoordinateadaptor)
+            if (!rcs->Metacoordinateadaptor)
                 rcs->Metacoordinateadaptor =
                     ensMetacoordinateadaptorNew(dba);
 
@@ -6609,6 +6690,8 @@ EnsPMetacoordinateadaptor ensRegistryGetMetacoordinateadaptor(
 **
 ** @return [EnsPMetainformationadaptor]
 ** Ensembl Meta-Information Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6618,17 +6701,17 @@ EnsPMetainformationadaptor ensRegistryGetMetainformationadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6641,10 +6724,10 @@ EnsPMetainformationadaptor ensRegistryGetMetainformationadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Metainformationadaptor)
+            if (!rcs->Metainformationadaptor)
                 rcs->Metainformationadaptor =
                     ensMetainformationadaptorNew(dba);
 
@@ -6674,6 +6757,8 @@ EnsPMetainformationadaptor ensRegistryGetMetainformationadaptor(
 **
 ** @return [EnsPMiscellaneousfeatureadaptor]
 ** Ensembl Miscellaneous Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6683,17 +6768,17 @@ EnsPMiscellaneousfeatureadaptor ensRegistryGetMiscellaneousfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6706,10 +6791,10 @@ EnsPMiscellaneousfeatureadaptor ensRegistryGetMiscellaneousfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Miscellaneousfeatureadaptor)
+            if (!rcs->Miscellaneousfeatureadaptor)
                 rcs->Miscellaneousfeatureadaptor =
                     ensMiscellaneousfeatureadaptorNew(dba);
 
@@ -6739,6 +6824,8 @@ EnsPMiscellaneousfeatureadaptor ensRegistryGetMiscellaneousfeatureadaptor(
 **
 ** @return [EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6748,17 +6835,17 @@ EnsPMiscellaneoussetadaptor ensRegistryGetMiscellaneoussetadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6771,10 +6858,10 @@ EnsPMiscellaneoussetadaptor ensRegistryGetMiscellaneoussetadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Miscellaneoussetadaptor)
+            if (!rcs->Miscellaneoussetadaptor)
                 rcs->Miscellaneoussetadaptor =
                     ensMiscellaneoussetadaptorNew(dba);
 
@@ -6804,6 +6891,8 @@ EnsPMiscellaneoussetadaptor ensRegistryGetMiscellaneoussetadaptor(
 **
 ** @return [EnsPPredictionexonadaptor]
 ** Ensembl Prediction Exon Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6813,17 +6902,17 @@ EnsPPredictionexonadaptor ensRegistryGetPredictionexonadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6836,10 +6925,10 @@ EnsPPredictionexonadaptor ensRegistryGetPredictionexonadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Predictionexonadaptor)
+            if (!rcs->Predictionexonadaptor)
                 rcs->Predictionexonadaptor =
                     ensPredictionexonadaptorNew(dba);
 
@@ -6869,6 +6958,8 @@ EnsPPredictionexonadaptor ensRegistryGetPredictionexonadaptor(
 **
 ** @return [EnsPPredictiontranscriptadaptor]
 ** Ensembl Prediction Transcript Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6878,17 +6969,17 @@ EnsPPredictiontranscriptadaptor ensRegistryGetPredictiontranscriptadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6901,10 +6992,10 @@ EnsPPredictiontranscriptadaptor ensRegistryGetPredictiontranscriptadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Predictiontranscriptadaptor)
+            if (!rcs->Predictiontranscriptadaptor)
                 rcs->Predictiontranscriptadaptor =
                     ensPredictiontranscriptadaptorNew(dba);
 
@@ -6934,6 +7025,8 @@ EnsPPredictiontranscriptadaptor ensRegistryGetPredictiontranscriptadaptor(
 **
 ** @return [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6943,17 +7036,17 @@ EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -6966,10 +7059,10 @@ EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Proteinalignfeatureadaptor)
+            if (!rcs->Proteinalignfeatureadaptor)
                 rcs->Proteinalignfeatureadaptor =
                     ensProteinalignfeatureadaptorNew(dba);
 
@@ -6999,6 +7092,8 @@ EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
 **
 ** @return [EnsPProteinfeatureadaptor]
 ** Ensembl Protein Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7008,17 +7103,17 @@ EnsPProteinfeatureadaptor ensRegistryGetProteinfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7031,10 +7126,10 @@ EnsPProteinfeatureadaptor ensRegistryGetProteinfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Proteinfeatureadaptor)
+            if (!rcs->Proteinfeatureadaptor)
                 rcs->Proteinfeatureadaptor =
                     ensProteinfeatureadaptorNew(dba);
 
@@ -7070,6 +7165,8 @@ EnsPProteinfeatureadaptor ensRegistryGetProteinfeatureadaptor(
 **
 ** @return [EnsPRepeatconsensusadaptor]
 ** Ensembl Repeat Consensus Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -7081,19 +7178,19 @@ EnsPRepeatconsensusadaptor ensRegistryGetRepeatconsensusadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7106,10 +7203,10 @@ EnsPRepeatconsensusadaptor ensRegistryGetRepeatconsensusadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Repeatconsensusadaptor)
+            if (!rcs->Repeatconsensusadaptor)
                 rcs->Repeatconsensusadaptor =
                     ensRepeatconsensusadaptorNew(rsa);
 
@@ -7143,6 +7240,8 @@ EnsPRepeatconsensusadaptor ensRegistryGetRepeatconsensusadaptor(
 **
 ** @return [EnsPRepeatfeatureadaptor]
 ** Ensembl Repeat Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7154,19 +7253,19 @@ EnsPRepeatfeatureadaptor ensRegistryGetRepeatfeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7179,10 +7278,10 @@ EnsPRepeatfeatureadaptor ensRegistryGetRepeatfeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Repeatfeatureadaptor)
+            if (!rcs->Repeatfeatureadaptor)
                 rcs->Repeatfeatureadaptor =
                     ensRepeatfeatureadaptorNew(rsa);
 
@@ -7212,6 +7311,8 @@ EnsPRepeatfeatureadaptor ensRegistryGetRepeatfeatureadaptor(
 **
 ** @return [EnsPSeqregionadaptor]
 ** Ensembl Sequence Region Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7221,17 +7322,17 @@ EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7244,10 +7345,10 @@ EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Seqregionadaptor)
+            if (!rcs->Seqregionadaptor)
                 rcs->Seqregionadaptor =
                     ensSeqregionadaptorNew(dba);
 
@@ -7277,6 +7378,8 @@ EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
 **
 ** @return [EnsPSeqregionsynonymadaptor]
 ** Ensembl Sequence Region Synonym Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7286,17 +7389,17 @@ EnsPSeqregionsynonymadaptor ensRegistryGetSeqregionsynonymadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7309,10 +7412,10 @@ EnsPSeqregionsynonymadaptor ensRegistryGetSeqregionsynonymadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Seqregionsynonymadaptor)
+            if (!rcs->Seqregionsynonymadaptor)
                 rcs->Seqregionsynonymadaptor =
                     ensSeqregionsynonymadaptorNew(dba);
 
@@ -7346,6 +7449,8 @@ EnsPSeqregionsynonymadaptor ensRegistryGetSeqregionsynonymadaptor(
 **
 ** @return [EnsPSequenceadaptor]
 ** Ensembl Sequence Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7357,19 +7462,19 @@ EnsPSequenceadaptor ensRegistryGetSequenceadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(rsa));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(rsa));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(rsa))
+    switch (ensDatabaseadaptorGetGroup(rsa))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7382,10 +7487,10 @@ EnsPSequenceadaptor ensRegistryGetSequenceadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(rsa)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Sequenceadaptor)
+            if (!rcs->Sequenceadaptor)
                 rcs->Sequenceadaptor =
                     ensSequenceadaptorNew(rsa);
 
@@ -7415,6 +7520,8 @@ EnsPSequenceadaptor ensRegistryGetSequenceadaptor(
 **
 ** @return [EnsPSimplefeatureadaptor]
 ** Ensembl Simple Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7424,17 +7531,17 @@ EnsPSimplefeatureadaptor ensRegistryGetSimplefeatureadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7447,10 +7554,10 @@ EnsPSimplefeatureadaptor ensRegistryGetSimplefeatureadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Simplefeatureadaptor)
+            if (!rcs->Simplefeatureadaptor)
                 rcs->Simplefeatureadaptor =
                     ensSimplefeatureadaptorNew(dba);
 
@@ -7480,6 +7587,8 @@ EnsPSimplefeatureadaptor ensRegistryGetSimplefeatureadaptor(
 **
 ** @return [EnsPSliceadaptor]
 ** Ensembl Slice Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7489,17 +7598,17 @@ EnsPSliceadaptor ensRegistryGetSliceadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7512,10 +7621,10 @@ EnsPSliceadaptor ensRegistryGetSliceadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Sliceadaptor)
+            if (!rcs->Sliceadaptor)
                 rcs->Sliceadaptor =
                     ensSliceadaptorNew(dba);
 
@@ -7545,6 +7654,8 @@ EnsPSliceadaptor ensRegistryGetSliceadaptor(
 **
 ** @return [AjPStr]
 ** Ensembl stable identifier prefix or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -7554,17 +7665,17 @@ AjPStr ensRegistryGetStableidentifierprefix(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7577,7 +7688,7 @@ AjPStr ensRegistryGetStableidentifierprefix(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
             return rcs->Stableidentifierprefix;
@@ -7606,6 +7717,8 @@ AjPStr ensRegistryGetStableidentifierprefix(
 **
 ** @return [EnsPTranscriptadaptor]
 ** Ensembl Transcript Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7615,17 +7728,17 @@ EnsPTranscriptadaptor ensRegistryGetTranscriptadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7638,10 +7751,10 @@ EnsPTranscriptadaptor ensRegistryGetTranscriptadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Transcriptadaptor)
+            if (!rcs->Transcriptadaptor)
                 rcs->Transcriptadaptor =
                     ensTranscriptadaptorNew(dba);
 
@@ -7671,6 +7784,8 @@ EnsPTranscriptadaptor ensRegistryGetTranscriptadaptor(
 **
 ** @return [EnsPTranslationadaptor]
 ** Ensembl Translation Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7680,17 +7795,17 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
     RegistryPEntry entry   = NULL;
     RegistryPCoreStyle rcs = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupCore:
 
@@ -7703,10 +7818,10 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
             rcs = (RegistryPCoreStyle)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rcs)
+            if (!rcs)
                 break;
 
-            if(!rcs->Translationadaptor)
+            if (!rcs->Translationadaptor)
                 rcs->Translationadaptor =
                     ensTranslationadaptorNew(dba);
 
@@ -7717,6 +7832,154 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
         default:
 
             ajWarn("ensRegistryGetTranslationadaptor got an "
+                   "Ensembl Database Adaptor "
+                   "with an unexpected group %d.\n",
+                   ensDatabaseadaptorGetGroup(dba));
+    }
+
+    return NULL;
+}
+
+
+
+
+/* @section Ensembl Ontology Adaptor retrieval ********************************
+**
+** Functions for returning Ensembl Ontology Adaptor objects from the
+** Ensembl Registry.
+**
+** @fdata [EnsPDatabaseadaptor]
+**
+** @nam3rule Get Return Registry attribute(s)
+** @nam4rule Ontologyadaptor
+** Return the Ensembl Ontology Adaptor
+** @nam4rule Ontologytermadaptor
+** Return the Ensembl Ontology Term Adaptor
+**
+** @argrule * dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule Ontologyadaptor [EnsPOntologyadaptor]
+** Ensembl Ontology Adaptor or NULL
+** @valrule Ontologytermadaptor [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensRegistryGetOntologyadaptor ****************************************
+**
+** Get an Ensembl Ontology Adaptor from the Ensembl Registry.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPOntologyadaptor]
+** Ensembl Ontology Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPOntologyadaptor ensRegistryGetOntologyadaptor(
+    EnsPDatabaseadaptor dba)
+{
+    RegistryPEntry entry = NULL;
+    RegistryPOntology ro = NULL;
+
+    if (!dba)
+        return NULL;
+
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
+
+    if (!entry)
+        return NULL;
+
+    switch (ensDatabaseadaptorGetGroup(dba))
+    {
+        case ensEDatabaseadaptorGroupOntology:
+
+            ro = (RegistryPOntology)
+                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
+
+            if (!ro)
+                break;
+
+            if (!ro->Ontologyadaptor)
+                ro->Ontologyadaptor =
+                    ensOntologyadaptorNew(dba);
+
+            return ro->Ontologyadaptor;
+
+            break;
+
+        default:
+
+            ajWarn("ensRegistryGetOntologyadaptor got an "
+                   "Ensembl Database Adaptor "
+                   "with an unexpected group %d.\n",
+                   ensDatabaseadaptorGetGroup(dba));
+    }
+
+    return NULL;
+}
+
+
+
+
+/* @func ensRegistryGetOntologytermadaptor ************************************
+**
+** Get an Ensembl Ontology Term Adaptor from the Ensembl Registry.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPOntologytermadaptor ensRegistryGetOntologytermadaptor(
+    EnsPDatabaseadaptor dba)
+{
+    RegistryPEntry entry = NULL;
+    RegistryPOntology ro = NULL;
+
+    if (!dba)
+        return NULL;
+
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
+
+    if (!entry)
+        return NULL;
+
+    switch (ensDatabaseadaptorGetGroup(dba))
+    {
+        case ensEDatabaseadaptorGroupOntology:
+
+            ro = (RegistryPOntology)
+                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
+
+            if (!ro)
+                break;
+
+            if (!ro->Ontologytermadaptor)
+                ro->Ontologytermadaptor =
+                    ensOntologytermadaptorNew(dba);
+
+            return ro->Ontologytermadaptor;
+
+            break;
+
+        default:
+
+            ajWarn("ensRegistryGetOntologytermadaptor got an "
                    "Ensembl Database Adaptor "
                    "with an unexpected group %d.\n",
                    ensDatabaseadaptorGetGroup(dba));
@@ -7778,6 +8041,8 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
 **
 ** @return [EnsPQcalignmentadaptor]
 ** Ensembl Quality Check Alignment Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7787,27 +8052,27 @@ EnsPQcalignmentadaptor ensRegistryGetQcalignmentadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Qcalignmentadaptor)
+            if (!rqc->Qcalignmentadaptor)
                 rqc->Qcalignmentadaptor =
                     ensQcalignmentadaptorNew(dba);
 
@@ -7837,6 +8102,8 @@ EnsPQcalignmentadaptor ensRegistryGetQcalignmentadaptor(
 **
 ** @return [EnsPQcdasfeatureadaptor]
 ** Ensembl Quality Check DAS Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7846,27 +8113,27 @@ EnsPQcdasfeatureadaptor ensRegistryGetQcdasfeatureadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Qcdasfeatureadaptor)
+            if (!rqc->Qcdasfeatureadaptor)
                 rqc->Qcdasfeatureadaptor =
                     ensQcdasfeatureadaptorNew(dba);
 
@@ -7896,6 +8163,8 @@ EnsPQcdasfeatureadaptor ensRegistryGetQcdasfeatureadaptor(
 **
 ** @return [EnsPQcdatabaseadaptor]
 ** Ensembl Quality Check Database Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7905,27 +8174,27 @@ EnsPQcdatabaseadaptor ensRegistryGetQcdatabaseadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Databaseadaptor)
+            if (!rqc->Databaseadaptor)
                 rqc->Qcdatabaseadaptor =
                     ensQcdatabaseadaptorNew(dba);
 
@@ -7955,6 +8224,8 @@ EnsPQcdatabaseadaptor ensRegistryGetQcdatabaseadaptor(
 **
 ** @return [EnsPQcsequenceadaptor]
 ** Ensembl Quality Check Sequence Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7964,27 +8235,27 @@ EnsPQcsequenceadaptor ensRegistryGetQcsequenceadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Qcsequenceadaptor)
+            if (!rqc->Qcsequenceadaptor)
                 rqc->Qcsequenceadaptor =
                     ensQcsequenceadaptorNew(dba);
 
@@ -8014,6 +8285,8 @@ EnsPQcsequenceadaptor ensRegistryGetQcsequenceadaptor(
 **
 ** @return [EnsPQcsubmissionadaptor]
 ** Ensembl Quality Check Submission Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8023,27 +8296,27 @@ EnsPQcsubmissionadaptor ensRegistryGetQcsubmissionadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Qcsubmissionadaptor)
+            if (!rqc->Qcsubmissionadaptor)
                 rqc->Qcsubmissionadaptor =
                     ensQcsubmissionadaptorNew(dba);
 
@@ -8073,6 +8346,8 @@ EnsPQcsubmissionadaptor ensRegistryGetQcsubmissionadaptor(
 **
 ** @return [EnsPQcvariationadaptor]
 ** Ensembl Quality Check Variation Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8082,27 +8357,27 @@ EnsPQcvariationadaptor ensRegistryGetQcvariationadaptor(
     RegistryPEntry entry      = NULL;
     RegistryPQualityCheck rqc = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupQualityCheck:
 
             rqc = (RegistryPQualityCheck)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rqc)
+            if (!rqc)
                 break;
 
-            if(!rqc->Qcvariationadaptor)
+            if (!rqc->Qcvariationadaptor)
                 rqc->Qcvariationadaptor =
                     ensQcvariationadaptorNew(dba);
 
@@ -8140,6 +8415,8 @@ EnsPQcvariationadaptor ensRegistryGetQcvariationadaptor(
 ** Return the Ensembl Genetic Variation Database Adaptor
 ** @nam4rule Gvgenotypeadaptor
 ** Return the Ensembl Genetic Variation Genotype Adaptor
+** @nam4rule Gvgenotypecodeadaptor
+** Return the Ensembl Genetic Variation Genotype Code Adaptor
 ** @nam4rule Gvindividualadaptor
 ** Return the Ensembl Genetic Variation Individual Adaptor
 ** @nam4rule Gvpopulationadaptor
@@ -8171,6 +8448,8 @@ EnsPQcvariationadaptor ensRegistryGetQcvariationadaptor(
 ** Ensembl Genetic Variation Database Adaptor or NULL
 ** @valrule Gvgenotypeadaptor [EnsPGvgenotypeadaptor]
 ** Ensembl Genetic Variation Genotype Adaptor or NULL
+** @valrule Gvgenotypecodeadaptor [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor or NULL
 ** @valrule Gvindividualadaptor [EnsPGvindividualadaptor]
 ** Ensembl Genetic Variation Individual Adaptor or NULL
 ** @valrule Gvpopulationadaptor [EnsPGvpopulationadaptor]
@@ -8209,6 +8488,8 @@ EnsPQcvariationadaptor ensRegistryGetQcvariationadaptor(
 **
 ** @return [EnsPGvalleleadaptor]
 ** Ensembl Genetic Variation Allele Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8218,27 +8499,27 @@ EnsPGvalleleadaptor ensRegistryGetGvalleleadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvalleleadaptor)
+            if (!rgv->Gvalleleadaptor)
                 rgv->Gvalleleadaptor =
                     ensGvalleleadaptorNew(dba);
 
@@ -8271,6 +8552,8 @@ EnsPGvalleleadaptor ensRegistryGetGvalleleadaptor(
 **
 ** @return [EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8280,27 +8563,27 @@ EnsPGvattributeadaptor ensRegistryGetGvattributeadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvattributeadaptor)
+            if (!rgv->Gvattributeadaptor)
                 rgv->Gvattributeadaptor =
                     ensGvattributeadaptorNew(dba);
 
@@ -8331,6 +8614,8 @@ EnsPGvattributeadaptor ensRegistryGetGvattributeadaptor(
 **
 ** @return [EnsPGvdatabaseadaptor]
 ** Ensembl Genetic Variation Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8340,27 +8625,27 @@ EnsPGvdatabaseadaptor ensRegistryGetGvdatabaseadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvdatabaseadaptor)
+            if (!rgv->Gvdatabaseadaptor)
                 rgv->Gvdatabaseadaptor =
                     ensGvdatabaseadaptorNewIni(dba);
 
@@ -8393,16 +8678,18 @@ EnsPGvdatabaseadaptor ensRegistryGetGvdatabaseadaptor(
 **
 ** @return [EnsPGvgenotypeadaptor]
 ** Ensembl Genetic Variation Genotype Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 EnsPGvgenotypeadaptor ensRegistryGetGvgenotypeadaptor(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
@@ -8424,6 +8711,68 @@ EnsPGvgenotypeadaptor ensRegistryGetGvgenotypeadaptor(
 
 
 
+/* @func ensRegistryGetGvgenotypecodeadaptor **********************************
+**
+** Get an Ensembl Genetic Variation Genotype Code Adaptor from the
+** Ensembl Registry.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPGvgenotypecodeadaptor ensRegistryGetGvgenotypecodeadaptor(
+    EnsPDatabaseadaptor dba)
+{
+    RegistryPEntry entry          = NULL;
+    RegistryPGeneticVariation rgv = NULL;
+
+    if (!dba)
+        return NULL;
+
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
+
+    if (!entry)
+        return NULL;
+
+    switch (ensDatabaseadaptorGetGroup(dba))
+    {
+        case ensEDatabaseadaptorGroupGeneticVariation:
+
+            rgv = (RegistryPGeneticVariation)
+                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
+
+            if (!rgv)
+                break;
+
+            if (!rgv->Gvgenotypecodeadaptor)
+                rgv->Gvgenotypecodeadaptor =
+                    ensGvgenotypecodeadaptorNew(dba);
+
+            return rgv->Gvgenotypecodeadaptor;
+
+            break;
+
+        default:
+
+            ajWarn("ensRegistryGetGvgenotypecodeadaptor got an "
+                   "Ensembl Database Adaptor "
+                   "with an unexpected group %d.\n",
+                   ensDatabaseadaptorGetGroup(dba));
+    }
+
+    return NULL;
+}
+
+
+
+
 /* @func ensRegistryGetGvindividualadaptor ************************************
 **
 ** Get an Ensembl Genetic Variation Individual Adaptor from the
@@ -8433,6 +8782,8 @@ EnsPGvgenotypeadaptor ensRegistryGetGvgenotypeadaptor(
 **
 ** @return [EnsPGvindividualadaptor]
 ** Ensembl Genetic Variation Individual Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8442,27 +8793,27 @@ EnsPGvindividualadaptor ensRegistryGetGvindividualadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvindividualadaptor)
+            if (!rgv->Gvindividualadaptor)
                 rgv->Gvindividualadaptor =
                     ensGvindividualadaptorNew(dba);
 
@@ -8493,6 +8844,8 @@ EnsPGvindividualadaptor ensRegistryGetGvindividualadaptor(
 **
 ** @return [EnsPGvpopulationadaptor]
 ** Ensembl Genetic Variation Population Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8502,27 +8855,27 @@ EnsPGvpopulationadaptor ensRegistryGetGvpopulationadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvpopulationadaptor)
+            if (!rgv->Gvpopulationadaptor)
                 rgv->Gvpopulationadaptor =
                     ensGvpopulationadaptorNew(dba);
 
@@ -8553,6 +8906,8 @@ EnsPGvpopulationadaptor ensRegistryGetGvpopulationadaptor(
 **
 ** @return [EnsPGvpopulationgenotypeadaptor]
 ** Ensembl Genetic Variation Population Genotype Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8562,27 +8917,27 @@ EnsPGvpopulationgenotypeadaptor ensRegistryGetGvpopulationgenotypeadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvpopulationgenotypeadaptor)
+            if (!rgv->Gvpopulationgenotypeadaptor)
                 rgv->Gvpopulationgenotypeadaptor =
                     ensGvpopulationgenotypeadaptorNew(dba);
 
@@ -8613,6 +8968,8 @@ EnsPGvpopulationgenotypeadaptor ensRegistryGetGvpopulationgenotypeadaptor(
 **
 ** @return [EnsPGvsampleadaptor]
 ** Ensembl Genetic Variation Sample Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8622,27 +8979,27 @@ EnsPGvsampleadaptor ensRegistryGetGvsampleadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvsampleadaptor)
+            if (!rgv->Gvsampleadaptor)
                 rgv->Gvsampleadaptor =
                     ensGvsampleadaptorNew(dba);
 
@@ -8673,6 +9030,8 @@ EnsPGvsampleadaptor ensRegistryGetGvsampleadaptor(
 **
 ** @return [EnsPGvsourceadaptor]
 ** Ensembl Genetic Variation Source Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -8682,27 +9041,27 @@ EnsPGvsourceadaptor ensRegistryGetGvsourceadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvsourceadaptor)
+            if (!rgv->Gvsourceadaptor)
                 rgv->Gvsourceadaptor =
                     ensGvsourceadaptorNew(dba);
 
@@ -8735,16 +9094,18 @@ EnsPGvsourceadaptor ensRegistryGetGvsourceadaptor(
 **
 ** @return [EnsPGvsynonymadaptor]
 ** Ensembl Genetic Variation Synonym Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvsynonymadaptor ensRegistryGetGvsynonymadaptor(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
@@ -8775,6 +9136,8 @@ EnsPGvsynonymadaptor ensRegistryGetGvsynonymadaptor(
 **
 ** @return [EnsPGvtranscriptvariationadaptor]
 ** Ensembl Genetic Variation Transcript Variation Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8784,27 +9147,27 @@ EnsPGvtranscriptvariationadaptor ensRegistryGetGvtranscriptvariationadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvtranscriptvariationadaptor)
+            if (!rgv->Gvtranscriptvariationadaptor)
                 rgv->Gvtranscriptvariationadaptor =
                     ensGvtranscriptvariationadaptorNew(dba);
 
@@ -8837,20 +9200,42 @@ EnsPGvtranscriptvariationadaptor ensRegistryGetGvtranscriptvariationadaptor(
 **
 ** @return [EnsPGvvariationadaptor]
 ** Ensembl Genetic Variation Variation Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvvariationadaptor ensRegistryGetGvvariationadaptor(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    RegistryPEntry entry          = NULL;
+    RegistryPGeneticVariation rgv = NULL;
+
+    if (!dba)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
+
+    if (!entry)
+        return NULL;
+
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
-            return ensRegistryGetGvdatabaseadaptor(dba);
+            rgv = (RegistryPGeneticVariation)
+                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
+
+            if (!rgv)
+                break;
+
+            if (!rgv->Gvvariationadaptor)
+                rgv->Gvvariationadaptor =
+                    ensGvvariationadaptorNew(dba);
+
+            return rgv->Gvvariationadaptor;
 
             break;
 
@@ -8877,6 +9262,8 @@ EnsPGvvariationadaptor ensRegistryGetGvvariationadaptor(
 **
 ** @return [EnsPGvvariationfeatureadaptor]
 ** Ensembl Genetic Variation Variation Feature Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8886,27 +9273,27 @@ EnsPGvvariationfeatureadaptor ensRegistryGetGvvariationfeatureadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvvariationfeatureadaptor)
+            if (!rgv->Gvvariationfeatureadaptor)
                 rgv->Gvvariationfeatureadaptor =
                     ensGvvariationfeatureadaptorNew(dba);
 
@@ -8937,6 +9324,8 @@ EnsPGvvariationfeatureadaptor ensRegistryGetGvvariationfeatureadaptor(
 **
 ** @return [EnsPGvvariationsetadaptor]
 ** Ensembl Genetic Variation Variation Set Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8946,27 +9335,27 @@ EnsPGvvariationsetadaptor ensRegistryGetGvvariationsetadaptor(
     RegistryPEntry entry          = NULL;
     RegistryPGeneticVariation rgv = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     entry = (RegistryPEntry) ajTableFetchmodV(
-        registryEntry,
-        (const void*) ensDatabaseadaptorGetSpecies(dba));
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
 
-    if(!entry)
+    if (!entry)
         return NULL;
 
-    switch(ensDatabaseadaptorGetGroup(dba))
+    switch (ensDatabaseadaptorGetGroup(dba))
     {
         case ensEDatabaseadaptorGroupGeneticVariation:
 
             rgv = (RegistryPGeneticVariation)
                 entry->Registry[ensDatabaseadaptorGetGroup(dba)];
 
-            if(!rgv)
+            if (!rgv)
                 break;
 
-            if(!rgv->Gvvariationsetadaptor)
+            if (!rgv->Gvvariationsetadaptor)
                 rgv->Gvvariationsetadaptor =
                     ensGvvariationsetadaptorNew(dba);
 

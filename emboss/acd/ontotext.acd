@@ -1,9 +1,9 @@
 application: ontotext [
   documentation: "Get ontology term(s) original full text"
   groups: "Ontology, Data retrieval:Ontology data, Data retrieval:Text data"
-    relations: "EDAM:0000089 topic Ontologies"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+    relations: "EDAM_topic:0089 Ontology"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
      default: ""
      parameter: "Y"
      entry: "Y"
-     relations: "EDAM:0001087 identifier Ontology term ID"
+     relations: "EDAM_identifier:1087 Ontology concept ID"
   ]
 
 
@@ -35,7 +35,7 @@ section: additional [
     information: "Include subclasses of hits"
     help: "Extend the query matches to include all terms which are
            specialisations (sub-classes) of the matched terms."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -45,7 +45,7 @@ section: additional [
     information: "Include obsolete terms"
     help: "The default behaviour is to not use or return obsolete terms.
            This option if set will include all terms."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -73,8 +73,9 @@ section: output [
 
   outfile: outfile [
     parameter: "Y"
-    knowntype: "Full text output file"
-    relations: "EDAM:0000966 data Ontology term"
+    knowntype: "Entry full text"
+    information: "Full text output file"
+    relations: "EDAM_data:0966 Ontology term"
   ]
 
 endsection: output

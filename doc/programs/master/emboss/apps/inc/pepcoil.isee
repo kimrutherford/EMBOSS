@@ -4,7 +4,7 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure using GOR method</td>
+<td>Predict protein secondary structure using GOR method</td>
 </tr>
 
 <tr>

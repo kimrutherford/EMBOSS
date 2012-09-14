@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -75,7 +75,7 @@ Output report [x65923.recoder]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find restriction sites to remove (mutate) with no translation change
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -101,7 +101,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -211,7 +214,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -280,11 +283,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -328,7 +355,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -586,7 +613,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -598,7 +625,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -618,12 +653,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -692,7 +729,7 @@ By default, the output is in 'table' format.
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: recoder
 #    -sequence tembl:x65923
 #    -enzymes EcoRII
@@ -703,10 +740,9 @@ By default, the output is in 'table' format.
 #=======================================
 #
 # Sequence: X65923     from: 1   to: 518
-# HitCount: 34
+# HitCount: 22
 #
 # KEY:
-# Dir: Direction (Rev for reverse complement)
 # EnzymeName: Enzyme name
 # RS-Pattern: Restriction enzyme recognition site pattern
 # Base-Posn: Position of base to be mutated
@@ -717,41 +753,29 @@ By default, the output is in 'table' format.
 #
 #=======================================
 
-  Start     End  Strand Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
-     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;G
-     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;A
-     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;T
-     77      81       + .      EcoRII     CCWGG             79    R.R     A-&gt;C
-     77      81       + .      EcoRII     CCWGG             81    R.R     G-&gt;A
-    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;G
-    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;A
-    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;T
-    107     111       + .      EcoRII     CCWGG            109    R.R     A-&gt;C
-    107     111       + .      EcoRII     CCWGG            111    R.R     G-&gt;A
-    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;G
-    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;A
-    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;T
-    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;G
-    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;A
-    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;T
-    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;G
-    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;A
-    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;T
-    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;G
-    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;A
-    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;T
-     77      81       - Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
-     77      81       - Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
-    107     111       - Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
-    107     111       - Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
-    182     186       - Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
-    182     186       - Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
-    197     201       - Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
-    197     201       - Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
-    248     252       - Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
-    248     252       - Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
-    293     297       - Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
-    293     297       - Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
+  Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81       + EcoRII     CCWGG             78    P.P     C-&gt;G
+     77      81       + EcoRII     CCWGG             78    P.P     C-&gt;A
+     77      81       + EcoRII     CCWGG             78    P.P     C-&gt;T
+     77      81       + EcoRII     CCWGG             79    R.R     A-&gt;C
+     77      81       + EcoRII     CCWGG             81    R.R     G-&gt;A
+    107     111       + EcoRII     CCWGG            108    A.A     C-&gt;G
+    107     111       + EcoRII     CCWGG            108    A.A     C-&gt;A
+    107     111       + EcoRII     CCWGG            108    A.A     C-&gt;T
+    107     111       + EcoRII     CCWGG            109    R.R     A-&gt;C
+    107     111       + EcoRII     CCWGG            111    R.R     G-&gt;A
+    182     186       + EcoRII     CCWGG            183    S.S     C-&gt;G
+    182     186       + EcoRII     CCWGG            183    S.S     C-&gt;A
+    182     186       + EcoRII     CCWGG            183    S.S     C-&gt;T
+    197     201       + EcoRII     CCWGG            198    P.P     C-&gt;G
+    197     201       + EcoRII     CCWGG            198    P.P     C-&gt;A
+    197     201       + EcoRII     CCWGG            198    P.P     C-&gt;T
+    248     252       + EcoRII     CCWGG            249    P.P     C-&gt;G
+    248     252       + EcoRII     CCWGG            249    P.P     C-&gt;A
+    248     252       + EcoRII     CCWGG            249    P.P     C-&gt;T
+    293     297       + EcoRII     CCWGG            294    P.P     C-&gt;G
+    293     297       + EcoRII     CCWGG            294    P.P     C-&gt;A
+    293     297       + EcoRII     CCWGG            294    P.P     C-&gt;T
 
 #---------------------------------------
 #---------------------------------------
@@ -760,7 +784,7 @@ By default, the output is in 'table' format.
 # Total_sequences: 1
 # Total_length: 518
 # Reported_sequences: 1
-# Reported_hitcount: 34
+# Reported_hitcount: 22
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -916,7 +940,7 @@ None.
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>

@@ -2,8 +2,8 @@ application: polydot [
   documentation: "Draw dotplots for all-against-all comparison of a
                   sequence set"
   groups: "Alignment:Dot plots"
-    relations: "EDAM:0000159 topic Sequence comparison"
-    relations: "EDAM:0000490 operation Dotplot plotting"
+    relations: "EDAM_topic:0159 Sequence comparison"
+    relations: "EDAM_operation:0490 Dotplot plotting"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
     type: "any"
     help: "File containing a sequence alignment"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -31,7 +31,7 @@ section: required [
     default: "6"
     minimum: "2"
     information: "Word size"
-    relations: "EDAM:0001250 data Word size"
+    relations: "EDAM_data:1250 Word size"
   ]
 
 endsection: required
@@ -48,34 +48,34 @@ section: output [
     help: "This specifies the size of the gap that is used to separate
            the individual dotplots in the display. The size is measured in
            residues, as displayed in the output."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around each dotplot"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   toggle: dumpfeat [
     default: "N"
     additional: "Y"
     information: "Dump all matches as feature files"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   featout: outfeat [
     standard: "$(dumpfeat)"
     nullok: "@(!$(dumpfeat))"
     nulldefault: "@(!$(dumpfeat))"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Poly dotplot"
-    relations: "EDAM:0000862 data Dotplot"
+    relations: "EDAM_data:0862 Dotplot"
   ]
 
 endsection: output

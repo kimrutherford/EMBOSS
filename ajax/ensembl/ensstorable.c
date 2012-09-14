@@ -1,82 +1,85 @@
-/* @source Ensembl Storable functions
+/* @source ensstorable ********************************************************
+**
+** Ensembl Storable functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.17 $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensstorable.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ====================== private functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -95,8 +98,8 @@
 ** @nam2rule Storable Functions for manipulating Ensembl Storable objects
 **
 ** @cc Bio::EnsEMBL::Storable
-** @cc CVS Revision: 1.21
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -138,6 +141,8 @@
 ** @param [r] storable [const EnsPStorable] Ensembl Storable
 **
 ** @return [EnsPStorable] Ensembl Storable or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -145,7 +150,7 @@ EnsPStorable ensStorableNewCpy(const EnsPStorable storable)
 {
     EnsPStorable pthis = NULL;
 
-    if(!storable)
+    if (!storable)
         return NULL;
 
     AJNEW0(pthis);
@@ -156,7 +161,7 @@ EnsPStorable ensStorableNewCpy(const EnsPStorable storable)
 
     pthis->Identifier = storable->Identifier;
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     return pthis;
 }
@@ -173,12 +178,14 @@ EnsPStorable ensStorableNewCpy(const EnsPStorable storable)
 ** @param [u] adaptor [void*] Corresponding Ensembl Object Adaptor
 **
 ** @return [EnsPStorable] Ensembl Storable or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPStorable ensStorableNewIni(EnsEStorableType type,
                                ajuint identifier,
-                               void* adaptor)
+                               void *adaptor)
 {
     EnsPStorable storable = NULL;
 
@@ -190,7 +197,7 @@ EnsPStorable ensStorableNewIni(EnsEStorableType type,
 
     storable->Adaptor = adaptor;
 
-    storable->Use = 1;
+    storable->Use = 1U;
 
     return storable;
 }
@@ -206,12 +213,14 @@ EnsPStorable ensStorableNewIni(EnsEStorableType type,
 ** @param [u] storable [EnsPStorable] Ensembl Storable
 **
 ** @return [EnsPStorable] Ensembl Storable or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPStorable ensStorableNewRef(EnsPStorable storable)
 {
-    if(!storable)
+    if (!storable)
         return NULL;
 
     storable->Use++;
@@ -224,14 +233,14 @@ EnsPStorable ensStorableNewRef(EnsPStorable storable)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Storable object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Storable object.
 **
 ** @fdata [EnsPStorable]
 **
-** @nam3rule Del Destroy (free) an Ensembl Storable object
+** @nam3rule Del Destroy (free) an Ensembl Storable
 **
-** @argrule * Pstorable [EnsPStorable*] Ensembl Storable object address
+** @argrule * Pstorable [EnsPStorable*] Ensembl Storable address
 **
 ** @valrule * [void]
 **
@@ -245,27 +254,36 @@ EnsPStorable ensStorableNewRef(EnsPStorable storable)
 **
 ** Default destructor for an Ensembl Storable.
 **
-** @param [d] Pstorable [EnsPStorable*] Ensembl Storable object address
+** @param [d] Pstorable [EnsPStorable*] Ensembl Storable address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensStorableDel(EnsPStorable* Pstorable)
+void ensStorableDel(EnsPStorable *Pstorable)
 {
     EnsPStorable pthis = NULL;
 
-    if(!Pstorable)
+    if (!Pstorable)
         return;
 
-    if(!*Pstorable)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensStorableDel"))
+        ajDebug("ensStorableDel\n"
+                "  *Pstorable %p\n",
+                *Pstorable);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pstorable)
         return;
 
     pthis = *Pstorable;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pstorable = NULL;
 
@@ -282,9 +300,9 @@ void ensStorableDel(EnsPStorable* Pstorable)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Storable object.
+** Functions for returning members of an Ensembl Storable object.
 **
 ** @fdata [EnsPStorable]
 **
@@ -295,9 +313,10 @@ void ensStorableDel(EnsPStorable* Pstorable)
 **
 ** @argrule * storable [const EnsPStorable] Ensembl Storable
 **
-** @valrule Adaptor [void*] Ensembl Object Adaptor
-** @valrule Identifier [ajuint] SQL database-internal identifier
-** @valrule Type [EnsEStorableType] Ensembl Storable Type
+** @valrule Adaptor [void*] Ensembl Object Adaptor or NULL
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
+** @valrule Type [EnsEStorableType]
+** Ensembl Storable Type or ensEStorableTypeNULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -307,20 +326,19 @@ void ensStorableDel(EnsPStorable* Pstorable)
 
 /* @func ensStorableGetAdaptor ************************************************
 **
-** Get the Ensembl Object Adaptor element of an Ensembl Storable.
+** Get the Ensembl Object Adaptor member of an Ensembl Storable.
 **
 ** @param [r] storable [const EnsPStorable] Ensembl Storable
 **
 ** @return [void*] Ensembl Object Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void* ensStorableGetAdaptor(const EnsPStorable storable)
 {
-    if(!storable)
-        return NULL;
-
-    return storable->Adaptor;
+    return (storable) ? storable->Adaptor : NULL;
 }
 
 
@@ -328,20 +346,19 @@ void* ensStorableGetAdaptor(const EnsPStorable storable)
 
 /* @func ensStorableGetIdentifier *********************************************
 **
-** Get the SQL database-internal identifier element of an Ensembl Storable.
+** Get the SQL database-internal identifier member of an Ensembl Storable.
 **
 ** @param [r] storable [const EnsPStorable] Ensembl Storable
 **
-** @return [ajuint] SQL database-internal identifier (primary key) or 0
+** @return [ajuint] SQL database-internal identifier (primary key) or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensStorableGetIdentifier(const EnsPStorable storable)
 {
-    if(!storable)
-        return 0;
-
-    return storable->Identifier;
+    return (storable) ? storable->Identifier : 0U;
 }
 
 
@@ -349,33 +366,32 @@ ajuint ensStorableGetIdentifier(const EnsPStorable storable)
 
 /* @func ensStorableGetType ***************************************************
 **
-** Get the Ensembl Storable Object type element of an Ensembl Storable.
+** Get the Ensembl Storable Object type member of an Ensembl Storable.
 **
 ** @param [r] storable [const EnsPStorable] Ensembl Storable
 **
-** @return [EnsEStorableType] Ensembl Storable Type enumeration or
-**                            ensEStorableTypeNULL
+** @return [EnsEStorableType]
+** Ensembl Storable Type enumeration or ensEStorableTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEStorableType ensStorableGetType(const EnsPStorable storable)
 {
-    if(!storable)
-        return ensEStorableTypeNULL;
-
-    return storable->Type;
+    return (storable) ? storable->Type : ensEStorableTypeNULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Storable object.
+** Functions for assigning members of an Ensembl Storable object.
 **
 ** @fdata [EnsPStorable]
 **
-** @nam3rule Set Set one element of an Ensembl Storable
+** @nam3rule Set Set one member of an Ensembl Storable
 ** @nam4rule Identifier Set the SQL database-internal identifier
 ** @nam4rule Adaptor Set the Ensembl Object Adaptor
 ** @nam4rule Type Set the type
@@ -395,21 +411,23 @@ EnsEStorableType ensStorableGetType(const EnsPStorable storable)
 
 /* @func ensStorableSetAdaptor ************************************************
 **
-** Set the Ensembl Object Adaptor element of an Ensembl Storable.
+** Set the Ensembl Object Adaptor member of an Ensembl Storable.
 **
 ** @param [u] storable [EnsPStorable] Ensembl Storable
 ** @param [u] adaptor [void*] Ensembl Object Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-AjBool ensStorableSetAdaptor(EnsPStorable storable, void* adaptor)
+AjBool ensStorableSetAdaptor(EnsPStorable storable, void *adaptor)
 {
-    if(!storable)
+    if (!storable)
         return ajFalse;
 
-    if(!adaptor)
+    if (!adaptor)
         return ajFalse;
 
     storable->Adaptor = adaptor;
@@ -422,21 +440,23 @@ AjBool ensStorableSetAdaptor(EnsPStorable storable, void* adaptor)
 
 /* @func ensStorableSetIdentifier *********************************************
 **
-** Set the SQL database-internal identifier element of an Ensembl Storable.
+** Set the SQL database-internal identifier member of an Ensembl Storable.
 **
 ** @param [u] storable [EnsPStorable] Ensembl Storable
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensStorableSetIdentifier(EnsPStorable storable, ajuint identifier)
 {
-    if(!storable)
+    if (!storable)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
     storable->Identifier = identifier;
@@ -477,25 +497,27 @@ AjBool ensStorableSetIdentifier(EnsPStorable storable, ajuint identifier)
 **
 ** @return [AjBool] ajTrue if the Ensembl Storable is alread stored in the
 **                  SQL database
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensStorableIsStored(const EnsPStorable storable,
                            const EnsPDatabaseconnection dbc)
 {
-    if(!storable)
+    if (!storable)
         return ajFalse;
 
-    if(!dbc)
+    if (!dbc)
         return ajFalse;
 
-    if(storable->Identifier && (!storable->Adaptor))
+    if (storable->Identifier && (!storable->Adaptor))
         return ajFalse;
 
-    if(storable->Adaptor && (!storable->Identifier))
+    if (storable->Adaptor && (!storable->Identifier))
         return ajFalse;
 
-    if((!storable->Identifier) && (!storable->Adaptor))
+    if ((!storable->Identifier) && (!storable->Adaptor))
         return ajFalse;
 
     /*

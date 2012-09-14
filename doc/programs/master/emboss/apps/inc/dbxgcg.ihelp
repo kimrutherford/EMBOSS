@@ -1,5 +1,5 @@
 Index a GCG formatted database using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -27,6 +27,8 @@ Version: EMBOSS:6.4.0.0
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -statistics         boolean    [N] Report I/O statistics for each input
+                                  file
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:

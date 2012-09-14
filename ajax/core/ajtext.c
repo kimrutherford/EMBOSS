@@ -1,31 +1,41 @@
-/******************************************************************************
-** @source AJAX TEXT functions
+/* @source ajtext *************************************************************
+**
+** AJAX TEXT functions
 **
 ** These functions control all aspects of AJAX text
 ** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.8 $
 ** @modified Oct 5 pmr First version
+** @modified $Date: 2011/10/18 14:23:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajtext.h"
+#include "ajtextread.h"
+#include "ajtextwrite.h"
+
+
+
 
 static AjPStr textTempQry = NULL;
 
@@ -76,6 +86,8 @@ static void textMakeQry(const AjPText thys, AjPStr* qry);
 ** Text data constructor
 **
 ** @return [AjPText] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -119,6 +131,8 @@ AjPText ajTextNew(void)
 **
 ** @param [d] Ptext       [AjPText*]  Text data object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -186,6 +200,8 @@ void ajTextDel(AjPText *Ptext)
 **
 ** @param [r] text [const AjPText] Text data object.
 ** @return [const char*] Query as a character string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -207,6 +223,8 @@ const char* ajTextGetQryC(const AjPText text)
 **
 ** @param [r] text [const AjPText] Text data object.
 ** @return [const AjPStr] Query as a string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -225,13 +243,15 @@ const AjPStr ajTextGetQryS(const AjPText text)
 
 
 
-/* @funcstatic textMakeQry ***************************************************
+/* @funcstatic textMakeQry ****************************************************
 **
 ** Sets the query for a text data object.
 **
 ** @param [r] thys [const AjPText] Text data object
 ** @param [w] qry [AjPStr*] Query string in full
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -286,6 +306,8 @@ static void textMakeQry(const AjPText thys, AjPStr* qry)
 **
 ** @param [u] text [AjPText] text data
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -361,6 +383,8 @@ void ajTextClear(AjPText text)
 ** Cleans up text processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

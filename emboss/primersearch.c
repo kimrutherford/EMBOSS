@@ -213,7 +213,7 @@ int main(int argc, char **argv)
     primersearch_print_hits(primerList, outf);
 
     /* delete all nodes of list, then the list itself */
-    ajListMap(primerList, primersearch_free_primer, NULL);
+    ajListMap(primerList, &primersearch_free_primer, NULL);
     ajListFree(&primerList);
     ajListFree(&primerList);
 

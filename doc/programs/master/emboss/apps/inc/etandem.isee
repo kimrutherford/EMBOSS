@@ -4,17 +4,17 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats in nucleotide sequences</td>
+<td>Find tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Finds inverted repeats in nucleotide sequence(s)</td>
+<td>Find inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 </table>

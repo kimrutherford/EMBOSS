@@ -1,0 +1,14 @@
+Here is a sample session with <b>refseqget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>refseqget -of embl </b>
+Get reference sequence
+-refsequence : enter refseq value: <b>tembl:em498477</b>
+Reference sequence output file [em498477.embl]: <b>test.out</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

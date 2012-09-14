@@ -24,7 +24,7 @@
 
 <tr>
 <td><a href="prosextract.html">prosextract</a></td>
-<td>Processes the PROSITE motif database for use by patmatmotifs</td>
+<td>Process the PROSITE motif database for use by patmatmotifs</td>
 </tr>
 
 <tr>

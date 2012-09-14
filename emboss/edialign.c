@@ -7016,7 +7016,7 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 
 	for(hv=0;hv<seqnum;hv++)
 	    for(i=begin[hv];i<(ajuint) end[hv];i++)
-		hseq[hv][i] = tolower(seq[hv][i]);
+	      hseq[hv][i] = tolower((int)seq[hv][i]);
 
 	for( hv = 0 ; hv < fragno ; hv++ )
 	    for(k=0;k<2;k++)
@@ -7040,7 +7040,7 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 	{
 	    s1 = 0;
 	    while( 
-                  ( endseq[s1][p] == tolower( endseq[s1][p] ) )
+                  ( endseq[s1][p] == tolower((int) endseq[s1][p] ) )
 		  && (s1 < (seqnum - 1) ) /* no capital letter */
 		  )
 		s1++;
@@ -7049,7 +7049,7 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 	    {
 		for(s2 = s1+1 ; s2 < seqnum ; s2++)   
 		{
-		    if( endseq[s2][p] != tolower( endseq[s2][p] ) )
+		  if( endseq[s2][p] != tolower((int) endseq[s2][p] ) )
 			/* endseq[s2][p] capital letter */ 
 		    {
 			aligned = edialign_alignedPositions(gabiosclos,s1,
@@ -7074,7 +7074,7 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 	    for(sv = 0 ; sv < seqnum ; sv++)
 		for(hv = 0 ; hv < endlen ; hv++ )
 		    if( endseq[sv][hv] != gap_char )
-			if( endseq[sv][hv] == tolower( endseq[sv][hv] ) )
+		      if( endseq[sv][hv] == tolower((int) endseq[sv][hv] ) )
 			    endseq[sv][hv] = '*' ;
 
 
@@ -8424,7 +8424,7 @@ static void edialign_struc_check( char *regex )
 	if( ( regex[ p ] != '[' ) && ( regex[ p ] != ']' ) )
 	{ 
 	    char_num[ mot_len ]++ ;  
-	    regex[ p ] = toupper( regex[ p ] ) ; 
+	    regex[ p ] = toupper((int) regex[ p ] ) ; 
 	}
 
 	if( regex[ p ] == ']' ) 

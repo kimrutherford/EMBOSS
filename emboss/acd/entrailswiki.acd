@@ -1,8 +1,8 @@
 application: entrailswiki [
-  documentation: "Reports the internal structures in wikitext"
+  documentation: "Report the internal structures in wikitext"
   groups: "Utils:Misc"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000335 operation File reformatting"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0335 File reformatting"
 ]
 
 section: required [
@@ -25,7 +25,7 @@ section: required [
             resource: Data resource formats;
             taxonomy: Taxonomy formats"
     information: "Tables to be written"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
 endsection: required
@@ -38,7 +38,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "wikitext"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:0969 Text"
   ]
 
 endsection: output

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds programs by EDAM input data
+   Find programs by EDAM input data
 
 Description
 
@@ -41,7 +41,7 @@ Usage
 
 
 % wossinput codon
-Finds programs by EDAM input data
+Find programs by EDAM input data
 
 SEARCH FOR INPUT 'CODON'
 backtranseq Back-translate a protein sequence to a nucleotide sequence
@@ -57,8 +57,8 @@ tcode       Identify protein-coding regions using Fickett TESTCODE statistic
 
 Command line arguments
 
-Finds programs by EDAM input data
-Version: EMBOSS:6.4.0.0
+Find programs by EDAM input data
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any
@@ -215,7 +215,7 @@ Known bugs
 
 See also
 
-                     Program name                          Description
+                     Program name                         Description
                     drfinddata     Find public databases by data type
                     drfindformat   Find public databases by format
                     drfindid       Find public databases by identifier
@@ -226,14 +226,14 @@ See also
                     edamisformat   Find EDAM ontology terms by is_format_of relation
                     edamisid       Find EDAM ontology terms by is_identifier_of relation
                     edamname       Find EDAM ontology terms by name
-                    seealso        Finds programs with similar function to a specified program
-                    tfm            Displays full documentation for an application
-                    wossdata       Finds programs by EDAM data
-                    wossname       Finds programs by keywords in their short description
-                    wossoperation  Finds programs by EDAM operation
-                    wossoutput     Finds programs by EDAM output data
-                    wossparam      Finds programs by EDAM parameter
-                    wosstopic      Finds programs by EDAM topic
+                    seealso        Find programs with similar function to a specified program
+                    tfm            Display full documentation for an application
+                    wossdata       Find programs by EDAM data
+                    wossname       Find programs by keywords in their short description
+                    wossoperation  Find programs by EDAM operation
+                    wossoutput     Find programs by EDAM output data
+                    wossparam      Find programs by EDAM parameter
+                    wosstopic      Find programs by EDAM topic
 
 Author(s)
 

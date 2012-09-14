@@ -1,26 +1,41 @@
-/* @Source embshow.c
+/* @source embshow ************************************************************
 **
 ** General routines for sequence display.
-** Copyright (c) 2000 Gary Williams
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 2000 Gary Williams
+** @version $Revision: 1.51 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
 ******************************************************************************/
 
-#include "emboss.h"
-#include <ctype.h>
 
+#include "ajlib.h"
+
+#include "embshow.h"
+#include "embprop.h"
+#include "embmat.h"
+#include "ajlist.h"
+#include "ajseq.h"
+#include "ajfeat.h"
+#include "ajrange.h"
+#include "ajtranslate.h"
+
+#include <ctype.h>
 
 
 
@@ -161,6 +176,8 @@ static void showAddTags(AjPStr *tagsout, const AjPFeature feat, AjBool values);
 ** @param [r] html [AjBool] format output for HTML
 ** @param [r] offset [ajint] number to start display of position numbering at
 ** @return [EmbPShow] New sequence show object.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -199,6 +216,8 @@ EmbPShow embShowNew(const AjPSeq seq, ajint begin, ajint end, ajint width,
 ** @param [r] info [void*] descriptor
 ** @param [r] type [ajint] type of descriptor
 ** @return [EmbPShowInfo] New sequence show object.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -240,6 +259,8 @@ static EmbPShowInfo showInfoNew(void* info, ajint type)
 **
 ** @param [d] pthis [EmbPShow*] Show sequence object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -333,6 +354,8 @@ void embShowDel(EmbPShow* pthis)
 **
 ** @param [d] pinfo [EmbPShowSeq*] Show sequence descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -352,6 +375,8 @@ static void showDelSeq(EmbPShowSeq* pinfo)
 **
 ** @param [d] pinfo [EmbPShowBlank*] Show blank descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -371,6 +396,8 @@ static void showDelBlank(EmbPShowBlank* pinfo)
 **
 ** @param [d] pinfo [EmbPShowTicks*] Show ticks descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -390,6 +417,8 @@ static void showDelTicks(EmbPShowTicks* pinfo)
 **
 ** @param [d] pinfo [EmbPShowTicknum*] Show tick numbers descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -409,6 +438,8 @@ static void showDelTicknum(EmbPShowTicknum* pinfo)
 **
 ** @param [d] pinfo [EmbPShowComp*] Show complement descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -428,6 +459,8 @@ static void showDelComp(EmbPShowComp* pinfo)
 **
 ** @param [d] pinfo [EmbPShowTran*] Show translation descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -453,6 +486,8 @@ static void showDelTran(EmbPShowTran* pinfo)
 **
 ** @param [d] pinfo [EmbPShowRE*] Show restriction enzyme descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -484,6 +519,8 @@ static void showDelRE(EmbPShowRE* pinfo)
 **
 ** @param [d] pinfo [EmbPShowFT*] Show feature table descriptor object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -508,6 +545,8 @@ static void showDelFT(EmbPShowFT* pinfo)
 **
 ** @param [d] pinfo [EmbPShowNote*] Show annotation region descriptor object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -551,6 +590,8 @@ static void showDelNote(EmbPShowNote* pinfo)
 ** @param [r] upperrange [const AjPRange] Range of sequence to uppercase
 ** @param [r] colour [const AjPRange] Range of sequence to colour in HTML
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -580,6 +621,8 @@ void embShowAddSeq(EmbPShow thys, AjBool number, AjBool threeletter,
 **
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -605,6 +648,8 @@ void embShowAddBlank(EmbPShow thys)
 **
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -631,6 +676,8 @@ void embShowAddTicks(EmbPShow thys)
 **
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -657,6 +704,8 @@ void embShowAddTicknum(EmbPShow thys)
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @param [r] number [AjBool] ajTrue = number the complement
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -694,6 +743,8 @@ void embShowAddComp(EmbPShow thys, AjBool number)
 ** @param [r] lastorf [AjBool] ajTrue end of the seq is a possible ORF
 ** @param [r] showframe [AjBool] ajTrue write the frame number
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -746,6 +797,8 @@ void embShowAddTran(EmbPShow thys, const AjPTrn trnTable, ajint frame,
 ** @param [r] plasmid [AjBool] Circular (plasmid) sequence
 ** @param [r] flat [AjBool] show in flat format with recognition sites
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -759,7 +812,7 @@ void embShowAddRE(EmbPShow thys, ajint sense, const AjPList restrictlist,
     
     info->sense = sense;		/* 1 or -1 = sense to translate */
     info->flat = flat;		        /* upright or flat display */
-    info->hits = ajListGetLength(restrictlist);
+    info->hits = (ajuint) ajListGetLength(restrictlist);
     info->matches = ajListNewListref(restrictlist);
     info->sitelist = NULL;	        /* show we have not yet created this
 					   list */
@@ -780,6 +833,8 @@ void embShowAddRE(EmbPShow thys, ajint sense, const AjPList restrictlist,
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @param [r] feat [const AjPFeattable] features
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -808,6 +863,8 @@ void embShowAddFT(EmbPShow thys, const AjPFeattable feat)
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @param [r] regions [const AjPRange] Sequence range(s)
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -871,6 +928,8 @@ void embShowAddNote(EmbPShow thys, const AjPRange regions)
 ** @param [u] out [AjPFile] Output file handle
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -941,6 +1000,8 @@ void embShowPrint(AjPFile out, const EmbPShow thys)
 ** @param [u] out [AjPFile] Output file handle
 ** @param [r] lines [const AjPList] lines to print
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -991,6 +1052,8 @@ static void showPrintLines(AjPFile out, const AjPList lines)
 ** @param [r] pos [ajuint] position in sequence so far while printing
 ** @param [r] last [ajuint] final position in sequence so far while printing
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1072,6 +1135,8 @@ static void showFillLines(AjPList lines, const EmbPShow thys,
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1103,6 +1168,8 @@ static void showMargin(const EmbPShow thys, AjPList lines)
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] number [ajint] number to display
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1134,6 +1201,8 @@ static void showMarginNumber(const EmbPShow thys, AjPList lines, ajint number)
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] number [ajint] number of space characters to output
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1170,6 +1239,8 @@ static void showPad(AjPList lines, ajint number)
 **                                        to uppercase
 ** @param [r] pos [ajuint] position in sequence that line starts at
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1252,6 +1323,8 @@ void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajuint pos)
 ** @param [r] colour [const AjPRange] range of original sequence to colour
 ** @param [r] pos [ajuint] position in sequence that line starts at
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1335,6 +1408,8 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajuint pos)
 ** @param [r] pos [ajuint] position (ignoring HTML tags) to insert at
 ** @param [r] insert [const AjPStr] string to insert
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1386,6 +1461,8 @@ static void showInsertHTML(AjPStr *target, ajuint pos, const AjPStr insert)
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1524,6 +1601,8 @@ static void showFillSeq(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1562,6 +1641,8 @@ static void showFillBlank(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1615,6 +1696,8 @@ static void showFillTicks(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1667,6 +1750,8 @@ static void showFillTicknum(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1743,6 +1828,8 @@ static void showFillComp(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2038,6 +2125,8 @@ static void showFillTran(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2076,6 +2165,8 @@ static void showFillRE(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2141,7 +2232,7 @@ static void showFillREupright(const EmbPShow thys,
 	}
 
 	ajListIterDel(&miter);
-	ajListSort(info->sitelist, showFillREuprightSort);
+	ajListSort(info->sitelist, &showFillREuprightSort);
     }
 
     ajStrAssignC(&tick, "|");		/* a useful string */
@@ -2172,7 +2263,7 @@ static void showFillREupright(const EmbPShow thys,
 	    **  to pop off the bottom and then push the altered node back on
 	    **  the top of the list
 	    */
-	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
+	    for(ln = (ajuint) ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		ajListstrPop(linelist, &line);
 		/*
@@ -2274,6 +2365,8 @@ static void showFillREupright(const EmbPShow thys,
 ** @param [r] b [const void*] Second pos
 ** @return [ajint] Comparison value. 0 if equal, -1 if first is lower,
 **               +1 if first is higher.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2306,6 +2399,8 @@ static ajint showFillREuprightSort(const void* a, const void* b)
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2684,7 +2779,7 @@ static void showFillREflat(const EmbPShow thys,
 	    **  to pop off the bottom and then push the altered node back on
 	    **  the top of the list
 	    */
-	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
+	    for(ln = (ajuint) ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		ajListstrPop(linelist, &line); /* get the site line */
 		ajListstrPop(linelist, &line2); /* get the name line */
@@ -2798,6 +2893,8 @@ static void showFillREflat(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2953,7 +3050,7 @@ static void showFillFT(const EmbPShow thys,
 	    **  and ajListstrPushApp to pop off the bottom and then push
 	    **  the altered node back on the top of the list
 	    */
-	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
+	    for(ln = (ajuint) ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		/* get the linestr line */
 		ajListstrPop(linelist, &line);
@@ -3063,6 +3160,8 @@ static void showFillFT(const EmbPShow thys,
 ** @param [r] pos [ajuint] current printing position in the sequence
 ** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 static void showFillNote(const EmbPShow thys,
@@ -3190,7 +3289,7 @@ static void showFillNote(const EmbPShow thys,
 	    **  and ajListstrPushApp to pop off the bottom and then push
 	    **  the altered node back on the top of the list
 	    */
-	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
+	    for(ln = (ajuint) ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		/* linestr line */
 		ajListstrPop(linelist, &line);
@@ -3299,6 +3398,8 @@ static void showFillNote(const EmbPShow thys,
 ** @param [r] start [ajint] start position in target to begin overwriting at
 ** @param [u] insert [AjPStr] string to overwrite with
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3330,6 +3431,8 @@ static void showOverPrint(AjPStr *target, ajint start, AjPStr insert)
 ** @param [r] start [ajint] start position in target to begin checking at
 ** @param [r] end [ajint] end position in target to check
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3362,6 +3465,8 @@ static AjBool showLineIsClear(AjPStr *line, ajint start, ajint end)
 ** @param [r] values [AjBool] display values of tags (currently ignored)
 **
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 

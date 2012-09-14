@@ -5,7 +5,7 @@ appl: oneof [ doc: "testing" group: "testing" ]
 
 section: input [ info: "Input section" type: "page" ]
 
-select: test [
+select: testlist [
       standard: Y
       values: "one;two;three;four;five"
       info: "select value"
@@ -13,7 +13,7 @@ select: test [
 ]
 
 integer: testnum [ min: 1 info: "Pick a number"
-	 standard: "@($(test) == { one | three | five })"
+	 standard: "@($(testlist) == { one | three | five })"
     ]
 
 endsection: input

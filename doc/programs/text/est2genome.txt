@@ -106,7 +106,7 @@ Output file [h45989.est2genome]:
 Command line arguments
 
 Align EST sequences to genomic DNA sequence
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
@@ -181,7 +181,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -197,7 +200,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -266,17 +272,6 @@ RL   Unpublished.
 XX
 DR   GDB; 3839990.
 DR   GDB; 4193257.
-DR   ImaGenes; ENSEp780A0214D.
-DR   ImaGenes; ENSEp780A044Q.
-DR   ImaGenes; HU3_p972A0639D.
-DR   ImaGenes; HU3_p972B1110Q.
-DR   ImaGenes; HU3_p983A0639D.
-DR   ImaGenes; HU4_p940A0622D.
-DR   ImaGenes; IMAGp956A0431Q.
-DR   ImaGenes; IMAGp998F03326Q.
-DR   ImaGenes; RZPDp1096A101D.
-DR   ImaGenes; RZPDp1096A191Q.
-DR   ImaGenes; RZPDp200A0214D.
 DR   UNILIB; 555; 300.
 XX
 CC   On May 8, 1995 this sequence version replaced gi:800819.
@@ -360,36 +355,36 @@ RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (09-JAN-2009) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (09-JAN-2009) to the INSDC.
 RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
 RL   E-mail enquiries: vega@sanger.ac.uk Clone requests: Geneservice
 RL   (http://www.geneservice.co.uk/) and BACPAC Resources
 RL   (http://bacpac.chori.org/)
 XX
 DR   EMBL-CON; GL000124.
+DR   Ensembl-Gn; ENSG00000007384; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000161980; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000161981; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000262316; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000293860; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000293861; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000338527; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383018; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417043; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417493; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419764; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420545; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428730; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450643; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454039; Homo_sapiens.
 DR   GDB; 11502921.
-DR   RFAM; RF00017; SRP_euk_arch.
-XX
-CC   -------------- Genome Center
-CC   Center: Wellcome Trust Sanger Institute
-CC   Center code: SC
-CC   Web site: http://www.sanger.ac.uk
-CC   Contact: vega@sanger.ac.uk
-CC   --------------
-CC
-CC   This sequence was finished as follows unless otherwise noted: all regions
-CC   were either double-stranded or sequenced with an alternate chemistry or
-CC   covered by high quality data (i.e., phred quality >= 30); an attempt was
-CC   made to resolve all sequencing problems, such as compressions and repeats;
-CC   all regions were covered by at least one subclone; and the assembly was
-CC   confirmed by restriction digest, except on the rare occasion of the clone
-CC   being a YAC.
-CC
-CC   The following abbreviations are used to associate primary accession
-CC   numbers given in the feature table with their source databases:
-CC   Em:, EMBL; Sw:, SWISSPROT; Tr:, TREMBL; Wp:, WORMPEP;
-CC   Information on the WORMPEP database can be found at
-CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
+DR   GOA; E9PGJ1.
+DR   GOA; F5GWL4.
+DR   GOA; F8WBS4.
+DR   GOA; H0Y6L9.
+DR   InterPro; IPR022241; Rhomboid_SP.
+DR   InterPro; IPR022764; Peptidase_S54_rhomboid_dom.
 
 
   [Part of this file has been deleted for brevity]

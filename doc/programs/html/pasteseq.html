@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -100,7 +100,7 @@ Insert one sequence into another
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Insert one sequence into another
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   (Gapped) sequence filename and optional
@@ -126,7 +126,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -142,7 +145,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -249,7 +255,7 @@ To insert before the start use the position 0.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -318,11 +324,35 @@ To insert before the start use the position 0.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -366,7 +396,7 @@ To insert before the start use the position 0.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -435,11 +465,35 @@ To insert before the start use the position 0.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -483,7 +537,7 @@ To insert before the start use the position 0.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 
@@ -718,13 +772,14 @@ ID   AMIR_PSEAE              Reviewed;         196 AA.
 AC   P10932;
 DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
 DT   08-DEC-2000, sequence version 2.
-DT   18-MAY-2010, entry version 81.
+DT   16-MAY-2012, entry version 93.
 DE   RecName: Full=Aliphatic amidase regulator;
 GN   Name=amiR; OrderedLocusNames=PA3363;
-OS   Pseudomonas aeruginosa.
+OS   Pseudomonas aeruginosa (strain ATCC 15692 / PAO1 / 1C / PRS 101 / LMG
+OS   12228).
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
 OC   Pseudomonadaceae; Pseudomonas.
-OX   NCBI_TaxID=287;
+OX   NCBI_TaxID=208964;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RC   STRAIN=PAC433;
@@ -763,32 +818,31 @@ RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
 RT   regulated transcription antitermination complex.";
 RL   EMBO J. 18:5175-5186(1999).
 CC   -!- FUNCTION: Positive controlling element of AmiE, the gene for
-CC       aliphatic amidase. Acts as a transcriptional antitermination
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   GeneID; 880573; -.
-DR   GenomeReviews; AE004091_GR; PA3363.
-DR   KEGG; pae:PA3363; -.
-DR   PseudoCAP; PA3363; -.
-DR   HOGENOM; HBG638444; -.
-DR   OMA; QLQRIGC; -.
+DR   eggNOG; COG3707; -.
+DR   HOGENOM; HOG000247749; -.
+DR   OMA; QRIGCQV; -.
 DR   ProtClustDB; CLSK867929; -.
 DR   BioCyc; PAER208964:PA3363-MONOMER; -.
-DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
+DR   EvolutionaryTrace; P10932; -.
+DR   GO; GO:0003723; F:RNA binding; IEA:InterPro.
 DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
-DR   InterPro; IPR005561; AmiR_NasR_reg.
-DR   InterPro; IPR011006; CheY-like.
+DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW.
+DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
+DR   InterPro; IPR005561; ANTAR.
+DR   InterPro; IPR011006; CheY-like_superfamily.
 DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
 DR   InterPro; IPR011991; WHTH_trsnscrt_rep_DNA-bd.
-DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
 DR   Pfam; PF03861; ANTAR; 1.
 DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   SMART; SM01012; ANTAR; 1.
 DR   SUPFAM; SSF52172; CheY_like; 1.
 DR   PROSITE; PS50921; ANTAR; 1.
 PE   1: Evidence at protein level;
-KW   3D-structure; Complete proteome; Transcription;
+KW   3D-structure; Complete proteome; Reference proteome; Transcription;
 KW   Transcription antitermination; Transcription regulation.
 FT   CHAIN         1    196       Aliphatic amidase regulator.
 FT                                /FTId=PRO_0000064582.
@@ -988,12 +1042,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
-<td>Reads and writes alignments</td>
+<td>Read and write alignments</td>
 </tr>
 
 <tr>
 <td><a href="aligncopypair.html">aligncopypair</a></td>
-<td>Reads and writes pairs from alignments</td>
+<td>Read and write pairs from alignments</td>
 </tr>
 
 <tr>
@@ -1008,12 +1062,12 @@ None.
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a section from a sequence</td>
+<td>Remove a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+<td>Remove non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -1023,7 +1077,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -1043,12 +1097,17 @@ None.
 
 <tr>
 <td><a href="featcopy.html">featcopy</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featmerge.html">featmerge</a></td>
+<td>Merge two overlapping feature tables</td>
 </tr>
 
 <tr>
 <td><a href="featreport.html">featreport</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
 </tr>
 
 <tr>
@@ -1073,12 +1132,12 @@ None.
 
 <tr>
 <td><a href="maskambignuc.html">maskambignuc</a></td>
-<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+<td>Mask all ambiguity characters in nucleotide sequences with N</td>
 </tr>
 
 <tr>
 <td><a href="maskambigprot.html">maskambigprot</a></td>
-<td>Masks all ambiguity characters in protein sequences with X</td>
+<td>Mask all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
@@ -1128,7 +1187,7 @@ None.
 
 <tr>
 <td><a href="nthseqset.html">nthseqset</a></td>
-<td>Reads and writes (returns) one set of sequences from many</td>
+<td>Read and write (return) one set of sequences from many</td>
 </tr>
 
 <tr>
@@ -1138,22 +1197,22 @@ None.
 
 <tr>
 <td><a href="seqcount.html">seqcount</a></td>
-<td>Reads and counts sequences</td>
+<td>Read and count sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
-<td>Reads and writes (returns) sequences</td>
+<td>Read and write (return) sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsetall.html">seqretsetall</a></td>
-<td>Reads and writes (returns) many sets of sequences</td>
+<td>Read and write (return) many sets of sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads sequences and writes them to individual files</td>
+<td>Read sequences and write them to individual files</td>
 </tr>
 
 <tr>
@@ -1168,7 +1227,7 @@ None.
 
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
-<td>Reads and writes (returns) sequences, skipping first few</td>
+<td>Read and write (return) sequences, skipping first few</td>
 </tr>
 
 <tr>
@@ -1203,7 +1262,7 @@ None.
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+<td>Remove vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>

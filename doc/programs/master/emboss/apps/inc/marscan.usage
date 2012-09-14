@@ -5,7 +5,7 @@ Here is a sample session with <b>marscan</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>marscan </b>
-Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
+Find matrix/scaffold recognition (MRS) signatures in DNA sequences
 Input nucleotide sequence(s): <b>tembl:u01317</b>
 Output report [u01317.marscan]: <b></b>
 

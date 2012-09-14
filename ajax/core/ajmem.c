@@ -1,43 +1,109 @@
-/******************************************************************************
-** @source AJAX memory functions
+/* @source ajmem **************************************************************
 **
-** @@
+** AJAX memory functions
+**
+** @author Copyright (C) 1999 Peter Rice
+** @version $Revision: 1.35 $
+** @modified Peter Rice pmr@ebi.ac.uk
+** @modified $Date: 2011/10/23 20:09:49 $ by $Author: mks $
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajmem.h"
+#include "ajassert.h"
+#include "ajexcept.h"
+#include "ajmess.h"
+#include "ajutil.h"
 
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ajax.h"
-#ifdef AJ_MEMPROBE
+#ifdef HAVE_MCHECK
 #include <mcheck.h>
-#endif
+#endif /* HAVE_MCHECK */
 
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
+
+
+
+
+/* @conststatic Mem_Failed ****************************************************
+**
+** Exception for "Allocation failed, insufficient memory available"
+**
+******************************************************************************/
 static const Except_T Mem_Failed =
 {
     "Allocation failed, insufficient memory available"
 };
 
+
+
+
+
+/* @conststatic Mem_Badcount **************************************************
+**
+** Exception for "Allocation bad byte count"
+**
+******************************************************************************/
 static const Except_T Mem_Badcount =
 {
     "Allocation bad byte count"
 };
+
+
+
+
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 #ifdef AJ_SAVESTATS
 static ajlong memAlloc       = 0;
@@ -48,17 +114,30 @@ static ajlong memResizeOld   = 0;
 static ajlong memResizeCount = 0;
 static ajlong memTotal       = 0;
 static ajlong memZero        = 0;
-#endif
+#endif /* AJ_SAVESTATS */
 
-
-#ifdef AJ_MEMPROBE
+#ifdef HAVE_MCHECK
 static void* probePtr = NULL;
 static ajint probeLine = 0;
 static const char* probeFile = "";
 static AjBool probeTest = AJFALSE;
 static ajint probeFail = 0;
 static ajint probeMaxFail = 0;
-#endif
+#endif /* HAVE_MCHECK */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -78,6 +157,8 @@ static ajint probeMaxFail = 0;
 **                            raise an exception and fail, or if running
 **                            with Java, to print to standard error
 **                            and exit.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -88,16 +169,16 @@ void* ajMemAlloc(size_t nbytes, const char* file, ajint line, AjBool nofail)
 #ifdef HAVE_JAVA
     (void) file;                /* make it used */
     (void) line;                /* make it used */
-#endif
+#endif /* HAVE_JAVA */
 
     if(nbytes <= 0)
     {
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Attempt to allocate <=0 bytes");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	ajExceptRaise(&Mem_Badcount, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
 
     ptr = malloc(nbytes);
@@ -109,19 +190,19 @@ void* ajMemAlloc(size_t nbytes, const char* file, ajint line, AjBool nofail)
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Memory allocation failed in ajMemAlloc");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	if(file == NULL)
 	    AJRAISE(Mem_Failed);
 	else
 	    ajExceptRaise(&Mem_Failed, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
 
 #ifdef AJ_SAVESTATS
     memAlloc += nbytes;
     memCount++;
     memTotal++;
-#endif
+#endif /* AJ_SAVESTATS */
 
     return ptr;
 }
@@ -145,6 +226,8 @@ void* ajMemAlloc(size_t nbytes, const char* file, ajint line, AjBool nofail)
 **                            raise an exception and fail, or if running
 **                            with Java, to print to standard error
 **                            and exit.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -158,7 +241,7 @@ void* ajMemCalloc(size_t count, size_t nbytes,
 #ifdef HAVE_JAVA
     (void) file;                /* make it used */
     (void) line;                /* make it used */
-#endif
+#endif /* HAVE_JAVA */
 
     if(count <= 0)
         ajUtilCatch();
@@ -177,19 +260,19 @@ void* ajMemCalloc(size_t count, size_t nbytes,
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Memory allocation failed in ajMemCalloc");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	if(file == NULL)
 	    AJRAISE(Mem_Failed);
 	else
 	    ajExceptRaise(&Mem_Failed, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
 
 #ifdef AJ_SAVESTATS
     memAlloc += (icount*ibytes);
     memCount++;
     memTotal++;
-#endif
+#endif /* AJ_SAVESTATS */
 
     return ptr;
 }
@@ -197,7 +280,7 @@ void* ajMemCalloc(size_t count, size_t nbytes,
 
 
 
-/* @func ajMemCallocZero *******************************************************
+/* @func ajMemCallocZero ******************************************************
 **
 ** Allocates memory using calloc for an array of elements,
 ** and fails with an error message if unsuccessful.
@@ -216,6 +299,8 @@ void* ajMemCalloc(size_t count, size_t nbytes,
 **                            raise an exception and fail, or if running
 **                            with Java, to print to standard error
 **                            and exit.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -229,7 +314,7 @@ void* ajMemCallocZero(size_t count, size_t nbytes,
 #ifdef HAVE_JAVA
     (void) file;                /* make it used */
     (void) line;                /* make it used */
-#endif
+#endif /* HAVE_JAVA */
 
     if(count <= 0)
         ajUtilCatch();
@@ -248,12 +333,12 @@ void* ajMemCallocZero(size_t count, size_t nbytes,
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Memory allocation failed in ajMemCallocZero");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	if(file == NULL)
 	    AJRAISE(Mem_Failed);
 	else
 	    ajExceptRaise(&Mem_Failed, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
 
     memset(ptr, 0, icount*ibytes);
@@ -263,22 +348,9 @@ void* ajMemCallocZero(size_t count, size_t nbytes,
     memCount++;
     memTotal++;
     memZero += (icount*ibytes);
-#endif
+#endif /* AJ_SAVESTATS */
 
     return ptr;
-}
-
-
-
-
-/* @obsolete ajMemCalloc0
-** @rename ajMemCallocZero
-*/
-
-__deprecated void* ajMemCalloc0(size_t count, size_t nbytes,
-				   const char* file, ajint line, AjBool nofail)
-{
-  return ajMemCallocZero(count, nbytes, file, line, nofail);
 }
 
 
@@ -292,6 +364,8 @@ __deprecated void* ajMemCalloc0(size_t count, size_t nbytes,
 ** @param [r] count [size_t] Number of elements required
 ** @param [r] nbytes [size_t] Number of bytes required
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -310,7 +384,7 @@ void ajMemSetZero(void* ptr, size_t count, size_t nbytes)
 
 #ifdef AJ_SAVESTATS
     memZero += (count*nbytes);
-#endif
+#endif /* AJ_SAVESTATS */
 
     return;
 }
@@ -324,6 +398,8 @@ void ajMemSetZero(void* ptr, size_t count, size_t nbytes)
 ** (uninitialised) pointers.
 **
 ** @param [u] ptr [void**] Pointer to memory previously allocated with 'malloc'
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -340,7 +416,7 @@ void ajMemFree(void** ptr)
 #ifdef AJ_SAVESTATS
     memCount--;
     memFree++;
-#endif
+#endif /* AJ_SAVESTATS */
 
     return;
 }
@@ -369,6 +445,8 @@ void ajMemFree(void** ptr)
 **                            raise an exception and fail, or if running
 **                            with Java, to print to standard error
 **                            and exit.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -396,18 +474,18 @@ void* ajMemResize(void* ptr, size_t nbytes,
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Memory allocation failed in ajMemResize");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	if(file == NULL)
 	    AJRAISE(Mem_Failed);
 	else
 	    ajExceptRaise(&Mem_Failed, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
   
 #ifdef AJ_SAVESTATS
     memResize += ibytes;
     memResizeCount++;
-#endif
+#endif /* AJ_SAVESTATS */
     
     return ptr;
 }
@@ -440,6 +518,8 @@ void* ajMemResize(void* ptr, size_t nbytes,
 **                            raise an exception and fail, or if running
 **                            with Java, to print to standard error
 **                            and exit.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -467,12 +547,12 @@ void* ajMemResizeZero(void* ptr, size_t oldbytes, size_t nbytes,
 #ifdef HAVE_JAVA
 	fprintf(stderr,"Memory allocation failed in ajMemResizeZero");
 	exit(-1);
-#else
+#else /* !HAVE_JAVA */
 	if(file == NULL)
 	    AJRAISE(Mem_Failed);
 	else
 	    ajExceptRaise(&Mem_Failed, file, line);
-#endif
+#endif /* !HAVE_JAVA */
     }
   
     if(ibytes > oldbytes)
@@ -482,7 +562,7 @@ void* ajMemResizeZero(void* ptr, size_t oldbytes, size_t nbytes,
     memResizeOld += oldbytes;
     memResize += ibytes;
     memResizeCount++;
-#endif
+#endif /* AJ_SAVESTATS */
 
     return ptr;
 }
@@ -497,6 +577,8 @@ void* ajMemResizeZero(void* ptr, size_t oldbytes, size_t nbytes,
 **
 ** @param [r] size [size_t] Number of array elements.
 ** @return [ajint*] Newly allocated array.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -515,6 +597,8 @@ ajint* ajMemArrB(size_t size)
 **
 ** @param [r] size [size_t] Number of array elements.
 ** @return [ajint*] Newly allocated array.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -533,6 +617,8 @@ ajint* ajMemArrI(size_t size)
 **
 ** @param [r] size [size_t] Number of array elements.
 ** @return [float*] Newly allocated array.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -550,6 +636,8 @@ float* ajMemArrF(size_t size)
 **
 ** @param [r] title [const char*] Title for this summary
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -583,9 +671,9 @@ void ajMemStat(const char* title)
     statZero   = memZero;
 
     statResizeCount = memResizeCount;
-#else
+#else /* !AJ_SAVESTATS */
     (void) title;               /* make it used */
-#endif
+#endif /* !AJ_SAVESTATS */
 
     return;
 }
@@ -598,6 +686,8 @@ void ajMemStat(const char* title)
 ** Prints a summary of memory usage with debug calls
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -610,7 +700,7 @@ void ajMemExit(void)
     ajDebug("Memory usage (number): %Ld allocates, "
 	    "%Ld frees, %Ld resizes, %Ld in use\n",
 	    memTotal, memFree, memResizeCount, memCount);
-#endif
+#endif /* AJ_SAVESTATS */
 
     return;
 }
@@ -624,11 +714,13 @@ void ajMemExit(void)
 **
 ** @param [r] istat [int] Enumerated value from mprobe
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 void ajMemCheck(int istat)
 {
-#ifdef AJ_MEMPROBE
+#ifdef HAVE_MCHECK
     if(probeTest)
     {
 	if(istat == MCHECK_OK)
@@ -655,9 +747,9 @@ void ajMemCheck(int istat)
 
     if(probeMaxFail && (++probeFail >= probeMaxFail))
        ajDie("Maximum ajMemProbe failures %d", probeFail);
-#else
+#else /* !HAVE_MCHECK */
     (void) istat;
-#endif
+#endif /* !HAVE_MCHECK */
 
     return;
 }
@@ -671,19 +763,21 @@ void ajMemCheck(int istat)
 **
 ** @param [r] maxfail [ajint] Maximum failures allowed
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 void ajMemCheckSetLimit(ajint maxfail)
 {
-#ifdef AJ_MEMPROBE
+#ifdef HAVE_MCHECK
     if(probeFail >= maxfail)
       ajDie("Maximum ajMemProbe failures set to %d, already at %d",
 	    maxfail, probeFail);
 
     probeMaxFail = maxfail;
-#else
+#else /* !HAVE_MCHECK */
     (void) maxfail;
-#endif
+#endif /* !HAVE_MCHECK */
 
     return;
 }
@@ -699,13 +793,15 @@ void ajMemCheckSetLimit(ajint maxfail)
 ** @param [r] file [const char*] Source file name, generated by a macro.
 ** @param [r] line [ajint] Source line number, generated by a macro.
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
 void ajMemProbe(void* ptr,
 		const char* file, ajint line)
 {
-#ifdef AJ_MPROBE
+#ifdef HAVE_MCHECK
     if(ptr == NULL)
     {
 	ajWarn("ajMemProbe address %x NULL in %s at line %d", ptr, file, line);
@@ -721,11 +817,33 @@ void ajMemProbe(void* ptr,
     mprobe(ptr);
 
     probeTest = ajFalse;
-#else
+#else /* !HAVE_MCHECK */
     (void) ptr;
     (void) file;
     (void) line;
-#endif
+#endif /* !HAVE_MCHECK */
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajMemCalloc0
+** @rename ajMemCallocZero
+*/
+
+__deprecated void* ajMemCalloc0(size_t count, size_t nbytes,
+				   const char* file, ajint line, AjBool nofail)
+{
+  return ajMemCallocZero(count, nbytes, file, line, nofail);
+}
+
+#endif

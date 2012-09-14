@@ -1,0 +1,26 @@
+CO	contigname_s1
+NR	1
+LC	24
+CS	TGCCTGCAGGTCGACTCTAGAAGG
+CQ	,-+/,36;:6<3327<7A1/,,).
+CT	COMM 5 8 Some comment to this consensus tag.
+CT	COMM 7 12 Another comment to this consensus tag.
+\\
+RD	U13a05e07.t1
+RS	CTTGCATGCCTGCAGGTCGACTCTAGAAGGACCCCGATCA
+RQ	,-+*,1-+/,36;:6a3327<7A1/,,).('..7=@E8:E
+TN	U13a05e07
+TF	1200
+TT	1800
+SF	U13a05e07.t1.scf
+SL	4
+SR	32
+QL	7
+QR	30
+AO	1 40 1 40
+RT	ALUS 10 15 Some comment to this read tag.
+ST	Sanger
+ER
+AT	1 24 7 30
+//
+EC

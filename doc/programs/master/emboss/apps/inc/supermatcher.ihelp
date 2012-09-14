@@ -1,5 +1,5 @@
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -26,7 +26,7 @@ Version: EMBOSS:6.4.0.0
    -width              integer    [16] Alignment width (Integer 1 or more)
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
-   -errorfile          outfile    [supermatcher.error] Error file to be
+   -errfile            outfile    [supermatcher.error] Error file to be
                                   written to for failed alignments
 
    Advanced (Unprompted) qualifiers: (none)
@@ -41,7 +41,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -57,7 +60,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -75,7 +81,7 @@ Version: EMBOSS:6.4.0.0
    -ausashow3          boolean    Show the full USA in the alignment
    -aglobal3           boolean    Show the full sequence in alignment
 
-   "-errorfile" associated qualifiers
+   "-errfile" associated qualifiers
    -odirectory         string     Output directory
 
    General qualifiers:

@@ -125,11 +125,11 @@ int main(int argc, char **argv)
     reverse     = ajAcdGetBoolean("reverse");
     unknown     = ajAcdGetBoolean("unknown");
     strand      = ajAcdGetBoolean("strand");
-    source      = ajAcdGetBoolean("origin");
+    source      = ajAcdGetBoolean("sourceshow");
     position    = ajAcdGetBoolean("position");
-    type        = ajAcdGetBoolean("type");
-    tags        = ajAcdGetBoolean("tags");
-    values      = ajAcdGetBoolean("values");
+    type        = ajAcdGetBoolean("typeshow");
+    tags        = ajAcdGetBoolean("tagshow");
+    values      = ajAcdGetBoolean("valueshow");
     stricttags  = ajAcdGetBoolean("stricttags");
     annotation  = ajAcdGetRange("annotation"); 
     
@@ -294,8 +294,8 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     AjBool val = ajFalse;
 
     ajuint i;
-    ajuint isize;
-    ajuint jsize;
+    ajuint sizei;
+    ajuint sizej;
     ajuint j = 0;
 
     /* get the feature table of the sequence */
@@ -310,31 +310,29 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
     if(ajFeattableGetSize(feat))
     {
-        isize = ajListToarray(feat->Features, (void***) &array);
+        sizei = (ajuint) ajListToarray(feat->Features, (void***) &array);
         fullfeats = (AjPFeature*) array;
 
         featlist = ajListNew();
-        AJCNEW0(featindex, isize);
+        AJCNEW0(featindex, sizei);
 
-        jsize = 0;
+        sizej = 0;
         for(i=0;fullfeats[i];i++)
         {
-            if(ajFeatIsChild(fullfeats[i]))
-                continue;
-             ajListPushAppend(featlist, fullfeats[i]);
-           featindex[jsize++] = i;
+            ajListPushAppend(featlist, fullfeats[i]);
+            featindex[sizej++] = i;
         }
 
 	if(!ajStrCmpC(sortlist, "source"))
 	    /* sort by: sense, source, type, start */
-	    ajListToindex(featlist, featindex, showfeat_CompareFeatSource);
+	    ajListToindex(featlist, featindex, &showfeat_CompareFeatSource);
 	else if(!ajStrCmpC(sortlist, "start"))
 	    /* sort by: sense, start, type, source */
-	    ajListToindex(featlist, featindex, showfeat_CompareFeatPos);
+	    ajListToindex(featlist, featindex, &showfeat_CompareFeatPos);
 	else if(!ajStrCmpC(sortlist, "type"))
 	    /* type */
 	    /* sort by: sense, type, source, start */
-	    ajListToindex(featlist, featindex, showfeat_CompareFeatType);
+	    ajListToindex(featlist, featindex, &showfeat_CompareFeatType);
 	/* else - no sort */
 
 	if(!ajStrCmpC(sortlist, "nosort"))
@@ -345,7 +343,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
         {
             fullfeatlist = ajListNew();
             j = 0;
-            for(i=0;i<jsize;i++) 
+            for(i=0;i<sizej;i++) 
             {
                 j = featindex[i];
                 ajListPushAppend(fullfeatlist, fullfeats[j]);

@@ -19,12 +19,12 @@
 
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
@@ -34,7 +34,7 @@
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
-<td>Finds and extracts open reading frames (ORFs)</td>
+<td>Find and extract open reading frames (ORFs)</td>
 </tr>
 
 <tr>
@@ -44,12 +44,12 @@
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+<td>Find matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
@@ -99,12 +99,12 @@
 
 <tr>
 <td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
+<td>Display protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>

@@ -12,8 +12,7 @@ KW   rhodopsin; transmembrane protein.
 XX
 OS   Xenopus laevis (African clawed frog)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia;
-OC   Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus;
-OC   Xenopus.
+OC   Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae; Xenopus; Xenopus.
 XX
 RN   [1]
 RP   1-1684
@@ -28,7 +27,7 @@ RX   DOI; 10.1074/jbc.271.6.3179.
 RX   PUBMED; 8621718.
 RA   Batni S., Scalzetti L., Moody S.A., Knox B.E.;
 RT   "Characterization of the Xenopus rhodopsin gene";
-RL   J. Biol. Chem. 271(6):3179-3186(1996).
+RL   J Biol Chem 271(6):3179-3186(1996).
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -107,8 +106,7 @@ KW   .
 XX
 OS   Xenopus laevis (African clawed frog)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia;
-OC   Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus;
-OC   Xenopus.
+OC   Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae; Xenopus; Xenopus.
 XX
 RN   [1]
 RP   1-8914
@@ -116,13 +114,13 @@ RX   DOI; 10.1074/jbc.271.6.3179.
 RX   PUBMED; 8621718.
 RA   Batni S., Scalzetti L., Moody S.A., Knox B.E.;
 RT   "Characterization of the Xenopus rhodopsin gene";
-RL   J. Biol. Chem. 271(6):3179-3186(1996).
+RL   J Biol Chem 271(6):3179-3186(1996).
 XX
 RN   [2]
 RP   1-8914
 RA   Batni S., Scalzetti L., Knox B.E.;
 RT   ;
-RL   Submitted (30-MAR-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (30-MAR-1995) to the INSDC.
 RL   Barry E. Knox, Biochemistry and Molecular Biology, SUNY HSC at Syracuse,
 RL   750 E. Adams St., Syracuse, NY 13210, USA
 XX
@@ -131,7 +129,7 @@ RC   Sequence update by submitter
 RP   1-8914
 RA   Batni S., Scalzetti L., Knox B.E.;
 RT   ;
-RL   Submitted (20-APR-2006) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (20-APR-2006) to the INSDC.
 RL   Barry E. Knox, Biochemistry and Molecular Biology, SUNY HSC at Syracuse,
 RL   750 E. Adams St., Syracuse, NY 13210, USA
 XX
@@ -337,7 +335,7 @@ XX
 AC   AF123456;
 XX
 DT   24-MAR-1999 (Rel. 59, Created)
-DT   15-APR-2005 (Rel. 83, Last updated, Version 5)
+DT   13-APR-2012 (Rel. 112, Last updated, Version 6)
 XX
 DE   Gallus gallus doublesex and mab-3 related transcription factor 1 (DMRT1)
 DE   mRNA, partial cds.
@@ -358,12 +356,12 @@ RA   Gruetzner F., Paton I.R., Windsor D., Dunn I., Engel W., Staeheli P.,
 RA   Mizuno S., Haaf T., Schmid M.;
 RT   "300 million years of conserved synteny between chicken Z and human
 RT   chromosome 9";
-RL   Nat. Genet. 21(3):258-259(1999).
+RL   Nat Genet 21(3):258-259(1999).
 XX
 RN   [2]
 RP   1-1510
 RX   PUBMED; 10894941.
-RA   Nanda I., Zend-Ajusch E., Shan Z., Gruetzner F., Schartl M., Burt D.W.,
+RA   Nanda I., Zend-Ajusch E., Shan Z., Grutzner F., Schartl M., Burt D.W.,
 RA   Koehler M., Fowler V.M., Goodwin G., Schneider W.J., Mizuno S., Dechant G.,
 RA   Haaf T., Schmid M.;
 RT   "Conserved synteny between the chicken Z sex chromosome and human
@@ -375,7 +373,7 @@ RN   [3]
 RP   1-1510
 RA   Haaf T., Shan Z.H.;
 RT   ;
-RL   Submitted (25-JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (25-JAN-1999) to the INSDC.
 RL   Max-Planck Institute for Molecular Genetics, Ihnestr. 73, Berlin 14195,
 RL   Germany
 XX
@@ -384,7 +382,7 @@ RC   Sequence update by submitter
 RP   1-1510
 RA   Shan Z.;
 RT   ;
-RL   Submitted (23-DEC-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (23-DEC-1999) to the INSDC.
 RL   MPI of Molecular Genetics, Ihnestr. 73, Berlin 14195, Germany
 XX
 CC   On Dec 23, 1999 this sequence version replaced gi:4454562.
@@ -397,6 +395,12 @@ FT                   /chromosome="Z"
 FT                   /map="Zp21"
 FT                   /mol_type="mRNA"
 FT                   /db_xref="taxon:9031"
+FT   gene            <1..1510
+FT                   /gene="DMRT1"
+FT                   /note="expressed in genital ridges of both males and
+FT                   females prior to the sexual determination, restricted to
+FT                   the male gonads after sex determination; DMRT1 is a
+FT                   candidate sex determination factor in vertebrates"
 FT   CDS             <1..936
 FT                   /codon_start=1
 FT                   /gene="DMRT1"
@@ -478,8 +482,10 @@ RN   [3]
 RP   1-1634
 RA   Dzierszinski F., Tomavo S.;
 RT   ;
-RL   Submitted (25-JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (25-JAN-1999) to the INSDC.
 RL   INSERM, 369, Rue Jules Guesde BP 39, Villeneuve D'Ascq 59651, France
+XX
+DR   EnsemblGenomes; TGME49_068850; Toxoplasma_gondii.
 XX
 FH   Key             Location/Qualifiers
 FH

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Calculates statistics of protein properties
+   Calculate statistics of protein properties
 
 Description
 
@@ -35,7 +35,7 @@ Usage
 
 
 % pepstats
-Calculates statistics of protein properties
+Calculate statistics of protein properties
 Input protein sequence(s): tsw:laci_ecoli
 Pepstats program output file [laci_ecoli.pepstats]:
 
@@ -45,8 +45,8 @@ Pepstats program output file [laci_ecoli.pepstats]:
 
 Command line arguments
 
-Calculates statistics of protein properties
-Version: EMBOSS:6.4.0.0
+Calculate statistics of protein properties
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -72,7 +72,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -132,7 +135,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -388,7 +391,7 @@ See also
    mwfilter         Filter noisy data from molecular weights file
    octanol          Draw a White-Wimley protein hydropathy plot
    oddcomp          Identify proteins with specified sequence word composition
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepwindow        Draw a hydropathy plot for a protein sequence

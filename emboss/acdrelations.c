@@ -444,7 +444,7 @@ static void acdrelations_readdatfile
       ajStrRemoveWhite(&acdtype);
       ajStrAssignS(&dattmp->acdtype, acdtype);
       ajStrAssignS(&dattmp->edam, relations);
-      dattmp->n = ajListstrToarray(strlist, &dattmp->acdattr);
+      dattmp->n = (ajuint) ajListstrToarray(strlist, &dattmp->acdattr);
       ajListPushAppend(datlist, dattmp);
       
       /* Clear nodes (but not strings) from string list */
@@ -453,7 +453,7 @@ static void acdrelations_readdatfile
   
 
   /* Write PEdam structure */
-  ((*P)->n) = ajListToarray(datlist, (void***) &((*P)->dat));
+  ((*P)->n) = (ajuint) ajListToarray(datlist, (void***) &((*P)->dat));
 
   /* Free memory */
   ajStrDel(&line);
@@ -525,7 +525,7 @@ static void acdrelations_readtypefile
     
 
     /* Write PKtype structure */
-    ((*T)->n) = ajListToarray(datlist, (void***) &((*T)->dat));
+    ((*T)->n) = (ajuint) ajListToarray(datlist, (void***) &((*T)->dat));
   
     
     /* Free memory */
@@ -582,7 +582,7 @@ static void acdrelations_procacdfile1
       {
           /* Tokenise line segment (from after "relations:") by '"', ' ' and '/' 
              Discard unwanted tokens */
-          pos = ajStrFindAnyK(line, ':');
+          pos = (ajuint) ajStrFindAnyK(line, ':');
           ajStrAssignC(&tmp, line->Ptr+pos);
           
           parse = ajStrTokenNewC(tmp, "\" /");
@@ -707,7 +707,7 @@ static void acdrelations_procacdfile2
               /* Reached end of data definition */
               if(ajStrMatchC(tok, "]"))
               {
-                  nstr = ajListstrToarray(strlist, &strarr);
+                  nstr = (ajuint) ajListstrToarray(strlist, &strarr);
                   
                   /* Write relations: line */
                   acdrelations_writerelations(outf, acdtype, strarr, nstr, P, T);

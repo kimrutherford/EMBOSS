@@ -1,38 +1,43 @@
-#!/bin/sh 
+#!/bin/sh
 #
-# 
-#
-JEMBOSS_HOME=.
-export JEMBOSS_HOME
-LIB=$JEMBOSS_HOME/lib
-export LIB
+# jemboss/runJemboss.sh.  Generated from runJemboss.sh.in by configure.
+# EMBOSS
+# Version: $Revision: 1.1 $
+# Modified $Date: 2011/08/25 20:55:38 $ by $Author: mks $
 
-CLASSPATH=${CLASSPATH}:$LIB/jakarta-regexp-1.2.jar
-CLASSPATH=${CLASSPATH}:$LIB/jalview.jar
-CLASSPATH=${CLASSPATH}:$LIB/mail.jar
-CLASSPATH=${CLASSPATH}:$LIB/activation.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/axis.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/jaxrpc.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/saaj.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/commons-logging.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/commons-discovery.jar
-CLASSPATH=${CLASSPATH}:$LIB/axis/wsdl4j.jar
-CLASSPATH=${CLASSPATH}:$LIB/client.jar
-CLASSPATH=${CLASSPATH}:$LIB/jemboss.jar
-CLASSPATH=${CLASSPATH}:$JEMBOSS_HOME
-export CLASSPATH
+export JEMBOSS_HOME="/usr/local/share/EMBOSS/jemboss";
 
-#
-#For csh: 
-#setenv CLASSPATH $LIB/jakarta-regexp-1.2.jar
-#setenv CLASSPATH ${CLASSPATH}:$LIB/jnet.jar:$LIB/jcert.jar:$LIB/jsse.jar
-#setenv CLASSPATH ${CLASSPATH}:$LIB/axis/axis.jar:$LIB/axis/jaxrpc.jar:$LIB/axis/saaj.jar
-#setenv CLASSPATH ${CLASSPATH}:$LIB/axis/commons-logging.jar:$LIB/axis/commons-discovery.jar
-#setenv CLASSPATH $LIB/client.jar:$LIB/jalview.jar:.
-#
+# Override an existing CLASSPATH environment variable
 
-#
-#Add local to run as 'standalone':
-#java org.emboss.jemboss.Jemboss local &
-#
-java org.emboss.jemboss.Jemboss &
+export CLASSPATH="";
+
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/activation.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/client.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jakarta-regexp-1.2.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jalviewApplet.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jcert.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jemboss.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jnet.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/jsse.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/mail.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/axis.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/commons-discovery.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/commons-logging.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/jaxrpc.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/log4j-1.2.4.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/saaj.jar";
+CLASSPATH="${CLASSPATH}:${JEMBOSS_HOME}/lib/axis/wsdl4j.jar";
+
+cd "${JEMBOSS_HOME}";
+
+# Add local to run Jemboss in 'standalone' mode:
+# java org.emboss.jemboss.Jemboss local &
+
+case "${1}" in
+  local)
+     org/emboss/jemboss/Jemboss local &
+    ;;
+  *)
+     org/emboss/jemboss/Jemboss &
+    ;;
+esac

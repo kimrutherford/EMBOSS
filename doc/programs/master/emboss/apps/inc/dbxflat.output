@@ -5,8 +5,11 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/embl/
-Processing file: rod.dat entries: 6 (6) time: 0.0/0.0s (0.0/0.0s)
+Processing file: rod.dat
+entries: 6 (6) time: 0.0/0.0s (0.0/0.0s)
 Total time: 0:00.0
+Entry idlen 15 OK. Maximum ID length was 6 for 'L48662'.
+Field acc acclen 15 OK. Maximum acc term length was 6 for 'L48662'.
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.ent</h3>
@@ -22,37 +25,45 @@ rod.dat
 <p><h3>File: embl.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     6
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     7
-Fullcount 9
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     3
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        7
+Fullcount    9
+Kwlimit      15
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     6
-Fullcount 6
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        169
+Secpagesize  512
+Seccachesize 2000
+Count        6
+Fullcount    6
+Kwlimit      15
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.xac</h3>

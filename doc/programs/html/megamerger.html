@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -91,7 +91,7 @@ Output file [v00295.megamerger]: <b>report</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Merge two large overlapping DNA sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Nucleotide sequence filename and optional
@@ -128,7 +128,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -144,7 +147,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -265,7 +271,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -334,11 +340,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -382,7 +412,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -451,11 +481,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -499,7 +553,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 
@@ -584,7 +638,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -764,13 +818,12 @@ FT                   /db_xref="InterPro:IPR013781"
 FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="InterPro:IPR017853"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="InterPro:IPR023230"
+FT                   /db_xref="InterPro:IPR023232"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
 FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
 FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
@@ -786,6 +839,7 @@ FT                   /db_xref="GOA:P07464"
 FT                   /db_xref="InterPro:IPR001451"
 FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="InterPro:IPR024688"
 FT                   /db_xref="PDB:1KQA"
 FT                   /db_xref="PDB:1KRR"
 FT                   /db_xref="PDB:1KRU"

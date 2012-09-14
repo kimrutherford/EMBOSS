@@ -1,10 +1,10 @@
-/* @source cacheensembl application
+/* @source cacheensembl *******************************************************
 **
 ** Prepares an EMBOSS cache file for an Ensembl server
 **
-** @author Copyright (C) Michael Schuster
-** @modified $Date: 2011/07/08 16:29:51 $ by $Author: rice $
-** @version $Revision: 1.2 $
+** @author Copyright (C) 2011 Michael Schuster
+** @version $Revision: 1.7 $
+** @modified $Date: 2012/03/09 20:37:58 $ by $Author: mks $
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -20,51 +20,45 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+**
 ******************************************************************************/
 
 
 
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "emboss.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ============================== data ================================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ==================== function prototypes =========================== */
-/* ==================================================================== */
-
-
-
-
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static int cacheensembl_stringcompare(const void* P1, const void* P2);
 
@@ -95,6 +89,8 @@ int main(int argc, char** argv)
     AjPStr svrname = NULL;
     AjPStr svrurl  = NULL;
     AjPStr dbcurl  = NULL;
+    AjPStr special = NULL;
+    AjPStr prefix  = NULL;
 
     AjPTime svrtime = NULL;
 
@@ -109,11 +105,12 @@ int main(int argc, char** argv)
 
     svrname = ajAcdGetString("servername");
     outf    = ajAcdGetOutfile("outfile");
-    cachef = ajAcdGetOutfile("cachefile");
+    cachef  = ajAcdGetOutfile("cachefile");
 
-    dbcurl = ajStrNew();
-    svrurl = ajStrNew();
-    dbname = ajStrNew();
+    dbcurl  = ajStrNew();
+    svrurl  = ajStrNew();
+    dbname  = ajStrNew();
+    special = ajStrNew();
 
     ajNamSvrGetUrl(svrname, &svrurl);
 
@@ -173,6 +170,37 @@ int main(int argc, char** argv)
                 ajStrAppendC(&dbname, ensDatabaseadaptorGroupToChar(dbag));
             }
 
+            prefix = NULL;
+
+            switch(dbag)
+            {
+                case ensEDatabaseadaptorGroupCore:
+
+                case ensEDatabaseadaptorGroupVega:
+
+                case ensEDatabaseadaptorGroupOtherFeatures:
+
+                case ensEDatabaseadaptorGroupCopyDNA:
+
+                    prefix = ensRegistryGetStableidentifierprefix(dba);
+
+                    break;
+
+                default:
+
+                    break;
+            }
+
+            ajStrAssignClear(&special);
+
+            if((prefix != NULL) && (ajStrGetLen(prefix) > 0))
+                ajFmtPrintAppS(&special, "SpeciesPrefix=%S;",
+                               prefix);
+
+            if(ensDatabaseadaptorGetMultispecies(dba) == ajTrue)
+                ajFmtPrintAppS(&special, "SpeciesIdentifier=%u;",
+                               ensDatabaseadaptorGetIdentifier(dba));
+
             dbc = ensDatabaseadaptorGetDatabaseconnection(dba);
 
             ensDatabaseconnectionFetchUrl(dbc, &dbcurl);
@@ -181,8 +209,10 @@ int main(int argc, char** argv)
                 ajFmtPrintF(outf, "%S\n", dbname);
 
             ajFmtPrintF(cachef, "DBNAME %S [\n", dbname);
+
             ajFmtPrintF(cachef, "  release: \"%s\"\n", ensSoftwareGetVersion());
             ajFmtPrintF(cachef, "  server:  \"%S\"\n", svrname);
+            ajFmtPrintF(cachef, "  special: \"%S\"\n", special);
             ajFmtPrintF(cachef, "  url:     \"%S\"\n", dbcurl);
             ajFmtPrintF(cachef, "]\n");
             ajFmtPrintF(cachef, "\n");
@@ -208,8 +238,8 @@ int main(int argc, char** argv)
             ajListIterDel(&iterator);
 
             ajListSortUnique(aliases,
-                             cacheensembl_stringcompare,
-                             cacheensembl_stringdelete);
+                             &cacheensembl_stringcompare,
+                             &cacheensembl_stringdelete);
 
             alias = NULL;
             if(ajListGetLength(aliases) > 0)
@@ -240,11 +270,13 @@ int main(int argc, char** argv)
     }
 
     ajListstrFree(&aliases);
+    ajListstrFree(&species);
     ajListFree(&dbas);
 
     ajStrDel(&dbcurl);
     ajStrDel(&svrurl);
     ajStrDel(&dbname);
+    ajStrDel(&special);
     ajStrDel(&svrname);
 
     ajFileClose(&outf);

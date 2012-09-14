@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Generates server cache file for Dbfetch/WSDbfetch data sources
+   Generate server cache file for Dbfetch/WSDbfetch data sources
 
 Description
 
@@ -48,6 +48,14 @@ Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format csv
 Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format csv
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
@@ -75,6 +83,8 @@ Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found for db IPI History
 Warning: No dbtype found supporting format iprmc
 Warning: No dbtype found supporting format iprmctab
 Warning: No dbtype found supporting format iprmcxml
@@ -123,9 +133,13 @@ Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format tinyseq
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format tinyseq
 Warning: No dbtype found supporting format resid
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format seqxml
@@ -160,8 +174,8 @@ Warning: No dbtype found supporting format seqxml
 
 Command line arguments
 
-Generates server cache file for Dbfetch/WSDbfetch data sources
-Version: EMBOSS:6.4.0.0
+Generate server cache file for Dbfetch/WSDbfetch data sources
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-servername]        string     [dbfetch] Name of the ws/dbfetch server
@@ -215,14 +229,17 @@ Output file format
 
   File: qatests.server.tdbfetch
 
-# qatests.server.tdbfetch 2011-07-15 12:00:00
+# qatests.server.tdbfetch 2012-07-15 12:00:00
 
 DB edam [
   method: dbfetch
   hasacc: N
   format: "obo"
+  edamfmt: "EDAM_format:2549"
+  edamdat: "EDAM_data:2858"
+  edamtpc: "EDAM_topic:0770"
   type: "text, obo"
-  example: "0000352, 0001223"
+  example: "0338, 1929, EDAM_operation:0338, EDAM_format:1929, 0000338, 0001929"
   comment: "EMBRACE Data and Methods (EDAM) Ontology."
 ]
 
@@ -230,6 +247,10 @@ DB embl [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2183, EDAM_format:1954, EDAM_format:23
+30, EDAM_format:2185, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "M10051, K00650, D87894, AJ242600, HSINSR, HSFOS, ROD894, LOP242600,
 J00231.1, K00650.1, D87894.1, AJ242600.1"
@@ -243,6 +264,10 @@ DB emblcds [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2184, EDAM_format:1954, EDAM_format:23
+30, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "AAA59452, AAA59452.1"
   comment: "EMBLCDS is a database of nucleotide sequences of the CDS (coding seq
@@ -255,45 +280,20 @@ DB emblcon [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2183, EDAM_format:1954, EDAM_format:23
+30, EDAM_format:2185, EDAM_format:2332"
+  edamdat: "EDAM_data:2889, EDAM_data:2046, EDAM_data:0855, EDAM_data:2018"
+  edamtpc: "EDAM_topic:3042"
   type: "text, sequence, features"
   example: "CH003588, CH003588.1"
   comment: "The EMBLCON database division represents complete genomes and other
 long sequences constructed from segment entries."
 ]
 
-DB emblconexp [
-  method: dbfetch
-  hasacc: N
-  format: "embl, fasta"
-  type: "text, sequence, features"
-  example: "AL672111, AL672111.1"
-  comment: "The EMBLCON database division represents complete genomes and other
-long sequences constructed from segment entries. Expanded entries including the
-complete sequence."
-]
-
-DB emblsva [
-  method: dbfetch
-  hasacc: N
 
 
   [Part of this file has been deleted for brevity]
 
-  format: "fasta, gff3, uniprot, uniprotxml"
-  type: "text, features, sequence"
-  example: "P06213, P29306, P68255, INSR_HUMAN, 1433X_MAIZE, 1433T_RAT"
-  comment: "The UniProt Knowledgebase (UniProtKB) is the central access point fo
-r extensive curated protein information, including function, classification, and
- cross-references. Search UniProtKB to retrieve aEURoeeverything that is knownaE
-UR about a particular sequence."
-]
-
-DB uniref100 [
-  method: dbfetch
-  hasacc: N
-  format: "fasta"
-  type: "sequence"
-  example: "UniRef100_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
 lated sequences into a single record to speed searches. There are three differen
 t non-redundant databases with different sequence identity cut-offs. In UniRef10
@@ -306,6 +306,9 @@ DB uniref50 [
   method: dbfetch
   hasacc: N
   format: "fasta"
+  edamfmt: "EDAM_format:1954, EDAM_format:2332"
+  edamdat: "EDAM_data:2047, EDAM_data:0849, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "sequence"
   example: "UniRef50_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
@@ -320,6 +323,9 @@ DB uniref90 [
   method: dbfetch
   hasacc: N
   format: "fasta"
+  edamfmt: "EDAM_format:1954, EDAM_format:2332"
+  edamdat: "EDAM_data:2047, EDAM_data:0849, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "sequence"
   example: "UniRef90_P06213"
   comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
@@ -334,6 +340,9 @@ DB unisave [
   method: dbfetch
   hasacc: N
   format: "fasta, uniprot"
+  edamfmt: "EDAM_format:1954, EDAM_format:1977"
+  edamdat: "EDAM_data:2047, EDAM_data:2888"
+  edamtpc: "EDAM_topic:3043"
   type: "text, features, sequence"
   example: "P06213, P06213.157, P06213.3, INSR_HUMAN"
   comment: "The UniProtKB Sequence/Annotation Version Archive (UniSave) is a rep
@@ -344,6 +353,10 @@ DB uspto_prt [
   method: dbfetch
   hasacc: N
   format: "embl, fasta"
+  edamfmt: "EDAM_format:1927, EDAM_format:2330, EDAM_format:1954, EDAM_format:23
+32"
+  edamdat: "EDAM_data:0855, EDAM_data:2888, EDAM_data:2018, EDAM_data:2047"
+  edamtpc: "EDAM_topic:3043"
   type: "text, sequence, features"
   example: "AAA00053, I02590, AAA00053.1"
   comment: "Protein sequences appearing in patents from the United States Patent
@@ -382,14 +395,14 @@ Known bugs
 See also
 
    Program name     Description
-   cachedas         Generates server cache file for DAS servers or for the DAS
+   cachedas         Generate server cache file for DAS servers or for the DAS
                     registry
-   cacheebeyesearch Generates server cache file for EB-eye search domains
-   cacheensembl     Generates server cache file for an Ensembl server
+   cacheebeyesearch Generate server cache file for EB-eye search domains
+   cacheensembl     Generate server cache file for an Ensembl server
    dbtell           Display information about a public database
    servertell       Display information about a public server
-   showdb           Displays information on configured databases
-   showserver       Displays information on configured servers
+   showdb           Display information on configured databases
+   showserver       Display information on configured servers
 
 Author(s)
 

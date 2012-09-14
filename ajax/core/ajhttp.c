@@ -1,30 +1,42 @@
-/******************************************************************************
-** @source AJAX HTTP (database) functions
+/* @source ajhttp *************************************************************
+**
+** AJAX HTTP (database) functions
 **
 ** These functions control all aspects of AJAX http access
 ** via SEND/GET/POST protocols
 **
 ** @author Copyright (C) 2010 Alan Bleasby
-** @version 3.0
+** @version $Revision: 1.24 $
+** @modified $Date: 2011/11/23 09:56:06 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajhttp.h"
+#include "ajsys.h"
+#include "ajfile.h"
+#include "ajreg.h"
+#include "ajutil.h"
+#include "ajnam.h"
+#include "ajfileio.h"
 
 #include <limits.h>
 #include <stdarg.h>
@@ -47,8 +59,9 @@
 
 
 
+
 static FILE* httpSend(const AjPStr dbname,
-                      struct AJSOCKET sock,
+                      AjOSysSocket sock,
                       const AjPStr host, ajint iport,
                       const AjPStr proxyauth, const AjPStr proxycreds,
                       const AjPStr get);
@@ -68,6 +81,8 @@ static FILE* httpSend(const AjPStr dbname,
 ** @param [w] proxyauth [AjPStr*] Proxy authentication type (if any)
 ** @param [w] proxycreds [AjPStr*] Proxy auth credentials (if any)
 ** @return [AjBool] ajTrue if a proxy was defined
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -186,7 +201,7 @@ AjBool ajHttpGetProxyinfo(const AjPStr dbproxy, ajint* proxyport,
 
 
 
-/* @func ajHttpGetVersion ****************************************************
+/* @func ajHttpGetVersion *****************************************************
 **
 ** Returns the HTTP version. Any supplied version takes precedence over
 ** an EMBOSS_HTTPVERSION definition so allowing DB entries to
@@ -195,6 +210,8 @@ AjBool ajHttpGetProxyinfo(const AjPStr dbproxy, ajint* proxyport,
 ** @param [r] version [const AjPStr] Version or NULL (or zero-length string)
 ** @param [w] httpver [AjPStr*] HTTP version
 ** @return [AjBool] ajTrue if a version was defined
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -239,13 +256,15 @@ AjBool ajHttpGetVersion(const AjPStr version, AjPStr* httpver)
 ** @param [r] host [const AjPStr] Host name
 ** @param [r] iport [ajint] Port
 ** @param [r] get [const AjPStr] GET string
-** @param [u] Psock [struct AJSOCKET*] Socket returned to caller
+** @param [u] Psock [AjPSysSocket] Socket returned to caller
 ** @return [FILE*] Open file on success, NULL on failure
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 FILE* ajHttpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
-                 const AjPStr get, struct AJSOCKET *Psock)
+                 const AjPStr get, AjPSysSocket Psock)
 {
     FILE* fp;
     struct addrinfo hints;
@@ -257,7 +276,7 @@ FILE* ajHttpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
     const char *phost = NULL;
     const char *pport = NULL;
 
-    struct AJSOCKET sock = *Psock;
+    AjOSysSocket sock = *Psock;
 
     AjPStr errstr = NULL;
     int ret;
@@ -329,7 +348,7 @@ FILE* ajHttpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
 
 
 
-/* @func ajHttpOpenProxy ***************************************************
+/* @func ajHttpOpenProxy ******************************************************
 **
 ** Opens an HTTP connection via a proxy
 **
@@ -341,15 +360,17 @@ FILE* ajHttpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
 ** @param [r] host [const AjPStr] Host name
 ** @param [r] iport [ajint] Port
 ** @param [r] get [const AjPStr] GET string
-** @param [u] Psock [struct AJSOCKET*] Socket returned to caller
+** @param [u] Psock [AjPSysSocket] Socket returned to caller
 ** @return [FILE*] Open file on success, NULL on failure
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 FILE* ajHttpOpenProxy(const AjPStr dbname, const AjPStr proxyname,
                       ajint proxyport, const AjPStr proxyauth,
                       const AjPStr proxycreds, const AjPStr host,
-                      ajint iport, const AjPStr get, struct AJSOCKET *Psock)
+                      ajint iport, const AjPStr get, AjPSysSocket Psock)
 {
     FILE* fp;
     struct addrinfo hints;
@@ -361,7 +382,7 @@ FILE* ajHttpOpenProxy(const AjPStr dbname, const AjPStr proxyname,
     const char *phost = NULL;
     const char *pport = NULL;
 
-    struct AJSOCKET sock = *Psock;
+    AjOSysSocket sock = *Psock;
     
     AjPStr errstr = NULL;
     int ret;
@@ -440,18 +461,20 @@ FILE* ajHttpOpenProxy(const AjPStr dbname, const AjPStr proxyname,
 ** Send HTTP GET request to an open socket
 **
 ** @param [r] dbname [const AjPStr] Database name (for error reporting)
-** @param [u] sock [struct AJSOCKET] Socket structure
+** @param [u] sock [AjOSysSocket] Socket structure
 ** @param [r] host [const AjPStr] Host name for Host header line
 ** @param [r] iport [ajint] Port for Host header line
 ** @param [r] proxyauth [const AjPStr] Proxy auth type (if any)
 ** @param [r] proxycreds [const AjPStr] Proxy auth credentials (if any)
 ** @param [r] get [const AjPStr] GET string
 ** @return [FILE*] Open file on success, NULL on failure
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static FILE* httpSend(const AjPStr dbname,
-                      struct AJSOCKET sock,
+                      AjOSysSocket sock,
                       const AjPStr host, ajint iport,
                       const AjPStr proxyauth, const AjPStr proxycreds,
                       const AjPStr get)
@@ -460,7 +483,7 @@ static FILE* httpSend(const AjPStr dbname,
     AjPStr gethead = NULL;
     AjPStr cred = NULL;
     
-    ajuint isendlen;
+    ajint isendlen;
 
     ajDebug("httpSend: Sending to socket\n");
 
@@ -469,13 +492,14 @@ static FILE* httpSend(const AjPStr dbname,
 
     isendlen = send(sock.sock, ajStrGetPtr(get), ajStrGetLen(get), 0);
 
-    if(isendlen != ajStrGetLen(get))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
+    if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(get))
+	ajErr("send failure, expected %u bytes returned %d : %s\n",
 	      ajStrGetLen(get), isendlen, ajMessGetSysmessageC());
 
     ajDebug("sending: '%S'\n", get);
-    ajDebug("send for GET errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
+    if(isendlen < 0)
+            ajDebug("send for GET errno %d msg '%s'\n",
+                    errno, ajMessGetSysmessageC());
 
     if(ajStrGetLen(proxyauth))
     {
@@ -493,12 +517,13 @@ static FILE* httpSend(const AjPStr dbname,
         isendlen =  send(sock.sock, ajStrGetPtr(gethead),
                          ajStrGetLen(gethead), 0);
 
-        if(isendlen != ajStrGetLen(gethead))
-            ajErr("send failure, expected %d bytes returned %d : %s\n",
+        if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
+            ajErr("send failure, expected %u bytes returned %d : %s\n",
                   ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
         ajDebug("sending: '%S'\n", gethead);
-        ajDebug("send for host errno %d msg '%s'\n",
-                errno, ajMessGetSysmessageC());
+        if(isendlen < 0)
+            ajDebug("send for host errno %d msg '%s'\n",
+                    errno, ajMessGetSysmessageC());
 
         ajStrDel(&cred);
     }
@@ -509,20 +534,21 @@ static FILE* httpSend(const AjPStr dbname,
                 ajNamValueVersion(), ajNamValueSystem());
     isendlen = send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
+    if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
+	ajErr("send failure, expected %u bytes returned %d : %s\n",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
 
     ajFmtPrintS(&gethead, "Host: %S:%d\r\n", host, iport);
     isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
+    if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
+	ajErr("send failure, expected %u bytes returned %d : %s\n",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
-    ajDebug("send for host errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
+    if(isendlen < 0)
+            ajDebug("send for host errno %d msg '%s'\n",
+                    errno, ajMessGetSysmessageC());
 
     if(ajStrFindC(get,"HTTP/1.1") != -1)
     {
@@ -530,24 +556,26 @@ static FILE* httpSend(const AjPStr dbname,
         isendlen =  send(sock.sock, ajStrGetPtr(gethead),ajStrGetLen(gethead),
                          0);
 
-        if(isendlen != ajStrGetLen(gethead))
-            ajErr("send failure, expected %d bytes returned %d : %s\n",
+        if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
+            ajErr("send failure, expected %u bytes returned %d : %s\n",
                   ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
 
         ajDebug("sending: '%S'\n", gethead);
-        ajDebug("send for host errno %d msg '%s'\n",
-                errno, ajMessGetSysmessageC());
+        if(isendlen < 0)
+            ajDebug("send for host errno %d msg '%s'\n",
+                    errno, ajMessGetSysmessageC());
     }
 
     ajFmtPrintS(&gethead, "\r\n");
     isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
+    if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
+	ajErr("send failure, expected %u bytes returned %d : %s\n",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
-    ajDebug("send for blankline errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
+    if(isendlen < 0)
+        ajDebug("send for blankline errno %d msg '%s'\n",
+                errno, ajMessGetSysmessageC());
 
     ajStrDel(&gethead);
 
@@ -573,6 +601,8 @@ static FILE* httpSend(const AjPStr dbname,
 ** Initialise a URL components object
 **
 ** @return [AjPUrlref] URL Components
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPUrlref ajHttpUrlrefNew(void)
@@ -602,6 +632,8 @@ AjPUrlref ajHttpUrlrefNew(void)
 **
 ** @param [u] thys [AjPUrlref*] URL components object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajHttpUrlrefDel(AjPUrlref *thys)
@@ -642,6 +674,8 @@ void ajHttpUrlrefDel(AjPUrlref *thys)
 ** @param [u] parts [AjPUrlref*] URL components object
 ** @param [u] url [const char*] URL
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajHttpUrlrefParseC(AjPUrlref *parts, const char *url)
@@ -759,6 +793,8 @@ void ajHttpUrlrefParseC(AjPUrlref *parts, const char *url)
 **
 ** @param [u] urli [AjPUrlref] URL components object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajHttpUrlrefSplitPort(AjPUrlref urli)
@@ -798,12 +834,33 @@ void ajHttpUrlrefSplitPort(AjPUrlref urli)
 
 
 
-/* @func ajHttpUrlrefSplitUsername *********************************************
+/* @func ajHttpUrlrefParseS ***************************************************
+**
+** Parse an IPV4/6 URL into its components
+**
+** @param [u] parts [AjPUrlref*] URL components object
+** @param [r] surl [const AjPStr] URL
+** @return [void]
+**
+** @release 6.5.0
+******************************************************************************/
+
+void ajHttpUrlrefParseS(AjPUrlref *parts, const AjPStr surl)
+{
+    ajHttpUrlrefParseC(parts, MAJSTRGETPTR(surl));
+}
+
+
+
+
+/* @func ajHttpUrlrefSplitUsername ********************************************
 **
 ** Separate any username[:password] from a host specification (IPV4/6)
 **
 ** @param [u] urli [AjPUrlref] URL components object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajHttpUrlrefSplitUsername(AjPUrlref urli)
@@ -875,6 +932,8 @@ void ajHttpUrlrefSplitUsername(AjPUrlref urli)
 ** @param [w] host [AjPStr*] Host name
 ** @param [w] urlget [AjPStr*] URL for the HTTP header GET
 ** @return [AjBool] ajTrue if the URL was parsed
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -920,6 +979,8 @@ AjBool ajHttpQueryUrl(const AjPQuery qry, ajint* iport, AjPStr* host,
 ** @param [w] host [AjPStr*] Host name
 ** @param [w] urlget [AjPStr*] URL for the HTTP header GET
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -957,11 +1018,15 @@ void ajHttpUrlDeconstruct(const AjPStr url, ajint* iport, AjPStr* host,
 ** @param [w] host [AjPStr*] Host name
 ** @param [w] port [ajint*] Port
 ** @param [w] path [AjPStr*] part of URL after port number
+** @param [w] httpcode [ajuint*] HTTP protocol return code
 ** @return [AjBool] returns true if the header includes a redirection response
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path)
+AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path,
+                      ajuint *httpcode)
 {
 
     AjPRegexp httpexp  = NULL;
@@ -972,8 +1037,6 @@ AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path)
     AjPStr newurl   = NULL;
     AjPStr newhost  = NULL;
     AjPStr currline = NULL;
-
-    ajuint httpcode = 0;
 
     AjBool isheader = ajFalse;
     AjBool ret = ajFalse;
@@ -991,14 +1054,14 @@ AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path)
     {
         isheader = ajTrue;
         ajRegSubI(httpexp, 1, &codestr);
-        ajStrToUint(codestr, &httpcode);
-        ajDebug("Header: codestr '%S' code '%u'\n", codestr, httpcode);
+        ajStrToUint(codestr, httpcode);
+        ajDebug("Header: codestr '%S' code '%u'\n", codestr, *httpcode);
         ajStrDel(&codestr);
     }
 
     if(isheader)
     {
-        if(httpcode == 301 || httpcode == 302 || httpcode==307)
+        if(*httpcode == 301 || *httpcode == 302 || *httpcode==307)
         {
             redirexp = ajRegCompC("^Location: (\\S+)");
             nullexp  = ajRegCompC("^\r?\n?$");
@@ -1040,7 +1103,7 @@ AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path)
 
 
 
-/* @func ajHttpRead **********************************************************
+/* @func ajHttpRead ***********************************************************
 **
 ** Reads the header of http response in given buffer buff,
 ** if it includes a redirection response updates the host, port and get
@@ -1053,12 +1116,43 @@ AjBool ajHttpRedirect(AjPFilebuff buff, AjPStr* host, ajint* port, AjPStr* path)
 ** @param [r] port [ajint] Port
 ** @param [r] dbpath [const AjPStr] part of URL after port number
 ** @return [AjPFilebuff] http response
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPFilebuff ajHttpRead(const AjPStr dbhttpver, const AjPStr dbname,
                        const AjPStr dbproxy, const AjPStr host,
                        ajint port, const AjPStr dbpath)
+{
+    return ajHttpReadPos(dbhttpver, dbname, dbproxy, host, port, dbpath, 0L);
+}
+
+
+
+
+/* @func ajHttpReadPos ********************************************************
+**
+** Reads the header of http response in given buffer buff,
+** if it includes a redirection response updates the host, port and get
+** parameters using the 'Location' header
+**
+** @param [r] dbhttpver [const AjPStr] DB http version
+** @param [r] dbname [const AjPStr] DB name
+** @param [r] dbproxy [const AjPStr] DB proxy
+** @param [r] host [const AjPStr] Host name
+** @param [r] port [ajint] Port
+** @param [r] dbpath [const AjPStr] part of URL after port number
+** @param [r] fpos [ajlong] File start offset
+** @return [AjPFilebuff] http response
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjPFilebuff ajHttpReadPos(const AjPStr dbhttpver, const AjPStr dbname,
+                          const AjPStr dbproxy, const AjPStr host,
+                          ajint port, const AjPStr dbpath, ajlong fpos)
 {
     AjPStr get       = NULL;
     AjPStr httpver   = NULL;
@@ -1070,9 +1164,10 @@ AjPFilebuff ajHttpRead(const AjPStr dbhttpver, const AjPStr dbname,
     AjPFilebuff buff = NULL;
     FILE *fp         = NULL;
 
-    struct AJSOCKET sock;
-    struct AJTIMEOUT timo;
+    AjOSysSocket sock;
+    AjOSysTimeout timo;
     ajint proxyport = 0;
+    ajuint httpcode = 0;
 
     httpver   = ajStrNew();
     proxyname = ajStrNew();
@@ -1093,7 +1188,8 @@ AjPFilebuff ajHttpRead(const AjPStr dbhttpver, const AjPStr dbname,
     ajHttpGetProxyinfo(dbproxy, &proxyport, &proxyname, &proxyauth, &proxycred);
 
 
-    while (buff==NULL || ajHttpRedirect(buff, &newhost, &port, &path))
+    while (buff==NULL || ajHttpRedirect(buff, &newhost, &port, &path,
+                                        &httpcode))
     {
 	if(buff) /* means buff includes http redirect response*/
 	    ajFilebuffDel(&buff);
@@ -1111,6 +1207,8 @@ AjPFilebuff ajHttpRead(const AjPStr dbhttpver, const AjPStr dbname,
 	else
 	{
 	    ajFmtPrintS(&get, "GET %S HTTP/%S\r\n", path, httpver);
+	    if(fpos)
+                ajFmtPrintAppS(&get, "Range: bytes=%Ld-\r\n", fpos);
 
 	    fp = ajHttpOpen(dbname, newhost, port, get, &sock);
 	}
@@ -1135,6 +1233,11 @@ AjPFilebuff ajHttpRead(const AjPStr dbhttpver, const AjPStr dbname,
 	ajSysTimeoutSet(&timo);
 	ajFilebuffLoadAll(buff);
 	ajSysTimeoutUnset(&timo);
+    }
+
+    if(httpcode >= 400)
+    {
+        ajFilebuffDel(&buff);
     }
 
     ajStrDel(&get);

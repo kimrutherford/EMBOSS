@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Picks PCR primers and hybridization oligos
+   Pick PCR primers and hybridization oligos
 
 Description
 
@@ -96,7 +96,7 @@ Usage
 
 
 % eprimer32 tembl:x65921 x65921.eprimer32 -explain
-Picks PCR primers and hybridization oligos
+Pick PCR primers and hybridization oligos
 
 
    Go to the input files for this example
@@ -104,8 +104,8 @@ Picks PCR primers and hybridization oligos
 
 Command line arguments
 
-Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.4.0.0
+Pick PCR primers and hybridization oligos
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -227,7 +227,7 @@ Version: EMBOSS:6.4.0.0
                                   parameter has no effect on the internal
                                   oligo if one is requested.) (Integer 0 or
                                   more)
-*  -osize              integer    [20] Optimum length (in bases) of a primer
+*  -optsize            integer    [20] Optimum length (in bases) of a primer
                                   oligo. Eprimer32 will attempt to pick
                                   primers close to this length. (Integer 0 or
                                   more)
@@ -240,7 +240,7 @@ Version: EMBOSS:6.4.0.0
                                   the maximum oligo size for which
                                   Eprimer32's melting-temperature is valid.
                                   (Integer up to 35)
-*  -otm                float      [60.0] Optimum melting temperature(Celsius)
+*  -opttm              float      [60.0] Optimum melting temperature(Celsius)
                                   for a primer oligo. Eprimer32 will try to
                                   pick primers with melting temperatures are
                                   close to this temperature. The oligo melting
@@ -669,7 +669,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -745,7 +748,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -758,6 +761,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -766,15 +778,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -843,59 +846,56 @@ Output file format
 # FORWARD PRIMER STATISTICS:
 # considered 18855
 # GC content failed 156
-# low tm 9245
-# high tm 3587
-# high any compl 2
-# high end compl 61
+# low tm 3890
+# high tm 9325
+# high hairpin stability 23
 # long poly-x seq 45
-# ok 5759
+# ok 5416
 
 # REVERSE PRIMER STATISTICS:
 # considered 18706
 # GC content failed 161
-# low tm 9106
-# high tm 3606
-# high any compl 3
-# high end compl 25
+# low tm 3834
+# high tm 9289
+# high hairpin stability 8
 # long poly-x seq 66
-# ok 5739
+# ok 5348
 
 # PRIMER PAIR STATISTICS:
-# considered 4135
-# unacceptable product size 3770
-# high end compl 29
-# ok 336
+# considered 3726
+# unacceptable product size 3429
+# ok 297
 
 #                      Start  Len   Tm     GC%   Sequence
 
-   1 PRODUCT SIZE: 199
-     FORWARD PRIMER     201   20  59.90  65.00  ACCGGTTCTCCATCCCCGCA
+   1 PRODUCT SIZE: 201
+     FORWARD PRIMER     981   20  60.11  55.00  CCGGAAGATCAAGTCGTGCT
 
-     REVERSE PRIMER     380   20  59.84  65.00  CCGCGCGGTTCCCTGCTATT
-
-
-   2 PRODUCT SIZE: 207
-     FORWARD PRIMER     826   20  60.04  70.00  GACCGGCCAGGAAACGGTCG
-
-     REVERSE PRIMER    1013   20  59.96  70.00  TGGCCTCATCCTCCAGGGGC
+     REVERSE PRIMER    1162   20  59.90  55.00  GGTGTGACACTCAGCTGTCA
 
 
-   3 PRODUCT SIZE: 202
-     FORWARD PRIMER     831   20  60.32  70.00  GCCAGGAAACGGTCGCCCAG
+   2 PRODUCT SIZE: 199
+     FORWARD PRIMER     802   20  60.11  60.00  CCAGGAGCTACACACCTTCG
 
-     REVERSE PRIMER    1013   20  59.96  70.00  TGGCCTCATCCTCCAGGGGC
-
-
-   4 PRODUCT SIZE: 205
-     FORWARD PRIMER     600   20  60.18  70.00  GTGGCCCTGCTCCAGTCCCT
-
-     REVERSE PRIMER     785   20  59.97  65.00  TGGGCGCGGACAAAGAGCTG
+     REVERSE PRIMER     981   20  60.11  55.00  AGCACGACTTGATCTTCCGG
 
 
-   5 PRODUCT SIZE: 197
-     FORWARD PRIMER     203   20  59.84  70.00  CGGTTCTCCATCCCCGCAGC
+   3 PRODUCT SIZE: 200
+     FORWARD PRIMER    1489   20  59.89  55.00  AAAAGAGGGGTTCTGCTGGG
 
-     REVERSE PRIMER     380   20  59.84  65.00  CCGCGCGGTTCCCTGCTATT
+     REVERSE PRIMER    1669   20  60.18  55.00  TAAGAGCCCAGGGACTTGGT
+
+
+   4 PRODUCT SIZE: 200
+     FORWARD PRIMER     801   20  59.75  60.00  CCCAGGAGCTACACACCTTC
+
+     REVERSE PRIMER     981   20  60.11  55.00  AGCACGACTTGATCTTCCGG
+
+
+   5 PRODUCT SIZE: 200
+     FORWARD PRIMER    1084   20  60.32  55.00  GCATGCTTGGAGGTGAGTGA
+
+     REVERSE PRIMER    1264   20  59.96  55.00  ACTCTGGCTCAGTCTCCCAT
 
 
 
@@ -985,7 +985,7 @@ Known bugs
 See also
 
                     Program name                         Description
-                    eprimer3     Picks PCR primers and hybridization oligos
+                    eprimer3     Pick PCR primers and hybridization oligos
    primersearch     Search DNA sequences for matches with primer pairs
                     stssearch    Search a DNA database for matches with a set of STS primers
 

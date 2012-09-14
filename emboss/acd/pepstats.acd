@@ -1,9 +1,9 @@
 application: pepstats [
-  documentation: "Calculates statistics of protein properties"
+  documentation: "Calculate statistics of protein properties"
   groups: "Protein:Composition, Protein:Properties"
-    relations: "EDAM:0000123 topic Protein physicochemistry"
-    relations: "EDAM:0000157 topic Sequence composition"
-    relations: "EDAM:0000250 operation Protein property calculation"
+    relations: "EDAM_topic:0123 Protein properties"
+    relations: "EDAM_topic:0157 Sequence composition analysis"
+    relations: "EDAM_operation:0250 Protein property calculation"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   datafile: aadata [
@@ -22,7 +22,7 @@ section: input [
     help: "Amino acid properties"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
-    relations: "EDAM:0001502 data Amino acid index (chemical classes)"
+    relations: "EDAM_data:1502 Amino acid index (chemical classes)"
   ]
 
   datafile: mwdata [
@@ -30,7 +30,7 @@ section: input [
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
+    relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
 endsection: input
@@ -43,13 +43,13 @@ section: advanced [
   boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -63,7 +63,7 @@ section: output [
     parameter: "Y"
     knowntype: "pepstats output"
     information: "Pepstats program output file"
-    relations: "EDAM:0000897 data Protein property"
+    relations: "EDAM_data:0897 Protein property"
   ]
 
 endsection: output

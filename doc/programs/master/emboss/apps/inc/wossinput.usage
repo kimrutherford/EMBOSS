@@ -7,7 +7,7 @@ Search for programs with 'codon' in their input:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wossinput codon </b>
-Finds programs by EDAM input data
+Find programs by EDAM input data
 
 SEARCH FOR INPUT 'CODON'
 backtranseq Back-translate a protein sequence to a nucleotide sequence

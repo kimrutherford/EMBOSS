@@ -83,3 +83,21 @@
    fun:axis2_svc_client_create_with_conf_ctx_and_svc
    fun:ajSoapAxis2GetClient
 }
+{
+   pmr__strspn
+   Memcheck:Addr8
+   fun:__strspn_sse42
+   fun:ajSysFuncStrtokR
+   fun:ajVarbcfSync
+   fun:varoutWriteBcf
+   fun:main
+}
+{
+   pmr__strspn2
+   Memcheck:Addr8
+   fun:__strspn_sse42
+   fun:ajSysFuncStrtokR
+   fun:ajVarbcfSync
+   fun:varoutWriteNextBcf
+   fun:main
+}

@@ -40,7 +40,7 @@ Created abiview.ps
 Command line arguments
 
 Display the trace in an ABI sequencer file
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ABI sequencing trace file
@@ -201,27 +201,29 @@ Known bugs
 See also
 
                    Program name                            Description
-                   cirdna       Draws circular maps of DNA constructs
+                   cirdna       Draw circular map of DNA constructs
                    coderet      Extract CDS, mRNA and translations from feature tables
-                   entret       Retrieves sequence entries from flatfile databases and files
+                   entret       Retrieve sequence entries from flatfile databases and files
   extractalign     Extract regions from a sequence alignment
                    iep          Calculate the isoelectric point of proteins
                    infoalign    Display basic information about a multiple sequence alignment
                    infoseq      Display basic information about sequences
-                   lindna       Draws linear maps of DNA constructs
+                   lindna       Draw linear maps of DNA constructs
                    pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
                    pepwheel     Draw a helical wheel diagram for a protein sequence
                    plotorf      Plot potential open reading frames in a nucleotide sequence
                    prettyplot   Draw a sequence alignment with pretty formatting
                    prettyseq    Write a nucleotide sequence and its translation to file
+                   refseqget    Get reference sequence
                    remap        Display restriction enzyme binding sites in a nucleotide sequence
                    seqxref      Retrieve all database cross-references for a sequence entry
                    seqxrefget   Retrieve all cross-referenced data for a sequence entry
                    showalign    Display a multiple sequence alignment in pretty format
                    showfeat     Display features of a sequence in pretty format
-                   showpep      Displays protein sequences with features in pretty format
+                   showpep      Display protein sequences with features in pretty format
                    sixpack      Display a DNA sequence with 6-frame translation and ORFs
+  variationget     Get sequence variations
                    whichdb      Search all sequence databases for an entry and retrieve it
 
 Author(s)

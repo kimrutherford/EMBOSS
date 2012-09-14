@@ -4,31 +4,13 @@
 <p><h3>File: qatests.server.ebeye</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# qatests.server.ebeye 2011-07-15 12:00:00
-
-DB toucan [
-  method: ebeye
-  dbalias: 2can
-  fields: "description, domain_source, id, name"
-  return: "description, domain_source, id, name"
-  format: "text"
-  hasaccession: "N"
-]
+# qatests.server.ebeye 2012-07-15 12:00:00
 
 DB arrayexpress_repository [
   method: ebeye
   dbalias: arrayexpress-repository
-  fields: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
-  return: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
-  format: "text"
-  hasaccession: "N"
-]
-
-DB astd [
-  method: ebeye
-  dbalias: astd
-  fields: "creation_date, description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
-  return: "description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
+  fields: "acc, author, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
+  return: "acc, description, domain_source, id, keywords, name"
   format: "text"
   hasaccession: "N"
 ]
@@ -37,7 +19,7 @@ DB atlas_experiments [
   method: ebeye
   dbalias: atlas-experiments
   fields: "creation_date, description, domain_source, id, last_modification_date, name"
-  return: "description, domain_source, id, last_modification_date, name"
+  return: "description, domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
@@ -45,8 +27,8 @@ DB atlas_experiments [
 DB atlas_genes [
   method: ebeye
   dbalias: atlas-genes
-  fields: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
-  return: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
+  fields: "cell_line, cell_type, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, genesigdbid, goterm, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_accession_number, mirbase_description, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_matured_mirna, mirbase_pubmedid, mirbase_sequence, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, synonym"
+  return: "cell_line, cell_type, compound, description, developmental_stage, disease_state, domain_source, id, infect, name, number_of_experiments, organism_part, otherconditions, phenotype"
   format: "text"
   hasaccession: "N"
 ]
@@ -54,21 +36,30 @@ DB atlas_genes [
 DB biocatalogue [
   method: ebeye
   dbalias: biocatalogue
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-  fields: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
-  return: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
+  fields: "acc, creation_date, description, domain_source, id, keywords, last_modification_date, name, provider, service_types"
+  return: "description, domain_source, id, keywords, name, provider, service_types"
   format: "text"
   hasaccession: "N"
 ]
 
-DB uniparc [
+DB biomodels [
   method: ebeye
-  dbalias: uniparc
-  fields: "domain_source, id, uniprotkb_exclusion"
-  return: "domain_source, id, uniprotkb_exclusion"
+  dbalias: biomodels
+  fields: "acc, author, creation_date, curated, description, domain_source, id, keywords, last_modification_date, name, original_model"
+  return: "description, domain_source, id, keywords, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB chebi [
+  method: ebeye
+  dbalias: chebi
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  fields: "EMBLWGS_version, EMBL_CON_version, EMBL_TPA_version, EMBL_version, EPO_version, H_INV_version, IPI_version, REFSEQ_version, USPTO_version, UniProtKB/Swiss-Prot_version, UniProtKB/TrEMBL_version, domain_source, id, uniprotkb_exclusion"
+  return: "domain_source, id"
   format: "text"
   hasaccession: "N"
 ]
@@ -76,8 +67,8 @@ DB uniparc [
 DB uniprot [
   method: ebeye
   dbalias: uniprot
-  fields: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
-  return: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
+  fields: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_PATRIC_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
+  return: "acc, descAltName, descRecName, descSubName, domain_source, gene_primary_name, id, organism_scientific_name, sequence_length, status"
   format: "text"
   hasaccession: "N"
 ]
@@ -86,7 +77,7 @@ DB uniref100 [
   method: ebeye
   dbalias: uniref100
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
-  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
@@ -95,7 +86,7 @@ DB uniref50 [
   method: ebeye
   dbalias: uniref50
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
-  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
@@ -104,7 +95,16 @@ DB uniref90 [
   method: ebeye
   dbalias: uniref90
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
-  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, id, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB wgs_masters [
+  method: ebeye
+  dbalias: wgs_masters
+  fields: "description, domain_source, id, name, scientific_name"
+  return: "description, domain_source, id, name, scientific_name"
   format: "text"
   hasaccession: "N"
 ]

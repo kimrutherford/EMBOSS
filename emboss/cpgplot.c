@@ -164,9 +164,12 @@ int main(int argc, char **argv)
 			 minpc, featout);
 
 	if(doplot)
+        {
+            ajGraphSetDatanameS(mult, ajSeqGetNameS(seq));
 	    cpgplot_plotit(ajSeqGetNameC(seq), begin, len,
 			   obsexp, xypc, thresh,
 			   obsexpmax, doobsexp, docg, dopc, mult);
+        }
 
 	ajStrDel(&strand);
     }

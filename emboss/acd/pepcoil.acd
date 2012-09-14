@@ -1,9 +1,9 @@
 application: pepcoil [
-  documentation: "Predicts coiled coil regions in protein sequences"
+  documentation: "Predict coiled coil regions in protein sequences"
   groups: "Protein:2D Structure, Protein:Domains"
-    relations: "EDAM:0000178 topic Protein secondary structure prediction"
-    relations: "EDAM:0000736 topic Protein domains"
-    relations: "EDAM:0000268 operation Protein super-secondary structure prediction"
+    relations: "EDAM_topic:0178 Protein secondary structure prediction"
+    relations: "EDAM_topic:0736 Protein domains and folds"
+    relations: "EDAM_operation:0268 Protein super-secondary structure prediction"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
 endsection: input
@@ -30,7 +30,7 @@ section: required [
     maximum: "28"
     default: "28"
     information: "Window size"
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
 endsection: required
@@ -43,27 +43,27 @@ section: output [
   boolean: coil [
     default: "Y"
     information: "Report coiled coil regions"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: frame [
     default: "$(coil)"
     information: "Show coil frameshifts"
     expected: "Yes if -coil is true"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: other [
     default: "N"
     information: "Report non coiled coil regions"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   report: outfile [
     parameter: "Y"
     rformat: "motif"
     taglist: "float:Probability str:Predict int:pos=Max_coil_pos str:Frames"
-    relations: "EDAM:0000877 data Protein structure report (super-secondary)"
+    relations: "EDAM_data:0877 Protein features (super-secondary)"
   ]
 
 endsection: output

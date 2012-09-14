@@ -1,31 +1,34 @@
-/* @source Ensembl Utility functions
+/* @source ensutility *********************************************************
+**
+** Ensembl Utility functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.26 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/03/29 15:21:32 $ by $Author: uludag $
-** @version $Revision: 1.20 $
+** @modified $Date: 2012/03/09 20:33:25 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensregistry.h"
 #include "enstranslation.h"
@@ -34,60 +37,60 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
-/* #varstatic utilityInit *****************************************************
+/* #varstatic utilityGInit ****************************************************
 **
 ** Private boolean variable to ascertain that ensInit has been called once
 ** and only once.
 **
 ******************************************************************************/
 
-static AjBool utilityInit = AJFALSE;
+static AjBool utilityGInit = AJFALSE;
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -129,19 +132,21 @@ static AjBool utilityInit = AJFALSE;
 ** Initialises Ensembl internals.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void ensInit(void)
 {
-    if(utilityInit)
+    if (utilityGInit)
         return;
 
     ensRegistryInit();
 
     ensTranslationInit();
 
-    utilityInit = ajTrue;
+    utilityGInit = ajTrue;
 
     return;
 }
@@ -168,19 +173,21 @@ void ensInit(void)
 ** Clears Ensembl internals.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void ensExit(void)
 {
-    if(!utilityInit)
+    if (!utilityGInit)
         return;
 
     ensRegistryExit();
 
     ensTranslationExit();
 
-    utilityInit = ajFalse;
+    utilityGInit = ajFalse;
 
     return;
 }
@@ -224,6 +231,8 @@ void ensExit(void)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -233,7 +242,7 @@ AjBool ensTraceQuery(const AjPQuery qry, ajuint level)
     AjIList iter = NULL;
     AjPQueryField field = NULL;
 
-    if(!qry)
+    if (!qry)
         return ajFalse;
 
     indent = ajStrNew();
@@ -264,8 +273,9 @@ AjBool ensTraceQuery(const AjPQuery qry, ajuint level)
             "%S  DbProxy      '%S'\n"
             "%S  DbHttpVer    '%S'\n"
             "%S  ServerVer    '%S'\n"
-            "%S  Field        '%S'\n"
+            "%S  SingleField  '%S'\n"
             "%S  QryString    '%S'\n"
+            "%S  QryFields    '%S'\n"
             "%S  Application  '%S'\n"
             "%S  Fpos          %Ld\n"
             "%S  TextAccess    %p\n"
@@ -306,8 +316,9 @@ AjBool ensTraceQuery(const AjPQuery qry, ajuint level)
             indent, qry->DbProxy,
             indent, qry->DbHttpVer,
             indent, qry->ServerVer,
-            indent, qry->Field,
+            indent, qry->SingleField,
             indent, qry->QryString,
+            indent, qry->QryFields,
             indent, qry->Application,
             indent, qry->Fpos,
             indent, qry->TextAccess,
@@ -330,7 +341,7 @@ AjBool ensTraceQuery(const AjPQuery qry, ajuint level)
             qry->QueryFields);
 
     iter = ajListIterNewread(qry->QueryFields);
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         field = (AjPQueryField) ajListIterGet(iter);
         ajDebug("%S    %10.10S   '%S'\n",
@@ -354,6 +365,8 @@ AjBool ensTraceQuery(const AjPQuery qry, ajuint level)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -361,7 +374,7 @@ AjBool ensTraceSeq(const AjPSeq seq, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!seq)
+    if (!seq)
         return ajFalse;
 
     indent = ajStrNew();
@@ -483,6 +496,8 @@ AjBool ensTraceSeq(const AjPSeq seq, ajuint level)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -493,7 +508,7 @@ AjBool ensTraceSeqdesc(const AjPSeqDesc seqdesc, ajuint level)
     AjPStr indent = NULL;
     AjPStr value = NULL;
 
-    if(!seqdesc)
+    if (!seqdesc)
         return ajFalse;
 
     indent = ajStrNew();
@@ -523,13 +538,13 @@ AjBool ensTraceSeqdesc(const AjPSeqDesc seqdesc, ajuint level)
 
     /* Trace the AJAX List of AJAX String short names. */
 
-    if(seqdesc->Short)
+    if (seqdesc->Short)
     {
         ajDebug("%S    AJAX List of AJAX String short names:\n", indent);
 
         iter = ajListIterNew(seqdesc->Short);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             value = (AjPStr) ajListIterGet(iter);
 
@@ -541,13 +556,13 @@ AjBool ensTraceSeqdesc(const AjPSeqDesc seqdesc, ajuint level)
 
     /* Trace the AJAX List of AJAX String EC numbers. */
 
-    if(seqdesc->EC)
+    if (seqdesc->EC)
     {
         ajDebug("%S    AJAX List of AJAX String EC numbers:\n", indent);
 
         iter = ajListIterNew(seqdesc->EC);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             value = (AjPStr) ajListIterGet(iter);
 
@@ -573,6 +588,8 @@ AjBool ensTraceSeqdesc(const AjPSeqDesc seqdesc, ajuint level)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -659,6 +676,8 @@ AjBool ensTraceSeqin(const AjPSeqin seqin, ajuint level)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -666,7 +685,7 @@ AjBool ensTraceTextin(const AjPTextin textin, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!textin)
+    if (!textin)
         return ajFalse;
 
     indent = ajStrNew();

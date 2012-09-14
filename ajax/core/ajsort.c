@@ -1,27 +1,30 @@
-/******************************************************************************
-** @source AJAX sort functions
+/* @source ajsort *************************************************************
+**
+** AJAX sort functions
 **
 ** @author Copyright (C) 2001 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.18 $
+** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajsort.h"
 
 
 
@@ -36,6 +39,8 @@
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -70,6 +75,8 @@ void ajSortFloatDecI(const float *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -104,6 +111,8 @@ void ajSortIntDecI(const ajint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -138,6 +147,8 @@ void ajSortUintDecI(const ajuint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -172,6 +183,8 @@ void ajSortFloatIncI(const float *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -206,6 +219,8 @@ void ajSortIntIncI(const ajint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -241,6 +256,8 @@ void ajSortUintIncI(const ajuint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -271,18 +288,6 @@ void ajSorttwoIntIncI(ajint *a, ajuint *p, ajuint n)
 
 
 
-/* @obsolete ajSortTwoIntIncI
-** @rename ajSorttwoIntIncI
-*/
-__deprecated void ajSortTwoIntIncI(ajint *a, ajuint *p, ajuint n)
-{
-    ajSorttwoIntIncI(a, p, n);
-    return;
-}
-
-
-
-
 /* @func ajSorttwoUintIncI ****************************************************
 **
 ** Based on an array of unsigned ints, sort (ascending) both this array and
@@ -293,6 +298,8 @@ __deprecated void ajSortTwoIntIncI(ajint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -323,18 +330,6 @@ void ajSorttwoUintIncI(ajuint *a, ajuint *p, ajuint n)
 
 
 
-/* @obsolete ajSortTwoUintIncI
-** @rename ajSorttwoUintIncI
-*/
-__deprecated void ajSortTwoUintIncI(ajuint *a, ajuint *p, ajuint n)
-{
-    ajSorttwoUintIncI(a, p, n);
-    return;
-}
-
-
-
-
 /* @func ajSortFloatDec *******************************************************
 **
 ** Sort a float array.
@@ -343,6 +338,8 @@ __deprecated void ajSortTwoUintIncI(ajuint *a, ajuint *p, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -376,6 +373,8 @@ void ajSortFloatDec(float *a, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -409,6 +408,8 @@ void ajSortIntDec(ajint *a, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -442,6 +443,8 @@ void ajSortUintDec(ajuint *a, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -475,6 +478,8 @@ void ajSortFloatInc(float *a, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -508,6 +513,8 @@ void ajSortIntInc(ajint *a, ajuint n)
 ** @param [r] n [ajuint] Number of elements to sort
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -529,3 +536,36 @@ void ajSortUintInc(ajuint *a, ajuint n)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajSortTwoIntIncI
+** @rename ajSorttwoIntIncI
+*/
+__deprecated void ajSortTwoIntIncI(ajint *a, ajuint *p, ajuint n)
+{
+    ajSorttwoIntIncI(a, p, n);
+    return;
+}
+
+
+
+
+/* @obsolete ajSortTwoUintIncI
+** @rename ajSorttwoUintIncI
+*/
+__deprecated void ajSortTwoUintIncI(ajuint *a, ajuint *p, ajuint n)
+{
+    ajSorttwoUintIncI(a, p, n);
+    return;
+}
+
+#endif /* AJ_COMPILE_DEPRECATED */

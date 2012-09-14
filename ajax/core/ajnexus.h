@@ -1,18 +1,60 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajnexus ***********************************************************
+**
+** AJAX nexus file parsing functions
+**
+** @author Copyright (C) 2003 Peter Rice
+** @version $Revision: 1.13 $
+** @modified $Date: 2011/10/02 10:11:48 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajnexus_h
-#define ajnexus_h
+#ifndef AJNEXUS_H
+#define AJNEXUS_H
 
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
 #include "ajfile.h"
 #include "ajstr.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* @data AjPNexusTaxa *****************************************************
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data AjPNexusTaxa *********************************************************
 **
 ** Ajax nexus data taxa block object.
 **
@@ -29,11 +71,13 @@ extern "C"
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusTaxa {
+typedef struct AjSNexusTaxa
+{
     AjPStr* TaxLabels;
     ajuint  Ntax;
     char    Padding[4];
 } AjONexusTaxa;
+
 #define AjPNexusTaxa AjONexusTaxa*
 
 
@@ -76,7 +120,8 @@ typedef struct AjSNexusTaxa {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusCharacters {
+typedef struct AjSNexusCharacters
+{
     AjBool NewTaxa;
     ajuint Ntax;
     ajuint Nchar;
@@ -102,6 +147,7 @@ typedef struct AjSNexusCharacters {
     char MatchChar;
     char Padding[5];
 } AjONexusCharacters;
+
 #define AjPNexusCharacters AjONexusCharacters*
 
 
@@ -134,7 +180,8 @@ typedef struct AjSNexusCharacters {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusUnaligned {
+typedef struct AjSNexusUnaligned
+{
     AjBool NewTaxa;
     ajuint Ntax;
     AjPStr DataType;
@@ -146,6 +193,7 @@ typedef struct AjSNexusUnaligned {
     char Missing;
     char Padding[7];
 } AjONexusUnaligned;
+
 #define AjPNexusUnaligned AjONexusUnaligned*
 
 
@@ -175,7 +223,8 @@ typedef struct AjSNexusUnaligned {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusDistances {
+typedef struct AjSNexusDistances
+{
     AjBool NewTaxa;
     ajuint Ntax;
     ajuint Nchar;
@@ -187,6 +236,7 @@ typedef struct AjSNexusDistances {
     char Missing;
     char Padding[7];
 } AjONexusDistances;
+
 #define AjPNexusDistances AjONexusDistances*
 
 
@@ -216,7 +266,8 @@ typedef struct AjSNexusDistances {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusSets {
+typedef struct AjSNexusSets
+{
     AjPStr* CharSet;
     AjPStr* StateSet;
     AjPStr* ChangeSet;
@@ -226,6 +277,7 @@ typedef struct AjSNexusSets {
     AjPStr* TaxPartition;
     AjPStr* TreePartition;
 } AjONexusSets;
+
 #define AjPNexusSets AjONexusSets*
 
 
@@ -253,7 +305,8 @@ typedef struct AjSNexusSets {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusAssumptions {
+typedef struct AjSNexusAssumptions
+{
     AjPStr DefType;
     AjPStr PolyTCount;
     AjPStr GapMode;
@@ -263,6 +316,7 @@ typedef struct AjSNexusAssumptions {
     AjPStr* ExSet;
     AjPStr* AncStates;
 } AjONexusAssumptions;
+
 #define AjPNexusAssumptions AjONexusAssumptions*
 
 
@@ -285,11 +339,13 @@ typedef struct AjSNexusAssumptions {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusCodons {
+typedef struct AjSNexusCodons
+{
     AjPStr* CodonPosSet;
     AjPStr* GeneticCode;
     AjPStr* CodeSet;
 } AjONexusCodons;
+
 #define AjPNexusCodons AjONexusCodons*
 
 
@@ -311,16 +367,18 @@ typedef struct AjSNexusCodons {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusTrees {
+typedef struct AjSNexusTrees
+{
     AjPStr* Translate;
     AjPStr* Tree;
 } AjONexusTrees;
+
 #define AjPNexusTrees AjONexusTrees*
 
 
 
 
-/* @data AjPNexusNotes *****************************************************
+/* @data AjPNexusNotes ********************************************************
 **
 ** Ajax nexus data notes block object.
 **
@@ -336,10 +394,12 @@ typedef struct AjSNexusTrees {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexusNotes {
+typedef struct AjSNexusNotes
+{
     AjPStr* Text;
     AjPStr* Picture;
 } AjONexusNotes;
+
 #define AjPNexusNotes AjONexusNotes*
 
 
@@ -370,7 +430,8 @@ typedef struct AjSNexusNotes {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSNexus {
+typedef struct AjSNexus
+{
     AjPNexusTaxa Taxa;
     AjPNexusCharacters Characters;
     AjPNexusUnaligned Unaligned;
@@ -383,7 +444,16 @@ typedef struct AjSNexus {
     ajuint Ntax;
     char Padding[4];
 } AjONexus;
+
 #define AjPNexus AjONexus*
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
 
 
 
@@ -398,13 +468,15 @@ AjPStr*  ajNexusGetSequences(AjPNexus thys);
 AjPNexus ajNexusNew(void);
 AjPNexus ajNexusParse(AjPFilebuff buff);
 void     ajNexusTrace(const AjPNexus thys);
+void     ajNexusExit(void);
 
 /*
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJNEXUS_H */

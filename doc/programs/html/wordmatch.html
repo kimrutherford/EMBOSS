@@ -15,7 +15,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -53,7 +53,7 @@ Please help by correcting and extending the Wiki pages.
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
 -->
-Finds regions of identity (exact matches) of two sequences
+Find regions of identity (exact matches) of two sequences
 
 <H2>
     Description
@@ -76,7 +76,7 @@ Here is a sample session with <b>wordmatch</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wordmatch tsw:hba_human tsw:hbb_human </b>
-Finds regions of identity (exact matches) of two sequences
+Find regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
 Features output [HBA_HUMAN.gff]: <b></b>
@@ -100,8 +100,8 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.4.0.0
+Find regions of identity (exact matches) of two sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -132,7 +132,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -148,7 +151,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -308,7 +314,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated seqset qualifiers
+<td align="left" colspan=5>"-asequence" associated seqset qualifiers
 </td>
 </tr>
 
@@ -377,11 +383,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -425,7 +455,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated seqall qualifiers
+<td align="left" colspan=5>"-bsequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -494,11 +524,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -542,7 +596,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated align qualifiers
+<td align="left" colspan=5>"-outfile" associated align qualifiers
 </td>
 </tr>
 
@@ -619,7 +673,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-logfile" associated outfile qualifiers
+<td align="left" colspan=5>"-logfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -632,7 +686,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-aoutfeat" associated featout qualifiers
+<td align="left" colspan=5>"-aoutfeat" associated featout qualifiers
 </td>
 </tr>
 
@@ -685,7 +739,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-boutfeat" associated featout qualifiers
+<td align="left" colspan=5>"-boutfeat" associated featout qualifiers
 </td>
 </tr>
 
@@ -890,10 +944,10 @@ ID   HBA_HUMAN               Reviewed;         142 AA.
 AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   15-JUN-2010, entry version 86.
+DT   13-JUN-2012, entry version 108.
 DE   RecName: Full=Hemoglobin subunit alpha;
-DE   AltName: Full=Hemoglobin alpha chain;
 DE   AltName: Full=Alpha-globin;
+DE   AltName: Full=Hemoglobin alpha chain;
 GN   Name=HBA1;
 GN   and
 GN   Name=HBA2;
@@ -1001,10 +1055,10 @@ AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
 AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   15-JUN-2010, entry version 88.
+DT   13-JUN-2012, entry version 108.
 DE   RecName: Full=Hemoglobin subunit beta;
-DE   AltName: Full=Hemoglobin beta chain;
 DE   AltName: Full=Beta-globin;
+DE   AltName: Full=Hemoglobin beta chain;
 DE   Contains:
 DE     RecName: Full=LVV-hemorphin-7;
 GN   Name=HBB;
@@ -1179,7 +1233,7 @@ for further information on feature formats.
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -1207,12 +1261,12 @@ for further information on feature formats.
 <pre>
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.4.0.0
-HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID=HBA_HUMAN.1;note=HBB_HUMAN
-HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID=HBA_HUMAN.2;note=HBB_HUMAN
-HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID=HBA_HUMAN.3;note=HBB_HUMAN
+#!Source-version EMBOSS 6.5.0.0
+HBA_HUMAN	wordmatch	polypeptide_region	15	18	1	.	.	ID=HBA_HUMAN.1;note=HBB_HUMAN
+HBA_HUMAN	wordmatch	polypeptide_region	59	63	1	.	.	ID=HBA_HUMAN.2;note=HBB_HUMAN
+HBA_HUMAN	wordmatch	polypeptide_region	117	120	1	.	.	ID=HBA_HUMAN.3;note=HBB_HUMAN
 </pre>
 </td></tr></table><p>
 <p><h3>File: HBB_HUMAN.gff</h3>
@@ -1220,12 +1274,12 @@ HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID=HBA_HUMAN.3;note=HBB
 <pre>
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.4.0.0
-HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID=HBB_HUMAN.1;note=HBA_HUMAN
-HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID=HBB_HUMAN.2;note=HBA_HUMAN
-HBB_HUMAN	wordmatch	polypeptide_region	122	125	1.000	+	.	ID=HBB_HUMAN.3;note=HBA_HUMAN
+#!Source-version EMBOSS 6.5.0.0
+HBB_HUMAN	wordmatch	polypeptide_region	16	19	1	.	.	ID=HBB_HUMAN.1;note=HBA_HUMAN
+HBB_HUMAN	wordmatch	polypeptide_region	64	68	1	.	.	ID=HBB_HUMAN.2;note=HBA_HUMAN
+HBB_HUMAN	wordmatch	polypeptide_region	122	125	1	.	.	ID=HBB_HUMAN.3;note=HBA_HUMAN
 </pre>
 </td></tr></table><p>
 <p><h3>File: wordmatch.log</h3>
@@ -1377,10 +1431,8 @@ Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;embos
 
 Completed 27th November 1998.
 
-<!--
 <p>
 
--->
 
 <H2>
     Target users
@@ -1396,6 +1448,7 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 <pre>
+None
 
 </pre>
 

@@ -11,8 +11,8 @@ endsection: input
 
 section: output [ info: "Output section" type: "page" ]
 
-seqout:  output [ param: Y ]
+seqout:  outputfile [ param: Y ]
 
-outfile: outtest output [ param: Y odirectory: "$(outdir)" ]
+outfile: outtest outputfile [ param: Y odirectory: "$(outdir)" ]
 
 endsection: output

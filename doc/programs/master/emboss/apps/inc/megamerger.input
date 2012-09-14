@@ -55,13 +55,12 @@ FT                   /db_xref="InterPro:IPR013781"
 FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="InterPro:IPR017853"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="InterPro:IPR023230"
+FT                   /db_xref="InterPro:IPR023232"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
 FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
 FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
@@ -77,6 +76,7 @@ FT                   /db_xref="GOA:P07464"
 FT                   /db_xref="InterPro:IPR001451"
 FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="InterPro:IPR024688"
 FT                   /db_xref="PDB:1KQA"
 FT                   /db_xref="PDB:1KRR"
 FT                   /db_xref="PDB:1KRU"

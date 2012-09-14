@@ -44,7 +44,7 @@ Created pepinfo.ps
 Command line arguments
 
 Plot amino acid properties of a protein sequence in parallel.
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -78,7 +78,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -148,7 +151,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   15-JUN-2010, entry version 128.
+DT   13-JUN-2012, entry version 145.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
@@ -464,21 +467,21 @@ See also
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
-   cirdna           Draws circular maps of DNA constructs
+   cirdna           Draw circular map of DNA constructs
    compseq          Calculate the composition of unique words in sequences
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
    hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
    iep              Calculate the isoelectric point of proteins
-   lindna           Draws linear maps of DNA constructs
+   lindna           Draw linear maps of DNA constructs
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
    octanol          Draw a White-Wimley protein hydropathy plot
    oddcomp          Identify proteins with specified sequence word composition
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepnet           Draw a helical net for a protein sequence
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    pepwheel         Draw a helical wheel diagram for a protein sequence
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
@@ -488,7 +491,7 @@ See also
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
    showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
+   showpep          Display protein sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
    wordcount        Count and extract unique words in molecular sequence(s)
 

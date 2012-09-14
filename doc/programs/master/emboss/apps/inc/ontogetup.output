@@ -1,26 +1,27 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 0001234.obo</h3>
+<p><h3>File: 1234.obo</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM:0002977
+id: EDAM_data:2977
 name: Nucleic acid sequence
 namespace: data
 def: One or more nucleic acid sequences, possibly with associated annotation.
 subset: data
-is_a: EDAM:0002044 ! Sequence
-is_a: EDAM:0002525 ! Nucleic acid data
+synonym: "nucleotide sequence information" RELATED [http://purl.org/biotop/biotop.owl#NucleotideSequenceInformation]
+is_a: EDAM_data:2044 ! Sequence
 
 </pre>
 </td></tr></table><p>

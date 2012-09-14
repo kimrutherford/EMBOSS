@@ -29,7 +29,7 @@
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>

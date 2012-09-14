@@ -1,0 +1,427 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-assembly]<br>(Parameter 1)</td>
+<td>assembly</td>
+<td>(no help text) assembly value</td>
+<td>Assembly of sequence reads</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outassembly]<br>(Parameter 2)</td>
+<td>outassembly</td>
+<td>(no help text) outassembly value</td>
+<td>Assembly of sequence reads</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-gcbiasmetricsoutfile]<br>(Parameter 3)</td>
+<td>outfile</td>
+<td>GC bias metrics</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.infoassembly</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-qualvaluesdistoutfile]<br>(Parameter 4)</td>
+<td>outfile</td>
+<td>Distribution of quality values for the reads</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.infoassembly</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-refsequence</td>
+<td>seqset</td>
+<td>Reference sequences in the assembly</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-windowsize</td>
+<td>integer</td>
+<td>The size of windows on the genome that are used to bin reads.</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-bisulfite</td>
+<td>boolean</td>
+<td>If this is true, it is assumed that the reads were bisulfite treated</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-assembly" associated assembly qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -cbegin1<br>-cbegin_assembly</td>
+<td>integer</td>
+<td>Start of the contig/consensus sequences</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -cend1<br>-cend_assembly</td>
+<td>integer</td>
+<td>End of the contig/consensus sequences</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_assembly</td>
+<td>string</td>
+<td>Input assembly format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_assembly</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_assembly</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_assembly</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-refsequence" associated seqset qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -scircular</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outassembly" associated outassembly qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outassembly</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outassembly</td>
+<td>string</td>
+<td>Assembly output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-gcbiasmetricsoutfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory3<br>-odirectory_gcbiasmetricsoutfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-qualvaluesdistoutfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory4<br>-odirectory_qualvaluesdistoutfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>

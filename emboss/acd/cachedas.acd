@@ -1,9 +1,9 @@
 application: cachedas [
-  documentation: "Generates server cache file for DAS servers or for the DAS registry"
+  documentation: "Generate server cache file for DAS servers or for the DAS registry"
   groups: "Data resources"
   gui: "no"
-  relations: "EDAM:0000091 topic Data handling"
-  relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+  relations: "EDAM_topic:0091 Data handling"
+  relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input [
@@ -15,35 +15,35 @@ section: input [
     additional: "Y"
     default: "N"
     information: "Display DAS sequence sources only"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: host [
     default: "www.dasregistry.org"
     information: "DAS registry/server host location"
     knowntype: "url host address"
-    relations: "EDAM:0001047 data URI"
+    relations: "EDAM_data:1047 URI"
   ]
 
   string: path [
     default: "/das"
     information: "DAS registry/server path on registry/server host"
     knowntype: "url path"
-    relations: "EDAM:0001049 identifier Directory name"
+    relations: "EDAM_identifier:1049 Directory name"
   ]
 
   integer: port [
     default: "80"
     information: "DAS registry/server port on registry/server host"
     knowntype: "url port"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: servername [
     default: "das"
     information: "Name of a DAS server defined in EMBOSS resource files"
     knowntype: "emboss server name"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: input
@@ -57,15 +57,15 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "cachedas output"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
   outfile: cachefile [
     parameter: "Y"
     default:   "server.$(servername)"
     information: "Server cache output file"
-    knowntype: "emboss server cache "
-    relations: "EDAM:0000969 data Text"
+    knowntype: "emboss server cache file"
+    relations: "EDAM_data:2048 Report"
   ]
 
 endsection: output

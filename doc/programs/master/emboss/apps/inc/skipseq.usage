@@ -7,7 +7,7 @@ This does not skip any sequences. It is exactly equivalent to seqret:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>skipseq </b>
-Reads and writes (returns) sequences, skipping first few
+Read and write (return) sequences, skipping first few
 Input (gapped) sequence(s): <b>@eclac.list</b>
 Number of sequences to skip at start [0]: <b></b>
 output sequence(s) [j01636.fasta]: <b></b>
@@ -25,7 +25,7 @@ This skips the first input sequence, writing out the others:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>skipseq -skip 1 </b>
-Reads and writes (returns) sequences, skipping first few
+Read and write (return) sequences, skipping first few
 Input (gapped) sequence(s): <b>@eclac.list</b>
 output sequence(s) [j01636.fasta]: <b></b>
 

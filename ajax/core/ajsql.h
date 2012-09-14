@@ -1,10 +1,56 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajsql *************************************************************
+**
+** AJAX SQL functions
+**
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.14 $
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajsql_h
-#define ajsql_h
+#ifndef AJSQL_H
+#define AJSQL_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajarr.h"
+#include "ajtime.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -42,15 +88,21 @@ typedef struct AjSVoid
     ajuint Len;
     void **Ptr;
 } AjOVoid;
+
 #define AjPVoid AjOVoid*
 
 
 
 
-/* AjESqlconnectionClient *****************************************************
+/* @enum AjESqlconnectionClient ***********************************************
 **
 ** AJAX SQL Connection client library enumeration.
 **
+** @alias AjOSqlconnectionClient
+**
+** @value ajESqlconnectionClientNULL       Null
+** @value ajESqlconnectionClientMySQL      MySQL client
+** @value ajESqlconnectionClientPostgreSQL PostgreSQL client
 ******************************************************************************/
 
 typedef enum AjOSqlconnectionClient
@@ -185,9 +237,15 @@ typedef struct AjSSqlrowiter
     ajulong Current;
 } AjOSqlrowiter;
 
+#define AjISqlrow AjOSqlrowiter*
 #define AjPSqlrowiter AjOSqlrowiter*
 
-#define AjISqlrow AjOSqlrowiter*
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -280,7 +338,7 @@ AjBool ajSqlcolumnGetValue(AjPSqlrow sqlr, void **Pvalue,
 
 AjBool ajSqlcolumnToStr(AjPSqlrow sqlr, AjPStr *Pvalue);
 
-AjBool ajSqlcolumnToInt( AjPSqlrow sqlr, ajint *Pvalue);
+AjBool ajSqlcolumnToInt(AjPSqlrow sqlr, ajint *Pvalue);
 
 AjBool ajSqlcolumnToUint(AjPSqlrow sqlr, ajuint *Pvalue);
 
@@ -290,7 +348,7 @@ AjBool ajSqlcolumnToUlong(AjPSqlrow sqlr, ajulong *Pvalue);
 
 AjBool ajSqlcolumnToFloat(AjPSqlrow sqlr, float *Pvalue);
 
-AjBool ajSqlcolumnToDouble( AjPSqlrow sqlr, double *Pvalue);
+AjBool ajSqlcolumnToDouble(AjPSqlrow sqlr, double *Pvalue);
 
 AjBool ajSqlcolumnToBool(AjPSqlrow sqlr, AjBool *Pvalue);
 
@@ -353,8 +411,6 @@ AjBool ajVoidPut(AjPVoid *thys, ajuint elem, void *v);
 
 
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !AJSQL_H */

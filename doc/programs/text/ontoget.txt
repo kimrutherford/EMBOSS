@@ -25,9 +25,9 @@ Usage
    Here is a sample session with ontoget
 
 
-% ontoget edam:0001234
+% ontoget edam:1234
 Get ontology term(s)
-Obo output file [0001234.obo]:
+Obo output file [1234.obo]:
 
 
    Go to the input files for this example
@@ -36,9 +36,9 @@ Obo output file [0001234.obo]:
    Example 2
 
 
-% ontoget edam:0000850 -subclasses
+% ontoget edam:0850 -subclasses
 Get ontology term(s)
-Obo output file [0000850.obo]:
+Obo output file [0850.obo]:
 
 
    Go to the input files for this example
@@ -47,7 +47,7 @@ Obo output file [0000850.obo]:
 Command line arguments
 
 Get ontology term(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -67,6 +67,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -95,35 +97,36 @@ Input file format
 
   Input files for usage example
 
-  Database entry: edam:0001234
+  Database entry: edam:1234
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 
   Input files for usage example 2
 
-  Database entry: edam:0000850
+  Database entry: edam:0850
 
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that d
 o not (typically) correspond to molecular sequence database records or entries a
 nd which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data a
-rising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated dat
+a arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 
 Output file format
@@ -140,142 +143,141 @@ Output file format
 
   Output files for usage example
 
-  File: 0001234.obo
+  File: 1234.obo
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 
   Output files for usage example 2
 
-  File: 0000850.obo
+  File: 0850.obo
 
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that d
 o not (typically) correspond to molecular sequence database records or entries a
 nd which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data a
-rising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated dat
+a arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 [Term]
-id: EDAM:0001240
+id: EDAM_data:1239
+name: Restriction digest
+namespace: data
+def: Restriction digest fragments from digesting a nucleotide sequence with rest
+riction sites using a restriction endonuclease.
+subset: data
+xref: SO:0000412
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM_data:1240
 name: PCR primers
 namespace: data
 def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a mini
 mal primer set.
 subset: data
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
 
 [Term]
-id: EDAM:0001246
+id: EDAM_data:1246
 name: Sequence cluster (nucleic acid)
 namespace: data
 def: A cluster of nucleotide sequences.
 comment: The sequences are typically related, for example a family of sequences.
 subset: data
-synonym: "Nucleotide sequence cluster" EXACT []
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-is_a: EDAM:0001235 ! Sequence cluster
+synonym: "Nucleotide sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:1235 ! Sequence cluster
 
 [Term]
-id: EDAM:0002198
-name: Gene cluster
-namespace: data
-def: A cluster of similar genes.
-subset: data
-is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
-
-[Term]
-id: EDAM:0002874
-name: Sequence set (polymorphic)
-namespace: data
-def: A set of sub-sequences displaying some type of polymorphism, typically indi
-cating the sequence in which they occur, their position and other metadata.
+id: EDAM_data:0925
+name: Sequence assembly
 
 
   [Part of this file has been deleted for brevity]
 
-def: Any collection of multiple protein sequences and associated metadata that d
-o not (typically) correspond to common sequence database records or database ent
-ries.
+comment: The cluster might include sequences identifiers, short descriptions, al
+ignment and summary information.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
+relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
 
 [Term]
-id: EDAM:0001245
+id: EDAM_data:1245
 name: Sequence cluster (protein)
 namespace: data
 def: A cluster of protein sequences.
 comment: The sequences are typically related, for example a family of sequences.
 subset: data
-synonym: "Protein sequence cluster" EXACT []
-is_a: EDAM:0001233 ! Sequence set (protein)
-is_a: EDAM:0001235 ! Sequence cluster
+synonym: "Protein sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1233 ! Sequence set (protein)
+is_a: EDAM_data:1235 ! Sequence cluster
 
 [Term]
-id: EDAM:0001238
-name: Proteolytic digest
-namespace: data
-def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical
- cleavage) with fragment masses.
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001262
-name: Peptide molecular weight hits
-namespace: data
-def: A report on peptide fragments of certain molecular weight(s) in one or more
- protein sequences.
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001235
-name: Sequence cluster
-namespace: data
-def: A set of sequences that have been clustered or otherwise classified as belo
-nging to a group including (typically) sequence cluster information.
-comment: The cluster might include sequences identifiers, short descriptions, al
-ignment and summary information.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-relationship: in_topic EDAM:0000164 ! Sequence clustering
-relationship: in_topic EDAM:0000724 ! Protein families
-
-[Term]
-id: EDAM:0002245
+id: EDAM_data:2245
 name: Sequence set (bootstrapped)
 namespace: data
 def: A collection of sequences output from a bootstrapping (resampling) procedur
 e.
 comment: Bootstrapping is often performed in phylogenetic analysis.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that d
+o not (typically) correspond to common sequence database records or database ent
+ries.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1238
+name: Proteolytic digest
+namespace: data
+def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical
+ cleavage) with fragment masses.
+subset: data
+is_a: EDAM_data:1233 ! Sequence set (protein)
+relationship: has_topic EDAM_topic:0767 ! Protein and peptide identification
+
+[Term]
+id: EDAM_data:1262
+name: Peptide molecular weight hits
+namespace: data
+def: A report on peptide fragments of certain molecular weight(s) in one or more
+ protein sequences.
+subset: data
+is_a: EDAM_data:1233 ! Sequence set (protein)
 
 
 Data files

@@ -1,10 +1,59 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embdbi ************************************************************
+**
+** General routines for alignment.
+**
+** @author Copyright (c) 2000 Peter Rice
+** @version $Revision: 1.24 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embdbi_h
-#define embdbi_h
+#ifndef EMBDBI_H
+#define EMBDBI_H
+
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajfile.h"
+#include "ajlist.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -59,6 +108,12 @@ typedef struct EmbSEntry {
 } EmbOEntry;
 #define EmbPEntry EmbOEntry*
 
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -165,8 +220,6 @@ void      embDbiWriteTrg (AjPFile file, ajuint maxfieldlen,
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBDBI_H */

@@ -1,31 +1,40 @@
-/******************************************************************************
-** @source AJAX data resource functions
+/* @source ajresource *********************************************************
+**
+** AJAX data resource functions
 **
 ** These functions control all aspects of AJAX data resource
 ** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version  $Revision: 1.31 $
 ** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajresource.h"
+#include "ajlist.h"
+#include "ajresourceread.h"
+#include "ajresourcewrite.h"
+#include "ajnam.h"
 
 static AjPStr resourceTempQry = NULL;
 static void resourceMakeQry(const AjPResource thys, AjPStr* qry);
@@ -82,6 +91,8 @@ static void resourceMakeQry(const AjPResource thys, AjPStr* qry);
 ** Resource data constructor
 **
 ** @return [AjPResource] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -122,6 +133,8 @@ AjPResource ajResourceNew(void)
 **
 ** @param [r] dbname [const AjPStr] DRCAT identifier
 ** @return [AjPResource] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -150,6 +163,8 @@ AjPResource ajResourceNewDrcat(const AjPStr dbname)
 ** @param [r] res [const AjPResource] Resource object
 ** @return [AjPResource] Resource object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPResource ajResourceNewResource(const AjPResource res)
@@ -214,6 +229,8 @@ AjPResource ajResourceNewResource(const AjPResource res)
 **
 ** @param [d] Presource  [AjPResource*] Data resource data object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -364,6 +381,8 @@ void ajResourceDel(AjPResource *Presource)
 ** @param [w] qry [AjPQuery] Query object.
 ** @param [f] findformat [AjBool function] Find format function for datatype
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -378,6 +397,8 @@ AjBool ajResourceGetDbdata(const AjPResource resource, AjPQuery qry,
 
     if(!resource)
         return ajFalse;
+
+    qry->InDrcat = ajTrue;
 
     ajStrAssignC(&qry->DbType, ajNamQueryGetDatatypeC(qry));
 
@@ -446,6 +467,8 @@ AjBool ajResourceGetDbdata(const AjPResource resource, AjPQuery qry,
 **
 ** @return [const AjPStr] Returned entry text
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajResourceGetEntry(const AjPResource resource)
@@ -467,6 +490,8 @@ const AjPStr ajResourceGetEntry(const AjPResource resource)
 **
 ** @return [const AjPStr] Returned id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajResourceGetId(const AjPResource resource)
@@ -487,6 +512,8 @@ const AjPStr ajResourceGetId(const AjPResource resource)
 **
 ** @param [r] resource [const AjPResource] Data resource data object.
 ** @return [const char*] Query as a character string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -508,6 +535,8 @@ const char* ajResourceGetQryC(const AjPResource resource)
 **
 ** @param [r] resource [const AjPResource] Data resource data object.
 ** @return [const AjPStr] Query as a string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -533,6 +562,8 @@ const AjPStr ajResourceGetQryS(const AjPResource resource)
 ** @param [r] thys [const AjPResource] Data resource data object
 ** @param [w] qry [AjPStr*] Query string in full
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -587,6 +618,8 @@ static void resourceMakeQry(const AjPResource thys, AjPStr* qry)
 **
 ** @param [u] resource [AjPResource] Data resource data object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -717,6 +750,8 @@ void ajResourceClear(AjPResource resource)
 ** @param [r] thys [const AjPResource] Resource object
 ** @return [void]
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajResourceTrace(const AjPResource thys)
@@ -740,7 +775,7 @@ void ajResourceTrace(const AjPResource thys)
     ajDebug("      Desc: %S\n", thys->Desc);
     ajDebug("       Url: %S\n", thys->Url);
 
-    ajDebug("     Idalt: %d\n", ajListGetLength(thys->Idalt));
+    ajDebug("     Idalt: %Lu\n", ajListGetLength(thys->Idalt));
     if(ajListGetLength(thys->Idalt))
     {
         i=0;
@@ -753,7 +788,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("       Cat: %d\n", ajListGetLength(thys->Cat));
+    ajDebug("       Cat: %Lu\n", ajListGetLength(thys->Cat));
     if(ajListGetLength(thys->Cat))
     {
         i = 0;
@@ -766,7 +801,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("     Taxon: %d\n", ajListGetLength(thys->Taxon));
+    ajDebug("     Taxon: %Lu\n", ajListGetLength(thys->Taxon));
     if(ajListGetLength(thys->Taxon))
     {
         i = 0;
@@ -779,7 +814,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("   Edamtpc: %d\n", ajListGetLength(thys->Edamtpc));
+    ajDebug("   Edamtpc: %Lu\n", ajListGetLength(thys->Edamtpc));
     if(ajListGetLength(thys->Edamtpc))
     {
         i = 0;
@@ -792,7 +827,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("   Edamdat: %d\n", ajListGetLength(thys->Edamdat));
+    ajDebug("   Edamdat: %Lu\n", ajListGetLength(thys->Edamdat));
     if(ajListGetLength(thys->Edamdat))
     {
         i = 0;
@@ -805,7 +840,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("    Edamid: %d\n", ajListGetLength(thys->Edamid));
+    ajDebug("    Edamid: %Lu\n", ajListGetLength(thys->Edamid));
     if(ajListGetLength(thys->Edamid))
     {
         i = 0;
@@ -818,7 +853,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("   Edamfmt: %d\n", ajListGetLength(thys->Edamfmt));
+    ajDebug("   Edamfmt: %Lu\n", ajListGetLength(thys->Edamfmt));
     if(ajListGetLength(thys->Edamfmt))
     {
         i = 0;
@@ -831,7 +866,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("      Xref: %d\n", ajListGetLength(thys->Xref));
+    ajDebug("      Xref: %Lu\n", ajListGetLength(thys->Xref));
     if(ajListGetLength(thys->Xref))
     {
         i = 0;
@@ -844,7 +879,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("     Query: %d\n", ajListGetLength(thys->Query));
+    ajDebug("     Query: %Lu\n", ajListGetLength(thys->Query));
     if(ajListGetLength(thys->Query))
     {
         i = 0;
@@ -859,7 +894,7 @@ void ajResourceTrace(const AjPResource thys)
         ajListIterDel(&iter);
     }
     
-    ajDebug("  Example: %d\n", ajListGetLength(thys->Example));
+    ajDebug("  Example: %Lu\n", ajListGetLength(thys->Example));
     if(ajListGetLength(thys->Example))
     {
         i = 0;
@@ -909,12 +944,14 @@ void ajResourceTrace(const AjPResource thys)
 
 
 
-/* @func ajReslinkNew ********************************************************
+/* @func ajReslinkNew *********************************************************
 **
 ** Constructor for a public resource link object
 **
 ** @return [AjPReslink] Resource link object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPReslink ajReslinkNew(void)
@@ -936,6 +973,8 @@ AjPReslink ajReslinkNew(void)
 ** @param [r] reslink [const AjPReslink] Source resource link object
 ** @return [AjPReslink] Resource link object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPReslink ajReslinkNewReslink(const AjPReslink reslink)
@@ -984,6 +1023,8 @@ AjPReslink ajReslinkNewReslink(const AjPReslink reslink)
 **
 ** @param [d] Preslink [AjPReslink*] Resource link object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajReslinkDel(AjPReslink *Preslink)
@@ -1037,13 +1078,15 @@ void ajReslinkDel(AjPReslink *Preslink)
 
 
 
-/* @func ajReslinklistClone ****************************************************
+/* @func ajReslinklistClone ***************************************************
 **
 ** Copy a list of resource links to another list
 **
 ** @param [r] src [const AjPList] Source list of resource links
 ** @param [w] dest [AjPList] Destination list of resource links
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajReslinklistClone(const AjPList src, AjPList dest)
@@ -1108,6 +1151,8 @@ AjBool ajReslinklistClone(const AjPList src, AjPList dest)
 **
 ** @return [AjPResquery] Resource query object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPResquery ajResqueryNew(void)
@@ -1129,6 +1174,8 @@ AjPResquery ajResqueryNew(void)
 ** @param [r] qry [const AjPResquery] Source resource query object
 ** @return [AjPResquery] Resource query object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPResquery ajResqueryNewResquery(const AjPResquery qry)
@@ -1180,6 +1227,8 @@ AjPResquery ajResqueryNewResquery(const AjPResquery qry)
 **
 ** @param [d] Presquery [AjPResquery*] Resource query object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajResqueryDel(AjPResquery *Presquery)
@@ -1236,13 +1285,15 @@ void ajResqueryDel(AjPResquery *Presquery)
 
 
 
-/* @func ajResquerylistClone ***************************************************
+/* @func ajResquerylistClone **************************************************
 **
 ** Copy a list of resource queries to another list
 **
 ** @param [r] src [const AjPList] Source list of resource queries
 ** @param [w] dest [AjPList] Destination list of resource queries
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajResquerylistClone(const AjPList src, AjPList dest)
@@ -1301,12 +1352,14 @@ AjBool ajResquerylistClone(const AjPList src, AjPList dest)
 
 
 
-/* @func ajRestermNew ********************************************************
+/* @func ajRestermNew *********************************************************
 **
 ** Constructor for a public resource term object
 **
 ** @return [AjPResterm] Resource term object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPResterm ajRestermNew(void)
@@ -1328,6 +1381,8 @@ AjPResterm ajRestermNew(void)
 ** @param [r] term [const AjPResterm] Source resource term object
 ** @return [AjPResterm] Resource term object
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPResterm ajRestermNewResterm(const AjPResterm term)
@@ -1374,6 +1429,8 @@ AjPResterm ajRestermNewResterm(const AjPResterm term)
 **
 ** @param [d] Presterm [AjPResterm*] Resource term object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajRestermDel(AjPResterm *Presterm)
@@ -1427,13 +1484,15 @@ void ajRestermDel(AjPResterm *Presterm)
 
 
 
-/* @func ajRestermlistClone ****************************************************
+/* @func ajRestermlistClone ***************************************************
 **
 ** Copy a list of resource terms to another list
 **
 ** @param [r] src [const AjPList] Source list of resource terms
 ** @param [w] dest [AjPList] Destination list of resource terms
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajRestermlistClone(const AjPList src, AjPList dest)
@@ -1495,6 +1554,8 @@ AjBool ajRestermlistClone(const AjPList src, AjPList dest)
 ** Cleans up data processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

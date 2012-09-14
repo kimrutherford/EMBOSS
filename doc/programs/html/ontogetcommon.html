@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -85,7 +85,7 @@ Here is a sample session with <b>ontogetcommon</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontogetcommon "edam:{0000108,0000110}" </b>
+% <b>ontogetcommon "edam:{0097,0640}" </b>
 Get common ancestor for terms
 Obo output file [ontogetcommon.obo]: <b></b>
 
@@ -102,7 +102,7 @@ Obo output file [ontogetcommon.obo]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Get common ancestor for terms
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -120,6 +120,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -200,7 +202,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+<td align="left" colspan=5>"-oboterms" associated obo qualifiers
 </td>
 </tr>
 
@@ -213,6 +215,22 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_oboterms</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_oboterms</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -idbname1<br>-idbname_oboterms</td>
 <td>string</td>
 <td>User-provided database name</td>
@@ -221,7 +239,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+<td align="left" colspan=5>"-outfile" associated outobo qualifiers
 </td>
 </tr>
 
@@ -374,26 +392,27 @@ IT IS DONE FOR YOU.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: "edam:{0000108,0000110}"</h3>
+<p><h3>Database entry: "edam:{0097,0640}"</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000110
-name: Transcription
+id: EDAM_topic:0640
+name: Nucleic acid sequence analysis
 namespace: topic
-def: The study of the transcription of DNA into mRNA and transcription regulation including transcription factors and regulatory motifs, elements or regions in DNA sequences.
-comment: This includes promoters, enhancers, silencers and boundary elements / insulators.
-subset: topic
-xref: BioCatalogue:Transcription Factors
-is_a: EDAM:0000197 ! Gene expression and regulation
+def: Processing and analysis of nucleotide sequences and sequence-based entities such as alignments, motifs and profiles.
+subset: topics
+xref: BioCatalogue:Nucleotide Sequence Analysis
+is_a: EDAM_topic:0080 ! Sequence analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 [Term]
-id: EDAM:0000108
-name: Translation
+id: EDAM_topic:0097
+name: Nucleic acid structure analysis
 namespace: topic
-def: The study of the translation of mRNA into protein.
-subset: topic
-is_a: EDAM:0000197 ! Gene expression and regulation
+def: The processing and analysis of nucleic acid (secondary or tertiary) structural data.
+subset: topics
+is_a: EDAM_topic:0081 ! Structure analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
 </td></tr></table><p>
@@ -434,15 +453,15 @@ for further information on ontology formats.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0000197
-name: Gene expression and regulation
+id: EDAM_topic:0077
+name: Nucleic acid analysis
 namespace: topic
-def: The study of gene expression and regulation (genetic information that is used in the synthesis of a protein).
-comment: This involves analysis of microarray data, northern blots, gene-indexed expression profiles etc.
-alt_id: EDAM:0000631
-alt_id: EDAM:0000204
-subset: topic
-is_a: EDAM:0002816 ! Genes
+def: Processing and analysis of nucleic acid data, typically (but not exclusively) nucleic acid sequence analysis.
+subset: topics
+synonym: "Nucleic acids" EXACT [http://edamontology.org]
+synonym: "Nucleic acid informatics" EXACT [http://edamontology.org]
+synonym: "Nucleic acid bioinformatics" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
 
 </pre>
 </td></tr></table><p>

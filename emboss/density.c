@@ -233,6 +233,7 @@ int main(int argc, char **argv)
 
         if(graph)
         {
+            ajGraphSetDatanameS(graph, ajSeqGetNameS(seq));
             ajGraphxySetflagOverlay(graph,ajTrue);
             ajGraphSetXlabelC(graph,"Position");
             ajGraphSetYlabelC(graph,"Density");
@@ -520,22 +521,22 @@ static void density_ReportHits(AjPFeattable TabRpt, const PNucDensity density,
 			   (ajint)density->pos[i]);	
 
         ajFmtPrintS(&str,"*a %.3f",density->a[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
 
         ajFmtPrintS(&str,"*c %.3f",density->c[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
 
         ajFmtPrintS(&str,"*g %.3f",density->g[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
 
         ajFmtPrintS(&str,"*t %.3f",density->t[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
 
         ajFmtPrintS(&str,"*at %.3f",density->at[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
 
         ajFmtPrintS(&str,"*gc %.3f",density->gc[i]);
-        ajFeatTagAdd(feat, NULL, str);
+        ajFeatTagAddSS(feat, NULL, str);
     }
 
     ajStrDel(&str);

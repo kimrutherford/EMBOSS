@@ -4,9 +4,9 @@ Here is a sample session with <b>ontogetsibs</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontogetsibs edam:0000575 </b>
+% <b>ontogetsibs edam:0575 </b>
 Get ontology term(s) by id with common parent
-Obo output file [0000575.obo]: <b></b>
+Obo output file [0575.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

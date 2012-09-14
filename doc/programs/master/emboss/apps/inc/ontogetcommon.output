@@ -5,15 +5,15 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0000197
-name: Gene expression and regulation
+id: EDAM_topic:0077
+name: Nucleic acid analysis
 namespace: topic
-def: The study of gene expression and regulation (genetic information that is used in the synthesis of a protein).
-comment: This involves analysis of microarray data, northern blots, gene-indexed expression profiles etc.
-alt_id: EDAM:0000631
-alt_id: EDAM:0000204
-subset: topic
-is_a: EDAM:0002816 ! Genes
+def: Processing and analysis of nucleic acid data, typically (but not exclusively) nucleic acid sequence analysis.
+subset: topics
+synonym: "Nucleic acids" EXACT [http://edamontology.org]
+synonym: "Nucleic acid informatics" EXACT [http://edamontology.org]
+synonym: "Nucleic acid bioinformatics" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
 
 </pre>
 </td></tr></table><p>

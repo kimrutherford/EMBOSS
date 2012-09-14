@@ -184,8 +184,11 @@ int main(int argc, char **argv)
 		     xa, ta, tpa, cga, &npoints);
 
 	if(doplot)
+        {
+            ajGraphSetDatanameS(mult, ajSeqGetNameS(seq));
 	    dan_plotit(seq,xa,ta,npoints,begin,end, mult,
 		       mintemp);
+        }
 
 	dan_unfmall(xa, ta, tpa, cga);
 	ajStrDel(&strand);
@@ -443,17 +446,17 @@ static void dan_reportgc(const AjPSeq seq, AjPFeattable TabRpt,
 	  gf = ajFeatNewII(TabRpt,
 			   ibegin+1, iend+1);
 	  ajFmtPrintS(&tmpStr, "*tm %4.1f", ta[*np]);
-	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  ajFeatTagAddSS(gf,  NULL, tmpStr);
 	  ajFmtPrintS(&tmpStr, "*gc %4.1f", cga[*np]);
-	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  ajFeatTagAddSS(gf,  NULL, tmpStr);
 	  if(dothermo)
 	  {
 	      ajFmtPrintS (&tmpStr, "*dg %.3f", DeltaG);
-	      ajFeatTagAdd(gf,  NULL, tmpStr);
+	      ajFeatTagAddSS(gf,  NULL, tmpStr);
 	      ajFmtPrintS (&tmpStr, "*dh %.3f", DeltaH);
-	      ajFeatTagAdd(gf,  NULL, tmpStr);
+	      ajFeatTagAddSS(gf,  NULL, tmpStr);
 	      ajFmtPrintS (&tmpStr, "*ds %.3f", DeltaS);
-	      ajFeatTagAdd(gf,  NULL, tmpStr);
+	      ajFeatTagAddSS(gf,  NULL, tmpStr);
 	  }
 	}
 	if(isproduct)
@@ -467,7 +470,7 @@ static void dan_reportgc(const AjPSeq seq, AjPFeattable TabRpt,
 	    if(!doplot)
 	    {
 		ajFmtPrintS (&tmpStr, "*tmprod %4.1f", tpa[*np]);
-		ajFeatTagAdd(gf,  NULL, tmpStr);
+		ajFeatTagAddSS(gf,  NULL, tmpStr);
 	    }
 	}
 

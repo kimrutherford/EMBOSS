@@ -10,6 +10,7 @@ Basename for index files: <b>emrod</b>
 Resource name: <b>emblresource</b>
     simple : >ID
      idacc : >ID ACC or >ID (ACC)
+      idsv : >ID SV or >ID (SV)
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
       dbid : >db ID

@@ -5,7 +5,7 @@ Here is a sample session with <b>pepstats</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepstats </b>
-Calculates statistics of protein properties
+Calculate statistics of protein properties
 Input protein sequence(s): <b>tsw:laci_ecoli</b>
 Pepstats program output file [laci_ecoli.pepstats]: <b></b>
 

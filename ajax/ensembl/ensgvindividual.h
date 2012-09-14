@@ -1,10 +1,37 @@
+/* @include ensgvindividual ***************************************************
+**
+** Ensembl Genetic Variation Individual functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.15 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSGVINDIVIDUAL_H
 #define ENSGVINDIVIDUAL_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvsample.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -50,7 +77,7 @@ EnsPGvindividual ensGvindividualNewIni(EnsPGvindividualadaptor gvia,
 
 EnsPGvindividual ensGvindividualNewRef(EnsPGvindividual gvi);
 
-void ensGvindividualDel(EnsPGvindividual* Pgvi);
+void ensGvindividualDel(EnsPGvindividual *Pgvi);
 
 EnsPGvindividualadaptor ensGvindividualGetAdaptor(const EnsPGvindividual gvi);
 
@@ -98,11 +125,11 @@ size_t ensGvindividualCalculateMemsize(const EnsPGvindividual gvi);
 
 EnsEGvindividualGender ensGvindividualGenderFromStr(const AjPStr gender);
 
-const char* ensGvindividualGenderToChar(EnsEGvindividualGender gvig);
+const char *ensGvindividualGenderToChar(EnsEGvindividualGender gvig);
 
 EnsEGvindividualType ensGvindividualTypeFromStr(const AjPStr type);
 
-const char* ensGvindividualTypeToChar(EnsEGvindividualType gvit);
+const char *ensGvindividualTypeToChar(EnsEGvindividualType gvit);
 
 /* Ensembl Genetic Variation Individual Adaptor */
 
@@ -112,7 +139,7 @@ EnsPGvindividualadaptor ensRegistryGetGvindividualadaptor(
 EnsPGvindividualadaptor ensGvindividualadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensGvindividualadaptorDel(EnsPGvindividualadaptor* Pgvia);
+void ensGvindividualadaptorDel(EnsPGvindividualadaptor *Pgvia);
 
 EnsPGvsampleadaptor ensGvindividualadaptorGetBaseadaptor(
     EnsPGvindividualadaptor gvia);
@@ -165,11 +192,11 @@ AjBool ensGvindividualadaptorFetchAllbySynonym(
 AjBool ensGvindividualadaptorFetchByIdentifier(
     EnsPGvindividualadaptor gvia,
     ajuint identifier,
-    EnsPGvindividual* Pgvi);
+    EnsPGvindividual *Pgvi);
 
 AjBool ensGvindividualadaptorFetchReference(
     EnsPGvindividualadaptor gvia,
-    EnsPGvindividual* Pgvi);
+    EnsPGvindividual *Pgvi);
 
 /*
 ** End of prototype definitions

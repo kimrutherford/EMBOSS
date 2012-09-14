@@ -1,10 +1,55 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajcod *************************************************************
+**
+** AJAX codon functions
+**
+** @author Copyright (C) 1999 Alan Bleasby
+** @version $Revision: 1.27 $
+** @modified Aug 07 ajb First version
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajcod_h
-#define ajcod_h
+#ifndef AJCOD_H
+#define AJCOD_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajfile.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -56,7 +101,16 @@ typedef struct AjSCod
     ajint GeneticCode;
     char Padding[4];
 } AjOCod;
+
 #define AjPCod AjOCod*
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
 
 
 
@@ -79,7 +133,7 @@ void         ajCodSetSpeciesC(AjPCod thys, const char* species);
 void         ajCodSetSpeciesS(AjPCod thys, const AjPStr species);
 void         ajCodBacktranslate(AjPStr *b, const AjPStr a, const AjPCod thys);
 void         ajCodBacktranslateAmbig(AjPStr *b, const AjPStr a,
-				     const AjPCod thys);
+                                     const AjPCod thys);
 ajint        ajCodBase(ajint c);
 double       ajCodCalcCaiCod(const AjPCod thys);
 double       ajCodCalcCaiSeq(const AjPCod cod, const AjPStr str);
@@ -89,9 +143,9 @@ void         ajCodCalcUsage(AjPCod thys, ajint c);
 void         ajCodClear(AjPCod thys);
 void         ajCodClearData(AjPCod thys);
 void         ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT,
-		       const char *str);
+                       const char *str);
 void         ajCodSetTripletsS(AjPCod thys, const AjPStr s, ajint *c);
-void         ajCodDel (AjPCod *thys);
+void         ajCodDel(AjPCod *thys);
 ajint        ajCodGetCode(const AjPCod thys);
 const AjPStr ajCodGetDesc(const AjPCod thys);
 const char*  ajCodGetDescC(const AjPCod thys);
@@ -109,14 +163,14 @@ const AjPStr ajCodGetSpecies(const AjPCod thys);
 const char*  ajCodGetSpeciesC(const AjPCod thys);
 ajint        ajCodIndex(const AjPStr s);
 ajint        ajCodIndexC(const char *codon);
-AjPCod	     ajCodNew(void);
-AjPCod	     ajCodNewCodenum(ajint code);
-AjPCod       ajCodNewCod (const AjPCod thys);
+AjPCod       ajCodNew(void);
+AjPCod       ajCodNewCodenum(ajint code);
+AjPCod       ajCodNewCod(const AjPCod thys);
 AjBool       ajCodRead(AjPCod thys, const AjPStr fn, const AjPStr format);
 void         ajCodSetBacktranslate(AjPCod thys);
 char*        ajCodTriplet(ajint idx);
-void 	     ajCodWrite(AjPCod thys, AjPFile outf);
-void 	     ajCodWriteOut( const AjPCod thys, AjPOutfile outf);
+void         ajCodWrite(AjPCod thys, AjPFile outf);
+void         ajCodWriteOut(const AjPCod thys, AjPOutfile outf);
 AjBool       ajCodoutformatFind(const AjPStr name, ajint *iformat);
 void         ajCodPrintFormat(AjPFile outf, AjBool full);
 
@@ -124,9 +178,17 @@ void         ajCodPrintFormat(AjPFile outf, AjBool full);
 ** End of prototype definitions
 */
 
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+#ifdef AJ_COMPILE_DEPRECATED
+
 __deprecated ajint        ajCodOutFormat(const AjPStr name);
-__deprecated AjPCod       ajCodDup (const AjPCod thys);
-__deprecated AjPCod	  ajCodNewCode(ajint code);
+__deprecated AjPCod       ajCodDup(const AjPCod thys);
+__deprecated AjPCod       ajCodNewCode(ajint code);
 __deprecated void         ajCodAssCode(AjPCod thys, ajint geneticcode);
 __deprecated void         ajCodAssDesc(AjPCod thys, const AjPStr desc);
 __deprecated void         ajCodAssDescC(AjPCod thys, const char* desc);
@@ -145,8 +207,11 @@ __deprecated void         ajCodCountTriplets(AjPCod thys,
 __deprecated double       ajCodCalcCai(const AjPCod cod, const AjPStr str);
 __deprecated void         ajCodCalculateUsage(AjPCod thys, ajint c);
 
-#endif
+#endif /* AJ_COMPILE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJCOD_H */

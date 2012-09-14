@@ -56,7 +56,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-first" associated codon qualifiers
+<td align="left" colspan=5>"-first" associated codon qualifiers
 </td>
 </tr>
 
@@ -69,7 +69,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-second" associated codon qualifiers
+<td align="left" colspan=5>"-second" associated codon qualifiers
 </td>
 </tr>
 
@@ -82,7 +82,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

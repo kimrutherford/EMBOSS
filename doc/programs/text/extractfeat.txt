@@ -66,7 +66,7 @@ output sequence [x65921.fasta]:
 
 % extractfeat "tembl:*"  -type exon -before 5 -after -5
 Extract features from sequence(s)
-output sequence [h45989.fasta]:
+output sequence [em498477.fasta]:
 
 
    Go to the output files for this example
@@ -90,8 +90,7 @@ output sequence [x65921.fasta]:
 
 % extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4
 Extract features from sequence(s)
-output sequence [12s1_arath.fasta]:
-ajSeqxrefNewDbS '1-I' 'FT025'
+output sequence [cru4_arath.fasta]:
 
 
    Go to the output files for this example
@@ -99,7 +98,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 Command line arguments
 
 Extract features from sequence(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -287,7 +286,10 @@ ion
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -358,7 +360,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -371,6 +373,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -379,15 +390,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -491,7 +493,7 @@ caatgccaactcttaagtcttttgta
 
   Output files for usage example 3
 
-  File: h45989.fasta
+  File: em498477.fasta
 
 >X65921_408_504 [exon] H.sapiens fau 1 gene
 ctcagcagtg
@@ -632,62 +634,154 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
 
   Output files for usage example 5
 
-  File: 12s1_arath.fasta
+  File: cru4_arath.fasta
 
->AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquap
-orin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and k
-idney proximal tubule) (Urine water channel)
+>CRU4_ARATH_52_52 [post_translationally_modified_region] 12S seed storage protei
+n CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage pr
+otein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protei
+n CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storag
+e protein CRU4 basic chain) (Precursor)
+VLKSEAG
+>CRU4_ARATH_96_96 [post_translationally_modified_region] 12S seed storage protei
+n CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage pr
+otein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protei
+n CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storag
+e protein CRU4 basic chain) (Precursor)
+AKLSFVA
+>CRU4_ARATH_314_314 [post_translationally_modified_region] 12S seed storage prot
+ein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage
+protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage prot
+ein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed stor
+age protein CRU4 basic chain) (Precursor)
+GYISTLN
+>AQP1_HUMAN_247_247 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (
+Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells
+ and kidney proximal tubule)
 VWTSGQV
->AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquap
-orin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and k
-idney proximal tubule) (Urine water channel)
+>AQP1_HUMAN_262_262 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (
+Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells
+ and kidney proximal tubule)
 DINSRVE
->GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General
- control protein GCN4 (Amino acid biosynthesis regulatory protein)
+>GCN4_YEAST_17_17 [post_translationally_modified_region] General control protein
+ GCN4 (Amino acid biosynthesis regulatory protein)
 MGFSPLD
->GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] Gener
-al control protein GCN4 (Amino acid biosynthesis regulatory protein)
+>GCN4_YEAST_218_218 [post_translationally_modified_region] General control prote
+in GCN4 (Amino acid biosynthesis regulatory protein)
 IPLSPIV
->OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodo
-psin (Opsin-2)
+>OPSD_HUMAN_334_334 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 DEASATV
->OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodo
-psin (Opsin-2)
+>OPSD_HUMAN_338_338 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 ATVSKTE
->OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodo
-psin (Opsin-2)
+>OPSD_HUMAN_343_343 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 TETSQVA
->PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxilli
-n
+>PAX3_HUMAN_201_201 [post_translationally_modified_region] Paired box protein Pa
+x-3 (HuP2)
+APQSDEG
+>PAX3_HUMAN_205_205 [post_translationally_modified_region] Paired box protein Pa
+x-3 (HuP2)
+DEGSDID
+>PAX3_HUMAN_209_209 [post_translationally_modified_region] Paired box protein Pa
+x-3 (HuP2)
+DIDSEPD
+>PAXI_HUMAN_83_83 [post_translationally_modified_region] Paxillin
 QPQSSSP
->PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxilli
-n
+>PAXI_HUMAN_84_84 [post_translationally_modified_region] Paxillin
+PQSSSPV
+>PAXI_HUMAN_85_85 [post_translationally_modified_region] Paxillin
 QSSSPVY
->PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_106_106 [post_translationally_modified_region] Paxillin
 SVGSPCS
->PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_109_109 [post_translationally_modified_region] Paxillin
 SPCSRVG
->PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_126_126 [post_translationally_modified_region] Paxillin
 KQKSAEP
->PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_130_130 [post_translationally_modified_region] Paxillin
 AEPSPTV
->PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_137_137 [post_translationally_modified_region] Paxillin
 MSTSLGS
->PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxil
-lin
+>PAXI_HUMAN_244_244 [post_translationally_modified_region] Paxillin
+EMSSPQR
+>PAXI_HUMAN_303_303 [post_translationally_modified_region] Paxillin
 GRSSPGG
->UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiq
-uitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-co
-ntaining 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+>UBR5_RAT_100_100 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+TSDSPWF
+>UBR5_RAT_342_342 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+PVQSPVS
+>UBR5_RAT_567_567 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+QLRSPES
+>UBR5_RAT_601_601 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+PPPSPAS
+>UBR5_RAT_797_797 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+GQESPII
+>UBR5_RAT_917_917 [post_translationally_modified_region] E3 ubiquitin-protein li
+gase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-
+containing 1) (Hyperplastic discs protein homolog)
+ACVSVCF
+>UBR5_RAT_1007_1007 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+DPVSPPI
+>UBR5_RAT_1216_1216 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+KRTSPTA
+>UBR5_RAT_1344_1344 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+DPLSASS
+>UBR5_RAT_1364_1364 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+NQQSGTI
+>UBR5_RAT_1470_1470 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+VAESLIV
+>UBR5_RAT_1730_1730 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+AASSAGL
+>UBR5_RAT_1769_1769 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+YLTSASS
+>UBR5_RAT_2016_2016 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+FRRSDSM
+>UBR5_RAT_2018_2018 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+RSDSMTF
+>UBR5_RAT_2061_2061 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
 GRPSQGL
->UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiq
-uitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-co
-ntaining 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+>UBR5_RAT_2066_2066 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+GLYSSSA
+>UBR5_RAT_2279_2279 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+GEGSGVA
+>UBR5_RAT_2473_2473 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
+HGSSRSV
+>UBR5_RAT_2475_2475 [post_translationally_modified_region] E3 ubiquitin-protein
+ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domai
+n-containing 1) (Hyperplastic discs protein homolog)
 SSRSVVD
 
    The sequences of the specified features are written out.
@@ -805,26 +899,26 @@ Known bugs
 See also
 
    Program name     Description
-   aligncopy        Reads and writes alignments
-   aligncopypair    Reads and writes pairs from alignments
+   aligncopy        Read and write alignments
+   aligncopypair    Read and write pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
-   cutseq           Removes a section from a sequence
-   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   cutseq           Remove a section from a sequence
+   degapseq         Remove non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
-   entret           Retrieves sequence entries from flatfile databases and files
+   entret           Retrieve sequence entries from flatfile databases and files
    extractalign     Extract regions from a sequence alignment
    extractseq       Extract regions from a sequence
-   featcopy         Reads and writes a feature table
-   featreport       Reads and writes a feature table
+   featcopy         Read and write a feature table
+   featmerge        Merge two overlapping feature tables
+   featreport       Read and write a feature table
    feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
-   maskambignuc     Masks all ambiguity characters in nucleotide sequences
-   with             N
-   maskambigprot    Masks all ambiguity characters in protein sequences with
-                    X
+   maskambignuc     Mask all ambiguity characters in nucleotide sequences with
+                    N
+   maskambigprot    Mask all ambiguity characters in protein sequences with X
    maskfeat         Write a sequence with masked features
    maskseq          Write a sequence with masked regions
    newseq           Create a sequence file from a typed-in sequence
@@ -835,25 +929,25 @@ See also
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
                     sequences
-   nthseqset        Reads and writes (returns) one set of sequences from many
+   nthseqset        Read and write (return) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
-   seqcount         Reads and counts sequences
-   seqret           Reads and writes (returns) sequences
-   seqretsetall     Reads and writes (returns) many sets of sequences
-   seqretsplit      Reads sequences and writes them to individual files
+   seqcount         Read and count sequences
+   seqret           Read and write (return) sequences
+   seqretsetall     Read and write (return) many sets of sequences
+   seqretsplit      Read sequences and write them to individual files
    showfeat         Display features of a sequence in pretty format
    sizeseq          Sort sequences by size
    skipredundant    Remove redundant sequences from an input set
-   skipseq          Reads and writes (returns) sequences, skipping first few
+   skipseq          Read and write (return) sequences, skipping first few
    splitsource      Split sequence(s) into original source sequences
    splitter         Split sequence(s) into smaller sequences
    trimest          Remove poly-A tails from nucleotide sequences
    trimseq          Remove unwanted characters from start and end of sequence(s)
    trimspace        Remove extra whitespace from an ASCII text file
-   twofeat          Finds neighbouring pairs of features in sequence(s)
+   twofeat          Find neighbouring pairs of features in sequence(s)
    union            Concatenate multiple sequences into a single sequence
-   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   vectorstrip      Remove vectors from the ends of nucleotide sequence(s)
    yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)

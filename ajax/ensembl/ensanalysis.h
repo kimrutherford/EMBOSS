@@ -1,10 +1,37 @@
+/* @include ensanalysis *******************************************************
+**
+** Ensembl Analysis functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.18 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/20 22:04:34 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSANALYSIS_H
 #define ENSANALYSIS_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensbaseadaptor.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -61,45 +88,45 @@ EnsPAnalysis ensAnalysisNewIni(EnsPAnalysisadaptor aa,
 
 EnsPAnalysis ensAnalysisNewRef(EnsPAnalysis analysis);
 
-void ensAnalysisDel(EnsPAnalysis* Panalysis);
+void ensAnalysisDel(EnsPAnalysis *Panalysis);
 
 EnsPAnalysisadaptor ensAnalysisGetAdaptor(const EnsPAnalysis analysis);
 
-ajuint ensAnalysisGetIdentifier(const EnsPAnalysis analysis);
+AjPStr ensAnalysisGetDatabasefile(const EnsPAnalysis analysis);
 
-const AjPStr ensAnalysisGetName(const EnsPAnalysis analysis);
+AjPStr ensAnalysisGetDatabasename(const EnsPAnalysis analysis);
 
-const AjPStr ensAnalysisGetDatabasefile(const EnsPAnalysis analysis);
+AjPStr ensAnalysisGetDatabaseversion(const EnsPAnalysis analysis);
 
-const AjPStr ensAnalysisGetDatabasename(const EnsPAnalysis analysis);
+AjPStr ensAnalysisGetDateCreation(const EnsPAnalysis analysis);
 
-const AjPStr ensAnalysisGetDatabaseversion(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetDateCreation(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetProgramname(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetProgramversion(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetProgramfile(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetParameters(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetModulename(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetModuleversion(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetGffsource(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetGfffeature(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetDescription(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetDisplaylabel(const EnsPAnalysis analysis);
-
-const AjPStr ensAnalysisGetWebdata(const EnsPAnalysis analysis);
+AjPStr ensAnalysisGetDescription(const EnsPAnalysis analysis);
 
 AjBool ensAnalysisGetDisplayable(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetDisplaylabel(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetGfffeature(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetGffsource(const EnsPAnalysis analysis);
+
+ajuint ensAnalysisGetIdentifier(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetModulename(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetModuleversion(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetName(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetParameters(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetProgramfile(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetProgramname(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetProgramversion(const EnsPAnalysis analysis);
+
+AjPStr ensAnalysisGetWebdata(const EnsPAnalysis analysis);
 
 AjBool ensAnalysisSetAdaptor(EnsPAnalysis analysis,
                              EnsPAnalysisadaptor aa);
@@ -167,6 +194,14 @@ AjBool ensAnalysisIsDatabase(const EnsPAnalysis analysis);
 AjBool ensAnalysisMatch(const EnsPAnalysis analysis1,
                         const EnsPAnalysis analysis2);
 
+AjBool ensListAnalysisSortIdentifierAscending(AjPList analyses);
+
+AjBool ensListAnalysisSortIdentifierDescending(AjPList analyses);
+
+AjBool ensListAnalysisSortNameAscending(AjPList analyses);
+
+AjBool ensListAnalysisSortNameDescending(AjPList analyses);
+
 /* Ensembl Analysis Adaptor */
 
 EnsPAnalysisadaptor ensRegistryGetAnalysisadaptor(
@@ -177,7 +212,7 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
 
 AjBool ensAnalysisadaptorCacheClear(EnsPAnalysisadaptor aa);
 
-void ensAnalysisadaptorDel(EnsPAnalysisadaptor* Paa);
+void ensAnalysisadaptorDel(EnsPAnalysisadaptor *Paa);
 
 EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
     const EnsPAnalysisadaptor aa);
@@ -194,11 +229,11 @@ AjBool ensAnalysisadaptorFetchAllbyFeatureclass(EnsPAnalysisadaptor aa,
 
 AjBool ensAnalysisadaptorFetchByIdentifier(EnsPAnalysisadaptor aa,
                                            ajuint identifier,
-                                           EnsPAnalysis* Panalysis);
+                                           EnsPAnalysis *Panalysis);
 
 AjBool ensAnalysisadaptorFetchByName(EnsPAnalysisadaptor aa,
                                      const AjPStr name,
-                                     EnsPAnalysis* Panalysis);
+                                     EnsPAnalysis *Panalysis);
 
 /*
 ** End of prototype definitions

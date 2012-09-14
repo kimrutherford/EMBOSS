@@ -1,30 +1,43 @@
-/****************************************************************************
-** @source embpdb.c
+/* @source embpdb *************************************************************
 **
 ** Algorithms for handling protein structural data.
 ** For use with the Atom, Chain and Pdb objects defined in ajpdb.h
 ** Also for use with Hetent, Het, Vdwres, Vdwall, Cmap and Pdbtosp objects 
 ** (also in ajpdb.h).
 ** 
-** Copyright (c) 2004 Jon Ison
+** @author CopyrightCopyright (c) 2004 Jon Ison
+** @version $Revision: 1.24 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @@
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
 **
-** This program is distributed in the hope that it will be useful,
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ****************************************************************************/
 
-#include "emboss.h"
+#include "ajlib.h"
+
+#include "embpdb.h"
+#include "ajpdb.h"
+#include "ajdomain.h"
+#include "ajlist.h"
+
 #include <math.h>
+
+
+
 
 /* ======================================================================= */
 /* ============================ private data ============================= */
@@ -134,7 +147,7 @@
 
 
 
-/* @func embPdbidToSp *******************************************************
+/* @func embPdbidToSp *********************************************************
 **
 ** Read a pdb identifier code and writes the equivalent swissprot identifier
 ** code.  Relies on list of Pdbtosp objects sorted by PDB code, which is 
@@ -146,6 +159,8 @@
 **
 ** @return [AjBool]  True if a swissprot identifier code was found
 **                   for the Pdb code.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -164,7 +179,7 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
     }
     
 
-    dim = ajListToarray(list, (void ***) &(arr));
+    dim = (ajuint) ajListToarray(list, (void ***) &(arr));
 
     if(!dim)
     {
@@ -185,7 +200,7 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 
 
 
-/* @func embPdbidToAcc ******************************************************
+/* @func embPdbidToAcc ********************************************************
 **
 ** Read a pdb identifier code and writes the equivalent accession number.
 ** Relies on list of Pdbtosp objects sorted by PDB code, which is usually 
@@ -197,6 +212,8 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 **
 ** @return [AjBool]  True if a swissprot identifier code was found for the
 **                   Pdb code.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -216,7 +233,7 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
     }
     
 
-    dim = ajListToarray(list, (void ***) &(arr));
+    dim = (ajuint) ajListToarray(list, (void ***) &(arr));
 
     if(!dim)
     {
@@ -244,7 +261,7 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
 
 
 
-/* @func  embPdbidToScop ****************************************************
+/* @func  embPdbidToScop ******************************************************
 **
 ** Writes a list of scop identifier codes for the domains that a Pdb object
 ** contains.  The domain data is taken from a list of scop objects.
@@ -256,6 +273,8 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
 **                                       in the current pdb object
 ** 
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -300,7 +319,7 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
 
 
 
-/* @func embAtomInContact ***************************************************
+/* @func embAtomInContact *****************************************************
 **
 ** Determines whether two atoms are in physical contact  
 **
@@ -314,6 +333,8 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
 ** the van der Waals surface of the second atom.
 **
 ** @return [AjBool] True if the two atoms form contact
+**
+** @release 2.9.0
 ** @@
 **
 ****************************************************************************/
@@ -360,7 +381,7 @@ AjBool embAtomInContact(const AjPAtom atm1, const AjPAtom atm2, float thresh,
 
 
 
-/* @func embAtomDistance ****************************************************
+/* @func embAtomDistance ******************************************************
 **
 ** Returns the distance (Angstroms) between two atoms.
 **
@@ -372,6 +393,8 @@ AjBool embAtomInContact(const AjPAtom atm1, const AjPAtom atm2, float thresh,
 ** atoms.
 **
 ** @return [float] Distance (Angstroms) between two atoms.
+**
+** @release 2.9.0
 ** @@
 **
 ****************************************************************************/
@@ -433,7 +456,7 @@ float embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 
 
 
-/* @func embVdwRad **********************************************************
+/* @func embVdwRad ************************************************************
 **
 ** Returns the van der Waals radius of an atom. Returns 1.2 as default.
 **
@@ -441,41 +464,45 @@ float embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 ** @param [r] vdw    [const AjPVdwall]   Vdwall object
 **
 ** @return [float] van der Waals radius of the atom
+**
+** @release 2.9.0
 ** @@
 **
 ****************************************************************************/
 
 float embVdwRad(const AjPAtom atm, const AjPVdwall vdw)
 {
-    ajint x = 0;
-    ajint y = 0;
+    ajuint x = 0U;
+    ajuint y = 0U;
     
-    for(x=0;x<vdw->N;x++)
-	for(y=0;y<vdw->Res[x]->N;y++)
+    for(x = 0U; x < vdw->N; x++)
+	for(y = 0; y < vdw->Res[x]->N; y++)
 	    if(ajStrMatchS(atm->Atm, vdw->Res[x]->Atm[y]))
-		return(vdw->Res[x]->Rad[y]);	 
+		return vdw->Res[x]->Rad[y];
     
-    return((float)1.2);
+    return (float) 1.2;
 }
 
 
 
 
-/* @func embPdbToIdx ********************************************************
+/* @func embPdbToIdx **********************************************************
 **
 ** Reads a Pdb object and writes an integer which gives the index into the 
 ** protein sequence for a residue with a specified pdb residue number and a 
 ** specified chain number.
 ** 
-** @param [w] idx [ajint*]  Residue number (index into sequence)
-** @param [r] pdb [const AjPPdb]  Pdb object
-** @param [r] res [const AjPStr]  Residue number (PDB numbering)
-** @param [r] chn [ajint]   Chain number
+** @param [w] idx [ajint*] Residue number (index into sequence)
+** @param [r] pdb [const AjPPdb] Pdb object
+** @param [r] res [const AjPStr] Residue number (PDB numbering)
+** @param [r] chn [ajuint] Chain number
 **
 ** @return [AjBool] True on succcess (res was found in pdb object)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
-AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
+AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajuint chn)
 {
     AjIList  iter = NULL;
     AjPResidue  residue  = NULL;
@@ -568,7 +595,7 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 
 
 
-/* @func embPdbListHeterogens ***********************************************
+/* @func embPdbListHeterogens *************************************************
 ** 
 ** Function to create a list of arrays of Atom objects for ligands in the 
 ** current Pdb object (a single array for each ligand).  An array of int's
@@ -586,6 +613,8 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 ** @param [u] logfile         [AjPFile]  Log file for error messages
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@ 
 ****************************************************************************/
 
@@ -599,7 +628,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
     */
     AjIList iter  = NULL;	/* Iterator for atoms in current pdb object */
     AjPAtom hetat = NULL;		/* Pointer to current Atom object */
-    ajint i=0;			/* Counter for chains */
+    ajuint i = 0U;		/* Counter for chains */
     ajint prev_gpn = -10000; 	/* Group number of atom object from
 				   previous iteration */
     AjPList GrpAtmList = NULL; 	/* List to hold atoms from the current 
@@ -629,7 +658,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
   
     if(pdb->Nchn>0)
     {      
-        for(i=0;i<pdb->Nchn;++i) 
+        for(i = 0U; i < pdb->Nchn; i++) 
         {
             prev_gpn=-100000;	   /* Reset prev_gpn for each chain */
             /* initialise iterator for pdb->Chains[i]->Atoms */
@@ -649,7 +678,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 
                     if(GrpAtmList)
                     {
-                        n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+                        n=(ajuint) (ajListToarray(GrpAtmList, (void ***) &AtmArray));
                         ajListPushAppend(*list_heterogens, AtmArray);
                         /*
                         ** So that ajListToarray doesn't try and free the
@@ -677,7 +706,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 
         if(GrpAtmList)
         {
-            n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+            n=(ajuint) (ajListToarray(GrpAtmList, (void ***) &AtmArray));
             ajListPushAppend(*list_heterogens, AtmArray);
             /*
             ** So that ajListToarray doesn't try and free the non-NULL
@@ -702,7 +731,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 
 
 
-/* @func embPdbResidueIndexI ***************************************************
+/* @func embPdbResidueIndexI **************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -710,14 +739,16 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 ** equal to the number of structured residues. 
 **
 ** @param [r] pdb [const AjPPdb] Pdb object
-** @param [r] chn [ajint] Chain number
+** @param [r] chn [ajuint] Chain number
 ** @param [w] idx [AjPInt*] Index array
 **
 ** @return [AjBool] True on succcess
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
-AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
+AjBool embPdbResidueIndexI(const AjPPdb pdb, ajuint chn, AjPInt *idx)
 {
     AjIList  iter = NULL;
     AjPResidue  res  = NULL;
@@ -789,7 +820,7 @@ AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 
 
 
-/* @func embPdbResidueIndexC ***************************************************
+/* @func embPdbResidueIndexC **************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -801,12 +832,14 @@ AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 ** @param [w] idx [AjPInt*] Index array
 **
 ** @return [AjBool] True on succcess
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
 AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 {
-    ajint chnn;
+    ajuint chnn = 0U;
     
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
@@ -832,17 +865,19 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 ** which CA atoms are missing. The array length is of course equal to the 
 ** number of structured residues. 
 **
-** @param [r] pdb  [const AjPPdb]  Pdb object
-** @param [r] chn  [ajint]   Chain number
+** @param [r] pdb  [const AjPPdb] Pdb object
+** @param [r] chn  [ajuint] Chain number
 ** @param [w] idx  [AjPUint*] Index array
-** @param [w] nres [ajint*]  Array length 
+** @param [w] nres [ajint*] Array length 
 **
 ** @return [AjBool] True on succcess
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
 AjBool embPdbResidueIndexICA(const AjPPdb pdb,
-			  ajint chn, AjPUint *idx, ajint *nres)
+                             ajuint chn, AjPUint *idx, ajint *nres)
 {
     AjIList iter  = NULL;
     AjPAtom atm   = NULL;
@@ -914,7 +949,7 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 
 
 
-/* @func embPdbResidueIndexCCA *************************************************
+/* @func embPdbResidueIndexCCA ************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -928,13 +963,15 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 ** @param [w] nres [ajint*] Array length 
 **
 ** @return [AjBool] True on succcess
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
 AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
 			     AjPUint *idx, ajint *nres)
 {
-    ajint chnn;
+    ajuint chnn = 0U;
     
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
@@ -953,7 +990,7 @@ AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
 
 
 
-/* @func embStrideToThree ***************************************************
+/* @func embStrideToThree *****************************************************
 **
 ** Reads a string that contains an 8-state STRIDE secondary structure 
 ** assignment and writes a string with the corresponding 3-state assignment.
@@ -967,6 +1004,8 @@ AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
 ** @param [r] from [const AjPStr]  String to read
 **
 ** @return [AjBool] True on succcess
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 

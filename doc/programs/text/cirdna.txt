@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Draws circular maps of DNA constructs
+   Draw circular map of DNA constructs
 
 Description
 
@@ -33,7 +33,7 @@ Usage
 
 
 % cirdna -graph cps
-Draws circular maps of DNA constructs
+Draw circular map of DNA constructs
 Commands to the cirdna drawing program file [inputfile]: data.cirp
 Draw a ruler [Y]:
       Open : Open blocks
@@ -55,8 +55,8 @@ Created cirdna.ps
 
 Command line arguments
 
-Draws circular maps of DNA constructs
-Version: EMBOSS:6.4.0.0
+Draw circular map of DNA constructs
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the cirdna drawing
@@ -295,7 +295,7 @@ See also
                    Program name                            Description
                    abiview      Display the trace in an ABI sequencer file
                    iep          Calculate the isoelectric point of proteins
-                   lindna       Draws linear maps of DNA constructs
+                   lindna       Draw linear maps of DNA constructs
                    pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
                    pepwheel     Draw a helical wheel diagram for a protein sequence
@@ -304,7 +304,7 @@ See also
                    prettyseq    Write a nucleotide sequence and its translation to file
                    remap        Display restriction enzyme binding sites in a nucleotide sequence
                    showfeat     Display features of a sequence in pretty format
-                   showpep      Displays protein sequences with features in pretty format
+                   showpep      Display protein sequences with features in pretty format
                    sixpack      Display a DNA sequence with 6-frame translation and ORFs
 
 Author(s)

@@ -1,39 +1,100 @@
-/****************************************************************************
+/* @include embsig ************************************************************
 ** 
-** @source embsig.h
-**
 ** Data structures and algorithms for use with sparse sequence signatures.
 ** Hit, Hitlist, Sigpos, Sigdat and Signature objects.
 ** 
-** Copyright (c) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
-** @version 1.0 
+** @author Copyright (c) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
+** @modified $Date: 2012/04/12 20:39:51 $ by $Author: mks $
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
-** 
+** version 2.1 of the License, or (at your option) any later version.
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
-** 
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** Lesser General Public License for more details.
 **
-****************************************************************************/
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+**
+*****************************************************************************/
 
-#ifdef __cplusplus
-extern "C"
+#ifndef EMBSIG_H
+#define EMBSIG_H
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajarr.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajmatrices.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* @enum EmbESignatureType ****************************************************
+**
+** NUCLEUS Signature Type enumeration
+**
+** @value embESignatureTypeNULL NULL
+** @value embESignatureTypeCATH CATH for domain signatures
+** @value embESignatureTypeSCOP SCOP for domain signatures
+** @value embESignatureTypeLIGAND Ligand for ligand signatures
+** @@
+******************************************************************************/
+
+typedef enum EmbOSignatureType
 {
-#endif
+    embESignatureTypeNULL,
+    embESignatureTypeCATH,
+    embESignatureTypeSCOP,
+    embESignatureTypeLIGAND
+} EmbESignatureType;
 
-#ifndef embsig_h
-#define embsig_h
 
+
+
+/* @enum EmbESignatureTypesig *************************************************
+**
+** NUCLEUS Signature Type enumeration
+**
+** @value embESignatureTypesigNULL NULL
+** @value embESignatureTypesig1D 1D
+** @value embESignatureTypesig3D 3D
+** @@
+******************************************************************************/
+
+typedef enum EmbOSignatureTypesig
+{
+    embESignatureTypesigNULL,
+    embESignatureTypesig1D,
+    embESignatureTypesig3D
+} EmbESignatureTypesig;
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -62,6 +123,7 @@ extern "C"
 ** @delete embSigposDel Default Sigdat object destructor
 ** @@
 ****************************************************************************/
+
 typedef struct EmbSSigpos
 {
     ajuint   *gsiz;       
@@ -109,6 +171,7 @@ typedef struct EmbSSigpos
 ** @delete embSigdatDel Default Sigdat object destructor
 ** @@
 ****************************************************************************/
+
 typedef struct EmbSSigdat
 {
 
@@ -143,9 +206,8 @@ typedef struct EmbSSigdat
 **
 ** 
 **
-** @attr  Type         [ajuint]       Type, either ajSCOP (1) or ajCATH (2)
-** for domain signatures, or ajLIGAND (3) for ligand signatures.
-** @attr  Typesig      [ajuint]       Type, either aj1D (1) or aj3D (2)
+** @attr  Type [EmbESignatureType] NUCLEUS Signature Type enumeration
+** @attr  Typesig [EmbESignatureTypesig] NUCLEUS Signature Typesig enumeration
 ** for sequence or structure-based signatures respectively. 
 ** @attr  Class        [AjPStr]      SCOP classification.
 ** @attr  Architecture [AjPStr]      CATH classification.
@@ -199,8 +261,8 @@ typedef struct EmbSSigdat
 
 typedef struct EmbSSignature
 {
-    ajuint      Type;
-    ajuint      Typesig;
+    EmbESignatureType Type;
+    EmbESignatureTypesig Typesig;
     AjPStr      Class;
     AjPStr      Architecture;
     AjPStr      Topology;
@@ -352,8 +414,7 @@ typedef struct EmbSHit
 ** @attr  Priority      [AjBool]    True if the Hitlist is high priority. 
 
 ** @attr  hits          [EmbPHit*]  Array of hits. 
-** @attr  Type          [ajuint]     Domain type, either ajSCOP (1) or
-**                                  ajCATH (2).
+** @attr  Type          [EmbESignatureType] NUCLEUS Signature Type enumeration
 ** @attr  N             [ajuint]    No. of hits. 
 **
 ** @new    embHitlistNew Default Hitlist constructor
@@ -403,12 +464,18 @@ typedef struct EmbSHitlist
     ajuint   Sunid_Family;
     AjBool   Priority;     
     EmbPHit *hits;         
-    ajuint   Type;
+    EmbESignatureType Type;
     ajuint   N;            
 } EmbOHitlist;
 #define EmbPHitlist EmbOHitlist*
 
 
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -543,11 +610,9 @@ void          embSigExit(void);
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBSIG_H */
 
 
 

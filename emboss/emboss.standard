@@ -18,6 +18,24 @@
 #######################################
 
 #######################################
+# EBI Chemical Ontology (CHEBI)
+#######################################
+
+DB chebi [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#######################################
 # Evidence codes ontology (ECO)
 # used to define sequence database evidence
 #######################################
@@ -48,6 +66,116 @@ DB edam [
   method: "emboss"
   indexdirectory: "$emboss_standard/index"
   directory:      "$emboss_standard/data"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+DB edam_data [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  dbalias: "edam"
+  namespace: "data|identifier"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+DB edam_format [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  dbalias: "edam"
+  namespace: "format"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+DB edam_identifier [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  dbalias: "edam"
+  namespace: "identifier"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+DB edam_operation [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  dbalias: "edam"
+  namespace: "operation"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+DB edam_topic [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  dbalias: "edam"
+  namespace: "topic"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
 #  fields: "id acc nam isa des ns hasattr hasin hasout
 #           isid isfmt issrc"
   field: "id ! identifier without the prefix"
@@ -73,6 +201,54 @@ DB go [
   type:   "obo"
   format: "obo"
   method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des ns"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+]
+
+DB go_component [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  namespace: "cellular_component"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des ns"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+]
+
+DB go_function [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  namespace: "molecular_function"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des ns"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+]
+
+DB go_process [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  namespace: "biological_process"
   indexdirectory: "$emboss_standard/index"
   directory:      "$emboss_standard/data/OBO"
 #  fields: "id acc nam isa des ns"
@@ -122,11 +298,31 @@ DB ro [
 ]
 
 #######################################
-# Sequence ontology (RO)
+# Sequence ontology (SO)
 # used to define sequence features
 #######################################
 
 DB so [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#######################################
+# Software ontology (SWO)
+# used to define general software
+# in collaboration with EDAM
+#######################################
+
+DB swo [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -213,7 +409,7 @@ DB taxon [
 SERVER srs [
   method:        "srswww"
   type:          "unknown"
-  url:           "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+  url:           "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz"
   comment:       "SRS from EBI"
   serverversion: "7.1.3"
   cachefile:     "server.srs"
@@ -377,6 +573,12 @@ SERVER dbfetch [
 
 RES dbxresource [
   type: "Index"
+  idlen:  "15"
+  acclen: "15"
+  svlen:  "15"
+  deslen: "25"
+  orglen: "15"
+  keylen: "15"
 ]
 
 RES taxresource [
@@ -385,7 +587,7 @@ RES taxresource [
   rnklen: "16"
   idlen: "7"
   uplen: "7"
-  taxlen: "110"
+  taxlen: "120"
   gclen: "2"
   mgclen: "2"
 ]
@@ -395,26 +597,29 @@ RES emblresource [
   idlen:  "15"
   acclen: "15"
   svlen:  "15"
-  keylen: "50"
-  deslen: "20"
-  orglen: "30"
+  keylen: "80"
+  deslen: "75"
+  orglen: "75"
 ]
 
 RES swissresource [
   type: "Index"
-  idlen:  "15"
-  acclen: "15"
-  svlen:  "15"
-  keylen: "15"
-  deslen: "15"
-  orglen: "15"
+  idlen:  "12"
+  acclen: "6"
+  svlen:  "10"
+  deslen: "85"
+  keylen: "75"
+  orglen: "75"
+  despagesize: "2048"
+  keypagesize: "2048"
+  orgpagesize: "2048"
 ]
 
 RES pirresource [
   type: "Index"
-  idlen:  "15"
-  acclen: "15"
-  svlen:  "15"
+  idlen:  "6"
+  acclen: "6"
+  svlen:  "10"
   keylen: "25"
   deslen: "15"
   orglen: "35"
@@ -436,12 +641,28 @@ RES oboresource [
   type: "Index"
   fields: "id acc nam isa des ns"
   acclen: "200"
-  namlen: "75"
-  deslen: "40"
+  namlen: "70"
+  deslen: "50"
   nslen:  "20"
   accpagesize: "16384"
-  nampagesize: "8192"
+  nampagesize: "16384"
   despagesize: "4096"
+]
+
+RES sworesource [
+  type: "Index"
+  fields: "id acc nam isa des ns"
+  idlen: "60"
+  acclen: "100"
+  namlen: "150"
+  deslen: "50"
+  nslen:  "20"
+  isalen: "50"
+  idpagesize: "16384"
+  accpagesize: "16384"
+  nampagesize: "16384"
+  despagesize: "4096"
+  isapagesize: "16384"
 ]
 
 RES edamresource [
@@ -449,7 +670,7 @@ RES edamresource [
   fields: "id acc nam isa des ns hasattr hasin hasout
            isid isfmt issrc"
   acclen: "80"
-  namlen: "20"
+  namlen: "32"
   deslen: "30"
   accpagesize: "8192"
   despagesize: "4096"
@@ -466,12 +687,12 @@ RES drcatresource [
   qinlen:  "65"
   qoutlen: "90"
   qurllen: "30"
-  namlen: "20"
-  deslen: "20"
-  urllen: "25"
+  namlen:  "20"
+  deslen:  "20"
+  urllen:  "25"
   restlen: "20"
-  cclen: "40"
-  catlen: "40"
+  cclen:   "40"
+  catlen:  "60"
   taxidlen: "6"
 ]
 
@@ -480,10 +701,11 @@ RES drcatresource [
 # We recommend a value of 2048
 
 SET PAGESIZE 2048
+SET SECPAGESIZE 512
 
 # Cachesize - a cache of disc pages to be used by the 'dbx'
 # indexing system and is required for 'method emboss'. It is
 # the number of PAGESIZE blocks to cache. We recommend
-# a value of 200
+# a value of 2000
 
-SET CACHESIZE 200
+SET CACHESIZE 2000

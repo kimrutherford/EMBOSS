@@ -1,0 +1,38 @@
+Get reference sequence
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-refsequence]       refseq     (no help text) refseq value
+  [-outfile]           outrefseq  (no help text) outrefseq value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-refsequence" associated qualifiers
+   -iformat1           string     Input reference sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Referece sequence output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

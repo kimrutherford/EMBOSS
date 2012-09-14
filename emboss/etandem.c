@@ -199,11 +199,11 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 		   (float) a->bestScore, '+', 0);
     ajFeatTagAddCC(gf, "rpt_type", "TANDEM");
     ajFmtPrintS(&s, "*rpt_size %d", n);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
     ajFmtPrintS(&s, "*rpt_count %d", copies);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
     ajFmtPrintS(&s, "*identity %.1f", perc);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
 
     /* make the consensus */
 
@@ -223,7 +223,7 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 	}
 
     ajFmtPrintS(&s, "*consensus %S", constr);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
 
     if(outfile)
       ajFmtPrintF(outfile, "%S\n", constr);

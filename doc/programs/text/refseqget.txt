@@ -1,0 +1,291 @@
+                                  refseqget
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get reference sequence
+
+Description
+
+   refseqget reads a reference sequence and returns the data in one of the
+   EMBOSS reference sequence formats.
+
+Usage
+
+   Here is a sample session with refseqget
+
+
+% refseqget -of embl
+Get reference sequence
+-refsequence : enter refseq value: tembl:em498477
+Reference sequence output file [em498477.embl]: test.out
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get reference sequence
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-refsequence]       refseq     (no help text) refseq value
+  [-outfile]           outrefseq  (no help text) outrefseq value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-refsequence" associated qualifiers
+   -iformat1           string     Input reference sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Referece sequence output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   refseqget reads a reference sequence.
+
+   The input is a standard EMBOSS reference sequence query.
+
+   The major reference sequence sources are files in one of the common
+   sequence formats, or remote files accessed by HTTP or FTP.
+
+  Input files for usage example
+
+   'tembl:em498477' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:em498477
+
+ID   EM498477; SV 1; linear; genomic DNA; CON; ENV; 1791 BP.
+XX
+AC   EM498477; AACY020000000;
+XX
+PR   Project:PRJNA13694;
+XX
+DT   14-APR-2007 (Rel. 91, Created)
+DT   14-APR-2007 (Rel. 91, Last updated, Version 1)
+XX
+DE   marine metagenome JCVI_SCAF_1096627861213 genomic scaffold, whole genome
+DE   shotgun sequence.
+XX
+KW   .
+XX
+OS   marine metagenome
+OC   unclassified sequences; metagenomes; ecological metagenomes.
+XX
+RN   [1]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050016.
+RX   PUBMED; 17355171.
+RA   Yooseph S., Sutton G., Rusch D.B., Halpern A.L., Williamson S.J.,
+RA   Remington K., Eisen J.A., Heidelberg K.B., Manning G., Li W.,
+RA   Jaroszewski L., Cieplak P., Miller C.S., Li H., Mashiyama S.T.,
+RA   Joachimiak M.P., van Belle C., Chandonia J.M., Soergel D.A., Zhai Y.,
+RA   Natarajan K., Lee S., Raphael B.J., Bafna V., Friedman R., Brenner S.E.,
+RA   Godzik A., Eisenberg D., Dixon J.E., Taylor S.S., Strausberg R.L.,
+RA   Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: expanding the universe
+RT   of protein families";
+RL   PLoS Biol. 5(3):e16-e16(2007).
+XX
+RN   [2]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050017.
+RX   PUBMED; 17355172.
+RA   Kannan N., Taylor S.S., Zhai Y., Venter J.C., Manning G.;
+RT   "Structural and functional diversity of the microbial kinome";
+RL   PLoS Biol. 5(3):e17-e17(2007).
+XX
+RN   [3]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050077.
+RX   PUBMED; 17355176.
+RA   Rusch D.B., Halpern A.L., Sutton G., Heidelberg K.B., Williamson S.,
+RA   Yooseph S., Wu D., Eisen J.A., Hoffman J.M., Remington K., Beeson K.,
+RA   Tran B., Smith H., Baden-Tillson H., Stewart C., Thorpe J., Freeman J.,
+RA   Andrews-Pfannkoch C., Venter J.E., Li K., Kravitz S., Heidelberg J.F.,
+RA   Utterback T., Rogers Y.H., Falcon L.I., Souza V., Bonilla-Rosso G.,
+RA   Eguiarte L.E., Karl D.M., Sathyendranath S., Platt T., Bermingham E.,
+RA   Gallardo V., Tamayo-Castillo G., Ferrari M.R., Strausberg R.L., Nealson K.,
+RA   Friedman R., Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: northwest Atlantic
+RT   through eastern tropical Pacific";
+RL   PLoS Biol. 5(3):e77-e77(2007).
+XX
+RN   [4]
+RP   1-1791
+RG   J. Craig Venter Institute
+RA   ;
+RT   ;
+RL   Submitted (02-MAR-2007) to the INSDC.
+RL   J. Craig Venter Institute, 9704 Medical Center Drive, Rockville, MD 20850,
+RL   USA
+XX
+CC   For complete environmental metadata relating to this record,
+CC   background on the Global Ocean Sampling expedition, as well as
+CC   additional analysis results, please visit the CAMERA website
+CC   (http://camera.calit2.net).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1791
+FT                   /organism="marine metagenome"
+FT                   /environmental_sample
+FT                   /mol_type="genomic DNA"
+FT                   /isolation_source="isolated as part of a large dataset
+FT                   composed predominantly from surface water marine samples
+FT                   collected along a voyage from Eastern North American coast
+FT                   to the Eastern Pacific Ocean, including locations in the
+FT                   Sargasso Sea, Panama Canal, and the Galapagos Islands"
+FT                   /note="metagenomic"
+FT                   /db_xref="taxon:408172"
+XX
+CO   join(AACY021843949.1:1..897,gap(51),complement(AACY020702065.1:1..843))
+//
+
+Output file format
+
+   refseqget writes data in one of the reference sequence output formats.
+
+   The output is a standard EMBOSS reference sequence.
+
+   The major reference sequence formats are the most common sequence
+   formats.
+
+  Output files for usage example
+
+  File: test.out
+
+ID   EM498477; SV 1; linear; unassigned DNA; STD; UNC; 1791 BP.
+XX
+DE   marine metagenome JCVI_SCAF_1096627861213 genomic scaffold, whole genome
+DE   shotgun sequence.
+XX
+SQ   Sequence 1791 BP; 583 A; 286 C; 326 G; 545 T; 51 other;
+     agtacacaat atcctacaaa ttttaatcca ggaacaagtt tctttttggc aaatagtttt        60
+     gcaagatcac aggcacaatt tttgggagat agcacaggta taacaattaa tgaagttaat       120
+     agaatatcta aagctactgg accacttact gctgccactg gtgaaacttc atcatcagat       180
+     ccacatgctg gatttcagct tggtgtatta aatccttatg cttatgaacc tgctgatatt       240
+     gatgaatgta gtttgttaag cacatgttat tttaaattag gagatgccac ggtagatacg       300
+     gttaataata caattgatgt tggatttcct catggcctta gtgatttagt tttaggtaga       360
+     gtttttccgg gggcaggtaa taccttacct actggattaa ctgaaagaaa ttattatata       420
+     caagttatca attcaacaac acttgcattt tctaccagaa aatcaggaac taccacattt       480
+     agagcaaatt tatctacttc tggtagtgat gcaggaatag caaaggtttg tattgcaaca       540
+     gggataacat gttattattt ccaaaccagt ggatatgtat attttaccag ggacactcgc       600
+     gctcatttta gttataataa taatattgca cgagcacatt tatcgccagt aacaagatgg       660
+     ggtttacata ctgcaaatac aactgcaagg tctagagttg ataatggatt taattcctta       720
+     ggaggtgctg atatacgtgc taatcctaat ggattaatgg atataccaga gggtggaaac       780
+     ggtggcaata atgcacattt atattatcct tatggtagta caagtagaac taataataca       840
+     aattatttat attatggtat gagattagct cgtactcaag atggtggcac aaattatNNN       900
+     NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNta tgctagatta       960
+     ttctgaagat ggtaacgaag atgccgatca gtacgcatta tggcttgcat ataaagaagt      1020
+     ttccgaaccg aattcgttct acattgcaaa tcatggtttt acaacgggcg acattgtaac      1080
+     atatagttca actggaactc ttcctgctgg tctcaatggt tttacaacgg caactgctca      1140
+     aataacaagt gctaacagat ttaaatttaa tagaaatagt gcagcagtaa atattgaaag      1200
+     tgtaggagtt gctggccaag atattacatt tactgcagtt tcattaaatc cacttggaaa      1260
+     ttcaattaac ttagtaggaa attcattaac caatggtgaa caagtttcat atacaaataa      1320
+     tggcgcatca aatattggtg gtcttacaag tggcactagt tattttgttt ttgatagaac      1380
+     atctgataca attaaacttg ccacaacgtt aactggttat accggagatg aagttttagt      1440
+     tgatacagat gccacatcag caacaggtgc tgcagcattt attaactcaa caaatggtag      1500
+     aattcaaggt atttctagta cagcaggaat tgatacgttc caagatggaa gcattgtgca      1560
+     aatagaacaa gtatccggtt ccactgatca tggattaaaa aatggagcat ttttatttgt      1620
+     taataaaatt aattccaaaa ccttcgagct ttacccaacc gattctgata gagtggctac      1680
+     taccaatcaa tatgttccat cacgtacatc agttgatgga caagtaaaat taaaagaaac      1740
+     cacacttgtt gatttaacag catttgattc tggtacacat agtattacag c               1791
+//
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                          Description
+                    abiview      Display the trace in an ABI sequencer file
+                    coderet      Extract CDS, mRNA and translations from feature tables
+                    entret       Retrieve sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+                    infoalign    Display basic information about a multiple sequence alignment
+                    infoseq      Display basic information about sequences
+                    seqxref      Retrieve all database cross-references for a sequence entry
+                    seqxrefget   Retrieve all cross-referenced data for a sequence entry
+                    showalign    Display a multiple sequence alignment in pretty format
+   variationget     Get sequence variations
+                    whichdb      Search all sequence databases for an entry and retrieve it
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

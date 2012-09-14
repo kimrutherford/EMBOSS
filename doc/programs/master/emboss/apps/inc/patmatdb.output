@@ -1,17 +1,17 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 12s1_arath.patmatdb</h3>
+<p><h3>File: cru4_arath.patmatdb</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: patmatdb
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: patmatdb
 #    -sequence "tsw:*"
 #    -motif "st[ty]s"
 # Report_format: dbmotif
-# Report_file: 12s1_arath.patmatdb
+# Report_file: cru4_arath.patmatdb
 ########################################
 
 #=======================================
@@ -80,7 +80,7 @@ LADLESTTSHISKR
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35357
+# Total_length: 37225
 # Reported_sequences: 3
 # Reported_hitcount: 3
 #---------------------------------------

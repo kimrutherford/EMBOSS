@@ -104,7 +104,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 
@@ -189,7 +189,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated xygraph qualifiers
+<td align="left" colspan=5>"-graph" associated xygraph qualifiers
 </td>
 </tr>
 

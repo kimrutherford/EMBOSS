@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Reports on protein proteolytic enzyme or reagent cleavage sites
+   Report on protein proteolytic enzyme or reagent cleavage sites
 
 Description
 
@@ -32,7 +32,7 @@ Usage
 
 
 % pepdigest
-Reports on protein proteolytic enzyme or reagent cleavage sites
+Report on protein proteolytic enzyme or reagent cleavage sites
 Input protein sequence(s): tsw:opsd_human
 Enzymes and Reagents
          1 : Trypsin
@@ -53,8 +53,8 @@ Output report [opsd_human.pepdigest]:
 
 Command line arguments
 
-Reports on protein proteolytic enzyme or reagent cleavage sites
-Version: EMBOSS:6.4.0.0
+Report on protein proteolytic enzyme or reagent cleavage sites
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Protein sequence(s) filename and optional
@@ -110,7 +110,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -163,7 +166,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   15-JUN-2010, entry version 128.
+DT   13-JUN-2012, entry version 145.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
@@ -287,7 +290,7 @@ Output file format
 
 ########################################
 # Program: pepdigest
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: pepdigest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable
@@ -406,7 +409,7 @@ See also
    mwfilter         Filter noisy data from molecular weights file
    oddcomp          Identify proteins with specified sequence word composition
    pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

@@ -1,22 +1,41 @@
-/* @source init.c
+/* @source embinit ************************************************************
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** General routines for initialisation
 **
-** This program is distributed in the hope that it will be useful,
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.21 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
 ******************************************************************************/
 
-#include "emboss.h"
-
+#include "embinit.h"
+#include "ajassemdb.h"
+#include "ajfeatdb.h"
+#include "ajobodb.h"
+#include "ajrefseqdb.h"
+#include "ajresourcedb.h"
+#include "ajseqdb.h"
+#include "ajtaxdb.h"
+#include "ajtextdb.h"
+#include "ajurldb.h"
+#include "ajvardb.h"
+#include "ajacd.h"
+#include "ajnam.h"
 
 static void initDball(void);
 
@@ -28,6 +47,8 @@ static void initDball(void);
 ** Initialises database access functions for all datatypes
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -38,6 +59,7 @@ static void initDball (void)
     ajFeatdbInit();
     ajObodbInit();
     ajAssemdbInit();
+    ajRefseqdbInit();
     ajTaxdbInit();
     ajUrldbInit();
     ajVardbInit();
@@ -62,10 +84,12 @@ static void initDball (void)
 **        usually passed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
-void  embInit (const char *pgm, ajint argc, char * const argv[])
+void embInit (const char *pgm, ajint argc, char * const argv[])
 {
     initDball();
     ajNamInit("emboss");
@@ -92,6 +116,8 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @param [r] package [const char*] Package name, used to find the ACD file
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -109,7 +135,7 @@ void embInitP (const char *pgm, ajint argc, char * const argv[],
 
 
 
-/* @func embInitPV *************************************************************
+/* @func embInitPV ************************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -124,11 +150,13 @@ void embInitP (const char *pgm, ajint argc, char * const argv[],
 ** @param [r] package [const char*] Package name, used to find the ACD file
 ** @param [r] packversion [const char*] Package version
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void embInitPV (const char *pgm, ajint argc, char * const argv[],
-               const char *package, const char *packversion)
+                const char *package, const char *packversion)
 {
     initDball();
     ajNamInit("emboss");

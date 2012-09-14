@@ -4,12 +4,12 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure using GOR method</td>
+<td>Predict protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
+<td>Predict coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>

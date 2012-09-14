@@ -10,7 +10,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -106,7 +106,7 @@ protein output sequence(s) [x13776.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display a DNA sequence with 6-frame translation and ORFs
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -133,10 +133,10 @@ Version: EMBOSS:6.4.0.0
                                   Mitochondrial); 22 (Scenedesmus obliquus);
                                   23 (Thraustochytrium Mitochondrial))
    -[no]firstorf       boolean    [Y] Count the beginning of a sequence as a
-                                  possible ORF, even if it's inferior to the
+                                  possible ORF, even if it is inferior to the
                                   minimal ORF size.
    -[no]lastorf        boolean    [Y] Count the end of a sequence as a
-                                  possible ORF, even if it's not finishing
+                                  possible ORF, even if it is not finishing
                                   with a STOP, or inferior to the minimal ORF
                                   size.
    -mstart             boolean    [N] Displays only ORFs starting with an M.
@@ -144,9 +144,9 @@ Version: EMBOSS:6.4.0.0
    Advanced (Unprompted) qualifiers:
    -[no]reverse        boolean    [Y] Display also the translation of the DNA
                                   sequence in the 3 reverse frames
-   -orfminsize         integer    [1] Minimum size of Open Reading Frames
-                                  (ORFs) to display in the translations.
-                                  (Integer 1 or more)
+   -orfminsize         integer    [1] Minimum protein size of Open Reading
+                                  Frames (ORFs) to display in the
+                                  translations. (Integer 1 or more)
    -uppercase          range      [If this is left blank, then the sequence
                                   case is left alone.] Regions to put in
                                   uppercase.
@@ -202,7 +202,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -296,7 +299,7 @@ Version: EMBOSS:6.4.0.0
 <tr bgcolor="#FFFFCC">
 <td>-[no]firstorf</td>
 <td>boolean</td>
-<td>Count the beginning of a sequence as a possible ORF, even if it's inferior to the minimal ORF size.</td>
+<td>Count the beginning of a sequence as a possible ORF, even if it is inferior to the minimal ORF size.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -304,7 +307,7 @@ Version: EMBOSS:6.4.0.0
 <tr bgcolor="#FFFFCC">
 <td>-[no]lastorf</td>
 <td>boolean</td>
-<td>Count the end of a sequence as a possible ORF, even if it's not finishing with a STOP, or inferior to the minimal ORF size.</td>
+<td>Count the end of a sequence as a possible ORF, even if it is not finishing with a STOP, or inferior to the minimal ORF size.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -332,7 +335,7 @@ Version: EMBOSS:6.4.0.0
 <tr bgcolor="#FFFFCC">
 <td>-orfminsize</td>
 <td>integer</td>
-<td>Minimum size of Open Reading Frames (ORFs) to display in the translations.</td>
+<td>Minimum protein size of Open Reading Frames (ORFs) to display in the translations.</td>
 <td>Integer 1 or more</td>
 <td>1</td>
 </tr>
@@ -438,7 +441,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -507,11 +510,35 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -555,7 +582,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -568,7 +595,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -817,7 +844,7 @@ RN   [1]
 RP   1167-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-DEC-1988) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
@@ -842,7 +869,7 @@ RN   [4]
 RP   1-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (04-SEP-1991) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
@@ -852,7 +879,6 @@ DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                   /replace=""
 FT                   /note="ClaI fragment deleted in pSW36,  constitutive
 FT                   phenotype"
 FT   misc_feature    1
@@ -860,8 +886,9 @@ FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
 FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
-FT   conflict        1281
+FT   misc_difference 1281
 FT                   /replace="g"
+FT                   /note="conflict"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
@@ -1298,11 +1325,17 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
+<p>The -minorfsize threshold is in amino acid units.</p>
+
 <p>An open reading frame is defined in this program as any possible
 translation between two STOP codons. Optionally, the beginning or end
-of a sequence may be counted as an ORF even if it's less than the
+of a sequence may be counted as an ORF even if it is less than the
 minimal ORF size or (end only) lacking a STOP codon.  See the
 -firstorf and -lastorf options.</p>
+
+<p>Open reading frames can be restricted to start with a start codon
+using the -mstart option. This may eliminate some or all of the final
+ORFs at the end of each frame.</p>
 
 <H2>
     References
@@ -1355,12 +1388,12 @@ None.
 
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
@@ -1370,7 +1403,7 @@ None.
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
-<td>Finds and extracts open reading frames (ORFs)</td>
+<td>Find and extract open reading frames (ORFs)</td>
 </tr>
 
 <tr>
@@ -1380,12 +1413,12 @@ None.
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+<td>Find matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
@@ -1435,12 +1468,12 @@ None.
 
 <tr>
 <td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
+<td>Display protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>

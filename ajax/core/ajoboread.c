@@ -1,29 +1,46 @@
-/******************************************************************************
-** @source AJAX OBO handling functions
+/* @source ajoboread **********************************************************
+**
+** AJAX OBO reading functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.41 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajoboread.h"
+#include "ajobo.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+
+#include <ctype.h>
+#include <string.h>
+
 
 AjPTable oboDbMethods = NULL;
 
@@ -76,7 +93,7 @@ static const char *oboBuiltin[] =
     "xsd:date",
     NULL
 };
-#endif
+#endif /* 0 */
 
 
 
@@ -92,6 +109,20 @@ static const char *oboStanza[] =
 
 
 
+
+/* @enumstatic tagtype ********************************************************
+**
+** OBO tag value type
+**
+** @value TAG_ANY Any
+** @value TAG_BOOL Boolean
+** @value TAG_QTEXT Quoted text
+** @value TAG_DBX Database cross-reference
+** @value TAG_QXREF Quoted cross-reference 
+** @value TAG_ID Identifier
+** @value TAG_NAME Name
+
+******************************************************************************/
 
 enum tagtype {
     TAG_ANY, TAG_BOOL, TAG_QTEXT, TAG_DBX, TAG_QXREF, TAG_ID, TAG_NAME
@@ -114,15 +145,32 @@ enum tagtype {
 
 /* should parse out any dbxref list from any tag? */
 
+
+
+
+/* @datastatic OboOTagdef *****************************************************
+**
+** Tag definitions for OBO format
+**
+** @attr Tag [const char*] Tag name
+** @attr Type [ajint] Enumerated type
+** @attr Min [ajint] Minimum unmber
+** @attr Count [ajint] Maximum number
+** @attr Padding [ajint] Padding
+** @attr Obsolete [const char*] Obsolete form of tag name
+******************************************************************************/
+
 typedef struct OboSTagdef 
 {
     const char* Tag;
+    ajint       Type;
     ajint       Min;
     ajint       Count;
-    ajint       Type;
     ajint       Padding;
     const char* Obsolete;
 } OboOTagdef;
+
+#define OboPTagdef OboOTagdef*
 
 
 
@@ -273,7 +321,7 @@ static const char *oboFormulaTags[] =      /* new and undocumented in 1.3 */
     "formula",
     NULL
 };
-#endif /* #if 0 */
+#endif /* 0 */
 
 
 
@@ -299,6 +347,7 @@ static const char *oboHeaderTags[] =
     "treat-xrefs-as-is_a",                              /* new in 1.3 */
     "relax-unique-identifier-assumption-for-namespace", /* new in 1.3 */
     "relax-unique-label-assumption-for-namespace",      /* new in 1.3 */
+    "next_id",                                          /* used by EDAM */
     "",
     NULL
 };
@@ -321,7 +370,7 @@ static AjBool oboinReadObo(AjPOboin thys, AjPObo obo);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Read [AjBool function] Input function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -345,12 +394,12 @@ static OboOInFormat oboinFormatDef[] =
 /* "Name",        "Description" */
 /*     Alias,   Try,     */
 /*     ReadFunction */
-  {"unknown",     "0000000", "Unknown format",
+  {"unknown",     "0000", "Unknown format",
        AJFALSE, AJFALSE,
-       oboinReadObo}, /* alias for obo */
-  {"obo",         "0002196", "OBO format",
+       &oboinReadObo}, /* alias for obo */
+  {"obo",         "2196", "OBO format",
        AJFALSE, AJTRUE,
-       oboinReadObo},
+       &oboinReadObo},
   {NULL, NULL, NULL, 0, 0, NULL}
 };
 
@@ -428,6 +477,8 @@ static AjBool obolineParseDef(AjPObo obo, const AjPStr line);
 **
 ** @return [AjPOboin] New obo input object.
 ** @category new [AjPOboin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -482,6 +533,8 @@ AjPOboin ajOboinNew(void)
 ** @param [d] pthis [AjPOboin*] Obo input
 ** @return [void]
 ** @category delete [AjPOboin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -549,6 +602,8 @@ void ajOboinDel(AjPOboin* pthis)
 ** @param [w] thys [AjPOboin] obo term input
 ** @return [void]
 ** @category modify [AjPOboin] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -570,7 +625,7 @@ void ajOboinClear(AjPOboin thys)
 
 
 
-/* @func ajOboinQryC ***********************************************************
+/* @func ajOboinQryC **********************************************************
 **
 ** Resets an obo term input object using a new Universal
 ** obo term Address
@@ -579,6 +634,8 @@ void ajOboinClear(AjPOboin thys)
 ** @param [r] txt [const char*] Query
 ** @return [void]
 ** @category modify [AjPOboin] Resets using a new query
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -603,6 +660,8 @@ void ajOboinQryC(AjPOboin thys, const char* txt)
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
 ** @category modify [AjPOboin] Resets using a new query
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -646,6 +705,8 @@ void ajOboinQryS(AjPOboin thys, const AjPStr str)
 **
 ** @param [r] thys [const AjPOboin] obo term input object.
 ** @return [const AjPStr] Query string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -664,6 +725,8 @@ const AjPStr ajOboinGetQryS(const AjPOboin thys)
 **
 ** @param [r] thys [const AjPOboin] obo term input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -717,6 +780,8 @@ void ajOboinTrace(const AjPOboin thys)
 ** @return [AjBool] ajTrue on success.
 ** @category input [AjPObo] Master obo term input, calls specific functions
 **                  for file access type and obo term format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -844,6 +909,8 @@ AjBool ajOboinRead(AjPOboin oboin, AjPObo obo)
 **                  1 if the query match failed.
 **                  2 if the obo term type failed
 **                  3 if it failed to read an obo term
+**
+** @release 6.4.0
 ** @@
 ** This is the only function that calls the appropriate Read function
 ** oboinReadXxxxxx where Xxxxxxx is the supported obo term format.
@@ -866,7 +933,7 @@ static ajuint oboinReadFmt(AjPOboin oboin, AjPObo obo,
     oboin->Input->Records = 0;
 
     /* Calling funclist oboinFormatDef() */
-    if(oboinFormatDef[format].Read(oboin, obo))
+    if((*oboinFormatDef[format].Read)(oboin, obo))
     {
 	ajDebug("oboinReadFmt success with format %d (%s) '%S'\n",
 		format, oboinFormatDef[format].Name, obo->Name);
@@ -921,6 +988,8 @@ static ajuint oboinReadFmt(AjPOboin oboin, AjPObo obo,
 ** @param [u] oboin [AjPOboin] obo term input object
 ** @param [w] obo [AjPObo] obo term object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -956,9 +1025,9 @@ static AjBool oboinRead(AjPOboin oboin, AjPObo obo)
 	/* Calling funclist oboinAccess() */
 	if(textaccess)
         {
-            if(!textaccess->Access(oboin->Input))
+            if(!(*textaccess->Access)(oboin->Input))
             {
-                ajDebug("oboinRead: textaccess->Access(oboin->Input) "
+                ajDebug("oboinRead: (*textaccess->Access)(oboin->Input) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -967,9 +1036,9 @@ static AjBool oboinRead(AjPOboin oboin, AjPObo obo)
 
 	if(oboaccess)
         {
-            if(!oboaccess->Access(oboin))
+            if(!(*oboaccess->Access)(oboin))
             {
-                ajDebug("oboinRead: oboaccess->Access(oboin) "
+                ajDebug("oboinRead: (*oboaccess->Access)(oboin) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -1133,9 +1202,9 @@ static AjBool oboinRead(AjPOboin oboin, AjPObo obo)
 
     if(ajFilebuffIsEmpty(buff) && oboin->Input->ChunkEntries)
     {
-	if(textaccess && !textaccess->Access(oboin->Input))
+	if(textaccess && !(*textaccess->Access)(oboin->Input))
             return ajFalse;
-	else if(oboaccess && !oboaccess->Access(oboin))
+	else if(oboaccess && !(*oboaccess->Access)(oboin))
             return ajFalse;
         buff = oboin->Input->Filebuff;
     }
@@ -1212,6 +1281,8 @@ static AjBool oboinRead(AjPOboin oboin, AjPObo obo)
 ** @param [u] oboin [AjPOboin] Obo input object
 ** @param [w] obo [AjPObo] Obo object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1339,7 +1410,10 @@ static AjBool oboinReadObo(AjPOboin oboin, AjPObo obo)
             if(spos < 0)
                 ajStrAssignS(&obo->Id, obotag->Value);
             else
+            {
+                ajStrAssignSubS(&obo->Db, obotag->Value, 0, spos-1);
                 ajStrAssignSubS(&obo->Id, obotag->Value, spos+1, -1);
+            }
         }
         else if(ajStrMatchC(name, "name"))
         {
@@ -1503,11 +1577,13 @@ static AjBool oboinReadObo(AjPOboin oboin, AjPObo obo)
 
 
 
-/* @func ajOboallNew ***********************************************************
+/* @func ajOboallNew **********************************************************
 **
 ** Creates a new obo input stream object.
 **
 ** @return [AjPOboall] New obo input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1554,12 +1630,14 @@ AjPOboall ajOboallNew(void)
 
 
 
-/* @func ajOboallDel ***********************************************************
+/* @func ajOboallDel **********************************************************
 **
 ** Deletes an obo input stream object.
 **
 ** @param [d] pthis [AjPOboall*] Obo input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1621,6 +1699,8 @@ void ajOboallDel(AjPOboall* pthis)
 **
 ** @param [w] thys [AjPOboall] obo term input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1673,6 +1753,8 @@ void ajOboallClear(AjPOboall thys)
 **
 ** @param [r] thys [const AjPOboall] obo term input stream
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1695,6 +1777,8 @@ const AjPStr ajOboallGetQryS(const AjPOboall thys)
 **
 ** @param [r] thys [const AjPOboall] obo term input stream
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1724,7 +1808,7 @@ const AjPStr ajOboallGetoboId(const AjPOboall thys)
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -1746,6 +1830,8 @@ const AjPStr ajOboallGetoboId(const AjPOboall thys)
 ** @param [w] thys [AjPOboall] Obo term input stream
 ** @param [u] Pobo [AjPObo*] Obo term returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1835,6 +1921,8 @@ AjBool ajOboallNext(AjPOboall thys, AjPObo *Pobo)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1878,6 +1966,8 @@ static AjBool oboinformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1901,6 +1991,8 @@ AjBool ajOboinformatTerm(const AjPStr term)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if format was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1958,6 +2050,8 @@ AjBool ajOboinformatTest(const AjPStr format)
 ** @param [r] qry [const AjPStr] Query
 ** @param [u] obo [AjPObo] obo term
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2002,6 +2096,8 @@ AjBool ajOboqryGetObo(const AjPStr qry, AjPObo obo)
 ** @param [u] obo [AjPObo] obo term to be read. The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2062,7 +2158,7 @@ static AjBool oboinQryProcess(AjPOboin oboin, AjPObo obo)
                 qry->Formatstr);
         qry->Access = ajCallTableGetS(oboDbMethods,qry->Method);
         oboaccess = qry->Access;
-        return oboaccess->Access(oboin);
+        return (*oboaccess->Access)(oboin);
     }
 
     ajDebug("oboinQryProcess text method '%S' success\n", qry->Method);
@@ -2101,6 +2197,8 @@ static AjBool oboinQryProcess(AjPOboin oboin, AjPObo obo)
 ** @param [u] obo [AjPObo] obo term
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2214,6 +2312,8 @@ static AjBool oboinListProcess(AjPOboin oboin, AjPObo obo,
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2251,6 +2351,8 @@ static void oboinListNoComment(AjPStr* text)
 ** @param [u] oboin [AjPOboin] obo term input.
 ** @param [u] obo [AjPObo] obo term.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2339,6 +2441,8 @@ static AjBool oboinFormatSet(AjPOboin oboin, AjPObo obo)
 ** @param [w] up   [const AjPStr*] Parent query
 ** @param [w] space [const AjPStr*] Namespace query
 ** @return [ajuint] Number of fields found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajOboqueryGetallObofields(const AjPQuery query,
@@ -2385,6 +2489,8 @@ ajuint ajOboqueryGetallObofields(const AjPQuery query,
 ** @param [r] thys [const AjPQuery] query.
 ** @param [r] obo [const AjPObo] obo term.
 ** @return [AjBool] ajTrue if the obo term matches the query.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2396,7 +2502,7 @@ static AjBool oboQueryMatch(const AjPQuery thys, const AjPObo obo)
     AjPQueryField field = NULL;
     AjBool ok = ajFalse;
 
-    ajDebug("oboQueryMatch '%S' fields: %u Case %B Done %B\n",
+    ajDebug("oboQueryMatch '%S' fields: %Lu Case %B Done %B\n",
 	    obo->Name, ajListGetLength(thys->QueryFields),
             thys->CaseId, thys->QryDone);
 
@@ -2517,6 +2623,8 @@ static AjBool oboQueryMatch(const AjPQuery thys, const AjPObo obo)
 ** @param [w] thys [AjPObo] Obo term returned.
 ** @param [u] oboin [AjPOboin] Obo term input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2535,7 +2643,7 @@ static AjBool oboDefine(AjPObo thys, AjPOboin oboin)
 
     /* assign the dbname and entryname if defined in the oboin object */
     if(ajStrGetLen(oboin->Input->Db))
-      ajStrAssignS(&thys->Db, oboin->Input->Db);
+      ajStrAssignEmptyS(&thys->Db, oboin->Input->Db);
 
     /*ajDebug("oboDefine: returns thys->Name '%S' type: %S\n",
       thys->Name, thys->Type);*/
@@ -2554,12 +2662,16 @@ static AjBool oboDefine(AjPObo thys, AjPOboin oboin)
 ** @param [w] oboin [AjPOboin] Obo input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void oboinQryRestore(AjPOboin oboin, const AjPQueryList node)
 {
     oboin->Input->Format = node->Format;
+    oboin->Input->Fpos   = node->Fpos;
     ajStrAssignS(&oboin->Input->Formatstr, node->Formatstr);
+    ajStrAssignS(&oboin->Input->QryFields, node->QryFields);
 
     return;
 }
@@ -2574,12 +2686,16 @@ static void oboinQryRestore(AjPOboin oboin, const AjPQueryList node)
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] oboin [const AjPOboin] Obo input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void oboinQrySave(AjPQueryList node, const AjPOboin oboin)
 {
     node->Format   = oboin->Input->Format;
+    node->Fpos     = oboin->Input->Fpos;
     ajStrAssignS(&node->Formatstr, oboin->Input->Formatstr);
+    ajStrAssignS(&node->QryFields, oboin->Input->QryFields);
 
     return;
 }
@@ -2626,6 +2742,8 @@ static void oboinQrySave(AjPQueryList node, const AjPOboin oboin)
 ** Obo data internals constructor
 **
 ** @return [AjPOboData] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2641,13 +2759,15 @@ AjPOboData ajObodataNew(void)
 
 
 
-/* @func ajObodataParseObofile *************************************************
+/* @func ajObodataParseObofile ************************************************
 **
 ** Parse an OBO format file
 **
 ** @param [u] obofile [AjPFile] OBO format input file
 ** @param [r] validations [const char*] Validations to turn on or off
 ** @return [AjPOboData] Ontology data object
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
@@ -2703,12 +2823,20 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
     AjPStrTok idsplit     = NULL;
     AjPStrTok validsplit  = NULL;
     AjPStr validstr       = NULL;
-    AjBool obovalid        = ajTrue;
-    AjBool obovalididorder = ajTrue;
-    AjBool obovalididunk   = ajTrue;
+    AjBool obovalid          = ajTrue;
+    AjBool obovalididorder   = ajTrue;
+    AjBool obovalididunk     = ajTrue;
+    AjBool obovalidmultisyn  = ajTrue;
     AjPStr namekey = NULL;
     AjPStr namestr = NULL;
     AjPList namelist = NULL;
+    const AjPObo isaterm = NULL;
+    AjPStr tmpid = NULL;
+    AjPStr tmpname = NULL;
+    ajlong ipos;
+
+    ajDebug("ajObodataParseObofile '%F', validations '%s'\n",
+            obofile, validations);
 
     ret = ajObodataNew();
     namelist = ajListNew();
@@ -2724,12 +2852,15 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
             {
                 obovalid = ajFalse;
                 obovalididorder = ajFalse;
-                obovalididunk = ajFalse;
+/*                obovalididunk = ajFalse;*/
+                obovalidmultisyn = ajFalse;
             }
             else if(ajStrMatchC(tmpstr, "noidorder"))
                 obovalididorder = ajFalse;
             else if(ajStrMatchC(tmpstr, "nounkid"))
                 obovalididunk = ajFalse;
+            else if(ajStrMatchC(tmpstr, "nomultisynonym"))
+                obovalidmultisyn = ajFalse;
             else
                 ajWarn("ajObodataParseObofile: unknown validation '%S'",
                        tmpstr);
@@ -2748,12 +2879,12 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
     {
         linecnt++;
 
-        ajObolineCutComment(&line, &comment);
-        ajObolineEscape(&line);
-
         if(ajStrGetLen(line) && isspace((int) ajStrGetCharLast(line)))
            oboinWarn(obofile, linecnt, term->Id,
                    "trailing whitespace on line");
+
+        ajObolineCutComment(&line, &comment);
+        ajObolineEscape(&line);
 
         if((ajStrGetCharLast(line) == '\\') &&
            (ajStrGetCharPos(line, -2) != '\\'))
@@ -2818,13 +2949,20 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                                                  namekey, term);
                             if(oldterm)
                             {
-                                oboinWarn(obofile, linecnt, term->Id,
-                                        "%S Name/Synonym %S duplicates '%S'",
-                                        term->Id, namekey, oldterm->Id);
+                                if(!ajStrMatchS(oldterm->Id, term->Id))
+                                    oboinWarn(obofile, linecnt, term->Id,
+                                              "%S Name/Synonym %S "
+                                              "duplicates '%S'",
+                                              term->Id, namekey, oldterm->Id);
+                                else if(obovalidmultisyn)
+                                    oboinWarn(obofile, linecnt, term->Id,
+                                              "%S Name/Synonym %S "
+                                              "multiply defined",
+                                              term->Id, namekey);
                                 oldterm = NULL;
                             }
                         }
-                     }
+                    }
                     else
                     {
                         if(ajStrMatchC(stanzatype, "Typedef"))
@@ -2924,17 +3062,31 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
         else 
         {
             if(ajObolineCutModifier(&line, &modifier))
-                ajDebug("%F %u: (%S) modifier found '%S'\n",
-                        obofile, linecnt, term->Id,
-                        modifier);
-
+            {
+                if(term)
+                    ajDebug("%F %u: (%S) modifier found '%S'\n",
+                            obofile, linecnt, term->Id,
+                            modifier);
+                else
+                    ajDebug("%F %u: header modifier found '%S'\n",
+                            obofile, linecnt,
+                            modifier);
+            }
             /* parse name: value ! comment */
             ajStrExtractWord(line, &rest, &token);
 
             if(!ajStrGetLen(rest))
-                oboinWarn(obofile, linecnt, term->Id,
-                        "missing value for tag '%S' in %S '%S'",
-                        token, stanzatype, id);
+            {
+                if(isterm)
+                    oboinWarn(obofile, linecnt, term->Id,
+                              "missing value for tag '%S' in %S '%S'",
+                              token, stanzatype, id);
+                else
+                    oboinWarn(obofile, linecnt, NULL,
+                              "missing value for tag '%S' in %S '%S'",
+                              token, stanzatype, id);
+                    }
+            
             ajStrAssignS(&name, token);
 
             if(ajStrGetCharLast(name) != ':')
@@ -3034,8 +3186,9 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
 
                             if(i > 1)
                             {
-			      namekey = ajStrNewRes((size_t) i);
-			      ajStrAssignSubS(&namekey, rest, 1, (ajlong) i-1);
+                                namekey = ajStrNewRes((size_t) i);
+                                ajStrAssignSubS(&namekey, rest,
+                                                1, (ajlong) i-1);
                                 ajListstrPushAppend(namelist, namekey);
                             }
                         }
@@ -3146,14 +3299,26 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                 }
 
                 if(!ok)
-                    oboinWarn(obofile, linecnt, term->Id,
-                            "unknown header name '%S'",
-                            token);
+                {
+                    if(term)
+                        oboinWarn(obofile, linecnt, term->Id,
+                                  "unknown header name '%S'",
+                                  token);
+                    else
+                        oboinWarn(obofile, linecnt, NULL,
+                                  "unknown header name noid",
+                                  token);
+                }
             }
 
             ajStrTrimWhite(&rest);
         }
     }
+
+    /*
+    ** Apply the same tests to the last term
+    ** if that was the final stanza in the input file
+    */
 
     if(stanzalist)
     {
@@ -3191,10 +3356,17 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                                          namekey, term);
                     if(oldterm)
                     {
-                        oboinWarn(obofile, linecnt, term->Id,
-                                "%S Name/Synonym %S duplicates '%S'",
-                                term->Id, namekey, oldterm->Id);
-                        oldterm = NULL;
+                        if(!ajStrMatchS(oldterm->Id, term->Id))
+                            oboinWarn(obofile, linecnt, term->Id,
+                                      "%S Name/Synonym %S "
+                                      "duplicates '%S'",
+                                      term->Id, namekey, oldterm->Id);
+                        else if(obovalidmultisyn)
+                            oboinWarn(obofile, linecnt, term->Id,
+                                      "%S Name/Synonym %S "
+                                      "multiply defined",
+                                      term->Id, namekey);
+                         oldterm = NULL;
                     }
                 }
 
@@ -3227,8 +3399,8 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
     id = NULL;
     stanzalist = ajListNew();
 
-    ajDebug("typedefs:%u terms:%u instances:%u annotations:%u formulas:%u "
-           "other:%u\n",
+    ajDebug("typedefs:%Lu terms:%Lu instances:%Lu annotations:%Lu "
+            "formulas:%Lu other:%Lu\n",
             ajTableGetLength(ret->Typedeftable),
             ajTableGetLength(ret->Termtable),
             ajTableGetLength(ret->Instancetable),
@@ -3241,9 +3413,9 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
     ** fetch and sort them
     */
 
-    ntypes = ajTableToarrayKeysValues(ret->Typedeftable,
-                                      (void***) &typeids,
-                                      (void***) &typetags);
+    ntypes = (ajuint) ajTableToarrayKeysValues(ret->Typedeftable,
+					       (void***) &typeids,
+					       (void***) &typetags);
     for(s=ntypes/2; s>0; s /= 2)
 	for(i=s; i<ntypes; ++i)
 	  for(k = (ajlong)(i-s);k>=0 && MAJSTRCMPS(typeids[k],typeids[k+s])>0;
@@ -3291,18 +3463,21 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                 }
                 
             }
-            /* check for IDs */
+
             ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
 
             while (ajStrTokenNextParse(&idsplit, &tmpstr))
             {
                 if(ajStrPrefixS(tmpstr, idprefix))
-                    if(obovalididunk && !ajTableMatchS(ret->Termtable, tmpstr))
+                {
+                    if(obovalididunk &&
+                       !ajTableMatchS(ret->Termtable, tmpstr))
                         oboinWarn(obofile, obotag->Linenumber, NULL,
-                                "Unknown id '%S' for tag '%S' in typedef '%S'",
-                                tmpstr, obotag->Name, id);
+                                  "Unknown id '%S' for tag '%S' "
+                                  "in typedef '%S'",
+                                  tmpstr, obotag->Name, id);
+                }
             }
-            
         }
     }
 
@@ -3310,9 +3485,9 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
     ** Validate terms
     */
 
-    nterms = ajTableToarrayKeysValues(ret->Termtable,
-                                      (void***) &termids,
-                                      (void***) &terms);
+    nterms = (ajuint) ajTableToarrayKeysValues(ret->Termtable,
+					       (void***) &termids,
+					       (void***) &terms);
     for(s=nterms/2; s>0; s /= 2)
 	for(i=s; i<nterms; ++i)
 	  for(k = (ajlong)(i-s); k>=0 && MAJSTRCMPS(termids[k],termids[k+s])>0;
@@ -3396,24 +3571,84 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                             "term tag not found '%S' for id '%S'",
                             obotag->Name, id);
             }
-            /* check for IDs */
-            ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
-
-            while (ajStrTokenNextParse(&idsplit, &tmpstr))
-            {
-                ajStrTrimEndC(&tmpstr, ".");
-
-                if(ajStrPrefixS(tmpstr, idprefix))
-                    if(obovalididunk && !ajTableMatchS(ret->Termtable, tmpstr))
-                        oboinWarn(obofile, obotag->Linenumber, NULL,
-                                "Unknown id '%S' for tag '%S' in term '%S'",
-                                tmpstr, obotag->Name, id);
-            }
             
+            if(ajStrMatchC(obotag->Name, "is_a") ||
+               ajStrMatchC(obotag->Name, "consider"))
+            {
+                ajStrAssignS(&tmpname, obotag->Comment);
+                ipos = ajStrFindAnyK(tmpname, '!');
+                if(ipos >= 0)
+                {
+                    ajStrKeepRange(&tmpname, 0, ipos-1);
+                    ajStrTrimEndC(&tmpname, " ");
+                }
+
+                isaterm = ajTableFetchS(ret->Termtable, obotag->Value);
+                if(!isaterm)
+                    oboinWarn(obofile, obotag->Linenumber, NULL,
+                              "Unknown id '%S' for tag '%S' "
+                              "in term '%S'",
+                              obotag->Value, obotag->Name, id);
+
+                else if(!ajStrMatchS(isaterm->Name, tmpname))
+                    oboinWarn(obofile, obotag->Linenumber, NULL,
+                              "Bad name '%S' for id '%S' "
+                              "for tag '%S' "
+                              "in term '%S' expected '%S'",
+                              tmpname, obotag->Value,
+                              obotag->Name, id, isaterm->Name);
+            }
+            else if(ajStrMatchC(obotag->Name, "relationship"))
+            {
+                ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
+                ajStrTokenNextParse(&idsplit, &tmpstr);
+                ajStrTokenNextParse(&idsplit, &tmpid);
+
+                ajStrAssignS(&tmpname, obotag->Comment);
+                ipos = ajStrFindAnyK(tmpname, '!');
+                if(ipos >= 0)
+                {
+                    ajStrKeepRange(&tmpname, 0, ipos-1);
+                    ajStrTrimEndC(&tmpname, " ");
+                }
+
+                isaterm = ajTableFetchS(ret->Termtable, tmpid);
+                if(!isaterm)
+                    oboinWarn(obofile, obotag->Linenumber, NULL,
+                              "Unknown id '%S' for tag '%S' relation '%S'"
+                              "in term '%S'",
+                              tmpid, obotag->Name, tmpstr, id);
+
+                else if(!ajStrMatchS(isaterm->Name, tmpname))
+                    oboinWarn(obofile, obotag->Linenumber, NULL,
+                              "Bad name '%S' for id '%S' "
+                              "for tag '%S' "
+                              "in term '%S' expected '%S'",
+                              tmpname, tmpid,
+                              obotag->Name, id, isaterm->Name);
+            }
+            else 
+            {
+                /* check for IDs */
+                ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
+
+                while (ajStrTokenNextParse(&idsplit, &tmpstr))
+                {
+                    ajStrTrimEndC(&tmpstr, ".");
+
+                    if(ajStrPrefixS(tmpstr, idprefix))
+                        if(obovalididunk &&
+                           !ajTableMatchS(ret->Termtable, tmpstr))
+                            oboinWarn(obofile, obotag->Linenumber, NULL,
+                                      "Unknown id '%S' for tag '%S' "
+                                      "in term '%S'",
+                                      tmpstr, obotag->Name, id);
+                }
+            }
         }
     }
 
-    ajDebug("%u id prefixes current '%S'\n",
+    ajDebug("%Lu id prefixes current '%S'\n",
             ajListGetLength(idprefixlist), idprefix);
 
     iterpref = ajListIterNew(idprefixlist);
@@ -3427,6 +3662,8 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
 
     ajListIterDel(&iterpref);
 
+    ajStrDel(&tmpid);
+    ajStrDel(&tmpname);
     return ret; 
 }
 
@@ -3462,17 +3699,32 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
 ** @param [r] thys [const AjPOboData] Parsed ontology
 ** @param [r] query [const AjPStr] OBO identifier
 ** @return [AjPObo] OBO term
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPObo ajObodataFetchId(const AjPOboData thys, const AjPStr query)
 {
     AjPObo ret;
     ajuint irecurs = 0;
+    AjPStr tmpqry = NULL;
+    AjBool isid = ajFalse;
 
     if(!thys)
         return NULL;
 
-    ret = ajTableFetchmodS(thys->Termtable, query);
+    if(ajStrPrefixC(query, "EDAM_identifier"))
+    {
+        isid = ajTrue;
+        ajStrAssignS(&tmpqry, query);
+        ajStrExchangeCC(&tmpqry, "EDAM_identifier:", "EDAM_data:");
+        ret = ajTableFetchmodS(thys->Termtable, tmpqry);
+        ajStrDel(&tmpqry);
+    }
+    else 
+    {
+        ret = ajTableFetchmodS(thys->Termtable, query);
+    }
 
     while(ret && ajStrGetLen(ret->Trueid))
     {
@@ -3480,6 +3732,11 @@ AjPObo ajObodataFetchId(const AjPOboData thys, const AjPStr query)
             return NULL;
 
         ret = ajTableFetchmodS(thys->Termtable, ret->Trueid);
+    }
+
+    if(isid)
+    {
+        ajStrExchangeCC(&ret->Id, "EDAM_data:", "EDAM_identifier:");
     }
 
     return ret;
@@ -3497,6 +3754,8 @@ AjPObo ajObodataFetchId(const AjPOboData thys, const AjPStr query)
 ** @param [r] thys [const AjPOboData] Parsed ontology
 ** @param [r] query [const AjPStr] OBO name
 ** @return [AjPObo] OBO term
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPObo ajObodataFetchName(const AjPOboData thys, const AjPStr query)
@@ -3567,6 +3826,8 @@ AjPObo ajObodataFetchName(const AjPOboData thys, const AjPStr query)
 ** @param [u] Pline [AjPStr*] Line with possible comment text
 ** @param [u] Pcomment [AjPStr*] Comment text
 ** @return [AjBool] True if a comment was found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajObolineCutComment(AjPStr *Pline, AjPStr *Pcomment)
@@ -3606,7 +3867,7 @@ AjBool ajObolineCutComment(AjPStr *Pline, AjPStr *Pcomment)
         {
             doescape = ajFalse;
 
-            if(isspace(*cp))
+            if(isspace((int)*cp))
                 spaces++;
             else
                 spaces = 0;
@@ -3630,6 +3891,8 @@ AjBool ajObolineCutComment(AjPStr *Pline, AjPStr *Pcomment)
 ** @param [u] Pline [AjPStr*] Line with possible trailing dbxref text
 ** @param [u] Pdbxref [AjPStr*] Dbxref text
 ** @return [AjBool] True if a trailing dbxref was found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajObolineCutDbxref(AjPStr *Pline, AjPStr *Pdbxref)
@@ -3675,6 +3938,8 @@ AjBool ajObolineCutDbxref(AjPStr *Pline, AjPStr *Pdbxref)
 ** @param [u] Pline [AjPStr*] Line with possible trailing modifier text
 ** @param [u] Pmodifier [AjPStr*] Modifier text
 ** @return [AjBool] True if a trailing modifier was found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajObolineCutModifier(AjPStr *Pline, AjPStr *Pmodifier)
@@ -3721,6 +3986,8 @@ AjBool ajObolineCutModifier(AjPStr *Pline, AjPStr *Pmodifier)
 **
 ** @param [u] Pline [AjPStr*] Line with possible comment text
 ** @return [AjBool] True if an escaped character was found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajObolineEscape(AjPStr *Pline)
@@ -3796,6 +4063,8 @@ AjBool ajObolineEscape(AjPStr *Pline)
 ** @param [u] obo [AjPObo] OBO term object
 ** @param [r] line [const AjPStr] Original definition line
 ** @return [AjBool] True if an escaped character was found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool obolineParseDef(AjPObo obo, const AjPStr line)
@@ -3946,6 +4215,8 @@ static AjBool obolineParseDef(AjPObo obo, const AjPStr line)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3989,7 +4260,7 @@ void ajOboinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -4030,6 +4301,8 @@ void ajOboinprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4088,6 +4361,8 @@ void ajOboinprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4128,6 +4403,8 @@ void ajOboinprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4203,6 +4480,8 @@ void ajOboinprintWiki(AjPFile outf)
 ** Cleans up obo term input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4220,7 +4499,7 @@ void ajOboinExit(void)
 
 
 
-/* @funcstatic oboinDebug ******************************************************
+/* @funcstatic oboinDebug *****************************************************
 **
 ** Formatted write as a debug message.
 **
@@ -4229,6 +4508,8 @@ void ajOboinExit(void)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4253,7 +4534,7 @@ static void oboinDebug(const AjPFile obofile, ajuint linecnt,
 
 
 
-/* @funcstatic oboinWarn *******************************************************
+/* @funcstatic oboinWarn ******************************************************
 **
 ** Formatted write as an error message.
 **
@@ -4263,6 +4544,8 @@ static void oboinDebug(const AjPFile obofile, ajuint linecnt,
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4316,6 +4599,8 @@ static void oboinWarn(const AjPFile obofile, ajuint linecnt, const AjPStr id,
 ** Returns the listof known field names for ajOboinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4327,11 +4612,13 @@ const char* ajOboinTypeGetFields(void)
 
 
 
-/* @func ajOboinTypeGetQlinks ************************************************
+/* @func ajOboinTypeGetQlinks *************************************************
 **
 ** Returns the listof known query link operators for ajOboinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4388,6 +4675,8 @@ const char* ajOboinTypeGetQlinks(void)
 ** returns the table in which obo database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4410,6 +4699,8 @@ AjPTable ajOboaccessGetDb(void)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4434,6 +4725,8 @@ const char* ajOboaccessMethodGetQlinks(const AjPStr method)
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4459,12 +4752,14 @@ ajuint ajOboaccessMethodGetScope(const AjPStr method)
 
 
 
-/* @func ajOboaccessMethodTest *************************************************
+/* @func ajOboaccessMethodTest ************************************************
 **
 ** Tests for a named method for obo reading.
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

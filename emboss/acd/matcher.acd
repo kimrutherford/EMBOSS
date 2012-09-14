@@ -1,8 +1,9 @@
 application: matcher [
   documentation: "Waterman-Eggert local alignment of two sequences"
   groups: "Alignment:Local"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000493 operation Pairwise sequence alignment (local)"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0493 Pairwise sequence alignment construction
+    	       (local)"
 ]
 
 section: input [
@@ -13,13 +14,13 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   matrix: datafile [
@@ -30,7 +31,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
   ]
 
 endsection: input
@@ -50,7 +51,7 @@ section: additional [
            gives you other reasonable alignments. In some cases, for example
            multidomain proteins of cDNA and genomic DNA comparisons, there
            may be other interesting and significant alignments."
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   integer: gapopen [
@@ -65,7 +66,7 @@ section: additional [
            matrix. The default value of 14 assumes you are using the
            EBLOSUM62 matrix for protein sequences, or a value of 16 and the
            EDNAFULL matrix for nucleotide sequences."
-    relations: "EDAM:0001397 data Gap opening penalty"
+    relations: "EDAM_data:1397 Gap opening penalty"
   ]
 
   integer: gapextend [
@@ -84,7 +85,7 @@ section: additional [
            in which case you would expect many single base gaps. You can get
            this result by setting the gap penalty to zero (or very low) and
            using the gap extension penalty to control gap scoring."
-    relations: "EDAM:0001398 data Gap extension penalty"
+    relations: "EDAM_data:1398 Gap extension penalty"
   ]
 
 endsection: additional
@@ -99,7 +100,7 @@ section: output [
     aformat: "markx0"
     minseqs: "2"
     maxseqs: "2"
-    relations: "EDAM:0001381 data Sequence alignment (pair)"
+    relations: "EDAM_data:1381 Sequence alignment (pair)"
   ]
 
 endsection: output

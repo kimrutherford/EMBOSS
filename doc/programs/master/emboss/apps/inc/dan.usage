@@ -5,7 +5,7 @@ Here is a sample session with <b>dan</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dan </b>
-Calculates nucleic acid melting temperature
+Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
 Enter Shift Increment [1]: <b></b>
@@ -26,7 +26,7 @@ An example of producing a plot of Tm:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dan -plot -graph cps </b>
-Calculates nucleic acid melting temperature
+Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
 Enter Shift Increment [1]: <b></b>

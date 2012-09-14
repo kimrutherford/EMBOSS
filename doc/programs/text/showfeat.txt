@@ -64,7 +64,7 @@ Output file [x65921.showfeat]:
 Command line arguments
 
 Display features of a sequence in pretty format
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -212,7 +212,7 @@ Version: EMBOSS:6.4.0.0
                                   always directionless (indicated by '0'),
                                   forward is indicated by '+' and reverse is
                                   '-'.
-   -origin             boolean    [N] Set this if you wish to display the
+   -sourceshow         boolean    [N] Set this if you wish to display the
                                   origin of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
@@ -224,12 +224,12 @@ Version: EMBOSS:6.4.0.0
                                   same line, then the start and end positions
                                   will be joined by a comma, for example:
                                   '189-189,225-225'.
-   -[no]type           boolean    [Y] Set this to be false if you do not wish
+   -[no]typeshow       boolean    [Y] Set this to be false if you do not wish
                                   to display the type of the features.
-   -tags               boolean    [N] Set this to be false if you do not wish
+   -tagshow            boolean    [N] Set this to be false if you do not wish
                                   to display the tags and values of the
                                   features.
-   -[no]values         boolean    [Y] Set this to be false if you do not wish
+   -[no]valueshow      boolean    [Y] Set this to be false if you do not wish
                                   to display the tag values of the features.
                                   If this is set to be false, only the tag
                                   names will be displayed. If the tags are not
@@ -256,7 +256,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -338,7 +341,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -351,6 +354,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -359,15 +371,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -548,10 +551,10 @@ See also
 
                    Program name                            Description
                    abiview      Display the trace in an ABI sequencer file
-                   cirdna       Draws circular maps of DNA constructs
+                   cirdna       Draw circular map of DNA constructs
                    extractfeat  Extract features from sequence(s)
                    iep          Calculate the isoelectric point of proteins
-                   lindna       Draws linear maps of DNA constructs
+                   lindna       Draw linear maps of DNA constructs
                    maskfeat     Write a sequence with masked features
                    pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
@@ -560,9 +563,9 @@ See also
                    prettyplot   Draw a sequence alignment with pretty formatting
                    prettyseq    Write a nucleotide sequence and its translation to file
                    remap        Display restriction enzyme binding sites in a nucleotide sequence
-                   showpep      Displays protein sequences with features in pretty format
+                   showpep      Display protein sequences with features in pretty format
                    sixpack      Display a DNA sequence with 6-frame translation and ORFs
-                   twofeat      Finds neighbouring pairs of features in sequence(s)
+                   twofeat      Find neighbouring pairs of features in sequence(s)
 
 Author(s)
 

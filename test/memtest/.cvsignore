@@ -1,0 +1,10 @@
+qatest.log
+qatestcmd.dat
+valgrind.err
+valgrind.out
+valgrind.result
+valgrind.summary
+valgrind.txt
+valgrindqa.err
+valgrindqa.out
+*-qa[0-9]*

@@ -1,7 +1,5 @@
-/****************************************************************************
+/* @source embdmx *************************************************************
 **
-** @source embdmx.c
-** 
 ** Algorithms for some of the DOMAINATRIX EMBASSY applications. 
 ** For use with the Scophit and Scopalign objects.  
 ** The functionality will eventually be subsumed by other AJAX and NUCLEUS 
@@ -9,23 +7,24 @@
 ** 
 ** @author Copyright (C) 2004 Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
 ** @author Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
-** @version 1.0 
+** @version $Revision: 1.38 $ 
+** @modified $Date: 2012/07/14 15:07:29 $ by $Author: rice $
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
-** 
+** version 2.1 of the License, or (at your option) any later version.
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
-** 
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
 ****************************************************************************/
 
 
@@ -36,8 +35,17 @@
 /* ============================ include files ============================ */
 /* ======================================================================= */
 
-#include "emboss.h"
+#include "embdmx.h"
+#include "embsig.h"
+#include "embaln.h"
 
+#include "ajlib.h"
+#include "ajmath.h"
+#include "ajdmx.h"
+#include "ajfileio.h"
+#include "ajlist.h"
+#include "ajmatrices.h"
+#include "ajsys.h"
 
 
 
@@ -91,6 +99,8 @@
 **
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [EmbPDmxNrseq] New non-redundant sequence object
+**
+** @release 6.1.0
 ******************************************************************************/
 
 EmbPDmxNrseq embDmxNrseqNew(const AjPSeq seq)
@@ -106,7 +116,7 @@ EmbPDmxNrseq embDmxNrseqNew(const AjPSeq seq)
 
 
 
-/* @func embDmxScophitsToHitlist *********************************************
+/* @func embDmxScophitsToHitlist **********************************************
 **
 ** Reads from a list of Scophit objects and writes a Hitlist object 
 ** with the next block of hits with identical SCOP classification. If the 
@@ -119,6 +129,8 @@ EmbPDmxNrseq embDmxNrseqNew(const AjPSeq seq)
 ** @param [u] iter    [AjIList*]    Pointer to iterator for list.
 **
 ** @return [AjBool] True on success (lists were processed ok)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -255,7 +267,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     (*out)->Type = type;
     
     /* Copy temp. list to Hitlist */
-    (*out)->N = ajListToarray(list, (void ***) &((*out)->hits));
+    (*out)->N = (ajuint) ajListToarray(list, (void ***) &((*out)->hits));
 
     ajStrDel(&fam);
     ajStrDel(&sfam);
@@ -269,7 +281,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 
 
 
-/* @func embDmxScophitToHit *************************************************
+/* @func embDmxScophitToHit ***************************************************
 **
 ** Copies the contents from a Scophit to a Hit object. Creates the Hit object
 ** if necessary.
@@ -278,6 +290,8 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 ** @param [r] from [const AjPScophit] Scophit object 
 **
 ** @return [AjBool] True if copy was successful.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -318,7 +332,7 @@ AjBool embDmxScophitToHit(EmbPHit *to, const AjPScophit from)
 
 
 
-/* @func embDmxScophitsAccToHitlist *****************************************
+/* @func embDmxScophitsAccToHitlist *******************************************
 **
 ** Reads from a list of Scophit objects and writes a Hitlist object 
 ** with the next block of hits with identical SCOP classification. A Hit is 
@@ -338,6 +352,8 @@ AjBool embDmxScophitToHit(EmbPHit *to, const AjPScophit from)
 ** @param [u] iter    [AjIList*]    Pointer to iterator for list.
 **
 ** @return [AjBool] True on success (lists were processed ok)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -499,7 +515,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
         
 
     /* Copy temp. list to Hitlist */
-    (*out)->N = ajListToarray(list, (void ***) &((*out)->hits));
+    (*out)->N = (ajuint) ajListToarray(list, (void ***) &((*out)->hits));
 
     /* Tidy up and return */
     ajStrDel(&fam);
@@ -514,7 +530,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 
 
 
-/* @func embDmxHitsWrite ****************************************************
+/* @func embDmxHitsWrite ******************************************************
  ** Writes a list of AjOHit objects to an output file. This is intended for 
  ** displaying the results from scans of a model against a protein sequence
  ** database. Output in a sigplot compatible format.
@@ -525,6 +541,8 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
  **
  ** @return [AjBool] True if file was written
  ** @@
+**
+** @release 2.9.0
  ***************************************************************************/
 
 AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
@@ -550,7 +568,7 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
     /* Push hits onto tmplist */
     ajListPushAppend(tmplist, hits);
     embDmxHitlistToScophits(tmplist, outlist);
-    ajListSort(outlist, ajDmxScophitCompPval);
+    ajListSort(outlist, &ajDmxScophitCompPval);
     
 
     /*Print header info*/
@@ -628,7 +646,7 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
 
 
 
-/* @func embDmxScopToScophit ************************************************
+/* @func embDmxScopToScophit **************************************************
 **
 ** Writes a Scophit structure with the common information in a Scop
 ** structure. The swissprot sequence is taken in preference to the pdb 
@@ -639,6 +657,8 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
 **                                    structure to write to. 
 **
 ** @return [AjBool] ajTrue on the success of creating a Scophit structure. 
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -685,7 +705,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 
 
 
-/* @func embDmxScopalgToScop ************************************************
+/* @func embDmxScopalgToScop **************************************************
 **
 ** Takes a Scopalg object (scop alignment) and an array of Scop objects
 ** taken from, e.g. a scop classification file.
@@ -699,6 +719,8 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 ** 
 ** @return [AjBool] A populated list has been returned
 **                  (a file has been written)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -707,12 +729,11 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 {
     AjPStr entry_up = NULL;  /* Current entry, upper case */
     ajint idx = 0;           /* Index into array for the Pdb code */
-    ajuint i   = 0;           /* Simple loop counter */
+    ajuint i   = 0U;         /* Simple loop counter */
 
 
     entry_up  = ajStrNew();
     
-
     /* check for bad arguments */
     if(!align)
     {
@@ -722,19 +743,17 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
         return ajFalse;
     }
 
-
-
     /*
     ** write to list the scop structures matching a particular
     ** family of domains
     */
-    for(i=0;i<align->N;i++)
+    for(i = 0U; i < align->Number; i++)
     {
 	ajStrAssignS(&entry_up, align->Codes[i]);
 	ajStrFmtUpper(&entry_up);
 	
 	
-        if((idx = ajScopArrFindScopid(scop_arr,scop_dim,entry_up))==-1)
+        if((idx = ajScopArrFindScopid(scop_arr,scop_dim,entry_up)) == -1)
         {
 	    ajStrDel(&entry_up);
 
@@ -746,9 +765,8 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 	    ajFmtPrint("Pushing %d (%S)\n", scop_arr[idx]->Sunid_Family, 
 		       scop_arr[idx]->Acc); */
 	    
-            ajListPushAppend(*list,(void*)scop_arr[idx]);
+            ajListPushAppend(*list, (void *) scop_arr[idx]);
 	}
-	
     }
 
     ajStrDel(&entry_up);
@@ -759,7 +777,7 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 
 
 
-/* @func embDmxScophitsOverlapAcc *******************************************
+/* @func embDmxScophitsOverlapAcc *********************************************
 **
 ** Checks for overlap and identical accession numbers between two hits.
 **
@@ -769,6 +787,8 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 **
 ** @return [AjBool] True if the overlap between the sequences is at least as 
 ** long as the threshold. False otherwise.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -800,7 +820,7 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 
 
 
-/* @func embDmxScophitsOverlap **********************************************
+/* @func embDmxScophitsOverlap ************************************************
 **
 ** Checks for overlap between two hits.
 **
@@ -810,6 +830,8 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 **
 ** @return [AjBool] True if the overlap between the sequences is at least as 
 **                  long as the threshold. False otherwise.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -838,7 +860,7 @@ AjBool embDmxScophitsOverlap(const AjPScophit h1, const AjPScophit h2,
 
 
 
-/* @func embDmxScophitMerge *************************************************
+/* @func embDmxScophitMerge ***************************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of the two 
 ** sequences from the Scophit objects hit1 and hit2. 
@@ -854,6 +876,8 @@ AjBool embDmxScophitsOverlap(const AjPScophit h1, const AjPScophit h2,
 ** @param [r] hit2     [const AjPScophit]  Scophit 2
 **
 ** @return [AjPScophit] Pointer to Scophit object.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -984,7 +1008,7 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
 
 
 
-/* @func embDmxScophitMergeInsertOther **************************************
+/* @func embDmxScophitMergeInsertOther ****************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Appends the new Scophit onto a list. Target
@@ -995,6 +1019,8 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
 ** @param [d] hit2   [AjPScophit]  Scophit object 2
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1019,7 +1045,7 @@ AjBool embDmxScophitMergeInsertOther(AjPList list, AjPScophit hit1,
 
 
 
-/* @func embDmxScophitMergeInsertOtherTarget ********************************
+/* @func embDmxScophitMergeInsertOtherTarget **********************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Appends the new Scophit onto a list. Target
@@ -1030,6 +1056,8 @@ AjBool embDmxScophitMergeInsertOther(AjPList list, AjPScophit hit1,
 ** @param [d] hit2   [AjPScophit]  Scophit object 2
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1055,7 +1083,7 @@ AjBool embDmxScophitMergeInsertOtherTarget(AjPList list, AjPScophit hit1,
 
 
 
-/* @func embDmxScophitMergeInsertOtherTargetBoth ****************************
+/* @func embDmxScophitMergeInsertOtherTargetBoth ******************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Appends the new Scophit onto a list. Target
@@ -1066,6 +1094,8 @@ AjBool embDmxScophitMergeInsertOtherTarget(AjPList list, AjPScophit hit1,
 ** @param [d] hit2   [AjPScophit]  Scophit object 2
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1094,7 +1124,7 @@ AjBool embDmxScophitMergeInsertOtherTargetBoth(AjPList list, AjPScophit hit1,
 
 
 
-/* @func embDmxScophitMergeInsertThis ***************************************
+/* @func embDmxScophitMergeInsertThis *****************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Insert the new Scophit immediately after hit2. 
@@ -1106,6 +1136,8 @@ AjBool embDmxScophitMergeInsertOtherTargetBoth(AjPList list, AjPScophit hit1,
 ** @param [u] iter   [AjIList]     List iterator
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1130,7 +1162,7 @@ AjBool embDmxScophitMergeInsertThis(const AjPList list, AjPScophit hit1,
 
 
 
-/* @func embDmxScophitMergeInsertThisTarget *********************************
+/* @func embDmxScophitMergeInsertThisTarget ***********************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Insert the new Scophit immediately after hit2. 
@@ -1143,6 +1175,8 @@ AjBool embDmxScophitMergeInsertThis(const AjPList list, AjPScophit hit1,
 ** @param [u] iter   [AjIList]     List iterator
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1169,7 +1203,7 @@ AjBool embDmxScophitMergeInsertThisTarget(const AjPList list,
 
 
 
-/* @func embDmxScophitMergeInsertThisTargetBoth  ****************************
+/* @func embDmxScophitMergeInsertThisTargetBoth  ******************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Insert the new Scophit immediately after hit2. 
@@ -1183,6 +1217,8 @@ AjBool embDmxScophitMergeInsertThisTarget(const AjPList list,
 ** @param [u] iter   [AjIList]     List iterator
 **
 ** @return [AjBool] True on success.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1213,7 +1249,7 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
 
 
 
-/* @func embDmxSeqNR ********************************************************
+/* @func embDmxSeqNR **********************************************************
 **
 ** Reads a list of AjPSeq's and writes an array describing the redundancy in
 ** the list. Elements in the array correspond to sequences in the list, i.e.
@@ -1245,6 +1281,8 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
 ** redundant as normal.
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1256,9 +1294,9 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
     ajint start2  = 0;	  /* Start of seq 2, passed as arg but not used */
     ajint maxarr  = 300;  /* Initial size for matrix */
     ajint len;
-    ajint x;		  /* Counter for seq 1 */
-    ajint y;		  /* Counter for seq 2 */
-    ajint nin;		  /* Number of sequences in input list */
+    ajuint x;		  /* Counter for seq 1 */
+    ajuint y;		  /* Counter for seq 2 */
+    ajuint nin;		  /* Number of sequences in input list */
     ajint *compass;
 
     const char  *p;
@@ -1292,7 +1330,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
     cvt = ajMatrixfGetCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
+    if(!(nin = (ajuint) ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into SeqsetNR");
 	AJFREE(compass);
@@ -1496,7 +1534,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 
 
 
-/* @func embDmxSeqNRRange****************************************************
+/* @func embDmxSeqNRRange******************************************************
 **
 ** Reads a list of AjPSeq's and writes an array describing the redundancy in
 ** the list. Elements in the array correspond to sequences in the list, i.e.
@@ -1528,6 +1566,8 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 ** 
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1539,9 +1579,9 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
     ajint start2 = 0;	/* Start of seq 2, passed as arg but not used */
     ajint maxarr = 300;	/* Initial size for matrix */
     ajint len;
-    ajint x;		/* Counter for seq 1 */
-    ajint y;		/* Counter for seq 2 */
-    ajint nin;		/* Number of sequences in input list */
+    ajuint x;		/* Counter for seq 1 */
+    ajuint y;		/* Counter for seq 2 */
+    ajuint nin;		/* Number of sequences in input list */
     ajint *compass;
 
     const char  *p;
@@ -1577,7 +1617,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
+    if(!(nin = (ajuint) ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into SeqsetNR");
 	AJFREE(compass);
@@ -1785,7 +1825,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 
 
 
-/* @func embDmxSeqCompall ***************************************************
+/* @func embDmxSeqCompall *****************************************************
 **
 ** Reads a list of AjPSeq's and writes an array of sequence similarity values
 ** for an all-versus-all comparison of the sequences.  The rows and columns 
@@ -1799,6 +1839,8 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 ** @param [r] gapextend [float]      Gap extension penalty
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -1809,9 +1851,9 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     ajint start2  = 0;	  /* Start of seq 2, passed as arg but not used */
     ajint maxarr  = 300;  /* Initial size for matrix */
     ajint len;
-    ajint x;		  /* Counter for seq 1 */
-    ajint y;		  /* Counter for seq 2 */
-    ajint nin;		  /* Number of sequences in input list */
+    ajuint x;		  /* Counter for seq 1 */
+    ajuint y;		  /* Counter for seq 2 */
+    ajuint nin;		  /* Number of sequences in input list */
     ajint *compass;
 
     const char  *p;
@@ -1844,7 +1886,7 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     cvt = ajMatrixfGetCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
+    if(!(nin = (ajuint) ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into embDmxSeqCompall");
 	AJFREE(compass);
@@ -1983,6 +2025,8 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 ** @param [u] inf      [AjPFile]  DHF file.
 **
 ** @return [AjPList] List of Scophit object pointers, or NULL (error).
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2058,9 +2102,9 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    ajStrAssignS(&type, token);
 
 	    if(ajStrMatchC(type, "SCOP"))
-		hit->Type = ajSCOP;
+		hit->Type = ajEDomainTypeSCOP;
 	    else if(ajStrMatchC(type, "CATH"))
-		hit->Type = ajCATH;
+		hit->Type = ajEDomainTypeCATH;
 
 	    /* Dom */
 	    token = ajStrParseC(NULL, "^");
@@ -2153,7 +2197,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 
 
 
-/* @func embDmxHitlistToScophits ********************************************
+/* @func embDmxHitlistToScophits **********************************************
 **
 ** Read from a list of Hitlist structures and writes a list of Scophit 
 ** structures.
@@ -2162,6 +2206,8 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 ** @param [w] out     [AjPList] List of Scophit structures
 **
 ** @return [AjBool] True on success (lists were processed ok)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -2258,6 +2304,8 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
 **
 ** @param [d] Pnrseq [EmbPDmxNrseq*] Non-redundant sequence object
 ** @return [void]
+**
+** @release 6.1.0
 ******************************************************************************/
 
 void embDmxNrseqDel(EmbPDmxNrseq* Pnrseq)

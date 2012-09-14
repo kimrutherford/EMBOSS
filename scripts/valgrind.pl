@@ -16,9 +16,9 @@
 		"domainalign-qa1" => "mkdir daf",
 		"seqnr-qa1" => "mkdir hitsnr;mkdir hitsred",
 		"sigscanlig-qa1" => "mkdir lhf;mkdir aln;mkdir results",
-		"ehmmindex-qa1" => "cp ../../qa/ehmmcalibrate-ex2-keep/myhmmso .",
+		"ehmmindex-qa1" => "cp ../../qa/ehmmcalibrate-keep2/myhmmso .",
 		"ohmmindex-qa1" => "cp ../../qa/ohmm-own-keep4/myhmms .",
-		"ohmmcalibrate-qa1" => "cp ../../qa/ohmmbuild-ex-keep/globin.hmm .",
+		"ohmmcalibrate-qa1" => "cp ../../qa/ohmmbuild-keep/globin.hmm .",
 
 		"ohmmcalibrate-qa2" => "cp ../../qa/ohmm-own-keep4/myhmms .",
 		"ohmmcalibrate-qa3" => "cp ../../qa/ohmm-own-keep4/myhmms .",
@@ -204,11 +204,27 @@ $dolist=0;
 $doall = 0;
 $dokeep=0;
 $dorunning = 1;
+
+open (VERSION, "embossversion -full -filter|") ||
+    die "Cannot run embossversion";
+while (<VERSION>){
+    if(/System: (\S+)/) {
+#      $os = $1;
+#      if($os =~ /windows/) {$iswindows = 1; $docheck=0}
+    }
+    if(/BaseDirectory: (\S+)/) {
+	$basedir = $1;
+#        print "BaseDirectory: $acddir\n";
+    }
+}
+close VERSION;
+chdir "$basedir/test/memtest";
+
 foreach $test (@ARGV) {
     if ($test =~ /^-(.*)/) {
 	$arg=$1;
 	if ($arg =~ /testfile=(\S+)/) {$testfile=$1}
-	if ($arg =~ /qa/) {$testfile="qatestcmd.dat"}
+	if ($arg =~ /qa/) {$testfile="$basedir/test/memtest/qatestcmd.dat"}
 #    elsif ($arg =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
 	elsif ($arg eq "list") {
 	    $dolist = 1;
@@ -261,7 +277,7 @@ if($dowild) {
     }
 }
 
-$valgopts = "--suppressions=../../valgrind.supp --track-origins=yes --leak-check=full --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high --track-fds=yes";
+$valgopts = "--suppressions=$basedir/test/valgrind.supp --track-origins=yes --leak-check=full --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high --track-fds=yes";
 ## --leak-check=full       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
 ## --num-callers=15       Backtrace 15 functions - use more if needed

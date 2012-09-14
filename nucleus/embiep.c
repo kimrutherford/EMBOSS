@@ -1,29 +1,42 @@
-/* @source embiep.c
+/* @source embiep *************************************************************
 **
-** Acid/base routines
-** Copyright (c) 1999 Alan Bleasby
+** Isoelectric point routines
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.26 $
+** @modified $Date: 2011/11/08 15:12:52 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+
+#include "ajlib.h"
+
+#include "embiep.h"
+#include "ajsys.h"
+#include "ajfiledata.h"
+#include "ajfileio.h"
+#include "ajbase.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
-
 
 
 
@@ -32,11 +45,13 @@
 
 
 
-/* @func embIeppKNew  *****************************************************
+/* @func embIeppKNew  *********************************************************
 **
 ** Create a pK array and read the data
 **
 ** @return [double*] pK data
+**
+** @release 6.1.0
 ******************************************************************************/
 
 double* embIeppKNew(void)
@@ -53,13 +68,15 @@ double* embIeppKNew(void)
 
 
 
-/* @func embIeppKDel  *****************************************************
+/* @func embIeppKDel  *********************************************************
 **
 ** Delete a pK array and read the data
 **
 ** @param [w] pK [double *] pKs
 **
 ** @return [void]
+**
+** @release 6.1.0
 ******************************************************************************/
 
 void embIeppKDel(double *pK)
@@ -80,6 +97,8 @@ void embIeppKDel(double *pK)
 ** @param [r] pH [double] pH
 **
 ** @return [double] hydrogen ion concentrration
+**
+** @release 4.0.0
 ******************************************************************************/
 
 double embIepPhToHconc(double pH)
@@ -97,6 +116,8 @@ double embIepPhToHconc(double pH)
 ** @param [r] H [double] H
 **
 ** @return [double] pH
+**
+** @release 4.0.0
 ******************************************************************************/
 
 double embIepPhFromHconc(double H)
@@ -114,6 +135,8 @@ double embIepPhFromHconc(double H)
 ** @param [r] pK [double] pK
 **
 ** @return [double] dissociation constant
+**
+** @release 1.0.0
 ******************************************************************************/
 
 double embIepPkToK(double pK)
@@ -131,6 +154,8 @@ double embIepPkToK(double pK)
 ** @param [r] K [double] K
 **
 ** @return [double] pK
+**
+** @release 4.0.0
 ******************************************************************************/
 
 double embIepPkFromK(double K)
@@ -148,6 +173,8 @@ double embIepPkFromK(double K)
 ** @param [w] pK [double*] pK
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embIepPkRead(double *pK)
@@ -224,6 +251,8 @@ void embIepPkRead(double *pK)
 ** @param [w] c [ajint *] amino acid composition
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void embIepCompC(const char *s, ajint amino, ajint carboxyl,
@@ -314,6 +343,8 @@ void embIepCompC(const char *s, ajint amino, ajint carboxyl,
 ** @param [w] c [ajint *] amino acid composition
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void embIepCompS(const AjPStr str, ajint amino, ajint carboxyl,
@@ -321,20 +352,6 @@ void embIepCompS(const AjPStr str, ajint amino, ajint carboxyl,
 		 ajint *c)
 {
     embIepCompC(ajStrGetPtr(str), amino, carboxyl, sscount, modlysine, c);
-
-    return;
-}
-
-
-
-
-/* @obsolete embIepComp
-** @replace embIepCompC (1,2,3/1,2,0,0,3)
-*/
-__deprecated void  embIepComp(const char *s, ajint amino, ajint carboxyl,
-                              ajint *c)
-{
-    embIepCompC(s, amino, carboxyl, 0, 0, c);
 
     return;
 }
@@ -351,6 +368,8 @@ __deprecated void  embIepComp(const char *s, ajint amino, ajint carboxyl,
 ** @param [w] pK [double *] pK values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embIepCalcK(double *K, double *pK)
@@ -381,6 +400,8 @@ void embIepCalcK(double *K, double *pK)
 ** @param [w] pro [double *] number of protons bound
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embIepGetProto(const double *K, const ajint *c,
@@ -419,6 +440,8 @@ void embIepGetProto(const double *K, const ajint *c,
 ** @param [w] total [double *] total protons
 **
 ** @return [double] charge
+**
+** @release 1.0.0
 ******************************************************************************/
 
 double embIepGetCharge(const ajint *c, const double *pro, double *total)
@@ -452,6 +475,8 @@ double embIepGetCharge(const ajint *c, const double *pro, double *total)
 ** @param [w] pro [double *] number of protons
 **
 ** @return [double] IEP or 0.0
+**
+** @release 1.0.0
 ******************************************************************************/
 
 double embIepPhConverge(const ajint *c, const double *K,
@@ -518,6 +543,8 @@ double embIepPhConverge(const ajint *c, const double *K,
 ** @param [r] termini [AjBool] use termini
 **
 ** @return [AjBool] True if IEP exists
+**
+** @release 4.0.0
 ******************************************************************************/
 
 AjBool embIepIepC(const char *s, ajint amino, ajint carboxyl,
@@ -575,6 +602,8 @@ AjBool embIepIepC(const char *s, ajint amino, ajint carboxyl,
 ** @param [r] termini [AjBool] use termini
 **
 ** @return [AjBool] True if IEP exists
+**
+** @release 4.0.0
 ******************************************************************************/
 
 AjBool embIepIepS(const AjPStr str, ajint amino, ajint carboxyl,
@@ -583,6 +612,27 @@ AjBool embIepIepS(const AjPStr str, ajint amino, ajint carboxyl,
 {
     return embIepIepC(ajStrGetPtr(str), amino, carboxyl, sscount, modlysine,
 		      pK, iep, termini);
+}
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete embIepComp
+** @replace embIepCompC (1,2,3/1,2,0,0,3)
+*/
+__deprecated void  embIepComp(const char *s, ajint amino, ajint carboxyl,
+                              ajint *c)
+{
+    embIepCompC(s, amino, carboxyl, 0, 0, c);
+
+    return;
 }
 
 
@@ -597,3 +647,4 @@ __deprecated AjBool  embIepIEP(const char *s, ajint amino, ajint carboxyl,
 {
     return embIepIepC(s, amino, carboxyl, 0, 0, pK, iep, termini);
 }
+#endif

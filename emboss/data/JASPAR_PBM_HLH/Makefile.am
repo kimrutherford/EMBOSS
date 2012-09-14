@@ -1,2 +1,5 @@
-pkgdata_DATA = dummyfile
-pkgdatadir=$(prefix)/share/$(PACKAGE)/data/JASPAR_PBM_HLH
+## Process this file with automake to produce Makefile.in
+
+jasparpbmhlhdir = $(pkgdatadir)/data/JASPAR_PBM_HLH
+
+dist_jasparpbmhlh_DATA = dummyfile

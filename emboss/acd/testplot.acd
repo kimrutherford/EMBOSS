@@ -1,8 +1,8 @@
 application: testplot [
   documentation: "Test plot"
   groups: "Test"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]
 
 section: required [
@@ -16,7 +16,7 @@ section: required [
     minimum: "2"
     maximum: "360"
     information: "Number of degrees to plot"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
 endsection: required
@@ -30,13 +30,13 @@ section: output [
     standard: "y"
     default: "y"
     information: "Overlap the graphs"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   xygraph: graph [
     standard: "y"
     multiple: "3"
-    relations: "EDAM:0002142 data EMBOSS graph"
+    relations: "EDAM_data:2142 EMBOSS graph"
   ]
 
 endsection: output

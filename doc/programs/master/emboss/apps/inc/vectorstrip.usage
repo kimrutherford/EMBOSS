@@ -5,7 +5,7 @@ Here is a sample session with <b>vectorstrip</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>vectorstrip @vecseqs.list </b>
-Removes vectors from the ends of nucleotide sequence(s)
+Remove vectors from the ends of nucleotide sequence(s)
 Are your vector sequences in a file? [Y]: <b></b>
 Cloning vector definition file (optional): <b>vectors</b>
 Max allowed % mismatch [10]: <b></b>

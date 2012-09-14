@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -76,7 +76,7 @@ Here is a sample session with <b>ontocount</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontocount edam:0001234 </b>
+% <b>ontocount edam:1234 </b>
 Count ontology term(s)
 Output file [stdout]: <b></b>
 
@@ -92,11 +92,11 @@ Output file [stdout]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontocount edam:0001234 -subclasses </b>
+% <b>ontocount edam:1234 -subclasses </b>
 Count ontology term(s)
 Output file [stdout]: <b></b>
 
-7
+5
 
 </pre></td></tr></table><p>
 <p>
@@ -111,7 +111,7 @@ Output file [stdout]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Count ontology term(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -131,6 +131,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -218,7 +220,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+<td align="left" colspan=5>"-oboterms" associated obo qualifiers
 </td>
 </tr>
 
@@ -231,6 +233,22 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_oboterms</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_oboterms</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -idbname1<br>-idbname_oboterms</td>
 <td>string</td>
 <td>User-provided database name</td>
@@ -239,7 +257,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -386,17 +404,17 @@ EMBOSS application.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: edam:0001234</h3>
+<p><h3>Database entry: edam:1234</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 </pre>
 </td></tr></table><p>

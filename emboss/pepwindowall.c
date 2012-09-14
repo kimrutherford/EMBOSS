@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     seqset   = ajAcdGetSeqset("sequences");
     mult     = ajAcdGetGraphxy("graph");
     datafile = ajAcdGetDatafile("datafile");
-    llen     = ajAcdGetInt("length");
+    llen     = ajAcdGetInt("window");
     normal   = ajAcdGetBoolean("normalize");
 
     if(!pepwindowall_getnakaidata(datafile,&matrix[0], normal))
@@ -108,6 +108,8 @@ int main(int argc, char **argv)
 	ajStrSetClear(&aa0str);
 
 	graphdata = ajGraphdataNewI(maxlen);
+        ajGraphdataSetDatanameS(graphdata,
+                                ajSeqsetGetseqNameS(seqset, i));
 	ajGraphdataSetTypeC(graphdata,"Overlay 2D Plot");
 	ymin = 64000.;
 	ymax = -64000.;

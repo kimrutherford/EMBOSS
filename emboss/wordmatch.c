@@ -157,8 +157,9 @@ int main(int argc, char **argv)
                 {
                     iter = ajListIterNewread(matchlist[i]) ;
 
-                    while(embWordMatchIter(iter, &targetstart, &querystart, &len,
-                            &targetseq))
+                    while(embWordMatchIter(iter,
+                                           &targetstart, &querystart, &len,
+                                           &targetseq))
                     {
                         if(dumpAlign)
                         {

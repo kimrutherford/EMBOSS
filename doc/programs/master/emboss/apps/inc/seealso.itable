@@ -97,7 +97,7 @@ Using expanded group names will find many more programs which share at least som
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

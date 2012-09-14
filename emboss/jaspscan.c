@@ -259,7 +259,7 @@ int main(int argc, char **argv)
 
 
     jaspscan_ParseInput(dir, jaspdir, mats, excl, &recurs, flist);
-    mno = ajListGetLength(flist);
+    mno = (ajuint) ajListGetLength(flist);
 
 
     if(cp == 'C')
@@ -319,7 +319,7 @@ int main(int argc, char **argv)
 
     ajSeqDel(&seq);
 
-    ajTableMapDel(mattab,jaspscan_ClearTable,NULL);
+    ajTableMapDel(mattab, &jaspscan_ClearTable, NULL);
     ajTableFree(&mattab);
 
     ajListFree(&flist);
@@ -441,7 +441,7 @@ static void jaspscan_ParseInput(const AjPStr dir, const AjPStr jaspdir,
 	    if(ajStrMatchC(carr[i],"ALL"))
 	    {
 		jaspscan_GetFileList(dir, jaspdir, "*", ret);
-		ajListSortUnique(ret, ajStrVcmp, jaspscan_strdel);
+		ajListSortUnique(ret, &ajStrVcmp, &jaspscan_strdel);
 	    }
 	    else if(ajStrGetCharFirst(carr[i]) == '@')
 	    {
@@ -465,14 +465,14 @@ static void jaspscan_ParseInput(const AjPStr dir, const AjPStr jaspdir,
 		*recurs += 1;
 		jaspscan_ParseInput(dir,jaspdir,comm,NULL,recurs,ret);
 		*recurs -= 1;
-		ajListSortUnique(ret, ajStrVcmp, jaspscan_strdel);	    
+		ajListSortUnique(ret, &ajStrVcmp, &jaspscan_strdel);	    
 
 		ajFileClose(&inf);
 	    }
 	    else
 	    {
 		jaspscan_GetFileList(dir,jaspdir,ajStrGetPtr(carr[i]),ret);
-		ajListSortUnique(ret, ajStrVcmp, jaspscan_strdel);
+		ajListSortUnique(ret, &ajStrVcmp, &jaspscan_strdel);
 	    }
 	}
 
@@ -516,7 +516,7 @@ static void jaspscan_ParseInput(const AjPStr dir, const AjPStr jaspdir,
 		*recurs += 1;
 		jaspscan_ParseInput(dir,jaspdir,NULL,comm,recurs,ret);
 		*recurs -= 1;
-		ajListSortUnique(ret, ajStrVcmp, jaspscan_strdel);	    
+		ajListSortUnique(ret, &ajStrVcmp, &jaspscan_strdel);	    
 
 		ajFileClose(&inf);
 	    }
@@ -524,7 +524,7 @@ static void jaspscan_ParseInput(const AjPStr dir, const AjPStr jaspdir,
 	    {
 		ajStrAssignS(&line,earr[i]);
 		ajStrAppendC(&line,J_EXT);
-		rlen = ajListGetLength(ret);
+		rlen = (ajuint) ajListGetLength(ret);
 		for(j=0; j < rlen; ++j)
 		{
 		    ajListPop(ret,(void **)&val);
@@ -1238,10 +1238,10 @@ static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 	    feat = ajFeatNewIIRev(TabRpt,hit->start,hit->end);
 
 	ajFmtPrintS(&str,"*pc %.3f",hit->scorepc);
-	ajFeatTagAdd(feat, NULL, str);
+	ajFeatTagAddSS(feat, NULL, str);
 
 	ajFmtPrintS(&str,"*id %S",hit->matname);
-	ajFeatTagAdd(feat, NULL, str);
+	ajFeatTagAddSS(feat, NULL, str);
 
 	info = ajTableFetchS(mattab, hit->matname);
 	if(!info)
@@ -1250,75 +1250,75 @@ static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 	if(ajStrGetLen(info->name))
 	{
 	    ajFmtPrintS(&str,"*name %S",info->name);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->species))
 	{
 	    ajFmtPrintS(&str,"*species %S",info->species);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->klass))
 	{
 	    ajFmtPrintS(&str,"*class %S",info->klass);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->sgroup))
 	{
 	    ajFmtPrintS(&str,"*supergroup %S",info->sgroup);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->protseq))
 	{
 	    ajFmtPrintS(&str,"*pseq %S",info->protseq);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->exp))
 	{
 	    ajFmtPrintS(&str,"*exp %S",info->exp);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->pmid))
 	{
 	    ajFmtPrintS(&str,"*pmid %S",info->pmid);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->num))
 	{
 	    ajStrToFloat(info->num,&fnum);
 	    ajFmtPrintS(&str,"*info %.3f",fnum);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 	
 	if(ajStrGetLen(info->jaspar))
 	{
 	    ajFmtPrintS(&str,"*jaspar %S",info->jaspar);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->transfac))
 	{
 	    ajFmtPrintS(&str,"*transfac %S",info->transfac);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->mcs))
 	{
 	    ajStrToFloat(info->mcs,&fnum);
 	    ajFmtPrintS(&str,"*mcs %.3f",fnum);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	if(ajStrGetLen(info->models))
 	{
 	    ajFmtPrintS(&str,"*built %S",info->models);
-	    ajFeatTagAdd(feat, NULL, str);
+	    ajFeatTagAddSS(feat, NULL, str);
 	}
 
 	

@@ -1,17 +1,17 @@
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: edam:0001234</h3>
+<p><h3>Database entry: edam:1234</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 </pre>
 </td></tr></table><p>

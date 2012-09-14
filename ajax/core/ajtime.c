@@ -1,31 +1,39 @@
-/******************************************************************************
-** @source AJAX time functions
+/* @source ajtime *************************************************************
+**
+** AJAX time functions
 **
 ** @author Copyright (C) 1998 Ian Longden
 ** @author Copyright (C) 2003 Jon Ison    
-** @version 1.0
+** @version $Revision: 1.56 $
+** @modified 2004-2011 Peter Rice
+** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 
-#include <time.h>
+#include "ajlib.h"
 
-#include "ajax.h"
+#include "ajtime.h"
+#include "ajnam.h"
+
+#include <time.h>
+#include <limits.h>
 
 static clock_t timeClockSave = 0;
 
@@ -56,6 +64,7 @@ typedef struct TimeSFormat
     AjBool Uppercase;
     ajint Padding;
 } TimeOFormat;
+
 #define TimePFormat TimeOFormat*
 
 
@@ -74,9 +83,9 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
     {"log", "%a %b %d %H:%M:%S %Y", AJFALSE, 0},
 #ifndef WIN32
     {"report", "%a %e %b %Y %H:%M:%S", AJFALSE, 0},
-#else
+#else /* WIN32 */
     {"report", "%a %#d %b %Y %H:%M:%S", AJFALSE, 0},
-#endif
+#endif /* !WIN32 */
     {"dbindex", "%d/%m/%y", AJFALSE, 0},
     {"dtline", "%d-%b-%Y", AJTRUE, 0},
     {"cachefile", "%Y-%m-%d %H:%M:%S", AJTRUE, 0},
@@ -139,6 +148,8 @@ static const char* TimeFormat(const char *timefmt, AjBool* makeupper);
 ** Constructor for AjPTime object.
 **
 ** @return [AjPTime] An AjPTime object
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -166,6 +177,8 @@ AjPTime ajTimeNew(void)
 ** @param  [rN] mon     [ajint]   Month [1-12]
 ** @param  [rN] year    [ajint]   Four digit year
 ** @return [AjPTime] An AjPTime object
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -192,25 +205,14 @@ AjPTime ajTimeNewDayFmt(const char *timefmt,
 
 
 
-/* @obsolete ajTimeSet
-** @rename ajTimeNewDayFmt
-*/
-
-__deprecated AjPTime ajTimeSet(const char *timefmt,
-			       ajint mday, ajint mon, ajint year)
-{
-    return ajTimeNewDayFmt(timefmt, mday, mon, year);
-}
-
-
-
-
 /* @func ajTimeNewTime ********************************************************
 **
 ** Constructor for AjPTime object, making a copy of an existing time object
 **
 ** @param  [r] src [const AjPTime] Time object to be copied
 ** @return [AjPTime] An AjPTime object
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -234,6 +236,8 @@ AjPTime ajTimeNewTime(const AjPTime src)
 **
 ** AJAX function to return today's time as an AjPTime object
 ** @return [AjPTime] Pointer to time object containing today's date/time
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -257,18 +261,6 @@ AjPTime ajTimeNewToday(void)
 
 
 
-/* @obsolete ajTimeToday
-** @rename ajTimeNewToday
-*/
-
-__deprecated AjPTime ajTimeToday(void)
-{
-    return ajTimeNewToday();
-}
-
-
-
-
 /* @func ajTimeNewTodayFmt ****************************************************
 **
 ** AJAX function to return today's time as an AjPTime object
@@ -277,6 +269,8 @@ __deprecated AjPTime ajTimeToday(void)
 ** @param [r] timefmt [const char*] A controlled vocabulary of time formats
 **
 ** @return [] [AjPTime] Pointer to time object containing today's date/time
+**
+** @release 5.0.0
 ** @@
 **
 ******************************************************************************/
@@ -297,18 +291,6 @@ AjPTime ajTimeNewTodayFmt(const char* timefmt)
     thys->format = TimeFormat(timefmt, &thys->uppercase);
 
     return thys;
-}
-
-
-
-
-/* @obsolete ajTimeTodayF
-** @rename ajTimeNewTodayFmt
-*/
-
-__deprecated AjPTime ajTimeTodayF(const char* timefmt)
-{
-    return ajTimeNewTodayFmt(timefmt);
 }
 
 
@@ -340,6 +322,8 @@ __deprecated AjPTime ajTimeTodayF(const char* timefmt)
 ** @param [w] Ptime [AjPTime*] Time object pointer
 **
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -387,6 +371,8 @@ void ajTimeDel(AjPTime *Ptime)
 **
 ** @param [r] thys [const AjPTime] Time object
 ** @return [time_t] Standard time value
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -395,17 +381,6 @@ time_t ajTimeGetTimetype(const AjPTime thys)
     struct tm tm = thys->time;		/* mktime resets wday and yday */
 
     return mktime(&tm);
-}
-
-
-
-
-/* @obsolete ajTimeMake
-** @rename ajTimeGetTimetype
-*/
-__deprecated time_t ajTimeMake(const AjPTime thys)
-{
-    return ajTimeGetTimetype(thys);
 }
 
 
@@ -437,6 +412,8 @@ __deprecated time_t ajTimeMake(const AjPTime thys)
 ** AJAX function to return today's time as an AjPTime object reference
 ** @return [const AjPTime] Pointer to static time object containing
 **                         today's date/time
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -462,18 +439,6 @@ const AjPTime ajTimeRefToday(void)
 
 
 
-/* @obsolete ajTimeTodayRef
-** @rename ajTimeRefToday
-*/
-
-__deprecated const AjPTime ajTimeTodayRef(void)
-{
-    return ajTimeRefToday();
-}
-
-
-
-
 /* @func ajTimeRefTodayFmt ****************************************************
 **
 ** AJAX function to return today's time as a static AjPTime object
@@ -483,6 +448,8 @@ __deprecated const AjPTime ajTimeTodayRef(void)
 **
 ** @return [] [const AjPTime] Pointer to static time object containing
 **                            today's date/time
+**
+** @release 5.0.0
 ** @@
 **
 ******************************************************************************/
@@ -507,19 +474,7 @@ const AjPTime ajTimeRefTodayFmt(const char* timefmt)
 
 
 
-/* @obsolete ajTimeTodayRefF
-** @rename ajTimeRefTodayFmt
-*/
-
-__deprecated const AjPTime ajTimeTodayRefF(const char* timefmt)
-{
-    return ajTimeRefTodayFmt(timefmt);
-}
-
-
-
-
-/* @section set time ***********************************************************
+/* @section set time **********************************************************
 **
 ** Functions for setting the time.
 **
@@ -557,17 +512,19 @@ __deprecated const AjPTime ajTimeTodayRefF(const char* timefmt)
 ** @param [w] thys [AjPTime] Time object
 ** @param [r] timestr [const char*] Time in format yyyy-mm-dd hh:mm:ss
 ** @return [AjBool] ajTrue on success
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
 AjBool ajTimeSetC(AjPTime thys, const char* timestr)
 {
-    ajint year;
-    ajint mon;
-    ajint mday;
-    ajint hour;
-    ajint min;
-    ajint sec;
+    ajint year = 0;
+    ajint mon  = 0;
+    ajint mday = 0;
+    ajint hour = 0;
+    ajint min  = 0;
+    ajint sec  = 0;
 
     if(!thys)
         return ajFalse;
@@ -610,17 +567,19 @@ AjBool ajTimeSetC(AjPTime thys, const char* timestr)
 ** @param [w] thys [AjPTime] Time object
 ** @param [r] timestr [const AjPStr] Time in format yyyy-mm-dd hh:mm:ss
 ** @return [AjBool] ajTrue on success
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
 AjBool ajTimeSetS(AjPTime thys, const AjPStr timestr)
 {
-    ajint year;
-    ajint mon;
-    ajint mday;
-    ajint hour;
-    ajint min;
-    ajint sec;
+    ajint year = 0;
+    ajint mon  = 0;
+    ajint mday = 0;
+    ajint hour = 0;
+    ajint min  = 0;
+    ajint sec  = 0;
 
     if(!thys)
         return ajFalse;
@@ -659,6 +618,8 @@ AjBool ajTimeSetS(AjPTime thys, const AjPStr timestr)
 ** @param  [r] timer [const time_t] Populated standard C time structure
 **
 ** @return [AjBool] true if successful
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -691,26 +652,14 @@ AjBool ajTimeSetLocal(AjPTime thys, const time_t timer)
     thys->time.tm_hour = result->tm_hour;
     thys->time.tm_mon  = result->tm_mon;
     thys->time.tm_year = result->tm_year;
-#else
+#else /* !(__ppc__ || WIN32) */
     result = (struct tm *)localtime_r(&timer,&thys->time);
 
     if(!result)
 	return ajFalse;
-#endif
+#endif /* __ppc__ || WIN32 */
 
     return ajTrue;
-}
-
-
-
-
-/* @obsolete ajTimeLocal
-** @replace ajTimeSetLocal (1,2/2,1)
-*/
-
-__deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
-{
-    return ajTimeSetLocal(thys, timer);
 }
 
 
@@ -742,6 +691,8 @@ __deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 ** @param [r] thys [const AjPTime] Original time object
 ** @param [r] newtime [const AjPTime] Later time object
 ** @return [double] Difference in seconds
+**
+** @release 6.0.0
 ******************************************************************************/
 
 double ajTimeDiff(const AjPTime thys, const AjPTime newtime)
@@ -772,6 +723,8 @@ double ajTimeDiff(const AjPTime thys, const AjPTime newtime)
 ** @param [r] timefmt [const char*] AJAX time format
 ** @param [w] makeupper [AjBool*] If true, convert time to upper case
 ** @return [const char*] ANSI C time format, or NULL if none found
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -830,6 +783,8 @@ static const char* TimeFormat(const char *timefmt, AjBool* makeupper)
 **
 ** @param [r] thys [const AjPTime] Time object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -867,6 +822,8 @@ void ajTimeTrace(const AjPTime thys)
 ** Cleans up time processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -914,6 +871,8 @@ void ajTimeExit(void)
 ** Resets the clock time to zero
 **
 ** @return [void]
+**
+** @release 6.1.0
 ******************************************************************************/
 
 void ajTimeReset(void)
@@ -966,7 +925,7 @@ void ajTimeReset(void)
 
 
 
-/* @func ajClockDiff ********************************************************
+/* @func ajClockDiff **********************************************************
 **
 ** Returns the cpu time in seconds between two clock values
 **
@@ -974,6 +933,8 @@ void ajTimeReset(void)
 ** @param [r] nowtime [ajlong] current time
 ** @return [double] Total cpu clock time in seconds
 **
+**
+** @release 6.1.0
 ******************************************************************************/
 
 double ajClockDiff(ajlong starttime, ajlong nowtime)
@@ -988,12 +949,14 @@ double ajClockDiff(ajlong starttime, ajlong nowtime)
 
 
 
-/* @func ajClockNow ************************************************************
+/* @func ajClockNow ***********************************************************
 **
 ** Returns the clock time as a long even for systems where the clock_t type
 ** is 4 bytes
 **
 ** @return [ajlong] Total clock ticks
+**
+** @release 6.1.0
 ******************************************************************************/
 
 ajlong ajClockNow(void)
@@ -1032,12 +995,14 @@ ajlong ajClockNow(void)
 
 
 
-/* @func ajClockSeconds ********************************************************
+/* @func ajClockSeconds *******************************************************
 **
 ** Returns the cpu time in seconds since the start
 **
 ** @return [double] Total cpu clock time in seconds
 **
+**
+** @release 6.1.0
 ******************************************************************************/
 
 double ajClockSeconds(void)
@@ -1081,11 +1046,13 @@ double ajClockSeconds(void)
 
 
 
-/* @func ajClockReset **********************************************************
+/* @func ajClockReset *********************************************************
 **
 ** Resets the clock time to zero
 **
 ** @return [void]
+**
+** @release 6.1.0
 ******************************************************************************/
 
 void ajClockReset(void)
@@ -1095,3 +1062,96 @@ void ajClockReset(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajTimeSet
+** @rename ajTimeNewDayFmt
+*/
+
+__deprecated AjPTime ajTimeSet(const char *timefmt,
+			       ajint mday, ajint mon, ajint year)
+{
+    return ajTimeNewDayFmt(timefmt, mday, mon, year);
+}
+
+
+
+
+/* @obsolete ajTimeToday
+** @rename ajTimeNewToday
+*/
+
+__deprecated AjPTime ajTimeToday(void)
+{
+    return ajTimeNewToday();
+}
+
+
+
+
+/* @obsolete ajTimeTodayF
+** @rename ajTimeNewTodayFmt
+*/
+
+__deprecated AjPTime ajTimeTodayF(const char* timefmt)
+{
+    return ajTimeNewTodayFmt(timefmt);
+}
+
+
+
+
+/* @obsolete ajTimeMake
+** @rename ajTimeGetTimetype
+*/
+__deprecated time_t ajTimeMake(const AjPTime thys)
+{
+    return ajTimeGetTimetype(thys);
+}
+
+
+
+
+/* @obsolete ajTimeTodayRef
+** @rename ajTimeRefToday
+*/
+
+__deprecated const AjPTime ajTimeTodayRef(void)
+{
+    return ajTimeRefToday();
+}
+
+
+
+
+/* @obsolete ajTimeTodayRefF
+** @rename ajTimeRefTodayFmt
+*/
+
+__deprecated const AjPTime ajTimeTodayRefF(const char* timefmt)
+{
+    return ajTimeRefTodayFmt(timefmt);
+}
+
+
+
+
+/* @obsolete ajTimeLocal
+** @replace ajTimeSetLocal (1,2/2,1)
+*/
+
+__deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
+{
+    return ajTimeSetLocal(thys, timer);
+}
+
+#endif /* AJ_COMPILE_DEPRECATED */

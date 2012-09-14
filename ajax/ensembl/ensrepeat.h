@@ -1,10 +1,37 @@
+/* @include ensrepeat *********************************************************
+**
+** Ensembl Repeat functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.24 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSREPEAT_H
 #define ENSREPEAT_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPRepeatconsensusadaptor ******************************************
 **
@@ -43,9 +70,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPRepeatconsensus **************************************************
 **
@@ -123,9 +150,9 @@ typedef struct EnsSRepeatfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -145,7 +172,7 @@ EnsPRepeatconsensus ensRepeatconsensusNewIni(EnsPRepeatconsensusadaptor rca,
 
 EnsPRepeatconsensus ensRepeatconsensusNewRef(EnsPRepeatconsensus rc);
 
-void ensRepeatconsensusDel(EnsPRepeatconsensus* Prc);
+void ensRepeatconsensusDel(EnsPRepeatconsensus *Prc);
 
 EnsPRepeatconsensusadaptor ensRepeatconsensusGetAdaptor(
     const EnsPRepeatconsensus rc);
@@ -187,10 +214,6 @@ size_t ensRepeatconsensusCalculateMemsize(const EnsPRepeatconsensus rc);
 
 AjBool ensRepeatconsensusTrace(const EnsPRepeatconsensus rc, ajuint level);
 
-AjBool ensTableRepeatconsensusClear(AjPTable table);
-
-AjBool ensTableRepeatconsensusDelete(AjPTable* Ptable);
-
 /* Ensembl Repeat Consensus Adaptor */
 
 EnsPRepeatconsensusadaptor ensRegistryGetRepeatconsensusadaptor(
@@ -199,7 +222,7 @@ EnsPRepeatconsensusadaptor ensRegistryGetRepeatconsensusadaptor(
 EnsPRepeatconsensusadaptor ensRepeatconsensusadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensRepeatconsensusadaptorDel(EnsPRepeatconsensusadaptor* Prca);
+void ensRepeatconsensusadaptorDel(EnsPRepeatconsensusadaptor *Prca);
 
 EnsPDatabaseadaptor ensRepeatconsensusadaptorGetDatabaseadaptor(
     EnsPRepeatconsensusadaptor rca);
@@ -207,13 +230,13 @@ EnsPDatabaseadaptor ensRepeatconsensusadaptorGetDatabaseadaptor(
 AjBool ensRepeatconsensusadaptorFetchByIdentifier(
     EnsPRepeatconsensusadaptor rca,
     ajuint identifier,
-    EnsPRepeatconsensus* Prc);
+    EnsPRepeatconsensus *Prc);
 
 AjBool ensRepeatconsensusadaptorFetchByName(
     EnsPRepeatconsensusadaptor rca,
     const AjPStr name,
     const AjPStr class,
-    EnsPRepeatconsensus* Prc);
+    EnsPRepeatconsensus *Prc);
 
 AjBool ensRepeatconsensusadaptorFetchAllbyClassconsensus(
     EnsPRepeatconsensusadaptor rca,
@@ -224,6 +247,10 @@ AjBool ensRepeatconsensusadaptorFetchAllbyClassconsensus(
 AjBool ensRepeatconsensusadaptorFetchAllbyIdentifiers(
     EnsPRepeatconsensusadaptor rca,
     AjPTable rcit);
+
+AjBool ensRepeatconsensusadaptorRetrieveAllTypes(
+    EnsPRepeatconsensusadaptor rca,
+    AjPList types);
 
 /* Ensembl Repeat Feature */
 
@@ -239,7 +266,7 @@ EnsPRepeatfeature ensRepeatfeatureNewIni(EnsPRepeatfeatureadaptor rfa,
 
 EnsPRepeatfeature ensRepeatfeatureNewRef(EnsPRepeatfeature rf);
 
-void ensRepeatfeatureDel(EnsPRepeatfeature* Prf);
+void ensRepeatfeatureDel(EnsPRepeatfeature *Prf);
 
 EnsPRepeatfeatureadaptor ensRepeatfeatureGetAdaptor(
     const EnsPRepeatfeature rf);
@@ -290,6 +317,14 @@ AjBool ensRepeatfeatureTrace(const EnsPRepeatfeature rf, ajuint level);
 
 size_t ensRepeatfeatureCalculateMemsize(const EnsPRepeatfeature rf);
 
+/* AJAX List of Ensembl Repeat Feature objects */
+
+AjBool ensListRepeatfeatureSortEndAscending(AjPList rfs);
+
+AjBool ensListRepeatfeatureSortEndDescending(AjPList rfs);
+
+AjBool ensListRepeatfeatureSortIdentifierAscending(AjPList rfs);
+
 AjBool ensListRepeatfeatureSortStartAscending(AjPList rfs);
 
 AjBool ensListRepeatfeatureSortStartDescending(AjPList rfs);
@@ -302,7 +337,7 @@ EnsPRepeatfeatureadaptor ensRegistryGetRepeatfeatureadaptor(
 EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensRepeatfeatureadaptorDel(EnsPRepeatfeatureadaptor* Prfa);
+void ensRepeatfeatureadaptorDel(EnsPRepeatfeatureadaptor *Prfa);
 
 EnsPDatabaseadaptor ensRepeatfeatureadaptorGetDatabaseadaptor(
     EnsPRepeatfeatureadaptor rfa);

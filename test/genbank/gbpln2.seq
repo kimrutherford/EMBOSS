@@ -28,11 +28,12 @@ FEATURES             Location/Qualifiers
                      /protein_id="CAA23729.1"
                      /db_xref="GI:313502"
                      /db_xref="GOA:Q42801"
-                     /db_xref="HSSP:P02238"
+                     /db_xref="HSSP:1FSL"
                      /db_xref="InterPro:IPR000971"
                      /db_xref="InterPro:IPR001032"
                      /db_xref="InterPro:IPR009050"
                      /db_xref="InterPro:IPR012292"
+                     /db_xref="InterPro:IPR019824"
                      /db_xref="UniProtKB/TrEMBL:Q42801"
                      /translation="MGAFTEKQEALVNSSFEAFKANLPHHSVVFFNSILEKAPAAKNM
                      FSFLGDAVDPKNPKLAGHAEKLFGLVRDSAVQLQTKGLVVADATLGPIHTQKGVTDLQ

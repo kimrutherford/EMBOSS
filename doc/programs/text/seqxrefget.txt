@@ -35,7 +35,7 @@ Output file [x13776.seqxrefget]:
 Command line arguments
 
 Retrieve all cross-referenced data for a sequence entry
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -55,7 +55,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -111,7 +114,7 @@ RN   [1]
 RP   1167-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-DEC-1988) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
@@ -136,7 +139,7 @@ RN   [4]
 RP   1-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (04-SEP-1991) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
@@ -146,7 +149,6 @@ DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
 
   [Part of this file has been deleted for brevity]
 
-FT                   /replace=""
 FT                   /note="ClaI fragment deleted in pSW36,  constitutive
 FT                   phenotype"
 FT   misc_feature    1
@@ -154,8 +156,9 @@ FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
 FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
-FT   conflict        1281
+FT   misc_difference 1281
 FT                   /replace="g"
+FT                   /note="conflict"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
@@ -291,12 +294,14 @@ See also
                     Program name                          Description
                     abiview      Display the trace in an ABI sequencer file
                     coderet      Extract CDS, mRNA and translations from feature tables
-                    entret       Retrieves sequence entries from flatfile databases and files
+                    entret       Retrieve sequence entries from flatfile databases and files
    extractalign     Extract regions from a sequence alignment
                     infoalign    Display basic information about a multiple sequence alignment
                     infoseq      Display basic information about sequences
+                    refseqget    Get reference sequence
                     seqxref      Retrieve all database cross-references for a sequence entry
                     showalign    Display a multiple sequence alignment in pretty format
+   variationget     Get sequence variations
                     whichdb      Search all sequence databases for an entry and retrieve it
 
 Author(s)

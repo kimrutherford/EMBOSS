@@ -64,6 +64,11 @@ while (<>) {
 	$funcname = $1;
 	$newfunc = 1;
     }
+    elsif (/^Enumeration (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
     elsif (/^Static data type (\S+)/) {
 	$funcline = $_;
 	$funcname = $1;
@@ -89,15 +94,15 @@ while (<>) {
 	}
     }
 
-    elsif (/^bad or missing docheader for (\S+)/) {
-	$funcname = $1;
-	$newfunc = 1;
-    }
-
-    elsif (/^bad docheader for (\S+) precedes (\S+)/) {
-	$funcname = $2;
-	$newfunc = 1;
-    }
+#    elsif (/^bad or missing docheader for (\S+)/) {
+#	$funcname = $1;
+#	$newfunc = 1;
+#    }
+#
+#    elsif (/^bad docheader for (\S+) precedes (\S+)/) {
+#	$funcname = $2;
+#	$newfunc = 1;
+#    }
 
     elsif (/^bad (\S+)/) {
 	$badcount{$1}++;

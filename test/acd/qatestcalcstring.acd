@@ -3,10 +3,10 @@
 
 appl: qatestcalcstring [ groups: "test" doc: "ACD file for QA testing" ]
 
-string: test [ param: Y info: "String" ]
+string: teststring [ param: Y info: "String" ]
 
 string: testlength [
 	 standard: "Y"
 	 info: "Length"
-	 default: "$(test.length)"
+	 default: "$(teststring.length)"
 ]

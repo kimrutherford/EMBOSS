@@ -43,9 +43,14 @@ int main(int argc, char **argv)
     AjBool secondary;
     AjBool compressed;
     ajuint kwlimit;
-    ajuint pagesize;
-    ajuint cachesize;
-    ajulong pagecount;
+    ajuint idlimit;
+    ajuint refcount;
+    ajuint pripagesize;
+    ajuint secpagesize;
+    ajuint pricachesize;
+    ajuint seccachesize;
+    ajulong pripagecount;
+    ajulong secpagecount;
     ajuint order;
     ajuint nperbucket;
     ajuint level;
@@ -71,14 +76,16 @@ int main(int argc, char **argv)
     fieldext = ajBtreeFieldGetExtensionS(fieldname);
 
     if(!ajBtreeReadParamsS(dbname, fieldext,
-                           idir, &secondary, &compressed, &kwlimit,
-                           &pagesize, &cachesize, &pagecount,
+                           idir, &secondary, &compressed,
+                           &kwlimit, &idlimit, &refcount,
+                           &pripagesize, &secpagesize,
+                           &pricachesize, &seccachesize,
+                           &pripagecount, &secpagecount,
                            &order, &nperbucket,
                            &level, &sorder, &snperbucket, &count, &countall))
     {
-        if(!cache)
-            ajDie("Cannot find index file '%S' for database '%S",
-                  fieldname, dbname);
+        ajDie("Cannot find index file '%S' for database '%S",
+              fieldname, dbname);
     }
 
     if(compressed)

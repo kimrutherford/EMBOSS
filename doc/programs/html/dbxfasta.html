@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -85,6 +85,7 @@ Basename for index files: <b>emrod</b>
 Resource name: <b>emblresource</b>
     simple : >ID
      idacc : >ID ACC or >ID (ACC)
+      idsv : >ID SV or >ID (SV)
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
       dbid : >db ID
@@ -112,7 +113,7 @@ General log output file [outfile.dbxfasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -122,9 +123,10 @@ Version: EMBOSS:6.4.0.0
                                   characters, matching regular expression
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [idacc] ID line format (Values: simple
-                                  (>ID); idacc (>ID ACC or >ID (ACC)); gcgid
-                                  (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
-                                  ID); ncbi (| formats))
+                                  (>ID); idacc (>ID ACC or >ID (ACC)); idsv
+                                  (>ID SV or >ID (SV)); gcgid (>db:ID);
+                                  gcgidacc (>db:ID ACC); dbid (>db ID); ncbi
+                                  (| formats))
    -directory          directory  [.] Database directory
    -filenames          string     [*.fasta] Wildcard database filename (Any
                                   string)
@@ -140,6 +142,8 @@ Version: EMBOSS:6.4.0.0
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -statistics         boolean    [N] Report I/O statistics for each input
+                                  file
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -206,7 +210,7 @@ Version: EMBOSS:6.4.0.0
 <td>-idformat</td>
 <td>list</td>
 <td>ID line format</td>
-<td><table><tr><td>simple</td> <td><i>(&gt;ID)</i></td></tr><tr><td>idacc</td> <td><i>(&gt;ID ACC or &gt;ID (ACC))</i></td></tr><tr><td>gcgid</td> <td><i>(&gt;db:ID)</i></td></tr><tr><td>gcgidacc</td> <td><i>(&gt;db:ID ACC)</i></td></tr><tr><td>dbid</td> <td><i>(&gt;db ID)</i></td></tr><tr><td>ncbi</td> <td><i>(| formats)</i></td></tr></table></td>
+<td><table><tr><td>simple</td> <td><i>(&gt;ID)</i></td></tr><tr><td>idacc</td> <td><i>(&gt;ID ACC or &gt;ID (ACC))</i></td></tr><tr><td>idsv</td> <td><i>(&gt;ID SV or &gt;ID (SV))</i></td></tr><tr><td>gcgid</td> <td><i>(&gt;db:ID)</i></td></tr><tr><td>gcgidacc</td> <td><i>(&gt;db:ID ACC)</i></td></tr><tr><td>dbid</td> <td><i>(&gt;db ID)</i></td></tr><tr><td>ncbi</td> <td><i>(| formats)</i></td></tr></table></td>
 <td>idacc</td>
 </tr>
 
@@ -287,6 +291,14 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-statistics</td>
+<td>boolean</td>
+<td>Report I/O statistics for each input file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-indexoutdir</td>
 <td>outdir</td>
 <td>Index file output directory</td>
@@ -299,7 +311,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-directory" associated directory qualifiers
+<td align="left" colspan=5>"-directory" associated directory qualifiers
 </td>
 </tr>
 
@@ -312,7 +324,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+<td align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
 </td>
 </tr>
 
@@ -325,7 +337,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -505,8 +517,11 @@ structure of the ID name index.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/data/
-Processing file: emrod entries: 6 (6) time: 0.0s (0.0s)
+Processing file: emrod
+entries: 6 (6) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 15 OK. Maximum ID length was 6 for 'L48662'.
+Field acc acclen 15 OK. Maximum acc term length was 6 for 'L48662'.
 </pre>
 </td></tr></table><p>
 <p><h3>File: emrod.ent</h3>
@@ -522,37 +537,45 @@ emrod
 <p><h3>File: emrod.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     6
-Fullcount 6
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        6
+Fullcount    6
+Kwlimit      15
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: emrod.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     6
-Fullcount 6
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        169
+Secpagesize  512
+Seccachesize 2000
+Count        6
+Fullcount    6
+Kwlimit      15
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: emrod.xac</h3>

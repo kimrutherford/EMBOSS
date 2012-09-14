@@ -113,11 +113,17 @@ the default of 1 base shows all possible open reading frames.</p>
     Notes
 </H2>
 
+<p>The -minorfsize threshold is in amino acid units.</p>
+
 <p>An open reading frame is defined in this program as any possible
 translation between two STOP codons. Optionally, the beginning or end
-of a sequence may be counted as an ORF even if it's less than the
+of a sequence may be counted as an ORF even if it is less than the
 minimal ORF size or (end only) lacking a STOP codon.  See the
 -firstorf and -lastorf options.</p>
+
+<p>Open reading frames can be restricted to start with a start codon
+using the -mstart option. This may eliminate some or all of the final
+ORFs at the end of each frame.</p>
 
 <H2>
     References

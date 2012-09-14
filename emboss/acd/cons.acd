@@ -1,8 +1,9 @@
 application: cons [
   documentation: "Create a consensus sequence from a multiple alignment"
   groups: "Alignment:Consensus"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000448 operation Sequence alignment conservation analysis"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0448 Sequence alignment analysis
+                                       (conservation)"
 ]
 
 section: input [
@@ -16,7 +17,7 @@ section: input [
     aligned: "Y"
     minseqs: "2"
     help: "File containing a sequence alignment."
-    relations: "EDAM:0000863 data Sequence alignment"
+    relations: "EDAM_data:0863 Sequence alignment"
   ]
 
   matrix: datafile [
@@ -27,7 +28,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
   ]
 
 endsection: input
@@ -45,7 +46,7 @@ section: additional [
            half the total weight of all the sequences in the alignment."
     default: "@( $(sequence.totweight) / 2)"
     expected: "Half the total sequence weighting"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: identity [
@@ -57,7 +58,7 @@ section: additional [
            alignment only columns of identities contribute to the consensus."
     default: "0"
     minimum: "0"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   float: setcase [
@@ -68,7 +69,7 @@ section: additional [
            consensus is is upper-case and below which the consensus is in
            lower-case."
     default: "@( $(sequence.totweight) / 2)"
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: additional
@@ -80,8 +81,8 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM:0000849 data Sequence record"
-    relations: "EDAM:0000848 data Raw sequence"
+    relations: "EDAM_data:0849 Sequence record"
+    relations: "EDAM_data:0848 Raw sequence"
   ]
 
   string: name [
@@ -89,7 +90,7 @@ section: output [
     default: ""
     information: "Name of the consensus sequence"
     knowntype: "sequence id output"
-    relations: "EDAM:0001063 identifier Sequence identifier"
+    relations: "EDAM_identifier:1063 Sequence identifier"
   ]
 
 endsection: output

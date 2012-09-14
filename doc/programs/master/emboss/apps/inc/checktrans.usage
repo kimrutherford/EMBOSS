@@ -5,7 +5,7 @@ Here is a sample session with <b>checktrans</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>checktrans </b>
-Reports STOP codons and ORF statistics of a protein
+Report STOP codons and ORF statistics of a protein
 Input protein sequence(s): <b>paamir.pep</b>
 Minimum ORF Length to report [100]: <b></b>
 Output file [paamir_1.checktrans]: <b></b>

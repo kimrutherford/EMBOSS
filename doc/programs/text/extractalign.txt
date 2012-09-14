@@ -43,7 +43,7 @@ Extract regions from a sequence alignment
 Command line arguments
 
 Extract regions from a sequence alignment
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     (Aligned) sequence set filename and optional
@@ -74,7 +74,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -244,29 +247,29 @@ See also
 
    Program name     Description
    abiview          Display the trace in an ABI sequencer file
-   aligncopy        Reads and writes alignments
-   aligncopypair    Reads and writes pairs from alignments
+   aligncopy        Read and write alignments
+   aligncopypair    Read and write pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
    coderet          Extract CDS, mRNA and translations from feature tables
-   cutseq           Removes a section from a sequence
-   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   cutseq           Remove a section from a sequence
+   degapseq         Remove non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
-   entret           Retrieves sequence entries from flatfile databases and files
+   entret           Retrieve sequence entries from flatfile databases and files
    extractfeat      Extract features from sequence(s)
    extractseq       Extract regions from a sequence
-   featcopy         Reads and writes a feature table
-   featreport       Reads and writes a feature table
+   featcopy         Read and write a feature table
+   featmerge        Merge two overlapping feature tables
+   featreport       Read and write a feature table
    feattext         Return a feature table original text
    infoalign        Display basic information about a multiple sequence alignment
    infoseq          Display basic information about sequences
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
-   maskambignuc     Masks all ambiguity characters in nucleotide sequences
-   with             N
-   maskambigprot    Masks all ambiguity characters in protein sequences with
-                    X
+   maskambignuc     Mask all ambiguity characters in nucleotide sequences with
+                    N
+   maskambigprot    Mask all ambiguity characters in protein sequences with X
    maskfeat         Write a sequence with masked features
    maskseq          Write a sequence with masked regions
    newseq           Create a sequence file from a typed-in sequence
@@ -277,26 +280,28 @@ See also
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
                     sequences
-   nthseqset        Reads and writes (returns) one set of sequences from many
+   nthseqset        Read and write (return) one set of sequences from many
    pasteseq         Insert one sequence into another
+   refseqget        Get reference sequence
    revseq           Reverse and complement a nucleotide sequence
-   seqcount         Reads and counts sequences
-   seqret           Reads and writes (returns) sequences
-   seqretsetall     Reads and writes (returns) many sets of sequences
-   seqretsplit      Reads sequences and writes them to individual files
+   seqcount         Read and count sequences
+   seqret           Read and write (return) sequences
+   seqretsetall     Read and write (return) many sets of sequences
+   seqretsplit      Read sequences and write them to individual files
    seqxref          Retrieve all database cross-references for a sequence entry
    seqxrefget       Retrieve all cross-referenced data for a sequence entry
    showalign        Display a multiple sequence alignment in pretty format
    sizeseq          Sort sequences by size
    skipredundant    Remove redundant sequences from an input set
-   skipseq          Reads and writes (returns) sequences, skipping first few
+   skipseq          Read and write (return) sequences, skipping first few
    splitsource      Split sequence(s) into original source sequences
    splitter         Split sequence(s) into smaller sequences
    trimest          Remove poly-A tails from nucleotide sequences
    trimseq          Remove unwanted characters from start and end of sequence(s)
    trimspace        Remove extra whitespace from an ASCII text file
    union            Concatenate multiple sequences into a single sequence
-   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   variationget     Get sequence variations
+   vectorstrip      Remove vectors from the ends of nucleotide sequence(s)
    whichdb          Search all sequence databases for an entry and retrieve it
    yank             Add a sequence reference (a full USA) to a list file
 

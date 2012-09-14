@@ -1,15 +1,75 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajtree ************************************************************
+**
+** AJAX tree functions
+**
+** These functions create and control trees.
+**
+** @author Copyright (C) 2004 Peter Rice
+** @version $Revision: 1.15 $
+** @modified $Date: 2011/10/19 14:52:22 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajtree_h
-#define ajtree_h
+#ifndef AJTREE_H
+#define AJTREE_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ajdefine.h"
-#include "ajlist.h"
+#include "ajstr.h"
 
-enum AjETreeType {ajETreeAny, ajETreeStr, ajETreeSpecial};
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @enum AjETreeType **********************************************************
+**
+** Tree type
+**
+** @value ajETreeAny Any
+** @value ajETreeStr String data
+** @value ajETreeSpecial Other special data
+******************************************************************************/
+
+typedef enum AjOTreeType
+{
+    ajETreeAny,
+    ajETreeStr,
+    ajETreeSpecial
+} AjETreeType;
 
 #define AjPTreeNode AjOTreeNode*
 
@@ -36,7 +96,7 @@ enum AjETreeType {ajETreeAny, ajETreeStr, ajETreeSpecial};
 ** @attr Down  [struct AjSTree*] First child tree node
 ** @attr Name [AjPStr] Name string
 ** @attr Data [void*] Data value
-** @attr Freedata [(AjBool*)] Complex data free function
+** @attr Freedata [AjBool function] Complex data free function
 ** @attr Type [AjEnum] Tree type (any, string, etc.)
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
@@ -56,6 +116,13 @@ typedef struct AjSTree
 } AjOTree;
 
 #define AjPTree AjOTree*
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -101,8 +168,9 @@ void    ajTreeDummyFunction(void);
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJTREE_H */

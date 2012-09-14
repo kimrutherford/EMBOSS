@@ -84,7 +84,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-codonfile" associated codon qualifiers
+<td align="left" colspan=5>"-codonfile" associated codon qualifiers
 </td>
 </tr>
 
@@ -97,7 +97,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 

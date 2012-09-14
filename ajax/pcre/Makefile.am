@@ -2,35 +2,46 @@
 
 lib_LTLIBRARIES = libepcre.la
 
-if ISCYGWIN
-CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
-endif
-
-## PCRE stuff
+# PCRE stuff
 
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
-PCRELIBVERSION = @PCRE_LIB_VERSION@
-PCREPOSIXLIBVERSION = @PCRE_POSIXLIB_VERSION@
+### PCRELIBVERSION = @PCRE_LIB_VERSION@
+### PCREPOSIXLIBVERSION = @PCRE_POSIXLIB_VERSION@
 
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core $(POSIX_MALLOC_THRESHOLD) 
+libepcre_la_CPPFLAGS = $(POSIX_MALLOC_THRESHOLD)
 
-PCRESRC = pcre_chartables.c pcre_compile.c pcre_exec.c \
-pcre_fullinfo.c pcre_get.c pcre_globals.c pcre_info.c pcre_newline.c \
-pcreposix.c pcre_study.c pcre_tables.c pcre_try_flipped.c
-
-pkginclude_HEADERS = pcre.h pcre_config.h pcreemboss.h \
-	pcre_internal.h pcreposix.h pcre_printint.src ucp.h
-
-pkgincludedir = $(includedir)/epcre
-
-libepcre_la_SOURCES = $(PCRESRC)
-
-VERS_INF = -version-info 7:9:0
-
+libepcre_la_LDFLAGS  = -version-info 7:9:0
 if ISCYGWIN
-LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS)
-else
-LINKFLAGS = $(VERS_INF)
+libepcre_la_LDFLAGS += -no-undefined
+libepcre_la_LDFLAGS += -Wl,--add-stdcall-alias
+libepcre_la_LDFLAGS += -Wl,--export-all-symbols
+libepcre_la_LDFLAGS += -Wl,--enable-auto-import
 endif
 
-libepcre_la_LDFLAGS = $(LINKFLAGS)
+libepcre_la_SOURCES = \
+pcre_chartables.c \
+pcre_compile.c \
+pcre_dfa_exec.c \
+pcre_exec.c \
+pcre_fullinfo.c \
+pcre_get.c \
+pcre_globals.c \
+pcre_info.c \
+pcre_newline.c \
+pcreposix.c \
+pcre_study.c \
+pcre_tables.c \
+pcre_try_flipped.c \
+pcre_version.c \
+pcre_xclass.c
+
+epcreincludedir = $(includedir)/epcre
+
+epcreinclude_HEADERS = \
+pcre.h \
+pcre_config.h \
+pcreemboss.h \
+pcre_internal.h \
+pcreposix.h \
+pcre_printint.src \
+ucp.h

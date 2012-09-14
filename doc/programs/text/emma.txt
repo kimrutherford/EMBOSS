@@ -35,21 +35,21 @@ Dendrogram (tree file) from clustalw output file [hbb_human.dnd]:
 
 
 
- CLUSTAL W (1.83) Multiple Sequence Alignments
-
+ CLUSTAL 2.1 Multiple Sequence Alignments
 
 
 Sequence type explicitly set to Protein
 Sequence format is Pearson
-Sequence 1: HBB_HUMAN       146 aa
-Sequence 2: HBB_HORSE       146 aa
-Sequence 3: HBA_HUMAN       141 aa
-Sequence 4: HBA_HORSE       141 aa
-Sequence 5: MYG_PHYCA       153 aa
-Sequence 6: GLB5_PETMA      149 aa
-Sequence 7: LGB2_LUPLU      153 aa
+Sequence 1: HBB_HUMAN    146 aa
+Sequence 2: HBB_HORSE    146 aa
+Sequence 3: HBA_HUMAN    141 aa
+Sequence 4: HBA_HORSE    141 aa
+Sequence 5: MYG_PHYCA    153 aa
+Sequence 6: GLB5_PETMA   149 aa
+Sequence 7: LGB2_LUPLU   153 aa
 Start of Pairwise alignments
 Aligning...
+
 Sequences (1:2) Aligned. Score:  83
 Sequences (1:3) Aligned. Score:  43
 Sequences (1:4) Aligned. Score:  42
@@ -71,9 +71,11 @@ Sequences (4:7) Aligned. Score:  12
 Sequences (5:6) Aligned. Score:  21
 Sequences (5:7) Aligned. Score:  7
 Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [12345678A]
-Start of Multiple Alignment
+Guide tree file created:   [12345678A]
+
 There are 6 groups
+Start of Multiple Alignment
+
 Aligning...
 Group 1: Sequences:   2      Score:2194
 Group 2: Sequences:   2      Score:2165
@@ -81,11 +83,10 @@ Group 3: Sequences:   4      Score:960
 Group 4:                     Delayed
 Group 5:                     Delayed
 Group 6:                     Delayed
-Sequence:5     Score:865
-Sequence:6     Score:797
-Sequence:7     Score:1044
 Alignment Score 4164
+
 GCG-Alignment file created      [12345678A]
+
 
 
    Go to the input files for this example
@@ -94,7 +95,7 @@ GCG-Alignment file created      [12345678A]
 Command line arguments
 
 Multiple sequence alignment (ClustalW wrapper)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -106,10 +107,10 @@ Version: EMBOSS:6.4.0.0
 
    Additional (Optional) qualifiers (* if not always prompted):
    -onlydend           toggle     [N] Only produce dendrogram file
-*  -dend               toggle     [N] Do alignment using an old dendrogram
+*  -dendreuse          toggle     [N] Do alignment using an old dendrogram
 *  -dendfile           infile     Dendrogram (tree file) from clustalw file
                                   (optional)
-   -[no]slow           toggle     [Y] A distance is calculated between every
+   -[no]slowalign      toggle     [Y] A distance is calculated between every
                                   pair of sequences and these are used to
                                   construct the dendrogram which guides the
                                   final multiple alignment. The scores are
@@ -313,7 +314,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features

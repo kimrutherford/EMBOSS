@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Scans DNA sequences for transcription factors
+   Scan DNA sequences for transcription factors
 
 Description
 
@@ -33,7 +33,7 @@ Usage
 
 
 % jaspscan -both
-Scans DNA sequences for transcription factors
+Scan DNA sequences for transcription factors
 Input nucleotide sequence(s): tembl:m23100
 Jaspar matrix set
          C : Core
@@ -56,8 +56,8 @@ Output report [m23100.jaspscan]:
 
 Command line arguments
 
-Scans DNA sequences for transcription factors
-Version: EMBOSS:6.4.0.0
+Scan DNA sequences for transcription factors
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -121,7 +121,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -220,6 +223,9 @@ RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
 RT   by polymerase chain reaction";
 RL   Diabetes 39(1):123-128(1990).
 XX
+DR   Ensembl-Gn; ENSG00000171105; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000302850; Homo_sapiens.
+XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.
 XX
@@ -234,9 +240,6 @@ FT                   /tissue_type="liver"
 FT                   /db_xref="taxon:9606"
 FT   repeat_region   <1..76
 FT                   /rpt_family="Alu"
-FT   exon            1541..1923
-FT                   /gene="INSR"
-FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -315,7 +318,7 @@ Output file format
 
 ########################################
 # Program: jaspscan
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: jaspscan
 #    -both
 #    -sequence tembl:m23100
@@ -467,7 +470,7 @@ Known bugs
 See also
 
    Program name     Description
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+   marscan          Find matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
    tfscan           Identify transcription factor binding sites in DNA sequences
 

@@ -339,8 +339,8 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
 	    ajListPush(l,(void *)ptr);
 	}
 
-    ajListSort(l,emowse_sort_data);
-    n = ajListToarray(l,(void ***)data);
+    ajListSort(l, &emowse_sort_data);
+    n = (ajuint) ajListToarray(l,(void ***)data);
     ajListFree(&l);
     ajStrDel(&str);
     ajStrTokenDel(&token);
@@ -541,7 +541,7 @@ static void emowse_match(EmbPMdata const * data, ajint dno, AjPList flist,
 	hits->frags = frags;
 	hits->nf = nfrags;
 	ajListPush(hlist,(void *)hits);
-	ajListSort(hlist,emowse_hit_sort);
+	ajListSort(hlist, &emowse_hit_sort);
 	ajListPop(hlist,(void **)&hits);
 	min = hits->score;
 	ajListPush(hlist,(void *)hits);
@@ -573,7 +573,7 @@ static void emowse_match(EmbPMdata const * data, ajint dno, AjPList flist,
         hits->nf    = nfrags;
 
 	ajListPush(hlist,(void *)hits);
-	ajListSort(hlist,emowse_hit_sort);
+	ajListSort(hlist, &emowse_hit_sort);
 	ajListPop(hlist,(void **)&hits);
 	min = hits->score;
 	ajListPush(hlist,(void *)hits);

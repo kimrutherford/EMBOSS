@@ -5,7 +5,7 @@ Here is a sample session with <b>nthseqset</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>nthseqset -osf phylip </b>
-Reads and writes (returns) one set of sequences from many
+Read and write (return) one set of sequences from many
 Input sequence set(s): <b>globins-all.phy</b>
 The number of the sequence set to output [1]: <b>2</b>
 output sequence(s) [globins-all.phylip]: <b></b>

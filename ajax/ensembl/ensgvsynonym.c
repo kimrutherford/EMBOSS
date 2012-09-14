@@ -1,31 +1,34 @@
-/* @source Ensembl Genetic Variation Synonym functions
+/* @source ensgvsynonym *******************************************************
+**
+** Ensembl Genetic Variation Synonym functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.19 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.6 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvsource.h"
 #include "ensgvsynonym.h"
@@ -33,55 +36,51 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
-
-static void tableGvsynonymClear(void** key,
-                                void** value,
-                                void* cl);
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -106,8 +105,8 @@ static void tableGvsynonymClear(void** key,
 ** 'variation_synonym' table.
 **
 ** @cc Bio::EnsEMBL::Variation::Variation
-** @cc CVS Revision: 1.55
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.67
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -153,6 +152,8 @@ static void tableGvsynonymClear(void** key,
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [EnsPGvsynonym] Ensembl Genetic Variation Synonym or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -160,28 +161,24 @@ EnsPGvsynonym ensGvsynonymNewCpy(const EnsPGvsynonym gvs)
 {
     EnsPGvsynonym pthis = NULL;
 
-    if(!gvs)
+    if (!gvs)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = gvs->Identifier;
+    pthis->Adaptor    = gvs->Adaptor;
+    pthis->Gvsource   = ensGvsourceNewRef(gvs->Gvsource);
 
-    pthis->Adaptor = gvs->Adaptor;
-
-    pthis->Gvsource = ensGvsourceNewRef(gvs->Gvsource);
-
-    if(gvs->Name)
+    if (gvs->Name)
         pthis->Name = ajStrNewRef(gvs->Name);
 
-    if(gvs->Moleculetype)
+    if (gvs->Moleculetype)
         pthis->Moleculetype = ajStrNewRef(gvs->Moleculetype);
 
     pthis->Gvvariationidentifier = gvs->Gvvariationidentifier;
-
-    pthis->Subidentifier = gvs->Subidentifier;
+    pthis->Subidentifier         = gvs->Subidentifier;
 
     return pthis;
 }
@@ -194,8 +191,8 @@ EnsPGvsynonym ensGvsynonymNewCpy(const EnsPGvsynonym gvs)
 ** Constructor for an Ensembl Genetic Variation Synonym with initial values.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [u] gvsa [EnsPGvsynonymadaptor] Ensembl Genetic Variation
-**                                        Synonym Adaptor
+** @param [u] gvsa [EnsPGvsynonymadaptor]
+** Ensembl Genetic Variation Synonym Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Variation::*::new
 ** @param [u] gvsource [EnsPGvsource] Ensembl Genetic Variation Source
@@ -205,6 +202,8 @@ EnsPGvsynonym ensGvsynonymNewCpy(const EnsPGvsynonym gvs)
 ** @param [r] subidentifier [ajuint] Sub identifier
 **
 ** @return [EnsPGvsynonym] Ensembl Genetic Variation Synonym or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -220,23 +219,19 @@ EnsPGvsynonym ensGvsynonymNewIni(EnsPGvsynonymadaptor gvsa,
 
     AJNEW0(gvs);
 
-    gvs->Use = 1;
-
+    gvs->Use        = 1U;
     gvs->Identifier = identifier;
+    gvs->Adaptor    = gvsa;
+    gvs->Gvsource   = ensGvsourceNewRef(gvsource);
 
-    gvs->Adaptor = gvsa;
-
-    gvs->Gvsource = ensGvsourceNewRef(gvsource);
-
-    if(name)
+    if (name)
         gvs->Name = ajStrNewRef(name);
 
-    if(moleculetype)
+    if (moleculetype)
         gvs->Moleculetype = ajStrNewRef(moleculetype);
 
     gvs->Gvvariationidentifier = gvvidentifier;
-
-    gvs->Subidentifier = subidentifier;
+    gvs->Subidentifier         = subidentifier;
 
     return gvs;
 }
@@ -251,13 +246,15 @@ EnsPGvsynonym ensGvsynonymNewIni(EnsPGvsynonymadaptor gvsa,
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
-** @return [EnsPGvsynonym] Ensembl Genetic Variation Synonym
+** @return [EnsPGvsynonym] Ensembl Genetic Variation Synonym or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvsynonym ensGvsynonymNewRef(EnsPGvsynonym gvs)
 {
-    if(!gvs)
+    if (!gvs)
         return NULL;
 
     gvs->Use++;
@@ -270,15 +267,14 @@ EnsPGvsynonym ensGvsynonymNewRef(EnsPGvsynonym gvs)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Synonym object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Synonym object.
 **
 ** @fdata [EnsPGvsynonym]
 **
-** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Synonym object
+** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Synonym
 **
-** @argrule * Pgvs [EnsPGvsynonym*] Ensembl Genetic Variation Synonym
-**                                  object address
+** @argrule * Pgvs [EnsPGvsynonym*] Ensembl Genetic Variation Synonym address
 **
 ** @valrule * [void]
 **
@@ -292,24 +288,23 @@ EnsPGvsynonym ensGvsynonymNewRef(EnsPGvsynonym gvs)
 **
 ** Default destructor for an Ensembl Genetic Variation Synonym.
 **
-** @param [d] Pgvs [EnsPGvsynonym*] Ensembl Genetic Variation Synonym
-**                                  object address
+** @param [d] Pgvs [EnsPGvsynonym*] Ensembl Genetic Variation Synonym address
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
+void ensGvsynonymDel(EnsPGvsynonym *Pgvs)
 {
     EnsPGvsynonym pthis = NULL;
 
-    if(!Pgvs)
+    if (!Pgvs)
         return;
 
-    if(!*Pgvs)
-        return;
-
-    if(ajDebugTest("ensGvsynonymDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGvsynonymDel"))
     {
         ajDebug("ensGvsynonymDel\n"
                 "  *Pgvs %p\n",
@@ -317,12 +312,16 @@ void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
 
         ensGvsynonymTrace(*Pgvs, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pgvs)
+        return;
 
     pthis = *Pgvs;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pgvs = NULL;
 
@@ -344,9 +343,9 @@ void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Synonym object.
 **
 ** @fdata [EnsPGvsynonym]
@@ -354,8 +353,8 @@ void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
 ** @nam3rule Get Return Genetic Variation Synonym attribute(s)
 ** @nam4rule Adaptor Return the Ensembl Genetic Variation Synonym Adaptor
 ** @nam4rule Gvsource Return the Ensembl Genetic Variation Source
-** @nam4rule Gvvariationidentifier Return the Ensembl Genetic Variation
-**                                 identifier
+** @nam4rule Gvvariationidentifier
+** Return the Ensembl Genetic Variation identifier
 ** @nam4rule Identifier Return the SQL database-internal identifier
 ** @nam4rule Moleculetype Return the molecule type
 ** @nam4rule Name Return the name
@@ -363,15 +362,15 @@ void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
 **
 ** @argrule * gvs [const EnsPGvsynonym] Genetic Variation Synonym
 **
-** @valrule Adaptor [EnsPGvsynonymadaptor] Ensembl Genetic Variation
-**                                         Synonym Adaptor or NULL
+** @valrule Adaptor [EnsPGvsynonymadaptor]
+** Ensembl Genetic Variation Synonym Adaptor or NULL
 ** @valrule Gvsource [EnsPGvsource] Ensembl Genetic Variation Source or NULL
-** @valrule Gvvariationidentifier [ajuint] Ensembl Genetic Variation
-**                                         identifier or 0
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Gvvariationidentifier [ajuint]
+** Ensembl Genetic Variation identifier or 0U
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Moleculetype [AjPStr] Molecule type or NULL
 ** @valrule Name [AjPStr] Name or NULL
-** @valrule Subidentifier [ajuint] Sub-identifier or 0
+** @valrule Subidentifier [ajuint] Sub-identifier or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -381,22 +380,21 @@ void ensGvsynonymDel(EnsPGvsynonym* Pgvs)
 
 /* @func ensGvsynonymGetAdaptor ***********************************************
 **
-** Get the Ensembl Genetic Variation Synonym Adaptor element of an
+** Get the Ensembl Genetic Variation Synonym Adaptor member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [EnsPGvsynonymadaptor] Ensembl Genetic Variation Synonym Adaptor
 ** or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvsynonymadaptor ensGvsynonymGetAdaptor(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return NULL;
-
-    return gvs->Adaptor;
+    return (gvs) ? gvs->Adaptor : NULL;
 }
 
 
@@ -404,21 +402,20 @@ EnsPGvsynonymadaptor ensGvsynonymGetAdaptor(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetGvsource **********************************************
 **
-** Get the Ensembl Genetic Variation Source element of an
+** Get the Ensembl Genetic Variation Source member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [EnsPGvsource] Ensembl Genetic Variation Source or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvsource ensGvsynonymGetGvsource(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return NULL;
-
-    return gvs->Gvsource;
+    return (gvs) ? gvs->Gvsource : NULL;
 }
 
 
@@ -427,21 +424,20 @@ EnsPGvsource ensGvsynonymGetGvsource(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetGvvariationidentifier *********************************
 **
-** Get the Ensembl Genetic Variation identifier element of an
+** Get the Ensembl Genetic Variation identifier member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
-** @return [ajuint] Ensembl Genetic Variation identifier or 0
+** @return [ajuint] Ensembl Genetic Variation identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensGvsynonymGetGvvariationidentifier(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return 0;
-
-    return gvs->Gvvariationidentifier;
+    return (gvs) ? gvs->Gvvariationidentifier : 0U;
 }
 
 
@@ -450,21 +446,20 @@ ajuint ensGvsynonymGetGvvariationidentifier(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetIdentifier ********************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensGvsynonymGetIdentifier(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return 0;
-
-    return gvs->Identifier;
+    return (gvs) ? gvs->Identifier : 0U;
 }
 
 
@@ -473,20 +468,19 @@ ajuint ensGvsynonymGetIdentifier(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetMoleculetype ******************************************
 **
-** Get the molecule type element of an Ensembl Genetic Variation Synonym.
+** Get the molecule type member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [AjPStr] Molecule type or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvsynonymGetMoleculetype(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return NULL;
-
-    return gvs->Moleculetype;
+    return (gvs) ? gvs->Moleculetype : NULL;
 }
 
 
@@ -495,20 +489,19 @@ AjPStr ensGvsynonymGetMoleculetype(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetName **************************************************
 **
-** Get the name element of an Ensembl Genetic Variation Synonym.
+** Get the name member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [AjPStr] Name or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvsynonymGetName(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return NULL;
-
-    return gvs->Name;
+    return (gvs) ? gvs->Name : NULL;
 }
 
 
@@ -517,34 +510,33 @@ AjPStr ensGvsynonymGetName(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymGetSubidentifier *****************************************
 **
-** Get the Sub-identifier element of an Ensembl Genetic Variation Synonym.
+** Get the Sub-identifier member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
-** @return [ajuint] Sub-identifier or 0
+** @return [ajuint] Sub-identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensGvsynonymGetSubidentifier(const EnsPGvsynonym gvs)
 {
-    if(!gvs)
-        return 0;
-
-    return gvs->Subidentifier;
+    return (gvs) ? gvs->Subidentifier : 0U;
 }
 
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Genetic Variation Synonym object.
 **
 ** @fdata [EnsPGvsynonym]
 **
-** @nam3rule Set Set one element of a Genetic Variation Synonym
+** @nam3rule Set Set one member of a Genetic Variation Synonym
 ** @nam4rule Adaptor Set the Ensembl Genetic Variation Synonym Adaptor
 ** @nam4rule Gvsource Set the Ensembl Genetic Variation Source
 ** @nam4rule Gvvariationidentifier Set the Ensembl Genetic Variation
@@ -574,7 +566,7 @@ ajuint ensGvsynonymGetSubidentifier(const EnsPGvsynonym gvs)
 
 /* @func ensGvsynonymSetAdaptor ***********************************************
 **
-** Set the Ensembl Genetic Variation Synonym Adaptor element of an
+** Set the Ensembl Genetic Variation Synonym Adaptor member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
@@ -582,13 +574,15 @@ ajuint ensGvsynonymGetSubidentifier(const EnsPGvsynonym gvs)
 **                                        Synonym Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetAdaptor(EnsPGvsynonym gvs,
                               EnsPGvsynonymadaptor gvsa)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     gvs->Adaptor = gvsa;
@@ -601,20 +595,22 @@ AjBool ensGvsynonymSetAdaptor(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetGvsource **********************************************
 **
-** Set the Ensembl Genetic Variation Source element of an
+** Set the Ensembl Genetic Variation Source member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [u] gvsource [EnsPGvsource] Ensembl Genetic Variation Source
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetGvsource(EnsPGvsynonym gvs,
                                EnsPGvsource gvsource)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     ensGvsourceDel(&gvs->Gvsource);
@@ -629,20 +625,22 @@ AjBool ensGvsynonymSetGvsource(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetGvvariationidentifier *********************************
 **
-** Set the Ensembl Genetic Variation identifier element of an
+** Set the Ensembl Genetic Variation identifier member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [r] gvvidentifier [ajuint] Ensembl Genetic Variation identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetGvvariationidentifier(EnsPGvsynonym gvs,
                                             ajuint gvvidentifier)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     gvs->Gvvariationidentifier = gvvidentifier;
@@ -655,20 +653,22 @@ AjBool ensGvsynonymSetGvvariationidentifier(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetIdentifier ********************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetIdentifier(EnsPGvsynonym gvs,
                                  ajuint identifier)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     gvs->Identifier = identifier;
@@ -681,24 +681,26 @@ AjBool ensGvsynonymSetIdentifier(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetMoleculetype ******************************************
 **
-** Set the molecule type element of an Ensembl Genetic Variation Synonym.
+** Set the molecule type member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [u] moleculetype [AjPStr] Molecule type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetMoleculetype(EnsPGvsynonym gvs,
                                    AjPStr moleculetype)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     ajStrDel(&gvs->Moleculetype);
 
-    if(moleculetype)
+    if (moleculetype)
         gvs->Moleculetype = ajStrNewRef(moleculetype);
 
     return ajTrue;
@@ -709,24 +711,26 @@ AjBool ensGvsynonymSetMoleculetype(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetName **************************************************
 **
-** Set the name element of an Ensembl Genetic Variation Synonym.
+** Set the name member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [u] name [AjPStr] Name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetName(EnsPGvsynonym gvs,
                            AjPStr name)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     ajStrDel(&gvs->Name);
 
-    if(name)
+    if (name)
         gvs->Name = ajStrNewRef(name);
 
     return ajTrue;
@@ -737,19 +741,21 @@ AjBool ensGvsynonymSetName(EnsPGvsynonym gvs,
 
 /* @func ensGvsynonymSetSubidentifier *****************************************
 **
-** Set the sub-identifier element of an Ensembl Genetic Variation Synonym.
+** Set the sub-identifier member of an Ensembl Genetic Variation Synonym.
 **
 ** @param [u] gvs [EnsPGvsynonym] Ensembl Genetic Variation Synonym
 ** @param [r] subidentifier [ajuint] Sub-identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvsynonymSetSubidentifier(EnsPGvsynonym gvs,
                                     ajuint subidentifier)
 {
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     gvs->Subidentifier = subidentifier;
@@ -766,7 +772,7 @@ AjBool ensGvsynonymSetSubidentifier(EnsPGvsynonym gvs,
 **
 ** @fdata [EnsPGvsynonym]
 **
-** @nam3rule Trace Report Ensembl Genetic Variation Synonym elements to
+** @nam3rule Trace Report Ensembl Genetic Variation Synonym members to
 **                 debug file
 **
 ** @argrule Trace gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
@@ -788,6 +794,8 @@ AjBool ensGvsynonymSetSubidentifier(EnsPGvsynonym gvs,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -795,7 +803,7 @@ AjBool ensGvsynonymTrace(const EnsPGvsynonym gvs, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!gvs)
+    if (!gvs)
         return ajFalse;
 
     indent = ajStrNew();
@@ -858,6 +866,8 @@ AjBool ensGvsynonymTrace(const EnsPGvsynonym gvs, ajuint level)
 ** @param [r] gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -865,21 +875,21 @@ size_t ensGvsynonymCalculateMemsize(const EnsPGvsynonym gvs)
 {
     size_t size = 0;
 
-    if(!gvs)
+    if (!gvs)
         return 0;
 
     size += sizeof (EnsOGvsynonym);
 
     size += ensGvsourceCalculateMemsize(gvs->Gvsource);
 
-    if(gvs->Name)
+    if (gvs->Name)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvs->Name);
     }
 
-    if(gvs->Moleculetype)
+    if (gvs->Moleculetype)
     {
         size += sizeof (AjOStr);
 
@@ -887,142 +897,4 @@ size_t ensGvsynonymCalculateMemsize(const EnsPGvsynonym gvs)
     }
 
     return size;
-}
-
-
-
-
-/* @datasection [AjPTable] AJAX Table *****************************************
-**
-** @nam2rule Table Functions for manipulating AJAX Table objects
-**
-******************************************************************************/
-
-
-
-
-/* @section table *************************************************************
-**
-** Functions for manipulating AJAX Table objects.
-**
-** @fdata [AjPTable]
-**
-** @nam3rule Gvsynonym AJAX Table of AJAX unsigned integer key data and
-**                     Ensembl Genetic Variation Synonym value data
-** @nam4rule Clear Clear an AJAX Table
-** @nam4rule Delete Delete an AJAX Table
-**
-** @argrule Clear table [AjPTable] AJAX Table
-** @argrule Delete Ptable [AjPTable*] AJAX Table address
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
-******************************************************************************/
-
-
-
-
-/* @funcstatic tableGvsynonymClear ********************************************
-**
-** An ajTableMapDel "apply" function to clear an AJAX Table of
-** AJAX unsigned integer key data and
-** Ensembl Genetic Variation Synonym value data.
-**
-** @param [u] key [void**] AJAX unsigned integer address
-** @param [u] value [void**] Ensembl Genetic Variation Synonym address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void tableGvsynonymClear(void** key,
-                                void** value,
-                                void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    AJFREE(*key);
-
-    ensGvsynonymDel((EnsPGvsynonym*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
-
-
-
-
-/* @func ensTableGvsynonymClear ***********************************************
-**
-** Utility function to clear an AJAX Table of
-** AJAX unsigned integer key data and
-** Ensembl Genetic Variation Synonym value data.
-**
-** @param [u] table [AjPTable] AJAX Table
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTableGvsynonymClear(AjPTable table)
-{
-    if(!table)
-        return ajFalse;
-
-    ajTableMapDel(table, tableGvsynonymClear, NULL);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTableGvsynonymDelete **********************************************
-**
-** Utility function to clear and delete an AJAX Table of
-** AJAX unsigned integer key data and
-** Ensembl Genetic Variation Synonym value data.
-**
-** @param [d] Ptable [AjPTable*] AJAX Table address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTableGvsynonymDelete(AjPTable* Ptable)
-{
-    AjPTable pthis = NULL;
-
-    if(!Ptable)
-        return ajFalse;
-
-    if(!*Ptable)
-        return ajFalse;
-
-    pthis = *Ptable;
-
-    ensTableGvsynonymClear(pthis);
-
-    ajTableFree(&pthis);
-
-    *Ptable = NULL;
-
-    return ajTrue;
 }

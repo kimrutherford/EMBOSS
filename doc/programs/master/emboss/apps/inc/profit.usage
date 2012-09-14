@@ -9,7 +9,6 @@ Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: <b>outfile.prophecy</b>
 Input sequence(s): <b>tsw:*</b>
 Output file [outfile.profit]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>

@@ -38,7 +38,7 @@ Obo output file [goname.obo]:
 Command line arguments
 
 Find GO ontology terms by name
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-query]             string     Name(s) to search for in ontology (Any
@@ -106,69 +106,143 @@ Output file format
   File: goname.obo
 
 [Term]
-id: GO:0003980
-name: UDP-glucose:glycoprotein glucosyltransferase activity
-namespace: molecular_function
-def: Catalysis of the addition of UDP-glucose on to asparagine-linked (N-linked)
- oligosaccharides of the form Man7-9GlcNAc2 on incorrectly folded glycoproteins.
-synonym: "UGGT activity" EXACT []
-xref: EC:2.4.1.-
-xref: Reactome:12706 "UDP-glucose:glycoprotein glucosyltransferase activity"
-is_a: GO:0035251 ! UDP-glucosyltransferase activity
-
-[Term]
-id: GO:0005201
-name: extracellular matrix structural constituent
-namespace: molecular_function
-def: The action of a molecule that contributes to the structural integrity of th
-e extracellular matrix.
-subset: gosubset_prok
-synonym: "extracellular matrix glycoprotein" NARROW []
-is_a: GO:0005198 ! structural molecule activity
-
-[Term]
-id: GO:0009306
-name: protein secretion
+id: GO:0036071
+name: N-glycan fucosylation
 namespace: biological_process
-def: The controlled release of proteins from a cell or group of cells.
-alt_id: GO:0045166
-alt_id: GO:0045731
-subset: gosubset_prok
-synonym: "glycoprotein secretion" NARROW []
-synonym: "protein secretion during cell fate commitment" NARROW []
-synonym: "protein secretion resulting in cell fate commitment" NARROW []
-is_a: GO:0015031 ! protein transport
-is_a: GO:0032940 ! secretion by cell
+def: The process of transferring a fucosyl group to an N-glycan. An N-glycan is
+the carbohydrate portion of an N-glycoprotein when attached to a nitrogen from a
+sparagine or arginine side-chains.
+synonym: "glycoprotein fucosylation" RELATED [GOC:bf]
+is_a: GO:0036065 ! fucosylation
 
 [Term]
-id: GO:0017060
-name: 3-galactosyl-N-acetylglucosaminide 4-alpha-L-fucosyltransferase activity
+id: GO:0035977
+name: protein deglycosylation involved in glycoprotein catabolic process
+namespace: biological_process
+def: The removal of sugar residues from a glycosylated protein that contributes
+to the breakdown of a glycoprotein.
+is_a: GO:0006517 ! protein deglycosylation
+relationship: part_of GO:0006516 ! glycoprotein catabolic process
+
+[Term]
+id: GO:0034436
+name: glycoprotein transport
+namespace: biological_process
+def: The directed movement of a glycoprotein, any protein that contains covalent
+ly bound glycose (i.e. monosaccharide) residues, into, out of or within a cell,
+or between cells, by means of some agent such as a transporter or pore.
+is_a: GO:0015031 ! protein transport
+
+[Term]
+id: GO:0008424
+name: glycoprotein 6-alpha-L-fucosyltransferase activity
 namespace: molecular_function
-def: Catalysis of the reaction: GDP-L-fucose + beta-D-galactosyl-(1,3)-N-acetyl-
-D-glucosaminyl-R = GDP + beta-D-galactosyl-(1,3)-[alpha-L-fucosyl-(1,4)]-N-acety
-l-D-glucosaminyl-R.
-synonym: "(Le(a))-dependent (alpha-3/4)-fucosyltransferase activity" NARROW [EC:
-2.4.1.65]
-synonym: "(Lea)-dependent (alpha-3/4)-fucosyltransferase activity" EXACT [EC:2.4
-.1.65]
-synonym: "3-alpha-galactosyl-N-acetylglucosaminide 4-alpha-L-fucosyltransferase
-activity" EXACT [EC:2.4.1.65]
-synonym: "alpha(1,3/1,4) fucosyltransferase III" RELATED [EC:2.4.1.65]
-synonym: "alpha(1,4)-L-fucosyltransferase activity" EXACT []
-synonym: "alpha-(1,3/1,4) fucosyltransferase III activity" EXACT [EC:2.4.1.65]
-synonym: "alpha-(1->4)-L-fucosyltransferase activity" EXACT [EC:2.4.1.65]
-synonym: "alpha-4-L-fucosyltransferase activity" EXACT [EC:2.4.1.65]
-synonym: "beta-acetylglucosaminylsaccharide fucosyltransferase activity" EXACT [
-EC:2.4.1.65]
-synonym: "blood group Lewis alpha-4-fucosyltransferase" NARROW [EC:2.4.1.65]
-synonym: "blood group Lewis alpha-4-fucosyltransferase activity" NARROW [EC:2.4.
-1.65]
-synonym: "blood-group substance Le(a)-dependent fucosyltransferase activity" NAR
-ROW [EC:2.4.1.65]
+def: Catalysis of the reaction: N(4)-{N-acetyl-beta-D-glucosaminyl-(1->2)-alpha-
+D-mannosyl-(1->3)-[N-acetyl-beta-D-glucosaminyl-(1->2)-alpha-D-mannosyl-(1->6)]-
+beta-D-mannosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->4)-N-acetyl-beta-D-gluco
+saminyl}-L-asparagine + GDP-L-fucose = N(4)-{N-acetyl-beta-D-glucosaminyl-(1->2)
+-alpha-D-mannosyl-(1->3)-[N-acetyl-beta-D-glucosaminyl-(1->2)-alpha-D-mannosyl-(
+1->6)]-beta-D-mannosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->4)-[alpha-L-fucos
+yl-(1->6)]-N-acetyl-beta-D-glucosaminyl}asparagine + GDP + H(+).
+synonym: "FucT" RELATED [EC:2.4.1.68]
+synonym: "GDP-fucose--glycoprotein fucosyltransferase activity" EXACT [EC:2.4.1.
+68]
+synonym: "GDP-L-Fuc:N-acetyl-beta-D-glucosaminide alpha(1,6)fucosyltransferase a
+ctivity" EXACT [EC:2.4.1.68]
+synonym: "GDP-L-Fuc:N-acetyl-beta-D-glucosaminide alpha(1->6)fucosyltransferase
+activity" EXACT [EC:2.4.1.68]
+synonym: "GDP-L-Fuc:N-acetyl-beta-D-glucosaminide alpha-(1,6)fucosyltransferase
+activity" EXACT [EC:2.4.1.68]
+synonym: "GDP-L-Fuc:N-acetyl-beta-D-glucosaminide alpha-(1->6)fucosyltransferase
+ activity" EXACT [EC:2.4.1.68]
+synonym: "GDP-L-fucose--glycoprotein fucosyltransferase activity" EXACT [EC:2.4.
+1.68]
+synonym: "GDPfucose-glycoprotein fucosyltransferase activity" EXACT [EC:2.4.1.68
+]
+synonym: "glycoprotein fucosyltransferase activity" BROAD [EC:2.4.1.68]
+synonym: "guanosine diphosphofucose--glycoprotein fucosyltransferase activity" E
+XACT [EC:2.4.1.68]
+xref: EC:2.4.1.68
+xref: KEGG:R05988
+xref: MetaCyc:2.4.1.68-RXN
+xref: Reactome:REACT_25399 "Addition of alpha 1,6 fucose to the first GlcNAc of
+the N-glycan, Homo sapiens"
+xref: RHEA:12988
+is_a: GO:0046921 ! alpha-(1->6)-fucosyltransferase activity
+
+[Term]
+id: GO:0018010
+name: glycoprotein N-palmitoyltransferase activity
+namespace: molecular_function
+def: Catalysis of the reaction: palmitoyl-CoA + glycoprotein = CoA + N-palmitoyl
+glycoprotein.
 
 
   [Part of this file has been deleted for brevity]
 
+synonym: "cell wall hydroxyproline-rich glycoprotein metabolism" EXACT []
+is_a: GO:0010384 ! cell wall proteoglycan metabolic process
+
+[Term]
+id: GO:0004653
+name: polypeptide N-acetylgalactosaminyltransferase activity
+namespace: molecular_function
+def: Catalysis of the reaction: UDP-N-acetyl-D-galactosamine + polypeptide = UDP
+ + N-acetyl-D-galactosaminyl-polypeptide. This reaction is the modification of s
+erine or threonine residues in polypeptide chains by the transfer of a N-acetylg
+alactose from UDP-N-acetylgalactose to the hydroxyl group of the amino acid; it
+is the first step in O-glycan biosynthesis.
+synonym: "glycoprotein acetylgalactosaminyltransferase activity" EXACT [EC:2.4.1
+.41]
+synonym: "polypeptide-N-acetylgalactosamine transferase activity" EXACT [EC:2.4.
+1.41]
+synonym: "protein-UDP acetylgalactosaminyltransferase activity" EXACT [EC:2.4.1.
+41]
+synonym: "UDP-acetylgalactosamine-glycoprotein acetylgalactosaminyltransferase a
+ctivity" EXACT [EC:2.4.1.41]
+synonym: "UDP-acetylgalactosamine:peptide-N-galactosaminyltransferase activity"
+EXACT [EC:2.4.1.41]
+synonym: "UDP-GalNAc:polypeptide N-acetylgalactosaminyl transferase activity" EX
+ACT [EC:2.4.1.41]
+synonym: "UDP-GalNAc:polypeptide N-acetylgalactosaminyltransferase activity" EXA
+CT [EC:2.4.1.41]
+synonym: "UDP-N-acetyl-alpha-D-galactosamine:polypeptide N-acetylgalactosaminylt
+ransferase activity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetyl-D-galactosamine:polypeptide N-acetylgalactosaminyl-transf
+erase activity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetylgalactosamine-glycoprotein N-acetylgalactosaminyltransfera
+se activity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetylgalactosamine-protein N-acetylgalactosaminyltransferase ac
+tivity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetylgalactosamine:kappa-casein polypeptide N-acetylgalactosami
+nyltransferase activity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetylgalactosamine:polypeptide N-acetylgalactosaminyltransferas
+e activity" EXACT [EC:2.4.1.41]
+synonym: "UDP-N-acetylgalactosamine:protein N-acetylgalactosaminyl transferase a
+ctivity" EXACT [EC:2.4.1.41]
+synonym: "uridine diphosphoacetylgalactosamine-glycoprotein acetylgalactosaminyl
+transferase activity" EXACT [EC:2.4.1.41]
+xref: EC:2.4.1.41
+xref: MetaCyc:2.4.1.41-RXN
+xref: Reactome:REACT_115586 "Addition of GalNAc to mucins to form the Tn antigen
+, Homo sapiens"
+is_a: GO:0008376 ! acetylgalactosaminyltransferase activity
+
+[Term]
+id: GO:0003827
+name: alpha-1,3-mannosylglycoprotein 2-beta-N-acetylglucosaminyltransferase acti
+vity
+namespace: molecular_function
+def: Catalysis of the reaction: 3-(alpha-D-mannosyl)-beta-D-mannosyl-R + UDP-N-a
+cetyl-alpha-D-glucosamine = 3-(2-[N-acetyl-beta-D-glucosaminyl]-alpha-D-mannosyl
+)-beta-D-mannosyl-R + H(+) + UDP.
+synonym: "alpha-1,3-mannosyl-glycoprotein 2-beta-N-acetylglucosaminyltransferase
+ activity" EXACT [EC:2.4.1.101]
+synonym: "alpha-1,3-mannosyl-glycoprotein beta-1,2-N-acetylglucosaminyltransfera
+se activity" EXACT [EC:2.4.1.101]
+synonym: "alpha-1,3-mannosylglycoprotein beta-1,2-N-acetylglucosaminyltransferas
+e activity" EXACT []
+synonym: "GnTI" RELATED [EC:2.4.1.101]
 synonym: "GNTI activity" EXACT [EC:2.4.1.101]
 synonym: "N-acetylglucosaminyltransferase I activity" EXACT [EC:2.4.1.101]
 synonym: "N-glycosyl-oligosaccharide-glycoprotein N-acetylglucosaminyltransferas
@@ -184,67 +258,10 @@ synonym: "uridine diphosphoacetylglucosamine-alpha-1,3-mannosylglycoprotein beta
 xref: EC:2.4.1.101
 xref: KEGG:R05983
 xref: MetaCyc:2.4.1.101-RXN
-xref: Reactome:11577 "alpha-1,3-mannosylglycoprotein 2-beta-N-acetylglucosaminyl
-transferase activity"
+xref: Reactome:REACT_25236 "Addition of GlcNAc to the glycan on the A arm, Homo
+sapiens"
 xref: RHEA:11459
 is_a: GO:0008375 ! acetylglucosaminyltransferase activity
-
-[Term]
-id: GO:0047253
-name: alpha-1,6-mannosyl-glycoprotein 4-beta-N-acetylglucosaminyltransferase act
-ivity
-namespace: molecular_function
-def: Catalysis of the reaction: N-acetyl-beta-D-glucosaminyl-1,6-beta-D-(N-acety
-l-B-glucosaminyl-1,2)-beta-D-mannosyl-R + UDP-N-acetyl-D-glucosamine = N-acetyl-
-beta-D-glucosaminyl-1,6-beta-D-(N-acetyl-D-glucosaminyl-1,2-beta)-(N-acetyl-D-gl
-ucosaminyl-1,4-beta)-D-mannosyl-R + UDP.
-synonym: "mannosyl-glycoprotein beta-1,4-N-acetylglucosaminyl-transferase activi
-ty" EXACT []
-synonym: "mannosyl-glycoprotein beta-1,4-N-acetylglucosaminyltransferase activit
-y" EXACT [EC:2.4.1.201]
-synonym: "N-acetylglucosaminyltransferase VI activity" RELATED [EC:2.4.1.201]
-synonym: "N-glycosyl-oligosaccharide-glycoprotein N-acetylglucosaminyltransferas
-e VI activity" EXACT [EC:2.4.1.201]
-synonym: "UDP-N-acetyl-D-glucosamine:2,6-bis(N-acetyl-beta-D-glucosaminyl)-alpha
--D-mannosyl-glycoprotein 4-beta-N-acetyl-D-glucosaminyltransferase activity" EXA
-CT [EC:2.4.1.201]
-synonym: "uridine diphosphoacetylglucosamine-glycopeptide beta-1->4-acetylglucos
-aminyltransferase VI" RELATED [EC:2.4.1.201]
-synonym: "uridine diphosphoacetylglucosamine-glycopeptide beta-1->4-acetylglucos
-aminyltransferase VI activity" EXACT [EC:2.4.1.201]
-xref: EC:2.4.1.201
-xref: MetaCyc:2.4.1.201-RXN
-is_a: GO:0008375 ! acetylglucosaminyltransferase activity
-
-[Term]
-id: GO:0047396
-name: glycosylphosphatidylinositol diacylglycerol-lyase activity
-namespace: molecular_function
-def: Catalysis of the reaction: 6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-i
-nositol = 1,2-diacyl-sn-glycerol + 6-(alpha-D-glucosaminyl)-1D-myo-inositol 1,2-
-cyclic phosphate.
-subset: gosubset_prok
-synonym: "(glycosyl)phosphatidylinositol-specific phospholipase C activity" EXAC
-T [EC:4.6.1.14]
-synonym: "6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol diacyl-sn-glyc
-erol-lyase [6-(alpha-D-glucosaminyl)-1D-myo-inositol 1,2-cyclic phosphate-formin
-g]" RELATED [EC:4.6.1.14]
-synonym: "6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol diacylglycerol
--lyase (1,2-cyclic-phosphate-forming) activity" EXACT [EC:4.6.1.14]
-synonym: "glycosyl inositol phospholipid anchor-hydrolyzing enzyme activity" EXA
-CT [EC:4.6.1.14]
-synonym: "glycosylphosphatidylinositol-phospholipase C activity" NARROW [EC:4.6.
-1.14]
-synonym: "glycosylphosphatidylinositol-specific phospholipase C activity" EXACT
-[EC:4.6.1.14]
-synonym: "GPI-PLC activity" EXACT [EC:4.6.1.14]
-synonym: "GPI-specific phospholipase C activity" EXACT [EC:4.6.1.14]
-synonym: "variant-surface-glycoprotein phospholipase C activity" EXACT []
-synonym: "VSG-lipase activity" EXACT [EC:4.6.1.14]
-xref: EC:4.6.1.14
-xref: MetaCyc:3.1.4.47-RXN
-is_a: GO:0009975 ! cyclase activity
-is_a: GO:0016849 ! phosphorus-oxygen lyase activity
 
 
 Data files

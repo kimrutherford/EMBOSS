@@ -2,50 +2,51 @@
 
 <HEAD>
   <TITLE>
-  EMBOSS: ontoget
+  EMBOSS: ontoisobsolete
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
 <!--#include file="header1.inc" -->
-ontoget
+ontoisobsolete
 <!--#include file="header2.inc" -->
 
 <H2>
     Function
 </H2>
-<!--#include file="inc/ontoget.ione" -->
+<!--#include file="inc/ontoisobsolete.ione" -->
 
 <H2>
     Description
 </H2>
 
-<p><b>ontoget</b> displays on-screen for a named ontology whether term statement(s) with the supplied IDs are obsolete or not. The information may be written to an output file in various formats.</p>
+<p><b>ontoisobsolete</b> tests and ontology term retrieved by a query and returns "Obsolete" if the term is obsoleted in the ontology.
+
 
 <p>Ontologies from the EMBOSS data directory are used.</p>
 
 <H2>
     Usage
 </H2>
-<!--#include file="inc/ontoget.usage" -->
+<!--#include file="inc/ontoisobsolete.usage" -->
 
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-<!--#include file="inc/ontoget.ihelp" -->
+<!--#include file="inc/ontoisobsolete.ihelp" -->
 </pre>
 </td></tr></table>
 <P>
-<!--#include file="inc/ontoget.itable" -->
+<!--#include file="inc/ontoisobsolete.itable" -->
 
 <H2>
     Input file format
 </H2>
 
 <p>
-<!--#include file="inc/ontoget.input" -->
+<!--#include file="inc/ontoisobsolete.input" -->
 
 
 <H2>
@@ -54,7 +55,7 @@ ontoget
 <p>A single line per term is is given, including the term id, namespace and name, and whether it is obsolete or not.</p>
 
 <p>
-<!--#include file="inc/ontoget.output" -->
+<!--#include file="inc/ontoisobsolete.output" -->
 
 <H2>
     Data files
@@ -97,7 +98,7 @@ It exits with a status of 0.
 
 None.
 
-<!--#include file="inc/ontoget.isee" -->
+<!--#include file="inc/ontoisobsolete.isee" -->
 
 <H2>
     Author(s)
@@ -107,16 +108,12 @@ None.
 
 
 
-<p>
-
-This application was modified by 
-<!--#include file="inc/jison.address" -->
 
 <H2>
     History
 </H2>
 
-<!--#include file="inc/ontoget.history" -->
+<!--#include file="inc/ontoisobsolete.history" -->
 
 <H2>
     Target users
@@ -126,7 +123,7 @@ This application was modified by
 <H2>
     Comments
 </H2>
-<!--#include file="inc/ontoget.comment" -->
+<!--#include file="inc/ontoisobsolete.comment" -->
 
 </BODY>
 </HTML>

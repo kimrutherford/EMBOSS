@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Reports STOP codons and ORF statistics of a protein
+   Report STOP codons and ORF statistics of a protein
 
 Description
 
@@ -29,7 +29,7 @@ Usage
 
 
 % checktrans
-Reports STOP codons and ORF statistics of a protein
+Report STOP codons and ORF statistics of a protein
 Input protein sequence(s): paamir.pep
 Minimum ORF Length to report [100]:
 Output file [paamir_1.checktrans]:
@@ -42,8 +42,8 @@ Features output [paamir_1.gff]:
 
 Command line arguments
 
-Reports STOP codons and ORF statistics of a protein
-Version: EMBOSS:6.4.0.0
+Report STOP codons and ORF statistics of a protein
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -78,7 +78,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -194,11 +197,11 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 
 ##gff-version 3
 ##sequence-region PAAMIR_1 1 634
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.4.0.0
+#!Source-version EMBOSS 6.5.0.0
 PAAMIR_1        checktrans      polypeptide_region      278     634     .
-+       .       ID=PAAMIR_1.1
+.       .       ID=PAAMIR_1.1
 
 Data files
 
@@ -249,14 +252,14 @@ See also
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    coderet          Extract CDS, mRNA and translations from feature tables
-   getorf           Finds and extracts open reading frames (ORFs)
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+   getorf           Find and extract open reading frames (ORFs)
+   marscan          Find matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
    showorf          Display a nucleotide sequence and translation in pretty format
-   showseq          Displays sequences with features in pretty format
+   showseq          Display sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence

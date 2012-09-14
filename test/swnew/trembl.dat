@@ -2,7 +2,7 @@ ID   O42495_TAKRU            Unreviewed;       433 AA.
 AC   O42495;
 DT   01-JAN-1998, integrated into UniProtKB/TrEMBL.
 DT   01-OCT-2002, sequence version 2.
-DT   15-JUN-2010, entry version 52.
+DT   16-MAY-2012, entry version 58.
 DE   SubName: Full=SkmBOP;
 GN   Name=skmBOP;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -31,9 +31,8 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; U90880; AAC60295.2; -; Genomic_DNA.
-DR   SMR; O42495; 6-225.
-DR   Ensembl; ENSTRUT00000039921; ENSTRUP00000039780; ENSTRUG00000015565; Takifugu rubripes.
-DR   eggNOG; fiNOG11467; -.
+DR   ProteinModelPortal; O42495; -.
+DR   HOGENOM; HOG000050244; -.
 DR   GO; GO:0008270; F:zinc ion binding; IEA:InterPro.
 DR   InterPro; IPR001214; SET_dom.
 DR   InterPro; IPR002893; Znf_MYND.
@@ -59,9 +58,10 @@ ID   Q1KKT3_TAKRU            Unreviewed;       412 AA.
 AC   Q1KKT3;
 DT   30-MAY-2006, integrated into UniProtKB/TrEMBL.
 DT   30-MAY-2006, sequence version 1.
-DT   18-MAY-2010, entry version 26.
+DT   16-MAY-2012, entry version 40.
 DE   SubName: Full=Even-skipped homeobox 2;
-GN   Name=Evx2;
+DE   SubName: Full=Uncharacterized protein;
+GN   Name=Evx2; Synonyms=EVX2;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
@@ -75,6 +75,24 @@ RA   Lee A.P., Koh E.G.L., Tay A., Brenner S., Venkatesh B.;
 RT   "Highly conserved syntenic blocks at the vertebrate Hox loci and
 RT   conserved regulatory elements within and outside Hox gene clusters.";
 RL   Proc. Natl. Acad. Sci. U.S.A. 103:6994-6999(2006).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=Hd-rR;
+RX   PubMed=17554307; DOI=10.1038/nature05846;
+RA   Kasahara M., Naruse K., Sasaki S., Nakatani Y., Qu W., Ahsan B.,
+RA   Yamada T., Nagayasu Y., Doi K., Kasai Y., Jindo T., Kobayashi D.,
+RA   Shimada A., Toyoda A., Kuroki Y., Fujiyama A., Sasaki T., Shimizu A.,
+RA   Asakawa S., Shimizu N., Hashimoto S., Yang J., Lee Y., Matsushima K.,
+RA   Sugano S., Sakaizumi M., Narita T., Ohishi K., Haga S., Ohta F.,
+RA   Nomoto H., Nogata K., Morishita T., Endo T., Shin-I T., Takeda H.,
+RA   Morishita S., Kohara Y.;
+RT   "The medaka draft genome and insights into vertebrate genome
+RT   evolution.";
+RL   Nature 447:714-719(2007).
+RN   [3]
+RP   IDENTIFICATION.
+RG   Ensembl;
+RL   Submitted (FEB-2012) to UniProtKB.
 CC   -!- SUBCELLULAR LOCATION: Nucleus (By similarity).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
@@ -82,19 +100,18 @@ CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; DQ481668; ABF22461.1; -; Genomic_DNA.
 DR   SMR; Q1KKT3; 165-221.
-DR   Ensembl; ENSTRUT00000045103; ENSTRUP00000044951; ENSTRUG00000017536; Takifugu rubripes.
-DR   eggNOG; fiNOG11494; -.
-DR   PhylomeDB; Q1KKT3; -.
+DR   Ensembl; ENSTRUT00000045103; ENSTRUP00000044951; ENSTRUG00000017536.
+DR   eggNOG; NOG306682; -.
+DR   GeneTree; ENSGT00640000091339; -.
+DR   HOGENOM; HOG000231897; -.
 DR   GO; GO:0005634; C:nucleus; IEA:UniProtKB-SubCell.
 DR   GO; GO:0043565; F:sequence-specific DNA binding; IEA:InterPro.
-DR   GO; GO:0003700; F:transcription factor activity; IEA:InterPro.
-DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
-DR   InterPro; IPR001356; Homeobox.
-DR   InterPro; IPR017970; Homeobox_CS.
-DR   InterPro; IPR020479; Homeobox_region.
-DR   InterPro; IPR009057; Homeodomain-like.
-DR   InterPro; IPR012287; Homeodomain-rel.
+DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro.
 DR   Gene3D; G3DSA:1.10.10.60; Homeodomain-rel; 1.
+DR   InterPro; IPR017970; Homeobox_CS.
+DR   InterPro; IPR020479; Homeobox_metazoa.
+DR   InterPro; IPR001356; Homeodomain.
+DR   InterPro; IPR009057; Homeodomain-like.
 DR   Pfam; PF00046; Homeobox; 1.
 DR   PRINTS; PR00024; HOMEOBOX.
 DR   SMART; SM00389; HOX; 1.
@@ -102,7 +119,7 @@ DR   SUPFAM; SSF46689; Homeodomain_like; 1.
 DR   PROSITE; PS00027; HOMEOBOX_1; 1.
 DR   PROSITE; PS50071; HOMEOBOX_2; 1.
 PE   3: Inferred from homology;
-KW   DNA-binding; Homeobox; Nucleus.
+KW   Complete proteome; DNA-binding; Homeobox; Nucleus; Reference proteome.
 SQ   SEQUENCE   412 AA;  44015 MW;  7E7FEA72B2BC421E CRC64;
      MMERIRKEMI LMERGLHSPV AGKRLTDAPG NSVLEALENS QHSGRLSPRI TSASLHGNLG
      DIPSKGKFEI DSLFGTHHSS DNASSVDINS SENRKKMSIY SEVSPDSDIN SDVEVGCPAH
@@ -116,7 +133,7 @@ ID   Q1KL02_TAKRU            Unreviewed;       676 AA.
 AC   Q1KL02;
 DT   30-MAY-2006, integrated into UniProtKB/TrEMBL.
 DT   30-MAY-2006, sequence version 1.
-DT   15-JUN-2010, entry version 31.
+DT   16-MAY-2012, entry version 42.
 DE   SubName: Full=Chimerin 2;
 GN   Name=Chn2;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -137,21 +154,21 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; DQ481664; ABF22392.1; -; Genomic_DNA.
+DR   ProteinModelPortal; Q1KL02; -.
 DR   SMR; Q1KL02; 3-115, 419-676.
-DR   Ensembl; ENSTRUT00000039907; ENSTRUP00000039766; ENSTRUG00000015557; Takifugu rubripes.
-DR   eggNOG; fiNOG10110; -.
+DR   eggNOG; NOG295484; -.
 DR   InParanoid; Q1KL02; -.
+DR   OrthoDB; EOG4W9J3S; -.
 DR   GO; GO:0005622; C:intracellular; IEA:InterPro.
 DR   GO; GO:0046872; F:metal ion binding; IEA:UniProtKB-KW.
-DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
-DR   GO; GO:0007165; P:signal transduction; IEA:InterPro.
-DR   InterPro; IPR020454; DAG/PE_bd.
-DR   InterPro; IPR002219; Prot_Kinase_C-like_PE/DAG_bd.
-DR   InterPro; IPR008936; Rho_GTPase_activation_prot.
-DR   InterPro; IPR000198; RhoGAP.
-DR   InterPro; IPR000980; SH2.
+DR   GO; GO:0035556; P:intracellular signal transduction; IEA:InterPro.
 DR   Gene3D; G3DSA:1.10.555.10; RhoGAP; 1.
 DR   Gene3D; G3DSA:3.30.505.10; SH2; 1.
+DR   InterPro; IPR020454; DAG/PE-bd.
+DR   InterPro; IPR002219; Prot_Kinase_C-like_PE/DAG-bd.
+DR   InterPro; IPR008936; Rho_GTPase_activation_prot.
+DR   InterPro; IPR000198; RhoGAP_dom.
+DR   InterPro; IPR000980; SH2.
 DR   Pfam; PF00130; C1_1; 1.
 DR   Pfam; PF00620; RhoGAP; 1.
 DR   Pfam; PF00017; SH2; 1.
@@ -165,7 +182,7 @@ DR   PROSITE; PS50001; SH2; 1.
 DR   PROSITE; PS00479; ZF_DAG_PE_1; 1.
 DR   PROSITE; PS50081; ZF_DAG_PE_2; 1.
 PE   4: Predicted;
-KW   Metal-binding; Zinc.
+KW   Metal-binding; Zinc; Zinc-finger.
 SQ   SEQUENCE   676 AA;  77365 MW;  417B610C5ACC1B97 CRC64;
      MLFQKLFHGR ISREYADELL ATAEGAYLIR ESQRQPGSHT LALRFGHQTL NYRLFYDGKH
      FVGEKRFESV HDLVTDALIT LYIETKAAEY IAKMTTNPIY EHLGYTSLLK DKTVHRLNRG
@@ -184,7 +201,7 @@ ID   Q2HPN2_TAKRU            Unreviewed;       317 AA.
 AC   Q2HPN2;
 DT   21-MAR-2006, integrated into UniProtKB/TrEMBL.
 DT   21-MAR-2006, sequence version 1.
-DT   02-MAR-2010, entry version 19.
+DT   16-MAY-2012, entry version 28.
 DE   SubName: Full=Beta1,4-galactosyltransferase 7;
 DE            EC=2.4.1.133;
 GN   Name=b4Gal-T7;
@@ -196,25 +213,30 @@ OC   Tetradontoidea; Tetraodontidae; Takifugu.
 OX   NCBI_TaxID=31033;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE.
-RA   Ouzzine M., Bui C., Fournel-Gigleux S., Mollicone R., Oriol R.;
-RT   "Phylogeny of beta1,4-galactosyltransferases.";
-RL   Submitted (FEB-2006) to the EMBL/GenBank/DDBJ databases.
+RA   Talhaoui I., Bui C., Oriol R., Mulliert G., Gulberti S., Netter P.,
+RA   Coughtrie M.W.H., Ouzzine M., Fournel-Gigleux S.;
+RT   "Identification of Key Functional Residues in the Active Site of Human
+RT   E21,4-Galactosyltransferase 7: A MAJOR ENZYME IN THE GLYCOSAMINOGLYCAN
+RT   SYNTHESIS PATHWAY.";
+RL   J. Biol. Chem. 285:37342-37358(2010).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AM231267; CAJ77200.1; -; mRNA.
-DR   RefSeq; NP_001072098.1; -.
+DR   RefSeq; NP_001072098.1; NM_001078630.1.
 DR   UniGene; Tru.3653; -.
 DR   CAZy; GT7; Glycosyltransferase Family 7.
-DR   Ensembl; ENSTRUT00000021947; ENSTRUP00000021858; ENSTRUG00000008706; Takifugu rubripes.
 DR   GeneID; 778009; -.
-DR   CTD; 778009; -.
-DR   eggNOG; fiNOG08907; -.
-DR   GO; GO:0046525; F:xylosylprotein 4-beta-galactosyltransferase...; IEA:EC.
+DR   CTD; 779002; -.
+DR   eggNOG; NOG305756; -.
+DR   HOGENOM; HOG000286021; -.
+DR   GO; GO:0046525; F:xylosylprotein 4-beta-galactosyltransferase activity; IEA:EC.
 DR   GO; GO:0005975; P:carbohydrate metabolic process; IEA:InterPro.
-DR   InterPro; IPR003859; Galactosyl_T_2.
+DR   InterPro; IPR003859; Galactosyl_T_2_met.
 DR   PANTHER; PTHR19300; Galactosyl_T_2; 1.
+DR   Pfam; PF02709; Glyco_transf_7C; 1.
+DR   PRINTS; PR02050; B14GALTRFASE.
 PE   2: Evidence at transcript level;
 KW   Glycosyltransferase; Transferase.
 SQ   SEQUENCE   317 AA;  36672 MW;  DA3B946E1934C1F0 CRC64;
@@ -229,7 +251,7 @@ ID   Q2HWR4_TAKRU            Unreviewed;       217 AA.
 AC   Q2HWR4;
 DT   21-MAR-2006, integrated into UniProtKB/TrEMBL.
 DT   21-MAR-2006, sequence version 1.
-DT   02-MAR-2010, entry version 23.
+DT   16-MAY-2012, entry version 32.
 DE   SubName: Full=T-cell surface glycoprotein CD8alpha;
 GN   Name=CD8alpha;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -248,19 +270,21 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AB232548; BAE79813.1; -; mRNA.
-DR   RefSeq; NP_001072086.1; -.
+DR   RefSeq; NP_001072086.1; NM_001078618.1.
 DR   UniGene; Tru.3654; -.
-DR   SMR; Q2HWR4; 26-124.
-DR   Ensembl; ENSTRUT00000038247; ENSTRUP00000038110; ENSTRUG00000014906; Takifugu rubripes.
+DR   ProteinModelPortal; Q2HWR4; -.
+DR   STRING; Q2HWR4; -.
 DR   GeneID; 777995; -.
 DR   CTD; 777995; -.
+DR   eggNOG; fiNOG20049; -.
+DR   HOGENOM; HOG000126626; -.
 DR   InParanoid; Q2HWR4; -.
+DR   Gene3D; G3DSA:2.60.40.10; Ig-like_fold; 1.
 DR   InterPro; IPR015468; CD8_asu.
 DR   InterPro; IPR007110; Ig-like.
 DR   InterPro; IPR013783; Ig-like_fold.
 DR   InterPro; IPR003599; Ig_sub.
 DR   InterPro; IPR013106; Ig_V-set.
-DR   Gene3D; G3DSA:2.60.40.10; Ig-like_fold; 1.
 DR   PANTHER; PTHR10441; CD8_alpha; 1.
 DR   Pfam; PF07686; V-set; 1.
 DR   SMART; SM00409; IG; 1.
@@ -276,7 +300,7 @@ ID   Q2KT90_TAKRU            Unreviewed;       230 AA.
 AC   Q2KT90;
 DT   07-MAR-2006, integrated into UniProtKB/TrEMBL.
 DT   07-MAR-2006, sequence version 1.
-DT   15-JUN-2010, entry version 31.
+DT   16-MAY-2012, entry version 40.
 DE   RecName: Full=Cytochrome c oxidase subunit 2;
 GN   Name=COII;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -309,9 +333,13 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AP006045; BAE79207.1; -; Genomic_DNA.
+DR   ProteinModelPortal; Q2KT90; -.
 DR   SMR; Q2KT90; 1-227.
-DR   Ensembl; ENSTRUT00000047994; ENSTRUP00000047832; ENSTRUG00000018676; Takifugu rubripes.
+DR   STRING; Q2KT90; -.
+DR   eggNOG; COG1622; -.
+DR   HOGENOM; HOG000264988; -.
 DR   InParanoid; Q2KT90; -.
+DR   OrthoDB; EOG4BZN3N; -.
 DR   GO; GO:0016021; C:integral to membrane; IEA:UniProtKB-KW.
 DR   GO; GO:0005743; C:mitochondrial inner membrane; IEA:UniProtKB-SubCell.
 DR   GO; GO:0070469; C:respiratory chain; IEA:UniProtKB-KW.
@@ -320,16 +348,14 @@ DR   GO; GO:0004129; F:cytochrome-c oxidase activity; IEA:InterPro.
 DR   GO; GO:0009055; F:electron carrier activity; IEA:InterPro.
 DR   GO; GO:0020037; F:heme binding; IEA:InterPro.
 DR   GO; GO:0022904; P:respiratory electron transport chain; IEA:InterPro.
-DR   GO; GO:0006810; P:transport; IEA:UniProtKB-KW.
+DR   Gene3D; G3DSA:1.10.287.90; COX2_TM; 1.
+DR   Gene3D; G3DSA:2.60.40.420; Cupredoxin; 1.
 DR   InterPro; IPR001505; Copper_CuA.
 DR   InterPro; IPR008972; Cupredoxin.
 DR   InterPro; IPR014222; Cyt_c_oxidase_su2.
 DR   InterPro; IPR015964; Cyt_c_oxidase_su2-like_TM_dom.
 DR   InterPro; IPR002429; Cyt_c_oxidase_su2_C.
 DR   InterPro; IPR011759; Cyt_c_oxidase_su2_TM_dom.
-DR   Gene3D; G3DSA:1.10.287.90; COX2_TM; 1.
-DR   Gene3D; G3DSA:2.60.40.420; Cupredoxin; 1.
-DR   PANTHER; PTHR22888; COX2_C; 1.
 DR   Pfam; PF00116; COX2; 1.
 DR   Pfam; PF02790; COX2_TM; 1.
 DR   PRINTS; PR01166; CYCOXIDASEII.
@@ -342,7 +368,7 @@ DR   PROSITE; PS50999; COX2_TM; 1.
 PE   3: Inferred from homology;
 KW   Copper; Electron transport; Membrane; Metal-binding; Mitochondrion;
 KW   Mitochondrion inner membrane; Respiratory chain; Transmembrane;
-KW   Transport.
+KW   Transmembrane helix; Transport.
 SQ   SEQUENCE   230 AA;  26042 MW;  19C6D6E9BDB9D12C CRC64;
      MAHPSQLGFQ DAASPVMEEL LHFHDHALMI VFLISTLVLY IIVAMVSTKL TNKYILDSQE
      IEIIWTILPA IILILIALPS LRILYLMDEI NDPHLTIKAM GHQWYWSYEY TDYSDLAFDS
@@ -353,7 +379,7 @@ ID   Q4JHL5_TAKRU            Unreviewed;       854 AA.
 AC   Q4JHL5;
 DT   02-AUG-2005, integrated into UniProtKB/TrEMBL.
 DT   02-AUG-2005, sequence version 1.
-DT   15-JUN-2010, entry version 31.
+DT   16-MAY-2012, entry version 43.
 DE   SubName: Full=Aryl hydrocarbon receptor 1B;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -368,6 +394,7 @@ RA   Merson R.R., Karchner S.I., Hahn M.E.;
 RT   "Interaction of fish aryl hydrocarbon receptor paralogs (AHR1 and
 RT   AHR2) with the retinoblastoma protein.";
 RL   Aquat. Toxicol. 94:47-55(2009).
+CC   -!- SIMILARITY: Contains 1 PAC (PAS-associated C-terminal) domain.
 CC   -!- SIMILARITY: Contains 1 basic helix-loop-helix (bHLH) domain.
 CC   -!- SIMILARITY: Contains 2 PAS (PER-ARNT-SIM) domains.
 CC   -----------------------------------------------------------------------
@@ -375,20 +402,19 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; DQ088138; AAY96630.1; -; mRNA.
-DR   RefSeq; NP_001033048.1; -.
+DR   RefSeq; NP_001033048.1; NM_001037959.1.
 DR   UniGene; Tru.3516; -.
-DR   SMR; Q4JHL5; 119-384.
+DR   ProteinModelPortal; Q4JHL5; -.
 DR   GeneID; 654292; -.
-DR   CTD; 654292; -.
-DR   eggNOG; veNOG06416; -.
+DR   CTD; 554265; -.
 DR   GO; GO:0005634; C:nucleus; IEA:UniProtKB-KW.
 DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW.
 DR   GO; GO:0004872; F:receptor activity; IEA:UniProtKB-KW.
-DR   GO; GO:0030528; F:transcription regulator activity; IEA:InterPro.
-DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
-DR   GO; GO:0007165; P:signal transduction; IEA:InterPro.
-DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
-DR   InterPro; IPR001092; HLH_DNA-bd_dom.
+DR   GO; GO:0004871; F:signal transducer activity; IEA:InterPro.
+DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:UniProtKB-KW.
+DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW.
+DR   Gene3D; G3DSA:4.10.280.10; HLH_DNA_bd; 1.
+DR   InterPro; IPR011598; HLH_DNA-bd.
 DR   InterPro; IPR001610; PAC.
 DR   InterPro; IPR000014; PAS.
 DR   InterPro; IPR013767; PAS_fold.
@@ -424,7 +450,7 @@ ID   Q50J40_TAKRU            Unreviewed;       372 AA.
 AC   Q50J40;
 DT   07-JUN-2005, integrated into UniProtKB/TrEMBL.
 DT   07-JUN-2005, sequence version 1.
-DT   02-MAR-2010, entry version 20.
+DT   16-MAY-2012, entry version 28.
 DE   SubName: Full=Alpha-2,8-sialyltransferase;
 DE   Flags: Fragment;
 GN   Name=st8Sia V;
@@ -444,19 +470,20 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AJ705092; CAG29214.1; -; mRNA.
-DR   Ensembl; ENSTRUT00000046394; ENSTRUP00000046238; ENSTRUG00000018059; Takifugu rubripes.
-DR   eggNOG; fiNOG06649; -.
-DR   PhylomeDB; Q50J40; -.
+DR   UniGene; Tru.2023; -.
+DR   eggNOG; NOG323775; -.
 DR   GO; GO:0030173; C:integral to Golgi membrane; IEA:InterPro.
 DR   GO; GO:0008373; F:sialyltransferase activity; IEA:InterPro.
-DR   GO; GO:0006486; P:protein amino acid glycosylation; IEA:InterPro.
+DR   GO; GO:0006486; P:protein glycosylation; IEA:InterPro.
+DR   Gene3D; G3DSA:3.90.1480.10; A-2_3-sialyltransferase; 1.
+DR   InterPro; IPR009251; A-2_3-sialyltransferase.
 DR   InterPro; IPR001675; Glyco_trans_29.
 DR   InterPro; IPR012163; Sialyl_trans.
 DR   Pfam; PF00777; Glyco_transf_29; 1.
 DR   PIRSF; PIRSF005557; Sialyl_trans; 1.
 PE   2: Evidence at transcript level;
 KW   Glycosyltransferase; Golgi apparatus; Membrane; Transferase;
-KW   Transmembrane.
+KW   Transmembrane; Transmembrane helix.
 FT   NON_TER       1      1
 FT   NON_TER     372    372
 SQ   SEQUENCE   372 AA;  42962 MW;  74842EC22385F239 CRC64;
@@ -472,7 +499,7 @@ ID   Q68HA9_TAKRU            Unreviewed;       606 AA.
 AC   Q68HA9;
 DT   11-OCT-2004, integrated into UniProtKB/TrEMBL.
 DT   11-OCT-2004, sequence version 1.
-DT   18-MAY-2010, entry version 28.
+DT   16-MAY-2012, entry version 37.
 DE   SubName: Full=E1A-associated protein p300;
 DE   Flags: Fragment;
 GN   Name=EP300;
@@ -494,19 +521,20 @@ CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AY690625; AAT99578.1; -; mRNA.
 DR   UniGene; Tru.1841; -.
-DR   SMR; Q68HA9; 311-409, 551-606.
-DR   Ensembl; ENSTRUT00000016334; ENSTRUP00000016262; ENSTRUG00000006616; Takifugu rubripes.
-DR   eggNOG; veNOG10326; -.
+DR   ProteinModelPortal; Q68HA9; -.
+DR   eggNOG; COG5076; -.
+DR   HOGENOM; HOG000111353; -.
 DR   InParanoid; Q68HA9; -.
+DR   OrthoDB; EOG4Z0B4S; -.
 DR   GO; GO:0005634; C:nucleus; IEA:InterPro.
 DR   GO; GO:0004402; F:histone acetyltransferase activity; IEA:InterPro.
 DR   GO; GO:0003712; F:transcription cofactor activity; IEA:InterPro.
 DR   GO; GO:0008270; F:zinc ion binding; IEA:InterPro.
 DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
-DR   InterPro; IPR003101; KIX.
-DR   InterPro; IPR000197; Znf_TAZ.
 DR   Gene3D; G3DSA:1.10.246.20; KIX; 1.
 DR   Gene3D; G3DSA:1.20.1020.10; Znf_TAZ; 1.
+DR   InterPro; IPR003101; KIX.
+DR   InterPro; IPR000197; Znf_TAZ.
 DR   Pfam; PF02172; KIX; 1.
 DR   Pfam; PF02135; zf-TAZ; 1.
 DR   SMART; SM00551; ZnF_TAZ; 1.

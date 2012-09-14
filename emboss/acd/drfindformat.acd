@@ -2,9 +2,9 @@ application: drfindformat
 [
   documentation: "Find public databases by format"
   groups: "Ontology:EDAM, Data retrieval:Resource data"
-    relations: "EDAM:0000219 topic Annotation"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+    relations: "EDAM_topic:0219 Annotation"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input 
@@ -19,7 +19,7 @@ section: input
       parameter: "Y"
       information: "List of EDAM data keywords"
       knowntype: "keyword"
-      relations: "EDAM:0000968 data Keyword"
+      relations: "EDAM_data:0968 Keyword"
   ]
 
 endsection: input
@@ -53,7 +53,7 @@ section: advanced
           term names (and synonyms) only. This option also matches the
 	  keywords against the EDAM term definitions and will therefore
 	  (typically) report more matches."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: subclasses [
@@ -61,7 +61,7 @@ section: advanced
     information: "Include subclasses of hits"
     help: "Extend the query matches to include all terms which are
            specialisations (EDAM sub-classes) of the matched type."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -81,7 +81,7 @@ section: output
   [
     parameter: "Y"
     name: "drfindformat"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: output

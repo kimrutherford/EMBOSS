@@ -1,20 +1,38 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajquery ************************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX Query parsing functions
+**
+** @author Copyright (C) 2011 Peter Rice
+** @version $Revision: 1.46 $
+** @modified Jul 15 pmr First version with code from all datatypes merged
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajquery.h"
+#include "ajcall.h"
+#include "ajreg.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajresource.h"
 
 static AjBool    queryRegInitDone = AJFALSE;
 
@@ -25,21 +43,29 @@ static AjPStr queryDb        = NULL;
 static AjPStr queryChr       = NULL;
 static AjPStr queryTest      = NULL;
 
-static AjPRegexp queryRegAsis    = NULL;
-static AjPRegexp queryRegSvr     = NULL;
-static AjPRegexp queryRegDbId    = NULL;
-static AjPRegexp queryRegDbField = NULL;
-static AjPRegexp queryRegFmt     = NULL;
-static AjPRegexp queryRegFieldId = NULL;
-static AjPRegexp queryRegId      = NULL;
-static AjPRegexp queryRegList    = NULL;
-static AjPRegexp queryRegRange   = NULL;
-static AjPRegexp queryRegWild    = NULL;
+static AjPRegexp queryRegAsis     = NULL;
+static AjPRegexp queryRegHttp     = NULL;
+static AjPRegexp queryRegFtp      = NULL;
+static AjPRegexp queryRegSvr      = NULL;
+static AjPRegexp queryRegDb       = NULL;
+static AjPRegexp queryRegQryId    = NULL;
+static AjPRegexp queryRegQryField = NULL;
+static AjPRegexp queryRegFmt      = NULL;
+static AjPRegexp queryRegFieldId  = NULL;
+static AjPRegexp queryRegId       = NULL;
+static AjPRegexp queryRegList     = NULL;
+static AjPRegexp queryRegRange    = NULL;
+static AjPRegexp queryRegRefrange = NULL;
+static AjPRegexp queryRegWild     = NULL;
 
 static void queryWildComp(void);
 static void queryRegInit(void);
 static const AjPStr queryGetFieldC(const AjPQuery query,
                                    const char* txt);
+static AjBool queryDbfind(AjPStr *Pdb, const AjPStr querySvr,
+                          AjBool findformat(const AjPStr format,
+                                            ajint *iformat),
+                          AjPQuery qry, AjBool* dbstat, AjBool* drcatstat);
 
 
 static const char* queryDatatypeName[] =
@@ -95,13 +121,15 @@ static const char* queryDatatypeName[] =
 
 
 
-/* @func ajQueryNew ********************************************************
+/* @func ajQueryNew ***********************************************************
 **
 ** Creates a new query object for a specific datatype from the
 ** AJDATATYPE enumerated types
 **
 ** @param [r] datatype [const AjEDataType] Enumerated datatype
 ** @return [AjPQuery] New query object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -129,7 +157,7 @@ AjPQuery ajQueryNew(const AjEDataType datatype)
     pthis->Directory   = ajStrNew();
     pthis->Filename    = ajStrNew();
     pthis->Application = ajStrNew();
-    pthis->Field       = ajStrNew();
+    pthis->SingleField = ajStrNew();
 
     pthis->DbFilter = ajStrNew();
     pthis->DbReturn = ajStrNew();
@@ -174,6 +202,8 @@ AjPQuery ajQueryNew(const AjEDataType datatype)
 **
 ** @param [d] pthis [AjPQuery*] Address of query object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -189,7 +219,7 @@ void ajQueryDel(AjPQuery* pthis)
     if(!*pthis)
         return;
 
-    ajDebug("ajQueryDel db:'%S' svr: '%S' fields:%u\n",
+    ajDebug("ajQueryDel db:'%S' svr: '%S' fields:%Lu\n",
             (*pthis)->DbName, (*pthis)->SvrName,
             ajListGetLength((*pthis)->QueryFields));
 
@@ -221,13 +251,16 @@ void ajQueryDel(AjPQuery* pthis)
     ajStrDel(&thys->Directory);
     ajStrDel(&thys->Filename);
     ajStrDel(&thys->Exclude);
+    ajStrDel(&thys->Namespace);
+    ajStrDel(&thys->Organisms);
     ajStrDel(&thys->DbFields);
     ajStrDel(&thys->DbUrl);
     ajStrDel(&thys->DbProxy);
     ajStrDel(&thys->DbHttpVer);
     ajStrDel(&thys->ServerVer);
-    ajStrDel(&thys->Field);
+    ajStrDel(&thys->SingleField);
     ajStrDel(&thys->QryString);
+    ajStrDel(&thys->QryFields);
     ajStrDel(&thys->Application);
 
     if(thys->QryData)
@@ -237,7 +270,7 @@ void ajQueryDel(AjPQuery* pthis)
         if(textaccess)
         {
             if(textaccess->AccessFree)
-                textaccess->AccessFree(thys);
+                (*textaccess->AccessFree)(thys);
         }
         
         
@@ -293,6 +326,8 @@ void ajQueryDel(AjPQuery* pthis)
 **
 ** @param [r] query [const AjPQuery] Query
 ** @return [const char*] Standard name for query datatype
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const char* ajQueryGetDatatype(const AjPQuery query)
@@ -312,6 +347,8 @@ const char* ajQueryGetDatatype(const AjPQuery query)
 **
 ** @param [r] query [const AjPQuery] Query
 ** @return [const AjPStr] Format name
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajQueryGetFormat(const AjPQuery query)
@@ -328,6 +365,8 @@ const AjPStr ajQueryGetFormat(const AjPQuery query)
 **
 ** @param [r] query [const AjPQuery] Query
 ** @return [const AjPStr] Wildcard ID query string
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajQueryGetId(const AjPQuery query)
@@ -338,13 +377,15 @@ const AjPStr ajQueryGetId(const AjPQuery query)
 
 
 
-/* @func ajQueryGetQuery *******************************************************
+/* @func ajQueryGetQuery ******************************************************
 **
 ** Returns a report of the query string from a query
 **
 ** @param [r] query [const AjPQuery] Query
 ** @param [w] Pdest [AjPStr*] Query string
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryGetQuery(const AjPQuery query, AjPStr *Pdest)
@@ -385,6 +426,8 @@ AjBool ajQueryGetQuery(const AjPQuery query, AjPStr *Pdest)
 **
 ** @param [r] query  [const AjPQuery] Query
 ** @return [const AjPList] List of field objects
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPList ajQueryGetallFields(const AjPQuery query)
@@ -402,6 +445,8 @@ const AjPList ajQueryGetallFields(const AjPQuery query)
 ** @param [r] query [const AjPQuery] Query
 ** @param [r] txt [const char*] Field name
 ** @return [const AjPStr] Wildcard ID query string
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static const AjPStr queryGetFieldC(const AjPQuery query,
@@ -466,13 +511,15 @@ static const AjPStr queryGetFieldC(const AjPQuery query,
 ** @param [r] thys [const AjPQuery] Query object.
 ** @return [AjBool] ajTrue if query should be made. ajFalse if the query
 **                  includes all entries.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ajQueryIsSet(const AjPQuery thys)
 {
 
-    ajDebug("ajQueryIsSet list:%u\n", ajListGetLength(thys->QueryFields));
+    ajDebug("ajQueryIsSet list:%Lu\n", ajListGetLength(thys->QueryFields));
 
     if(ajListGetLength(thys->QueryFields))
 	return ajTrue;
@@ -491,6 +538,8 @@ AjBool ajQueryIsSet(const AjPQuery thys)
 ** @param [r] thys [const AjPQuery] Query object
 ** @param [r] fieldtxt [const char*] field name
 ** @return [AjBool] ajTrue if the field is defined
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
@@ -501,6 +550,7 @@ AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
 
     ajDebug("ajQueryKnownFieldC qry '%s' fields '%S'\n",
             fieldtxt, thys->DbFields);
+
     ajStrTokenAssignC(&handle, thys->DbFields, "\t ,;\n\r");
 
     while(ajStrTokenNextParse(&handle, &token))
@@ -538,6 +588,8 @@ AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
 ** @param [r] thys [const AjPQuery] Query object
 ** @param [r] field [const AjPStr] field name
 ** @return [AjBool] ajTrue if the field is defined
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryKnownFieldS(const AjPQuery thys, const AjPStr field)
@@ -593,6 +645,8 @@ AjBool ajQueryKnownFieldS(const AjPQuery thys, const AjPStr field)
 ** @param [r] fieldtxt [const char*] field name
 ** @param [r] wildquerytxt [const char*] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldAndC(AjPQuery thys, const char* fieldtxt,
@@ -622,6 +676,8 @@ AjBool ajQueryAddFieldAndC(AjPQuery thys, const char* fieldtxt,
 ** @param [r] field [const AjPStr] field name
 ** @param [r] wildquery [const AjPStr] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldAndS(AjPQuery thys, const AjPStr field,
@@ -652,6 +708,8 @@ AjBool ajQueryAddFieldAndS(AjPQuery thys, const AjPStr field,
 ** @param [r] fieldtxt [const char*] field name
 ** @param [r] wildquerytxt [const char*] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldElseC(AjPQuery thys, const char* fieldtxt,
@@ -681,6 +739,8 @@ AjBool ajQueryAddFieldElseC(AjPQuery thys, const char* fieldtxt,
 ** @param [r] field [const AjPStr] field name
 ** @param [r] wildquery [const AjPStr] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldElseS(AjPQuery thys, const AjPStr field,
@@ -711,6 +771,8 @@ AjBool ajQueryAddFieldElseS(AjPQuery thys, const AjPStr field,
 ** @param [r] fieldtxt [const char*] field name
 ** @param [r] wildquerytxt [const char*] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldEorC(AjPQuery thys, const char* fieldtxt,
@@ -740,6 +802,8 @@ AjBool ajQueryAddFieldEorC(AjPQuery thys, const char* fieldtxt,
 ** @param [r] field [const AjPStr] field name
 ** @param [r] wildquery [const AjPStr] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldEorS(AjPQuery thys, const AjPStr field,
@@ -770,6 +834,8 @@ AjBool ajQueryAddFieldEorS(AjPQuery thys, const AjPStr field,
 ** @param [r] fieldtxt [const char*] field name
 ** @param [r] wildquerytxt [const char*] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldNotC(AjPQuery thys, const char* fieldtxt,
@@ -799,6 +865,8 @@ AjBool ajQueryAddFieldNotC(AjPQuery thys, const char* fieldtxt,
 ** @param [r] field [const AjPStr] field name
 ** @param [r] wildquery [const AjPStr] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldNotS(AjPQuery thys, const AjPStr field,
@@ -829,6 +897,8 @@ AjBool ajQueryAddFieldNotS(AjPQuery thys, const AjPStr field,
 ** @param [r] fieldtxt [const char*] field name
 ** @param [r] wildquerytxt [const char*] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldOrC(AjPQuery thys, const char* fieldtxt,
@@ -862,6 +932,8 @@ AjBool ajQueryAddFieldOrC(AjPQuery thys, const char* fieldtxt,
 ** @param [r] field [const AjPStr] field name
 ** @param [r] wildquery [const AjPStr] wildcard query string
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajQueryAddFieldOrS(AjPQuery thys, const AjPStr field,
@@ -894,6 +966,8 @@ AjBool ajQueryAddFieldOrS(AjPQuery thys, const AjPStr field,
 **
 ** @param [u] thys [AjPQuery] query object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -921,13 +995,16 @@ void ajQueryClear(AjPQuery thys)
     ajStrSetClear(&thys->Directory);
     ajStrSetClear(&thys->Filename);
     ajStrSetClear(&thys->Exclude);
+    ajStrSetClear(&thys->Namespace);
+    ajStrSetClear(&thys->Organisms);
     ajStrSetClear(&thys->DbFields);
     ajStrSetClear(&thys->DbUrl);
     ajStrSetClear(&thys->DbProxy);
     ajStrSetClear(&thys->DbHttpVer);
     ajStrSetClear(&thys->ServerVer);
-    ajStrSetClear(&thys->Field);
+    ajStrSetClear(&thys->SingleField);
     ajStrSetClear(&thys->QryString);
+    ajStrSetClear(&thys->QryFields);
     ajStrSetClear(&thys->Application);
 
     ajStrSetClear(&thys->DbIdentifier);
@@ -950,6 +1027,7 @@ void ajQueryClear(AjPQuery thys)
     thys->SetServer = ajFalse;
     thys->SetDatabase = ajFalse;
     thys->SetQuery = ajFalse;
+    thys->InDrcat = ajFalse;
 
     thys->Wild = ajFalse;
     thys->CaseId = ajFalse;
@@ -961,7 +1039,7 @@ void ajQueryClear(AjPQuery thys)
 
 
 
-/* @func ajQuerySetWild ******************************************************
+/* @func ajQuerySetWild *******************************************************
 **
 ** Tests whether a query includes wild cards in any element,
 ** or can return more than one entry (keyword and some other search terms
@@ -969,6 +1047,8 @@ void ajQueryClear(AjPQuery thys)
 **
 ** @param [u] thys [AjPQuery] Query object.
 ** @return [AjBool] ajTrue if query had wild cards.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -983,7 +1063,7 @@ AjBool ajQuerySetWild(AjPQuery thys)
     if(!queryRegWild)
 	queryWildComp();
 
-    ajDebug("ajQuerySetWild fields: %u\n",
+    ajDebug("ajQuerySetWild fields: %Lu\n",
 	    ajListGetLength(thys->QueryFields));
 
     /* first test for ID query */
@@ -1060,6 +1140,8 @@ AjBool ajQuerySetWild(AjPQuery thys)
 **
 ** @param [u] thys [AjPQuery] Query object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1119,6 +1201,8 @@ void ajQueryStarclear(AjPQuery thys)
 **
 ** @param [r] thys [const AjPQuery] query object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1187,6 +1271,12 @@ void ajQueryTrace(const AjPQuery thys)
     if(ajStrGetLen(thys->Exclude))
 	ajDebug( "    Exclude: '%S'\n", thys->Exclude);
 
+    if(ajStrGetLen(thys->Namespace))
+	ajDebug( "    Namespace: '%S'\n", thys->Namespace);
+
+    if(ajStrGetLen(thys->Organisms))
+	ajDebug( "    Organisms: '%S'\n", thys->Organisms);
+
     if(ajStrGetLen(thys->DbFields))
 	ajDebug( "    DbFields: '%S'\n", thys->DbFields);
 
@@ -1211,16 +1301,19 @@ void ajQueryTrace(const AjPQuery thys)
     if(ajStrGetLen(thys->DbHttpVer))
 	ajDebug( "    DbHttpVer: '%S'\n", thys->DbHttpVer);
 
-    if(ajStrGetLen(thys->Field))
-	ajDebug( "    Field: '%S'\n", thys->Field);
+    if(ajStrGetLen(thys->SingleField))
+	ajDebug( "    SingleField: '%S'\n", thys->SingleField);
 
     if(ajStrGetLen(thys->QryString))
 	ajDebug( "    QryString: '%S'\n", thys->QryString);
 
+    if(ajStrGetLen(thys->QryFields))
+	ajDebug( "    QryFields: '%S'\n", thys->QryFields);
+
     if(ajStrGetLen(thys->Application))
 	ajDebug( "    Application: '%S'\n", thys->Application);
 
-    ajDebug( "   Fpos: %ld\n", thys->Fpos);
+    ajDebug( "   Fpos: %Ld\n", thys->Fpos);
     ajDebug( "   QryDone: %B\n", thys->QryDone);
     ajDebug( "   Wildcard in query: %B\n", thys->Wild);
 
@@ -1259,6 +1352,8 @@ void ajQueryTrace(const AjPQuery thys)
 ** Cleans up query processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1272,14 +1367,18 @@ void ajQueryExit(void)
     ajStrDel(&queryTest);
 
     ajRegFree(&queryRegAsis);
+    ajRegFree(&queryRegHttp);
+    ajRegFree(&queryRegFtp);
     ajRegFree(&queryRegSvr);
-    ajRegFree(&queryRegDbId);
-    ajRegFree(&queryRegDbField);
+    ajRegFree(&queryRegDb);
     ajRegFree(&queryRegFmt);
     ajRegFree(&queryRegFieldId);
     ajRegFree(&queryRegId);
     ajRegFree(&queryRegList);
+    ajRegFree(&queryRegQryId);
+    ajRegFree(&queryRegQryField);
     ajRegFree(&queryRegRange);
+    ajRegFree(&queryRegRefrange);
 
     ajRegFree(&queryRegWild);
 
@@ -1334,6 +1433,8 @@ void ajQueryExit(void)
 ** @param [r] oper [AjEQryLink] Operator
 **
 ** @return [AjPQueryField] Query field
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPQueryField ajQueryfieldNewC(const char* fieldtxt,
@@ -1367,6 +1468,8 @@ AjPQueryField ajQueryfieldNewC(const char* fieldtxt,
 ** @param [r] oper [AjEQryLink] Operator
 **
 ** @return [AjPQueryField] Query field
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPQueryField ajQueryfieldNewS(const AjPStr field,
@@ -1418,6 +1521,8 @@ AjPQueryField ajQueryfieldNewS(const AjPStr field,
 ** @param [d] Pthis [AjPQueryField*] Query field object to be deleted
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajQueryfieldDel(AjPQueryField *Pthis)
@@ -1476,6 +1581,8 @@ void ajQueryfieldDel(AjPQueryField *Pthis)
 **
 ** @param [r] list [const AjPList] The query list
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajQuerylistTrace(const AjPList list)
@@ -1486,7 +1593,7 @@ void ajQuerylistTrace(const AjPList list)
 
     iter = ajListIterNewread(list);
 
-    ajDebug("ajQuerylistTrace %d nodes\n", ajListGetLength(list));
+    ajDebug("ajQuerylistTrace %Lu nodes\n", ajListGetLength(list));
 
     while(!ajListIterDone(iter))
     {
@@ -1511,6 +1618,8 @@ void ajQuerylistTrace(const AjPList list)
 ** These are held in static storage and built once only if needed.
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1580,6 +1689,8 @@ static void queryWildComp(void)
 ** @param [u] textin [AjPTextin]  Text input object
 ** @param [f] findformat [AjBool function] Function to validate format name
 ** @return [const AjPStr] Format name if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1609,7 +1720,14 @@ const AjPStr ajQuerystrParseFormat(AjPStr *Pqry, AjPTextin textin,
     fmtstat = ajRegExec(queryRegFmt, *Pqry);
 
     if(!fmtstat)
+    {
+        if(ajStrGetLen(textin->Formatstr))
+        {
+            if(findformat(textin->Formatstr, &textin->Format))
+                ajStrAssignS(&qry->Formatstr, textin->Formatstr);
+        }
 	return NULL;
+    }
 
     ajRegSubI(queryRegFmt, 1, &queryFormat);
     ajRegSubI(queryRegFmt, 2, Pqry);
@@ -1640,6 +1758,8 @@ const AjPStr ajQuerystrParseFormat(AjPStr *Pqry, AjPTextin textin,
 **
 ** @param [u] Pqry [AjPStr*]  Query string
 ** @return [AjBool] True if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1683,6 +1803,8 @@ AjBool ajQuerystrParseListfile(AjPStr *Pqry)
 ** @param [u] Pend [ajint*]  End position
 ** @param [u] Prev [AjBool*]  Reverse orientation
 ** @return [AjBool] True if range was found.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1720,9 +1842,38 @@ AjBool ajQuerystrParseRange(AjPStr *Pqry, ajint *Pbegin, ajint *Pend,
 	ajRegSubI(queryRegRange, 1, Pqry);
 	ajDebug("range found [%d:%d:%b]\n",
 		*Pbegin, *Pend, *Prev);
+
+        return ajTrue;
     }
 
-    return rangestat;
+    rangestat = ajRegExec(queryRegRefrange, *Pqry);
+
+    if(rangestat)
+    {
+	ajRegSubI(queryRegRefrange, 2, &tmpstr);
+
+	if(ajStrGetLen(tmpstr))
+	    ajStrToInt(tmpstr, Pbegin);
+
+	ajRegSubI(queryRegRefrange, 4, &tmpstr);
+
+	if(ajStrGetLen(tmpstr))
+	    ajStrToInt(tmpstr, Pend);
+
+	ajRegSubI(queryRegRefrange, 6, &tmpstr);
+
+	if(ajStrGetLen(tmpstr))
+	    *Prev = ajTrue;
+
+	ajStrDel(&tmpstr);
+	ajRegSubI(queryRegRefrange, 1, Pqry);
+	ajDebug("refrange found [%d:%d:%b]\n",
+		*Pbegin, *Pend, *Prev);
+
+        return ajTrue;
+    }
+
+    return ajFalse;
 }
 
 
@@ -1741,9 +1892,10 @@ AjBool ajQuerystrParseRange(AjPStr *Pqry, ajint *Pbegin, ajint *Pend,
 ** (and set the file position).
 **
 ** If there is no database, looks for file:query and opens the file.
-** If an offset is provided as %offset sets the file position
 **
-** If the file does now exist, tests again for a database of that name
+** If an offset is provided by %offset this sets the file position
+**
+** If the file does not exist, tests again for a database of that name
 ** from any known server.
 **
 ** If no text data was found, returns the filled in datatype-specific details
@@ -1753,6 +1905,8 @@ AjBool ajQuerystrParseRange(AjPStr *Pqry, ajint *Pbegin, ajint *Pend,
 ** @param [f] findformat [AjBool function] Function to validate format name
 ** @param [w] Pnontext [AjBool*] True if access is a non-text method
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1764,11 +1918,15 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
     AjPQuery qry;
 
     AjBool svrstat   = ajFalse;
+    AjBool dbstat   = ajFalse;
     AjBool regstat   = ajFalse;
-    AjBool dbstat    = ajFalse;
     AjBool accstat   = ajFalse;	/* return status from reading something */
     AjBool asisstat  = ajFalse;
+    AjBool ftpstat   = ajFalse;
+    AjBool httpstat  = ajFalse;
     AjBool drcatstat = ajFalse;
+
+    AjBool isspecialfile = ajFalse;
 
     AjBool inbraces  = ajFalse;
 
@@ -1777,14 +1935,12 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
     AjPStr idstr = NULL;
     AjPStr lastoper= NULL;
     AjPStr operstr = NULL;
-    AjPStr allfields = NULL;
-    AjPStr qrystring = NULL;
     AjPStr qrystr = NULL;
 
     ajlong i;
+    ajuint iquery = 0;
 
     AjPStrTok handle = NULL;
-    AjPResource drcat = NULL;
     AjPTextAccess textaccess = NULL;
 
     ajint iformat = 0;
@@ -1801,17 +1957,31 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
     ajStrAssignS(&qry->QryString, *Pqry);
 
-    ajStrDel(&qry->Field);    /* clear it. we test this for regstat */
+    ajStrDel(&qry->SingleField);    /* clear it. we test this for regstat */
 
     if(!queryRegInitDone)
         queryRegInit();
     
-    ajDebug("++ajQrystrParseRead '%S' '%S' %d\n",
-	    *Pqry,
-	    textin->Formatstr, textin->Format);
+    ajDebug("ajQuerystrParseRead qry '%S' iquery '%S' ioffset '%Ld' "
+            "format: '%S' (%d)\n",
+            qry->QryString, textin->QryFields, textin->Fpos,
+            textin->Formatstr, textin->Format);
+
+    ajStrAssignS(&qry->QryFields, textin->QryFields);
+    qry->Fpos = textin->Fpos;
 
     /* Strip any leading spaces */
     ajStrTrimC(Pqry," \t\n");
+
+
+    /*
+    ** First we test some basic access methods
+    */
+
+    /*
+    ** ASIS
+    ** asis::datastream
+    */
 
     asisstat = ajRegExec(queryRegAsis, *Pqry);
 
@@ -1830,12 +2000,49 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
         ajStrAssignS(&textin->Formatstr, queryFormat);
 
 	ajRegSubI(queryRegAsis, 1, &qry->Filename);
-	ajDebug("asis sequence '%S'\n", qry->Filename);
+	ajDebug("asis data '%S'\n", qry->Filename);
 
-	return ajTextinAccessAsis(textin);
+        isspecialfile = ajTrue;
+    }
+
+    /*
+    ** FTP URL
+    ** ftp://host.address/path/to/file
+    ** supports -ioffset -iformat
+    */
+
+    ftpstat = ajRegExec(queryRegFtp, *Pqry);
+
+    if(ftpstat)
+    {
+	ajRegSubI(queryRegFtp, 1, &qry->Filename);
+	ajDebug("ftp data '%S'\n", qry->Filename);
+
+        isspecialfile = ajTrue;
+    }
+
+    /*
+    ** HTTP URL
+    ** http://host.address/path/to/file
+    ** supports -ioffset -iformat
+    */
+
+    httpstat = ajRegExec(queryRegHttp, *Pqry);
+
+    if(httpstat)
+    {
+	ajRegSubI(queryRegHttp, 1, &qry->Filename);
+	ajDebug("http data '%S'\n", qry->Filename);
+
+        isspecialfile = ajTrue;
     }
 
 #ifdef __CYGWIN__
+
+    /*
+    ** replace C: drive with /cygdrive/c/
+    */
+
     if(ajStrGetCharPos(*Pqry,1) == ':')
     {
         cygd = ajStrGetCharFirst(*Pqry);
@@ -1849,6 +2056,11 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 #endif
 
     ajDebug("query to test: '%S'\n\n", *Pqry);
+
+
+    /*
+    ** test a name: prefix for a possible server name
+    */
 
     svrstat = ajRegExec(queryRegSvr, *Pqry);
     ajDebug("server dbexp: %B '%S'\n", svrstat, *Pqry);
@@ -1875,175 +2087,116 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
     regstat = ajFalse;
 
-    if(ajRegExec(queryRegDbField, *Pqry))
+    if(!isspecialfile)
     {
-        regstat = ajTrue;
-        ajDebug("dbname queryRegDbField: %B '%S'\n", regstat, *Pqry);
-
-        /* test dbname-field: or dbname: */
-
-        ajRegSubI(queryRegDbField, 1, &queryDb);
-        ajRegSubI(queryRegDbField, 4, &allfields);
-        ajRegSubI(queryRegDbField, 5, &braceclose);
-
-        ajStrTrimWhite(&allfields);
-
-        if(!ajStrMatchC(braceclose, "}"))
-            ajErr("Bad query syntax: unclosed braces '%S'", *Pqry);
-
-        inbraces = ajTrue;      /* braces in the regex */
-
-        qry->QueryType = AJQUERY_QUERY;
-
-        ajDebug("Query db: '%S' allfields: '%S'\n", queryDb, allfields);
-
-        /* clear it if this was really a file */	
-
-        if(ajStrGetLen(querySvr))
-        {
-            if(!ajNamAliasServer(&queryDb, querySvr))
-            {
-                ajDebug("unknown dbname %S for server %S\n",
-                        queryDb, querySvr);
-		ajStrDel(&queryDb);
-		ajStrDel(&qry->Field);
-		regstat = ajFalse;
-            }
-        }
-        else if(!ajNamAliasDatabase(&queryDb))
-        {
-            drcat = ajResourceNewDrcat(queryDb);
-
-            if(drcat)
-            {
-                ajDebug("database '%S' found via DRCAT datatype %u\n",
-                        queryDb, qry->DataType);
-
-                if(!ajResourceGetDbdata(drcat, qry, findformat))
-                    regstat = ajFalse;
-                else
-                    drcatstat = ajTrue;
-
-                ajResourceDel(&drcat);
-            }
-            else
-            {
-                ajDebug("unknown dbname %S, try filename\n", queryDb);
-                regstat = ajFalse;
-            }
-
-            if(!regstat)
-            {
-                ajStrDel(&queryDb);
-                ajStrDel(&qry->Field);
-            }
-        }
-        ajStrDel(&braceclose);
-    }
-    else if(ajRegExec(queryRegDbId, *Pqry))
-    {
-        regstat = ajTrue;
-        ajDebug("dbname queryRegDbId: %B '%S'\n", regstat, *Pqry);
-
-        /* test dbname-field: or dbname: */
-
-	ajRegSubI(queryRegDbId, 1, &queryDb);
-	ajRegSubI(queryRegDbId, 3, &qry->Field);
-
-        ajDebug("Query db: '%S' field: '%S'\n", queryDb, qry->Field);
-
-	/* clear it if this was really a file */	
-
-        if(ajStrGetLen(querySvr))
-        {
-            if(!ajNamAliasServer(&queryDb, querySvr))
-            {
-                ajDebug("unknown dbname %S for server %S\n",
-                        queryDb, querySvr);
-                ajStrDel(&queryDb);
-                ajStrDel(&qry->Field);
-                regstat = ajFalse;
-            }
-        }
-	else if(!ajNamAliasDatabase(&queryDb))
-	{
-            drcat = ajResourceNewDrcat(queryDb);
-
-            if(drcat)
-            {
-                ajDebug("database '%S' found via DRCAT datatype %u\n",
-                        queryDb, qry->DataType);
-
-                if(!ajResourceGetDbdata(drcat, qry, findformat))
-                    regstat = ajFalse;
-                else
-                {
-                    if(qry->DataType == AJDATATYPE_URL)
-                    {
-                        qry->QryData = drcat;
-                        drcat = NULL;
-                    }
-                    drcatstat = ajTrue;
-                }
-
-                ajResourceDel(&drcat);
-            }
-            else
-            {
-                ajDebug("unknown dbname %S, try filename\n", queryDb);
-                regstat = ajFalse;
-            }
-
-            if(!regstat)
-            {
-                ajStrDel(&queryDb);
-                ajStrDel(&qry->Field);
-            }
-        }
-    /* test :identifier or :queryterm */
+        regstat = ajRegExec(queryRegFieldId, *Pqry);
+        ajDebug("entry-id regexp: %B\n", regstat);
+        ajDebug("filetest regexp queryRegFieldId: %B '%S'\n",
+                regstat, *Pqry);
 
         if(regstat)
         {
-            ajRegSubI(queryRegDbId, 6, &braceopen);
-            ajRegSubI(queryRegDbId, 8, &braceclose);
-            ajRegSubI(queryRegDbId, 7, &qrystring);
-
-            ajStrTrimWhite(&qrystring);
-
-            if(*MAJSTRGETPTR(braceopen))
+            ajRegSubI(queryRegFieldId, 1, &queryDb);
+            ajDebug("queryRegFieldId '%S'\n", queryDb);
+            if(queryDbfind(&queryDb, querySvr, findformat,
+                           qry, &dbstat, &drcatstat))
             {
-                if(*MAJSTRGETPTR(braceclose))
-                    inbraces = ajTrue;
-                else
-                {
-                    ajErr("Bad query syntax: unclosed braces '%S'", *Pqry);
-                    ajStrDel(&qrystring);
-
-                    return ajFalse;
-                }
+                ajRegSubI(queryRegFieldId, 3, &qry->SingleField);
+                ajRegSubI(queryRegFieldId, 4, &braceopen);
+                ajRegSubI(queryRegFieldId, 5, &qry->QryFields);
+                ajRegSubI(queryRegFieldId, 6, &braceclose);
+                ajStrTrimStartC(&braceopen, ":");
             }
             else
             {
-                if(*MAJSTRGETPTR(braceclose))
-                {
-                    ajErr("Bad query syntax: unopened braces '%S'", *Pqry);
-                    ajStrDel(&qrystring);
-
-                    return ajFalse;
-                }
+                ajDebug("failed: not a database or file '%S'\n", queryDb);
+                regstat = ajFalse;
             }
+        }
 
-            ajDebug("Query qrystring: '%S' open: '%S' close: '%S' "
-                    "inbraces: %B\n",
-                    qrystring, braceopen, braceclose, inbraces);
+        if(!regstat)
+        {
+            regstat = ajRegExec(queryRegId, *Pqry);
+            ajDebug("entry-id regexp: %B\n", regstat);
+            ajDebug("filetest regexp queryRegId: %B '%S'\n", regstat, *Pqry);
 
-            ajStrDel(&braceopen);
-            ajStrDel(&braceclose);
+            if(regstat)
+            {
+                ajRegSubI(queryRegId, 1, &queryDb);
+                ajDebug("queryRegId '%S'\n", queryDb);
+                ajRegSubI(queryRegId, 3, &queryChr);
+                ajRegSubI(queryRegId, 5, &braceopen);
+                ajRegSubI(queryRegId, 6, &qry->QryFields);
+                ajRegSubI(queryRegId, 7, &braceclose);
+                
+                regstat = queryDbfind(&queryDb, querySvr, findformat,
+                                      qry, &dbstat, &drcatstat);
+                if(!regstat)
+                    ajDebug("failed: not a database or file '%S'\n", queryDb);
+            }
+        }
+
+        if(!regstat)
+        {
+            ajStrAssignS(&queryDb, *Pqry);
         }
 
     }
 
-    if(regstat)
+    if(svrstat && !dbstat)
+    {
+        ajErr("Server '%S:' but no database name in '%S'", querySvr, *Pqry);
+        return ajFalse;
+    }
+
+    if(regstat && !dbstat && ajStrMatchC(queryChr, "%"))
+    {
+        ajStrToLong(qry->QryFields, &qry->Fpos);
+        regstat = ajFalse;
+    }
+
+    /*
+    ** no query found, but test -iquery input
+    */
+
+    if(!regstat && ajStrGetLen(textin->QryFields))
+    {
+        regstat = ajRegExec(queryRegQryField, textin->QryFields);
+        if(regstat)
+        {
+            ajDebug("queryRegQryField\n");
+            ajRegSubI(queryRegQryField, 1, &qry->SingleField);
+            ajRegSubI(queryRegQryField, 3, &queryChr);
+            ajRegSubI(queryRegQryField, 5, &braceopen);
+            ajRegSubI(queryRegQryField, 6, &qry->QryFields);
+            ajRegSubI(queryRegQryField, 7, &braceclose);
+        }
+    }
+    
+    if(!regstat && ajStrGetLen(textin->QryFields))
+    {
+        regstat = ajRegExec(queryRegQryId, textin->QryFields);
+        ajDebug("entry-id regexp: %B\n", regstat);
+        ajDebug("filetest regexp queryRegQryId: %B '%S'\n",
+                regstat, textin->QryFields);
+
+        if(regstat)
+        {
+            ajDebug("queryRegQryId\n");
+            ajRegSubI(queryRegQryId, 1, &braceopen);
+            ajRegSubI(queryRegQryId, 2, &qry->QryFields);
+            ajRegSubI(queryRegQryId, 3, &braceclose);
+        }
+    }
+
+    ajDebug("regstat: %B qry '%S' iquery '%S' queryDB: '%S' dbstat: %B "
+           "open: '%S' close: '%S' field: '%S' qryfields: '%S'\n",
+           regstat, *Pqry, textin->QryFields, queryDb, dbstat, 
+           braceopen, braceclose, qry->SingleField, qry->QryFields);
+
+    ajQueryStarclear(qry);
+
+    if(dbstat)                  /* we have a database */
     {
         ajStrAssignS(&qry->DbName, queryDb);
 
@@ -2051,21 +2204,22 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
         {
             ajStrAssignS(&qry->SvrName, querySvr);
             ajDebug("found server '%S' dbname '%S' level: '%S' "
-                    "qrystring: '%S'\n",
-                    qry->SvrName, qry->DbName, qry->Field, qrystring);
+                    "qryfields: '%S'\n",
+                    qry->SvrName, qry->DbName,
+                    qry->SingleField, qry->QryFields);
             dbstat = ajNamSvrData(qry, 0);
 
             if(!dbstat)
             {
-                ajStrDel(&qrystring);
+                ajStrDel(&qry->QryFields);
 
                 return ajFalse;
             }
         }
         else
         {
-            ajDebug("found dbname '%S' level: '%S' qrystring: '%S'\n",
-                    qry->DbName, qry->Field, qrystring);
+            ajDebug("found dbname '%S' level: '%S' qryfields: '%S'\n",
+                    qry->DbName, qry->SingleField, qry->QryFields);
             if(drcatstat)
                 dbstat = ajTrue;
             else
@@ -2074,29 +2228,217 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
                 if(!dbstat)
                 {
-                    ajStrDel(&qrystring);
+                    ajStrDel(&qry->QryFields);
 
                     return ajFalse;
                 }
             }
         }
 
-        /* dbname-field or dbname-{field:qry} */
-	if(dbstat && ajStrGetLen(allfields))
+	if(!dbstat)
 	{
-            ajDebug("  db qrystring '%S' allfields '%S' inbraces: %B\n",
-                    qrystring, allfields, inbraces);
+	    ajErr("no access method available for '%S'", *Pqry);
 
-            if(inbraces)
+	    return ajFalse;
+	}
+
+        if(findformat(qry->Formatstr, &iformat))
+            ajStrAssignS(&textin->Formatstr, qry->Formatstr);
+        else
+        {
+            ajErr("unknown format '%S' for '%S' type '%S'\n",
+                  qry->Formatstr, *Pqry, qry->DbType);
+
+            return ajFalse;
+        }
+    }
+    
+    /*
+    ** process the query fields
+    */
+
+    ajStrTrimWhite(&qry->QryFields);
+
+    if(*MAJSTRGETPTR(braceopen))
+    {
+        if(*MAJSTRGETPTR(braceclose))
+            inbraces = ajTrue;
+        else
+        {
+            ajErr("Bad query syntax: unclosed braces '%S'", *Pqry);
+            ajStrDel(&qry->QryFields);
+
+            return ajFalse;
+        }
+    }
+    else
+    {
+        if(*MAJSTRGETPTR(braceclose))
+        {
+            ajErr("Bad query syntax: unopened braces '%S'", *Pqry);
+            ajStrDel(&qry->QryFields);
+
+            return ajFalse;
+        }
+    }
+
+    ajDebug("Query qryfields: '%S' open: '%S' close: '%S' "
+            "inbraces: %B\n",
+            qry->QryFields, braceopen, braceclose, inbraces);
+
+    ajStrDel(&braceopen);
+    ajStrDel(&braceclose);
+
+    if(iformat >= 0)
+    {
+        textin->Format = iformat;
+        textin->TextFormat = 0;
+    }
+    else
+    {
+        textin->TextFormat = - iformat;
+        textin->Format = 0;
+    }
+
+    if(dbstat)
+        ajDebug("database type: '%S' format '%S' %u textformat %u \n",
+                qry->DbType, qry->Formatstr,
+                textin->Format, textin->TextFormat);
+    else
+        ajDebug("file: '%S' format '%S' %u textformat %u \n",
+                queryDb, qry->Formatstr,
+                textin->Format, textin->TextFormat);
+
+    if(regstat)
+    {
+        if(ajStrGetLen(qry->QryFields))
+        {
+            ajDebug("file Qry '%S' Field '%S' hasAcc:%B queryChr '%S'\n",
+                    qry->QryFields, qry->SingleField,
+                    qry->HasAcc, queryChr);
+
+            if(ajStrGetCharFirst(qry->QryFields) == '!')
+                ajStrInsertK(&qry->QryFields, 0, '*');
+
+            ajStrAssignC(&lastoper, "|");
+
+            if(ajStrGetLen(qry->SingleField)) /* one specified field */
             {
+                ajDebug("query processing: single field '%S' query '%S'\n",
+                       qry->SingleField, qry->QryFields);
+
                 qry->QueryType = AJQUERY_QUERY;
-                ajNamDbQuery(qry);
+                if(dbstat)
+                    ajNamDbQuery(qry);
+                else
+                    ajNamFileQuery(qry);
 
-                if(ajStrGetCharFirst(allfields) == '!')
-                    ajStrInsertK(&allfields, 0, '*');
+                /* ajDebug("    qry->SingleField %S\n",
+                   qry->SingleField); */
+                
+                if(!ajQueryKnownFieldS(qry, qry->SingleField))
+                {
+                    if(dbstat)
+                        ajErr("Query '%S' query field '%S' not defined"
+                          " for database '%S'",
+                          *Pqry, qry->SingleField, qry->DbName);
+                    else
+                         ajErr("Query '%S' query field '%S' not defined"
+                          " for datatype '%s'",
+                               *Pqry, qry->SingleField,
+                               ajQueryGetDatatype(qry));
 
-                ajStrAssignC(&lastoper, "|");
-                ajStrTokenAssignC(&handle, allfields, "|&^!");
+                    return ajFalse;
+                }
+
+                /*
+                ** in braces we treat spaces as delimiters
+                ** in simple queries they are real
+                */
+
+                if(inbraces)
+                    ajStrTokenAssignC(&handle, qry->QryFields, "|&!^ \t\n\r");
+                else
+                    ajStrTokenAssignC(&handle, qry->QryFields, "|&!^\t\n\r");
+
+                while(ajStrTokenNextParseDelimiters(&handle, &idstr,
+                                                    &operstr))
+                {
+                    if(iquery && (!ajStrGetLen(qry->Qlinks) ||
+                                  (ajStrFindAnyS(qry->Qlinks, lastoper) == -1)))
+                    {
+                        if(dbstat)
+                            ajErr("Query link operator '%S' not supported "
+                              "by access method '%S' for database '%S'"
+                              " allowed links are '%S'",
+                              lastoper, qry->Method, qry->DbName,
+                              qry->Qlinks);
+                        else
+                            ajErr("Query link operator '%S' not supported "
+                                  "by access method '%S' for datatype '%s'"
+                                  " allowed links are '%S'",
+                                  lastoper, qry->Method,
+                                  ajQueryGetDatatype(qry),
+                                  qry->Qlinks);
+
+                        return ajFalse;
+                    }
+
+                    iquery++;
+
+                    switch(ajStrGetCharFirst(lastoper))
+                    {
+                        case '|':
+                            ajQueryAddFieldOrS(qry,
+                                               qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldOrS.a '%S' '%S'\n",
+                                    qry->SingleField, idstr);
+                            break;
+
+                        case '&':
+                            ajQueryAddFieldAndS(qry,
+                                                qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldAndS.a '%S' '%S'\n",
+                                    qry->SingleField, idstr);
+                            break;
+
+                        case '!':
+                            ajQueryAddFieldNotS(qry,
+                                                qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldNotS.a '%S' '%S'\n",
+                                    qry->SingleField, idstr);
+                            break;
+
+                        case '^':
+                            ajQueryAddFieldEorS(qry,
+                                                qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldEorS.a '%S' '%S'\n",
+                                    qry->SingleField, idstr);
+                            break;
+
+                        default:
+                            ajErr("bad query syntax: "
+                                  "unknown operator '%S'",
+                                  lastoper);
+                            break;
+                    }
+
+                    ajStrAssignS(&lastoper, operstr);
+                    ajStrTrimWhite(&lastoper);
+                }
+            }
+            else if(ajStrFindAnyK(qry->QryFields, ':') > 0) /* 1+ fields */
+            {
+                ajDebug("query processing: full query '%S'\n",
+                       qry->QryFields);
+
+                qry->QueryType = AJQUERY_QUERY;
+                if(dbstat)
+                    ajNamDbQuery(qry);
+                else
+                    ajNamFileQuery(qry);
+
+                ajStrTokenAssignC(&handle, qry->QryFields, "|&^!");
 
                 while(ajStrTokenNextParseDelimiters(&handle, &qrystr,
                                                     &operstr))
@@ -2106,11 +2448,19 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
                         if(!ajStrGetLen(qry->Qlinks) ||
                            (ajStrFindAnyS(qry->Qlinks, operstr) == -1))
                         {
-                            ajErr("Query link operator '%S' not supported "
-                                  "by access method '%S' for database '%S'"
-                                  " allowed links are '%S'",
-                                  operstr, qry->Method, qry->DbName,
-                                  qry->Qlinks);
+                            if(dbstat)
+                                ajErr("Query link operator '%S' not supported "
+                                      "by access method '%S' for database '%S'"
+                                      " allowed links are '%S'",
+                                      operstr, qry->Method, qry->DbName,
+                                      qry->Qlinks);
+                            else
+                                ajErr("Query link operator '%S' not supported "
+                                      "by access method '%S' for datatype '%s'"
+                                      " allowed links are '%S'",
+                                      operstr, qry->Method,
+                                      ajQueryGetDatatype(qry),
+                                      qry->Qlinks);
 
                             return ajFalse;
                         }
@@ -2122,47 +2472,74 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
                     if(i>0)
                     {
-                        ajStrAssignSubS(&qry->Field, qrystr, 0, i-1);
+                        ajStrAssignSubS(&qry->SingleField, qrystr, 0, i-1);
                         ajStrAssignSubS(&idstr, qrystr, i+1, -1);
                         ajDebug("qrystr: '%S' field: '%S' qry: '%S'\n",
-                                qrystr, qry->Field, idstr);
+                                qrystr, qry->SingleField, idstr);
                     }
 
-                    if(!ajQueryKnownFieldS(qry, qry->Field))
+                    if(!ajQueryKnownFieldS(qry, qry->SingleField))
                     {
-                        ajErr("Query '%S' query field '%S' not defined"
-                              " for database '%S'",
-                              *Pqry, qry->Field, qry->DbName);
-
-                        ajStrDel(&qrystring);
+                        if(dbstat)
+                            ajErr("Query '%S' query field '%S' not defined"
+                                  " for database '%S'",
+                                  *Pqry, qry->SingleField, qry->DbName);
+                        else
+                            ajErr("Query '%S' query field '%S' not defined"
+                                  " for datatype '%s'",
+                                  *Pqry, qry->SingleField,
+                                  ajQueryGetDatatype(qry));
+                        ajStrDel(&qry->QryFields);
 
                         return ajFalse;
                     }
 
+                    if(iquery && (!ajStrGetLen(qry->Qlinks) ||
+                                  (ajStrFindAnyS(qry->Qlinks, lastoper) == -1)))
+                    {
+                        if(dbstat)
+                            ajErr("Query link operator '%S' not supported "
+                                  "by access method '%S' for database '%S'"
+                                  " allowed links are '%S'",
+                                  lastoper, qry->Method, qry->DbName,
+                                  qry->Qlinks);
+                        else
+                            ajErr("Query link operator '%S' not supported "
+                                  "by access method '%S' for datatype '%s'"
+                                  " allowed links are '%S'",
+                                  lastoper, qry->Method,
+                                  ajQueryGetDatatype(qry),
+                                  qry->Qlinks);
+
+                        return ajFalse;
+                    }
+
+                    iquery++;
+
                     switch(ajStrGetCharFirst(lastoper))
                     {
                         case '|':
-                            ajQueryAddFieldOrS(qry, qry->Field, idstr);
-                            ajDebug("ajQueryAddFieldOrS.a '%S' '%S'\n",
-                                    qry->Field, idstr);
+                            ajQueryAddFieldOrS(qry, qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldOrS.b '%S' '%S'\n",
+                                    qry->SingleField, idstr);
                             break;
 
                         case '&':
-                            ajQueryAddFieldAndS(qry, qry->Field, idstr);
-                            ajDebug("ajQueryAddFieldAndS.a '%S' '%S'\n",
-                                    qry->Field, idstr);
+                            ajQueryAddFieldAndS(qry, qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldAndS.b '%S' '%S'\n",
+                                    qry->SingleField, idstr);
                             break;
 
                         case '!':
-                            ajQueryAddFieldNotS(qry, qry->Field, idstr);
-                            ajDebug("ajQueryAddFieldNotS.a '%S' '%S'\n",
-                                    qry->Field, idstr);
+                            ajQueryAddFieldNotS(qry, qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldNotS.b '%S' '%S'\n",
+                                    qry->SingleField, idstr);
                             break;
 
                         case '^':
-                            ajQueryAddFieldEorS(qry, qry->Field, idstr);
-                            ajDebug("ajQueryAddFieldEorS.a '%S' '%S'\n",
-                                    qry->Field, idstr);
+                            ajQueryAddFieldEorS(qry, qry->SingleField, idstr);
+                            ajDebug("ajQueryAddFieldEorS.b '%S' '%S'\n",
+                                    qry->SingleField, idstr);
                             break;
 
                         default:
@@ -2177,349 +2554,174 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
                 ajStrDel(&qrystr);
             }
-            else 
+            else if(ajStrFindAnyC(qry->QryFields, " \t\n\r,;|") >= 0)
             {
-                ajQueryAddFieldOrS(qry, qry->Field, qrystring);
-                ajDebug("ajQueryAddFieldOrS.b '%S' '%S'\n",
-                        qry->Field, qrystring);
-            }
-        }
+                ajDebug("query processing: idlist '%S'\n",
+                       qry->QryFields);
 
-        /* dbname-field:qry or dbname-field:{qrylist} */
-        else if(dbstat && ajStrGetLen(qrystring))
-        {
-            /* ajDebug("  qrystring %S\n", qrystring); */
-            if(ajStrGetLen(qry->Field))
-            {
-                ajDebug("  db Qrystring '%S' Field '%S'\n",
-                        qrystring, qry->Field);
-
-                if(inbraces)
-                {
-                    qry->QueryType = AJQUERY_QUERY;
+                qry->QueryType = AJQUERY_QUERY;
+                if(dbstat)
                     ajNamDbQuery(qry);
-
-                    if(ajStrGetCharFirst(qrystring) == '!')
-                        ajStrInsertK(&qrystring, 0, '*');
-
-                    ajStrAssignC(&lastoper, "|");
-                    ajStrTokenAssignC(&handle, qrystring, "|&^!");
-
-                    while(ajStrTokenNextParseDelimiters(&handle, &idstr,
-                                                        &operstr))
-                    {
-                        if(ajStrGetLen(operstr) > 1)
-                        {
-                            ajErr("Query link multiple operators '%S'",
-                                  operstr);
-
-                            return ajFalse;
-                        }
-
-                         ajStrTrimWhite(&idstr);
-
-                        if(ajStrGetLen(operstr))
-                        {
- 
-                            if(ajStrGetCharFirst(operstr) == ',')
-                                ajStrAssignK(&operstr, '|');
-
-                            if(!ajStrGetLen(qry->Qlinks) ||
-                               (ajStrFindAnyS(qry->Qlinks, operstr) == -1))
-                            {
-                                ajErr("Query link operator '%S' not supported "
-                                      "by access method '%S' for database '%S'"
-                                      " allowed links are '%S'",
-                                      operstr, qry->Method, qry->DbName,
-                                      qry->Qlinks);
-
-                                return ajFalse;
-                            }
-                        }
-
-                        if(!ajQueryKnownFieldS(qry, qry->Field))
-                        {
-                            ajErr("Query '%S' query field '%S' not defined"
-                                  " for database '%S'",
-                                  *Pqry, qry->Field, qry->DbName);
-
-                            ajStrDel(&qrystring);
-
-                            return ajFalse;
-                        }
-
-                        switch(ajStrGetCharFirst(lastoper))
-                        {
-                            case '|':
-                                ajQueryAddFieldOrS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldOrS.c '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '&':
-                                ajQueryAddFieldAndS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldAndS.c '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '!':
-                                ajQueryAddFieldNotS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldNotS.c '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '^':
-                                ajQueryAddFieldEorS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldEorS.c '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            default:
-                                ajErr("bad query syntax: "
-                                      "unknown operator '%S'",
-                                      lastoper);
-                                break;
-                        }
-
-                        ajStrAssignS(&lastoper, operstr);
-                   }
-                }
-                else 
-                {
-                    if(!ajQueryKnownFieldS(qry, qry->Field))
-                    {
-                        ajErr("Query '%S' query field '%S' not defined"
-                              " for database '%S'",
-                              *Pqry, qry->Field, qry->DbName);
-
-                        ajStrDel(&qrystring);
-                        return ajFalse;
-                    }
-
-                    ajQueryAddFieldOrS(qry, qry->Field, qrystring);
-                    ajDebug("ajQueryAddFieldOrS.d '%S' '%S'\n",
-                            qry->Field, qrystring);
-
-                }
-            }
-
-            /* no field specified dbname:id or dbname:{idlist} */
-            else
-            {
-                if(inbraces)
-                {
-                    qry->QueryType = AJQUERY_QUERY;
-                    ajNamDbQuery(qry);
-
-                    if(ajStrGetCharFirst(qrystring) == '!')
-                        ajStrInsertK(&qrystring, 0, '*');
-
-                    ajStrAssignC(&lastoper, "|");
-                    ajStrTokenAssignC(&handle, qrystring, "|&^!,");
-
-                    ajDebug("testing '%S'\n", qrystring);
-
-                    while(ajStrTokenNextParseDelimiters(&handle, &idstr,
-                                                        &operstr))
-                    {
-                        if(ajStrGetLen(operstr) > 1)
-                        {
-                            ajErr("Query link multiple operators '%S'",
-                                  operstr);
-
-                            return ajFalse;
-                        }
-
-                        if(ajStrGetLen(operstr))
-                        {
- 
-                            if(ajStrGetCharFirst(operstr) == ',')
-                                ajStrAssignK(&operstr, '|');
-
-                            if(!ajStrGetLen(qry->Qlinks) ||
-                               (ajStrFindAnyS(qry->Qlinks, operstr) == -1))
-                            {
-                                ajErr("Query link operator '%S' not supported "
-                                      "by access method '%S' for database '%S'"
-                                      " allowed links are '%S'",
-                                      operstr, qry->Method, qry->DbName,
-                                      qry->Qlinks);
-
-                                return ajFalse;
-                            }
-                        }
-
-                        ajStrTrimWhite(&idstr);
-
-                        if(!ajStrGetLen(idstr))
-                        {
-                            if(ajStrGetLen(operstr))
-                                ajErr("Bad query term '%S' before '%S' "
-                                      "in query '%S'",
-                                      idstr, operstr, qrystring);
-                            else if(ajStrGetLen(lastoper))
-                                ajErr("Bad query term '%S' after '%S' "
-                                      "in query '%S'",
-                                      idstr, lastoper, qrystring);
-                            else
-                                ajErr("Bad query term '%S' "
-                                      "in query '%S'",
-                                      idstr, qrystring);
-                        }
-
-                        ajDebug("lastoper: '%S' idstr: '%S' operstr: '%S'\n",
-                                lastoper, idstr, operstr);
-
-                        switch(ajStrGetCharFirst(lastoper))
-                        {
-                            case '|':
-                                ajQueryAddFieldOrC(qry, "id",
-                                                   MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldOrC.e '%s' '%S'\n",
-                                        "id", idstr);
-                                break;
-
-                            case '&':
-                                ajQueryAddFieldAndC(qry, "id",
-                                                    MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldAndC.a '%s' '%S'\n",
-                                        "id", idstr);
-                                break;
-
-                            case '!':
-                                ajQueryAddFieldNotC(qry, "id",
-                                                    MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldNotC.e '%s' '%S'\n",
-                                        "id", idstr);
-                                break;
-
-                            case '^':
-                                ajQueryAddFieldEorC(qry, "id",
-                                                    MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldEorC.e '%s' '%S'\n",
-                                        "id", idstr);
-                                break;
-
-                            default:
-                                ajErr("bad query syntax: "
-                                      "unknown operator '%S'",
-                                      lastoper);
-                                break;
-                        }
-
-                        if(qry->HasAcc && ajQueryKnownFieldC(qry, "acc"))
-                        {
-                            ajQueryAddFieldElseC(qry, "acc",
-                                                 MAJSTRGETPTR(idstr));
-                            ajDebug("ajQueryAddFieldElseC.e '%s' '%S'\n",
-                                    "acc", idstr);
-                        }
-
-                        if(ajQueryKnownFieldC(qry, "sv"))
-                        {
-                            ajQueryAddFieldElseC(qry, "sv",
-                                                 MAJSTRGETPTR(idstr));
-                            ajDebug("ajQueryAddFieldElseC.e '%s' '%S'\n",
-                                    "sv", idstr);
-                        }
-
-                        ajStrAssignS(&lastoper, operstr);
-                        ajStrTrimWhite(&lastoper);
-                    }
-                }
                 else
+                    ajNamFileQuery(qry);
+
+                ajStrTokenAssignC(&handle, qry->QryFields, " \t\n\r,;|");
+
+                while(ajStrTokenNextParse(&handle, &idstr))
                 {
                     ajQueryAddFieldOrC(qry, "id",
-                                       MAJSTRGETPTR(qrystring));
-                    ajDebug("ajQueryAddFieldOrC.f '%s' '%S'\n",
-                            "id", qrystring);
+                                       MAJSTRGETPTR(idstr));
+                    ajDebug("ajQueryAddFieldOrC.c '%s' '%S'\n",
+                            "id", idstr);
 
                     if(qry->HasAcc && ajQueryKnownFieldC(qry, "acc"))
                     {
                         ajQueryAddFieldElseC(qry, "acc",
-                                             MAJSTRGETPTR(qrystring));
-                        ajDebug("ajQueryAddFieldElseC.f '%s' '%S'\n",
-                                "acc", qrystring);
+                                             MAJSTRGETPTR(idstr));
+                        ajDebug("ajQueryAddFieldElseC.c '%s' '%S'\n",
+                                "acc", idstr);
                     }
 
                     if(ajQueryKnownFieldC(qry, "sv"))
                     {
                         ajQueryAddFieldElseC(qry, "sv",
-                                             MAJSTRGETPTR(qrystring));
-                        ajDebug("ajQueryAddFieldElseC.f '%s' '%S'\n",
-                                "sv", qrystring);
+                                             MAJSTRGETPTR(idstr));
+                        ajDebug("ajQueryAddFieldElseC.c '%s' '%S'\n",
+                                "sv", idstr);
                     }
                 }
             }
-	}
+            else                /* just a simple id */
+            {
+                ajDebug("query processing: simple id '%S'\n",
+                       qry->QryFields);
 
-        ajStrDel(&idstr);
-        ajStrDel(&lastoper);
-        ajStrDel(&operstr);
+                qry->QueryType = AJQUERY_ENTRY;
+                if(dbstat)
+                    ajNamDbQuery(qry);
+                else
+                    ajNamFileQuery(qry);
+
+                ajQueryAddFieldOrC(qry, "id",
+                                   MAJSTRGETPTR(qry->QryFields));
+                ajDebug("ajQueryAddFieldOrC.d '%s' '%S'\n",
+                        "id", qry->QryFields);
+
+                if(qry->HasAcc && ajQueryKnownFieldC(qry, "acc"))
+                {
+                    ajQueryAddFieldElseC(qry, "acc",
+                                         MAJSTRGETPTR(qry->QryFields));
+                    ajDebug("ajQueryAddFieldElseC.d '%s' '%S'\n",
+                            "acc", qry->QryFields);
+                }
+
+                if(ajQueryKnownFieldC(qry, "sv"))
+                {
+                    ajQueryAddFieldElseC(qry, "sv",
+                                         MAJSTRGETPTR(qry->QryFields));
+                    ajDebug("ajQueryAddFieldElseC.d '%s' '%S'\n",
+                            "sv", qry->QryFields);
+                }
+            }
+            ajStrAssignS(&lastoper, operstr);
+            ajStrTrimWhite(&lastoper);
+        }
+        else
+        {
+            qry->QueryType = AJQUERY_ALL;
+        }
+
         ajStrTokenDel(&handle);
-        ajStrDel(&allfields);
-        ajStrDel(&qrystring);
+        ajStrDel(&idstr);
+        ajStrDel(&qrystr);
+        ajStrDel(&operstr);
+        ajStrDel(&lastoper);
+    }
+    else
+    {
+        qry->QueryType = AJQUERY_ALL;
+    }
 
-        ajQueryStarclear(qry);
+    if(ajQuerySetWild(qry))
+    {
+        if(qry->QueryType == AJQUERY_ENTRY)
+            qry->QueryType = AJQUERY_QUERY;
+    }
 
-	if(ajStrGetLen(querySvr))
-            dbstat = ajNamSvrQuery(qry);
-        else if(drcatstat)
-            dbstat = ajTrue;
-        else
-            dbstat = ajNamDbQuery(qry);
-
-
-	if(!dbstat)
-	{
-	    ajErr("no access method available for '%S'", *Pqry);
-
-	    return ajFalse;
-	}
-
-        if(findformat(qry->Formatstr, &iformat))
-            ajStrAssignS(&textin->Formatstr, qry->Formatstr);
-            
-        else
+    if(qry->QueryType == AJQUERY_ALL && ajStrGetLen(qry->Organisms))
+    {
+        qry->QueryType = AJQUERY_QUERY;
+        if(ajQueryKnownFieldC(qry, "org"))
         {
-            ajErr("unknown format '%S' for '%S' type '%S'\n",
-                  qry->Formatstr, *Pqry, qry->DbType);
-
-            return ajFalse;
+	    ajQueryAddFieldOrC(qry, "org",
+			       MAJSTRGETPTR(qry->Organisms));
         }
-
-        if(iformat >= 0)
+        else if(ajQueryKnownFieldC(qry, "tax"))
         {
-            textin->Format = iformat;
-            textin->TextFormat = 0;
+	    ajQueryAddFieldOrC(qry, "tax",
+                               MAJSTRGETPTR(qry->Organisms));
         }
-        else
-        {
-            textin->TextFormat = - iformat;
-            textin->Format = 0;
+        else {
+            if(dbstat)
+                ajErr("Query '%S' query field 'org' or 'tax' not defined"
+                      " for database '%S'",
+                      *Pqry, qry->DbName);
+            else
+                ajErr("Query '%S' query field 'org' or 'tax' not defined"
+                      " for datatype '%s'",
+                      *Pqry, ajQueryGetDatatype(qry));
         }
+    }
 
-        ajDebug("database type: '%S' format '%S' %u textformat %u \n",
-                qry->DbType, qry->Formatstr,
-                textin->Format, textin->TextFormat);
+    if(qry->QueryType == AJQUERY_ALL && ajStrGetLen(qry->Namespace))
+    {
+        qry->QueryType = AJQUERY_QUERY;
+        if(ajQueryKnownFieldC(qry, "namespace"))
+        {            ajQueryAddFieldOrC(qry, "namespace",
+                               MAJSTRGETPTR(qry->Namespace));
+        }
+        else if(ajQueryKnownFieldC(qry, "ns"))
+        {            ajQueryAddFieldOrC(qry, "ns",
+                               MAJSTRGETPTR(qry->Namespace));
+        }
+        else {
+            if(dbstat)
+                ajErr("Query '%S' query field 'ns' or 'namespace' not defined"
+                      " for database '%S'",
+                      *Pqry, qry->DbName);
+            else
+                ajErr("Query '%S' query field 'ns' or 'namespace' not defined"
+                      " for datatype '%s'",
+                      *Pqry, ajQueryGetDatatype(qry));
+        }
+    }
 
-        ajQueryTrace(qry);
+    ajQueryTrace(qry);
 
+    if(isspecialfile)
+    {
+        if(asisstat)
+            return ajTextinAccessAsis(textin);
+        if(ftpstat)
+            return ajTextinAccessFtp(textin);
+        if(httpstat)
+            return ajTextinAccessHttp(textin);
+    }
+
+    else if(dbstat)
+    {
         ajDebug("try TEXT access by method '%S'\n", qry->Method);
         qry->TextAccess = ajCallTableGetS(textDbMethods,qry->Method);
 
         if(!qry->TextAccess)
         {
-            /* set up values for caller to try datatype-specific access */
             *Pnontext = ajTrue;
 
             return ajTrue;
         }
 
-        /* ajDebug("trying access method '%S'\n", qry->Method); */
-
         textaccess = qry->TextAccess;
-        accstat = textaccess->Access(textin);
+        accstat = (*textaccess->Access)(textin);
 
         if(accstat)
             return ajTrue;
@@ -2530,233 +2732,143 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
         return ajFalse;
     }
 
-    ajDebug("no dbname specified\n");
-
-    ajDebug("\n");
-
-    /* no database name, try filename */
-
-    if(svrstat)
+    else if(ajFilenameExists(queryDb))
     {
-        ajErr("Server '%S:' but no database name in '%S'", querySvr, *Pqry);
-        return ajFalse;
-    }
+        ajDebug("found filename %S\n", queryDb);
+        ajStrAssignS(&qry->Filename, queryDb);
 
-    regstat = ajRegExec(queryRegFieldId, *Pqry);
-    ajDebug("entry-id regexp: %B\n", regstat);
-    ajDebug("filetest regexp queryRegFieldId: %B '%S'\n", regstat, *Pqry);
-
-    if(regstat)
-    {
-        ajRegSubI(queryRegFieldId, 1, &qry->Filename);
-        ajRegSubI(queryRegFieldId, 3, &qry->Field);
-        ajRegSubI(queryRegFieldId, 4, &queryChr);
-	ajRegSubI(queryRegFieldId, 5, &braceopen);
-        ajRegSubI(queryRegFieldId, 6, &qrystring);
-	ajRegSubI(queryRegFieldId, 7, &braceclose);
-    }
-
-    if(!regstat)
-    {
-        regstat = ajRegExec(queryRegId, *Pqry);
-        ajDebug("entry-id regexp: %B\n", regstat);
-        ajDebug("filetest regexp queryRegId: %B '%S'\n", regstat, *Pqry);
-
-        if(regstat)
+        if(qry->Fpos)
         {
-            ajRegSubI(queryRegId, 1, &qry->Filename);
-            ajRegSubI(queryRegId, 3, &queryChr);
-            ajRegSubI(queryRegId, 5, &braceopen);
-            ajRegSubI(queryRegId, 6, &qrystring);
-            ajRegSubI(queryRegId, 7, &braceclose);
-        }
-    }
-    
-    if(regstat)
-    {
-        ajDebug("Query file: '%S' chr: '%S' field: '%S' qrystring: '%S' "
-                "open: '%S' close: '%S' inbraces: %B\n",
-                qry->Filename, queryChr, qry->Field, qrystring,
-                braceopen, braceclose, inbraces);
-
-        if(*MAJSTRGETPTR(braceopen))
-        {
-            if(*MAJSTRGETPTR(braceclose))
-                inbraces = ajTrue;
-            else
-            {
-                ajErr("Bad query syntax: unclosed braces '%S'", *Pqry);
-
-                return ajFalse;
-            }
-        }
-        else
-        {
-            if(*MAJSTRGETPTR(braceclose))
-            {
-                ajErr("Bad query syntax: unopened braces '%S'", *Pqry);
-
-                return ajFalse;
-            }
-        }
-
-        ajDebug("found filename %S\n", qry->Filename);
-
-        ajStrDel(&braceopen);
-        ajStrDel(&braceclose);
-
-        if(ajStrMatchC(queryChr, "%"))
-        {
-            ajStrToLong(qrystring, &qry->Fpos);
             accstat = ajTextinAccessOffset(textin);
 
             ajQueryTrace(qry);
 
             if(accstat)
             {
-                ajStrDel(&qrystring);
+                ajStrDel(&qry->QryFields);
 
                 return ajTrue;
             }
         }
-        else
-        {
-            if(ajStrGetLen(qrystring))
-            {
-                ajDebug("file Qry '%S' Field '%S' hasAcc:%B queryChr '%S'\n",
-                        qrystring, qry->Field, qry->HasAcc, queryChr);
+        accstat = ajTextinAccessFile(textin);
 
-                if(ajStrGetLen(qry->Field)) /* set by dbname above */
-                {
-                    /* ajDebug("    qry->Field %S\n", qry->Field); */
-
-                    ajStrAssignC(&lastoper, "|");
-                    ajStrTokenAssignC(&handle, qrystring, "|&!^ \t\n\r");
-
-                    while(ajStrTokenNextParseDelimiters(&handle, &idstr,
-                                                        &operstr))
-                    {
-                        switch(ajStrGetCharFirst(lastoper))
-                        {
-                            case '|':
-                                ajQueryAddFieldOrS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldOrS.g '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '&':
-                                ajQueryAddFieldAndS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldAndS.g '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '!':
-                                ajQueryAddFieldNotS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldNotS.g '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            case '^':
-                                ajQueryAddFieldEorS(qry, qry->Field, idstr);
-                                ajDebug("ajQueryAddFieldEorS.g '%S' '%S'\n",
-                                        qry->Field, idstr);
-                                break;
-
-                            default:
-                                ajErr("bad query syntax: "
-                                      "unknown operator '%S'",
-                                      lastoper);
-                                break;
-                        }
-
-                        ajStrAssignS(&lastoper, operstr);
-                        ajStrTrimWhite(&lastoper);
-                    }
-                }
-                else        /* no specific field */
-                {
-                    if(inbraces)
-                    {
-                        qry->QueryType = AJQUERY_QUERY;
-                        ajNamFileQuery(qry);
-
-                        ajStrTokenAssignC(&handle, qrystring, " \t\n\r,;");
-
-                        while(ajStrTokenNextParse(&handle, &idstr))
-                        {
-                            ajQueryAddFieldOrC(qry, "id",
-                                               MAJSTRGETPTR(idstr));
-                            ajDebug("ajQueryAddFieldOrC.h '%s' '%S'\n",
-                                    "id", idstr);
-
-                            if(qry->HasAcc && ajQueryKnownFieldC(qry, "acc"))
-                            {
-                                ajQueryAddFieldElseC(qry, "acc",
-                                                   MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldElseC.h '%s' '%S'\n",
-                                        "acc", idstr);
-                            }
-
-                            if(ajQueryKnownFieldC(qry, "sv"))
-                            {
-                                ajQueryAddFieldElseC(qry, "sv",
-                                                     MAJSTRGETPTR(idstr));
-                                ajDebug("ajQueryAddFieldElseC.h '%s' '%S'\n",
-                                        "sv", idstr);
-
-                            }
-
-                        }
-
-                    }
-                    else 
-                    {
-                        ajQueryAddFieldOrC(qry, "id",
-                                           MAJSTRGETPTR(qrystring));
-                        ajDebug("ajQueryAddFieldOrC.i '%s' '%S'\n",
-                                "id", qrystring);
-
-                        ajQueryAddFieldElseC(qry, "acc",
-                                             MAJSTRGETPTR(qrystring));
-                        ajDebug("ajQueryAddFieldElseC.i '%s' '%S'\n",
-                                "acc", qrystring);
-                        
-                        ajQueryAddFieldElseC(qry, "sv",
-                                             MAJSTRGETPTR(qrystring));
-                        ajDebug("ajQueryAddFieldElseC.i '%s' '%S'\n",
-                                "sv", qrystring);
-                    }
-                    ajStrAssignS(&lastoper, operstr);
-                    ajStrTrimWhite(&lastoper);
-                }
-            }
-
-            ajStrTokenDel(&handle);
-            ajStrDel(&idstr);
-            ajStrDel(&qrystr);
-            ajStrDel(&qrystring);
-            ajStrDel(&operstr);
-            ajStrDel(&lastoper);
-            ajStrDel(&qrystring);
-
-            ajQueryTrace(qry);
-
-            accstat = ajTextinAccessFile(textin);
-
-            if(accstat)
-                return ajTrue;
-        }
+        if(accstat)
+            return ajTrue;
 
         ajErr("Failed to open filename '%S'", qry->Filename);
 
         return ajFalse;
+
     }
-    else			  /* dbstat and regstat both failed */
-        ajDebug("no filename specified\n");
+    else 
+    {
+        ajErr("Failed to open filename '%S'", queryDb);
+    }
+
+    ajDebug("no valid filename specified\n");
 
     ajDebug("\n");
 
     return ajFalse;
+    
+    
+}
+
+
+
+
+/* @funcstatic queryDbfind ****************************************************
+**
+** Test a possible database name
+**
+** @param [u] Pdb [AjPStr*] Database name
+** @param [r] svr [const AjPStr] Server name
+** @param [f] findformat [AjBool function] Function to validate format name
+** @param [u] qry [AjPQuery] Query object
+** @param [w] dbstat [AjBool*] True if database is valid
+** @param [w] drcatstat [AjBool*] True if database is found via DRCAT
+** @return [AjBool] ajTrue if string is a known file or database name
+**
+******************************************************************************/
+
+static AjBool queryDbfind(AjPStr *Pdb, const AjPStr svr,
+                          AjBool findformat(const AjPStr format,
+                                            ajint *iformat),
+                          AjPQuery qry, AjBool* dbstat, AjBool* drcatstat)
+{
+    AjBool ret = ajFalse;
+    AjPResource drcat = NULL;
+
+    *dbstat = ajFalse;
+    *drcatstat = ajFalse;
+
+    ajDebug("queryDbfind db: '%S' svr: '%S'\n", *Pdb, svr);
+
+    if(ajRegExec(queryRegDb, *Pdb))
+    {
+        *dbstat = ajTrue;
+        if(ajStrGetLen(svr)) /* is it a server:dbname */
+        {
+            if(!ajNamAliasServer(Pdb, svr))
+            {
+                ajDebug("unknown dbname %S for server %S\n",
+                        *Pdb, svr);
+                *dbstat = ajFalse;
+            }
+        }
+        else if(!ajNamAliasDatabase(Pdb)) /* is it a defined dbname */
+        {
+            ajDebug("not a db '%S'\n", *Pdb);
+            if(ajFilenameExists(*Pdb)) /* existing filename */
+            {
+                ajDebug("is a file '%S'\n", *Pdb);
+                ret = ajTrue;
+                *dbstat = ajFalse;
+            }
+            else                /* search DRCAT */
+            {
+                drcat = ajResourceNewDrcat(*Pdb);
+                
+                if(drcat)
+                {
+                    ajDebug("database '%S' found via DRCAT datatype %u\n",
+                            *Pdb, qry->DataType);
+
+                    if(!ajResourceGetDbdata(drcat, qry, findformat))
+                        *dbstat = ajFalse;
+                    else
+                    {
+                        if(qry->DataType == AJDATATYPE_URL)
+                        {
+                            qry->QryData = drcat;
+                            drcat = NULL;
+                        }
+                        *drcatstat = ajTrue;
+                    }
+
+                    ajResourceDel(&drcat);
+                }
+                else
+                {
+                    ajDebug("unknown dbname %S, try filename\n", *Pdb);
+                    *dbstat = ajFalse;
+                }
+                ajDebug("drcat search: %B '%S'\n", *drcatstat, *Pdb);
+            }
+        }
+    }
+
+    if(*dbstat || ret)
+        return ajTrue;
+
+    if(ajFilenameExists(*Pdb)) /* existing filename */
+    {
+        ajDebug("not a dbname but is a file '%S'\n", *Pdb);
+        ret = ajTrue;
+        *dbstat = ajFalse;
+    }
+
+    return ret;
 }
 
 
@@ -2767,6 +2879,8 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 ** Initialised regular expressions for parsing queries
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void queryRegInit(void)
@@ -2783,48 +2897,50 @@ static void queryRegInit(void)
 	queryRegSvr = ajRegCompC("^([A-Za-z][A-Za-z0-9_.]+):");
     /* \1 svrname (start with a letter, then alphanumeric) */
 
-    if(!queryRegDbField)
-	queryRegDbField = ajRegCompC("^([A-Za-z][A-Za-z0-9_.]+)([-])"
-                                     "([{])([^}]*)(}?)$");
-    if(!queryRegDbId)
-	queryRegDbId = ajRegCompC("^([A-Za-z][A-Za-z0-9_.]+)([-]([A-Za-z]+))?"
-                                  "([:]?(([{]?)([^}]*)(}?)))?$");
+    if(!queryRegDb)
+	queryRegDb = ajRegCompC("^[A-Za-z][A-Za-z0-9_.]*[A-Za-z0-9]$");
+
+    if(!queryRegQryField)
+	queryRegQryField = ajRegCompC("^([A-Za-z]+)?"
+                                   "(([:]?)(([{]?)([^}]*)(}?)))?$");
+    if(!queryRegQryId)
+	queryRegQryId = ajRegCompC("^([{]?)([^}]*)(}?)$");
 
     /* \1 dbname (start with a letter, then alphanumeric) */
     /* \2 -id or -acc etc. */
-    /* \3 qry->Field (id or acc etc.) */
+    /* \3 qry->SingleField (id or acc etc.) */
     /* \4 :qrystring or {qrystring}*/
     /* \5 qrystring */
 
     if(!queryRegFieldId)
 #ifndef WIN32
-        /* \1 is filename \3 is the qry->Field \6 is the qrystring */
+        /* \1 is filename \3 is the qry->SingleField \6 is the qrystring */
 	queryRegFieldId = ajRegCompC("^(([^{|]+[|])|[^{:]+)"
-                                     ":([^{:]+)"
-                                     "(:)({?)([^}]+)(}?)$");
+                                     "[:-]([^{:-]+)"
+                                     "([:{]+)([^}]+)(}?)$");
 #else
 	/* Windows file names can start with e.g.: 'C:\' */
 	/* But allow e.g. 'C:/...', for Staden spin */
 
-        /* \1 is filename \3 is the qry->Field \6 is the qrystring */
+        /* \1 is filename \3 is the qry->SingleField \6 is the qrystring */
 	queryRegFieldId = ajRegCompC ("^(([a-zA-Z]:[\\\\/])?[^{:]+)"
-                                      ":([^{:]+)"
-                                      "(:)({?)([^}]+)(}?)$");
+                                      "[:-]([^{:-]+)"
+                                      "([:{]+)([^}]+)(}?)$");
 #endif
 
 
     if(!queryRegId)
 #ifndef WIN32
-        /* \1 is filename \3 is the qry->Field \6 is the qry->QryString */
-	queryRegId = ajRegCompC("^(([^|{]+[|])|[^:{%]+)"
-                                "([:%]?)(({?)([^}]*)(}?))?$");
+        /* \1 is filename \3 is the qry->SingleField \6 is the qry->QryString */
+	queryRegId = ajRegCompC("^(([^|{]+[|])|[^:{%]*[^:{%-])"
+                                "([:%-]?)(({?)([^}]*)(}?))?$");
 #else
 	/* Windows file names can start with e.g.: 'C:\' */
 	/* But allow e.g. 'C:/...', for Staden spin */
 
-        /* \1 is filename \6 is the qry->Field \7 is the qry->QryString */
-	queryRegId = ajRegCompC ("^(([a-zA-Z]:[\\\\/])?[^:{%]+)"
-                                "([:%]?)(({?)([^}]*)(}?))?$");
+        /* \1 is filename \6 is the qry->SingleField \7 is the qry->QryString */
+	queryRegId = ajRegCompC ("^(([a-zA-Z]:[\\\\/])?[^:{%]*[^:{%-])"
+                                "([:%-]?)(({?)([^}]*)(}?))?$");
 #endif
 
 
@@ -2834,13 +2950,23 @@ static void queryRegInit(void)
     if(!queryRegAsis)	 /* \1 is filename \3 is the qry->QryString */
 	queryRegAsis = ajRegCompC("^[Aa][Ss][Ii][Ss]:+(.+)$");
 
+    if(!queryRegFtp)	 /* \1 is filename \3 is the qry->QryString */
+	queryRegFtp = ajRegCompC("^([Ff][Tt][Pp]:/*.+)$");
+
+    if(!queryRegHttp)	 /* \1 is filename \3 is the qry->QryString */
+	queryRegHttp = ajRegCompC("^([Hh][Tt][Tt][Pp]:/*.+)$");
+
     if(!queryRegWild)
 	queryRegWild = ajRegCompC("(.*[*].*)");
     /* \1 wildcard query */
 
-    if(!queryRegRange)    /* \1 is rest of USA \2 start \3 end \5 reverse*/
+    if(!queryRegRange)    /* \1 is rest of USA \2 start \3 end \5 reverse */
 	queryRegRange = ajRegCompC("(.*)[[](-?[0-9]*):(-?[0-9]*)"
                                    "(:([Rr])?)?[]]$");
+
+    if(!queryRegRefrange)    /* \1 is rest of USA \2 start \4 end \6 rev */
+	queryRegRefrange = ajRegCompC("(.*):([0-9]*)(:|\\.\\.)([0-9]*)"
+                                   "(:([Rr]))?$");
 
     queryRegInitDone = ajTrue;
 

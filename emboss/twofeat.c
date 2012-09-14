@@ -479,16 +479,16 @@ static void twofeat_report_hits(const AjPList hitlist, AjBool twoout,
 				score, strand, frame);
 
             ajFmtPrintS(&tmp, "*startA %d", ajFeatGetStart(detail->gfA));
-            ajFeatTagAdd(feature, NULL, tmp);
+            ajFeatTagAddSS(feature, NULL, tmp);
 
             ajFmtPrintS(&tmp, "*endA %d", ajFeatGetEnd(detail->gfA));
-            ajFeatTagAdd(feature, NULL, tmp);
+            ajFeatTagAddSS(feature, NULL, tmp);
 
             ajFmtPrintS(&tmp, "*startB %d", ajFeatGetStart(detail->gfB));
-            ajFeatTagAdd(feature, NULL, tmp);
+            ajFeatTagAddSS(feature, NULL, tmp);
 
             ajFmtPrintS(&tmp, "*endB %d", ajFeatGetEnd(detail->gfB));
-            ajFeatTagAdd(feature, NULL, tmp);
+            ajFeatTagAddSS(feature, NULL, tmp);
 
 	    ajStrDel(&tmp);
 	}
@@ -622,7 +622,7 @@ static AjBool twofeat_MatchFeature(const AjPFeature gf,
      ** is this a child of a join() ? 
      ** if it is a child, then we use the previous result of MatchPatternTags
      */
-    if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+    if(!ajFeatIsMultiple(gf))
 	*tagsmatch = twofeat_MatchPatternTags(gf, tag, value);
 
     /* ignore remote IDs */

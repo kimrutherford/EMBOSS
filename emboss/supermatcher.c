@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     gapextend = ajAcdGetFloat("gapextend");
     wordlen   = ajAcdGetInt("wordlen");
     align     = ajAcdGetAlign("outfile");
-    errorf    = ajAcdGetOutfile("errorfile");
+    errorf    = ajAcdGetOutfile("errfile");
     width     = ajAcdGetInt("width");	/* width for banded Smith-Waterman */
     minscore  = ajAcdGetFloat("minscore");
 
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     {
 	targetseq = ajSeqsetGetseqSeq(targetseqs, k);
 	embWordGetTable(&kmers, targetseq);
-	ajDebug("Number of distinct kmers found so far: %d\n",
+	ajDebug("Number of distinct kmers found so far: %Lu\n",
 		ajTableGetLength(kmers));
     }
     AJCNEW0(lastlocation, ntargetseqs);

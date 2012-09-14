@@ -1,8 +1,8 @@
 application: octanol [
   documentation: "Draw a White-Wimley protein hydropathy plot"
   groups: "Protein:Properties"
-  relations: "EDAM:0000137 topic Protein hydropathy"
-  relations: "EDAM:0000401 operation Protein hydropathy calculation (from sequence)"
+  relations: "EDAM_topic:0137 Protein hydropathy"
+  relations: "EDAM_operation:0401 Protein hydropathy calculation (from sequence)"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   datafile: datafile [
@@ -21,7 +21,7 @@ section: input [
     default: "Ewhite-wimley.dat"
     information: "White-Wimley data file"
     knowntype: "white wimley datafile"
-    relations: "EDAM:0001507 data Amino acid index (White-Wimley data)"
+    relations: "EDAM_data:1507 Amino acid index (White-Wimley data)"
   ]
 
 endsection: input
@@ -37,7 +37,7 @@ section: additional [
     default: "19"
     minimum: "1"
     maximum: "200"
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
 endsection: additional
@@ -50,31 +50,31 @@ section: output [
   xygraph: graph [
     parameter: "Y"
     multiple: "3"
-    gxtitle: "$(sequence.name)"
     gytitle: "Total Free Energy (Kcal/mol)"
     gtitle: "White-Wimley Plot"
-    relations: "EDAM:0001522 data Protein sequence hydropathy plot"
+    relations: "EDAM_data:1522 Protein sequence hydropathy plot"
+    sequence: "Y"
   ]
 
   boolean: plotoctanol [
     additional: "Y"
     default: "N"
     information: "Display the octanol plot"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: plotinterface [
     additional: "Y"
     default: "N"
     information: "Display the interface plot"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: plotdifference [
     additional: "Y"
     default: "Y"
     information: "Display the difference plot"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

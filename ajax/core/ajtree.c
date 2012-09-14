@@ -1,25 +1,33 @@
-/******************************************************************************
-** @source AJAX tree functions
+/* @source ajtree *************************************************************
+**
+** AJAX tree functions
+**
 ** These functions create and control trees.
 **
 ** @author Copyright (C) 2004 Peter Rice
+** @version $Revision: 1.20 $
+** @modified $Date: 2012/06/26 13:03:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
+
+
+
 
 /*Library* Tree Library *******************************************************
 **
@@ -30,12 +38,16 @@
 **
 ******************************************************************************/
 
+#include "ajlib.h"
+
+#include "ajtree.h"
+#include "ajassert.h"
+
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "ajax.h"
+#include <ctype.h>
 
 static ajint treeNewCnt     = 0;
 static ajint treeDelCnt     = 0;
@@ -59,6 +71,8 @@ static void treestrTraceNode (const AjPTree thys, ajint num);
 **
 ** @return [AjPTree] new tree;
 ** @category new [AjPTree] Creates a new general tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -70,7 +84,7 @@ AjPTree ajTreeNew(void)
 
 
 
-/* @func ajTreeNewNewick *******************************************************
+/* @func ajTreeNewNewick ******************************************************
 **
 ** Creates a new general tree using a Newick's format phylogenetic tree
 ** as input
@@ -78,6 +92,8 @@ AjPTree ajTreeNew(void)
 ** @param [r] newick [const AjPStr] Newick's format tree
 ** @return [AjPTree] new tree;
 ** @category new [AjPTree] Creates a new general tree.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -216,7 +232,7 @@ AjPTree ajTreeNewNewick(const AjPStr newick)
                 break;
 
             default:
-                if(isspace(*cp))
+	      if(isspace((int)*cp))
                 {
                     if(!islength && (*cp == ' ') &&
                        ajStrGetCharLast(tmpstr) != '_')
@@ -251,6 +267,8 @@ AjPTree ajTreeNewNewick(const AjPStr newick)
 **
 ** @return [AjPTree] new tree;
 ** @category new [AjPTree] Creates a new AjPStr tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -268,6 +286,8 @@ AjPTree ajTreestrNew(void)
 **
 ** @param [r] type [AjEnum] Defined tree type.
 ** @return [AjPTree] new tree;
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -297,6 +317,8 @@ static AjPTree treeNew(AjEnum type)
 ** @param [r] thys [const AjPTree] Tree to be copied
 ** @return [AjPTree] New, copied, tree.
 ** @category new [AjPTree] Copies an AjPStr tree to a new tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -318,6 +340,8 @@ AjPTree ajTreestrCopy(const AjPTree thys)
 ** @param [r] thys [const AjPTree] tree to be copied
 ** @return [AjPTree] new copied tree.
 ** @category new [AjPTree] Copies a tree to a new tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -344,6 +368,8 @@ AjPTree ajTreeCopy(const AjPTree thys)
 ** @param [r] thys [const AjPTree] Tree
 ** @return [ajuint] Number of nodes in tree.
 ** @category cast [AjPTree] get the number of nodes in a linked tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -375,6 +401,8 @@ ajuint ajTreeLength(const AjPTree thys)
 ** @param [r] thys [const AjPTree] Tree
 ** @return [ajuint] Number of nodes in tree.
 ** @category cast [AjPTree] get the number of nodes in an AjPStr linked tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -397,6 +425,8 @@ ajuint ajTreestrLength(const AjPTree thys)
 ** @return [void]
 ** @category delete [AjPTree] Free the tree, and free the items with
 **                            a simple "free".
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -486,6 +516,8 @@ void ajTreeFree(AjPTree* pthis)
 ** @param [d] pthis [AjPTree*] Tree
 ** @return [void]
 ** @category delete [AjPTree] Free the tree, and free the items with ajStrDel
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -574,6 +606,8 @@ void ajTreestrFree(AjPTree* pthis)
 ** @return [void]
 ** @category delete [AjPTree] Free the tree but do not try to free the nodes.
 **                            Nodes should be freed first by ajTreeMap.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -659,6 +693,8 @@ void ajTreeDel(AjPTree* pthis)
 ** @category delete [AjPTree] Free the tree but do not try to free the nodes.
 **                         use where nodes are still in use,
 **                         e.g. in ajTreeToArray.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -681,6 +717,8 @@ void ajTreestrDel(AjPTree* pthis)
 ** @param [u] cl [void*] Standard, usually NULL.
 ** @return [void]
 ** @category modify [AjPTree] Call a function for each node in a tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -716,6 +754,8 @@ void ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl)
 ** @param [u] cl [void*] Standard, usually NULL.
 ** @return [void]
 ** @category modify [AjPTree] Call a function for each node in a tree.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -750,6 +790,8 @@ void ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl)
 ** @param [w] array [void***] Array of pointers to tree items.
 ** @return [ajuint] Size of array of pointers.
 ** @category cast [AjPTree] Create an array of the pointers to the data.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -800,6 +842,8 @@ ajuint ajTreeToArray(const AjPTree thys, void*** array)
 **
 ** @return [ajuint] Size of array of pointers.
 ** @category cast [AjPTree] Create an array of the pointers to the data.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -846,6 +890,8 @@ ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
 ** Dummy function to catch all unused functions defined in ajtree
 **
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajTreeDummyFunction(void)
@@ -864,6 +910,8 @@ void ajTreeDummyFunction(void)
 ** @param [r] name [const AjPStr] Leaf name
 ** @param [o] data [void*] Data value
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ******************************************************************************/
 
 AjBool ajTreeAddData(AjPTree thys, const AjPStr name, void* data)
@@ -900,6 +948,8 @@ AjBool ajTreeAddData(AjPTree thys, const AjPStr name, void* data)
 ** @param [r] name [const AjPStr] Leaf name
 ** @param [o] data [AjPStr] Data value
 ** @return [AjBool] ajTrue on success
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjBool ajTreestrAddData(AjPTree thys, const AjPStr name, AjPStr data)
@@ -935,6 +985,8 @@ AjBool ajTreestrAddData(AjPTree thys, const AjPStr name, AjPStr data)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                   define data or further nodes.
+**
+** @release 2.9.0
 ******************************************************************************/
 
 AjPTree ajTreeAddNode(AjPTree thys)
@@ -968,6 +1020,8 @@ AjPTree ajTreeAddNode(AjPTree thys)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 2.9.0
 ******************************************************************************/
 
 AjPTree ajTreeAddSubNode(AjPTree thys)
@@ -994,6 +1048,8 @@ AjPTree ajTreeAddSubNode(AjPTree thys)
 ** @param [r] thys [const AjPTree] Tree object
 ** @param [w] Pnewick [AjPStr*] Newick format string
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1089,12 +1145,14 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 
 
 
-/* @func ajTreeTrace *********************************************************
+/* @func ajTreeTrace **********************************************************
 **
 ** Prints a trace of a tree to debug output
 **
 ** @param [r] thys [const AjPTree] Tree object
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -1127,6 +1185,8 @@ void ajTreeTrace(const AjPTree thys)
 **
 ** @param [r] thys [const AjPTree] Tree object
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1159,6 +1219,8 @@ void ajTreestrTrace(const AjPTree thys)
 ** @param [r] thys [const AjPTree] Tree node
 ** @param [r] num [ajint] Node number
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 static void treeTraceNode (const AjPTree thys, ajint num)
@@ -1216,6 +1278,8 @@ static void treeTraceNode (const AjPTree thys, ajint num)
 ** @param [r] thys [const AjPTree] Tree node
 ** @param [r] num [ajint] Node number
 ** @return [void]
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static void treestrTraceNode (const AjPTree thys, ajint num)
@@ -1274,7 +1338,7 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
 
 
 
-/* @func ajTreeFollow *****************************************************
+/* @func ajTreeFollow *********************************************************
 **
 ** Returns the next node through the tree.
 **
@@ -1289,6 +1353,8 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
@@ -1344,7 +1410,7 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
 
 
 
-/* @func ajTreeNext *****************************************************
+/* @func ajTreeNext ***********************************************************
 **
 ** Returns the next node at the same level
 **
@@ -1352,6 +1418,8 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjPTree ajTreeNext(const AjPTree thys)
@@ -1362,7 +1430,7 @@ AjPTree ajTreeNext(const AjPTree thys)
 
 
 
-/* @func ajTreePrev *****************************************************
+/* @func ajTreePrev ***********************************************************
 **
 ** Returns the previous node at the same level
 **
@@ -1370,6 +1438,8 @@ AjPTree ajTreeNext(const AjPTree thys)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjPTree ajTreePrev(const AjPTree thys)
@@ -1380,7 +1450,7 @@ AjPTree ajTreePrev(const AjPTree thys)
 
 
 
-/* @func ajTreeDown *****************************************************
+/* @func ajTreeDown ***********************************************************
 **
 ** Returns the next node down 1 level
 **
@@ -1388,6 +1458,8 @@ AjPTree ajTreePrev(const AjPTree thys)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjPTree ajTreeDown(const AjPTree thys)
@@ -1398,7 +1470,7 @@ AjPTree ajTreeDown(const AjPTree thys)
 
 
 
-/* @func ajTreeUp *****************************************************
+/* @func ajTreeUp *************************************************************
 **
 ** Returns the parent of the present node
 **
@@ -1406,6 +1478,8 @@ AjPTree ajTreeDown(const AjPTree thys)
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
 **                  define data or further nodes.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 AjPTree ajTreeUp(const AjPTree thys)
@@ -1421,6 +1495,8 @@ AjPTree ajTreeUp(const AjPTree thys)
 ** Prints a summary of tree usage with debug calls
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 

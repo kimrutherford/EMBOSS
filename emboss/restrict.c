@@ -333,7 +333,9 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 
     
     if(alpha && limit)
-	ajListSortTwo(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
+	ajListSortTwo(l,
+		      &embPatRestrictNameCompare,
+		      &embPatRestrictStartCompare);
 
 
     if(frags)
@@ -555,7 +557,9 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
     
     if(alpha && limit)
-	ajListSortTwo(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
+	ajListSortTwo(l,
+		      &embPatRestrictNameCompare,
+		      &embPatRestrictStartCompare);
 
     for(i=0;i<hits;++i)
     {
@@ -578,13 +582,13 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	}
 
 	ajFmtPrintS(&tmpStr, "*enzyme %S", m->cod);
-	ajFeatTagAdd(gf,  NULL, tmpStr);
+	ajFeatTagAddSS(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*site %S", m->pat);
-	ajFeatTagAdd(gf,  NULL, tmpStr);
+	ajFeatTagAddSS(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*5prime %d", m->cut1);
-	ajFeatTagAdd(gf,  NULL, tmpStr);
+	ajFeatTagAddSS(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*3prime %d", m->cut2);
-	ajFeatTagAdd(gf,  NULL, tmpStr);
+	ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 	if(frags)
 	    fa[fn++] = m->cut1;
@@ -596,9 +600,9 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 		if(frags)
 		    fa[fn++] = m->cut3;
 		ajFmtPrintS(&tmpStr, "*5primerev %d", m->cut3);
-		ajFeatTagAdd(gf,  NULL, tmpStr);
+		ajFeatTagAddSS(gf,  NULL, tmpStr);
 		ajFmtPrintS(&tmpStr, "*3primerev %d", m->cut4);
-		ajFeatTagAdd(gf,  NULL, tmpStr);
+		ajFeatTagAddSS(gf,  NULL, tmpStr);
 	    }
 	}
     }
@@ -650,7 +654,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
     if(ifrag)
     {
-	ajListSort(l,restrict_enzcompare);
+	ajListSort(l, &restrict_enzcompare);
 
 	nfrags = 0;
 	ajStrAssignC(&fragStr,"");

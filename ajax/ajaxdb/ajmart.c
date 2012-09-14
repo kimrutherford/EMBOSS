@@ -1,33 +1,38 @@
-/******************************************************************************
-** @source AJAX Mart (database) functions
+/* @source ajmart *************************************************************
+**
+** AJAX Mart (database) functions
 **
 ** These functions control all aspects of AJAX sequence database access
 **
 ** @author Copyright (C) 2009 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.33 $
 ** @modified Nov 23 ajb First version
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
 #include "expat.h"
-#include "ajseqdb.h"
 #include "ajmart.h"
+#include "ajlib.h"
+#include "ajhttp.h"
+#include "ajfileio.h"
+
 
 
 #define REGTABGUESS 100
@@ -144,12 +149,14 @@ static const char *dataset_schemas[] =
 
 
 
-/* @funcstatic martGetVirtualSchema ******************************************
+/* @funcstatic martGetVirtualSchema *******************************************
 **
 ** Return a virtual schema given a dataset name
 **
 ** @param [r] dataset [const AjPStr] dataset name
 ** @return [const char*] virtualSchema value
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static const char* martGetVirtualSchema(const AjPStr dataset)
@@ -178,11 +185,13 @@ static const char* martGetVirtualSchema(const AjPStr dataset)
 
 
 
-/* @func ajMartqueryNew ***************************************************
+/* @func ajMartqueryNew *******************************************************
 **
 ** Initialise mart query object
 **
 ** @return [AjPMartquery] Mart query object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartquery ajMartqueryNew(void)
@@ -218,12 +227,14 @@ AjPMartquery ajMartqueryNew(void)
 
 
 
-/* @func ajMartqueryDel ***************************************************
+/* @func ajMartqueryDel *******************************************************
 **
 ** Delete Mart query object
 **
 ** @param [u] thys [AjPMartquery*] Mary query object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartqueryDel(AjPMartquery *thys)
@@ -271,6 +282,8 @@ void ajMartqueryDel(AjPMartquery *thys)
 **
 ** @param [u] thys [AjPSeqin] Seqin query object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartquerySeqinFree(AjPSeqin thys)
@@ -302,11 +315,13 @@ void ajMartquerySeqinFree(AjPSeqin thys)
 
 
 
-/* @func ajMartLocNew ********************************************************
+/* @func ajMartLocNew *********************************************************
 **
 ** Create object for holding Mart location data read from XML
 **
 ** @return [AjPMartLoc] MartLoc object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartLoc ajMartLocNew(void)
@@ -329,12 +344,14 @@ AjPMartLoc ajMartLocNew(void)
 
 
 
-/* @func ajMartLocDel *************************************************
+/* @func ajMartLocDel *********************************************************
 **
 ** Delete a Mart Location object
 **
 ** @param [u] thys [AjPMartLoc*] MartLoc object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartLocDel(AjPMartLoc *thys)
@@ -381,11 +398,13 @@ void ajMartLocDel(AjPMartLoc *thys)
 
 
 
-/* @func ajMartDatasetNew ****************************************************
+/* @func ajMartDatasetNew *****************************************************
 **
 ** Create object for holding Mart Dataset read from XML (or tab-sep list)
 **
 ** @return [AjPMartDataset] MartDataset object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartDataset ajMartDatasetNew(void)
@@ -405,12 +424,14 @@ AjPMartDataset ajMartDatasetNew(void)
 
 
 
-/* @func ajMartDatasetDel *************************************************
+/* @func ajMartDatasetDel *****************************************************
 **
 ** Delete a Mart Dataset object
 **
 ** @param [u] thys [AjPMartDataset*] MartDataset object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartDatasetDel(AjPMartDataset *thys)
@@ -443,11 +464,13 @@ void ajMartDatasetDel(AjPMartDataset *thys)
 
 
 
-/* @func ajMartAttributeNew ****************************************************
+/* @func ajMartAttributeNew ***************************************************
 **
 ** Create object for holding Mart Attributes read from XML (or tab-sep list)
 **
 ** @return [AjPMartAttribute] MartAttribute object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartAttribute ajMartAttributeNew(void)
@@ -467,12 +490,14 @@ AjPMartAttribute ajMartAttributeNew(void)
 
 
 
-/* @func ajMartAttributeDel *************************************************
+/* @func ajMartAttributeDel ***************************************************
 **
 ** Delete a Mart Attribute object
 **
 ** @param [u] thys [AjPMartAttribute*] MartAttribute object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartAttributeDel(AjPMartAttribute *thys)
@@ -508,11 +533,13 @@ void ajMartAttributeDel(AjPMartAttribute *thys)
 
 
 
-/* @func ajMartFilterNew *****************************************************
+/* @func ajMartFilterNew ******************************************************
 **
 ** Create object for holding Mart Filters read from XML (or tab-sep list)
 **
 ** @return [AjPMartFilter] MartFilter object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartFilter ajMartFilterNew(void)
@@ -532,12 +559,14 @@ AjPMartFilter ajMartFilterNew(void)
 
 
 
-/* @func ajMartFilterDel *************************************************
+/* @func ajMartFilterDel ******************************************************
 **
 ** Delete a Mart Filter object
 **
 ** @param [u] thys [AjPMartFilter*] MartFilter object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartFilterDel(AjPMartFilter *thys)
@@ -572,11 +601,13 @@ void ajMartFilterDel(AjPMartFilter *thys)
 
 
 
-/* @func ajMartDsinfoNew *****************************************************
+/* @func ajMartDsinfoNew ******************************************************
 **
 ** Create object for query dataset info
 **
 ** @return [AjPMartdsinfo] Martdsinfo object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartdsinfo ajMartDsinfoNew(void)
@@ -597,12 +628,14 @@ AjPMartdsinfo ajMartDsinfoNew(void)
 
 
 
-/* @func ajMartDsinfoDel *************************************************
+/* @func ajMartDsinfoDel ******************************************************
 **
 ** Delete a Mart Dsinfo object
 **
 ** @param [u] thys [AjPMartdsinfo*] Mart Dsinfo object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartDsinfoDel(AjPMartdsinfo *thys)
@@ -639,12 +672,14 @@ void ajMartDsinfoDel(AjPMartdsinfo *thys)
 
 
 
-/* @func ajMartQinfoNew *****************************************************
+/* @func ajMartQinfoNew *******************************************************
 **
 ** Create object for query info
 **
 ** @param [r] n [ajuint] number of datasets
 ** @return [AjPMartqinfo] Martqinfo object
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartqinfo ajMartQinfoNew(ajuint n)
@@ -677,12 +712,14 @@ AjPMartqinfo ajMartQinfoNew(ajuint n)
 
 
 
-/* @func ajMartQinfoDel *************************************************
+/* @func ajMartQinfoDel *******************************************************
 **
 ** Delete a Mart qinfo object
 **
 ** @param [u] thys [AjPMartqinfo*] Mart Qinfo object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartQinfoDel(AjPMartqinfo *thys)
@@ -719,7 +756,7 @@ void ajMartQinfoDel(AjPMartqinfo *thys)
 
 
 
-/* @funcstatic martRegistryElementstart **************************************
+/* @funcstatic martRegistryElementstart ***************************************
 **
 ** Handler for reading Mart registry XML elements
 **
@@ -727,6 +764,8 @@ void ajMartQinfoDel(AjPMartqinfo *thys)
 ** @param [r] name [const XML_Char*] Close element token name
 ** @param [r] atts [const XML_Char**] Close element token name
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void martRegistryElementstart(void *userData, const XML_Char *name,
@@ -808,13 +847,15 @@ static void martRegistryElementstart(void *userData, const XML_Char *name,
 
 
 
-/* @funcstatic martRegistryElementend **************************************
+/* @funcstatic martRegistryElementend *****************************************
 **
 ** Handler for reading Mart registry XML elements
 **
 ** @param [u] userData [void*] XML structure being loaded
 ** @param [r] name [const XML_Char*] Close element token name
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void martRegistryElementend(void *userData, const XML_Char *name)
@@ -833,18 +874,20 @@ static void martRegistryElementend(void *userData, const XML_Char *name)
 
 
 
-/* @funcstatic martConvertLocToArrays ****************************************
+/* @funcstatic martConvertLocToArrays *****************************************
 **
 ** Convert lists used for reading the XML into more usable arrays
 ** within the same object.
 **
 ** @param [u] loc [AjPMartLoc] registry table
 ** @return [void] 
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void martConvertLocToArrays(AjPMartLoc loc)
 {
-    ajuint n;
+    ajulong n;
 
     if(!loc)
         return;
@@ -877,12 +920,14 @@ static void martConvertLocToArrays(AjPMartLoc loc)
 
 
 
-/* @func ajMartregistryParse **************************************
+/* @func ajMartregistryParse **************************************************
 **
 ** Read a mart registry file
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartregistryParse(AjPSeqin seqin)
@@ -955,12 +1000,14 @@ AjBool ajMartregistryParse(AjPSeqin seqin)
 
 
 
-/* @func ajMartGetRegistry ***************************************************
+/* @func ajMartGetRegistry ****************************************************
 **
 ** Return contents of a mart registry
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object 
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetRegistry(AjPSeqin seqin)
@@ -1035,13 +1082,15 @@ AjBool ajMartGetRegistry(AjPSeqin seqin)
 
 
 
-/* @funcstatic martGetMarttable ****************************************
+/* @funcstatic martGetMarttable ***********************************************
 **
 ** returns a mart table given a mart name
 **
 ** @param [r] seqin [const AjPSeqin] seqin object
 ** @param [r] mart [const AjPStr] mart name
 ** @return [AjPTable] mart table or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjPTable martGetMarttable(const AjPSeqin seqin, const AjPStr mart)
@@ -1087,13 +1136,15 @@ static AjPTable martGetMarttable(const AjPSeqin seqin, const AjPStr mart)
 
 
 
-/* @func ajMartGetDatasets ***************************************************
+/* @func ajMartGetDatasets ****************************************************
 **
 ** Return datasets given a mart registry and a mart name within it
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] mart [const AjPStr] "Sequence" mart name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
@@ -1224,7 +1275,7 @@ AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
 
 
 
-/* @funcstatic martTabToToken ****************************************
+/* @funcstatic martTabToToken *************************************************
 **
 ** Parse tab-separated list. Can't use normal AJAX tokens as
 ** there can be empty fields of the form \t\t
@@ -1233,6 +1284,8 @@ AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
 ** @param [r] s [const AjPStr] original string
 ** @param [r] loc [ajint] current location within s
 ** @return [ajint] updated value for loc or -1 if EOS
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static ajint martTabToToken(AjPStr *token, const AjPStr s, ajint loc)
@@ -1279,12 +1332,14 @@ static ajint martTabToToken(AjPStr *token, const AjPStr s, ajint loc)
 
 
 
-/* @funcstatic martBuffIsXML ****************************************
+/* @funcstatic martBuffIsXML **************************************************
 **
 ** Tests whether a file buffer is XML
 **
 ** @param [u] buff [AjPFilebuff] File buffer
 ** @return [AjBool] True if XML
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martBuffIsXML(AjPFilebuff buff)
@@ -1316,7 +1371,7 @@ static AjBool martBuffIsXML(AjPFilebuff buff)
 
 
 
-/* @funcstatic martTablePush ****************************************
+/* @funcstatic martTablePush **************************************************
 **
 ** Push a key/value pair to a table
 **
@@ -1324,6 +1379,8 @@ static AjBool martBuffIsXML(AjPFilebuff buff)
 ** @param [r] name [const char *] Key
 ** @param [r] token [const AjPStr] Value
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void martTablePush(AjPTable table, const char *name,
@@ -1342,12 +1399,14 @@ static void martTablePush(AjPTable table, const char *name,
 
 
 
-/* @funcstatic martSpacesToHex ****************************************
+/* @funcstatic martSpacesToHex ************************************************
 **
 ** Replace any spaces in a string with %20
 **
 ** @param [u] s [AjPStr*] String
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void martSpacesToHex(AjPStr *s)
@@ -1386,12 +1445,14 @@ static void martSpacesToHex(AjPStr *s)
 
 
 
-/* @funcstatic martParseTabbedDataset ****************************************
+/* @funcstatic martParseTabbedDataset *****************************************
 **
 ** Parse dataset information in the original tab-delimited format
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martParseTabbedDataset(AjPSeqin seqin)
@@ -1404,7 +1465,7 @@ static AjBool martParseTabbedDataset(AjPSeqin seqin)
     AjPMartquery mq   = NULL;
     AjBool error = ajFalse;
     
-    ajuint n  = 0;
+    ajulong n  = 0;
     ajint pos = 0;
 
     mq = ajMartGetMartqueryPtr(seqin);
@@ -1535,12 +1596,14 @@ static AjBool martParseTabbedDataset(AjPSeqin seqin)
 
 
 
-/* @func ajMartdatasetParse **************************************
+/* @func ajMartdatasetParse ***************************************************
 **
 ** Read a mart dataset buffer
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartdatasetParse(AjPSeqin seqin)
@@ -1559,13 +1622,15 @@ AjBool ajMartdatasetParse(AjPSeqin seqin)
 
 
 
-/* @func ajMartGetAttributes ***************************************************
+/* @func ajMartGetAttributes **************************************************
 **
 ** Return attributes given a mart dataset and a mart host/path/port
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetAttributes(AjPSeqin seqin, const AjPStr dataset)
@@ -1666,6 +1731,8 @@ AjBool ajMartGetAttributes(AjPSeqin seqin, const AjPStr dataset)
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetAttributesRetry(AjPSeqin seqin, const AjPStr dataset)
@@ -1736,6 +1803,8 @@ AjBool ajMartGetAttributesRetry(AjPSeqin seqin, const AjPStr dataset)
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @param [r] schema [const AjPStr] Schema name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetAttributesSchema(AjPSeqin seqin, const AjPStr dataset,
@@ -1800,7 +1869,7 @@ AjBool ajMartGetAttributesSchema(AjPSeqin seqin, const AjPStr dataset,
 
 
 
-/* @funcstatic martAttcmp ****************************************************
+/* @funcstatic martAttcmp *****************************************************
 **
 ** Finds the sort order of two mart tabbed strings  cast as void.  
 **
@@ -1812,6 +1881,8 @@ AjBool ajMartGetAttributesSchema(AjPSeqin seqin, const AjPStr dataset,
 ** @return [int] -1 if first string should sort before second, +1 if the
 **         second string should sort first. 0 if they are identical
 **         in length and content.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1851,13 +1922,15 @@ static int martAttcmp(const void* str, const void* str2)
 
 
 
-/* @funcstatic martStrdel *********************************************
+/* @funcstatic martStrdel *****************************************************
 **
 ** Deletes a string when called by ajListSortUnique
 **
 ** @param [r] str [void**] string to delete
 ** @param [r] cl [void*] not used
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1873,12 +1946,14 @@ static void martStrdel(void** str, void* cl)
 
 
 
-/* @funcstatic martParseTabbedAttributes *************************************
+/* @funcstatic martParseTabbedAttributes **************************************
 **
 ** Parse attribute information in the original tab-delimited format
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martParseTabbedAttributes(AjPSeqin seqin)
@@ -1893,7 +1968,7 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
     AjPMartquery mq   = NULL;
     AjBool error = ajFalse;
     
-    ajuint n  = 0;
+    ajulong n  = 0;
     ajint pos = 0;
     
     AjPList ulist = NULL;
@@ -1923,7 +1998,7 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
         ajListPush(ulist,(void *) tline);
     }
 
-    ajListSortUnique(ulist, martAttcmp, martStrdel);
+    ajListSortUnique(ulist, &martAttcmp, &martStrdel);
 
     while(ajListPop(ulist, (void **)&tline))
     {
@@ -2047,12 +2122,14 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
 
 
 
-/* @func ajMartattributesParse **************************************
+/* @func ajMartattributesParse ************************************************
 **
 ** Read a mart attributes buffer
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartattributesParse(AjPSeqin seqin)
@@ -2073,13 +2150,15 @@ AjBool ajMartattributesParse(AjPSeqin seqin)
 
 
 
-/* @func ajMartGetFilters ***************************************************
+/* @func ajMartGetFilters *****************************************************
 **
 ** Return filters given a mart dataset and a mart host/path/port
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetFilters(AjPSeqin seqin, const AjPStr dataset)
@@ -2178,6 +2257,8 @@ AjBool ajMartGetFilters(AjPSeqin seqin, const AjPStr dataset)
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @param [r] schema [const AjPStr] "Sequence" mart schema name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetFiltersSchema(AjPSeqin seqin, const AjPStr dataset,
@@ -2243,7 +2324,7 @@ AjBool ajMartGetFiltersSchema(AjPSeqin seqin, const AjPStr dataset,
 
 
 
-/* @func ajMartGetFiltersRetry ***********************************************
+/* @func ajMartGetFiltersRetry ************************************************
 **
 ** Retry a filters fetch using the main biomart registry site
 ** This routine should only be called after an ajMartGetFilters
@@ -2258,6 +2339,8 @@ AjBool ajMartGetFiltersSchema(AjPSeqin seqin, const AjPStr dataset,
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetFiltersRetry(AjPSeqin seqin, const AjPStr dataset)
@@ -2316,12 +2399,14 @@ AjBool ajMartGetFiltersRetry(AjPSeqin seqin, const AjPStr dataset)
 
 
 
-/* @funcstatic martParseTabbedFilters ****************************************
+/* @funcstatic martParseTabbedFilters *****************************************
 **
 ** Parse filter information in the original tab-delimited format
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martParseTabbedFilters(AjPSeqin seqin)
@@ -2461,7 +2546,7 @@ static AjBool martParseTabbedFilters(AjPSeqin seqin)
     if(error)
         return ajFalse;
     
-    n = ajListToarray(filt->Filter_read, (void ***) &filt->Filters);
+    n = (ajint) ajListToarray(filt->Filter_read, (void ***) &filt->Filters);
     if(n != filt->Nfilters)
     {
         ajWarn("martParseTabbedFilters: mismatching Filter count");
@@ -2475,12 +2560,14 @@ static AjBool martParseTabbedFilters(AjPSeqin seqin)
 
 
 
-/* @func ajMartfiltersParse **************************************
+/* @func ajMartfiltersParse ***************************************************
 **
 ** Parse a mart filters buffer
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartfiltersParse(AjPSeqin seqin)
@@ -2499,13 +2586,15 @@ AjBool ajMartfiltersParse(AjPSeqin seqin)
 
 
 
-/* @func ajMartFilterMatch *****************************************************
+/* @func ajMartFilterMatch ****************************************************
 **
 ** Associate filters with a given attribute table
 **
 ** @param [u] atab [AjPTable] Attribute table
 ** @param [r] filt [const AjPMartFilter] filters 
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
@@ -2569,12 +2658,14 @@ AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
 
 
 
-/* @func ajMartAssociate *****************************************************
+/* @func ajMartAssociate ******************************************************
 **
 ** Associate filters with attributes thgat can use them
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartAssociate(AjPSeqin seqin)
@@ -2619,6 +2710,8 @@ AjBool ajMartAssociate(AjPSeqin seqin)
 ** @param [r] qinfo [const AjPMartqinfo] Mart qinfo object
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartMakeQueryXml(const AjPMartqinfo qinfo, AjPSeqin seqin)
@@ -2679,7 +2772,7 @@ void ajMartMakeQueryXml(const AjPMartqinfo qinfo, AjPSeqin seqin)
         ajFmtPrintAppS(&mq->Query,">");
 
         lst = qinfo->Dsets[i]->Filters;
-        len = ajListGetLength(lst);
+        len = (ajuint) ajListGetLength(lst);
         for(j = 0; j < len; ++j)
         {
             ajListPop(lst,(void **)&tstr);
@@ -2688,7 +2781,7 @@ void ajMartMakeQueryXml(const AjPMartqinfo qinfo, AjPSeqin seqin)
         }
     
         lst = qinfo->Dsets[i]->Attributes;
-        len = ajListGetLength(lst);
+        len = (ajuint) ajListGetLength(lst);
         for(j = 0; j < len; ++j)
         {
             ajListPop(lst,(void **)&tstr);
@@ -2707,12 +2800,14 @@ void ajMartMakeQueryXml(const AjPMartqinfo qinfo, AjPSeqin seqin)
 
 
 
-/* @funcstatic martHttpEncode ************************************************
+/* @funcstatic martHttpEncode *************************************************
 **
 ** Replaces unsafe characters with hex codes for http GET
 **
 ** @param [u] str [AjPStr *] string to encode
 ** @return [AjBool] true if length changed
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martHttpEncode(AjPStr *str)
@@ -2760,12 +2855,14 @@ static AjBool martHttpEncode(AjPStr *str)
 
 
 
-/* @func ajMartSendQuery ***************************************************
+/* @func ajMartSendQuery ******************************************************
 **
 ** Send a query, given biomart query xml, to a mart server host/path/port
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSendQuery(AjPSeqin seqin)
@@ -2833,12 +2930,14 @@ AjBool ajMartSendQuery(AjPSeqin seqin)
 
 
 
-/* @func ajMartGetReghost ****************************************************
+/* @func ajMartGetReghost *****************************************************
 **
 ** Return the Registry host name
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [const AjPStr] Registry host name or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 const AjPStr ajMartGetReghost(const AjPSeqin seqin)
@@ -2856,12 +2955,14 @@ const AjPStr ajMartGetReghost(const AjPSeqin seqin)
 
 
 
-/* @func ajMartGetRegpath ****************************************************
+/* @func ajMartGetRegpath *****************************************************
 **
 ** Return the Registry path name
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [const AjPStr] Registry host name or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 const AjPStr ajMartGetRegpath(const AjPSeqin seqin)
@@ -2879,12 +2980,14 @@ const AjPStr ajMartGetRegpath(const AjPSeqin seqin)
 
 
 
-/* @func ajMartGetRegport ****************************************************
+/* @func ajMartGetRegport *****************************************************
 **
 ** Return the Registry port
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [ajuint] Registry port or 0
+**
+** @release 6.3.0
 ******************************************************************************/
 
 ajuint ajMartGetRegport(const AjPSeqin seqin)
@@ -2908,6 +3011,8 @@ ajuint ajMartGetRegport(const AjPSeqin seqin)
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [const AjPStr] Mart host name or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 const AjPStr ajMartGetMarthost(const AjPSeqin seqin)
@@ -2931,6 +3036,8 @@ const AjPStr ajMartGetMarthost(const AjPSeqin seqin)
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [const AjPStr] Mart host name or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 const AjPStr ajMartGetMartpath(const AjPSeqin seqin)
@@ -2954,6 +3061,8 @@ const AjPStr ajMartGetMartpath(const AjPSeqin seqin)
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [ajuint] Mart port or 0
+**
+** @release 6.3.0
 ******************************************************************************/
 
 ajuint ajMartGetMartport(const AjPSeqin seqin)
@@ -2978,6 +3087,8 @@ ajuint ajMartGetMartport(const AjPSeqin seqin)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] reghost [const char *] Registry name
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetReghostC(AjPSeqin seqin, const char *reghost)
@@ -3004,6 +3115,8 @@ AjBool ajMartSetReghostC(AjPSeqin seqin, const char *reghost)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] regpath [const char *] Registry path
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetRegpathC(AjPSeqin seqin, const char *regpath)
@@ -3023,13 +3136,15 @@ AjBool ajMartSetRegpathC(AjPSeqin seqin, const char *regpath)
 
 
 
-/* @func ajMartSetReghostS ***************************************************
+/* @func ajMartSetReghostS ****************************************************
 **
 ** Set the Registry host name
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] reghost [const AjPStr] Registry name
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetReghostS(AjPSeqin seqin, const AjPStr reghost)
@@ -3050,6 +3165,8 @@ AjBool ajMartSetReghostS(AjPSeqin seqin, const AjPStr reghost)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] regpath [const AjPStr] Registry path
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetRegpathS(AjPSeqin seqin, const AjPStr regpath)
@@ -3063,13 +3180,15 @@ AjBool ajMartSetRegpathS(AjPSeqin seqin, const AjPStr regpath)
 
 
 
-/* @func ajMartSetRegport ****************************************************
+/* @func ajMartSetRegport *****************************************************
 **
 ** Return the Registry port
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] regport [ajuint] Registry port
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetRegport(AjPSeqin seqin, ajuint regport)
@@ -3089,13 +3208,15 @@ AjBool ajMartSetRegport(AjPSeqin seqin, ajuint regport)
 
 
 
-/* @func ajMartSetMarthostC ****************************************************
+/* @func ajMartSetMarthostC ***************************************************
 **
 ** Set the Mart host name
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] marthost [const char *] Mart name
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetMarthostC(AjPSeqin seqin, const char *marthost)
@@ -3122,6 +3243,8 @@ AjBool ajMartSetMarthostC(AjPSeqin seqin, const char *marthost)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] martpath [const char *] Mart path
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetMartpathC(AjPSeqin seqin, const char *martpath)
@@ -3148,6 +3271,8 @@ AjBool ajMartSetMartpathC(AjPSeqin seqin, const char *martpath)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] marthost [const AjPStr] Mart name
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetMarthostS(AjPSeqin seqin, const AjPStr marthost)
@@ -3168,6 +3293,8 @@ AjBool ajMartSetMarthostS(AjPSeqin seqin, const AjPStr marthost)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] martpath [const AjPStr] Mart path
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetMartpathS(AjPSeqin seqin, const AjPStr martpath)
@@ -3188,6 +3315,8 @@ AjBool ajMartSetMartpathS(AjPSeqin seqin, const AjPStr martpath)
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [r] martport [ajuint] Mart port
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartSetMartport(AjPSeqin seqin, ajuint martport)
@@ -3213,6 +3342,8 @@ AjBool ajMartSetMartport(AjPSeqin seqin, ajuint martport)
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartFixRegistry(AjPSeqin seqin)
@@ -3232,12 +3363,14 @@ void ajMartFixRegistry(AjPSeqin seqin)
 
 
 
-/* @func ajMartFixMart ****************************************************
+/* @func ajMartFixMart ********************************************************
 **
 ** Try to fill in missing mart fields
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @return [void] True if valid
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartFixMart(AjPSeqin seqin)
@@ -3264,6 +3397,8 @@ void ajMartFixMart(AjPSeqin seqin)
 ** @param [r] name [const AjPStr] name
 ** @param [r] atts [const AjPMartAttribute] Attribute tables
 ** @return [AjBool] True if match found
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martMatchAttribute(const AjPStr name, const AjPMartAttribute atts)
@@ -3292,13 +3427,15 @@ static AjBool martMatchAttribute(const AjPStr name, const AjPMartAttribute atts)
 
 
 
-/* @funcstatic martMatchFilter *********************************************
+/* @funcstatic martMatchFilter ************************************************
 **
 ** Test whether a given name is found in the filters tables
 **
 ** @param [r] name [const AjPStr] name
 ** @param [r] filts [const AjPMartFilter] Filter tables
 ** @return [AjBool] True if match found
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool martMatchFilter(const AjPStr name, const AjPMartFilter filts)
@@ -3327,13 +3464,15 @@ static AjBool martMatchFilter(const AjPStr name, const AjPMartFilter filts)
 
 
 
-/* @func ajMartAttachMartquery ***********************************************
+/* @func ajMartAttachMartquery ************************************************
 **
 ** Add a mart query object to a seqin object
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [u] mq [AjPMartquery] Martquery object
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartAttachMartquery(AjPSeqin seqin, AjPMartquery mq)
@@ -3356,12 +3495,14 @@ void ajMartAttachMartquery(AjPSeqin seqin, AjPMartquery mq)
 
 
 
-/* @func ajMartGetMartqueryPtr ***********************************************
+/* @func ajMartGetMartqueryPtr ************************************************
 **
 ** Return a seqin Query pointer
 **
 ** @param [r] seqin [const AjPSeqin] Seqin object
 ** @return [AjPMartquery] Martquery
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPMartquery ajMartGetMartqueryPtr(const AjPSeqin seqin)
@@ -3385,7 +3526,7 @@ AjPMartquery ajMartGetMartqueryPtr(const AjPSeqin seqin)
 
 
 
-/* @func ajStrtokQuotR *******************************************************
+/* @func ajStrtokQuotR ********************************************************
 **
 ** Reentrant strtok that disallows tokenisation at delimiter
 ** characters if they are within quotation chracters
@@ -3401,6 +3542,8 @@ AjPMartquery ajMartGetMartqueryPtr(const AjPSeqin seqin)
 ** @param [r] ptrptr [const char**] Saved position in srcstr
 ** @param [w] buf [AjPStr*] Results buffer (the token)
 ** @return [char*] Pointer to start of token (in buf) or NULL
+**
+** @release 6.3.0
 ******************************************************************************/
 
 char* ajStrtokQuotR(const char *srcstr, const char *delimstr,
@@ -3475,7 +3618,7 @@ char* ajStrtokQuotR(const char *srcstr, const char *delimstr,
 
 
 
-/* @func ajMartParseParameters ***********************************************
+/* @func ajMartParseParameters ************************************************
 **
 ** Parses attribute and filter strings and load a given Qinfo object
 ** with them
@@ -3485,6 +3628,8 @@ char* ajStrtokQuotR(const char *srcstr, const char *delimstr,
 ** @param [r] filts [const AjPStr] Filters
 ** @param [r] idx [ajuint] dataset index
 ** @return [AjBool] False on parsing or loading error
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartParseParameters(AjPMartqinfo qinfo, const AjPStr atts,
@@ -3643,6 +3788,8 @@ AjBool ajMartParseParameters(AjPMartqinfo qinfo, const AjPStr atts,
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] schema [const char*] Virtual schema
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQuerySchemaC(AjPMartqinfo qinfo, const char *schema)
@@ -3658,13 +3805,15 @@ void ajMartSetQuerySchemaC(AjPMartqinfo qinfo, const char *schema)
 
 
 
-/* @func ajMartSetQueryVersionC ************************************************
+/* @func ajMartSetQueryVersionC ***********************************************
 **
 ** Set the Qinfo Software Version field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] version [const char*] Version
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryVersionC(AjPMartqinfo qinfo, const char *version)
@@ -3680,13 +3829,15 @@ void ajMartSetQueryVersionC(AjPMartqinfo qinfo, const char *version)
 
 
 
-/* @func ajMartSetQueryFormatC ***********************************************
+/* @func ajMartSetQueryFormatC ************************************************
 **
 ** Set the Qinfo Format field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] format [const char*] Format
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryFormatC(AjPMartqinfo qinfo, const char *format)
@@ -3702,13 +3853,15 @@ void ajMartSetQueryFormatC(AjPMartqinfo qinfo, const char *format)
 
 
 
-/* @func ajMartSetQueryCount ***********************************************
+/* @func ajMartSetQueryCount **************************************************
 **
 ** Set the Qinfo Count (unique ID count only) field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] count [AjBool] count
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryCount(AjPMartqinfo qinfo, AjBool count)
@@ -3724,13 +3877,15 @@ void ajMartSetQueryCount(AjPMartqinfo qinfo, AjBool count)
 
 
 
-/* @func ajMartSetQueryHeader ***********************************************
+/* @func ajMartSetQueryHeader *************************************************
 **
 ** Set the Qinfo Header (column title) field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] header [AjBool] Header
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryHeader(AjPMartqinfo qinfo, AjBool header)
@@ -3746,13 +3901,15 @@ void ajMartSetQueryHeader(AjPMartqinfo qinfo, AjBool header)
 
 
 
-/* @func ajMartSetQueryUnique ***********************************************
+/* @func ajMartSetQueryUnique *************************************************
 **
 ** Set the Qinfo Unique rows field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] unique [AjBool] Unique
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryUnique(AjPMartqinfo qinfo, AjBool unique)
@@ -3768,13 +3925,15 @@ void ajMartSetQueryUnique(AjPMartqinfo qinfo, AjBool unique)
 
 
 
-/* @func ajMartSetQueryStamp ***********************************************
+/* @func ajMartSetQueryStamp **************************************************
 **
 ** Set the Qinfo Completion Stamp ([success]) field
 **
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] stamp [AjBool] Stamp
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryStamp(AjPMartqinfo qinfo, AjBool stamp)
@@ -3790,7 +3949,7 @@ void ajMartSetQueryStamp(AjPMartqinfo qinfo, AjBool stamp)
 
 
 
-/* @func ajMartSetQueryVerify ***********************************************
+/* @func ajMartSetQueryVerify *************************************************
 **
 ** Set the Qinfo verification field to test that given atts & filts
 ** exist in the dataset
@@ -3798,6 +3957,8 @@ void ajMartSetQueryStamp(AjPMartqinfo qinfo, AjBool stamp)
 ** @param [u] qinfo [AjPMartqinfo] Seqin object
 ** @param [r] verify [AjBool] verify flag
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryVerify(AjPMartqinfo qinfo, AjBool verify)
@@ -3821,6 +3982,8 @@ void ajMartSetQueryVerify(AjPMartqinfo qinfo, AjBool verify)
 ** @param [r] name [const AjPStr] Name
 ** @param [r] idx [ajuint] Dataset number (0->n-1)
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryDatasetName(AjPMartqinfo qinfo, const AjPStr name,
@@ -3851,6 +4014,8 @@ void ajMartSetQueryDatasetName(AjPMartqinfo qinfo, const AjPStr name,
 ** @param [r] iface [const char*] Interface
 ** @param [r] idx [ajuint] Dataset number (0->n-1)
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 void ajMartSetQueryDatasetInterfaceC(AjPMartqinfo qinfo, const char *iface,
@@ -3873,13 +4038,15 @@ void ajMartSetQueryDatasetInterfaceC(AjPMartqinfo qinfo, const char *iface,
 
 
 
-/* @func ajMartCheckQinfo ****************************************************
+/* @func ajMartCheckQinfo *****************************************************
 **
 ** Try to fill in missing fields and check user attributes/filters
 **
 ** @param [u] seqin [AjPSeqin] Seqin object
 ** @param [u] qinfo [AjPMartqinfo] Mart qinfo object
 ** @return [AjBool] True if valid
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartCheckQinfo(AjPSeqin seqin, AjPMartqinfo qinfo)
@@ -3941,7 +4108,7 @@ AjBool ajMartCheckQinfo(AjPSeqin seqin, AjPMartqinfo qinfo)
 
         att = mq->Atts;
 
-        n = ajListGetLength(dsinfo->Attributes);
+        n = (ajuint) ajListGetLength(dsinfo->Attributes);
 
         for(j=0; j < n; ++j)
         {
@@ -3993,7 +4160,7 @@ AjBool ajMartCheckQinfo(AjPSeqin seqin, AjPMartqinfo qinfo)
 
         filt = mq->Filters;
         
-        n = ajListGetLength(dsinfo->Filters);
+        n = (ajuint) ajListGetLength(dsinfo->Filters);
 
         for(j=0; j < n; ++j)
         {
@@ -4025,13 +4192,15 @@ AjBool ajMartCheckQinfo(AjPSeqin seqin, AjPMartqinfo qinfo)
 
 
 
-/* @func ajMartGetConfiguration **********************************************
+/* @func ajMartGetConfiguration ***********************************************
 **
 ** Return config info given a mart dataset and a mart host/path/port
 **
 ** @param [u] seqin [AjPSeqin] "Sequence" input object
 ** @param [r] dataset [const AjPStr] "Sequence" mart dataset name
 ** @return [AjBool] true on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartGetConfiguration(AjPSeqin seqin, const AjPStr dataset)
@@ -4122,12 +4291,14 @@ AjBool ajMartGetConfiguration(AjPSeqin seqin, const AjPStr dataset)
 
 
 
-/* @func ajMartconfigurationParse **************************************
+/* @func ajMartconfigurationParse *********************************************
 **
 ** Parse a mart configuration buffer
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding mart info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartconfigurationParse(AjPSeqin seqin)
@@ -4153,13 +4324,15 @@ AjBool ajMartconfigurationParse(AjPSeqin seqin)
 
 
 
-/* @funcstatic martAttributePageCompar ***************************************
+/* @funcstatic martAttributePageCompar ****************************************
 **
 ** Sort function based on attribute page names
 **
 ** @param [r] a [const void*] First table
 ** @param [r] b [const void*] Second table
 ** @return [int] comparison of page strings
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static int martAttributePageCompar(const void *a, const void *b)
@@ -4183,12 +4356,14 @@ static int martAttributePageCompar(const void *a, const void *b)
 
 
 
-/* @func ajMartattributesPageSort *****************************************
+/* @func ajMartattributesPageSort *********************************************
 **
 ** Sort attributes based on page name
 **
 ** @param [u] seqin [AjPSeqin] Seqin object holding attribute info
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartattributesPageSort(AjPSeqin seqin)
@@ -4212,13 +4387,15 @@ AjBool ajMartattributesPageSort(AjPSeqin seqin)
 
 
 
-/* @func ajMartNameIsNucC ****************************************************
+/* @func ajMartNameIsNucC *****************************************************
 **
 ** Test whether name matches any of the set of known nucleic acid
 ** biomart terms
 **
 ** @param [r] name [const char *] Name
 ** @return [AjBool] True if nucleic acid name match
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartNameIsNucC(const char *name)
@@ -4242,13 +4419,15 @@ AjBool ajMartNameIsNucC(const char *name)
 
 
 
-/* @func ajMartNameIsProtC ***************************************************
+/* @func ajMartNameIsProtC ****************************************************
 **
 ** Test whether name matches any of the set of known protein
 ** biomart terms
 **
 ** @param [r] name [const char *] Name
 ** @return [AjBool] True if nucleic acid name match
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartNameIsProtC(const char *name)
@@ -4272,13 +4451,15 @@ AjBool ajMartNameIsProtC(const char *name)
 
 
 
-/* @func ajMartTableNameIsNuc ************************************************
+/* @func ajMartTableNameIsNuc *************************************************
 **
 ** Test whether table 'name' value  matches any of the set of known nucleic
 ** acid biomart terms
 **
 ** @param [r] t [const AjPTable] Table
 ** @return [AjBool] True if nucleic acid name match
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartTableNameIsNuc(const AjPTable t)
@@ -4302,13 +4483,15 @@ AjBool ajMartTableNameIsNuc(const AjPTable t)
 
 
 
-/* @func ajMartTableNameIsProt ***********************************************
+/* @func ajMartTableNameIsProt ************************************************
 **
 ** Test whether table 'name' value  matches any of the set of known protein
 ** biomart terms
 **
 ** @param [r] t [const AjPTable] Table
 ** @return [AjBool] True if protein name match
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajMartTableNameIsProt(const AjPTable t)
@@ -4343,6 +4526,8 @@ AjBool ajMartTableNameIsProt(const AjPTable t)
 ** @param [u] qinfo [AjPMartqinfo] Mart qinfo object
 ** @return [AjPStr*] Array of attribute names terminated by a NULL entry.
 **                   or NULL if mapping cannot be done
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
@@ -4443,12 +4628,14 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
 
 
 
-/* @funcstatic martVerifyOrCreateCacheDir ************************************
+/* @funcstatic martVerifyOrCreateCacheDir *************************************
 **
 ** Check whether cache directory exists, try to create it if not.
 **
 ** @param [u]  dir [AjPStr] directory
 ** @return [AjBool] true on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool martVerifyOrCreateCacheDir(AjPStr dir)
@@ -4463,7 +4650,7 @@ static AjBool martVerifyOrCreateCacheDir(AjPStr dir)
 
 
 
-/* @funcstatic martEncodeHname ***********************************************
+/* @funcstatic martEncodeHname ************************************************
 **
 ** Encode host/path/port into a suitable name for a directory
 **
@@ -4472,6 +4659,8 @@ static AjBool martVerifyOrCreateCacheDir(AjPStr dir)
 ** @param [r] path [const AjPStr] Path
 ** @param [r] port [ajuint] Port
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void martEncodeHname(AjPStr *str, const AjPStr host, const AjPStr path,
@@ -4501,7 +4690,7 @@ static void martEncodeHname(AjPStr *str, const AjPStr host, const AjPStr path,
 
 
 
-/* @func ajMartDecodeHname ***************************************************
+/* @func ajMartDecodeHname ****************************************************
 **
 ** Decode directory name into host/path/port
 **
@@ -4510,6 +4699,8 @@ static void martEncodeHname(AjPStr *str, const AjPStr host, const AjPStr path,
 ** @param [w] path [AjPStr*] Path
 ** @param [w] port [ajuint*] Port
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
@@ -4565,6 +4756,8 @@ void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
 ** @param [u] buff [AjPFilebuff] File buffer
 ** @param [r] type [ajint] Type of information held in the file buffer
 ** @return [AjBool] true on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool martWriteCacheEntry(AjPMartquery mq, AjPFilebuff buff, ajint type)
@@ -4953,7 +5146,7 @@ static AjBool martWriteCacheEntry(AjPMartquery mq, AjPFilebuff buff, ajint type)
 
 
 
-/* @funcstatic martReadCacheEntry ********************************************
+/* @funcstatic martReadCacheEntry *********************************************
 **
 ** Read cache file into file buffer
 **
@@ -4961,6 +5154,8 @@ static AjBool martWriteCacheEntry(AjPMartquery mq, AjPFilebuff buff, ajint type)
 ** @param [u] buff [AjPFilebuff*] File buffer
 ** @param [r] type [ajint] Type of information held in the file buffer
 ** @return [AjBool] true on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool martReadCacheEntry(AjPMartquery mq, AjPFilebuff *buff,

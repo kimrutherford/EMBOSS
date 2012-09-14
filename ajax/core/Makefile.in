@@ -35,23 +35,29 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ESYSTEMLIBS_FALSE@am__append_1 = -I$(top_srcdir)/ajax/expat \
+@ESYSTEMLIBS_FALSE@	-I$(top_srcdir)/ajax/zlib
+@ISCYGWIN_TRUE@am__append_2 = -no-undefined -Wl,--add-stdcall-alias \
+@ISCYGWIN_TRUE@	-Wl,--export-all-symbols \
+@ISCYGWIN_TRUE@	-Wl,--enable-auto-import -L../../plplot \
+@ISCYGWIN_TRUE@	-L../expat -L../pcre -L../zlib -leplplot \
+@ISCYGWIN_TRUE@	-leexpat -lepcre -lezlib
 subdir = ajax/core
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -79,26 +85,48 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libajax_la_LIBADD =
-am__objects_1 = ajalign.lo ajarr.lo ajassem.lo ajassemread.lo \
-	ajassemwrite.lo ajassert.lo ajbase.lo ajcall.lo ajcod.lo \
-	ajdan.lo ajdmx.lo ajdom.lo ajdomain.lo ajexcept.lo ajfeat.lo \
-	ajfeatread.lo ajfeatwrite.lo ajfile.lo ajfiledata.lo \
-	ajfileio.lo ajfmt.lo ajhttp.lo ajindex.lo ajjava.lo ajlist.lo \
-	ajmath.lo ajmatrices.lo ajmem.lo ajmess.lo ajnam.lo ajnexus.lo \
-	ajobo.lo ajoboread.lo ajobowrite.lo ajpat.lo ajpdb.lo \
-	ajpdbio.lo ajphylo.lo ajquery.lo ajrange.lo ajreg.lo \
-	ajreport.lo ajresource.lo ajresourceread.lo ajresourcewrite.lo \
-	ajseq.lo ajseqabi.lo ajseqbam.lo ajseqread.lo ajseqtype.lo \
-	ajseqwrite.lo ajsort.lo ajsql.lo ajstr.lo ajsys.lo ajtable.lo \
-	ajtax.lo ajtaxread.lo ajtaxwrite.lo ajtext.lo ajtextread.lo \
-	ajtextwrite.lo ajtime.lo ajtranslate.lo ajtree.lo ajurl.lo \
-	ajurlread.lo ajurlwrite.lo ajutil.lo ajvar.lo ajvarread.lo \
-	ajvarwrite.lo ajvector.lo
-am_libajax_la_OBJECTS = $(am__objects_1)
+am_libajax_la_OBJECTS = libajax_la-ajalign.lo libajax_la-ajarr.lo \
+	libajax_la-ajassem.lo libajax_la-ajassemread.lo \
+	libajax_la-ajassemwrite.lo libajax_la-ajassert.lo \
+	libajax_la-ajbamindex.lo libajax_la-ajbase.lo \
+	libajax_la-ajcall.lo libajax_la-ajcigar.lo libajax_la-ajcod.lo \
+	libajax_la-ajdan.lo libajax_la-ajdmx.lo libajax_la-ajdom.lo \
+	libajax_la-ajdomain.lo libajax_la-ajexcept.lo \
+	libajax_la-ajfeat.lo libajax_la-ajfeatread.lo \
+	libajax_la-ajfeatwrite.lo libajax_la-ajfile.lo \
+	libajax_la-ajfiledata.lo libajax_la-ajfileio.lo \
+	libajax_la-ajfmt.lo libajax_la-ajftp.lo libajax_la-ajhttp.lo \
+	libajax_la-ajindex.lo libajax_la-ajjava.lo \
+	libajax_la-ajlist.lo libajax_la-ajmath.lo \
+	libajax_la-ajmatrices.lo libajax_la-ajmem.lo \
+	libajax_la-ajmess.lo libajax_la-ajnam.lo libajax_la-ajnexus.lo \
+	libajax_la-ajobo.lo libajax_la-ajoboread.lo \
+	libajax_la-ajobowrite.lo libajax_la-ajpat.lo \
+	libajax_la-ajpdb.lo libajax_la-ajpdbio.lo \
+	libajax_la-ajphylo.lo libajax_la-ajquery.lo \
+	libajax_la-ajrange.lo libajax_la-ajreg.lo \
+	libajax_la-ajreport.lo libajax_la-ajrefseq.lo \
+	libajax_la-ajrefseqread.lo libajax_la-ajrefseqwrite.lo \
+	libajax_la-ajresource.lo libajax_la-ajresourceread.lo \
+	libajax_la-ajresourcewrite.lo libajax_la-ajseq.lo \
+	libajax_la-ajseqabi.lo libajax_la-ajseqbam.lo \
+	libajax_la-ajseqread.lo libajax_la-ajseqtype.lo \
+	libajax_la-ajseqwrite.lo libajax_la-ajsort.lo \
+	libajax_la-ajsql.lo libajax_la-ajstr.lo libajax_la-ajsys.lo \
+	libajax_la-ajtable.lo libajax_la-ajtagval.lo \
+	libajax_la-ajtax.lo libajax_la-ajtaxread.lo \
+	libajax_la-ajtaxwrite.lo libajax_la-ajtext.lo \
+	libajax_la-ajtextread.lo libajax_la-ajtextwrite.lo \
+	libajax_la-ajtime.lo libajax_la-ajtranslate.lo \
+	libajax_la-ajtree.lo libajax_la-ajurl.lo \
+	libajax_la-ajurlread.lo libajax_la-ajurlwrite.lo \
+	libajax_la-ajutil.lo libajax_la-ajvar.lo \
+	libajax_la-ajvarbcf.lo libajax_la-ajvarread.lo \
+	libajax_la-ajvarwrite.lo libajax_la-ajvector.lo
 libajax_la_OBJECTS = $(am_libajax_la_OBJECTS)
 libajax_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libajax_la_LDFLAGS) $(LDFLAGS) -o $@
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libajax_la_CFLAGS) \
+	$(CFLAGS) $(libajax_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -122,6 +150,7 @@ ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AJAX_SYSTEM = @AJAX_SYSTEM@
 AMTAR = @AMTAR@
+ANT = @ANT@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -151,9 +180,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
-EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
-ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -164,9 +191,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISAIXIA64 = @ISAIXIA64@
-ISCYGWIN = @ISCYGWIN@
-JAVA_OK = @JAVA_OK@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVA_CFLAGS = @JAVA_CFLAGS@
+JAVA_CPPFLAGS = @JAVA_CPPFLAGS@
+JAVA_LDFLAGS = @JAVA_LDFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -183,7 +213,6 @@ MYSQL_CONFIG = @MYSQL_CONFIG@
 MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
-NEEDAJAX = @NEEDAJAX@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -204,12 +233,12 @@ PCRE_MAJOR = @PCRE_MAJOR@
 PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
-PG_CONFIG = @PG_CONFIG@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CONFIG = @POSTGRESQL_CONFIG@
 POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
@@ -239,7 +268,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ant_in_path = @ant_in_path@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -252,7 +280,6 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-havejavac = @havejavac@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -262,7 +289,6 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-javac_in_path = @javac_in_path@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -283,79 +309,194 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libajax.la
-AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
-@ISCYGWIN_TRUE@CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias \
-@ISCYGWIN_TRUE@-Wl,--export-all-symbols -Wl,--enable-auto-import
-
-@ISCYGWIN_TRUE@CYGWIN_LDAJAX = -L../../plplot -L../expat -L../pcre -L../zlib \
-@ISCYGWIN_TRUE@-leplplot -leexpat -lepcre -lezlib
-
-@ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
-AM_CPPFLAGS = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) \
--DAJAX_SYSTEM="$(AJAX_SYSTEM)" -DPREFIX=\"$(prefix)\" \
-$(MYSQL_CPPFLAGS) $(POSTGRESQL_CPPFLAGS) \
--I. -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre $(EXTRA_INCLUDES)
-
-AJAXSRC = ajalign.c ajarr.c \
-ajassem.c ajassemread.c ajassemwrite.c \
+libajax_la_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS) $(JAVA_CFLAGS)
+libajax_la_CPPFLAGS = -I$(top_srcdir)/ajax/pcre $(am__append_1) \
+	-I$(top_srcdir)/plplot $(JAVA_CPPFLAGS) $(MYSQL_CPPFLAGS) \
+	$(POSTGRESQL_CPPFLAGS) -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) \
+	-DAJAX_SYSTEM="$(AJAX_SYSTEM)" -DPREFIX=\"$(prefix)\"
+libajax_la_LDFLAGS = -version-info 6:4:0 $(JAVA_LDFLAGS) \
+	$(MYSQL_LDFLAGS) $(POSTGRESQL_LDFLAGS) $(am__append_2)
+libajax_la_SOURCES = \
+ajalign.c \
+ajarr.c \
+ajassem.c \
+ajassemread.c \
+ajassemwrite.c \
 ajassert.c \
-ajbase.c ajcall.c ajcod.c \
-ajdan.c ajdmx.c ajdom.c ajdomain.c \
+ajbamindex.c \
+ajbase.c \
+ajcall.c \
+ajcigar.c \
+ajcod.c \
+ajdan.c \
+ajdmx.c \
+ajdom.c \
+ajdomain.c \
 ajexcept.c \
-ajfeat.c ajfeatread.c ajfeatwrite.c \
-ajfile.c ajfiledata.c ajfileio.c ajfmt.c \
-ajhttp.c ajindex.c ajjava.c ajlist.c \
-ajmath.c ajmatrices.c ajmem.c ajmess.c \
-ajnam.c ajnexus.c \
-ajobo.c ajoboread.c ajobowrite.c \
-ajpat.c ajpdb.c ajpdbio.c ajphylo.c \
+ajfeat.c \
+ajfeatread.c \
+ajfeatwrite.c \
+ajfile.c \
+ajfiledata.c \
+ajfileio.c \
+ajfmt.c \
+ajftp.c \
+ajhttp.c \
+ajindex.c \
+ajjava.c \
+ajlist.c \
+ajmath.c \
+ajmatrices.c \
+ajmem.c \
+ajmess.c \
+ajnam.c \
+ajnexus.c \
+ajobo.c \
+ajoboread.c \
+ajobowrite.c \
+ajpat.c \
+ajpdb.c \
+ajpdbio.c \
+ajphylo.c \
 ajquery.c \
-ajrange.c ajreg.c ajreport.c \
-ajresource.c ajresourceread.c ajresourcewrite.c \
-ajseq.c ajseqabi.c ajseqbam.c ajseqread.c ajseqtype.c ajseqwrite.c \
-ajsort.c ajsql.c ajstr.c ajsys.c \
+ajrange.c \
+ajreg.c \
+ajreport.c \
+ajrefseq.c \
+ajrefseqread.c \
+ajrefseqwrite.c \
+ajresource.c \
+ajresourceread.c \
+ajresourcewrite.c \
+ajseq.c \
+ajseqabi.c \
+ajseqbam.c \
+ajseqread.c \
+ajseqtype.c \
+ajseqwrite.c \
+ajsort.c \
+ajsql.c \
+ajstr.c \
+ajsys.c \
 ajtable.c \
-ajtax.c ajtaxread.c ajtaxwrite.c \
-ajtext.c ajtextread.c ajtextwrite.c \
-ajtime.c ajtranslate.c ajtree.c \
-ajurl.c ajurlread.c ajurlwrite.c \
+ajtagval.c \
+ajtax.c \
+ajtaxread.c \
+ajtaxwrite.c \
+ajtext.c \
+ajtextread.c \
+ajtextwrite.c \
+ajtime.c \
+ajtranslate.c \
+ajtree.c \
+ajurl.c \
+ajurlread.c \
+ajurlwrite.c \
 ajutil.c \
-ajvar.c ajvarread.c ajvarwrite.c \
+ajvar.c \
+ajvarbcf.c \
+ajvarread.c \
+ajvarwrite.c \
 ajvector.c
 
-include_HEADERS = ajax.h ajarch.h ajdefine.h \
+include_HEADERS = \
+ajax.h \
+ajarch.h \
+ajdefine.h \
 ajalign.h \
 ajarr.h \
-ajassem.h ajassemdata.h ajassemread.h ajassemwrite.h \
+ajassem.h \
+ajassemdata.h \
+ajassemread.h \
+ajassemwrite.h \
 ajassert.h \
-ajbase.h ajcall.h ajcod.h \
-ajdan.h ajdmx.h ajdom.h ajdomain.h ajexcept.h \
-ajfeat.h ajfeatdata.h ajfeatread.h ajfeatwrite.h \
-ajfile.h ajfiledata.h ajfileio.h ajfmt.h \
-ajhttp.h ajindex.h ajjava.h ajlist.h \
-ajmath.h ajmatrices.h ajmem.h ajmess.h \
-ajnam.h ajnexus.h \
-ajobo.h ajobodata.h ajoboread.h ajobowrite.h \
-ajpat.h ajpdb.h ajpdbio.h ajphylo.h \
-ajquery.h ajquerydata.h \
-ajrange.h ajreg.h ajreport.h \
-ajresource.h ajresourcedata.h ajresourceread.h ajresourcewrite.h \
-ajseq.h ajseqabi.h ajseqbam.h ajseqdata.h ajseqread.h ajseqtype.h ajseqwrite.h \
-ajsort.h ajsql.h ajstr.h ajsys.h \
+ajbamindex.h \
+ajbase.h \
+ajcall.h \
+ajcigar.h \
+ajcod.h \
+ajdan.h \
+ajdmx.h \
+ajdom.h \
+ajdomain.h \
+ajexcept.h \
+ajfeat.h \
+ajfeatdata.h \
+ajfeatread.h \
+ajfeatwrite.h \
+ajfile.h \
+ajfiledata.h \
+ajfileio.h \
+ajfmt.h \
+ajftp.h \
+ajhttp.h \
+ajindex.h \
+ajjava.h \
+ajlib.h \
+ajlist.h \
+ajmath.h \
+ajmatrices.h \
+ajmem.h \
+ajmess.h \
+ajnam.h \
+ajnexus.h \
+ajobo.h \
+ajobodata.h \
+ajoboread.h \
+ajobowrite.h \
+ajpat.h \
+ajpdb.h \
+ajpdbio.h \
+ajphylo.h \
+ajquery.h \
+ajquerydata.h \
+ajrange.h \
+ajreg.h \
+ajreport.h \
+ajrefseq.h \
+ajrefseqdata.h \
+ajrefseqread.h \
+ajrefseqwrite.h \
+ajresource.h \
+ajresourcedata.h \
+ajresourceread.h \
+ajresourcewrite.h \
+ajseq.h \
+ajseqabi.h \
+ajseqbam.h \
+ajseqdata.h \
+ajseqread.h \
+ajseqtype.h \
+ajseqwrite.h \
+ajsort.h \
+ajsql.h \
+ajstr.h \
+ajsys.h \
 ajtable.h \
-ajtax.h ajtaxdata.h ajtaxread.h ajtaxwrite.h \
-ajtext.h ajtextdata.h ajtextread.h ajtextwrite.h \
-ajtime.h ajtranslate.h ajtree.h \
-ajurl.h ajurldata.h ajurlread.h ajurlwrite.h \
+ajtagval.h \
+ajtax.h \
+ajtaxdata.h \
+ajtaxread.h \
+ajtaxwrite.h \
+ajtext.h \
+ajtextdata.h \
+ajtextread.h \
+ajtextwrite.h \
+ajtime.h \
+ajtranslate.h \
+ajtree.h \
+ajurl.h \
+ajurldata.h \
+ajurlread.h \
+ajurlwrite.h \
 ajutil.h \
-ajvar.h ajvardata.h ajvarread.h ajvarwrite.h \
+ajvar.h \
+ajvarbcf.h \
+ajvardata.h \
+ajvarread.h \
+ajvarwrite.h \
 ajvector.h
 
-libajax_la_SOURCES = $(AJAXSRC)
-VERS_INF = -version-info 6:4:0
-@ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
-@ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDAJAX)
-libajax_la_LDFLAGS = $(LINKFLAGS) $(MYSQL_LDFLAGS) $(POSTGRESQL_LDFLAGS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -448,79 +589,87 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajalign.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajarr.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassem.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassemread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassemwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassert.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajbase.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajcall.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajcod.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajdan.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajdmx.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajdom.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajdomain.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajexcept.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeat.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeatread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeatwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfile.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfiledata.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfileio.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfmt.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajhttp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajindex.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajjava.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajlist.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajmath.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajmatrices.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajmem.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajmess.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnam.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnexus.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajobo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajoboread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajobowrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpat.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdb.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdbio.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajphylo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajquery.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajrange.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreg.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreport.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresource.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresourceread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresourcewrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseq.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqabi.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqbam.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqtype.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajsort.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajsql.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajstr.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajsys.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtable.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtax.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtaxread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtaxwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtext.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtextread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtextwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtime.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtranslate.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtree.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurl.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurlread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurlwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajutil.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvar.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvarread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvarwrite.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvector.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajalign.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajarr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajassem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajassemread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajassemwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajassert.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajbamindex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajbase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajcall.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajcigar.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajcod.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajdan.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajdmx.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajdom.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajdomain.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajexcept.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfeat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfeatread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfeatwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfile.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfiledata.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfileio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajfmt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajftp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajhttp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajindex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajjava.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajlist.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajmath.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajmatrices.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajmem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajmess.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajnam.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajnexus.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajobo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajoboread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajobowrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajpat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajpdb.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajpdbio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajphylo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajquery.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajrange.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajrefseq.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajrefseqread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajrefseqwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajreg.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajreport.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajresource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajresourceread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajresourcewrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseq.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseqabi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseqbam.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseqread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseqtype.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajseqwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajsort.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajsql.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajstr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajsys.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtable.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtagval.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtax.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtaxread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtaxwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtext.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtextread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtextwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtime.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtranslate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajtree.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajurl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajurlread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajurlwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajutil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajvar.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajvarbcf.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajvarread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajvarwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libajax_la-ajvector.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -542,6 +691,573 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+libajax_la-ajalign.lo: ajalign.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajalign.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajalign.Tpo -c -o libajax_la-ajalign.lo `test -f 'ajalign.c' || echo '$(srcdir)/'`ajalign.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajalign.Tpo $(DEPDIR)/libajax_la-ajalign.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajalign.c' object='libajax_la-ajalign.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajalign.lo `test -f 'ajalign.c' || echo '$(srcdir)/'`ajalign.c
+
+libajax_la-ajarr.lo: ajarr.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajarr.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajarr.Tpo -c -o libajax_la-ajarr.lo `test -f 'ajarr.c' || echo '$(srcdir)/'`ajarr.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajarr.Tpo $(DEPDIR)/libajax_la-ajarr.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajarr.c' object='libajax_la-ajarr.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajarr.lo `test -f 'ajarr.c' || echo '$(srcdir)/'`ajarr.c
+
+libajax_la-ajassem.lo: ajassem.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajassem.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajassem.Tpo -c -o libajax_la-ajassem.lo `test -f 'ajassem.c' || echo '$(srcdir)/'`ajassem.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajassem.Tpo $(DEPDIR)/libajax_la-ajassem.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajassem.c' object='libajax_la-ajassem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajassem.lo `test -f 'ajassem.c' || echo '$(srcdir)/'`ajassem.c
+
+libajax_la-ajassemread.lo: ajassemread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajassemread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajassemread.Tpo -c -o libajax_la-ajassemread.lo `test -f 'ajassemread.c' || echo '$(srcdir)/'`ajassemread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajassemread.Tpo $(DEPDIR)/libajax_la-ajassemread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajassemread.c' object='libajax_la-ajassemread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajassemread.lo `test -f 'ajassemread.c' || echo '$(srcdir)/'`ajassemread.c
+
+libajax_la-ajassemwrite.lo: ajassemwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajassemwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajassemwrite.Tpo -c -o libajax_la-ajassemwrite.lo `test -f 'ajassemwrite.c' || echo '$(srcdir)/'`ajassemwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajassemwrite.Tpo $(DEPDIR)/libajax_la-ajassemwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajassemwrite.c' object='libajax_la-ajassemwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajassemwrite.lo `test -f 'ajassemwrite.c' || echo '$(srcdir)/'`ajassemwrite.c
+
+libajax_la-ajassert.lo: ajassert.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajassert.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajassert.Tpo -c -o libajax_la-ajassert.lo `test -f 'ajassert.c' || echo '$(srcdir)/'`ajassert.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajassert.Tpo $(DEPDIR)/libajax_la-ajassert.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajassert.c' object='libajax_la-ajassert.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajassert.lo `test -f 'ajassert.c' || echo '$(srcdir)/'`ajassert.c
+
+libajax_la-ajbamindex.lo: ajbamindex.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajbamindex.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajbamindex.Tpo -c -o libajax_la-ajbamindex.lo `test -f 'ajbamindex.c' || echo '$(srcdir)/'`ajbamindex.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajbamindex.Tpo $(DEPDIR)/libajax_la-ajbamindex.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajbamindex.c' object='libajax_la-ajbamindex.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajbamindex.lo `test -f 'ajbamindex.c' || echo '$(srcdir)/'`ajbamindex.c
+
+libajax_la-ajbase.lo: ajbase.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajbase.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajbase.Tpo -c -o libajax_la-ajbase.lo `test -f 'ajbase.c' || echo '$(srcdir)/'`ajbase.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajbase.Tpo $(DEPDIR)/libajax_la-ajbase.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajbase.c' object='libajax_la-ajbase.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajbase.lo `test -f 'ajbase.c' || echo '$(srcdir)/'`ajbase.c
+
+libajax_la-ajcall.lo: ajcall.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajcall.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajcall.Tpo -c -o libajax_la-ajcall.lo `test -f 'ajcall.c' || echo '$(srcdir)/'`ajcall.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajcall.Tpo $(DEPDIR)/libajax_la-ajcall.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajcall.c' object='libajax_la-ajcall.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajcall.lo `test -f 'ajcall.c' || echo '$(srcdir)/'`ajcall.c
+
+libajax_la-ajcigar.lo: ajcigar.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajcigar.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajcigar.Tpo -c -o libajax_la-ajcigar.lo `test -f 'ajcigar.c' || echo '$(srcdir)/'`ajcigar.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajcigar.Tpo $(DEPDIR)/libajax_la-ajcigar.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajcigar.c' object='libajax_la-ajcigar.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajcigar.lo `test -f 'ajcigar.c' || echo '$(srcdir)/'`ajcigar.c
+
+libajax_la-ajcod.lo: ajcod.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajcod.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajcod.Tpo -c -o libajax_la-ajcod.lo `test -f 'ajcod.c' || echo '$(srcdir)/'`ajcod.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajcod.Tpo $(DEPDIR)/libajax_la-ajcod.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajcod.c' object='libajax_la-ajcod.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajcod.lo `test -f 'ajcod.c' || echo '$(srcdir)/'`ajcod.c
+
+libajax_la-ajdan.lo: ajdan.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajdan.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajdan.Tpo -c -o libajax_la-ajdan.lo `test -f 'ajdan.c' || echo '$(srcdir)/'`ajdan.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajdan.Tpo $(DEPDIR)/libajax_la-ajdan.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajdan.c' object='libajax_la-ajdan.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajdan.lo `test -f 'ajdan.c' || echo '$(srcdir)/'`ajdan.c
+
+libajax_la-ajdmx.lo: ajdmx.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajdmx.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajdmx.Tpo -c -o libajax_la-ajdmx.lo `test -f 'ajdmx.c' || echo '$(srcdir)/'`ajdmx.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajdmx.Tpo $(DEPDIR)/libajax_la-ajdmx.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajdmx.c' object='libajax_la-ajdmx.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajdmx.lo `test -f 'ajdmx.c' || echo '$(srcdir)/'`ajdmx.c
+
+libajax_la-ajdom.lo: ajdom.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajdom.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajdom.Tpo -c -o libajax_la-ajdom.lo `test -f 'ajdom.c' || echo '$(srcdir)/'`ajdom.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajdom.Tpo $(DEPDIR)/libajax_la-ajdom.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajdom.c' object='libajax_la-ajdom.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajdom.lo `test -f 'ajdom.c' || echo '$(srcdir)/'`ajdom.c
+
+libajax_la-ajdomain.lo: ajdomain.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajdomain.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajdomain.Tpo -c -o libajax_la-ajdomain.lo `test -f 'ajdomain.c' || echo '$(srcdir)/'`ajdomain.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajdomain.Tpo $(DEPDIR)/libajax_la-ajdomain.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajdomain.c' object='libajax_la-ajdomain.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajdomain.lo `test -f 'ajdomain.c' || echo '$(srcdir)/'`ajdomain.c
+
+libajax_la-ajexcept.lo: ajexcept.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajexcept.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajexcept.Tpo -c -o libajax_la-ajexcept.lo `test -f 'ajexcept.c' || echo '$(srcdir)/'`ajexcept.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajexcept.Tpo $(DEPDIR)/libajax_la-ajexcept.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajexcept.c' object='libajax_la-ajexcept.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajexcept.lo `test -f 'ajexcept.c' || echo '$(srcdir)/'`ajexcept.c
+
+libajax_la-ajfeat.lo: ajfeat.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfeat.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfeat.Tpo -c -o libajax_la-ajfeat.lo `test -f 'ajfeat.c' || echo '$(srcdir)/'`ajfeat.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfeat.Tpo $(DEPDIR)/libajax_la-ajfeat.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfeat.c' object='libajax_la-ajfeat.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfeat.lo `test -f 'ajfeat.c' || echo '$(srcdir)/'`ajfeat.c
+
+libajax_la-ajfeatread.lo: ajfeatread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfeatread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfeatread.Tpo -c -o libajax_la-ajfeatread.lo `test -f 'ajfeatread.c' || echo '$(srcdir)/'`ajfeatread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfeatread.Tpo $(DEPDIR)/libajax_la-ajfeatread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfeatread.c' object='libajax_la-ajfeatread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfeatread.lo `test -f 'ajfeatread.c' || echo '$(srcdir)/'`ajfeatread.c
+
+libajax_la-ajfeatwrite.lo: ajfeatwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfeatwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfeatwrite.Tpo -c -o libajax_la-ajfeatwrite.lo `test -f 'ajfeatwrite.c' || echo '$(srcdir)/'`ajfeatwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfeatwrite.Tpo $(DEPDIR)/libajax_la-ajfeatwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfeatwrite.c' object='libajax_la-ajfeatwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfeatwrite.lo `test -f 'ajfeatwrite.c' || echo '$(srcdir)/'`ajfeatwrite.c
+
+libajax_la-ajfile.lo: ajfile.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfile.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfile.Tpo -c -o libajax_la-ajfile.lo `test -f 'ajfile.c' || echo '$(srcdir)/'`ajfile.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfile.Tpo $(DEPDIR)/libajax_la-ajfile.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfile.c' object='libajax_la-ajfile.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfile.lo `test -f 'ajfile.c' || echo '$(srcdir)/'`ajfile.c
+
+libajax_la-ajfiledata.lo: ajfiledata.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfiledata.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfiledata.Tpo -c -o libajax_la-ajfiledata.lo `test -f 'ajfiledata.c' || echo '$(srcdir)/'`ajfiledata.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfiledata.Tpo $(DEPDIR)/libajax_la-ajfiledata.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfiledata.c' object='libajax_la-ajfiledata.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfiledata.lo `test -f 'ajfiledata.c' || echo '$(srcdir)/'`ajfiledata.c
+
+libajax_la-ajfileio.lo: ajfileio.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfileio.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfileio.Tpo -c -o libajax_la-ajfileio.lo `test -f 'ajfileio.c' || echo '$(srcdir)/'`ajfileio.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfileio.Tpo $(DEPDIR)/libajax_la-ajfileio.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfileio.c' object='libajax_la-ajfileio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfileio.lo `test -f 'ajfileio.c' || echo '$(srcdir)/'`ajfileio.c
+
+libajax_la-ajfmt.lo: ajfmt.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajfmt.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajfmt.Tpo -c -o libajax_la-ajfmt.lo `test -f 'ajfmt.c' || echo '$(srcdir)/'`ajfmt.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajfmt.Tpo $(DEPDIR)/libajax_la-ajfmt.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajfmt.c' object='libajax_la-ajfmt.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajfmt.lo `test -f 'ajfmt.c' || echo '$(srcdir)/'`ajfmt.c
+
+libajax_la-ajftp.lo: ajftp.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajftp.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajftp.Tpo -c -o libajax_la-ajftp.lo `test -f 'ajftp.c' || echo '$(srcdir)/'`ajftp.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajftp.Tpo $(DEPDIR)/libajax_la-ajftp.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajftp.c' object='libajax_la-ajftp.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajftp.lo `test -f 'ajftp.c' || echo '$(srcdir)/'`ajftp.c
+
+libajax_la-ajhttp.lo: ajhttp.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajhttp.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajhttp.Tpo -c -o libajax_la-ajhttp.lo `test -f 'ajhttp.c' || echo '$(srcdir)/'`ajhttp.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajhttp.Tpo $(DEPDIR)/libajax_la-ajhttp.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajhttp.c' object='libajax_la-ajhttp.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajhttp.lo `test -f 'ajhttp.c' || echo '$(srcdir)/'`ajhttp.c
+
+libajax_la-ajindex.lo: ajindex.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajindex.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajindex.Tpo -c -o libajax_la-ajindex.lo `test -f 'ajindex.c' || echo '$(srcdir)/'`ajindex.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajindex.Tpo $(DEPDIR)/libajax_la-ajindex.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajindex.c' object='libajax_la-ajindex.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajindex.lo `test -f 'ajindex.c' || echo '$(srcdir)/'`ajindex.c
+
+libajax_la-ajjava.lo: ajjava.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajjava.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajjava.Tpo -c -o libajax_la-ajjava.lo `test -f 'ajjava.c' || echo '$(srcdir)/'`ajjava.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajjava.Tpo $(DEPDIR)/libajax_la-ajjava.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajjava.c' object='libajax_la-ajjava.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajjava.lo `test -f 'ajjava.c' || echo '$(srcdir)/'`ajjava.c
+
+libajax_la-ajlist.lo: ajlist.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajlist.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajlist.Tpo -c -o libajax_la-ajlist.lo `test -f 'ajlist.c' || echo '$(srcdir)/'`ajlist.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajlist.Tpo $(DEPDIR)/libajax_la-ajlist.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajlist.c' object='libajax_la-ajlist.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajlist.lo `test -f 'ajlist.c' || echo '$(srcdir)/'`ajlist.c
+
+libajax_la-ajmath.lo: ajmath.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajmath.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajmath.Tpo -c -o libajax_la-ajmath.lo `test -f 'ajmath.c' || echo '$(srcdir)/'`ajmath.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajmath.Tpo $(DEPDIR)/libajax_la-ajmath.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajmath.c' object='libajax_la-ajmath.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajmath.lo `test -f 'ajmath.c' || echo '$(srcdir)/'`ajmath.c
+
+libajax_la-ajmatrices.lo: ajmatrices.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajmatrices.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajmatrices.Tpo -c -o libajax_la-ajmatrices.lo `test -f 'ajmatrices.c' || echo '$(srcdir)/'`ajmatrices.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajmatrices.Tpo $(DEPDIR)/libajax_la-ajmatrices.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajmatrices.c' object='libajax_la-ajmatrices.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajmatrices.lo `test -f 'ajmatrices.c' || echo '$(srcdir)/'`ajmatrices.c
+
+libajax_la-ajmem.lo: ajmem.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajmem.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajmem.Tpo -c -o libajax_la-ajmem.lo `test -f 'ajmem.c' || echo '$(srcdir)/'`ajmem.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajmem.Tpo $(DEPDIR)/libajax_la-ajmem.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajmem.c' object='libajax_la-ajmem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajmem.lo `test -f 'ajmem.c' || echo '$(srcdir)/'`ajmem.c
+
+libajax_la-ajmess.lo: ajmess.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajmess.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajmess.Tpo -c -o libajax_la-ajmess.lo `test -f 'ajmess.c' || echo '$(srcdir)/'`ajmess.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajmess.Tpo $(DEPDIR)/libajax_la-ajmess.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajmess.c' object='libajax_la-ajmess.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajmess.lo `test -f 'ajmess.c' || echo '$(srcdir)/'`ajmess.c
+
+libajax_la-ajnam.lo: ajnam.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajnam.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajnam.Tpo -c -o libajax_la-ajnam.lo `test -f 'ajnam.c' || echo '$(srcdir)/'`ajnam.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajnam.Tpo $(DEPDIR)/libajax_la-ajnam.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajnam.c' object='libajax_la-ajnam.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajnam.lo `test -f 'ajnam.c' || echo '$(srcdir)/'`ajnam.c
+
+libajax_la-ajnexus.lo: ajnexus.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajnexus.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajnexus.Tpo -c -o libajax_la-ajnexus.lo `test -f 'ajnexus.c' || echo '$(srcdir)/'`ajnexus.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajnexus.Tpo $(DEPDIR)/libajax_la-ajnexus.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajnexus.c' object='libajax_la-ajnexus.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajnexus.lo `test -f 'ajnexus.c' || echo '$(srcdir)/'`ajnexus.c
+
+libajax_la-ajobo.lo: ajobo.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajobo.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajobo.Tpo -c -o libajax_la-ajobo.lo `test -f 'ajobo.c' || echo '$(srcdir)/'`ajobo.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajobo.Tpo $(DEPDIR)/libajax_la-ajobo.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajobo.c' object='libajax_la-ajobo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajobo.lo `test -f 'ajobo.c' || echo '$(srcdir)/'`ajobo.c
+
+libajax_la-ajoboread.lo: ajoboread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajoboread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajoboread.Tpo -c -o libajax_la-ajoboread.lo `test -f 'ajoboread.c' || echo '$(srcdir)/'`ajoboread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajoboread.Tpo $(DEPDIR)/libajax_la-ajoboread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajoboread.c' object='libajax_la-ajoboread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajoboread.lo `test -f 'ajoboread.c' || echo '$(srcdir)/'`ajoboread.c
+
+libajax_la-ajobowrite.lo: ajobowrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajobowrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajobowrite.Tpo -c -o libajax_la-ajobowrite.lo `test -f 'ajobowrite.c' || echo '$(srcdir)/'`ajobowrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajobowrite.Tpo $(DEPDIR)/libajax_la-ajobowrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajobowrite.c' object='libajax_la-ajobowrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajobowrite.lo `test -f 'ajobowrite.c' || echo '$(srcdir)/'`ajobowrite.c
+
+libajax_la-ajpat.lo: ajpat.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajpat.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajpat.Tpo -c -o libajax_la-ajpat.lo `test -f 'ajpat.c' || echo '$(srcdir)/'`ajpat.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajpat.Tpo $(DEPDIR)/libajax_la-ajpat.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajpat.c' object='libajax_la-ajpat.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajpat.lo `test -f 'ajpat.c' || echo '$(srcdir)/'`ajpat.c
+
+libajax_la-ajpdb.lo: ajpdb.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajpdb.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajpdb.Tpo -c -o libajax_la-ajpdb.lo `test -f 'ajpdb.c' || echo '$(srcdir)/'`ajpdb.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajpdb.Tpo $(DEPDIR)/libajax_la-ajpdb.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajpdb.c' object='libajax_la-ajpdb.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajpdb.lo `test -f 'ajpdb.c' || echo '$(srcdir)/'`ajpdb.c
+
+libajax_la-ajpdbio.lo: ajpdbio.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajpdbio.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajpdbio.Tpo -c -o libajax_la-ajpdbio.lo `test -f 'ajpdbio.c' || echo '$(srcdir)/'`ajpdbio.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajpdbio.Tpo $(DEPDIR)/libajax_la-ajpdbio.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajpdbio.c' object='libajax_la-ajpdbio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajpdbio.lo `test -f 'ajpdbio.c' || echo '$(srcdir)/'`ajpdbio.c
+
+libajax_la-ajphylo.lo: ajphylo.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajphylo.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajphylo.Tpo -c -o libajax_la-ajphylo.lo `test -f 'ajphylo.c' || echo '$(srcdir)/'`ajphylo.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajphylo.Tpo $(DEPDIR)/libajax_la-ajphylo.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajphylo.c' object='libajax_la-ajphylo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajphylo.lo `test -f 'ajphylo.c' || echo '$(srcdir)/'`ajphylo.c
+
+libajax_la-ajquery.lo: ajquery.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajquery.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajquery.Tpo -c -o libajax_la-ajquery.lo `test -f 'ajquery.c' || echo '$(srcdir)/'`ajquery.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajquery.Tpo $(DEPDIR)/libajax_la-ajquery.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajquery.c' object='libajax_la-ajquery.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajquery.lo `test -f 'ajquery.c' || echo '$(srcdir)/'`ajquery.c
+
+libajax_la-ajrange.lo: ajrange.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajrange.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajrange.Tpo -c -o libajax_la-ajrange.lo `test -f 'ajrange.c' || echo '$(srcdir)/'`ajrange.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajrange.Tpo $(DEPDIR)/libajax_la-ajrange.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajrange.c' object='libajax_la-ajrange.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajrange.lo `test -f 'ajrange.c' || echo '$(srcdir)/'`ajrange.c
+
+libajax_la-ajreg.lo: ajreg.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajreg.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajreg.Tpo -c -o libajax_la-ajreg.lo `test -f 'ajreg.c' || echo '$(srcdir)/'`ajreg.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajreg.Tpo $(DEPDIR)/libajax_la-ajreg.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajreg.c' object='libajax_la-ajreg.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajreg.lo `test -f 'ajreg.c' || echo '$(srcdir)/'`ajreg.c
+
+libajax_la-ajreport.lo: ajreport.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajreport.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajreport.Tpo -c -o libajax_la-ajreport.lo `test -f 'ajreport.c' || echo '$(srcdir)/'`ajreport.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajreport.Tpo $(DEPDIR)/libajax_la-ajreport.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajreport.c' object='libajax_la-ajreport.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajreport.lo `test -f 'ajreport.c' || echo '$(srcdir)/'`ajreport.c
+
+libajax_la-ajrefseq.lo: ajrefseq.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajrefseq.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajrefseq.Tpo -c -o libajax_la-ajrefseq.lo `test -f 'ajrefseq.c' || echo '$(srcdir)/'`ajrefseq.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajrefseq.Tpo $(DEPDIR)/libajax_la-ajrefseq.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajrefseq.c' object='libajax_la-ajrefseq.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajrefseq.lo `test -f 'ajrefseq.c' || echo '$(srcdir)/'`ajrefseq.c
+
+libajax_la-ajrefseqread.lo: ajrefseqread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajrefseqread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajrefseqread.Tpo -c -o libajax_la-ajrefseqread.lo `test -f 'ajrefseqread.c' || echo '$(srcdir)/'`ajrefseqread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajrefseqread.Tpo $(DEPDIR)/libajax_la-ajrefseqread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajrefseqread.c' object='libajax_la-ajrefseqread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajrefseqread.lo `test -f 'ajrefseqread.c' || echo '$(srcdir)/'`ajrefseqread.c
+
+libajax_la-ajrefseqwrite.lo: ajrefseqwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajrefseqwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajrefseqwrite.Tpo -c -o libajax_la-ajrefseqwrite.lo `test -f 'ajrefseqwrite.c' || echo '$(srcdir)/'`ajrefseqwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajrefseqwrite.Tpo $(DEPDIR)/libajax_la-ajrefseqwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajrefseqwrite.c' object='libajax_la-ajrefseqwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajrefseqwrite.lo `test -f 'ajrefseqwrite.c' || echo '$(srcdir)/'`ajrefseqwrite.c
+
+libajax_la-ajresource.lo: ajresource.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajresource.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajresource.Tpo -c -o libajax_la-ajresource.lo `test -f 'ajresource.c' || echo '$(srcdir)/'`ajresource.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajresource.Tpo $(DEPDIR)/libajax_la-ajresource.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajresource.c' object='libajax_la-ajresource.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajresource.lo `test -f 'ajresource.c' || echo '$(srcdir)/'`ajresource.c
+
+libajax_la-ajresourceread.lo: ajresourceread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajresourceread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajresourceread.Tpo -c -o libajax_la-ajresourceread.lo `test -f 'ajresourceread.c' || echo '$(srcdir)/'`ajresourceread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajresourceread.Tpo $(DEPDIR)/libajax_la-ajresourceread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajresourceread.c' object='libajax_la-ajresourceread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajresourceread.lo `test -f 'ajresourceread.c' || echo '$(srcdir)/'`ajresourceread.c
+
+libajax_la-ajresourcewrite.lo: ajresourcewrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajresourcewrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajresourcewrite.Tpo -c -o libajax_la-ajresourcewrite.lo `test -f 'ajresourcewrite.c' || echo '$(srcdir)/'`ajresourcewrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajresourcewrite.Tpo $(DEPDIR)/libajax_la-ajresourcewrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajresourcewrite.c' object='libajax_la-ajresourcewrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajresourcewrite.lo `test -f 'ajresourcewrite.c' || echo '$(srcdir)/'`ajresourcewrite.c
+
+libajax_la-ajseq.lo: ajseq.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseq.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseq.Tpo -c -o libajax_la-ajseq.lo `test -f 'ajseq.c' || echo '$(srcdir)/'`ajseq.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseq.Tpo $(DEPDIR)/libajax_la-ajseq.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseq.c' object='libajax_la-ajseq.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseq.lo `test -f 'ajseq.c' || echo '$(srcdir)/'`ajseq.c
+
+libajax_la-ajseqabi.lo: ajseqabi.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseqabi.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseqabi.Tpo -c -o libajax_la-ajseqabi.lo `test -f 'ajseqabi.c' || echo '$(srcdir)/'`ajseqabi.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseqabi.Tpo $(DEPDIR)/libajax_la-ajseqabi.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseqabi.c' object='libajax_la-ajseqabi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseqabi.lo `test -f 'ajseqabi.c' || echo '$(srcdir)/'`ajseqabi.c
+
+libajax_la-ajseqbam.lo: ajseqbam.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseqbam.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseqbam.Tpo -c -o libajax_la-ajseqbam.lo `test -f 'ajseqbam.c' || echo '$(srcdir)/'`ajseqbam.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseqbam.Tpo $(DEPDIR)/libajax_la-ajseqbam.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseqbam.c' object='libajax_la-ajseqbam.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseqbam.lo `test -f 'ajseqbam.c' || echo '$(srcdir)/'`ajseqbam.c
+
+libajax_la-ajseqread.lo: ajseqread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseqread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseqread.Tpo -c -o libajax_la-ajseqread.lo `test -f 'ajseqread.c' || echo '$(srcdir)/'`ajseqread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseqread.Tpo $(DEPDIR)/libajax_la-ajseqread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseqread.c' object='libajax_la-ajseqread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseqread.lo `test -f 'ajseqread.c' || echo '$(srcdir)/'`ajseqread.c
+
+libajax_la-ajseqtype.lo: ajseqtype.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseqtype.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseqtype.Tpo -c -o libajax_la-ajseqtype.lo `test -f 'ajseqtype.c' || echo '$(srcdir)/'`ajseqtype.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseqtype.Tpo $(DEPDIR)/libajax_la-ajseqtype.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseqtype.c' object='libajax_la-ajseqtype.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseqtype.lo `test -f 'ajseqtype.c' || echo '$(srcdir)/'`ajseqtype.c
+
+libajax_la-ajseqwrite.lo: ajseqwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajseqwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajseqwrite.Tpo -c -o libajax_la-ajseqwrite.lo `test -f 'ajseqwrite.c' || echo '$(srcdir)/'`ajseqwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajseqwrite.Tpo $(DEPDIR)/libajax_la-ajseqwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajseqwrite.c' object='libajax_la-ajseqwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajseqwrite.lo `test -f 'ajseqwrite.c' || echo '$(srcdir)/'`ajseqwrite.c
+
+libajax_la-ajsort.lo: ajsort.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajsort.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajsort.Tpo -c -o libajax_la-ajsort.lo `test -f 'ajsort.c' || echo '$(srcdir)/'`ajsort.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajsort.Tpo $(DEPDIR)/libajax_la-ajsort.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajsort.c' object='libajax_la-ajsort.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajsort.lo `test -f 'ajsort.c' || echo '$(srcdir)/'`ajsort.c
+
+libajax_la-ajsql.lo: ajsql.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajsql.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajsql.Tpo -c -o libajax_la-ajsql.lo `test -f 'ajsql.c' || echo '$(srcdir)/'`ajsql.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajsql.Tpo $(DEPDIR)/libajax_la-ajsql.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajsql.c' object='libajax_la-ajsql.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajsql.lo `test -f 'ajsql.c' || echo '$(srcdir)/'`ajsql.c
+
+libajax_la-ajstr.lo: ajstr.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajstr.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajstr.Tpo -c -o libajax_la-ajstr.lo `test -f 'ajstr.c' || echo '$(srcdir)/'`ajstr.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajstr.Tpo $(DEPDIR)/libajax_la-ajstr.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajstr.c' object='libajax_la-ajstr.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajstr.lo `test -f 'ajstr.c' || echo '$(srcdir)/'`ajstr.c
+
+libajax_la-ajsys.lo: ajsys.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajsys.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajsys.Tpo -c -o libajax_la-ajsys.lo `test -f 'ajsys.c' || echo '$(srcdir)/'`ajsys.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajsys.Tpo $(DEPDIR)/libajax_la-ajsys.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajsys.c' object='libajax_la-ajsys.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajsys.lo `test -f 'ajsys.c' || echo '$(srcdir)/'`ajsys.c
+
+libajax_la-ajtable.lo: ajtable.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtable.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtable.Tpo -c -o libajax_la-ajtable.lo `test -f 'ajtable.c' || echo '$(srcdir)/'`ajtable.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtable.Tpo $(DEPDIR)/libajax_la-ajtable.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtable.c' object='libajax_la-ajtable.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtable.lo `test -f 'ajtable.c' || echo '$(srcdir)/'`ajtable.c
+
+libajax_la-ajtagval.lo: ajtagval.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtagval.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtagval.Tpo -c -o libajax_la-ajtagval.lo `test -f 'ajtagval.c' || echo '$(srcdir)/'`ajtagval.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtagval.Tpo $(DEPDIR)/libajax_la-ajtagval.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtagval.c' object='libajax_la-ajtagval.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtagval.lo `test -f 'ajtagval.c' || echo '$(srcdir)/'`ajtagval.c
+
+libajax_la-ajtax.lo: ajtax.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtax.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtax.Tpo -c -o libajax_la-ajtax.lo `test -f 'ajtax.c' || echo '$(srcdir)/'`ajtax.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtax.Tpo $(DEPDIR)/libajax_la-ajtax.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtax.c' object='libajax_la-ajtax.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtax.lo `test -f 'ajtax.c' || echo '$(srcdir)/'`ajtax.c
+
+libajax_la-ajtaxread.lo: ajtaxread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtaxread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtaxread.Tpo -c -o libajax_la-ajtaxread.lo `test -f 'ajtaxread.c' || echo '$(srcdir)/'`ajtaxread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtaxread.Tpo $(DEPDIR)/libajax_la-ajtaxread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtaxread.c' object='libajax_la-ajtaxread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtaxread.lo `test -f 'ajtaxread.c' || echo '$(srcdir)/'`ajtaxread.c
+
+libajax_la-ajtaxwrite.lo: ajtaxwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtaxwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtaxwrite.Tpo -c -o libajax_la-ajtaxwrite.lo `test -f 'ajtaxwrite.c' || echo '$(srcdir)/'`ajtaxwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtaxwrite.Tpo $(DEPDIR)/libajax_la-ajtaxwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtaxwrite.c' object='libajax_la-ajtaxwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtaxwrite.lo `test -f 'ajtaxwrite.c' || echo '$(srcdir)/'`ajtaxwrite.c
+
+libajax_la-ajtext.lo: ajtext.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtext.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtext.Tpo -c -o libajax_la-ajtext.lo `test -f 'ajtext.c' || echo '$(srcdir)/'`ajtext.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtext.Tpo $(DEPDIR)/libajax_la-ajtext.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtext.c' object='libajax_la-ajtext.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtext.lo `test -f 'ajtext.c' || echo '$(srcdir)/'`ajtext.c
+
+libajax_la-ajtextread.lo: ajtextread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtextread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtextread.Tpo -c -o libajax_la-ajtextread.lo `test -f 'ajtextread.c' || echo '$(srcdir)/'`ajtextread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtextread.Tpo $(DEPDIR)/libajax_la-ajtextread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtextread.c' object='libajax_la-ajtextread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtextread.lo `test -f 'ajtextread.c' || echo '$(srcdir)/'`ajtextread.c
+
+libajax_la-ajtextwrite.lo: ajtextwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtextwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtextwrite.Tpo -c -o libajax_la-ajtextwrite.lo `test -f 'ajtextwrite.c' || echo '$(srcdir)/'`ajtextwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtextwrite.Tpo $(DEPDIR)/libajax_la-ajtextwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtextwrite.c' object='libajax_la-ajtextwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtextwrite.lo `test -f 'ajtextwrite.c' || echo '$(srcdir)/'`ajtextwrite.c
+
+libajax_la-ajtime.lo: ajtime.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtime.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtime.Tpo -c -o libajax_la-ajtime.lo `test -f 'ajtime.c' || echo '$(srcdir)/'`ajtime.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtime.Tpo $(DEPDIR)/libajax_la-ajtime.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtime.c' object='libajax_la-ajtime.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtime.lo `test -f 'ajtime.c' || echo '$(srcdir)/'`ajtime.c
+
+libajax_la-ajtranslate.lo: ajtranslate.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtranslate.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtranslate.Tpo -c -o libajax_la-ajtranslate.lo `test -f 'ajtranslate.c' || echo '$(srcdir)/'`ajtranslate.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtranslate.Tpo $(DEPDIR)/libajax_la-ajtranslate.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtranslate.c' object='libajax_la-ajtranslate.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtranslate.lo `test -f 'ajtranslate.c' || echo '$(srcdir)/'`ajtranslate.c
+
+libajax_la-ajtree.lo: ajtree.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajtree.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajtree.Tpo -c -o libajax_la-ajtree.lo `test -f 'ajtree.c' || echo '$(srcdir)/'`ajtree.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajtree.Tpo $(DEPDIR)/libajax_la-ajtree.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajtree.c' object='libajax_la-ajtree.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajtree.lo `test -f 'ajtree.c' || echo '$(srcdir)/'`ajtree.c
+
+libajax_la-ajurl.lo: ajurl.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajurl.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajurl.Tpo -c -o libajax_la-ajurl.lo `test -f 'ajurl.c' || echo '$(srcdir)/'`ajurl.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajurl.Tpo $(DEPDIR)/libajax_la-ajurl.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajurl.c' object='libajax_la-ajurl.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajurl.lo `test -f 'ajurl.c' || echo '$(srcdir)/'`ajurl.c
+
+libajax_la-ajurlread.lo: ajurlread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajurlread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajurlread.Tpo -c -o libajax_la-ajurlread.lo `test -f 'ajurlread.c' || echo '$(srcdir)/'`ajurlread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajurlread.Tpo $(DEPDIR)/libajax_la-ajurlread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajurlread.c' object='libajax_la-ajurlread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajurlread.lo `test -f 'ajurlread.c' || echo '$(srcdir)/'`ajurlread.c
+
+libajax_la-ajurlwrite.lo: ajurlwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajurlwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajurlwrite.Tpo -c -o libajax_la-ajurlwrite.lo `test -f 'ajurlwrite.c' || echo '$(srcdir)/'`ajurlwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajurlwrite.Tpo $(DEPDIR)/libajax_la-ajurlwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajurlwrite.c' object='libajax_la-ajurlwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajurlwrite.lo `test -f 'ajurlwrite.c' || echo '$(srcdir)/'`ajurlwrite.c
+
+libajax_la-ajutil.lo: ajutil.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajutil.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajutil.Tpo -c -o libajax_la-ajutil.lo `test -f 'ajutil.c' || echo '$(srcdir)/'`ajutil.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajutil.Tpo $(DEPDIR)/libajax_la-ajutil.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajutil.c' object='libajax_la-ajutil.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajutil.lo `test -f 'ajutil.c' || echo '$(srcdir)/'`ajutil.c
+
+libajax_la-ajvar.lo: ajvar.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajvar.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajvar.Tpo -c -o libajax_la-ajvar.lo `test -f 'ajvar.c' || echo '$(srcdir)/'`ajvar.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajvar.Tpo $(DEPDIR)/libajax_la-ajvar.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajvar.c' object='libajax_la-ajvar.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajvar.lo `test -f 'ajvar.c' || echo '$(srcdir)/'`ajvar.c
+
+libajax_la-ajvarbcf.lo: ajvarbcf.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajvarbcf.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajvarbcf.Tpo -c -o libajax_la-ajvarbcf.lo `test -f 'ajvarbcf.c' || echo '$(srcdir)/'`ajvarbcf.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajvarbcf.Tpo $(DEPDIR)/libajax_la-ajvarbcf.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajvarbcf.c' object='libajax_la-ajvarbcf.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajvarbcf.lo `test -f 'ajvarbcf.c' || echo '$(srcdir)/'`ajvarbcf.c
+
+libajax_la-ajvarread.lo: ajvarread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajvarread.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajvarread.Tpo -c -o libajax_la-ajvarread.lo `test -f 'ajvarread.c' || echo '$(srcdir)/'`ajvarread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajvarread.Tpo $(DEPDIR)/libajax_la-ajvarread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajvarread.c' object='libajax_la-ajvarread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajvarread.lo `test -f 'ajvarread.c' || echo '$(srcdir)/'`ajvarread.c
+
+libajax_la-ajvarwrite.lo: ajvarwrite.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajvarwrite.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajvarwrite.Tpo -c -o libajax_la-ajvarwrite.lo `test -f 'ajvarwrite.c' || echo '$(srcdir)/'`ajvarwrite.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajvarwrite.Tpo $(DEPDIR)/libajax_la-ajvarwrite.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajvarwrite.c' object='libajax_la-ajvarwrite.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajvarwrite.lo `test -f 'ajvarwrite.c' || echo '$(srcdir)/'`ajvarwrite.c
+
+libajax_la-ajvector.lo: ajvector.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -MT libajax_la-ajvector.lo -MD -MP -MF $(DEPDIR)/libajax_la-ajvector.Tpo -c -o libajax_la-ajvector.lo `test -f 'ajvector.c' || echo '$(srcdir)/'`ajvector.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libajax_la-ajvector.Tpo $(DEPDIR)/libajax_la-ajvector.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ajvector.c' object='libajax_la-ajvector.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libajax_la_CPPFLAGS) $(CPPFLAGS) $(libajax_la_CFLAGS) $(CFLAGS) -c -o libajax_la-ajvector.lo `test -f 'ajvector.c' || echo '$(srcdir)/'`ajvector.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

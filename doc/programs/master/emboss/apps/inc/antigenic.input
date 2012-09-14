@@ -11,7 +11,7 @@ ID   ACTB1_TAKRU             Reviewed;         375 AA.
 AC   P68142; P53484;
 DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
 DT   25-OCT-2004, sequence version 1.
-DT   02-MAR-2010, entry version 39.
+DT   16-MAY-2012, entry version 49.
 DE   RecName: Full=Actin, cytoplasmic 1;
 DE   AltName: Full=Beta-actin A;
 DE   Contains:
@@ -39,6 +39,11 @@ CC       Each actin can bind to 4 others.
 CC   -!- SUBCELLULAR LOCATION: Cytoplasm, cytoskeleton.
 CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
 CC       muscle.
+CC   -!- PTM: Oxidation of Met-44 by MICALs (MICAL1, MICAL2 or MICAL3) to
+CC       form methionine sulfoxide promotes actin filament
+CC       depolymerization. Methionine sulfoxide is produced
+CC       stereospecifically, but it is not known whether the (S)-S-oxide or
+CC       the (R)-S-oxide is produced (By similarity).
 CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
 CC       alpha, beta and gamma have been identified. The alpha actins are
 CC       found in muscle tissues and are a major constituent of the
@@ -54,15 +59,17 @@ CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
 DR   PIR; S71124; S71124.
+DR   ProteinModelPortal; P68142; -.
 DR   SMR; P68142; 2-375.
-DR   Ensembl; ENSTRUT00000013141; ENSTRUP00000013080; ENSTRUG00000005447; Takifugu rubripes.
-DR   eggNOG; fiNOG04759; -.
+DR   Ensembl; ENSTRUT00000013141; ENSTRUP00000013080; ENSTRUG00000005447.
+DR   eggNOG; COG5277; -.
+DR   GeneTree; ENSGT00630000089629; -.
 DR   InParanoid; P68142; -.
-DR   PhylomeDB; P68142; -.
+DR   OMA; IKNLMER; -.
+DR   OrthoDB; EOG41JZC9; -.
 DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-KW.
 DR   GO; GO:0005856; C:cytoskeleton; IEA:UniProtKB-SubCell.
 DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
-DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
 DR   InterPro; IPR004000; Actin-like.
 DR   InterPro; IPR020902; Actin/actin-like_CS.
 DR   InterPro; IPR004001; Actin_CS.
@@ -74,8 +81,8 @@ DR   PROSITE; PS00406; ACTINS_1; 1.
 DR   PROSITE; PS00432; ACTINS_2; 1.
 DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
 PE   2: Evidence at transcript level;
-KW   Acetylation; ATP-binding; Cytoplasm; Cytoskeleton; Methylation;
-KW   Nucleotide-binding.
+KW   Acetylation; ATP-binding; Complete proteome; Cytoplasm; Cytoskeleton;
+KW   Methylation; Nucleotide-binding; Oxidation; Reference proteome.
 FT   CHAIN         1    375       Actin, cytoplasmic 1.
 FT                                /FTId=PRO_0000367094.
 FT   INIT_MET      1      1       Removed; alternate (By similarity).
@@ -87,6 +94,7 @@ FT                                1; alternate (By similarity).
 FT   MOD_RES       2      2       N-acetylglutamate; in Actin, cytoplasmic
 FT                                1, N-terminally processed (By
 FT                                similarity).
+FT   MOD_RES      44     44       Methionine sulfoxide (By similarity).
 FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
 SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
      MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS

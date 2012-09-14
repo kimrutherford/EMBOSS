@@ -1,5 +1,5 @@
 Draw a sequence alignment with pretty formatting
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     (Aligned) sequence set filename and optional
@@ -19,8 +19,8 @@ Version: EMBOSS:6.4.0.0
                                   the EMBOSS installation.
    -residuesperline    integer    [50] The number of residues to be displayed
                                   on each line (Any integer value)
-   -resbreak           integer    [Same as -residuesperline to give no breaks]
-                                  Residues before a space (Integer 1 or more)
+   -blocksperline      integer    [1] Blocks of residues on each line (Integer
+                                  1 or more)
    -[no]ccolours       boolean    [Y] Colour residues by their consensus
                                   value.
    -cidentity          string     [RED] Colour to display identical residues
@@ -47,7 +47,7 @@ Version: EMBOSS:6.4.0.0
                                   similar related
    -identity           integer    [0] Only match those which are identical in
                                   all sequences. (Integer 0 or more)
-   -[no]box            boolean    [Y] Display prettyboxes
+   -[no]doboxes        boolean    [Y] Display prettyboxes
    -boxcol             boolean    [N] Colour the background in the boxes
    -boxuse             string     [GREY] Colour to be used for background.
                                   (GREY) (Any string)
@@ -56,9 +56,8 @@ Version: EMBOSS:6.4.0.0
                                   integer value)
    -[no]number         boolean    [Y] Display the residue number
    -[no]listoptions    boolean    [Y] Display the date and options used
-   -plurality          float      [Half the total sequence weighting]
-                                  Plurality check value (totweight/2) (Any
-                                  numeric value)
+   -ratio              float      [0.5] Plurality ratio for a consensus match
+                                  (Number from 0.000 to 1.000)
    -consensus          boolean    [N] Display the consensus
    -[no]collision      boolean    [Y] Allow collisions in calculating
                                   consensus
@@ -102,7 +101,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features

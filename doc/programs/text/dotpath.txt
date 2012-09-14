@@ -48,7 +48,7 @@ Created dotpath.ps
 Command line arguments
 
 Draw a non-overlapping wordmatch dotplot of two sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -79,7 +79,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -95,7 +98,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -178,7 +184,7 @@ RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (22-FEB-1999) to the INSDC.
 RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
 RL   Seattle, WA 98195, USA
 XX
@@ -186,7 +192,7 @@ RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (28-OCT-1999) to the INSDC.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
 
@@ -267,7 +273,7 @@ RN   [1]
 RP   1-2229817
 RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
 RT   ;
-RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-AUG-2001) to the INSDC.
 RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
 RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
 RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
@@ -288,15 +294,15 @@ DR   EPD; EP74203; HS_MRPS18B.
 DR   EPD; EP74346; HS_HLA-E.
 DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
-DR   GDB; 11515913.
-DR   GOA; P59942.
-DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02629; J*01:01:01:02.
-DR   IMGT/HLA; HLA02802; V*01:01:01:02.
-DR   RFAM; RF00017; SRP_euk_arch.
-DR   RFAM; RF00019; Y_RNA.
-DR   RFAM; RF00026; U6.
-DR   RFAM; RF00100; 7SK.
+DR   Ensembl-Gn; ENSG00000096155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000096171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000111971; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137310; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137313; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137331; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137332; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137337; Homo_sapiens.
 
 
   [Part of this file has been deleted for brevity]
@@ -409,7 +415,7 @@ See also
 
                     Program name                          Description
                     dotmatcher   Draw a threshold dotplot of two sequences
-                    dottup       Displays a wordmatch dotplot of two sequences
+                    dottup       Display a wordmatch dotplot of two sequences
                     polydot      Draw dotplots for all-against-all comparison of a sequence set
 
                     This program is closely based on dottup with the addition of by default

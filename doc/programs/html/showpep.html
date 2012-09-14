@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -36,7 +36,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 <H2>
     Description
 </H2>
@@ -61,7 +61,7 @@ Here is a sample session with <b>showpep</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -83,7 +83,7 @@ The standard list of output formats are only a small selection of the possible w
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 120 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -113,7 +113,7 @@ Display only the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -129,7 +129,7 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:rs24_takru -three -format 2 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [rs24_takru.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -145,7 +145,7 @@ Number the sequence lines in the margin:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -161,7 +161,7 @@ Start the numbering at a specified value ('123' in this case):
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -177,7 +177,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22" </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -193,7 +193,7 @@ Add your own annotation to the display:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25 binding site 17-17 SNP 22-22 SNP" </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -205,8 +205,8 @@ Output file [laci_ecoli.showpep]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Displays protein sequences with features in pretty format
-Version: EMBOSS:6.4.0.0
+Display protein sequences with features in pretty format
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -360,7 +360,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -640,7 +643,7 @@ pax* | 10</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -709,11 +712,35 @@ pax* | 10</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -757,7 +784,7 @@ pax* | 10</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -920,7 +947,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -1033,7 +1060,7 @@ ID   RS24_TAKRU              Reviewed;         132 AA.
 AC   O42387;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-JAN-1998, sequence version 1.
-DT   02-MAR-2010, entry version 42.
+DT   16-MAY-2012, entry version 54.
 DE   RecName: Full=40S ribosomal protein S24;
 GN   Name=rps24;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -1052,26 +1079,28 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
-DR   SMR; O42387; 4-96.
+DR   ProteinModelPortal; O42387; -.
 DR   STRING; O42387; -.
 DR   PRIDE; O42387; -.
-DR   Ensembl; ENSTRUT00000016709; ENSTRUP00000016637; ENSTRUG00000006773; Takifugu rubripes.
-DR   eggNOG; fiNOG15754; -.
+DR   eggNOG; COG2004; -.
 DR   InParanoid; O42387; -.
 DR   GO; GO:0005840; C:ribosome; IEA:UniProtKB-KW.
 DR   GO; GO:0000166; F:nucleotide binding; IEA:InterPro.
 DR   GO; GO:0003735; F:structural constituent of ribosome; IEA:InterPro.
 DR   GO; GO:0006412; P:translation; IEA:InterPro.
-DR   InterPro; IPR012677; a_b_plait_nuc_bd.
+DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
+DR   InterPro; IPR012677; Nucleotide-bd_a/b_plait.
+DR   InterPro; IPR012678; Ribosomal_L23/L15e_core_dom.
 DR   InterPro; IPR001976; Ribosomal_S24e.
 DR   InterPro; IPR018098; Ribosomal_S24e_CS.
-DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
 DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
 DR   Pfam; PF01282; Ribosomal_S24e; 1.
 DR   ProDom; PD006052; Ribosomal_S24e; 1.
+DR   SUPFAM; SSF54189; L23_L15e_core; 1.
 DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
 PE   3: Inferred from homology;
-KW   Ribonucleoprotein; Ribosomal protein.
+KW   Complete proteome; Reference proteome; Ribonucleoprotein;
+KW   Ribosomal protein.
 FT   CHAIN         1    132       40S ribosomal protein S24.
 FT                                /FTId=PRO_0000137627.
 SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
@@ -1213,7 +1242,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -1360,7 +1389,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -1369,12 +1398,14 @@ Lactose operon repressor
           SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAAVHNLLAQRVS
           ============================================================
           mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
-            |=====|                       |====|                 |=|
-            beta_strand                   beta_strand            turn
+            |=====|                       |====|
+            beta_strand                   beta_strand
                        |==============|           |=|
                        alpha_helix                beta_strand
                                                      |==========|
                                                      alpha_helix
+                                                                 |=|
+                                              polypeptide_turn_motif
 
 </pre>
 </td></tr></table><p>
@@ -1696,7 +1727,7 @@ None known.
 
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
@@ -1706,7 +1737,7 @@ None known.
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>

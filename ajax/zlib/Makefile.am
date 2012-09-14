@@ -2,30 +2,43 @@
 
 lib_LTLIBRARIES = libezlib.la
 
-
+libezlib_la_LDFLAGS  = -version-info 2:0:1
 if ISCYGWIN
-CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
+libezlib_la_LDFLAGS += -no-undefined
+libezlib_la_LDFLAGS += -Wl,--add-stdcall-alias
+libezlib_la_LDFLAGS += -Wl,--export-all-symbols
+libezlib_la_LDFLAGS += -Wl,--enable-auto-import
 endif
 
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core
+libezlib_la_SOURCES = \
+adler32.c \
+compress.c \
+crc32.c \
+deflate.c \
+gzclose.c \
+gzlib.c \
+gzread.c \
+gzwrite.c \
+infback.c \
+inffast.c \
+inflate.c \
+inftrees.c \
+trees.c \
+uncompr.c \
+zutil.c
 
-ZLIBSRC = adler32.c compress.c crc32.c deflate.c gzio.c infback.c inffast.c \
-inflate.c inftrees.c trees.c uncompr.c zutil.c
+ezlibincludedir = $(includedir)/ezlib
 
-# Uncomment and amend when there are some real headers
-pkginclude_HEADERS = crc32.h deflate.h inffast.h inffixed.h inflate.h \
-inftrees.h trees.h zconf.h zlibemboss.h zlib.h zutil.h
-
-pkgincludedir = $(includedir)/ezlib
-
-libezlib_la_SOURCES = $(ZLIBSRC)
-
-VERS_INF = -version-info 2:0:1
-
-if ISCYGWIN
-LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS)
-else
-LINKFLAGS = $(VERS_INF)
-endif
-
-libezlib_la_LDFLAGS = $(LINKFLAGS)
+ezlibinclude_HEADERS = \
+crc32.h \
+deflate.h \
+gzguts.h \
+inffast.h \
+inffixed.h \
+inflate.h \
+inftrees.h \
+trees.h \
+zconf.h \
+zlibemboss.h \
+zlib.h \
+zutil.h

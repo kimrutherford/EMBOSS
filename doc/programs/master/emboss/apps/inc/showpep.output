@@ -23,7 +23,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -170,7 +170,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -179,12 +179,14 @@ Lactose operon repressor
           SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAAVHNLLAQRVS
           ============================================================
           mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
-            |=====|                       |====|                 |=|
-            beta_strand                   beta_strand            turn
+            |=====|                       |====|
+            beta_strand                   beta_strand
                        |==============|           |=|
                        alpha_helix                beta_strand
                                                      |==========|
                                                      alpha_helix
+                                                                 |=|
+                                              polypeptide_turn_motif
 
 </pre>
 </td></tr></table><p>

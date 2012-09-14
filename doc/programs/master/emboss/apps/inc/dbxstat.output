@@ -4,14 +4,12 @@
 <p><h3>File: edam.dbxstat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-       565 operation
-       827 data
-       420 format
-       601 identifier
-        82 entity
-        57 resource
-       274 topic
+       819 data
+       435 format
+       605 identifier
+       614 operation
+       245 topic
 
-Total keywords: 7 IDs: 2826
+Total keywords: 5 IDs: 2718
 </pre>
 </td></tr></table><p>

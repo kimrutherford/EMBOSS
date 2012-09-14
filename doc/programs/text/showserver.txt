@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Displays information on configured servers
+   Display information on configured servers
 
 Description
 
@@ -26,84 +26,84 @@ Usage
 
 
 % showserver
-Displays information on configured servers
+Display information on configured servers
 
 # Name            Scope                      Type                       ID  Qry
-All Count Cachefile                                                 URL
-                                     Comment
+All Count Cachefile                                              URL
+                                  Comment
 # =============== ========================== ========================== ==  ===
 === ===== ================================================== ===================
 ============================= =======
 biomart           sequence                   Sequence                   OK  -
--     158 /homes/pmr/local/share/EMBOSS/server.biomart        http://www.biomart
-.org:80/biomart/martservice
+-     158 /homes/user/local/share/EMBOSS/server.biomart           http://www.bio
+mart.org:80/biomart/martservice
 ensembl           sequence                   Sequence                   OK  -
--     125 /homes/pmr/local/share/EMBOSS/server.ensembl        mysql://anonymous@
-ensembldb.ensembl.org:5306/    Public Ensembl MySQL instance, use for small-scal
-e queries only.
+-     134 /homes/user/local/share/EMBOSS/server.ensembl           mysql://anonym
+ous@ensembldb.ensembl.org:5306/    Public Ensembl MySQL instance, use for small-
+scale queries only.
 ensemblgenomes    sequence                   Sequence                   OK  -
--     441 /homes/pmr/local/share/EMBOSS/server.ensemblgenomes mysql://anonymous@
-mysql.ebi.ac.uk:4157/          Public Ensembl Genomes MySQL instance, use for sm
-all-scale queries only.
+-     476 /homes/user/local/share/EMBOSS/server.ensemblgenomes    mysql://anonym
+ous@mysql.ebi.ac.uk:4157/          Public Ensembl Genomes MySQL instance, use fo
+r small-scale queries only.
 das               sequence features          Sequence Features          OK  -
--    1222 /homes/pmr/local/share/EMBOSS/server.dasregistry    http://www.dasregi
-stry.org/das/                  DAS sequence/feature sources listed on the DAS re
-gistry
+-    1222 /homes/user/local/share/EMBOSS/server.dasregistry       http://www.das
+registry.org/das/                  DAS sequence/feature sources listed on the DA
+S registry
 tdas              sequence features          Sequence Features          OK  -
--    1222 /homes/pmr/.embossdata/qatests.server.dasregistry         http://www.d
-asregistry.org/das/                  sequence/feature sources listed on dasregis
-try.org
+-    1525 /homes/user/.embossdata/qatests.server.dasregistry      http://www.das
+registry.org/das/                  sequence/feature sources listed on dasregistr
+y.org
 tensembldasserver sequence features          Sequence Features          OK  -
--     220 /homes/pmr/.embossdata/qatests.server.ensembldasserver    http://www.e
-nsembl.org/das/                      sequence/feature sources on ensembl das ser
-ver
+-     238 /homes/user/.embossdata/qatests.server.ensembldasserver http://www.ens
+embl.org/das/                      sequence/feature sources on ensembl das serve
+r
 dbfetch           sequence features text obo Sequence Features Text Obo OK  -
--      45 /homes/pmr/local/share/EMBOSS/server.dbfetch        http://www.ebi.ac.
-uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
+-      49 /homes/user/local/share/EMBOSS/server.dbfetch           http://www.ebi
+.ac.uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
 dkfz              sequence features text obo Sequence Features Text Obo OK  OK
-OK      1 /homes/pmr/local/share/EMBOSS/server.dkfz           http://www.dkfz.de
-/menu/cgi-bin/srs7.1.3.1/wgetz SRS from DKFZ Heidelberg
+OK      1 /homes/user/local/share/EMBOSS/server.dkfz              http://www.dkf
+z.de/menu/cgi-bin/srs7.1.3.1/wgetz SRS from DKFZ Heidelberg
 tdbfetch          sequence features text obo Sequence Features Text Obo OK  -
--      45 /homes/pmr/.embossdata/qatests.server.tdbfetch            http://www.e
-bi.ac.uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
+-      50 /homes/user/.embossdata/qatests.server.tdbfetch         http://www.ebi
+.ac.uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
 twsdbfetch        sequence features text obo Sequence Features Text Obo OK  -
--      45 /homes/pmr/.embossdata/qatests.server.twsdbfetch          http://www.e
-bi.ac.uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
+-      50 /homes/user/.embossdata/qatests.server.twsdbfetch       http://www.ebi
+.ac.uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
 wsdbfetch         sequence features text obo Sequence Features Text Obo OK  -
--      45 /homes/pmr/local/share/EMBOSS/server.wsdbfetch      http://www.ebi.ac.
-uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
+-      49 /homes/user/local/share/EMBOSS/server.wsdbfetch         http://www.ebi
+.ac.uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
 ebeye             text                       Text                       OK  OK
--      62 /homes/pmr/local/share/EMBOSS/server.ebeye          http://www.ebi.ac.
-uk/ebisearch/service.ebi       EB-eye text search service that allows searching
-across EBI public databases
+-      62 /homes/user/local/share/EMBOSS/server.ebeye             http://www.ebi
+.ac.uk/ebisearch/service.ebi       EB-eye text search service that allows search
+ing across EBI public databases
 tebeye            text                       Text                       OK  OK
--      62 /homes/pmr/.embossdata/qatests.server.ebeye               http://www.e
-bi.ac.uk/ebisearch/service.ebi       EBI ebeye webservices
+-      64 /homes/user/.embossdata/qatests.server.ebeye            http://www.ebi
+.ac.uk/ebisearch/service.ebi       EBI ebeye webservices
 entrez            text                       Unknown                    OK  OK
--      47 /homes/pmr/local/share/EMBOSS/server.entrez
+-      48 /homes/user/local/share/EMBOSS/server.entrez
 
 mrs               text                       Unknown                    OK  OK
--      33 /homes/pmr/local/share/EMBOSS/server.mrs            http://mrs.cmbi.ru
-.nl/mrs-5/search
+-      33 /homes/user/local/share/EMBOSS/server.mrs               http://mrs.cmb
+i.ru.nl/mrs-5/search
 mrs3              text                       Unknown                    OK  OK
--      33 /homes/pmr/local/share/EMBOSS/server.mrs3           http://mrs.cmbi.ru
-.nl/mrs-3/plain.do
+-      33 /homes/user/local/share/EMBOSS/server.mrs3              http://mrs.cmb
+i.ru.nl/mrs-3/plain.do
 mrs4              text                       Unknown                    OK  OK
--      33 /homes/pmr/local/share/EMBOSS/server.mrs4           http://mrs.cmbi.ru
-.nl/mrs-web/plain.do
+-      33 /homes/user/local/share/EMBOSS/server.mrs4              http://mrs.cmb
+i.ru.nl/mrs-web/plain.do
 srs               text                       Unknown                    OK  OK
-OK     21 /homes/pmr/local/share/EMBOSS/server.srs            http://srs.ebi.ac.
-uk/srs7bin/cgi-bin/wgetz       SRS from EBI
+OK     21 /homes/user/local/share/EMBOSS/server.srs               http://srs.ebi
+.ac.uk/srsbin/cgi-bin/wgetz        SRS from EBI
 
 
 Command line arguments
 
-Displays information on configured servers
-Version: EMBOSS:6.4.0.0
+Display information on configured servers
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
-   -server             string     Name of a single server to give information
+   -servername         string     Name of a single server to give information
                                   on (Any string)
    -showtypes          menu       [*] Show type(s) (Values: Protein (Protein
                                   sequences); Nucleic (Nucleotide sequences);
@@ -213,15 +213,15 @@ Known bugs
 See also
 
    Program name     Description
-   cachedas         Generates server cache file for DAS servers or for the DAS
+   cachedas         Generate server cache file for DAS servers or for the DAS
                     registry
-   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+   cachedbfetch     Generate server cache file for Dbfetch/WSDbfetch data
                     sources
-   cacheebeyesearch Generates server cache file for EB-eye search domains
-   cacheensembl     Generates server cache file for an Ensembl server
+   cacheebeyesearch Generate server cache file for EB-eye search domains
+   cacheensembl     Generate server cache file for an Ensembl server
    dbtell           Display information about a public database
    servertell       Display information about a public server
-   showdb           Displays information on configured databases
+   showdb           Display information on configured databases
 
 Author(s)
 

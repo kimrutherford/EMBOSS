@@ -2,8 +2,8 @@ application: ensembltest [
   documentation: "Demonstration of the Ensembl API to be."
   groups: "Test"
   embassy: "myemboss"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]
 
 section: input [
@@ -38,15 +38,17 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: aoutfile  [
     standard: "Y"
     knowntype: "ensembltest output"
   ]
 
-  seqoutall: outseq [
+  seqoutall: aoutseqall [
+    information: "Output file for multiple Ensembl Slice sequences"
+    name: "slices"
+    features: "Y"
     standard: "Y"
-    extension: "seq"
-    type: "nucleotide"
+    type: "dna"
   ]
 
   integer: maxnum [
@@ -55,31 +57,28 @@ section: output [
     standard: "$(large)"
   ]
 
-  seqoutall: exonsoutseq [
-    information: "Output file for Ensembl Exons"
+  seqoutall: boutseqall [
+    information: "Output file for multiple Ensembl Exon sequences"
     name: "exons"
-    extension: "fa"
     features: "N"
     standard: "$(large)"
-    type: "nucleotide"
+    type: "dna"
   ]
 
-  seqoutall: transcriptsoutseq [
-    information: "Output file for Ensembl Transcripts"
+  seqoutall: coutseqall [
+    information: "Output file for multiple Ensembl Transcript sequences"
     name: "transcripts"
-    extension: "fa"
     features: "N"
     standard: "$(large)"
-    type: "nucleotide"
+    type: "dna"
   ]
 
-  seqoutall: translationsoutseq [
-    information: "Output file for Ensembl Translations"
+  seqoutall: doutseqall [
+    information: "Output file for multiple Ensembl Translation sequences"
     name: "translations"
-    extension: "fa"
     features: "N"
     standard: "$(large)"
-    type: "nucleotide"
+    type: "stopprotein"
   ]
 
 endsection: output

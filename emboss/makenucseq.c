@@ -1,5 +1,4 @@
-/******************************************************************************
-** @source makeseq.c application
+/* @source makeseq.c application
 **
 ** Create random sequence.
 **
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
     } */
 
     /* array allows fast creation of a sequences */
-    scmax = ajListstrToarray(list,&seqr);
+    scmax = (ajuint) ajListstrToarray(list,&seqr);
 
     if(!scmax)
 	ajFatal("No strings in list. No characters to make the sequence.");

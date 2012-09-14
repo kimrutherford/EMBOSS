@@ -7,7 +7,7 @@ To remove bases 10 to 12 from a database entry and write to the new sequence fil
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cutseq tembl:x13776 gatta2.seq -from=10 -to=12 </b>
-Removes a section from a sequence
+Remove a section from a sequence
 
 </pre></td></tr></table><p>
 <p>
@@ -22,7 +22,7 @@ To remove the first 20 bases from 'tembl:x13776' and write it to 'jsh.seq':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq </b>
-Removes a section from a sequence
+Remove a section from a sequence
 
 </pre></td></tr></table><p>
 <p>
@@ -37,7 +37,7 @@ If the default start and end positions are accepted, then all of the sequence is
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290 </b>
-Removes a section from a sequence
+Remove a section from a sequence
 Start of region to delete [1168]: <b></b>
 End of region to delete [1290]: <b></b>
 

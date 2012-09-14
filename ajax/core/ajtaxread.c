@@ -1,20 +1,45 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajtaxread **********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX taxonomy reading functions
+**
+** These functions control all aspects of AJAX taxonomy reading
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.26 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajtaxread.h"
+#include "ajtax.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+
+#include <string.h>
+
 
 AjPTable taxDbMethods = NULL;
 
@@ -44,7 +69,7 @@ static AjBool taxinReadNcbi(AjPTaxin thys, AjPTax tax);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Read [AjBool function] Input function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -66,10 +91,10 @@ static TaxOInFormat taxinFormatDef[] =
 /*     ReadFunction */
   {"unknown",     "Unknown format",
        AJFALSE, AJFALSE,
-       taxinReadNcbi}, /* default to first format */
+       &taxinReadNcbi}, /* default to first format */
   {"ncbi",          "NCBI taxonomy format",
        AJFALSE, AJTRUE,
-       taxinReadNcbi},
+       &taxinReadNcbi},
   {NULL, NULL, 0, 0, NULL}
 };
 
@@ -132,12 +157,14 @@ static AjBool taxinQueryMatch(const AjPQuery thys, const AjPTax tax);
 
 
 
-/* @func ajTaxinNew **********************************************************
+/* @func ajTaxinNew ***********************************************************
 **
 ** Creates a new taxonomy input object.
 **
 ** @return [AjPTaxin] New taxonomy input object.
 ** @category new [AjPTaxin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -178,13 +205,15 @@ AjPTaxin ajTaxinNew(void)
 
 
 
-/* @func ajTaxinDel **********************************************************
+/* @func ajTaxinDel ***********************************************************
 **
 ** Deletes a taxonomy input object.
 **
 ** @param [d] pthis [AjPTaxin*] Taxonomy input
 ** @return [void]
 ** @category delete [AjPTaxin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -237,7 +266,7 @@ void ajTaxinDel(AjPTaxin* pthis)
 
 
 
-/* @func ajTaxinClear ********************************************************
+/* @func ajTaxinClear *********************************************************
 **
 ** Clears a taxonomy input object back to "as new" condition, except
 ** for the query list which must be preserved.
@@ -245,6 +274,8 @@ void ajTaxinDel(AjPTaxin* pthis)
 ** @param [w] thys [AjPTaxin] Taxonomy input
 ** @return [void]
 ** @category modify [AjPTaxin] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -263,7 +294,7 @@ void ajTaxinClear(AjPTaxin thys)
 
 
 
-/* @func ajTaxinQryC *********************************************************
+/* @func ajTaxinQryC **********************************************************
 **
 ** Resets a taxonomy input object using a new Universal
 ** Query Address
@@ -271,6 +302,8 @@ void ajTaxinClear(AjPTaxin thys)
 ** @param [u] thys [AjPTaxin] Taxonomy input object.
 ** @param [r] txt [const char*] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -286,7 +319,7 @@ void ajTaxinQryC(AjPTaxin thys, const char* txt)
 
 
 
-/* @func ajTaxinQryS ********************************************************
+/* @func ajTaxinQryS **********************************************************
 **
 ** Resets a taxonomy input object using a new Universal
 ** Query Address
@@ -294,6 +327,8 @@ void ajTaxinQryC(AjPTaxin thys, const char* txt)
 ** @param [u] thys [AjPTaxin] Taxonomy input object.
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -327,12 +362,14 @@ void ajTaxinQryS(AjPTaxin thys, const AjPStr str)
 
 
 
-/* @func ajTaxinTrace ********************************************************
+/* @func ajTaxinTrace *********************************************************
 **
 ** Debug calls to trace the data in a taxonomy input object.
 **
 ** @param [r] thys [const AjPTaxin] Taxonomy input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -372,7 +409,7 @@ void ajTaxinTrace(const AjPTaxin thys)
 
 
 
-/* @func ajTaxinRead ********************************************************
+/* @func ajTaxinRead **********************************************************
 **
 ** If the file is not yet open, calls taxinQryProcess to convert the query
 ** into an open file stream.
@@ -387,6 +424,8 @@ void ajTaxinTrace(const AjPTaxin thys)
 ** @category input [AjPTax] Master taxonomy data input,
 **                  calls specific functions for file access type
 **                  and taxonomy data format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -504,13 +543,15 @@ AjBool ajTaxinRead(AjPTaxin taxin, AjPTax tax)
 
 
 
-/* @funcstatic taxinQueryMatch ***********************************************
+/* @funcstatic taxinQueryMatch ************************************************
 **
 ** Compares a taxonomy data item to a query and returns true if they match.
 **
 ** @param [r] thys [const AjPQuery] query.
 ** @param [r] tax [const AjPTax] Taxonomy data.
 ** @return [AjBool] ajTrue if the taxonomy data matches the query.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -521,7 +562,7 @@ static AjBool taxinQueryMatch(const AjPQuery thys, const AjPTax tax)
     AjPQueryField field = NULL;
     AjBool ok = ajFalse;
 
-    ajDebug("taxinQueryMatch '%S' fields: %u Case %B Done %B\n",
+    ajDebug("taxinQueryMatch '%S' fields: %Lu Case %B Done %B\n",
 	    tax->Id, ajListGetLength(thys->QueryFields),
             thys->CaseId, thys->QryDone);
 
@@ -593,7 +634,7 @@ static AjBool taxinQueryMatch(const AjPQuery thys, const AjPTax tax)
 
 
 
-/* @funcstatic taxDefine ****************************************************
+/* @funcstatic taxDefine ******************************************************
 **
 ** Make sure all taxonomy data object attributes are defined
 ** using values from the taxonomy input object if needed
@@ -601,6 +642,8 @@ static AjBool taxinQueryMatch(const AjPQuery thys, const AjPTax tax)
 ** @param [w] thys [AjPTax] Taxonomy data returned.
 ** @param [u] taxin [AjPTaxin] Taxonomy data input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -621,7 +664,7 @@ static AjBool taxDefine(AjPTax thys, AjPTaxin taxin)
 
 
 
-/* @funcstatic taxinReadFmt *************************************************
+/* @funcstatic taxinReadFmt ***************************************************
 **
 ** Tests whether taxonomy data can be read using the specified format.
 ** Then tests whether the taxonomy data matches taxonomy data query criteria
@@ -634,6 +677,8 @@ static AjBool taxDefine(AjPTax thys, AjPTaxin taxin)
 **                  1 if the query match failed.
 **                  2 if the taxonomy data type failed
 **                  3 if it failed to read any taxonomy data
+**
+** @release 6.4.0
 ** @@
 ** This is the only function that calls the appropriate Read function
 ** taxinReadXxxxxx where Xxxxxxx is the supported taxonomy data format.
@@ -656,7 +701,7 @@ static ajuint taxinReadFmt(AjPTaxin taxin, AjPTax tax,
     taxin->Input->Records = 0;
 
     /* Calling funclist taxinFormatDef() */
-    if(taxinFormatDef[format].Read(taxin, tax))
+    if((*taxinFormatDef[format].Read)(taxin, tax))
     {
 	ajDebug("taxinReadFmt success with format %d (%s)\n",
 		format, taxinFormatDef[format].Name);
@@ -686,7 +731,7 @@ static ajuint taxinReadFmt(AjPTaxin taxin, AjPTax tax,
 		ajFilebuffIsBuffered(taxin->Input->Filebuff),
 		ajFilebuffIsEof(taxin->Input->Filebuff));
 
-	if (!ajFilebuffIsBuffered(taxin->Input->Filebuff) &&
+	if(!ajFilebuffIsBuffered(taxin->Input->Filebuff) &&
 	    ajFilebuffIsEof(taxin->Input->Filebuff))
 	    return FMT_EOF;
 
@@ -704,7 +749,7 @@ static ajuint taxinReadFmt(AjPTaxin taxin, AjPTax tax,
 
 
 
-/* @funcstatic taxinRead *****************************************************
+/* @funcstatic taxinRead ******************************************************
 **
 ** Given data in a taxin structure, tries to read everything needed
 ** using the specified format or by trial and error.
@@ -712,6 +757,8 @@ static ajuint taxinReadFmt(AjPTaxin taxin, AjPTax tax,
 ** @param [u] taxin [AjPTaxin] Taxonomy data input object
 ** @param [w] tax [AjPTax] Taxonomy data object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -746,9 +793,9 @@ static AjBool taxinRead(AjPTaxin taxin, AjPTax tax)
 	/* Calling funclist taxinAccess() */
 	if(textaccess)
         {
-            if(!textaccess->Access(taxin->Input))
+            if(!(*textaccess->Access)(taxin->Input))
             {
-                ajDebug("taxinRead: textaccess->Access(taxin->Input) "
+                ajDebug("taxinRead: (*textaccess->Access)(taxin->Input) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -757,9 +804,9 @@ static AjBool taxinRead(AjPTaxin taxin, AjPTax tax)
 
 	if(taxaccess)
         {
-            if(!taxaccess->Access(taxin))
+            if(!(*taxaccess->Access)(taxin))
             {
-                ajDebug("taxinRead: taxaccess->Access(taxin) "
+                ajDebug("taxinRead: (*taxaccess->Access)(taxin) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -922,9 +969,9 @@ static AjBool taxinRead(AjPTaxin taxin, AjPTax tax)
 
     if(ajFilebuffIsEmpty(buff) && taxin->Input->ChunkEntries)
     {
-	if(textaccess && !textaccess->Access(taxin->Input))
+	if(textaccess && !(*textaccess->Access)(taxin->Input))
             return ajFalse;
-	else if(taxaccess && !taxaccess->Access(taxin))
+	else if(taxaccess && !(*taxaccess->Access)(taxin))
             return ajFalse;
         buff = taxin->Input->Filebuff;
     }
@@ -1004,6 +1051,8 @@ static AjBool taxinRead(AjPTaxin taxin, AjPTax tax)
 ** @param [u] taxin [AjPTaxin] Tax input object
 ** @param [w] tax [AjPTax] tax object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1026,7 +1075,7 @@ static AjBool taxinReadNcbi(AjPTaxin taxin, AjPTax tax)
 
     /* ajFilebuffTrace(buff); */
 
-    while (ajBuffreadLinePos(buff, &taxinReadLine, &fpos))
+    while(ajBuffreadLinePos(buff, &taxinReadLine, &fpos))
     {
         ajStrTokenAssignC(&handle, taxinReadLine, "|");
 
@@ -1187,6 +1236,8 @@ static AjBool taxinReadNcbi(AjPTaxin taxin, AjPTax tax)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1230,7 +1281,7 @@ void ajTaxinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -1265,12 +1316,14 @@ void ajTaxinprintBook(AjPFile outf)
 
 
 
-/* @func ajTaxinprintHtml ****************************************************
+/* @func ajTaxinprintHtml *****************************************************
 **
 ** Reports the internal data structures as an HTML table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1323,13 +1376,15 @@ void ajTaxinprintHtml(AjPFile outf)
 
 
 
-/* @func ajTaxinprintText ****************************************************
+/* @func ajTaxinprintText *****************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1364,12 +1419,14 @@ void ajTaxinprintText(AjPFile outf, AjBool full)
 
 
 
-/* @func ajTaxinprintWiki ****************************************************
+/* @func ajTaxinprintWiki *****************************************************
 **
 ** Reports the internal data structures as a wiki table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1442,11 +1499,13 @@ void ajTaxinprintWiki(AjPFile outf)
 
 
 
-/* @func ajTaxinExit *********************************************************
+/* @func ajTaxinExit **********************************************************
 **
 ** Cleans up taxonomy input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1489,6 +1548,8 @@ void ajTaxinExit(void)
 ** Returns the list of known field names for ajTaxinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1500,11 +1561,13 @@ const char* ajTaxinTypeGetFields(void)
 
 
 
-/* @func ajTaxinTypeGetQlinks ************************************************
+/* @func ajTaxinTypeGetQlinks *************************************************
 **
 ** Returns the listof known query link operators for ajTaxinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1556,11 +1619,13 @@ const char* ajTaxinTypeGetQlinks(void)
 
 
 
-/* @func ajTaxaccessGetDb ***************************************************
+/* @func ajTaxaccessGetDb *****************************************************
 **
 ** Returns the table in which taxonomy database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1582,6 +1647,8 @@ AjPTable ajTaxaccessGetDb(void)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1599,13 +1666,15 @@ const char* ajTaxaccessMethodGetQlinks(const AjPStr method)
 
 
 
-/* @func ajTaxaccessMethodGetScope ******************************************
+/* @func ajTaxaccessMethodGetScope ********************************************
 **
 ** Tests for a named method for taxonomy data reading and returns the scope
 ** (entry, query or all).
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1631,12 +1700,14 @@ ajuint ajTaxaccessMethodGetScope(const AjPStr method)
 
 
 
-/* @func ajTaxaccessMethodTest **********************************************
+/* @func ajTaxaccessMethodTest ************************************************
 **
 ** Tests for a named method for taxonomy data reading.
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1651,19 +1722,23 @@ AjBool ajTaxaccessMethodTest(const AjPStr method)
 
 
 
-/* @funcstatic taxinQryRestore **********************************************
+/* @funcstatic taxinQryRestore ************************************************
 **
 ** Restores a taxonomy input specification from an AjPQueryList node
 **
 ** @param [w] taxin [AjPTaxin] Taxonomy input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void taxinQryRestore(AjPTaxin taxin, const AjPQueryList node)
 {
     taxin->Input->Format = node->Format;
+    taxin->Input->Fpos   = node->Fpos;
     ajStrAssignS(&taxin->Input->Formatstr, node->Formatstr);
+    ajStrAssignS(&taxin->Input->QryFields, node->QryFields);
 
     return;
 }
@@ -1671,19 +1746,23 @@ static void taxinQryRestore(AjPTaxin taxin, const AjPQueryList node)
 
 
 
-/* @funcstatic taxinQrySave *************************************************
+/* @funcstatic taxinQrySave ***************************************************
 **
 ** Saves a taxonomy input specification in an AjPQueryList node
 **
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] taxin [const AjPTaxin] Taxonomy input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void taxinQrySave(AjPQueryList node, const AjPTaxin taxin)
 {
     node->Format   = taxin->Input->Format;
+    node->Fpos     = taxin->Input->Fpos;
     ajStrAssignS(&node->Formatstr, taxin->Input->Formatstr);
+    ajStrAssignS(&node->QryFields, taxin->Input->QryFields);
 
     return;
 }
@@ -1691,7 +1770,7 @@ static void taxinQrySave(AjPQueryList node, const AjPTaxin taxin)
 
 
 
-/* @funcstatic taxinQryProcess **********************************************
+/* @funcstatic taxinQryProcess ************************************************
 **
 ** Converts a taxonomy data query into an open file.
 **
@@ -1713,6 +1792,8 @@ static void taxinQrySave(AjPQueryList node, const AjPTaxin taxin)
 **                         The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1773,7 +1854,7 @@ static AjBool taxinQryProcess(AjPTaxin taxin, AjPTax tax)
                 qry->Formatstr);
         qry->Access = ajCallTableGetS(taxDbMethods,qry->Method);
         taxaccess = qry->Access;
-        return taxaccess->Access(taxin);
+        return (*taxaccess->Access)(taxin);
     }
 
     ajDebug("taxinQryProcess text method '%S' success\n", qry->Method);
@@ -1795,7 +1876,7 @@ static AjBool taxinQryProcess(AjPTaxin taxin, AjPTax tax)
 
 
 
-/* @funcstatic taxinListProcess **********************************************
+/* @funcstatic taxinListProcess ***********************************************
 **
 ** Processes a file of queries.
 ** This function is called by, and calls, taxinQryProcess. There is
@@ -1813,6 +1894,8 @@ static AjBool taxinQryProcess(AjPTaxin taxin, AjPTax tax)
 ** @param [u] tax [AjPTax] Taxonomy data
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1916,13 +1999,15 @@ static AjBool taxinListProcess(AjPTaxin taxin, AjPTax tax,
 
 
 
-/* @funcstatic taxinListNoComment ********************************************
+/* @funcstatic taxinListNoComment *********************************************
 **
 ** Strips comments from a character string (a line from an ACD file).
 ** Comments are blank lines or any text following a "#" character.
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1952,7 +2037,7 @@ static void taxinListNoComment(AjPStr* text)
 
 
 
-/* @funcstatic taxinFormatSet ************************************************
+/* @funcstatic taxinFormatSet *************************************************
 **
 ** Sets the input format for taxonomy data using the taxonomy data
 ** input object's defined format
@@ -1960,6 +2045,8 @@ static void taxinListNoComment(AjPStr* text)
 ** @param [u] taxin [AjPTaxin] Taxonomy data input.
 ** @param [u] tax [AjPTax] Taxonomy data
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2029,11 +2116,13 @@ static AjBool taxinFormatSet(AjPTaxin taxin, AjPTax tax)
 
 
 
-/* @func ajTaxallNew ***********************************************************
+/* @func ajTaxallNew **********************************************************
 **
 ** Creates a new taxon input stream object.
 **
 ** @return [AjPTaxall] New taxon input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2080,12 +2169,14 @@ AjPTaxall ajTaxallNew(void)
 
 
 
-/* @func ajTaxallDel ***********************************************************
+/* @func ajTaxallDel **********************************************************
 **
 ** Deletes a taxon input stream object.
 **
 ** @param [d] pthis [AjPTaxall*] taxon input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2147,6 +2238,8 @@ void ajTaxallDel(AjPTaxall* pthis)
 **
 ** @param [w] thys [AjPTaxall] Taxon input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2194,6 +2287,8 @@ void ajTaxallClear(AjPTaxall thys)
 **
 ** @param [r] thys [const AjPTaxall] Taxon input stream
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2223,7 +2318,7 @@ const AjPStr ajTaxallGettaxId(const AjPTaxall thys)
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -2245,6 +2340,8 @@ const AjPStr ajTaxallGettaxId(const AjPTaxall thys)
 ** @param [w] thys [AjPTaxall] Taxon input stream
 ** @param [u] Ptax [AjPTax*] Taxon returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2323,7 +2420,7 @@ AjBool ajTaxallNext(AjPTaxall thys, AjPTax *Ptax)
 
 
 
-/* @funcstatic taxinformatFind ***********************************************
+/* @funcstatic taxinformatFind ************************************************
 **
 ** Looks for the specified format(s) in the internal definitions and
 ** returns the index.
@@ -2333,6 +2430,8 @@ AjBool ajTaxallNext(AjPTaxall thys, AjPTax *Ptax)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2370,12 +2469,14 @@ static AjBool taxinformatFind(const AjPStr format, ajint* iformat)
 
 
 
-/* @func ajTaxinformatTest ***************************************************
+/* @func ajTaxinformatTest ****************************************************
 **
 ** Tests whether a named taxonomy data input format is known
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

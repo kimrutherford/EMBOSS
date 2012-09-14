@@ -38,7 +38,7 @@ Output report [arf3_rat.preg]:
 Command line arguments
 
 Regular expression search of protein sequence(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -60,7 +60,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -149,7 +152,7 @@ Output file format
 
 ########################################
 # Program: preg
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
@@ -172,22 +175,22 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: UBR5_RAT     from: 1   to: 920
+# Sequence: UBR5_RAT     from: 1   to: 2788
 # HitCount: 1
 #
 # Pattern: IA[QWF]A
 #
 #=======================================
 
-  Start     End Pattern         Sequence
-    421     424 regex: IA[QWF]A IAQA
+  Start     End Pattern        Sequence
+   2289    2292 regex:IA[QWF]A IAQA
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 2
-# Total_length: 1101
+# Total_length: 2969
 # Reported_sequences: 2
 # Reported_hitcount: 1
 #---------------------------------------
@@ -853,16 +856,16 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   antigenic        Find antigenic sites in proteins
+   epestfind        Find PEST motifs as potential proteolytic cleavage sites
    fuzzpro          Search for patterns in protein sequences
    fuzztran         Search for patterns in protein sequences (translated)
-   patmatdb         Searches protein sequences with a sequence motif
+   patmatdb         Search protein sequences with a sequence motif
    patmatmotifs     Scan a protein sequence with motifs from the PROSITE
                     database
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+   pscan            Scan protein sequence(s) with fingerprints from the PRINTS
                     database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
+   sigcleave        Report on signal cleavage sites in a protein sequence
 
 Author(s)
 

@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,methfile,enzymes,
                                    sitelen,plasmid,ambiguity,min,max,blunt,
                                    sticky,commercial,methyl,l);
-	ajDebug("hits:%d listlen:%u\n", hits, ajListGetLength(l));
+	ajDebug("hits:%d listlen:%Lu\n", hits, ajListGetLength(l));
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqGetNameC(seq));

@@ -11,7 +11,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -124,7 +124,7 @@ ID   IFNA2_HUMAN             Reviewed;         188 AA.
 AC   P01563; P01564; Q14606; Q96KI6;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   23-MAR-2010, entry version 109.
+DT   16-MAY-2012, entry version 128.
 DE   RecName: Full=Interferon alpha-2;
 DE            Short=IFN-alpha-2;
 DE   AltName: Full=Interferon alpha-A;
@@ -174,13 +174,13 @@ RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   GO; GO:0006917; P:induction of apoptosis; TAS:ProtInc.
-DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
+DR   GO; GO:0060338; P:regulation of type I interferon-mediated signaling pathway; TAS:Reactome.
 DR   GO; GO:0009615; P:response to virus; IEA:UniProtKB-KW.
+DR   GO; GO:0060337; P:type I interferon-mediated signaling pathway; TAS:Reactome.
+DR   Gene3D; G3DSA:1.20.1250.10; 4_helix_cytokine_core; 1.
 DR   InterPro; IPR009079; 4_helix_cytokine-like_core.
-DR   InterPro; IPR000471; IInterferon_alpha/beta/delta.
-DR   InterPro; IPR015589; Interferon_alpha.
-DR   PANTHER; PTHR11691:SF9; IFNa; 1.
+DR   InterPro; IPR012351; 4_helix_cytokine_core.
+DR   InterPro; IPR000471; Interferon_alpha/beta/delta.
 DR   PANTHER; PTHR11691; Interferon_abd; 1.
 DR   Pfam; PF00143; Interferon; 1.
 DR   PRINTS; PR00266; INTERFERONAB.
@@ -190,7 +190,7 @@ DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
 PE   1: Evidence at protein level;
 KW   3D-structure; Antiviral defense; Complete proteome; Cytokine;
 KW   Direct protein sequencing; Disulfide bond; Glycoprotein;
-KW   Pharmaceutical; Polymorphism; Secreted; Signal.
+KW   Pharmaceutical; Polymorphism; Reference proteome; Secreted; Signal.
 FT   SIGNAL        1     23
 FT   CHAIN        24    188       Interferon alpha-2.
 FT                                /FTId=PRO_0000016360.

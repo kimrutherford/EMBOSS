@@ -1,10 +1,37 @@
+/* @include enscoordsystem ****************************************************
+**
+** Ensembl Coordinate System functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.20 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/20 22:05:59 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSCOORDSYSTEM_H
 #define ENSCOORDSYSTEM_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdatabaseadaptor.h"
 
@@ -13,16 +40,21 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+struct EnsSCoordsystem;
+
+
+
 
 /* @data EnsPCoordsystemadaptor ***********************************************
 **
@@ -41,8 +73,10 @@ AJ_BEGIN_DECLS
 ** @attr MappingPaths [AjPTable] Mapping paths between coordinate systems
 ** @attr ExternalToInternal [AjPTable] External to internal Sequence Regions
 ** @attr InternalToExternal [AjPTable] Internal to external Sequence Regions
-** @attr Seqlevel [void*] Sequence-level Ensembl Coordinate System
-** @attr Toplevel [void*] Top-level Ensembl Coordinate System
+** @attr Seqlevel [struct EnsSCoordsystem*]
+** Sequence-level Ensembl Coordinate System
+** @attr Toplevel [struct EnsSCoordsystem*]
+** Top-level Ensembl Coordinate System
 ** @@
 ******************************************************************************/
 
@@ -56,8 +90,8 @@ typedef struct EnsSCoordsystemadaptor
     AjPTable MappingPaths;
     AjPTable ExternalToInternal;
     AjPTable InternalToExternal;
-    void* Seqlevel;
-    void* Toplevel;
+    struct EnsSCoordsystem *Seqlevel;
+    struct EnsSCoordsystem *Toplevel;
 } EnsOCoordsystemadaptor;
 
 #define EnsPCoordsystemadaptor EnsOCoordsystemadaptor*
@@ -104,9 +138,9 @@ typedef struct EnsSCoordsystem
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -127,7 +161,7 @@ EnsPCoordsystem ensCoordsystemNewIni(EnsPCoordsystemadaptor csa,
 
 EnsPCoordsystem ensCoordsystemNewRef(EnsPCoordsystem cs);
 
-void ensCoordsystemDel(EnsPCoordsystem* Pcs);
+void ensCoordsystemDel(EnsPCoordsystem *Pcs);
 
 EnsPCoordsystemadaptor ensCoordsystemGetAdaptor(const EnsPCoordsystem cs);
 
@@ -159,6 +193,14 @@ AjBool ensCoordsystemMatch(const EnsPCoordsystem cs1,
 
 AjPStr ensCoordsystemGetSpecies(const EnsPCoordsystem cs);
 
+AjBool ensListCoordsystemSortIdentifierAscending(AjPList css);
+
+AjBool ensListCoordsystemSortIdentifierDescending(AjPList css);
+
+AjBool ensListCoordsystemSortRankAscending(AjPList css);
+
+AjBool ensListCoordsystemSortRankDescending(AjPList css);
+
 AjBool ensListCoordsystemTrace(const AjPList css, ajuint level);
 
 /* Ensembl Coordinate System Adaptor */
@@ -169,7 +211,7 @@ EnsPCoordsystemadaptor ensRegistryGetCoordsystemadaptor(
 EnsPCoordsystemadaptor ensCoordsystemadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensCoordsystemadaptorDel(EnsPCoordsystemadaptor* Pcsa);
+void ensCoordsystemadaptorDel(EnsPCoordsystemadaptor *Pcsa);
 
 EnsPDatabaseadaptor ensCoordsystemadaptorGetDatabaseadaptor(
     const EnsPCoordsystemadaptor csa);
@@ -186,26 +228,26 @@ AjBool ensCoordsystemadaptorFetchAllbyName(
 AjBool ensCoordsystemadaptorFetchByIdentifier(
     const EnsPCoordsystemadaptor csa,
     ajuint identifier,
-    EnsPCoordsystem* Pcs);
+    EnsPCoordsystem *Pcs);
 
 AjBool ensCoordsystemadaptorFetchByName(
     const EnsPCoordsystemadaptor csa,
     const AjPStr name,
     const AjPStr version,
-    EnsPCoordsystem* Pcs);
+    EnsPCoordsystem *Pcs);
 
 AjBool ensCoordsystemadaptorFetchByRank(
     const EnsPCoordsystemadaptor csa,
     ajuint rank,
-    EnsPCoordsystem* Pcs);
+    EnsPCoordsystem *Pcs);
 
 AjBool ensCoordsystemadaptorFetchSeqlevel(
     const EnsPCoordsystemadaptor csa,
-    EnsPCoordsystem* Pcs);
+    EnsPCoordsystem *Pcs);
 
 AjBool ensCoordsystemadaptorFetchToplevel(
     const EnsPCoordsystemadaptor csa,
-    EnsPCoordsystem* Pcs);
+    EnsPCoordsystem *Pcs);
 
 const AjPList ensCoordsystemadaptorGetMappingpath(
     const EnsPCoordsystemadaptor csa,

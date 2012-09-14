@@ -1,8 +1,8 @@
 application: infoseq [
   documentation: "Display basic information about sequences"
   groups: "Data retrieval:Sequence data"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0001813 operation Sequence retrieval"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:1813 Sequence retrieval"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: advanced [
            delimited by a character, which you may specify by using the
            -delimiter option. In other words, if -columns is set on, the
            -delimiter option is overriden."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: delimiter [
@@ -43,7 +43,7 @@ section: advanced [
            could be a space character, a tab character, a pipe character or
            any other character or string."
     knowntype: "output delimiter"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
 endsection: advanced
@@ -59,7 +59,7 @@ section: output [
     knowntype: "infoseq output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
-    relations: "EDAM:0000855 data Sequence metadata"
+    relations: "EDAM_data:0855 Sequence metadata"
   ]
 
   boolean: html [
@@ -67,7 +67,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: only [
@@ -78,79 +78,79 @@ section: output [
            '-nohead -noname -noacc -notype -nopgc -nodesc' \
            to get only the length output, you can specify \
            '-only -length'"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: heading [
     default: "Y"
     information: "Display column headings"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: database [
     default: "@(!$(only))"
     information: "Display 'database' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: accession [
     default: "@(!$(only))"
     information: "Display 'accession' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: gi [
     default: "N"
     information: "Display 'GI' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: seqversion [
     default: "N"
     information: "Display 'version' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: length [
     default: "@(!$(only))"
     information: "Display 'length' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: pgc [
     default: "@(!$(only))"
     information: "Display 'percent GC content' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: organism [
     default: "@(!$(only))"
     information: "Display 'organism' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

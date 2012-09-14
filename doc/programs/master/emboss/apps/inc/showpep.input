@@ -11,7 +11,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -124,7 +124,7 @@ ID   RS24_TAKRU              Reviewed;         132 AA.
 AC   O42387;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-JAN-1998, sequence version 1.
-DT   02-MAR-2010, entry version 42.
+DT   16-MAY-2012, entry version 54.
 DE   RecName: Full=40S ribosomal protein S24;
 GN   Name=rps24;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -143,26 +143,28 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
-DR   SMR; O42387; 4-96.
+DR   ProteinModelPortal; O42387; -.
 DR   STRING; O42387; -.
 DR   PRIDE; O42387; -.
-DR   Ensembl; ENSTRUT00000016709; ENSTRUP00000016637; ENSTRUG00000006773; Takifugu rubripes.
-DR   eggNOG; fiNOG15754; -.
+DR   eggNOG; COG2004; -.
 DR   InParanoid; O42387; -.
 DR   GO; GO:0005840; C:ribosome; IEA:UniProtKB-KW.
 DR   GO; GO:0000166; F:nucleotide binding; IEA:InterPro.
 DR   GO; GO:0003735; F:structural constituent of ribosome; IEA:InterPro.
 DR   GO; GO:0006412; P:translation; IEA:InterPro.
-DR   InterPro; IPR012677; a_b_plait_nuc_bd.
+DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
+DR   InterPro; IPR012677; Nucleotide-bd_a/b_plait.
+DR   InterPro; IPR012678; Ribosomal_L23/L15e_core_dom.
 DR   InterPro; IPR001976; Ribosomal_S24e.
 DR   InterPro; IPR018098; Ribosomal_S24e_CS.
-DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
 DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
 DR   Pfam; PF01282; Ribosomal_S24e; 1.
 DR   ProDom; PD006052; Ribosomal_S24e; 1.
+DR   SUPFAM; SSF54189; L23_L15e_core; 1.
 DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
 PE   3: Inferred from homology;
-KW   Ribonucleoprotein; Ribosomal protein.
+KW   Complete proteome; Reference proteome; Ribonucleoprotein;
+KW   Ribosomal protein.
 FT   CHAIN         1    132       40S ribosomal protein S24.
 FT                                /FTId=PRO_0000137627.
 SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;

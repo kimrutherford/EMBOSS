@@ -1,3 +1,5 @@
+## Process this file with automake to produce Makefile.in
+
 # The intention here is to check whether JAVA_OK exists and, if
 # so, do a server installation. Otherwise check to see whether
 # there is already a resources.jar in the directory (from

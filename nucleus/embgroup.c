@@ -1,23 +1,42 @@
-/* @source embgroup.c
+/* @source embgroup ***********************************************************
 **
 ** Group Routines.
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.58 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+
+#include "ajlib.h"
+
+#include "embgroup.h"
+#include "ajlist.h"
+#include "ajfile.h"
+#include "ajtable.h"
+#include "ajobo.h"
+#include "ajoboread.h"
+#include "ajsys.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+#include "ajacd.h"
 
 #include <sys/types.h>  /* for opendir etc. */
 #ifndef WIN32
@@ -28,6 +47,7 @@
 #endif
 #include <string.h>
 #include <sys/stat.h>   /* for stat */
+
 
 
 static void grpProgClear(EmbPGroupProg gl);
@@ -83,6 +103,8 @@ static AjPStr grpStr2 = NULL;
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [r] gui [AjBool] Only report programs that are OK in GUIs
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -195,6 +217,8 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 ** @param [w] embassyname [AjPStr*] Embassy package attribute value,
 **                                  or an empty string if in the main package
 ** @return [AjBool] ajTrue if an ACD file was found
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -285,6 +309,8 @@ AjBool embGrpGetEmbassy(const AjPStr appname, AjPStr* embassyname)
 ** @param [w] embassyname [AjPStr*] Embassy package name
 **                                  or empty string for main package
 ** @return [AjBool] ajTrue if an ACD file was found
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -362,6 +388,8 @@ static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
 ** @param [r] embassyname [const AjPStr] Name of embassy package.
 **                                       default is to search for all
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -426,6 +454,8 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 ** @param [r] embassyname [const AjPStr] Name of embassy package.
 **                                       default is to search for all
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -540,6 +570,8 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 **
 ** @param [w] Pprognode [EmbPGroupProg*] Program node
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -803,7 +835,7 @@ static void grpParse(AjPFile file, AjPList groups,
 
 
 
-/* @funcstatic grpParseEmbassy ***********************************************
+/* @funcstatic grpParseEmbassy ************************************************
 **
 ** parse the acd file to get the EMBASSY application attribute
 **
@@ -811,6 +843,8 @@ static void grpParse(AjPFile file, AjPList groups,
 ** @param [w] embassyname [AjPStr*] EMBASSY package name from
 **                                     embassy attribute
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -904,6 +938,8 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
 **
 ** @param [u] text [AjPStr*] Line of text from input file
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -946,6 +982,8 @@ static void grpNoComment(AjPStr* text)
 ** @param [u] tokenhandle [AjPStrTok*] Current parsing handle for input text
 ** @param [r] delim [const char*] Delimiter string
 ** @return [AjPStr] String containing next value using acdStrTok
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1031,6 +1069,8 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
 ** @param [u]  keywords [AjPStr*] List of keywords
 **
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -1160,6 +1200,8 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 ** @param [u] sublist [AjPList] (Sub)-names of groups string from ACD file
 **
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -1173,10 +1215,10 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
     AjPStr tail;
     AjPStr revhead;
     AjPStr revtail;
-    AjPStr dummy;		 /* dummy string for ajListstrPop() */
+    AjPStr dummy = NULL;        /* dummy string for ajListstrPop() */
 
 
-    len = ajListstrToarray(sublist, &sub);
+    len = (ajuint) ajListstrToarray(sublist, &sub);
 
     for(i=0; i<len; i++)
     {
@@ -1288,6 +1330,8 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 ** @param [u] Pprognode  [EmbPGroupProg*] Program node by reference
 **
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -1400,6 +1444,8 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 **
 ** @param [r] name [const AjPStr] Name of the group
 ** @return [EmbPGroupTop] pointer to a new GPnode struct
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1439,6 +1485,8 @@ EmbPGroupTop embGrpMakeNewGnode(const AjPStr name)
 **                                    with spaces as separators
 ** @param [r] package [const AjPStr] Name of the package
 ** @return [EmbPGroupProg] pointer to a new gnode struct
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1472,6 +1520,8 @@ EmbPGroupProg embGrpMakeNewPnode(const AjPStr name, const AjPStr doc,
 **
 ** @param [r] pnode [const EmbPGroupProg] Source program node
 ** @return [EmbPGroupProg] pointer to a new pnode struct
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1576,6 +1626,8 @@ static EmbPGroupProg grpCopyPnode(const EmbPGroupProg pnode)
 **
 ** @param [u] groupslist [AjPList] List to sort
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1588,13 +1640,13 @@ void embGrpSortGroupsList(AjPList groupslist)
     giter = ajListIterNewread(groupslist);
 
     while((gl = ajListIterGet(giter)) != NULL)
-	ajListSort(gl->progs, embGrpCompareTwoPnodes);
+	ajListSort(gl->progs, &embGrpCompareTwoPnodes);
 
 
     ajListIterDel(&giter);
 
     /* sort the groups themselves */
-    ajListSort(groupslist, embGrpCompareTwoGnodes);
+    ajListSort(groupslist, &embGrpCompareTwoGnodes);
 
     return;
 }
@@ -1602,12 +1654,14 @@ void embGrpSortGroupsList(AjPList groupslist)
 
 
 
-/* @func embGrpSortProgsList *************************************************
+/* @func embGrpSortProgsList **************************************************
 **
 ** Sort a list of Pnodes by their name.
 **
 ** @param [u] progslist [AjPList] List to sort
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -1620,13 +1674,13 @@ void embGrpSortProgsList(AjPList progslist)
     piter = ajListIterNewread(progslist);
 
     while((pl = ajListIterGet(piter)) != NULL)
-	ajListSort(pl->groups, embGrpCompareTwoGnodes);
+	ajListSort(pl->groups, &embGrpCompareTwoGnodes);
 
 
     ajListIterDel(&piter);
 
     /* sort the groups themselves */
-    ajListSort(progslist, embGrpCompareTwoPnodes);
+    ajListSort(progslist, &embGrpCompareTwoPnodes);
 
     return;
 }
@@ -1642,6 +1696,8 @@ void embGrpSortProgsList(AjPList progslist)
 ** @param [r] b [const void *] Second node
 **
 ** @return [ajint] Compare value (-1, 0, +1)
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1662,6 +1718,8 @@ ajint embGrpCompareTwoGnodes(const void * a, const void * b)
 ** @param [r] b [const void *] Second node
 **
 ** @return [ajint] Compare value (-1, 0, +1)
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -1685,6 +1743,8 @@ ajint embGrpCompareTwoPnodes(const void * a, const void * b)
 ** @param [r] showkey [AjBool] If True, show keywords
 ** @param [r] package [const AjPStr] Name of current package
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1751,6 +1811,8 @@ void embGrpOutputGroupsList(AjPFile outfile, const AjPList groupslist,
 ** @param [r] showkey [AjBool] Show keywords in output
 ** @param [r] package [const AjPStr] Name of current package
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1837,6 +1899,8 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 **
 ** @param [d] groupslist [AjPList] List of groups to be cleared
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1869,6 +1933,8 @@ static void grpGroupsListClear(AjPList groupslist)
 **
 ** @param [d] groupslist [AjPList*] List of groups to be destroyed
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1889,6 +1955,8 @@ void embGrpGroupsListDel(AjPList *groupslist)
 **
 ** @param [d] progslist [AjPList*] List of programs to be destroyed
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -1916,12 +1984,14 @@ void embGrpProgsListDel(AjPList *progslist)
 
 
 
-/* @funcstatic grpProgClear ****************************************************
+/* @funcstatic grpProgClear ***************************************************
 **
 ** Reset a program node
 **
 ** @param [d] gl [EmbPGroupProg] Program node
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1950,6 +2020,8 @@ static void grpProgClear(EmbPGroupProg gl)
 **
 ** @param [d] Pgl [EmbPGroupProg*] Program node
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1985,6 +2057,8 @@ void embGrpProgDel(EmbPGroupProg *Pgl)
 **
 ** @param [d] relslist [AjPList] List of relations to be cleared
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2016,6 +2090,8 @@ static void grpRelationsListClear(AjPList relslist)
 **
 ** @param [d] relslist [AjPList*] List of relations to be destroyed
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2052,6 +2128,8 @@ void embGrpRelationsListDel(AjPList *relslist)
 **
 ** @param [r] gr [const EmbPGroupRelation] Source relation
 ** @return [EmbPGroupRelation] Relation object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2083,6 +2161,8 @@ static EmbPGroupRelation grpRelationsCopy(const EmbPGroupRelation gr)
 ** @param [r] key [const AjPStr] String to search for
 ** @param [r] all [AjBool] Match all words in key search string
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2193,6 +2273,8 @@ void embGrpKeySearchProgs(AjPList newlist,
 ** @param [r] subclasses [AjBool] Match EDAM subclasses
 ** @param [r] obsolete [AjBool] Match EDAM obsolete terms
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2309,7 +2391,7 @@ void embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
                 if(subclasses)
                     ajOboGetTree(obo, obolist);
 
-                ajDebug("%S '%S' %u\n",
+                ajDebug("%S '%S' %Lu\n",
                        qrystr, obo->Id, ajListGetLength(obolist));
 
                 while(ajListGetLength(obolist))
@@ -2483,6 +2565,8 @@ void embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
 **                                  search through
 ** @param [r] key [const AjPStr] program name to search for
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2607,6 +2691,8 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 **
 ** @param [u] list [AjPList] List of application GPnode returned
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -2661,6 +2747,8 @@ void embGrpProgsMakeUnique(AjPList list)
 **
 ** @param [u] list [AjPList] List of application GPnode returned
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -2713,6 +2801,8 @@ void embGrpGroupMakeUnique(AjPList list)
 ** Cleanup program group internals on exit
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void embGrpExit(void)

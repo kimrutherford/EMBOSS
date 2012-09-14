@@ -51,8 +51,7 @@ Identify proteins with specified sequence word composition
 Input protein sequence(s): tsw:*
 Program compseq output file: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]:
-Output file [12s1_arath.oddcomp]: out.odd
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output file [cru4_arath.oddcomp]: out.odd
 
 
    Go to the input files for this example
@@ -61,7 +60,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 Command line arguments
 
 Identify proteins with specified sequence word composition
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -103,7 +102,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -199,6 +201,7 @@ Output file format
         CO9_TAKRU
         FOS_TAKRU
         RS7_TAKRU
+        UBR5_RAT
 
 #       END     #
 
@@ -252,10 +255,10 @@ See also
    freak            Generate residue/base frequency table or plot
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

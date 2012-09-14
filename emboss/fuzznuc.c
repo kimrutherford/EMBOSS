@@ -38,11 +38,9 @@ int main(int argc, char **argv)
     AjPFeattable tab = NULL;
     AjPReport report = NULL;
     AjPStr tmpstr = NULL;
-
-    AjBool sc;
-    AjBool writeok = ajTrue;
-
     AjPPatlistSeq plist = NULL;
+    AjBool writeok = ajTrue;
+    AjBool sc;
 
     embInit("fuzznuc", argc, argv);
 
@@ -59,9 +57,9 @@ int main(int argc, char **argv)
     while (writeok && ajSeqallNext(seqall,&seq))
     {
 	tab = ajFeattableNewSeq(seq);
-        embPatlistSeqSearch(tab,seq,plist,ajFalse);
+        embPatlistSeqSearchAll(tab,seq,plist,ajFalse);
         if (sc)
-            embPatlistSeqSearch (tab,seq,plist,ajTrue);
+            embPatlistSeqSearchAll(tab,seq,plist,ajTrue);
         if(ajFeattableGetSize(tab))
 	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);

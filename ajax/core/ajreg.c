@@ -1,47 +1,37 @@
-/******************************************************************************
-** @source AJAX REG (ajax regular expression) functions
+/* @source ajreg **************************************************************
 **
-** Uses Henry Spencer's older regular expression library at present.
-** The newer version appears to have some performance problems,
-** especially in extracting substrings which we may need to use
-** quite extensively.
+** AJAX REG (ajax regular expression) functions
 **
-** A major reason for adding this layer is to allow a future
-** near-transparent switch to the POSIX version of the Henry Spencer
-** library at some future date.
-**
-** Some extra tricks are added, such as simply returning the matched
-** string or the nth substring.
-**
-** Possible extensions include a case-insensitive regcomp ... which
-** would be useful in many places. Also a regcomp for prefixes,
-** suffixes and exact matches which adds "^" and "$" to the pattern
-** string.
+** Uses the Perl-Comparible Regular Expressions Library (PCRE)
+** included as a sepoarate library in the EMBOSS distribution.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version 1.0
+** @version $Revision: 1.34 $
 ** @modified Jun 25 pmr First version
-** @@
+** @modified 1999-2011 pmr Replace Henry Spencer library with PCRE
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
 
+#include "ajreg.h"
 
 
 
@@ -51,7 +41,8 @@ static ajlong regFreeCount = 0;
 static ajlong regCount     = 0;
 static ajlong regTotal     = 0;
 
-
+static int *regDfaWorkspace = NULL;
+static int regDfaWsCount = 10000;
 
 
 /* constructors */
@@ -65,6 +56,8 @@ static ajlong regTotal     = 0;
 **
 ** @param [r] rexp [const AjPStr] Regular expression string.
 ** @return [AjPRegexp] Compiled regular expression.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -82,6 +75,8 @@ AjPRegexp ajRegComp(const AjPStr rexp)
 **
 ** @param [r] rexp [const char*] Regular expression character string.
 ** @return [AjPRegexp] Compiled regular expression.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -124,6 +119,8 @@ AjPRegexp ajRegCompC(const char* rexp)
 **
 ** @param [r] rexp [const AjPStr] Regular expression string.
 ** @return [AjPRegexp] Compiled regular expression.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -141,6 +138,8 @@ AjPRegexp ajRegCompCase(const AjPStr rexp)
 **
 ** @param [r] rexp [const char*] Regular expression character string.
 ** @return [AjPRegexp] Compiled regular expression.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -194,6 +193,8 @@ AjPRegexp ajRegCompCaseC(const char* rexp)
 ** @param [u] prog [AjPRegexp] Compiled regular expression.
 ** @param [r] str [const AjPStr] String to be compared.
 ** @return [AjBool] ajTrue if a match was found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -243,6 +244,8 @@ AjBool ajRegExec(AjPRegexp prog, const AjPStr str)
 ** @param [u] prog [AjPRegexp] Compiled regular expression.
 ** @param [r] str [const char*] String to be compared.
 ** @return [AjBool] ajTrue if a match was found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -280,6 +283,143 @@ AjBool ajRegExecC(AjPRegexp prog, const char* str)
 
 
 
+/* @func ajRegExecall *********************************************************
+**
+** Execute a regular expression search using the alternative 'DFA' algorithm
+** which generates all matches instead of the perl-compatible maximum match.
+**
+** The expression must first have been compiled with ajRegComp or ajRegCompC.
+**
+** Internal data structures in the expression will be set to substrings
+** which other functions can retrieve.
+**
+** @param [u] prog [AjPRegexp] Compiled regular expression.
+** @param [r] str [const AjPStr] String to be compared.
+** @return [AjBool] ajTrue if a match was found.
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+AjBool ajRegExecall(AjPRegexp prog, const AjPStr str)
+{
+    int startoffset = 0;
+    int options     = 0;
+
+    if(!regDfaWorkspace)
+        AJCNEW(regDfaWorkspace, regDfaWsCount);
+        
+    prog->matches = pcre_dfa_exec(prog->pcre, prog->extra,
+                                  ajStrGetPtr(str), ajStrGetLen(str),
+                                  startoffset, options,
+                                  prog->ovector, 3*prog->ovecsize,
+                                  regDfaWorkspace, regDfaWsCount);
+
+    if(prog->matches >= 0)
+    {
+	prog->orig = ajStrGetPtr(str);
+
+	if(prog->matches == 0)
+	    ajWarn("ajRegExecall too many substrings");
+
+	return ajTrue;
+    }
+
+    if(prog->matches < -1)		    /* -1 is a simple fail to match */
+    {				/* others are recursion limits etc. */
+	ajDebug("ajRegExecall returned unexpected status '%d'\n",
+                prog->matches);
+	prog->orig = ajStrGetPtr(str);	/* needed for the trace */
+	ajRegTrace(prog);
+    }
+
+    prog->orig = NULL;
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajRegExecallC ********************************************************
+**
+** Execute a regular expression search using the alternative 'DFA' algorithm
+** which generates all matches instead of the perl-compatible maximum match.
+**
+** The expression must first have been compiled with ajRegComp or ajRegCompC.
+**
+** Internal data structures in the expression will be set to substrings
+** which other functions can retrieve.
+**
+** @param [u] prog [AjPRegexp] Compiled regular expression.
+** @param [r] str [const char*] String to be compared.
+** @return [AjBool] ajTrue if a match was found.
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+AjBool ajRegExecallC(AjPRegexp prog, const char* str)
+{
+    int startoffset = 0;
+    int options     = 0;
+
+    if(!regDfaWorkspace)
+        AJCNEW(regDfaWorkspace, regDfaWsCount);
+        
+    prog->matches = pcre_dfa_exec(prog->pcre, prog->extra,
+                                  str, strlen(str),
+                                  startoffset, options,
+                                  prog->ovector, 3*prog->ovecsize,
+                                  regDfaWorkspace, regDfaWsCount);
+
+    if(prog->matches >= 0)
+    {
+	prog->orig = str;
+
+	if(prog->matches == 0)
+	    ajWarn("ajRegExecallC too many substrings");
+
+	return ajTrue;
+    }
+
+    if(prog->matches < -1)		    /* -1 is a simple fail to match */
+    {				/* others are recursion limits etc. */
+	ajDebug("ajRegExecallC returned unexpected status '%d'\n",
+                prog->matches);
+	prog->orig = str;		/* needed for the trace */
+	ajRegTrace(prog);
+    }
+
+    prog->orig = NULL;
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajRegGetMatches ******************************************************
+**
+** After a successful regular expression match, uses the regular
+** expression and the original string to calculate the offset
+** of the match from the start of the string.
+**
+** @param [r] rp [const AjPRegexp] Compiled regular expression.
+** @return [ajint] Number of matches found
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+ajint ajRegGetMatches(const AjPRegexp rp)
+{
+    return (rp->matches);
+}
+
+
+
+
 /* @func ajRegOffset **********************************************************
 **
 ** After a successful regular expression match, uses the regular
@@ -291,6 +431,8 @@ AjBool ajRegExecC(AjPRegexp prog, const char* str)
 ** @param [r] rp [const AjPRegexp] Compiled regular expression.
 ** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -314,16 +456,18 @@ ajint ajRegOffset(const AjPRegexp rp)
 ** @param [r] isub [ajint] Substring number.
 ** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 ajint ajRegOffsetI(const AjPRegexp rp, ajint isub)
 {
-    if(isub < 1)
-	ajErr("Invalid substring number %d", isub);;
+    if(isub < 0)
+	ajErr("Invalid substring number %d", isub);
 
     if(isub >= (rp->ovecsize))
-	ajErr("Invalid substring number %d", isub);;
+	ajErr("Invalid substring number %d", isub);
 
     return (rp->ovector[isub*2]);
 }
@@ -338,6 +482,8 @@ ajint ajRegOffsetI(const AjPRegexp rp, ajint isub)
 ** @param [r] rp [const AjPRegexp] Compiled regular expression.
 ** @param [r] isub [ajint] Substring number.
 ** @return [ajint] Substring length, or 0 if not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -371,6 +517,8 @@ ajint ajRegLenI(const AjPRegexp rp, ajint isub)
 ** @param [r] rp [const AjPRegexp] Compiled regular expression.
 ** @param [w] post [AjPStr*] String to hold the result.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -401,6 +549,8 @@ AjBool ajRegPost(const AjPRegexp rp, AjPStr* post)
 ** @param [r] rp [const AjPRegexp] Compiled regular expression.
 ** @param [w] post [const char**] Character string to hold the result.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -421,13 +571,15 @@ AjBool ajRegPostC(const AjPRegexp rp, const char** post)
 
 
 
-/* @func ajRegPre ************************************************************
+/* @func ajRegPre *************************************************************
 **
 ** After a successful match, returns the string before the match.
 **
 ** @param [r] rp [const AjPRegexp] Compiled regular expression.
 ** @param [w] dest [AjPStr*] String to hold the result.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -465,6 +617,8 @@ AjBool ajRegPre(const AjPRegexp rp, AjPStr* dest)
 ** @return [AjBool] ajTrue if a substring was defined
 **                  ajFalse if the substring is not matched
 **                  ajFalse if isub is out of range
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -523,6 +677,8 @@ AjBool ajRegSubI(const AjPRegexp rp, ajint isub, AjPStr* dest)
 **
 ** @param [d] pexp [AjPRegexp*] Compiled regular expression.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -571,6 +727,8 @@ void ajRegFree(AjPRegexp* pexp)
 **
 ** @param [r] rexp [const AjPRegexp] Compiled regular expression.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -641,11 +799,16 @@ void ajRegTrace(const AjPRegexp rexp)
 ** Prints a summary of regular expression (AjPRegexp) usage with debug calls
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
 void ajRegExit(void)
 {
+    if(regDfaWorkspace)
+        AJFREE(regDfaWorkspace);
+
     ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use "
             "(sizes change)\n",
 	    regAlloc, regFree, (regAlloc - regFree));

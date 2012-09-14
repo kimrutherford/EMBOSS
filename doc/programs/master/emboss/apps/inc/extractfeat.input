@@ -27,7 +27,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -40,6 +40,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -48,15 +57,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

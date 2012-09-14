@@ -1,28 +1,39 @@
-/******************************************************************************
-** @source AJAX nucleic acid functions
+/* @source ajdan **************************************************************
+**
+** AJAX nucleic acid functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.26 $
 ** @modified Feb 25 ajb First version
+** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajdan.h"
+#include "ajsys.h"
+#include "ajfileio.h"
+#include "ajfiledata.h"
+#include "ajbase.h"
+
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
@@ -43,7 +54,7 @@ static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len);
 
 
 
-/* @func ajMeltInit **********************************************************
+/* @func ajMeltInit ***********************************************************
 **
 ** Initialises melt entropies, enthalpies and energies. Different data
 ** files are read for DNA or RNA heteroduplex. Also sets optional flag
@@ -52,6 +63,8 @@ static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len);
 ** @param  [r] isdna [AjBool] true for DNA, false for RNA
 ** @param  [r]  savesize [ajint] Size of array to save, or zero if none
 ** @return [void] Number of energies to save
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void ajMeltInit(AjBool isdna, ajint savesize)
@@ -216,6 +229,8 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 ** @param  [r] seq2 [const AjPStr] Pointer to a another sequence
 ** @param  [r]  len [ajint] Length of sequences
 ** @return [float] Match probability
+**
+** @release 6.2.0
 ******************************************************************************/
 
 static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
@@ -272,6 +287,8 @@ static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
 ** @param  [w] entropy [float*] entropy
 **
 ** @return [float] Melt energy
+**
+** @release 1.0.0
 ******************************************************************************/
 
 float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
@@ -404,6 +421,8 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 ** @param  [r] isDNA [AjBool] DNA or RNA
 **
 ** @return [float] Melt temperature
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajMeltTemp(const AjPStr strand, ajint len, ajint shift, float saltconc,
@@ -442,21 +461,6 @@ float ajMeltTemp(const AjPStr strand, ajint len, ajint shift, float saltconc,
 
 
 
-/* @obsolete ajTm
-** @rename ajMeltTemp
-*/
-
-__deprecated float ajTm(const AjPStr strand, ajint len,
-                        ajint shift, float saltconc,
-                        float DNAconc, AjBool isDNA)
-{
-
-    return ajMeltTemp(strand, len, shift, saltconc, DNAconc, isDNA);
-}
-
-
-
-
 /* @func ajMeltGC *************************************************************
 **
 ** Calculates GC fraction of a sequence allowing for ambiguity
@@ -465,6 +469,8 @@ __deprecated float ajTm(const AjPStr strand, ajint len,
 ** @param  [r] len [ajint] Length of sequence
 **
 ** @return [float] GC fraction
+**
+** @release 1.0.0
 ******************************************************************************/
 
 float ajMeltGC(const AjPStr strand, ajint len)
@@ -521,6 +527,8 @@ float ajMeltGC(const AjPStr strand, ajint len)
 ** @param  [w] saveener [float **] energy save array
 **
 ** @return [float] melt energy
+**
+** @release 1.0.0
 ******************************************************************************/
 
 float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
@@ -590,6 +598,8 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 ** @param  [w] saveener [float **] energy save array
 **
 ** @return [float] Melt temperature
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajMeltTempSave(const char *strand, ajint pos, ajint len, float saltconc,
@@ -635,23 +645,6 @@ float ajMeltTempSave(const char *strand, ajint pos, ajint len, float saltconc,
 
 
 
-/* @obsolete ajTm2
-** @rename ajMeltTempSave
-*/
-
-__deprecated float ajTm2(const char *strand, ajint pos,
-                         ajint len, float saltconc,
-	    float DNAconc, AjBool isDNA,
-	    float **saveentr, float **saveenth, float **saveener)
-{
-
-    return ajMeltTempSave(strand, pos, len, saltconc, DNAconc, isDNA,
-                          saveentr, saveenth, saveener);
-}
-
-
-
-
 /* @func ajMeltTempProd *******************************************************
 **
 ** Calculates product melt temperature of DNA
@@ -661,6 +654,8 @@ __deprecated float ajTm2(const char *strand, ajint pos,
 ** @param  [r] len [ajint] Length of sequence (segment)
 **
 ** @return [float] Melt temperature
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajMeltTempProd(float gc, float saltconc, ajint len)
@@ -679,18 +674,6 @@ float ajMeltTempProd(float gc, float saltconc, ajint len)
 
 
 
-/* @obsolete ajProdTm
-** @rename ajMeltTempProd
-*/
-
-__deprecated float ajProdTm(float gc, float saltconc, ajint len)
-{
-    return ajMeltTempProd(gc, saltconc, len);
-}
-
-
-
-
 /* @func ajAnneal *************************************************************
 **
 ** Calculates annealing temperature of product and primer
@@ -699,6 +682,8 @@ __deprecated float ajProdTm(float gc, float saltconc, ajint len)
 ** @param  [r] tmproduct [float] product Tm
 **
 ** @return [float] Annealing temperature
+**
+** @release 1.0.0
 ******************************************************************************/
 
 float ajAnneal(float tmprimer, float tmproduct)
@@ -714,6 +699,8 @@ float ajAnneal(float tmprimer, float tmproduct)
 ** Cleans up DNA melting processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -726,3 +713,55 @@ void ajMeltExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajTm
+** @rename ajMeltTemp
+*/
+
+__deprecated float ajTm(const AjPStr strand, ajint len,
+                        ajint shift, float saltconc,
+                        float DNAconc, AjBool isDNA)
+{
+
+    return ajMeltTemp(strand, len, shift, saltconc, DNAconc, isDNA);
+}
+
+
+
+
+/* @obsolete ajTm2
+** @rename ajMeltTempSave
+*/
+
+__deprecated float ajTm2(const char *strand, ajint pos,
+                         ajint len, float saltconc,
+	    float DNAconc, AjBool isDNA,
+	    float **saveentr, float **saveenth, float **saveener)
+{
+
+    return ajMeltTempSave(strand, pos, len, saltconc, DNAconc, isDNA,
+                          saveentr, saveenth, saveener);
+}
+
+
+
+
+/* @obsolete ajProdTm
+** @rename ajMeltTempProd
+*/
+
+__deprecated float ajProdTm(float gc, float saltconc, ajint len)
+{
+    return ajMeltTempProd(gc, saltconc, len);
+}
+#endif

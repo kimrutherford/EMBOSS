@@ -5,8 +5,8 @@ application: seqxrefall
   gui: "yes"
   batch: "yes"
   cpu: "low"
-    relations: "EDAM:0000090 topic Database search and retrieval"
-    relations: "EDAM:0000225 operation Database cross-reference retrieval"
+    relations: "EDAM_topic:0090 Database search and retrieval"
+    relations: "EDAM_operation:0225 Database cross-reference retrieval"
 ]
 
 
@@ -24,7 +24,7 @@ sequence: sequence
     parameter: "Y"
     type: "any"
     help: "The sequence for which cross-references will be retrieved."
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
 ]
 
 datafile: dbref
@@ -33,7 +33,7 @@ datafile: dbref
     help: "File of database information including identifier, description, type, URL etc."
     default: "dbref.dat"
     knowntype: "database info"
-    relations: "EDAM:0000957 data Database metadata "
+    relations: "EDAM_data:0957 Database metadata "
 ]
 
 endsection: input
@@ -59,7 +59,7 @@ selection: format
     information: "Select format"
     help: "This specifies the format of the output file"
     button: "Y"
-    relations: "EDAM:0002129 identifier File format name"
+    relations: "EDAM_identifier:2129 File format name"
 ]
 
 endsection: required
@@ -101,7 +101,7 @@ outfile: outfile
     parameter: "Y"
     knowntype: "database cross-reference list"
     help: "Output file containing list of cross-references"
-    relations: "EDAM:0002093 data Database cross-reference"
+    relations: "EDAM_data:2093 Database cross-reference"
 ]
 
 endsection: output

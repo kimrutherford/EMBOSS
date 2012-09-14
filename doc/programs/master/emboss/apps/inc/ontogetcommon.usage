@@ -4,7 +4,7 @@ Here is a sample session with <b>ontogetcommon</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontogetcommon "edam:{0000108,0000110}" </b>
+% <b>ontogetcommon "edam:{0097,0640}" </b>
 Get common ancestor for terms
 Obo output file [ontogetcommon.obo]: <b></b>
 

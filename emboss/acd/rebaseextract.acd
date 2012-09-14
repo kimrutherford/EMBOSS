@@ -5,9 +5,9 @@ application: rebaseextract [
   gui: "no"
   batch: "no"
   cpu: "low"
-    relations: "EDAM:0000100 topic Nucleic acid restriction"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0001812 operation Data loading"
+    relations: "EDAM_topic:0100 Nucleic acid restriction"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:1812 Data loading"
 ]
 
 section: input [
@@ -19,14 +19,14 @@ section: input [
     parameter: "Y"
     information: "REBASE database withrefm file"
     knowntype: "rebase withrefm"
-    relations: "EDAM:0001517 data Protein report (restriction enzyme)"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
   infile: protofile [
     parameter: "Y"
     information: "REBASE database proto file"
     knowntype: "rebase proto"
-    relations: "EDAM:0001518 data Restriction enzyme pattern data"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
   boolean: equivalences [
@@ -35,7 +35,7 @@ section: input [
     information: "Create prototype equivalence file"
     help: "This option calculates an embossre.equ file using
            restriction enzyme prototypes in the withrefm file."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: input

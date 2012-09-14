@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     AjPStr algb;
     AjPStr ss;
 
-    ajint    lena;
-    ajint    lenb;
+    ajuint    lena;
+    ajuint    lenb;
 
     const char   *p;
     const char   *q;
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
     float gapextend;
     float endgapopen;
     float endgapextend;
-    ajulong maxarr = 1000; 	/* arbitrary. realloc'd if needed */
-    ajulong len;			
+    size_t maxarr = 1000; 	/* arbitrary. realloc'd if needed */
+    size_t len;
 
     float score;
 
@@ -76,8 +76,6 @@ int main(int argc, char **argv)
     float simx = 0.;
 
     AjPStr tmpstr = NULL;
-
-    size_t stlen;
 
     embInit("needle", argc, argv);
 
@@ -116,24 +114,23 @@ int main(int argc, char **argv)
 	ajSeqTrim(b);
 	lenb = ajSeqGetLen(b);
 
-	if(lenb > (LONG_MAX/(ajlong)(lena+1)))
+	if(lenb > (LONG_MAX/(size_t)(lena+1)))
 	   ajFatal("Sequences too big. Try 'stretcher'");
 
-	len = lena*lenb;
+	len = (size_t)lena*(size_t)lenb;
 
 	if(len>maxarr)
 	{
-	    stlen = (size_t) len;
-	    AJCRESIZETRY0(compass,(size_t)maxarr,stlen);
+	    AJCRESIZETRY0(compass,(size_t)maxarr,len);
 	    if(!compass)
 		ajDie("Sequences too big. Try 'stretcher'");
-	    AJCRESIZETRY0(m,(size_t)maxarr,stlen);
+	    AJCRESIZETRY0(m,(size_t)maxarr,len);
 	    if(!m)
 		ajDie("Sequences too big. Try 'stretcher'");
-	    AJCRESIZETRY0(ix,(size_t)maxarr,stlen);
+	    AJCRESIZETRY0(ix,(size_t)maxarr,len);
 	    if(!ix)
 		ajDie("Sequences too big. Try 'stretcher'");
-	    AJCRESIZETRY0(iy,(size_t)maxarr,stlen);
+	    AJCRESIZETRY0(iy,(size_t)maxarr,len);
 	    if(!iy)
 		ajDie("Sequences too big. Try 'stretcher'");
 	    maxarr=len;

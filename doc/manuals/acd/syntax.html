@@ -615,7 +615,7 @@ Kinetics" which had to be created to hold 'findkm').</p>
   <p>&nbsp;</p>
   </td>
   <td>
-  <p>Sequence editing</p>
+  <p>Data file and content editing</p>
   </td>
  </tr>
 
@@ -1515,6 +1515,41 @@ word: N<br>
 
  <tr>
   <td>
+  <p><b>assembly</b></p>
+  </td>
+  <td>
+  <p>Assembly of sequence reads</p>
+  </td>
+
+  <td>
+  <p>
+&nbsp;
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+entry: N<br>
+nullok: N<br>
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+cbegin: "0"<br>
+cend: "0"<br>
+iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
+idbname: ""<br>
+
+ </p>
+ </td>
+
+ <tr>
+  <td>
   <p><b>codon</b></p>
   </td>
   <td>
@@ -1766,11 +1801,14 @@ nullok: N<br>
   <td>
   <p>
 fformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 fopenfile: ""<br>
 fask: "N"<br>
 fbegin: "0"<br>
 fend: "0"<br>
 freverse: "N"<br>
+fcircular: "N"<br>
 
  </p>
  </td>
@@ -1966,6 +2004,8 @@ nullok: N<br>
   <td>
   <p>
 iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 idbname: ""<br>
 
  </p>
@@ -2042,6 +2082,39 @@ nullok: N<br>
 
  <tr>
   <td>
+  <p><b>refseq</b></p>
+  </td>
+  <td>
+  <p>Reference sequence</p>
+  </td>
+
+  <td>
+  <p>
+&nbsp;
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+entry: N<br>
+nullok: N<br>
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
+idbname: ""<br>
+
+ </p>
+ </td>
+
+ <tr>
+  <td>
   <p><b>regexp</b></p>
   </td>
   <td>
@@ -2103,6 +2176,8 @@ nullok: N<br>
   <td>
   <p>
 iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 idbname: ""<br>
 
  </p>
@@ -2178,7 +2253,10 @@ snucleotide: "N"<br>
 sprotein: "N"<br>
 slower: "N"<br>
 supper: "N"<br>
+scircular: "N"<br>
 sformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 sdbname: ""<br>
 sid: ""<br>
 ufo: ""<br>
@@ -2231,7 +2309,10 @@ snucleotide: "N"<br>
 sprotein: "N"<br>
 slower: "N"<br>
 supper: "N"<br>
+scircular: "N"<br>
 sformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 sdbname: ""<br>
 sid: ""<br>
 ufo: ""<br>
@@ -2286,7 +2367,10 @@ snucleotide: "N"<br>
 sprotein: "N"<br>
 slower: "N"<br>
 supper: "N"<br>
+scircular: "N"<br>
 sformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 sdbname: ""<br>
 sid: ""<br>
 ufo: ""<br>
@@ -2345,7 +2429,10 @@ snucleotide: "N"<br>
 sprotein: "N"<br>
 slower: "N"<br>
 supper: "N"<br>
+scircular: "N"<br>
 sformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 sdbname: ""<br>
 sid: ""<br>
 ufo: ""<br>
@@ -2383,6 +2470,8 @@ nullok: N<br>
   <td>
   <p>
 iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 idbname: ""<br>
 
  </p>
@@ -2416,6 +2505,8 @@ nullok: N<br>
   <td>
   <p>
 iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 idbname: ""<br>
 
  </p>
@@ -2518,6 +2609,8 @@ nullok: N<br>
   <td>
   <p>
 iformat: ""<br>
+iquery: ""<br>
+ioffset: ""<br>
 idbname: ""<br>
 
  </p>
@@ -2688,6 +2781,39 @@ ofextension: ""<br>
 ofdirectory: ""<br>
 ofname: ""<br>
 ofsingle: "N"<br>
+
+ </p>
+ </td>
+
+ <tr>
+  <td>
+  <p><b>outassembly</b></p>
+  </td>
+  <td>
+  <p>Assembly of sequence reads</p>
+  </td>
+
+  <td>
+  <p>
+&nbsp;
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+name: ""<br>
+extension: ""<br>
+nulldefault: N<br>
+nullok: N<br>
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+odirectory: ""<br>
+oformat: ""<br>
 
  </p>
  </td>
@@ -3060,6 +3186,39 @@ oformat: ""<br>
 
   <td>
   <p>
+nulldefault: N<br>
+nullok: N<br>
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+odirectory: ""<br>
+oformat: ""<br>
+
+ </p>
+ </td>
+
+ <tr>
+  <td>
+  <p><b>outrefseq</b></p>
+  </td>
+  <td>
+  <p>Reference sequence</p>
+  </td>
+
+  <td>
+  <p>
+&nbsp;
+
+ </p>
+ </td>
+
+  <td>
+  <p>
+name: ""<br>
+extension: ""<br>
 nulldefault: N<br>
 nullok: N<br>
 
@@ -3655,6 +3814,11 @@ no.</p>
 <a name="fnB1">&nbsp;</a>
 <h4>2.3.1.2 Input<a href="#fn1">[1]</a></h4>
 
+<h5>Assembly</h5>
+
+<p>An assembly of sequence reads. The sequence data is read only is the
+resulotion is at the single base level.</p>
+
 <h5>Codon</h5>
 
 <p>Codon usage tables are simple files read from the EMBOSS data
@@ -3809,6 +3973,11 @@ applications to define weights, ancestral states and factors
 provide detailed type checking, and can automatically detect and
 validate the various alternative formats that phylip supports without
 the need for complex extra command line options.</p>
+
+<h5>Refseq</h5>
+
+<p>A reference sequence. The sequence data is read only is the
+resulotion is at the single base level.</p>
 
 <h5>Regexp</h5>
 
@@ -3972,6 +4141,12 @@ sequence formats.</p>
 Can also be stored with the sequence if the sequence output
 "features" attribute is set.</p>
 
+<h5>Outassembly</h5>
+
+<p>Output file containing sequence assembly data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
 <h5>Outcodon</h5>
 
 <p>Output file containing codon usage data.
@@ -4047,6 +4222,12 @@ which the <i>-oformat</i> associated qualifier can override.</p>
 <h5>Outproperties</h5>
 
 <p>Output file containing phylogenetics property data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<h5>Outrefseq</h5>
+
+<p>Output file containing reference sequence data.
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
@@ -5631,6 +5812,30 @@ they can fix the value, or provide parsers for each alternative.
 
  <tr>
   <td>
+  <p>assembly</p>
+  </td>
+  <td>
+  <p>entry: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Read whole entry text<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>nullok: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>codon</p>
   </td>
   <td>
@@ -6303,6 +6508,30 @@ they can fix the value, or provide parsers for each alternative.
 
  <tr>
   <td>
+  <p>refseq</p>
+  </td>
+  <td>
+  <p>entry: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Read whole entry text<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>nullok: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>regexp</p>
   </td>
   <td>
@@ -6955,6 +7184,11 @@ they can fix the value, or provide parsers for each alternative.
 <p><b>Table 4.2. Input data types - attributes.</b></p>
 
 
+<h5>Assembly</h5>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
+
 <h5>Codon</h5>
 
 <p>Codon usage tables are species-specific, and in some cases specific
@@ -7225,6 +7459,11 @@ by an empty string or by -noxxx on the command line if the application
 can run without a properties file.
 </p>
 
+
+<h5>Refseq</h5>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
 
 <h5>Regexp</h5>
 
@@ -7978,6 +8217,54 @@ Select one [blosum] : PAM
 
  <tr>
   <td>
+  <p>outassembly</p>
+  </td>
+  <td>
+  <p>name: <i>string<i></p>
+  </td>
+  <td>
+  <p>Default file name<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>extension: <i>string<i></p>
+  </td>
+  <td>
+  <p>Default file extension<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>nulldefault: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Defaults to 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>nullok: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>outcodon</p>
   </td>
   <td>
@@ -8411,6 +8698,54 @@ Select one [blosum] : PAM
  <tr>
   <td>
   <p>outproperties</p>
+  </td>
+  <td>
+  <p>nulldefault: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Defaults to 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>nullok: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>outrefseq</p>
+  </td>
+  <td>
+  <p>name: <i>string<i></p>
+  </td>
+  <td>
+  <p>Default file name<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>extension: <i>string<i></p>
+  </td>
+  <td>
+  <p>Default file extension<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
   </td>
   <td>
   <p>nulldefault: <i>Y/N<i></p>
@@ -9142,6 +9477,25 @@ for programs where an alignment file is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
 
+<h5>Outassembly</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
 <h5>Featout</h5>
 
 <p>The output filename is constructed from the <i>name:</i>
@@ -9390,6 +9744,25 @@ default, and turned on from the command line.</p>
 file extension.</p>
 
 <h5>Outproperties</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<h5>Outrefseq</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
 
 <p>The <i>extension:</i> attribute will default to the output file
 format.</p>
@@ -9821,6 +10194,11 @@ for programs where a graph is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
 
+<p>The <i>sequence:</i> attribute specifies that the X-axis positions
+relate to sequence positions in the first input sequence. The sequence
+name becomes the default x-axis title and is used for datafile outputs
+that need a source name.
+
 <p>The <i>goutfile:</i> attribute specifies the base file name for
 output. It can be used to direct output to a named file rather than
 default to the first sequence name in the input.</p>
@@ -9841,6 +10219,11 @@ generation, and uses an empty string (no graph) as the default
 for programs where a graph is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
+
+<p>The <i>sequence:</i> attribute specifies that the X-axis positions
+relate to sequence positions in the first input sequence. The sequence
+name becomes the default x-axis title and is used for datafile outputs
+that need a source name.
 
 <p>The command line qualifiers can be defined as ACD attributes. The
 most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and
@@ -11702,6 +12085,78 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
 
  <tr>
   <td>
+  <p>assembly</p>
+  </td>
+  <td>
+  <p>-cbegin: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Start of the contig/consensus sequences<br>Default: 0</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-cend: <i>integer<i></p>
+  </td>
+  <td>
+  <p>End of the contig/consensus sequences<br>Default: 0</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iformat: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input assembly format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-idbname: <i>string<i></p>
+  </td>
+  <td>
+  <p>User-provided database name<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>codon</p>
   </td>
   <td>
@@ -11757,6 +12212,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Features format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -11822,6 +12301,18 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
 
  <tr>
   <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-fcircular: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Circular sequence features<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>obo</p>
   </td>
   <td>
@@ -11829,6 +12320,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Input obo format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -11882,6 +12397,54 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
 
  <tr>
   <td>
+  <p>refseq</p>
+  </td>
+  <td>
+  <p>-iformat: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input reference sequence format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-idbname: <i>string<i></p>
+  </td>
+  <td>
+  <p>User-provided database name<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>regexp</p>
   </td>
   <td>
@@ -11913,6 +12476,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Input resource format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12041,10 +12628,46 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>&nbsp;</p>
   </td>
   <td>
+  <p>-scircular: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Sequence is circular<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
   <p>-sformat: <i>string<i></p>
   </td>
   <td>
   <p>Input sequence format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12209,10 +12832,46 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>&nbsp;</p>
   </td>
   <td>
+  <p>-scircular: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Sequence is circular<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
   <p>-sformat: <i>string<i></p>
   </td>
   <td>
   <p>Input sequence format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12377,10 +13036,46 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>&nbsp;</p>
   </td>
   <td>
+  <p>-scircular: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Sequence is circular<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
   <p>-sformat: <i>string<i></p>
   </td>
   <td>
   <p>Input sequence format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12545,10 +13240,46 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>&nbsp;</p>
   </td>
   <td>
+  <p>-scircular: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Sequence is circular<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
   <p>-sformat: <i>string<i></p>
   </td>
   <td>
   <p>Input sequence format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12629,6 +13360,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>&nbsp;</p>
   </td>
   <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
   <p>-idbname: <i>string<i></p>
   </td>
   <td>
@@ -12645,6 +13400,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Input text format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12741,6 +13520,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Input variation format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-iquery: <i>string<i></p>
+  </td>
+  <td>
+  <p>Input query fields or ID list<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-ioffset: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Input start position offset<br>Default: </p>
   </td>
  </tr>
 
@@ -12964,6 +13767,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
 
  <tr>
   <td>
+  <p>outassembly</p>
+  </td>
+  <td>
+  <p>-odirectory: <i>string<i></p>
+  </td>
+  <td>
+  <p>Output directory<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-oformat: <i>string<i></p>
+  </td>
+  <td>
+  <p>Assembly output format<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>outcodon</p>
   </td>
   <td>
@@ -13175,6 +14002,30 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Output format specific to this data type<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>outrefseq</p>
+  </td>
+  <td>
+  <p>-odirectory: <i>string<i></p>
+  </td>
+  <td>
+  <p>Output directory<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-oformat: <i>string<i></p>
+  </td>
+  <td>
+  <p>Referece sequence output format<br>Default: ""</p>
   </td>
  </tr>
 
@@ -14606,6 +15457,18 @@ a variable to be defined in this file.</p>
 
  <tr>
   <td>
+  <p>EMBOSS_AXIS2C</p>
+  </td>
+  <td>
+  <p>string</p>
+  </td>
+  <td>
+  <p>Set to 1 if built with the axis2c library<br>Default: "1"</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>EMBOSS_AXIS2C_HOME</p>
   </td>
   <td>
@@ -14624,7 +15487,7 @@ a variable to be defined in this file.</p>
   <p>integer</p>
   </td>
   <td>
-  <p>Cache size to use for database indexing<br>Default: 2048</p>
+  <p>Cache size to use for database indexing<br>Default: 2000</p>
   </td>
  </tr>
 
@@ -14774,6 +15637,18 @@ a variable to be defined in this file.</p>
 
  <tr>
   <td>
+  <p>EMBOSS_MYSQL</p>
+  </td>
+  <td>
+  <p>string</p>
+  </td>
+  <td>
+  <p>Set to 1 if built with the mysql library<br>Default: "1"</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>EMBOSS_OPTIONS</p>
   </td>
   <td>
@@ -14846,6 +15721,18 @@ a variable to be defined in this file.</p>
 
  <tr>
   <td>
+  <p>EMBOSS_POSTGRESQL</p>
+  </td>
+  <td>
+  <p>string</p>
+  </td>
+  <td>
+  <p>Set to 1 if built with the postgresql library<br>Default: "1"</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>EMBOSS_PROXY</p>
   </td>
   <td>
@@ -14858,6 +15745,30 @@ a variable to be defined in this file.</p>
 
  <tr>
   <td>
+  <p>EMBOSS_SECCACHESIZE</p>
+  </td>
+  <td>
+  <p>integer</p>
+  </td>
+  <td>
+  <p>Secondary cache size to use for database indexing<br>Default: <i>(cachesize)</i></p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>EMBOSS_SECPAGESIZE</p>
+  </td>
+  <td>
+  <p>integer</p>
+  </td>
+  <td>
+  <p>Secondary page size to use for database indexing<br>Default: 512</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>EMBOSS_SEQWARN</p>
   </td>
   <td>
@@ -14865,6 +15776,18 @@ a variable to be defined in this file.</p>
   </td>
   <td>
   <p>Print warning messages when parsing standard sequence characters<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>EMBOSS_SQL</p>
+  </td>
+  <td>
+  <p>string</p>
+  </td>
+  <td>
+  <p>Set to 1 if built with either the mysql or postgresql library<br>Default: "1"</p>
   </td>
  </tr>
 

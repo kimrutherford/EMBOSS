@@ -5,19 +5,24 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Index 'id' (.xid)
- compressed:  Yes (Compressed)
-  cachesize:  100 (Size of cache)
-   pagesize: 2048 (Page size)
-  pagecount:    3 (Page count)
-      order:   71 (Tree order)
-     sorder:   99 (Order of secondary tree)
-      level:    0 (Level of tree)
-     slevel:    0 (Level of secondary tree)
-       fill:   46 (Entries per bucket)
-      sfill:  101 (Entries per secondary bucket)
-    kwlimit:   15 (Max key size)
-      count:    6 (Unique entries in index)
-  fullcount:    6 (Total entries in index)
+  compressed:  Yes (Compressed)
+   cachesize: 2000 (Size of primary cache)
+seccachesize: 2000 (Size of secondary cache)
+    pagesize: 2048 (Page size)
+ secpagesize:  512 (Secondary page size)
+   pagecount:    3 (Primary page count)
+   pagecount:    0 (Secondary page count)
+    refcount:    0 (Number of reference files)
+       order:   71 (Tree order)
+      sorder:   99 (Order of secondary tree)
+       level:    0 (Level of tree)
+      slevel:    0 (Level of secondary tree)
+        fill:   56 (Entries per bucket)
+       sfill:  169 (Entries per secondary bucket)
+    keylimit:   15 (Max key size)
+     idlimit:    0 (Max secondary id size)
+       count:    6 (Unique entries in index)
+   fullcount:    6 (Total entries in index)
 Identifier index 'id' index found with 3 pages
       COUNT: 6
    COUNTALL: 6
@@ -25,24 +30,29 @@ Identifier index 'id' index found with 3 pages
      bucket: 2
 ...       keys: 1
 ...      bkeys: 6
-...   total_size: 2143
-...    freespace: 5823, 94.8 of uncompressed
+...   total_size: 6144
+...    freespace: 5871, 95.6% of uncompressed 6144
       FOUND: 6
    FOUNDALL: 6
 Index 'acc' (.xac)
- compressed:  Yes (Compressed)
-  cachesize:  100 (Size of cache)
-   pagesize: 2048 (Page size)
-  pagecount:    6 (Page count)
-      order:   71 (Tree order)
-     sorder:   99 (Order of secondary tree)
-      level:    0 (Level of tree)
-     slevel:    0 (Level of secondary tree)
-       fill:   46 (Entries per bucket)
-      sfill:  101 (Entries per secondary bucket)
-    kwlimit:   15 (Max key size)
-      count:    7 (Unique entries in index)
-  fullcount:    9 (Total entries in index)
+  compressed:  Yes (Compressed)
+   cachesize: 2000 (Size of primary cache)
+seccachesize: 2000 (Size of secondary cache)
+    pagesize: 2048 (Page size)
+ secpagesize:  512 (Secondary page size)
+   pagecount:    3 (Primary page count)
+   pagecount:    3 (Secondary page count)
+    refcount:    0 (Number of reference files)
+       order:   71 (Tree order)
+      sorder:   22 (Order of secondary tree)
+       level:    0 (Level of tree)
+      slevel:    0 (Level of secondary tree)
+        fill:   56 (Entries per bucket)
+       sfill:   41 (Entries per secondary bucket)
+    keylimit:   15 (Max key size)
+     idlimit:    0 (Max secondary id size)
+       count:    7 (Unique entries in index)
+   fullcount:    9 (Total entries in index)
 Identifier index 'acc' index found with 6 pages
       COUNT: 7
    COUNTALL: 9
@@ -55,8 +65,8 @@ Identifier index 'acc' index found with 6 pages
 ...      bdups: 1
 ...      bxtra: 2
 ...      nkeys: 3 (0)
-...   total_size: 2496
-...    freespace: 11764, 95.7 of uncompressed
+...   total_size: 7680
+...    freespace: 7236, 94.2% of uncompressed 7680
       FOUND: 7
    FOUNDALL: 9
 </pre>

@@ -34,7 +34,7 @@ Text output file [outfile.text]:
 Command line arguments
 
 Get text data entries
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-text]              text       Text filename and optional format, or
@@ -47,6 +47,8 @@ Version: EMBOSS:6.4.0.0
 
    "-text" associated qualifiers
    -iformat1           string     Input text format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -224,7 +226,7 @@ See also
 
                     Program name                         Description
                     drtext       Get data resource entries complete text
-                    entret       Retrieves sequence entries from flatfile databases and files
+                    entret       Retrieve sequence entries from flatfile databases and files
                     ontotext     Get ontology term(s) original full text
                     textsearch   Search the textual description of sequence(s)
 

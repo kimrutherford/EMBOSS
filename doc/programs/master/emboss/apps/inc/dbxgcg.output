@@ -5,16 +5,27 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/embl/
-Processing file: eem_ba1.seq entries: 10 (10) time: 0.0s (0.0s)
-Processing file: eem_est.seq entries: 11 (1) time: 0.0s (0.0s)
-Processing file: eem_fun.seq entries: 12 (1) time: 0.0s (0.0s)
-Processing file: eem_htginv1.seq entries: 17 (5) time: 0.0s (0.0s)
-Processing file: eem_hum1.seq entries: 32 (15) time: 0.0s (0.0s)
-Processing file: eem_in.seq entries: 34 (2) time: 0.0s (0.0s)
-Processing file: eem_ov.seq entries: 36 (2) time: 0.0s (0.0s)
-Processing file: eem_ro.seq entries: 39 (3) time: 0.0s (0.0s)
-Processing file: eem_vi.seq entries: 40 (1) time: 0.0s (0.0s)
+Processing file: eem_ba1.seq
+entries: 10 (10) time: 0.0s (0.0s)
+Processing file: eem_est.seq
+entries: 11 (1) time: 0.0s (0.0s)
+Processing file: eem_fun.seq
+entries: 12 (1) time: 0.0s (0.0s)
+Processing file: eem_htginv1.seq
+entries: 17 (5) time: 0.0s (0.0s)
+Processing file: eem_hum1.seq
+entries: 32 (15) time: 0.0s (0.0s)
+Processing file: eem_in.seq
+entries: 34 (2) time: 0.0s (0.0s)
+Processing file: eem_ov.seq
+entries: 36 (2) time: 0.0s (0.0s)
+Processing file: eem_ro.seq
+entries: 39 (3) time: 0.0s (0.0s)
+Processing file: eem_vi.seq
+entries: 40 (1) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 15 OK. Maximum ID length was 8 for 'AB009602'.
+Field acc acclen 15 OK. Maximum acc term length was 8 for 'AB009602'.
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.ent</h3>
@@ -23,7 +34,7 @@ Total time: 0.0s
 # Number of files: 9
 # Release: 0.0
 # Date:    00/00/00
-Dual filename database
+Reference 2 filename database
 eem_ba1.seq eem_ba1.ref
 eem_est.seq eem_est.ref
 eem_fun.seq eem_fun.ref
@@ -38,37 +49,45 @@ eem_vi.seq eem_vi.ref
 <p><h3>File: embl.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     48
-Fullcount 48
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         46
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        48
+Fullcount    48
+Kwlimit      15
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     40
-Fullcount 40
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         46
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        101
+Secpagesize  512
+Seccachesize 2000
+Count        40
+Fullcount    40
+Kwlimit      15
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.xac</h3>

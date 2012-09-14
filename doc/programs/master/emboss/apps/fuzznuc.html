@@ -81,7 +81,7 @@ stands for A or C or G.
 brackets `{ }' the nucleotides that are not accepted at a given
 position.  For example: {AG} stands for any nucleotides except A and G. 
 
-<li>Each element in a pattern is separated from its neighbor by a `-'. 
+<li>Each element in a pattern is separated from its neighbour by a `-'. 
 (Optional in fuzznuc). 
 
 <li>Repetition of an element of the pattern can be indicated by following
@@ -113,10 +113,10 @@ This searches for "C or G" 5 times, followed by T and G, then anything
 except A, then any base (1 to 5 times) before a C. 
 
 <p>
-You can use ambiguity codes for nucleic acid searches but not within []
-or {} as they expand to bracketed counterparts.  For example, "s" is
-expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
-illegal. 
+You can use ambiguity codes for nucleic acid searches but not within
+[] or {} as they expand to bracketed counterparts.  For example, "s"
+is expanded to "[GC]" therefore [S] would be expanded with a double
+set of brackets which is illegal.
 
 <p>
 Note the use of X is reserved for proteins.  You must use N for nucleic

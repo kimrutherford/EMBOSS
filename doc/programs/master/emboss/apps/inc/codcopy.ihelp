@@ -1,5 +1,5 @@
 Copy and reformat a codon usage table
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            codon      Codon usage table name

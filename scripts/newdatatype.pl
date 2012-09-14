@@ -19,6 +19,7 @@ sub filecopyc($$) {
     $text =~ s/wxyzdesc/$newdesc/g;
     $text =~ s/Wxyz/$newtype/g;
     $text =~ s/wxyz/$newname/g;
+    $text =~ s/WXYZ/$newcaps/g;
     if($newdescup =~ /^[AEUIOY]/){
 	$text =~ s/a $newdesc/an $newdesc/g;
     }
@@ -41,6 +42,7 @@ sub filecopyh($$) {
     while(<IN>) {$text .= $_}
     close IN;
 
+    $text =~ s/AJWXYZ/AjP$newtypeup/g;
     $text =~ s/AjPWxyz/AjP$newtype/g;
     $text =~ s/AjSWxyz/AjS$newtype/g;
     $text =~ s/AjOWxyz/AjO$newtype/g;
@@ -69,14 +71,14 @@ sub filecopyh($$) {
 foreach $opt (@ARGV) {
     if ($opt =~ /name=(\S+)/) {$newname=$1}
     elsif ($opt =~ /type=(\S+)/) {$newtype=ucfirst($1)}
-    elsif ($opt =~ /desc=(\S+)/) {$newdesc=$1}
+    elsif ($opt =~ /desc=(.+)/) {$newdesc=$1}
     else {print STDERR "Unnkown option '$opt'\n"}
 }
 
 if(!defined($newname)){die "name not defined"}
-if(!defined($newtype)){$newtype = ucfirst($newname)}
+if(!defined($newtype)){$newtype = ucfirst($newname);$newtypeup = uc($newname);}
 if(!defined($newdesc)){$newdesc = $newname}
-if(!defined($newcaps)){$newuapc = uc($newname)}
+if(!defined($newcaps)){$newcaps = uc($newname)}
 
 $newdescup = ucfirst($newdesc);
 
@@ -185,45 +187,457 @@ Add to namDbTypes
 Add new datatype wherever obo appears:
 
 in namAccessTest
-        else if(ajCharMatchC(namtype->Scope, \"$newname\"))
+        else if(namtype->DataType == AJDATATYPE_$newcaps)
             result = aj$newtype"."accessMethodTest(method);
 
 in namInformatTest
 
-    else if(ajCharMatchC(namtype->Scope, \"$newname\"))
+    else if(namtype->DataType == AJDATATYPE_$newcaps)
         result = aj$newtype"."informatTest(format);
 
 in namMethod2Scope
 
-        else if(ajCharMatchC(namtype->Scope, \"$newname\"))
+        else if(namtype->DataType == AJDATATYPE_$newcaps)
             result = aj$newtype"."accessMethodGetScope(method);
 
 
-(3) Edit ajax/core/ajutil.c
+(3) Edit ajax/core/ajfile.h
+
+Edit AjEOutfileType and add
+
+    ** @value $newdescup data
+
+    ajEOutfileType$newcaps,
+
+(4) Edit ajax/core/ajquerydata.c
+
+Add to AjEDataType
+
+    AJDATATYPE_$newcaps, 
+
+(5) Edit ajax/core/ajutil.c
 
 Add to ajReset
 
     aj$newtype"."Exit();
 
-(4) Edit nucleus/emboss.h
+(6) Edit nucleus/emboss.h
 
 Insert:
 
 #include \"aj$newname"."db.h\"
 
-(5) Edit nucleus/embinit.c
+(7) Edit nucleus/embinit.c
 
 Insert in initDball,
 
     aj$newtype"."dbInit();
 
-(6) Edit nucleus/embexit.c
+(8) Edit nucleus/embexit.c
 
 Insert in embExit,
 
     aj$newtype"."dbExit();
 
-(7) Edit ajacd.h and ajacd.c
+(9) Edit ajacd.h
 
 Add datatype and functions, following e.g. taxon definitions
+
+AjP$newtype   ajAcdGet$newtype (const char *token);
+AjPOutfile    ajAcdGetOut$newtype (const char *token);
+
+
+(10) Edit ajacd.c
+
+Add datatype and functions, following e.g. taxon definitions
+
+static const AjPStr acdPrompt$newtype(AcdPAcd thys);
+static const AjPStr acdPromptOut$newname(AcdPAcd thys);
+static void acdHelpText$newtype(const AcdPAcd thys, AjPStr* str);
+static void acdDel$newtype(void** PPval);
+static void acdSet$newtype(AcdPAcd thys);
+static void acdSetOut$newname(AcdPAcd thys);
+
+
+AcdOAttr acdAttr$newtype"."[] =
+{
+    {\"entry\", VT_BOOL, AJFALSE, \"N\",
+	 \"Read whole entry text\"},
+    {\"nullok\", VT_BOOL, AJFALSE, \"N\",
+	 \"Can accept a null filename as 'no file'\"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+AcdOAttr acdAttrOut$newname"."[] =
+{
+    {\"name\", VT_STR, AJFALSE, \"\",
+	 \"Default file name\"},
+    {\"extension\", VT_STR, AJFALSE, \"\",
+	 \"Default file extension\"},
+    {\"nulldefault\", VT_BOOL, AJFALSE, \"N\",
+	 \"Defaults to 'no file'\"},
+    {\"nullok\", VT_BOOL, AJFALSE, \"N\",
+	 \"Can accept a null filename as 'no file'\"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+
+
+In AcdOOuttype acdOuttype[] =
+
+    {\"out$newname\",     \"abc\",           OUTFILE_$newcaps, 0,
+	 acdPromptOut$newname,     aj$newtypeoutformatFind},
+
+
+
+AcdOQual acdQual$newtype[] =
+{
+    {\"iformat\",    \"\",  \"string\",  \"Input $newdesc format\"},
+    {\"idbname\",    \"\",  \"string\",  \"User-provided database name\"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
+AcdOQual acdQualOut$newname[] =
+{
+    {\"odirectory\", \"\",  \"string\",  \"Output directory\"},
+    {\"oformat\",    \"\",  \"string\",  \"$newdescup output format\"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
+    {\"$newname\",       \"input\",     acdSecInput,
+	 acdAttr$newtype,       acdQual$newtype,
+	 acdSet$newtype,        acdHelpText$newtype,   acdDel$newtype,
+	 AJTRUE,  AJTRUE,  acdPrompt$newtype,  &acdUseData, &acdUseIn,
+	 \"$newdescup\" },
+
+    {\"out$newname\",     \"output\",    acdSecOutput,
+	 acdAttrOut$newname,    acdQualOut$newname,
+	 acdSetOut$newname,     NULL,                  acdDelOutfile,
+	 AJTRUE,  AJTRUE,  acdPromptOut$newname,  &acdUseOutfile, &acdUseOut,
+	 \"$newdescup\" },
+
+in section return
+
+** @nam4rule  Get$newtype   ACD $newdesc datatype
+** @nam4rule  GetOut$newname   ACD $newdesc output datatype
+** @valrule   $newtype         [AjP$newtype]
+** @valrule   Out$newname      [AjPOutfile]
+
+
+/* @func ajAcdGet$newtype *****************************************************
+**
+** Returns an item of type $newdesc as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjP$newtype] $newdescup object
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjP$newtype ajAcdGet$newtype(const char *token)
+{
+    AjP$newtype val = acdGetValueRef(token, \"$newname\");
+
+    return val;
+}
+
+
+
+
+/* @funcstatic acdSet$newtype *************************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD $newdesc input
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSet$newtype(AcdPAcd thys)
+{
+    AjP$newtype val;
+    AjP$newtype"."in $newname"."in;
+
+    AjBool required = ajFalse;
+    AjBool ok       = ajFalse;
+    AjBool nullok   = ajFalse;
+    ajint itry;
+
+    AjPStr infname = NULL;
+    
+    val = aj$newtype"."New();        /* set the default value */
+    $newname"."in = aj$newtype"."inNew();  
+
+    acdAttrToBool(thys, "nullok", ajFalse, &nullok);
+
+    required = acdIsRequired(thys);
+    acdReplyInitS(thys, infname, &acdReplyDef);
+    ajStrDel(&infname);
+
+    acdAttrToBool(thys, "entry", ajFalse, &$newname"."in->Input->Text);
+
+    for(itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;	   /* accept the default if nothing changes */
+
+	ajStrAssignS(&acdReply, acdReplyDef);
+
+	if(required)
+	    acdUserGet(thys, &acdReply);
+
+	if(!ajStrGetLen(acdReply) && nullok)
+        {
+            aj$newtype"."inDel(&$newname"."in);
+	    break;
+	}
+
+	aj$newtype"."inQryS($newname"."in, acdReply);
+
+        ok = aj$newtype"."inRead($newname"."in, val);
+    }
+
+    if(!ok)
+	acdBadRetry(thys);
+
+    acdInFileSave(acdReply, aj$newtype">"GetId(val), ajTrue);
+
+    thys->Value = val;
+    ajStrAssignS(&thys->ValStr, acdReply);
+    
+    aj$newtype"."inDel(&$newname"."in);
+
+    return;
+}
+
+
+
+/* @func ajAcdGetOut$newname **************************************************
+**
+** Returns an item of type Out$newname as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjPOutfile] File object. The file was already opened by
+**         acdSetOut so this just returns the pointer.
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPOutfile ajAcdGetOut$newname(const char *token)
+{
+    return acdGetValueRef(token, \"out$newname"."\");
+}
+
+
+
+
+/* @funcstatic acdSetOut$newname **********************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD out$newname item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value (if no other available) is a null string, which
+** is invalid.
+**
+** Associated qualifiers \"-oformat\"
+** are stored in the object and applied to the data on output.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSetOut$newname(AcdPAcd thys)
+{
+    acdSetOutType(thys, \"out$newname"."\");
+
+    return;
+}
+
+
+
+
+/* @funcstatic acdHelpText$newtype ********************************************
+**
+** Sets the help text for this ACD object to be a $newdesc description
+**
+** @param [r] thys [const AcdPAcd] Current ACD object.
+** @param [w] Pstr [AjPStr*] Help text
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdHelpText$newtype(const AcdPAcd thys, AjPStr* Pstr)
+{
+    ajint maxreads;
+
+    ajStrAssignClear(Pstr);
+
+    acdAttrToInt(thys, \"maxreads\", 1, &maxreads);
+
+    if(maxreads <= 1)
+        ajStrAssignC(Pstr, \"$newname\");
+    else
+        ajStrAssignC(Pstr, \"$newname(s)\");
+
+    ajStrFmtTitle(Pstr);
+
+    ajStrAppendC(Pstr,
+		 \" filename and optional format, or reference (input query)\");
+
+    return;
+}
+
+
+
+
+/* @funcstatic acdPrompt$newtype **********************************************
+**
+** Sets the default prompt for this ACD object to be a $newdesc
+** prompt with \"first\", \"second\" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPrompt$newtype"."(AcdPAcd thys)
+{
+    static ajint count=0;
+    AjPStr $newname"."Prompt = NULL;
+    AjPStr $newname"."PromptAlt = NULL;
+    const AjPStr knowntype;
+    ajint maxreads = 0;
+
+    acdAttrToInt(thys, \"maxreads\", 1, &maxreads);
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    $newname"."Prompt = ajStrNewRes(32);
+    $enwname"."PromptAlt = ajStrNewRes(32);
+
+    if(ajStrGetLen(knowntype))
+	ajFmtPrintAppS(&$newname"."PromptAlt, "%S ", knowntype);
+
+    ajFmtPrintAppS(&$newname"."PromptAlt, \"$newdesc\");
+
+    if(maxreads > 1)
+	ajStrAppendC(&$newname"."PromptAlt, \"(s)\");
+
+    ajFmtPrintS(&$newname"."Prompt, \"Input %S\", $newname"."PromptAlt);
+
+    if(knowntype)
+    {
+	count++;
+	acdPromptStandardS(thys, $newname"."PromptAlt);
+    }
+    else
+	acdPromptStandardAlt(thys, ajStrGetPtr($newname"."Prompt),
+			     ajStrGetPtr($newname"."PromptAlt), &count);
+
+    if(!acdAttrTestDefined(thys, \"default\") &&
+       acdAttrTestDefined(thys, \"nullok\"))
+	acdPromptStandardAppend(thys, \" (optional)\");
+    
+    ajStrDel(&$newname"."Prompt);
+    ajStrDel(&$newname"."PromptAlt);
+
+    return thys->StdPrompt;
+}
+
+
+
+/* @funcstatic acdPromptOut$newname"." ****************************************
+**
+** Sets the default prompt for this ACD object to be a simple
+** prompt with \"second\", \"third\" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPromptOut$newname"."(AcdPAcd thys)
+{
+    static ajint count=0;
+
+    const AjPStr knowntype;
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    if(ajStrGetLen(knowntype))
+    {
+	count++;
+	acdPromptStandardS(thys, knowntype);
+	acdPromptStandardAppend(thys, \" output file\");
+    }
+    else
+	acdPromptStandard(thys, \"$newdesc output file\", &count);
+
+    if(!acdAttrTestDefined(thys, \"default\") &&
+       acdAttrTestDefined(thys, \"nullok\"))
+	acdPromptStandardAppend(thys, \" (optional)\");
+    
+    return thys->StdPrompt;
+}
+
+
+
+
+/* @funcstatic acdDel$newtype"." **********************************************
+**
+** Function with void** prototype to delete ACD $newdesc input data
+**
+** @param [d] PPval [void**] Value to be deleted
+** @return [void]
+**
+** @release 6.5.0
+**
+******************************************************************************/
+
+static void acdDel$newtype(void** PPval)
+{
+    if(!*PPval)
+        return;
+
+    aj$newtype"."Del((AjP$newtype"."*)PPval);
+
+    return;
+}
+
+
+
+
+
+
 ";

@@ -274,7 +274,7 @@ METAL   SO:0001092
 #                            internal cyclic lactam
 #SULFATATION                 Generally of tyrosine
 
-MOD_RES MOD:01156
+MOD_RES MOD:01156 SO:0001089
 	/note
 	/comment
 

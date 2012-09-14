@@ -74,7 +74,7 @@ The keyboard will beep at you when you have reached this limit and you will not 
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 

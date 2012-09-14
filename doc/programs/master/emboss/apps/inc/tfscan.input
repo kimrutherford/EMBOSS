@@ -47,7 +47,8 @@ RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
 RT   "Human fos gene";
 RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
-DR   EPD; EP11145; HS_FOS.
+DR   Ensembl-Gn; ENSG00000170345; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000303562; Homo_sapiens.
 XX
 CC   [2]  sites; promoter region.
 CC   C-fos is the human cellular homolog of the v-fos oncogene of
@@ -56,7 +57,6 @@ CC   was found that both human and murine c-fos genes contained an
 CC   enhancer-like element in their 5' noncoding regions that was
 CC   necessary for increased transcription following serum activation.
 CC   The FBJ-MuSV v-fos oncogene contains a deletion relative to murine
-CC   and human c-fos proto-oncogenes that causes complete divergence of
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

@@ -1,15 +1,59 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajresourcedata ****************************************************
+**
+** AJAX data resource data structures
+**
+** These functions control all aspects of AJAX data resource
+** parsing and include simple utilities.
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version  $Revision: 1.15 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajresourcedata_h
-#define ajresourcedata_h
+#ifndef AJRESOURCEDATA_H
+#define AJRESOURCEDATA_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajtextdata.h"
+
+AJ_BEGIN_DECLS
 
 
-#define NULLFPOS -1
 
-typedef struct AjSResourceAccess AjSResourceAccess;
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
 
 
 
@@ -53,7 +97,8 @@ typedef struct AjSResourceAccess AjSResourceAccess;
 ** @@
 ******************************************************************************/
 
-typedef struct AjSResource {
+typedef struct AjSResource
+{
     AjPStr  Id;
     AjPList Idalt;
     AjPStr  Acc;
@@ -86,7 +131,7 @@ typedef struct AjSResource {
 
 #define AjPResource AjOResource*
 
-    
+
 
 
 /* @data AjPResquery **********************************************************
@@ -105,7 +150,8 @@ typedef struct AjSResource {
 ** @attr FormatTerm [AjPStr] Resource query format EDAM term
 ** @attr Term     [AjPStr] Resource query term
 ** @attr Url      [AjPStr] Resource query URL
-** @attr Nterms   [ajuint] Number of terms 
+** @attr Nterms   [ajuint] Number of terms
+** @attr Padding  [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -117,11 +163,12 @@ typedef struct AjSResquery
     AjPStr Term;
     AjPStr Url;
     ajuint Nterms;
+    ajuint Padding;
 } AjOResquery;
 
 #define AjPResquery AjOResquery*
 
-    
+
 
 
 /* @data AjPReslink ***********************************************************
@@ -138,14 +185,16 @@ typedef struct AjSResquery
 ** @attr Source   [AjPStr] Resource link source
 ** @attr Term     [AjPStr] Resource query terms
 ** @attr Nterms   [ajuint] Resource query number of terms
+** @attr Padding  [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-    typedef struct AjSReslink
+typedef struct AjSReslink
 {
     AjPStr Source;
     AjPStr Term;
     ajuint Nterms;
+    ajuint Padding;
 } AjOReslink;
 
 #define AjPReslink AjOReslink*
@@ -169,7 +218,7 @@ typedef struct AjSResquery
 ** @@
 ******************************************************************************/
 
-    typedef struct AjSResterm
+typedef struct AjSResterm
 {
     AjPStr Id;
     AjPStr Name;
@@ -196,7 +245,8 @@ typedef struct AjSResquery
 ** @@
 ******************************************************************************/
 
-typedef struct AjSResourcein {
+typedef struct AjSResourcein
+{
     AjPTextin Input;
     void *ResourceData;
 } AjOResourcein;
@@ -206,7 +256,7 @@ typedef struct AjSResourcein {
 
 
 
-/* @data AjPResourceall ********************************************************
+/* @data AjPResourceall *******************************************************
 **
 ** Ajax data resource all (stream) object.
 **
@@ -243,6 +293,7 @@ typedef struct AjSResourceall
 
 
 
+
 /* @data AjPResourceAccess ****************************************************
 **
 ** Ajax data access database reading object.
@@ -261,8 +312,8 @@ typedef struct AjSResourceall
 ** @alias AjOResourceAccess
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -270,14 +321,15 @@ typedef struct AjSResourceall
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [AjBool] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSResourceAccess
 {
     const char *Name;
-    AjBool (*Access) (AjPResourcein resourcein);
-    AjBool (*AccessFree) (void* qry);
+    AjBool (*Access)(AjPResourcein resourcein);
+    AjBool (*AccessFree)(void* qry);
     const char* Qlink;
     const char* Desc;
     AjBool Alias;
@@ -285,6 +337,7 @@ typedef struct AjSResourceAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    AjBool Padding;
 } AjOResourceAccess;
 
 #define AjPResourceAccess AjOResourceAccess*
@@ -292,8 +345,6 @@ typedef struct AjSResourceAccess
 
 
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !AJRESOURCEDATA_H */

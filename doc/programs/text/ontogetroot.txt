@@ -26,9 +26,9 @@ Usage
    Here is a sample session with ontogetroot
 
 
-% ontogetroot edam:0001234
+% ontogetroot edam:1234
 Get ontology root terms by child identifier
-Obo output file [0001234.obo]:
+Obo output file [1234.obo]:
 
 
    Go to the input files for this example
@@ -37,7 +37,7 @@ Obo output file [0001234.obo]:
 Command line arguments
 
 Get ontology root terms by child identifier
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -55,6 +55,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -83,18 +85,18 @@ Input file format
 
   Input files for usage example
 
-  Database entry: edam:0001234
+  Database entry: edam:1234
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 
 Output file format
@@ -111,14 +113,53 @@ Output file format
 
   Output files for usage example
 
-  File: 0001234.obo
+  File: 1234.obo
 
 [Term]
-id: EDAM:0000006
+id: EDAM_data:0006
 name: Data
 namespace: data
-def: A type of data in common use in bioinformatics.
+def: Information, represented in an information artefact (data record) that is '
+understandable' by dedicated computational tools that can use the data as input
+or produce it as output.
 subset: data
+synonym: "Datum" EXACT [http://edamontology.org] {note="The multiplicity is not
+taken into account."}
+synonym: "Data record" EXACT [http://edamontology.org] {note="Currently we are f
+or practical purposes not distinguishing a data record (a tool-understandable in
+formation artefact) from data or datum (its content, the tool-understandable inf
+ormation)."}
+synonym: "Data set" EXACT [http://edamontology.org] {note="The multiplicity is n
+ot taken into account."}
+synonym: "Data" EXACT [http://wsio.org/data_002]
+synonym: "continuant" BROAD [snap:Continuant]
+synonym: "digital entity" RELATED [http://purl.org/biotop/biotop.owl#DigitalEnti
+ty]
+synonym: "Perpetuant" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Perpetu
+ant] {note="GFO 'Perpetuant' is in general broader than data, but it may be seen
+ narrower in the sense of being a concrete individual."}
+synonym: "data item" RELATED [http://semanticscience.org/resource/SIO_000069] {n
+ote="Data does theoretically not need to have a purpose, but in all regular case
+s it does. Remark: EDAM Data sub-ontology focuses on scientific data (SIO_000472
+), in particular the bioinformatics (SIO_010065) and biological (SIO_010019)."}
+synonym: "data item" RELATED [http://purl.obolibrary.org/obo/IAO_0000027] {note=
+"IAO 'data item' is a closely related ontological category (concept) broader in
+the sense of being any type of data in any role, and narrower in the sense of be
+ing limited to a 'generically_dependent_continuant' (snap:GenericallyDependentCo
+ntinuant), standing in relation of aboutness to some entity (http://purl.obolibr
+ary.org/obo/IAO_0000030), and to data that is intended to be a truthful statemen
+t about something."}
+synonym: "information content entity" RELATED [http://purl.obolibrary.org/obo/IA
+O_0000030] {note="IAO 'information content entity' is a closely related ontologi
+cal category (concept) broader in the sense of covering any type of data in any
+role, and narrower in the sense of being limited to a 'generically_dependent_con
+tinuant' (snap:GenericallyDependentContinuant) and standing in relation of about
+ness to some entity."}
+synonym: "record" RELATED [http://semanticscience.org/resource/SIO_000088] {note
+="Data does however not necessarily contain statements and not necessarily about
+ an entity."}
+relationship: has_topic EDAM_topic:0003 ! Topic ! Unfortunately, OBO-Edit2 doesn
+'t show the subject concept at the top level when browsed with the 'f' option.
 
 
 Data files

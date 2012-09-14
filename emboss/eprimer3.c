@@ -219,10 +219,10 @@ int main(int argc, char **argv)
     max_mispriming      = ajAcdGetFloat("maxmispriming");
     pair_max_mispriming = ajAcdGetFloat("pairmaxmispriming");
     gc_clamp            = ajAcdGetInt("gcclamp");
-    opt_size            = ajAcdGetInt("osize");
+    opt_size            = ajAcdGetInt("optsize");
     min_size            = ajAcdGetInt("minsize");
     max_size            = ajAcdGetInt("maxsize");
-    opt_tm              = ajAcdGetFloat("otm");
+    opt_tm              = ajAcdGetFloat("opttm");
     min_tm              = ajAcdGetFloat("mintm");
     max_tm              = ajAcdGetFloat("maxtm");
     max_diff_tm         = ajAcdGetFloat("maxdifftm");

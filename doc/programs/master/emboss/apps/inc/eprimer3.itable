@@ -131,7 +131,7 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-osize</td>
+<td>-optsize</td>
 <td>integer</td>
 <td>Optimum length (in bases) of a primer oligo. EPrimer3 will attempt to pick primers close to this length.</td>
 <td>Integer 0 or more</td>
@@ -155,7 +155,7 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-otm</td>
+<td>-opttm</td>
 <td>float</td>
 <td>Optimum melting temperature(Celsius) for a primer oligo. EPrimer3 will try to pick primers with melting temperatures are close to this temperature. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 21, pp 6409-6412 and Breslauer, Frank, Bloecker and Marky, Proc. Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the former paper for background discussion.</td>
 <td>Any numeric value</td>
@@ -544,7 +544,7 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -613,11 +613,35 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -661,7 +685,7 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

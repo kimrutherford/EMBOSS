@@ -28,6 +28,14 @@ Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format csv
 Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format csv
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
@@ -55,6 +63,8 @@ Warning: No dbtype found supporting format seqxml
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found for db IPI History
 Warning: No dbtype found supporting format iprmc
 Warning: No dbtype found supporting format iprmctab
 Warning: No dbtype found supporting format iprmcxml
@@ -103,9 +113,13 @@ Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format tinyseq
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format entrysize
 Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format tinyseq
 Warning: No dbtype found supporting format resid
 Warning: No dbtype found supporting format annot
 Warning: No dbtype found supporting format seqxml

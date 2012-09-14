@@ -5,7 +5,7 @@ Here is a sample session with <b>prosextract</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prosextract </b>
-Processes the PROSITE motif database for use by patmatmotifs
+Process the PROSITE motif database for use by patmatmotifs
 PROSITE database directory [.]: <b></b>
 
 </pre></td></tr></table><p>

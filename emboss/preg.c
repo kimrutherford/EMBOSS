@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 	ajDebug("Testing '%s' len: %d %d\n",
 		ajSeqGetNameC(seq), ajSeqGetLen(seq), ajStrGetLen(str));
         feat = ajFeattableNewProt(ajSeqGetNameS(seq));
-	embPatlistRegexSearch(feat, seq, plist, AJFALSE);
+	embPatlistRegexSearchAll(feat, seq, plist, AJFALSE);
 	(void) ajReportWrite (report,feat,seq);
 	ajFeattableDel(&feat);
     }

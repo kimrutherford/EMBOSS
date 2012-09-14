@@ -45,8 +45,7 @@ Input protein sequence(s): tsw:*
 Peptide molecular weight values file: test.mowse
 Whole sequence molwt [0]:
 Use monoisotopic weights [N]:
-Output file [12s1_arath.emowse]:
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output file [cru4_arath.emowse]:
 
 
    Go to the input files for this example
@@ -55,7 +54,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 Command line arguments
 
 Search protein sequences by digest fragment molecular weight
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -91,7 +90,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -237,7 +239,7 @@ Output file format
 
   Output files for usage example
 
-  File: 12s1_arath.emowse
+  File: cru4_arath.emowse
 
 
 Using data fragments of:
@@ -250,8 +252,8 @@ Using data fragments of:
           5423.0
           6082.8
 
-1   UBR5_RAT     E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-prote
-2   SYVC_TAKRU   Valyl-tRNA synthetase (6.1.1.9) (Valine--tRNA ligase) (ValRS)
+1   UBR5_RAT     E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (
+2   SYVC_TAKRU   Valine--tRNA ligase (6.1.1.9) (Valyl-tRNA synthetase) (ValRS)
 3   TCPD_TAKRU   T-complex protein 1 subunit delta (TCP-1-delta) (CCT-delta)
 4   OPS2_DROME   Opsin Rh2 (Ocellar opsin)
 5   FLAV_ECO57   Flavodoxin-1
@@ -259,7 +261,7 @@ Using data fragments of:
 7   FLAV_ECOLI   Flavodoxin-1
 8   FLAV_KLEPN   Flavodoxin
 9   FLAV_SYNY3   Flavodoxin
-10  EI2BB_TAKRU  Translation initiation factor eIF-2B subunit beta (eIF-2B GDP-
+10  EI2BB_TAKRU  Translation initiation factor eIF-2B subunit beta (S20I15) (eI
 11  FLAV_HAEIN   Flavodoxin
 12  HIRA_TAKRU   Protein HIRA (TUP1-like enhancer of split protein 1)
 13  OPS2_SCHGR   Opsin-2
@@ -269,25 +271,25 @@ Using data fragments of:
 17  PAX3_HUMAN   Paired box protein Pax-3 (HuP2)
 18  PAX4_HUMAN   Paired box protein Pax-4
 19  CO9_TAKRU    Complement component C9 (Precursor)
-20  SYHC_TAKRU   Histidyl-tRNA synthetase, cytoplasmic (6.1.1.21) (Histidine--t
+20  SYHC_TAKRU   Histidine--tRNA ligase, cytoplasmic (6.1.1.21) (Histidyl-tRNA
 21  BGAL_ECOLI   Beta-galactosidase (Beta-gal) (3.2.1.23) (Lactase)
 22  HD_TAKRU     Huntingtin (Huntington disease protein homolog) (HD protein ho
 
-    1  : UBR5_RAT       1.233e+06 103949.9   0.750
-         E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase
-, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protei
-n) (Fragment)
+    1  : UBR5_RAT       1.212e+05 308026.9   0.750
+         E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiqui
+tin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolo
+g)
          Mw     Start  End    Seq
-         1086.3 389    398    CATTPMAVHR
-         1399.6 37     48     GDFLNYALSLMR
-         2424.7 321    343    VFMEDVGAEPGSILTELGGFEVK
-         2930.3 702    729    QLILASQSSDADAVFSAMDLAFAVDLCK
-         3086.3 489    516    QLSIDTRPFRPASEGNPSDDPDPLPAHR
-        *6082.9 848    901    QDLVYFWTSSPSLPASEEGFQPMPSITIRPPDDQHLPTANTCISR...
+         1086.3 2257   2266   CATTPMAVHR
+         1399.6 1905   1916   GDFLNYALSLMR
+         2424.7 2189   2211   VFMEDVGAEPGSILTELGGFEVK
+         2930.3 2570   2597   QLILASQSSDADAVFSAMDLAFAVDLCK
+         3086.3 2357   2384   QLSIDTRPFRPASEGNPSDDPDPLPAHR
+        *6082.9 2716   2769   QDLVYFWTSSPSLPASEEGFQPMPSITIRPPDDQHLPTANTCISR...
          No Match      2030.2 5423.0
 
     2  : SYVC_TAKRU     3.791e+01 138218.2   0.375
-         Valyl-tRNA synthetase (6.1.1.9) (Valine--tRNA ligase) (ValRS)
+         Valine--tRNA ligase (6.1.1.9) (Valyl-tRNA synthetase) (ValRS)
          Mw     Start  End    Seq
          1087.3 510    518    TVLHPFCDR
         *1399.6 1184   1195   VPVKVQEQDTEK
@@ -328,7 +330,7 @@ n) (Fragment)
          No Match      1086.2 1399.6 2030.2 2424.7 3086.3 5423.0 6082.8
 
     20 : SYHC_TAKRU     2.821e+00 57913.0    0.125
-         Histidyl-tRNA synthetase, cytoplasmic (6.1.1.21) (Histidine--tRNA ligas
+         Histidine--tRNA ligase, cytoplasmic (6.1.1.21) (Histidyl-tRNA synthetas
 e) (HisRS)
          Mw     Start  End    Seq
          1087.2 124    133    DQGGELLSLR
@@ -764,10 +766,10 @@ See also
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
    oddcomp          Identify proteins with specified sequence word composition
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

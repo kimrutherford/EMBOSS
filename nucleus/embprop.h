@@ -1,10 +1,58 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embprop ***********************************************************
+**
+** Residue/sequence properties
+**
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.28 $
+** @modified 24 Nov 1999 - GWW - Added embPropProtGaps and embPropProt1to3
+** @modified 1 Sept 2000 - GWW - Added embPropTransition embPropTranversion
+** @modified 4 July 2001 - DMAM - Modified embPropAminoRead embPropCalcMolwt
+** @modified 4 July 2001 - DMAM - Added embPropCalcMolwtMod
+** @modified 1 July 2008 - JISON - Added embPropGet* functions
+** @modified $Date: 2011/10/18 14:24:25 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embprop_h
-#define embprop_h
+#ifndef EMBPROP_H
+#define EMBPROP_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajseqdata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 #define EMBPROPSIZE 29
 #define EMBPROPMOLWT      0
@@ -36,6 +84,13 @@ extern "C"
 
 #define EMBPROPMSTC_OH     17.00274
 #define EMBPROPMSTC_AMIDE  16.01804
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -109,6 +164,12 @@ typedef struct EmbSPropFrag	/* Enzyme digestion structure */
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -166,8 +227,6 @@ AjBool  embPropTransition (char base1, char base2);
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBPROP_H */

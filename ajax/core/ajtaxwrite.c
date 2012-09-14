@@ -1,28 +1,34 @@
-/******************************************************************************
-** @source AJAX taxonomy handling functions
+/* @source ajtaxwrite *********************************************************
+**
+** AJAX taxonomy writing functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.13 $
 ** @modified Oct 25 2010 pmr First AJAX version
+** @modified $Date: 2011/10/19 14:52:22 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajtaxwrite.h"
+#include "ajfile.h"
 
 static AjBool taxoutWriteEbi(AjPFile outf, const AjPTax tax);
 static AjBool taxoutWriteExcel(AjPFile outf, const AjPTax tax);
@@ -42,7 +48,7 @@ static AjBool taxoutWriteTax(AjPFile outf, const AjPTax tax);
 **
 ** @attr Name [const char*] Format name
 ** @attr Desc [const char*] Format description
-** @attr Write [(AjBool*)] Output function, returns ajTrue on success
+** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -62,16 +68,16 @@ static TaxOOutFormat taxoutFormatDef[] =
 /*     WriteFunction */
 
   {"ncbi",         "NCBI taxonomy format",
-       taxoutWriteNcbi},
+       &taxoutWriteNcbi},
 
   {"ebi",          "EBI taxonomy.dat format",
-       taxoutWriteEbi},
+       &taxoutWriteEbi},
 
   {"tax",          "EMBOSS taxon format",
-       taxoutWriteTax},
+       &taxoutWriteTax},
 
   {"excel",       "Tab-delimited file for import to Microsoft Excel",
-       taxoutWriteExcel},
+       &taxoutWriteExcel},
   {NULL, NULL, NULL}
 };
 
@@ -130,6 +136,8 @@ static TaxOOutFormat taxoutFormatDef[] =
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTaxoutWrite(AjPOutfile outf, const AjPTax tax)
@@ -137,7 +145,7 @@ AjBool ajTaxoutWrite(AjPOutfile outf, const AjPTax tax)
     ajuint i = ajOutfileGetFormatindex(outf);
     AjPFile outfile = ajOutfileGetFile(outf);
 
-    return taxoutFormatDef[i].Write(outfile, tax);
+    return (*taxoutFormatDef[i].Write)(outfile, tax);
 }
 
 
@@ -153,6 +161,8 @@ AjBool ajTaxoutWrite(AjPOutfile outf, const AjPTax tax)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool taxoutWriteEbi(AjPFile outf, const AjPTax tax)
@@ -197,6 +207,8 @@ static AjBool taxoutWriteEbi(AjPFile outf, const AjPTax tax)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool taxoutWriteExcel(AjPFile outf, const AjPTax tax)
@@ -226,6 +238,8 @@ static AjBool taxoutWriteExcel(AjPFile outf, const AjPTax tax)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool taxoutWriteNcbi(AjPFile outf, const AjPTax tax)
@@ -278,6 +292,8 @@ static AjBool taxoutWriteNcbi(AjPFile outf, const AjPTax tax)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool taxoutWriteTax(AjPFile outf, const AjPTax tax)
@@ -376,6 +392,8 @@ static AjBool taxoutWriteTax(AjPFile outf, const AjPTax tax)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -424,6 +442,8 @@ void ajTaxoutprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -465,6 +485,8 @@ void ajTaxoutprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -502,6 +524,8 @@ void ajTaxoutprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -590,6 +614,8 @@ void ajTaxoutprintWiki(AjPFile outf)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -635,6 +661,8 @@ AjBool ajTaxoutformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -680,11 +708,13 @@ AjBool ajTaxoutformatTest(const AjPStr format)
 
 
 
-/* @func ajTaxoutExit ********************************************************
+/* @func ajTaxoutExit *********************************************************
 **
 ** Cleans up taxonomy output internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

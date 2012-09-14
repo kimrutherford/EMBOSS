@@ -1,10 +1,37 @@
+/* @include enstranslation ****************************************************
+**
+** Ensembl Translation functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.28 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSTRANSLATION_H
 #define ENSTRANSLATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdata.h"
 #include "ensprotein.h"
@@ -14,23 +41,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -60,7 +87,7 @@ EnsPTranslation ensTranslationNewIni(EnsPTranslationadaptor tla,
 
 EnsPTranslation ensTranslationNewRef(EnsPTranslation translation);
 
-void ensTranslationDel(EnsPTranslation* Ptranslation);
+void ensTranslationDel(EnsPTranslation *Ptranslation);
 
 EnsPTranslationadaptor ensTranslationGetAdaptor(
     const EnsPTranslation translation);
@@ -138,9 +165,9 @@ ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation);
 
 ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation);
 
-AjBool ensTranslationFetchAllAttributes( EnsPTranslation translation,
-                                         const AjPStr code,
-                                         AjPList attributes);
+AjBool ensTranslationFetchAllAttributes(EnsPTranslation translation,
+                                        const AjPStr code,
+                                        AjPList attributes);
 
 AjBool ensTranslationFetchAllDatabaseentries(EnsPTranslation translation,
                                              const AjPStr name,
@@ -158,15 +185,15 @@ AjBool ensTranslationFetchAllSequenceedits(EnsPTranslation translation,
                                            AjPList ses);
 
 AjBool ensTranslationFetchDisplayidentifier(const EnsPTranslation translation,
-                                            AjPStr* Pidentifier);
+                                            AjPStr *Pidentifier);
 
 AjBool ensTranslationTrace(const EnsPTranslation translation, ajuint level);
 
 AjBool ensTranslationFetchSequenceSeq(EnsPTranslation translation,
-                                      AjPSeq* Psequence);
+                                      AjPSeq *Psequence);
 
 AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
-                                      AjPStr* Psequence);
+                                      AjPStr *Psequence);
 
 /* Ensembl Translation Adaptor */
 
@@ -176,7 +203,7 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
 EnsPTranslationadaptor ensTranslationadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensTranslationadaptorDel(EnsPTranslationadaptor* Ptla);
+void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla);
 
 EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
     EnsPTranslationadaptor tla);
@@ -192,13 +219,13 @@ AjBool ensTranslationadaptorFetchAllbyTranscript(EnsPTranslationadaptor tla,
 
 AjBool ensTranslationadaptorFetchByIdentifier(EnsPTranslationadaptor tla,
                                               ajuint identifier,
-                                              EnsPTranslation* Ptranslation);
+                                              EnsPTranslation *Ptranslation);
 
 AjBool ensTranslationadaptorFetchByStableidentifier(
     EnsPTranslationadaptor tla,
     const AjPStr stableid,
     ajuint version,
-    EnsPTranslation* Ptranslation);
+    EnsPTranslation *Ptranslation);
 
 AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
                                               EnsPTranscript transcript);

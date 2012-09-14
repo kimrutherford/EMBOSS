@@ -38,7 +38,7 @@ PRINTS database file: prints.test
 Command line arguments
 
 Extract data from PRINTS database for use by pscan
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     PRINTS database file
@@ -278,8 +278,7 @@ See also
    aaindexextract   Extract amino acid property data from AAINDEX
    cutgextract      Extract codon usage tables from CUTG database
    jaspextract      Extract data from JASPAR
-   prosextract      Processes the PROSITE motif database for use by
-                    patmatmotifs
+   prosextract      Process the PROSITE motif database for use by patmatmotifs
    rebaseextract    Process the REBASE database for use by restriction enzyme
                     applications
    tfextract        Process TRANSFAC transcription factor database for use by

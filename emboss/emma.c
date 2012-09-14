@@ -119,13 +119,13 @@ int main(int argc, char **argv)
     dend_outfile = ajAcdGetOutfile("dendoutfile");
 
     only_dend = ajAcdGetToggle("onlydend");
-    use_dend  = ajAcdGetToggle("dend");
+    use_dend  = ajAcdGetToggle("dendreuse");
     dend_file = ajAcdGetInfile("dendfile");
     if (dend_file)
 	ajStrAssignS(&dend_filename, ajFileGetPrintnameS(dend_file));
     ajFileClose(&dend_file);
 
-    do_slow = ajAcdGetToggle("slow");
+    do_slow = ajAcdGetToggle("slowalign");
 
     ktup      = ajAcdGetInt("ktup");
     gapw      = ajAcdGetInt("gapw");

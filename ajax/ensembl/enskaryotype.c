@@ -1,84 +1,87 @@
-/* @source Ensembl Karyotype Band functions
+/* @source enskaryotype *******************************************************
+**
+** Ensembl Karyotype Band functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.50 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.33 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enskaryotype.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic karyotypebandadaptorTables ************************************
+/* @conststatic karyotypebandadaptorKTables ***********************************
 **
 ** Array of Ensembl Karyotype Band Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const karyotypebandadaptorTables[] =
+static const char *const karyotypebandadaptorKTables[] =
 {
     "karyotype",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic karyotypebandadaptorColumns ***********************************
+/* @conststatic karyotypebandadaptorKColumns **********************************
 **
 ** Array of Ensembl Karyotype Band Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const karyotypebandadaptorColumns[] =
+static const char *const karyotypebandadaptorKColumns[] =
 {
     "karyotype.karyotype_id",
     "karyotype.seq_region_id",
@@ -86,50 +89,56 @@ static const char* const karyotypebandadaptorColumns[] =
     "karyotype.seq_region_end",
     "karyotype.band",
     "karyotype.stain",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static int listKaryotypebandCompareStartAscending(const void* P1,
-                                                  const void* P2);
+static int listKaryotypebandCompareEndAscending(
+    const void *item1,
+    const void *item2);
 
-static int listKaryotypebandCompareStartDescending(const void* P1,
-                                                   const void* P2);
+static int listKaryotypebandCompareEndDescending(
+    const void *item1,
+    const void *item2);
+
+static int listKaryotypebandCompareIdentifierAscending(
+    const void *item1,
+    const void *item2);
+
+static int listKaryotypebandCompareStartAscending(
+    const void *item1,
+    const void *item2);
+
+static int listKaryotypebandCompareStartDescending(
+    const void *item1,
+    const void *item2);
 
 static AjBool karyotypebandadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList kblist);
 
-static void* karyotypebandadaptorCacheReference(void* value);
-
-static void karyotypebandadaptorCacheDelete(void** value);
-
-static size_t karyotypebandadaptorCacheSize(const void* value);
-
-static EnsPFeature karyotypebandadaptorGetFeature(const void* value);
 
 
 
-
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -148,9 +157,9 @@ static EnsPFeature karyotypebandadaptorGetFeature(const void* value);
 ** @nam2rule Karyotypeband Functions for manipulating
 ** Ensembl Karyotype Band objects
 **
-** @cc Bio::EnsEMBL::Karyotypeband
-** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-62
+** @cc Bio::EnsEMBL::KaryotypeBand
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -194,6 +203,8 @@ static EnsPFeature karyotypebandadaptorGetFeature(const void* value);
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [EnsPKaryotypeband] Ensembl Karyotype Band or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -201,23 +212,20 @@ EnsPKaryotypeband ensKaryotypebandNewCpy(const EnsPKaryotypeband kb)
 {
     EnsPKaryotypeband pthis = NULL;
 
-    if(!kb)
+    if (!kb)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = kb->Identifier;
+    pthis->Adaptor    = kb->Adaptor;
+    pthis->Feature    = ensFeatureNewRef(kb->Feature);
 
-    pthis->Adaptor = kb->Adaptor;
-
-    pthis->Feature = ensFeatureNewRef(kb->Feature);
-
-    if(kb->Name)
+    if (kb->Name)
         pthis->Name = ajStrNewRef(kb->Name);
 
-    if(kb->Stain)
+    if (kb->Stain)
         pthis->Stain = ajStrNewRef(kb->Stain);
 
     return pthis;
@@ -239,6 +247,8 @@ EnsPKaryotypeband ensKaryotypebandNewCpy(const EnsPKaryotypeband kb)
 ** @param [u] stain [AjPStr] Stain
 **
 ** @return [EnsPKaryotypeband] Ensembl Karyotype Band or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -250,23 +260,20 @@ EnsPKaryotypeband ensKaryotypebandNewIni(EnsPKaryotypebandadaptor kba,
 {
     EnsPKaryotypeband kb = NULL;
 
-    if(!feature)
+    if (!feature)
         return NULL;
 
     AJNEW0(kb);
 
-    kb->Use = 1;
-
+    kb->Use        = 1U;
     kb->Identifier = identifier;
+    kb->Adaptor    = kba;
+    kb->Feature    = ensFeatureNewRef(feature);
 
-    kb->Adaptor = kba;
-
-    kb->Feature = ensFeatureNewRef(feature);
-
-    if(name)
+    if (name)
         kb->Name = ajStrNewRef(name);
 
-    if(stain)
+    if (stain)
         kb->Stain = ajStrNewRef(stain);
 
     return kb;
@@ -283,12 +290,14 @@ EnsPKaryotypeband ensKaryotypebandNewIni(EnsPKaryotypebandadaptor kba,
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [EnsPKaryotypeband] Ensembl Karyotype Band or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPKaryotypeband ensKaryotypebandNewRef(EnsPKaryotypeband kb)
 {
-    if(!kb)
+    if (!kb)
         return NULL;
 
     kb->Use++;
@@ -301,14 +310,14 @@ EnsPKaryotypeband ensKaryotypebandNewRef(EnsPKaryotypeband kb)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Karyotype Band object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Karyotype Band object.
 **
 ** @fdata [EnsPKaryotypeband]
 **
-** @nam3rule Del Destroy (free) an Ensembl Karyotype Band object
+** @nam3rule Del Destroy (free) an Ensembl Karyotype Band
 **
-** @argrule * Pkb [EnsPKaryotypeband*] Ensembl Karyotype Band object address
+** @argrule * Pkb [EnsPKaryotypeband*] Ensembl Karyotype Band address
 **
 ** @valrule * [void]
 **
@@ -322,27 +331,40 @@ EnsPKaryotypeband ensKaryotypebandNewRef(EnsPKaryotypeband kb)
 **
 ** Default destructor for an Ensembl Karyotype Band.
 **
-** @param [d] Pkb [EnsPKaryotypeband*] Ensembl Karyotype Band object address
+** @param [d] Pkb [EnsPKaryotypeband*] Ensembl Karyotype Band address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensKaryotypebandDel(EnsPKaryotypeband* Pkb)
+void ensKaryotypebandDel(EnsPKaryotypeband *Pkb)
 {
     EnsPKaryotypeband pthis = NULL;
 
-    if(!Pkb)
+    if (!Pkb)
         return;
 
-    if(!*Pkb)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensKaryotypebandDel"))
+    {
+        ajDebug("ensKaryotypebandDel\n"
+                "  *Pkb %p\n",
+                *Pkb);
+
+        ensKaryotypebandTrace(*Pkb, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pkb)
         return;
 
     pthis = *Pkb;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pkb = NULL;
 
@@ -364,9 +386,9 @@ void ensKaryotypebandDel(EnsPKaryotypeband* Pkb)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Karyotype Band object.
+** Functions for returning members of an Ensembl Karyotype Band object.
 **
 ** @fdata [EnsPKaryotypeband]
 **
@@ -382,7 +404,7 @@ void ensKaryotypebandDel(EnsPKaryotypeband* Pkb)
 ** @valrule Adaptor [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
 ** or NULL
 ** @valrule Feature [EnsPFeature] Ensembl Feature or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Name [AjPStr] Name or NULL
 ** @valrule Stain [AjPStr] Stain or NULL
 **
@@ -394,21 +416,20 @@ void ensKaryotypebandDel(EnsPKaryotypeband* Pkb)
 
 /* @func ensKaryotypebandGetAdaptor *******************************************
 **
-** Get the Ensembl Karyotype Band Adaptor element of an Ensembl Karyotype Band.
+** Get the Ensembl Karyotype Band Adaptor member of an Ensembl Karyotype Band.
 **
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPKaryotypebandadaptor ensKaryotypebandGetAdaptor(
     const EnsPKaryotypeband kb)
 {
-    if(!kb)
-        return NULL;
-
-    return kb->Adaptor;
+    return (kb) ? kb->Adaptor : NULL;
 }
 
 
@@ -416,21 +437,20 @@ EnsPKaryotypebandadaptor ensKaryotypebandGetAdaptor(
 
 /* @func ensKaryotypebandGetFeature *******************************************
 **
-** Get the Ensembl Feature element of an Ensembl Karyotype Band.
+** Get the Ensembl Feature member of an Ensembl Karyotype Band.
 **
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [EnsPFeature] Ensembl Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeature ensKaryotypebandGetFeature(
     const EnsPKaryotypeband kb)
 {
-    if(!kb)
-        return NULL;
-
-    return kb->Feature;
+    return (kb) ? kb->Feature : NULL;
 }
 
 
@@ -438,22 +458,21 @@ EnsPFeature ensKaryotypebandGetFeature(
 
 /* @func ensKaryotypebandGetIdentifier ****************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Karyotype Band.
 **
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 ajuint ensKaryotypebandGetIdentifier(
     const EnsPKaryotypeband kb)
 {
-    if(!kb)
-        return 0;
-
-    return kb->Identifier;
+    return (kb) ? kb->Identifier : 0U;
 }
 
 
@@ -461,21 +480,20 @@ ajuint ensKaryotypebandGetIdentifier(
 
 /* @func ensKaryotypebandGetName **********************************************
 **
-** Get the name element of an Ensembl Karyotype Band.
+** Get the name member of an Ensembl Karyotype Band.
 **
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [AjPStr] Name or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensKaryotypebandGetName(
     const EnsPKaryotypeband kb)
 {
-    if(!kb)
-        return NULL;
-
-    return kb->Name;
+    return (kb) ? kb->Name : NULL;
 }
 
 
@@ -483,21 +501,20 @@ AjPStr ensKaryotypebandGetName(
 
 /* @func ensKaryotypebandGetStain *********************************************
 **
-** Get the stain element of an Ensembl Karyotype Band.
+** Get the stain member of an Ensembl Karyotype Band.
 **
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [AjPStr] Stain or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensKaryotypebandGetStain(
     const EnsPKaryotypeband kb)
 {
-    if(!kb)
-        return NULL;
-
-    return kb->Stain;
+    return (kb) ? kb->Stain : NULL;
 }
 
 
@@ -505,11 +522,11 @@ AjPStr ensKaryotypebandGetStain(
 
 /* @section modifiers *********************************************************
 **
-** Functions for assigning elements of an Ensembl Karyotype Band object.
+** Functions for assigning members of an Ensembl Karyotype Band object.
 **
 ** @fdata [EnsPKaryotypeband]
 **
-** @nam3rule Set Set one element of an Karyotype Band
+** @nam3rule Set Set one member of an Karyotype Band
 ** @nam4rule Adaptor Set the Ensembl Karyotype Band Adaptor
 ** @nam4rule Feature Set the Ensembl Feature
 ** @nam4rule Identifier Set the SQL database-internal identifier
@@ -534,19 +551,21 @@ AjPStr ensKaryotypebandGetStain(
 
 /* @func ensKaryotypebandSetAdaptor *******************************************
 **
-** Set the Ensembl Karyotype Band Adaptor element of an Ensembl Karyotype Band.
+** Set the Ensembl Karyotype Band Adaptor member of an Ensembl Karyotype Band.
 **
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 ** @param [u] kba [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensKaryotypebandSetAdaptor(EnsPKaryotypeband kb,
                                   EnsPKaryotypebandadaptor kba)
 {
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     kb->Adaptor = kba;
@@ -559,19 +578,21 @@ AjBool ensKaryotypebandSetAdaptor(EnsPKaryotypeband kb,
 
 /* @func ensKaryotypebandSetFeature *******************************************
 **
-** Set the Ensembl Feature element of an Ensembl Karyotype Band.
+** Set the Ensembl Feature member of an Ensembl Karyotype Band.
 **
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensKaryotypebandSetFeature(EnsPKaryotypeband kb,
                                   EnsPFeature feature)
 {
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     ensFeatureDel(&kb->Feature);
@@ -586,20 +607,22 @@ AjBool ensKaryotypebandSetFeature(EnsPKaryotypeband kb,
 
 /* @func ensKaryotypebandSetIdentifier ****************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Karyotype Band.
 **
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 ** @param [r] identifier [ajuint] Database identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensKaryotypebandSetIdentifier(EnsPKaryotypeband kb,
                                      ajuint identifier)
 {
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     kb->Identifier = identifier;
@@ -612,19 +635,21 @@ AjBool ensKaryotypebandSetIdentifier(EnsPKaryotypeband kb,
 
 /* @func ensKaryotypebandSetName **********************************************
 **
-** Set the name element of an Ensembl Karyotype Band.
+** Set the name member of an Ensembl Karyotype Band.
 **
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 ** @param [u] name [AjPStr] Name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensKaryotypebandSetName(EnsPKaryotypeband kb,
                                AjPStr name)
 {
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     ajStrDel(&kb->Name);
@@ -639,19 +664,21 @@ AjBool ensKaryotypebandSetName(EnsPKaryotypeband kb,
 
 /* @func ensKaryotypebandSetStain *********************************************
 **
-** Set the stain element of an Ensembl Karyotype Band.
+** Set the stain member of an Ensembl Karyotype Band.
 **
 ** @param [u] kb [EnsPKaryotypeband] Ensembl Karyotype Band
 ** @param [u] stain [AjPStr] Logic name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensKaryotypebandSetStain(EnsPKaryotypeband kb,
                                 AjPStr stain)
 {
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     ajStrDel(&kb->Stain);
@@ -670,7 +697,7 @@ AjBool ensKaryotypebandSetStain(EnsPKaryotypeband kb,
 **
 ** @fdata [EnsPKaryotypeband]
 **
-** @nam3rule Trace Report Ensembl Karyotype Band elements to debug file
+** @nam3rule Trace Report Ensembl Karyotype Band members to debug file
 **
 ** @argrule Trace kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 ** @argrule Trace level [ajuint] Indentation level
@@ -691,6 +718,8 @@ AjBool ensKaryotypebandSetStain(EnsPKaryotypeband kb,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -698,7 +727,7 @@ AjBool ensKaryotypebandTrace(const EnsPKaryotypeband kb, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!kb)
+    if (!kb)
         return ajFalse;
 
     indent = ajStrNew();
@@ -754,6 +783,8 @@ AjBool ensKaryotypebandTrace(const EnsPKaryotypeband kb, ajuint level)
 ** @param [r] kb [const EnsPKaryotypeband] Ensembl Karyotype Band
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -761,21 +792,21 @@ size_t ensKaryotypebandCalculateMemsize(const EnsPKaryotypeband kb)
 {
     size_t size = 0;
 
-    if(!kb)
+    if (!kb)
         return 0;
 
     size += sizeof (EnsOKaryotypeband);
 
     size += ensFeatureCalculateMemsize(kb->Feature);
 
-    if(kb->Name)
+    if (kb->Name)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(kb->Name);
     }
 
-    if(kb->Stain)
+    if (kb->Stain)
     {
         size += sizeof (AjOStr);
 
@@ -797,28 +828,161 @@ size_t ensKaryotypebandCalculateMemsize(const EnsPKaryotypeband kb)
 
 
 
-/* @section list **************************************************************
+/* @funcstatic listKaryotypebandCompareEndAscending ***************************
 **
-** Functions for manipulating AJAX List objects.
+** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
+** Ensembl Feature end coordinate in ascending order.
 **
-** @fdata [AjPList]
+** @param [r] item1 [const void*] Ensembl Karyotype Band address 1
+** @param [r] item2 [const void*] Ensembl Karyotype Band address 2
+** @see ajListSort
 **
-** @nam3rule Karyotypeband Functions for manipulating AJAX List objects of
-** Ensembl Karyotype Band objects
-** @nam4rule Sort Sort functions
-** @nam5rule Start Sort by Ensembl Feature start element
-** @nam6rule Ascending  Sort in ascending order
-** @nam6rule Descending Sort in descending order
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
 **
-** @argrule Ascending kbs [AjPList] AJAX List of Ensembl Karyotype Band
-** objects
-** @argrule Descending kbs [AjPList] AJAX List of Ensembl Karyotype Band
-** objects
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
+** @release 6.4.0
+** @@
 ******************************************************************************/
+
+static int listKaryotypebandCompareEndAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPKaryotypeband kb1 = *(EnsOKaryotypeband *const *) item1;
+    EnsPKaryotypeband kb2 = *(EnsOKaryotypeband *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listKaryotypebandCompareEndAscending"))
+        ajDebug("listKaryotypebandCompareEndAscending\n"
+                "  kb1 %p\n"
+                "  kb2 %p\n",
+                kb1,
+                kb2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (kb1 && (!kb2))
+        return -1;
+
+    if ((!kb1) && (!kb2))
+        return 0;
+
+    if ((!kb1) && kb2)
+        return +1;
+
+    return ensFeatureCompareEndAscending(kb1->Feature, kb2->Feature);
+}
+
+
+
+
+/* @funcstatic listKaryotypebandCompareEndDescending **************************
+**
+** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Karyotype Band address 1
+** @param [r] item2 [const void*] Ensembl Karyotype Band address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listKaryotypebandCompareEndDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPKaryotypeband kb1 = *(EnsOKaryotypeband *const *) item1;
+    EnsPKaryotypeband kb2 = *(EnsOKaryotypeband *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listKaryotypebandCompareEndDescending"))
+        ajDebug("listKaryotypebandCompareEndDescending\n"
+                "  kb1 %p\n"
+                "  kb2 %p\n",
+                kb1,
+                kb2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (kb1 && (!kb2))
+        return -1;
+
+    if ((!kb1) && (!kb2))
+        return 0;
+
+    if ((!kb1) && kb2)
+        return +1;
+
+    return ensFeatureCompareEndDescending(kb1->Feature, kb2->Feature);
+}
+
+
+
+
+/* @funcstatic listKaryotypebandCompareIdentifierAscending ********************
+**
+** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
+** identifier member in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Karyotype Band address 1
+** @param [r] item2 [const void*] Ensembl Karyotype Band address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listKaryotypebandCompareIdentifierAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPKaryotypeband kb1 = *(EnsOKaryotypeband *const *) item1;
+    EnsPKaryotypeband kb2 = *(EnsOKaryotypeband *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listKaryotypebandCompareIdentifierAscending"))
+        ajDebug("listKaryotypebandCompareIdentifierAscending\n"
+                "  kb1 %p\n"
+                "  kb2 %p\n",
+                kb1,
+                kb2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (kb1 && (!kb2))
+        return -1;
+
+    if ((!kb1) && (!kb2))
+        return 0;
+
+    if ((!kb1) && kb2)
+        return +1;
+
+    if (kb1->Identifier < kb2->Identifier)
+        return -1;
+
+    if (kb1->Identifier > kb2->Identifier)
+        return +1;
+
+    return 0;
+}
 
 
 
@@ -828,45 +992,207 @@ size_t ensKaryotypebandCalculateMemsize(const EnsPKaryotypeband kb)
 ** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
 ** Ensembl Feature start coordinate in ascending order.
 **
-** @param [r] P1 [const void*] Ensembl Karyotype Band address 1
-** @param [r] P2 [const void*] Ensembl Karyotype Band address 2
+** @param [r] item1 [const void*] Ensembl Karyotype Band address 1
+** @param [r] item2 [const void*] Ensembl Karyotype Band address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listKaryotypebandCompareStartAscending(const void* P1,
-                                                  const void* P2)
+static int listKaryotypebandCompareStartAscending(
+    const void *item1,
+    const void *item2)
 {
-    const EnsPKaryotypeband kb1 = NULL;
-    const EnsPKaryotypeband kb2 = NULL;
+    EnsPKaryotypeband kb1 = *(EnsOKaryotypeband *const *) item1;
+    EnsPKaryotypeband kb2 = *(EnsOKaryotypeband *const *) item2;
 
-    kb1 = *(EnsPKaryotypeband const*) P1;
-    kb2 = *(EnsPKaryotypeband const*) P2;
-
-    if(ajDebugTest("listKaryotypebandCompareStartAscending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listKaryotypebandCompareStartAscending"))
         ajDebug("listKaryotypebandCompareStartAscending\n"
                 "  kb1 %p\n"
                 "  kb2 %p\n",
                 kb1,
                 kb2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(kb1 && (!kb2))
+    if (kb1 && (!kb2))
         return -1;
 
-    if((!kb1) && (!kb2))
+    if ((!kb1) && (!kb2))
         return 0;
 
-    if((!kb1) && kb2)
+    if ((!kb1) && kb2)
         return +1;
 
     return ensFeatureCompareStartAscending(kb1->Feature, kb2->Feature);
+}
+
+
+
+
+/* @funcstatic listKaryotypebandCompareStartDescending ************************
+**
+** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Karyotype Band address 1
+** @param [r] item2 [const void*] Ensembl Karyotype Band address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listKaryotypebandCompareStartDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPKaryotypeband kb1 = *(EnsOKaryotypeband *const *) item1;
+    EnsPKaryotypeband kb2 = *(EnsOKaryotypeband *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listKaryotypebandCompareStartDescending"))
+        ajDebug("listKaryotypebandCompareStartDescending\n"
+                "  kb1 %p\n"
+                "  kb2 %p\n",
+                kb1,
+                kb2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (kb1 && (!kb2))
+        return -1;
+
+    if ((!kb1) && (!kb2))
+        return 0;
+
+    if ((!kb1) && kb2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(kb1->Feature, kb2->Feature);
+}
+
+
+
+
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Karyotypeband Functions for manipulating AJAX List objects of
+** Ensembl Karyotype Band objects
+** @nam4rule Sort Sort functions
+** @nam5rule End Sort by Ensembl Feature end member
+** @nam5rule Identifier Sort by identifier member
+** @nam5rule Start Sort by Ensembl Feature start member
+** @nam6rule Ascending  Sort in ascending order
+** @nam6rule Descending Sort in descending order
+**
+** @argrule * kbs [AjPList] AJAX List of Ensembl Karyotype Band objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensListKaryotypebandSortEndAscending *********************************
+**
+** Sort an AJAX List of Ensembl Karyotype Band objects by their
+** Ensembl Feature end coordinate in ascending order.
+**
+** @param [u] kbs [AjPList] AJAX List of Ensembl Karyotype Band objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListKaryotypebandSortEndAscending(AjPList kbs)
+{
+    if (!kbs)
+        return ajFalse;
+
+    ajListSortTwoThree(kbs,
+                       &listKaryotypebandCompareEndAscending,
+                       &listKaryotypebandCompareStartAscending,
+                       &listKaryotypebandCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListKaryotypebandSortEndDescending ********************************
+**
+** Sort an AJAX List of Ensembl Karyotype Band objects by their
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [u] kbs [AjPList] AJAX List of Ensembl Karyotype band objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListKaryotypebandSortEndDescending(AjPList kbs)
+{
+    if (!kbs)
+        return ajFalse;
+
+    ajListSortTwoThree(kbs,
+                       &listKaryotypebandCompareEndDescending,
+                       &listKaryotypebandCompareStartDescending,
+                       &listKaryotypebandCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListKaryotypebandSortIdentifierAscending **************************
+**
+** Sort an AJAX List of Ensembl Karyotype Band objects by their
+** identifier member in ascending order.
+**
+** @param [u] kbs [AjPList] AJAX List of Ensembl Karyotype Band objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListKaryotypebandSortIdentifierAscending(AjPList kbs)
+{
+    if (!kbs)
+        return ajFalse;
+
+    ajListSort(kbs, &listKaryotypebandCompareIdentifierAscending);
+
+    return ajTrue;
 }
 
 
@@ -880,66 +1206,22 @@ static int listKaryotypebandCompareStartAscending(const void* P1,
 ** @param [u] kbs [AjPList] AJAX List of Ensembl Karyotype Band objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListKaryotypebandSortStartAscending(AjPList kbs)
 {
-    if(!kbs)
+    if (!kbs)
         return ajFalse;
 
-    ajListSort(kbs, listKaryotypebandCompareStartAscending);
+    ajListSortTwoThree(kbs,
+                       &listKaryotypebandCompareStartAscending,
+                       &listKaryotypebandCompareEndAscending,
+                       &listKaryotypebandCompareIdentifierAscending);
 
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic listKaryotypebandCompareStartDescending ************************
-**
-** AJAX List of Ensembl Karyotype Band objects comparison function to sort by
-** Ensembl Feature start coordinate in descending order.
-**
-** @param [r] P1 [const void*] Ensembl Karyotype Band address 1
-** @param [r] P2 [const void*] Ensembl Karyotype Band address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int listKaryotypebandCompareStartDescending(const void* P1,
-                                                   const void* P2)
-{
-    const EnsPKaryotypeband kb1 = NULL;
-    const EnsPKaryotypeband kb2 = NULL;
-
-    kb1 = *(EnsPKaryotypeband const*) P1;
-    kb2 = *(EnsPKaryotypeband const*) P2;
-
-    if(ajDebugTest("listKaryotypebandCompareStartDescending"))
-        ajDebug("listKaryotypebandCompareStartDescending\n"
-                "  kb1 %p\n"
-                "  kb2 %p\n",
-                kb1,
-                kb2);
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if(kb1 && (!kb2))
-        return -1;
-
-    if((!kb1) && (!kb2))
-        return 0;
-
-    if((!kb1) && kb2)
-        return +1;
-
-    return ensFeatureCompareStartDescending(kb1->Feature, kb2->Feature);
 }
 
 
@@ -953,15 +1235,20 @@ static int listKaryotypebandCompareStartDescending(const void* P1,
 ** @param [u] kbs [AjPList] AJAX List of Ensembl Karyotype band objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListKaryotypebandSortStartDescending(AjPList kbs)
 {
-    if(!kbs)
+    if (!kbs)
         return ajFalse;
 
-    ajListSort(kbs, listKaryotypebandCompareStartDescending);
+    ajListSortTwoThree(kbs,
+                       &listKaryotypebandCompareStartDescending,
+                       &listKaryotypebandCompareEndDescending,
+                       &listKaryotypebandCompareIdentifierAscending);
 
     return ajTrue;
 }
@@ -974,9 +1261,9 @@ AjBool ensListKaryotypebandSortStartDescending(AjPList kbs)
 ** @nam2rule Karyotypebandadaptor Functions for manipulating
 ** Ensembl Karyotype Band Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::Karyotypebandadaptor
-** @cc CVS Revision: 1.33
-** @cc CVS Tag: branch-ensembl-62
+** @cc Bio::EnsEMBL::DBSQL::KaryotypeBandAdaptor
+** @cc CVS Revision: 1.35
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -987,28 +1274,31 @@ AjBool ensListKaryotypebandSortStartDescending(AjPList kbs)
 **
 ** Fetch all Ensembl Karyotype Band objects via an SQL statement.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] kblist [AjPList] AJAX List of Ensembl Karyotype Band objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool karyotypebandadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList kblist)
 {
-    ajuint identifier = 0;
+    ajuint identifier = 0U;
 
-    ajuint srid    = 0;
-    ajuint srstart = 0;
-    ajuint srend   = 0;
+    ajuint srid     = 0U;
+    ajuint srstart  = 0U;
+    ajuint srend    = 0U;
+    ajint  srstrand = 1;
 
     AjPStr name  = NULL;
     AjPStr stain = NULL;
@@ -1017,53 +1307,44 @@ static AjBool karyotypebandadaptorFetchAllbyStatement(
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
 
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPDatabaseadaptor dba = NULL;
 
     EnsPFeature feature = NULL;
 
-    EnsPKaryotypeband kb         = NULL;
+    EnsPKaryotypeband        kb  = NULL;
     EnsPKaryotypebandadaptor kba = NULL;
 
-    EnsPSlice srslice   = NULL;
-    EnsPSliceadaptor sa = NULL;
-
-    if(ajDebugTest("karyotypebandadaptorFetchAllbyStatement"))
+    if (ajDebugTest("karyotypebandadaptorFetchAllbyStatement"))
         ajDebug("karyotypebandadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  kblist %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 kblist);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    (void) am;
-
-    (void) slice;
-
-    if(!kblist)
+    if (!kblist)
         return ajFalse;
 
-    csa = ensRegistryGetCoordsystemadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     kba = ensRegistryGetKaryotypebandadaptor(dba);
-
-    sa = ensRegistryGetSliceadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         srid       = 0;
@@ -1081,25 +1362,29 @@ static AjBool karyotypebandadaptorFetchAllbyStatement(
         ajSqlcolumnToStr(sqlr, &name);
         ajSqlcolumnToStr(sqlr, &stain);
 
-        /* Need to get the internal Ensembl Sequence Region identifier. */
+        ensBaseadaptorRetrieveFeature(ba,
+                                      0U,
+                                      srid,
+                                      srstart,
+                                      srend,
+                                      srstrand,
+                                      am,
+                                      slice,
+                                      &feature);
 
-        srid = ensCoordsystemadaptorGetSeqregionidentifierInternal(csa, srid);
+        if (!feature)
+        {
+            ajStrDel(&name);
+            ajStrDel(&stain);
 
-        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-
-        feature = ensFeatureNewIniS((EnsPAnalysis) NULL,
-                                    srslice,
-                                    srstart,
-                                    srend,
-                                    1);
+            continue;
+        }
 
         kb = ensKaryotypebandNewIni(kba, identifier, feature, name, stain);
 
-        ajListPushAppend(kblist, (void*) kb);
+        ajListPushAppend(kblist, (void *) kb);
 
         ensFeatureDel(&feature);
-
-        ensSliceDel(&srslice);
 
         ajStrDel(&name);
         ajStrDel(&stain);
@@ -1110,95 +1395,6 @@ static AjBool karyotypebandadaptorFetchAllbyStatement(
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic karyotypebandadaptorCacheReference *****************************
-**
-** Wrapper function to reference an Ensembl Karyotype Band
-** from an Ensembl Cache.
-**
-** @param [r] value [void*] Ensembl Karyotype Band
-**
-** @return [void*] Ensembl Karyotype Band or NULL
-** @@
-******************************************************************************/
-
-static void* karyotypebandadaptorCacheReference(void* value)
-{
-    if(!value)
-        return NULL;
-
-    return (void*) ensKaryotypebandNewRef((EnsPKaryotypeband) value);
-}
-
-
-
-
-/* @funcstatic karyotypebandadaptorCacheDelete ********************************
-**
-** Wrapper function to delete an Ensembl Karyotype Band from an Ensembl Cache.
-**
-** @param [r] value [void**] Ensembl Karyotype Band
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void karyotypebandadaptorCacheDelete(void** value)
-{
-    if(!value)
-        return;
-
-    ensKaryotypebandDel((EnsPKaryotypeband*) value);
-
-    return;
-}
-
-
-
-
-/* @funcstatic karyotypebandadaptorCacheSize **********************************
-**
-** Wrapper function to determine the memory size of an Ensembl Karyotype Band
-** from an Ensembl Cache.
-**
-** @param [r] value [const void*] Ensembl Karyotype Band
-**
-** @return [size_t] Memory size in bytes or 0
-** @@
-******************************************************************************/
-
-static size_t karyotypebandadaptorCacheSize(const void* value)
-{
-    if(!value)
-        return 0;
-
-    return ensKaryotypebandCalculateMemsize((const EnsPKaryotypeband) value);
-}
-
-
-
-
-/* @funcstatic karyotypebandadaptorGetFeature *********************************
-**
-** Wrapper function to get the Ensembl Feature element from an
-** Ensembl Karyotype Band.
-**
-** @param [r] value [const void*] Ensembl Karyotype Band
-**
-** @return [EnsPFeature] Ensembl Feature or NULL
-** @@
-******************************************************************************/
-
-static EnsPFeature karyotypebandadaptorGetFeature(const void* value)
-{
-    if(!value)
-        return NULL;
-
-    return ensKaryotypebandGetFeature((const EnsPKaryotypeband) value);
 }
 
 
@@ -1243,29 +1439,31 @@ static EnsPFeature karyotypebandadaptorGetFeature(const void* value)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensFeatureadaptorNew(
         dba,
-        karyotypebandadaptorTables,
-        karyotypebandadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        karyotypebandadaptorFetchAllbyStatement,
-        (void* (*)(const void* key)) NULL,
-        karyotypebandadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL,
-        karyotypebandadaptorCacheDelete,
-        karyotypebandadaptorCacheSize,
-        karyotypebandadaptorGetFeature,
+        karyotypebandadaptorKTables,
+        karyotypebandadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &karyotypebandadaptorFetchAllbyStatement,
+        (void *(*)(const void *)) NULL,
+        (void *(*)(void *)) &ensKaryotypebandNewRef,
+        (AjBool (*)(const void *)) NULL,
+        (void (*)(void **)) &ensKaryotypebandDel,
+        (size_t (*)(const void *)) &ensKaryotypebandCalculateMemsize,
+        (EnsPFeature (*)(const void *)) &ensKaryotypebandGetFeature,
         "Karyotype Band");
 }
 
@@ -1274,15 +1472,15 @@ EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Karyotype Band Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Karyotype Band Adaptor object.
 **
 ** @fdata [EnsPKaryotypebandadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Karyotype Band Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Karyotype Band Adaptor
 **
-** @argrule * Pkba [EnsPKaryotypebandadaptor*] Ensembl Karyotype Band Adaptor
-**                                             object address
+** @argrule * Pkba [EnsPKaryotypebandadaptor*]
+** Ensembl Karyotype Band Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1302,34 +1500,28 @@ EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pkba [EnsPKaryotypebandadaptor*] Ensembl Karyotype Band Adaptor
-**                                             object address
+** @param [d] Pkba [EnsPKaryotypebandadaptor*]
+** Ensembl Karyotype Band Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor* Pkba)
+void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor *Pkba)
 {
-    if(!Pkba)
-        return;
-
-    if(!*Pkba)
-        return;
-
     ensFeatureadaptorDel(Pkba);
 
-    *Pkba = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Karyotype Band Adaptor object.
 **
 ** @fdata [EnsPKaryotypebandadaptor]
@@ -1350,21 +1542,20 @@ void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor* Pkba)
 
 /* @func ensKaryotypebandadaptorGetDatabaseadaptor ****************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Karyotype Band Adaptor.
 **
 ** @param [u] kba [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensKaryotypebandadaptorGetDatabaseadaptor(
     EnsPKaryotypebandadaptor kba)
 {
-    if(!kba)
-        return NULL;
-
     return ensFeatureadaptorGetDatabaseadaptor(kba);
 }
 
@@ -1427,6 +1618,8 @@ EnsPDatabaseadaptor ensKaryotypebandadaptorGetDatabaseadaptor(
 ** @param [u] kblist [AjPList] AJAX List of Ensembl Karyotype Band objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1436,7 +1629,7 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
     const AjPStr band,
     AjPList kblist)
 {
-    char* txtband = NULL;
+    char *txtband = NULL;
 
     AjBool result = AJFALSE;
 
@@ -1447,16 +1640,16 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
     EnsPSlice slice     = NULL;
     EnsPSliceadaptor sa = NULL;
 
-    if(!kba)
+    if (!kba)
         return ajFalse;
 
-    if(!name)
+    if (!name)
         return ajFalse;
 
-    if(!band)
+    if (!band)
         return ajFalse;
 
-    if(!kblist)
+    if (!kblist)
         return ajFalse;
 
     dba = ensFeatureadaptorGetDatabaseadaptor(kba);
@@ -1469,7 +1662,7 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
                                         name,
                                         &slice);
 
-    if(!slice)
+    if (!slice)
     {
         ajDebug("ensKaryotypebandadaptorFetchAllbyChromosomeband could not "
                 "fetch an Ensembl Slice for chromosome name '%S'.\n", name);
@@ -1509,6 +1702,8 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
 ** @param [u] kblist [AjPList] AJAX List of Ensembl Karyotype Band objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1524,13 +1719,13 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
     EnsPSlice slice     = NULL;
     EnsPSliceadaptor sa = NULL;
 
-    if(!kba)
+    if (!kba)
         return ajFalse;
 
-    if(!name)
+    if (!name)
         return ajFalse;
 
-    if(!kblist)
+    if (!kblist)
         return ajFalse;
 
     dba = ensFeatureadaptorGetDatabaseadaptor(kba);
@@ -1543,7 +1738,7 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
                                         name,
                                         &slice);
 
-    if(!slice)
+    if (!slice)
     {
         ajDebug("ensKaryotypebandadaptorFetchAllbyChromosomename could not "
                 "fetch an Ensembl Slice for chromosome name '%S'.\n", name);

@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     
     ajFileClose(&outf);
     ajSeqallDel(&seqall);
-    ajTableDelValdel(&typesTable, ajMemFree);
+    ajTableDelValdel(&typesTable, &ajMemFree);
 
     ajStrDel(&dbvalue);
     ajStrDel(&dbname);

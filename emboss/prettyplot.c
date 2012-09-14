@@ -114,8 +114,8 @@ int main(int argc, char **argv)
     ajint count;
     ajint k;
     ajint kmax;
-    float defheight;
-    float currentscale;
+    float defheight = 0.0;
+    float currentscale = 0.0;
     AjPStr shade = NULL;
     AjPFloat pair  = NULL;
     AjPGraph graph = NULL;
@@ -183,6 +183,8 @@ int main(int argc, char **argv)
     float part = 0.0;
     const char *cptr;
     ajint resbreak;
+    ajint blocksperline;
+    float ratio;
     float fplural;
     float ystart;
     float xmin;
@@ -206,7 +208,8 @@ int main(int argc, char **argv)
 
     seqset   = ajAcdGetSeqset("sequences");
     numres   = ajAcdGetInt("residuesperline");
-    resbreak = ajAcdGetInt("resbreak");
+    blocksperline = ajAcdGetInt("blocksperline");
+    resbreak = (numres+blocksperline-1)/blocksperline;
 
     ajSeqsetFill(seqset);	/* Pads sequence set with gap characters */
     numseq = ajSeqsetGetSize(seqset);
@@ -217,7 +220,7 @@ int main(int argc, char **argv)
     shade             = ajAcdGetString("shade");
     pair              = ajAcdGetArray("pair");
     identity          = ajAcdGetInt("identity");
-    boxit             = ajAcdGetBoolean("box");
+    boxit             = ajAcdGetBoolean("doboxes");
 
     ajtime = ajTimeNewTodayFmt("daytime");
 
@@ -251,12 +254,14 @@ int main(int argc, char **argv)
     shownames   = ajAcdGetBoolean("name");
     shownumbers = ajAcdGetBoolean("number");
     charlen     = ajAcdGetInt("maxnamelen");
-    fplural     = ajAcdGetFloat("plurality");
+    ratio       = ajAcdGetFloat("ratio");
     portrait    = ajAcdGetBoolean("portrait");
     collision   = ajAcdGetBoolean("collision");
     listoptions = ajAcdGetBoolean("listoptions");
     altstr = ajAcdGetListSingle("alternative");
     cmpmatrix   = ajAcdGetMatrix("matrixfile");
+
+    fplural     = ratio * ajSeqsetGetTotweight(seqset);
 
     ajStrToInt(altstr, &alternative);
 

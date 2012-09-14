@@ -38,11 +38,12 @@ FEATURES             Location/Qualifiers
                      /mol_type="mRNA"
                      /db_xref="GDB:3839990"
                      /db_xref="taxon:9606"
+                     /db_xref="biosample:154914"
                      /clone="IMAGE:177794"
                      /sex="Male"
                      /dev_stage="55-year old"
                      /lab_host="DH10B (ampicillin resistant)"
-                     /clone_lib="Soares adult brain N2b5HB55Y"
+                     /clone_lib="LIBEST_000300 Soares adult brain N2b5HB55Y"
                      /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
                      modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
                      strand cDNA was primed with a Not I - oligo(dT) primer [5'

@@ -1,84 +1,87 @@
-/* @source Ensembl Quality Check Submission functions
+/* @source ensqcsubmission ****************************************************
+**
+** Ensembl Quality Check Submission functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.15 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/05/25 19:55:04 $ by $Author: mks $
-** @version $Revision: 1.3 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensqcsubmission.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic qcsubmissionadaptorTables *************************************
+/* @conststatic qcsubmissionadaptorKTables ************************************
 **
 ** Array of Ensembl Quality Check Submission Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* qcsubmissionadaptorTables[] =
+static const char *qcsubmissionadaptorKTables[] =
 {
     "submission",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcalignmentadaptorColumns *************************************
+/* @conststatic qcsubmissionadaptorKColumns ***********************************
 **
 ** Array of Ensembl Quality Check Submission Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* qcsubmissionadaptorColumns[] =
+static const char *qcsubmissionadaptorKColumns[] =
 {
     "submission.submission_id",
     "submission.analysis_id",
@@ -90,25 +93,25 @@ static const char* qcsubmissionadaptorColumns[] =
     "submission.target_end",
     "submission.target_strand",
     "submission.analysis_job_id",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool qcsubmissionadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -117,9 +120,9 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -191,6 +194,8 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [EnsPQcsubmission] Ensembl Quality Check Submission or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -198,27 +203,20 @@ EnsPQcsubmission ensQcsubmissionNewCpy(const EnsPQcsubmission qcsb)
 {
     EnsPQcsubmission pthis = NULL;
 
-    if(!qcsb)
+    if (!qcsb)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
-    pthis->Identifier = qcsb->Identifier;
-
-    pthis->Adaptor = qcsb->Adaptor;
-
-    if(qcsb->Analysis)
-        pthis->Analysis = ensAnalysisNewRef(qcsb->Analysis);
-
-    pthis->QuerySequence  = ensQcsequenceNewRef(qcsb->QuerySequence);
-    pthis->TargetSequence = ensQcsequenceNewRef(qcsb->TargetSequence);
-
-    pthis->TargetStart  = qcsb->TargetStart;
-    pthis->TargetEnd    = qcsb->TargetEnd;
-    pthis->TargetStrand = qcsb->TargetStrand;
-
+    pthis->Use              = 1U;
+    pthis->Identifier       = qcsb->Identifier;
+    pthis->Adaptor          = qcsb->Adaptor;
+    pthis->Analysis         = ensAnalysisNewRef(qcsb->Analysis);
+    pthis->QuerySequence    = ensQcsequenceNewRef(qcsb->QuerySequence);
+    pthis->TargetSequence   = ensQcsequenceNewRef(qcsb->TargetSequence);
+    pthis->TargetStart      = qcsb->TargetStart;
+    pthis->TargetEnd        = qcsb->TargetEnd;
+    pthis->TargetStrand     = qcsb->TargetStrand;
     pthis->Analysisjobidentifier = qcsb->Analysisjobidentifier;
 
     return pthis;
@@ -245,6 +243,8 @@ EnsPQcsubmission ensQcsubmissionNewCpy(const EnsPQcsubmission qcsb)
 ** @param [r] analysisjobid [ajuint] Ensembl Hive Analysis Job identifier
 **
 ** @return [EnsPQcsubmission] Ensembl Quality Check Submission or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -260,18 +260,18 @@ EnsPQcsubmission ensQcsubmissionNewIni(EnsPQcsubmissionadaptor qcsba,
 {
     EnsPQcsubmission qcsb = NULL;
 
-    if(!analysis)
+    if (!analysis)
         return NULL;
 
-    if(!qsequence)
+    if (!qsequence)
         return NULL;
 
-    if(!tsequence)
+    if (!tsequence)
         return NULL;
 
     AJNEW0(qcsb);
 
-    qcsb->Use = 1;
+    qcsb->Use = 1U;
 
     qcsb->Identifier = identifier;
 
@@ -302,12 +302,14 @@ EnsPQcsubmission ensQcsubmissionNewIni(EnsPQcsubmissionadaptor qcsba,
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Submission
 **
 ** @return [EnsPQcsubmission] Ensembl Quality Check Submission or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsubmission ensQcsubmissionNewRef(EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
+    if (!qcsb)
         return NULL;
 
     qcsb->Use++;
@@ -320,15 +322,15 @@ EnsPQcsubmission ensQcsubmissionNewRef(EnsPQcsubmission qcsb)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Submission object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Submission object.
 **
 ** @fdata [EnsPQcsubmission]
 **
-** @nam3rule Del Destroy (free) an Ensembl Quality Check Submission object
+** @nam3rule Del Destroy (free) an Ensembl Quality Check Submission
 **
-** @argrule * Pqcsb [EnsPQcsubmission*] Ensembl Quality Check Submission
-**                                      object address
+** @argrule * Pqcsb [EnsPQcsubmission*]
+** Ensembl Quality Check Submission address
 **
 ** @valrule * [void]
 **
@@ -348,24 +350,24 @@ EnsPQcsubmission ensQcsubmissionNewRef(EnsPQcsubmission qcsb)
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pqcsb [EnsPQcsubmission*] Ensembl Quality Check Submission
-**                                      object address
+** @param [d] Pqcsb [EnsPQcsubmission*]
+** Ensembl Quality Check Submission address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
+void ensQcsubmissionDel(EnsPQcsubmission *Pqcsb)
 {
     EnsPQcsubmission pthis = NULL;
 
-    if(!Pqcsb)
+    if (!Pqcsb)
         return;
 
-    if(!*Pqcsb)
-        return;
-
-    if(ajDebugTest("ensQcsubmissionDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcsubmissionDel"))
     {
         ajDebug("ensQcsubmissionDel\n"
                 "  *Pqcsb %p\n",
@@ -373,12 +375,16 @@ void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
 
         ensQcsubmissionTrace(*Pqcsb, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pqcsb)
+        return;
 
     pthis = *Pqcsb;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pqcsb = NULL;
 
@@ -400,9 +406,9 @@ void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Submission object.
 **
 ** @fdata [EnsPQcsubmission]
@@ -412,12 +418,12 @@ void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
 ** @nam4rule Analysis Return the Ensembl Analysis
 ** @nam4rule Analysisjobidentifier Return the Hive Analysis Job Identifier
 ** @nam4rule Identifier Return the SQL database-internal identifier
-** @nam4rule Query Return query elements
+** @nam4rule Query Return query members
 ** @nam5rule End Return the query end
 ** @nam5rule Sequence Return the query Ensembl Quality Check Sequence
 ** @nam5rule Start Return the query start
 ** @nam5rule Strand Return the query strand
-** @nam4rule Target Return target elements
+** @nam4rule Target Return target members
 ** @nam5rule End Return the target end
 ** @nam5rule Sequence Return the target Ensembl Quality Check Sequence
 ** @nam5rule Start Return the target start
@@ -428,17 +434,17 @@ void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
 ** @valrule Adaptor [EnsPQcsubmissionadaptor]
 ** Ensembl Quality Check Submission Adaptor or NULL
 ** @valrule Analysis [EnsPAnalysis] Ensembl Analysis or NULL
-** @valrule Analysisjobidentifier [ajuint] Hive Analysis Job Identifier or 0
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
-** @valrule QueryEnd [ajuint] Query end or 0
+** @valrule Analysisjobidentifier [ajuint] Hive Analysis Job Identifier or 0U
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
+** @valrule QueryEnd [ajuint] Query end or 0U
 ** @valrule QuerySequence [EnsPQcsequence]
 ** Query Ensembl Quality Check Sequence or NULL
-** @valrule QueryStart [ajuint] Query start or 0
+** @valrule QueryStart [ajuint] Query start or 0U
 ** @valrule QueryStrand [ajint] Query strand or 0
-** @valrule TargetEnd [ajuint] Target end or 0
+** @valrule TargetEnd [ajuint] Target end or 0U
 ** @valrule TargetSequence [EnsPQcsequence]
 ** Target Ensembl Quality Check Sequence or NULL
-** @valrule TargetStart [ajuint] Target start or 0
+** @valrule TargetStart [ajuint] Target start or 0U
 ** @valrule TargetStrand [ajint] Target strand or 0
 **
 ** @fcategory use
@@ -449,22 +455,21 @@ void ensQcsubmissionDel(EnsPQcsubmission* Pqcsb)
 
 /* @func ensQcsubmissionGetAdaptor ********************************************
 **
-** Get the Ensembl Quality Check Submission Adaptor element of an
+** Get the Ensembl Quality Check Submission Adaptor member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [EnsPQcsubmissionadaptor] Ensembl Quality Check Submission Adaptor
 ** or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsubmissionadaptor ensQcsubmissionGetAdaptor(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return NULL;
-
-    return qcsb->Adaptor;
+    return (qcsb) ? qcsb->Adaptor : NULL;
 }
 
 
@@ -472,20 +477,19 @@ EnsPQcsubmissionadaptor ensQcsubmissionGetAdaptor(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetAnalysis *******************************************
 **
-** Get the Ensembl Analysis element of an Ensembl Quality Check Submission.
+** Get the Ensembl Analysis member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [EnsPAnalysis] Ensembl Analysis or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAnalysis ensQcsubmissionGetAnalysis(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return NULL;
-
-    return qcsb->Analysis;
+    return (qcsb) ? qcsb->Analysis : NULL;
 }
 
 
@@ -493,21 +497,20 @@ EnsPAnalysis ensQcsubmissionGetAnalysis(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetAnalysisjobidentifier ******************************
 **
-** Get the Hive Analysis Job identifier element of an
+** Get the Hive Analysis Job identifier member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Variation
 **
-** @return [ajuint] Hive Analysis Job identifier or 0
+** @return [ajuint] Hive Analysis Job identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetAnalysisjobidentifier(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->Analysisjobidentifier;
+    return (qcsb) ? qcsb->Analysisjobidentifier : 0U;
 }
 
 
@@ -515,21 +518,20 @@ ajuint ensQcsubmissionGetAnalysisjobidentifier(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetIdentifier *****************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetIdentifier(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->Identifier;
+    return (qcsb) ? qcsb->Identifier : 0U;
 }
 
 
@@ -537,20 +539,19 @@ ajuint ensQcsubmissionGetIdentifier(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetQueryEnd *******************************************
 **
-** Get the query end element of an Ensembl Quality Check Submission.
+** Get the query end member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
-** @return [ajuint] Query end or 0
+** @return [ajuint] Query end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetQueryEnd(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->QueryEnd;
+    return (qcsb) ? qcsb->QueryEnd : 0U;
 }
 
 
@@ -558,21 +559,20 @@ ajuint ensQcsubmissionGetQueryEnd(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetQuerySequence **************************************
 **
-** Get the query Ensembl Quality Check Sequence element of an
+** Get the query Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [EnsPQcsequence] Query Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcsubmissionGetQuerySequence(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return NULL;
-
-    return qcsb->QuerySequence;
+    return (qcsb) ? qcsb->QuerySequence : NULL;
 }
 
 
@@ -580,20 +580,19 @@ EnsPQcsequence ensQcsubmissionGetQuerySequence(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetQueryStart *****************************************
 **
-** Get the query start element of an Ensembl Quality Check Submission.
+** Get the query start member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
-** @return [ajuint] Query start or 0
+** @return [ajuint] Query start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetQueryStart(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->QueryStart;
+    return (qcsb) ? qcsb->QueryStart : 0U;
 }
 
 
@@ -601,20 +600,19 @@ ajuint ensQcsubmissionGetQueryStart(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetQueryStrand ****************************************
 **
-** Get the query strand element of an Ensembl Quality Check Submission.
+** Get the query strand member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [ajint] Query strand or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensQcsubmissionGetQueryStrand(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->QueryStrand;
+    return (qcsb) ? qcsb->QueryStrand : 0;
 }
 
 
@@ -622,20 +620,19 @@ ajint ensQcsubmissionGetQueryStrand(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetTargetEnd ******************************************
 **
-** Get the target end element of an Ensembl Quality Check Submission.
+** Get the target end member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
-** @return [ajuint] Target end or 0
+** @return [ajuint] Target end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetTargetEnd(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->TargetEnd;
+    return (qcsb) ? qcsb->TargetEnd : 0U;
 }
 
 
@@ -643,21 +640,20 @@ ajuint ensQcsubmissionGetTargetEnd(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetTargetSequence *************************************
 **
-** Get the target Ensembl Quality Check Sequence element of an
+** Get the target Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [EnsPQcsequence] Target Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcsubmissionGetTargetSequence(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return NULL;
-
-    return qcsb->TargetSequence;
+    return (qcsb) ? qcsb->TargetSequence : NULL;
 }
 
 
@@ -665,20 +661,19 @@ EnsPQcsequence ensQcsubmissionGetTargetSequence(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetTargetStart ****************************************
 **
-** Get the target start element of an Ensembl Quality Check Submission.
+** Get the target start member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
-** @return [ajuint] Target start or 0
+** @return [ajuint] Target start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsubmissionGetTargetStart(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->TargetStart;
+    return (qcsb) ? qcsb->TargetStart : 0U;
 }
 
 
@@ -686,20 +681,19 @@ ajuint ensQcsubmissionGetTargetStart(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionGetTargetStrand ***************************************
 **
-** Get the target strand element of an Ensembl Quality Check Submission.
+** Get the target strand member of an Ensembl Quality Check Submission.
 **
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [ajint] Target strand or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensQcsubmissionGetTargetStrand(const EnsPQcsubmission qcsb)
 {
-    if(!qcsb)
-        return 0;
-
-    return qcsb->TargetStrand;
+    return (qcsb) ? qcsb->TargetStrand : 0;
 }
 
 
@@ -707,22 +701,22 @@ ajint ensQcsubmissionGetTargetStrand(const EnsPQcsubmission qcsb)
 
 /* @section modifiers *********************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Quality Check Submission object.
 **
 ** @fdata [EnsPQcsubmission]
 **
-** @nam3rule Set Set one element of an Ensembl Quality Check Submission
+** @nam3rule Set Set one member of an Ensembl Quality Check Submission
 ** @nam4rule Adaptor Set the Ensembl Quality Check Submission Adaptor
 ** @nam4rule Analysis Set the Ensembl Analysis
 ** @nam4rule Analysisjobidentifier Set the Analysis Job Identifier
 ** @nam4rule Identifier Set the SQL database-internal identifier
-** @nam4rule Query Set query elements
+** @nam4rule Query Set query members
 ** @nam5rule End Set the query end
 ** @nam5rule Sequence Set the query Ensembl Quality Check Sequence
 ** @nam5rule Start Set the query start
 ** @nam5rule Strand Set the query strand
-** @nam4rule Target Set target elements
+** @nam4rule Target Set target members
 ** @nam5rule End Set the target end
 ** @nam5rule Sequence Set the target Ensembl Quality Check Sequence
 ** @nam5rule Start Set the target start
@@ -755,20 +749,22 @@ ajint ensQcsubmissionGetTargetStrand(const EnsPQcsubmission qcsb)
 
 /* @func ensQcsubmissionSetAdaptor ********************************************
 **
-** Set the Ensembl Database Adaptor element of an Quality Check Submission.
+** Set the Ensembl Database Adaptor member of an Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [uN] qcsba [EnsPQcsubmissionadaptor]
 ** Ensembl Quality Check Submission Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetAdaptor(EnsPQcsubmission qcsb,
                                  EnsPQcsubmissionadaptor qcsba)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->Adaptor = qcsba;
@@ -781,19 +777,21 @@ AjBool ensQcsubmissionSetAdaptor(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetAnalysis *******************************************
 **
-** Set the Ensembl Analysis element of an Ensembl Quality Check Submission.
+** Set the Ensembl Analysis member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [uN] analysis [EnsPAnalysis] Ensembl Analysis
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetAnalysis(EnsPQcsubmission qcsb,
                                   EnsPAnalysis analysis)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     ensAnalysisDel(&qcsb->Analysis);
@@ -808,20 +806,22 @@ AjBool ensQcsubmissionSetAnalysis(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetAnalysisjobidentifier ******************************
 **
-** Set the Hive Analysis Job identifier element of an
+** Set the Hive Analysis Job identifier member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] jobid [ajuint] Hive Analysis Job identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetAnalysisjobidentifier(EnsPQcsubmission qcsb,
                                                ajuint jobid)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->Analysisjobidentifier = jobid;
@@ -834,20 +834,22 @@ AjBool ensQcsubmissionSetAnalysisjobidentifier(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetIdentifier *****************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetIdentifier(EnsPQcsubmission qcsb,
                                     ajuint identifier)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->Identifier = identifier;
@@ -860,19 +862,21 @@ AjBool ensQcsubmissionSetIdentifier(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetQueryEnd *******************************************
 **
-** Set the query end element of an Ensembl Quality Check Submission.
+** Set the query end member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] qend [ajuint] Query end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetQueryEnd(EnsPQcsubmission qcsb,
                                   ajuint qend)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->QueryEnd = qend;
@@ -885,20 +889,22 @@ AjBool ensQcsubmissionSetQueryEnd(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetQuerySequence **************************************
 **
-** Set the query Ensembl Quality Check Sequence element of an
+** Set the query Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [uN] qsequence [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetQuerySequence(EnsPQcsubmission qcsb,
                                        EnsPQcsequence qsequence)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     ensQcsequenceDel(&qcsb->QuerySequence);
@@ -913,19 +919,21 @@ AjBool ensQcsubmissionSetQuerySequence(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetQueryStart *****************************************
 **
-** Set the query start element of an Ensembl Quality Check Submission.
+** Set the query start member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] qstart [ajuint] Query start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetQueryStart(EnsPQcsubmission qcsb,
                                     ajuint qstart)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->QueryStart = qstart;
@@ -938,19 +946,21 @@ AjBool ensQcsubmissionSetQueryStart(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetQueryStrand ****************************************
 **
-** Set the query strand element of an Ensembl Quality Check Submission.
+** Set the query strand member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] qstrand [ajint] Query strand
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetQueryStrand(EnsPQcsubmission qcsb,
                                      ajint qstrand)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->QueryStrand = qstrand;
@@ -963,19 +973,21 @@ AjBool ensQcsubmissionSetQueryStrand(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetTargetEnd ******************************************
 **
-** Set the target end element of an Ensembl Quality Check Submission.
+** Set the target end member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] tend [ajuint] Target end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetTargetEnd(EnsPQcsubmission qcsb,
                                    ajuint tend)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->TargetEnd = tend;
@@ -988,20 +1000,22 @@ AjBool ensQcsubmissionSetTargetEnd(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetTargetSequence *************************************
 **
-** Set the target Ensembl Quality Check Sequence element of an
+** Set the target Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [uN] tsequence [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetTargetSequence(EnsPQcsubmission qcsb,
                                         EnsPQcsequence tsequence)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     ensQcsequenceDel(&qcsb->TargetSequence);
@@ -1016,19 +1030,21 @@ AjBool ensQcsubmissionSetTargetSequence(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetTargetStart ****************************************
 **
-** Set the target start element of an Ensembl Quality Check Submission.
+** Set the target start member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] tstart [ajuint] Target start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetTargetStart(EnsPQcsubmission qcsb,
                                      ajuint tstart)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->TargetStart = tstart;
@@ -1041,19 +1057,21 @@ AjBool ensQcsubmissionSetTargetStart(EnsPQcsubmission qcsb,
 
 /* @func ensQcsubmissionSetTargetStrand ***************************************
 **
-** Set the target strand element of an Ensembl Quality Check Submission.
+** Set the target strand member of an Ensembl Quality Check Submission.
 **
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 ** @param [r] tstrand [ajint] Target strand
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionSetTargetStrand(EnsPQcsubmission qcsb,
                                       ajint tstrand)
 {
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     qcsb->TargetStrand = tstrand;
@@ -1070,7 +1088,7 @@ AjBool ensQcsubmissionSetTargetStrand(EnsPQcsubmission qcsb,
 **
 ** @fdata [EnsPQcsubmission]
 **
-** @nam3rule Trace Report Ensembl Quality Check Submission elements to
+** @nam3rule Trace Report Ensembl Quality Check Submission members to
 **                 debug file
 **
 ** @argrule Trace qcsb [const EnsPQcsubmission]
@@ -1093,6 +1111,8 @@ AjBool ensQcsubmissionSetTargetStrand(EnsPQcsubmission qcsb,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1100,7 +1120,7 @@ AjBool ensQcsubmissionTrace(const EnsPQcsubmission qcsb, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1180,6 +1200,8 @@ AjBool ensQcsubmissionTrace(const EnsPQcsubmission qcsb, ajuint level)
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1187,7 +1209,7 @@ size_t ensQcsubmissionCalculateMemsize(const EnsPQcsubmission qcsb)
 {
     size_t size = 0;
 
-    if(!qcsb)
+    if (!qcsb)
         return 0;
 
     size += sizeof (EnsOQcsubmission);
@@ -1223,7 +1245,7 @@ size_t ensQcsubmissionCalculateMemsize(const EnsPQcsubmission qcsb)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Quality Check Submission objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
@@ -1231,11 +1253,13 @@ size_t ensQcsubmissionCalculateMemsize(const EnsPQcsubmission qcsb)
 ** Ensembl Quality Check Submission objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool qcsubmissionadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -1243,16 +1267,16 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
 {
     ajint tstrand = 0;
 
-    ajuint identifier = 0;
-    ajuint analysisid = 0;
-    ajuint qdbid      = 0;
-    ajuint qsid       = 0;
-    ajuint tdbid      = 0;
-    ajuint tsid       = 0;
-    ajuint tstart     = 0;
-    ajuint tend       = 0;
+    ajuint identifier = 0U;
+    ajuint analysisid = 0U;
+    ajuint qdbid      = 0U;
+    ajuint qsid       = 0U;
+    ajuint tdbid      = 0U;
+    ajuint tsid       = 0U;
+    ajuint tstart     = 0U;
+    ajuint tend       = 0U;
 
-    ajuint analysisjobid = 0;
+    ajuint analysisjobid = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1261,6 +1285,8 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPQcsequence qsequence   = NULL;
     EnsPQcsequence tsequence   = NULL;
     EnsPQcsequenceadaptor qcsa = NULL;
@@ -1268,39 +1294,39 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
     EnsPQcsubmission qcsb         = NULL;
     EnsPQcsubmissionadaptor qcsba = NULL;
 
-    if(ajDebugTest("qcsubmissionadaptorFetchAllbyStatement"))
+    if (ajDebugTest("qcsubmissionadaptorFetchAllbyStatement"))
         ajDebug("qcsubmissionadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  qcsbs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 qcsbs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!qcsbs)
+    if (!qcsbs)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
-    qcsa = ensRegistryGetQcsequenceadaptor(dba);
-
+    aa    = ensRegistryGetAnalysisadaptor(dba);
+    qcsa  = ensRegistryGetQcsequenceadaptor(dba);
     qcsba = ensRegistryGetQcsubmissionadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier    = 0;
         analysisid    = 0;
@@ -1342,7 +1368,7 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
                                      tstrand,
                                      analysisjobid);
 
-        ajListPushAppend(qcsbs, (void*) qcsb);
+        ajListPushAppend(qcsbs, (void *) qcsb);
 
         ensAnalysisDel(&analysis);
 
@@ -1399,25 +1425,27 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
 **
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPQcsubmissionadaptor] Ensembl Quality Check Submission Adaptor
-** or NULL
+** @return [EnsPQcsubmissionadaptor]
+** Ensembl Quality Check Submission Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsubmissionadaptor ensQcsubmissionadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensBaseadaptorNew(
         dba,
-        qcsubmissionadaptorTables,
-        qcsubmissionadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        qcsubmissionadaptorFetchAllbyStatement);
+        qcsubmissionadaptorKTables,
+        qcsubmissionadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &qcsubmissionadaptorFetchAllbyStatement);
 }
 
 
@@ -1425,16 +1453,15 @@ EnsPQcsubmissionadaptor ensQcsubmissionadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Submission Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Submission Adaptor object.
 **
 ** @fdata [EnsPQcsubmissionadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Quality Check Submission Adaptor
-**               object
 **
 ** @argrule * Pqcsba [EnsPQcsubmissionadaptor*]
-** Ensembl Quality Check Submission Adaptor object address
+** Ensembl Quality Check Submission Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1449,38 +1476,34 @@ EnsPQcsubmissionadaptor ensQcsubmissionadaptorNew(
 ** Default destructor for an Ensembl Quality Check Submission Adaptor.
 **
 ** @param [d] Pqcsba [EnsPQcsubmissionadaptor*]
-** Ensembl Quality Check Submission Adaptor object address
+** Ensembl Quality Check Submission Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcsubmissionadaptorDel(EnsPQcsubmissionadaptor* Pqcsba)
+void ensQcsubmissionadaptorDel(EnsPQcsubmissionadaptor *Pqcsba)
 {
-    if(!Pqcsba)
-        return;
-
-    if(!*Pqcsba)
-        return;
-
-    if(ajDebugTest("ensQcsubmissionadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcsubmissionadaptorDel"))
         ajDebug("ensQcsubmissionadaptorDel\n"
                 "  *Pqcsba %p\n",
                 *Pqcsba);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
     ensBaseadaptorDel(Pqcsba);
 
-    *Pqcsba = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Submission Adaptor object.
 **
 ** @fdata [EnsPQcsubmissionadaptor]
@@ -1504,22 +1527,21 @@ void ensQcsubmissionadaptorDel(EnsPQcsubmissionadaptor* Pqcsba)
 
 /* @func ensQcsubmissionadaptorGetBaseadaptor *********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Quality Check Submission Adaptor.
 **
 ** @param [u] qcsba [EnsPQcsubmissionadaptor]
 ** Ensembl Quality Check Submission Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensQcsubmissionadaptorGetBaseadaptor(
     EnsPQcsubmissionadaptor qcsba)
 {
-    if(!qcsba)
-        return NULL;
-
     return qcsba;
 }
 
@@ -1528,22 +1550,21 @@ EnsPBaseadaptor ensQcsubmissionadaptorGetBaseadaptor(
 
 /* @func ensQcsubmissionadaptorGetDatabaseadaptor *****************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Quality Check Submission Adaptor.
 **
 ** @param [u] qcsba [EnsPQcsubmissionadaptor]
 ** Ensembl Quality Check Submission Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensQcsubmissionadaptorGetDatabaseadaptor(
     EnsPQcsubmissionadaptor qcsba)
 {
-    if(!qcsba)
-        return NULL;
-
     return ensBaseadaptorGetDatabaseadaptor(qcsba);
 }
 
@@ -1639,6 +1660,8 @@ EnsPDatabaseadaptor ensQcsubmissionadaptorGetDatabaseadaptor(
 ** @param [u] qcsbs [AjPList] AJAX List of Ensembl Quality Check Submissions
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1651,19 +1674,19 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabasePair(
 {
     AjPStr constraint = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!analysis)
+    if (!analysis)
         return ajFalse;
 
-    if(!qdb)
+    if (!qdb)
         return ajFalse;
 
-    if(!tdb)
+    if (!tdb)
         return ajFalse;
 
-    if(!qcsbs)
+    if (!qcsbs)
         return ajFalse;
 
     constraint = ajFmtStr("submission.analysis_id = %u "
@@ -1705,6 +1728,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabasePair(
 ** Ensembl Quality Check Submission objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1716,19 +1741,19 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseQuery(
 {
     AjPStr constraint = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!qdb)
+    if (!qdb)
         return ajFalse;
 
-    if(!qcsbs)
+    if (!qcsbs)
         return ajFalse;
 
     constraint = ajFmtStr("submission.query_db_id = %u",
                           ensQcdatabaseGetIdentifier(qdb));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND submission.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -1763,6 +1788,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseQuery(
 ** Ensembl Quality Check Submission objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1774,19 +1801,19 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseTarget(
 {
     AjPStr constraint = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!tdb)
+    if (!tdb)
         return ajFalse;
 
-    if(!qcsbs)
+    if (!qcsbs)
         return ajFalse;
 
     constraint = ajFmtStr("submission.target_db_id = %u",
                           ensQcdatabaseGetIdentifier(tdb));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND submission.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -1830,6 +1857,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseTarget(
 ** Ensembl Quality Check Submission objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1846,19 +1875,19 @@ AjBool ensQcsubmissionadaptorFetchAllbyRegion(
 {
     AjPStr constraint = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!analysis)
+    if (!analysis)
         return ajFalse;
 
-    if(!qsequence)
+    if (!qsequence)
         return ajFalse;
 
-    if(!tdb)
+    if (!tdb)
         return ajFalse;
 
-    if(!qcsbs)
+    if (!qcsbs)
         return ajFalse;
 
     constraint = ajFmtStr("submission.analysis_id = %u "
@@ -1873,12 +1902,12 @@ AjBool ensQcsubmissionadaptorFetchAllbyRegion(
                           ensQcdatabaseGetIdentifier(tdb),
                           ensQcsequenceGetIdentifier(qsequence));
 
-    if(tsequence)
+    if (tsequence)
         ajFmtPrintAppS(&constraint,
                        " AND submission.target_id = %u",
                        ensQcsequenceGetIdentifier(tsequence));
 
-    if(tstart && tend)
+    if (tstart && tend)
         ajFmtPrintAppS(&constraint,
                        " AND"
                        " submission.target_start >= %u"
@@ -1918,24 +1947,26 @@ AjBool ensQcsubmissionadaptorFetchAllbyRegion(
 ** Ensembl Quality Check Submission address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsubmissionadaptorFetchByIdentifier(
     EnsPQcsubmissionadaptor qcsba,
     ajuint identifier,
-    EnsPQcsubmission* Pqcsb)
+    EnsPQcsubmission *Pqcsb)
 {
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pqcsb)
+    if (!Pqcsb)
         return ajFalse;
 
-    return ensBaseadaptorFetchByIdentifier(qcsba, identifier, (void**) Pqcsb);
+    return ensBaseadaptorFetchByIdentifier(qcsba, identifier, (void **) Pqcsb);
 }
 
 
@@ -1978,6 +2009,8 @@ AjBool ensQcsubmissionadaptorFetchByIdentifier(
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1992,13 +2025,13 @@ AjBool ensQcsubmissionadaptorDelete(EnsPQcsubmissionadaptor qcsba,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
-    if(!ensQcsubmissionGetIdentifier(qcsb))
+    if (!ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
@@ -2012,7 +2045,7 @@ AjBool ensQcsubmissionadaptorDelete(EnsPQcsubmissionadaptor qcsba,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         qcsb->Adaptor    = (EnsPQcsubmissionadaptor) NULL;
         qcsb->Identifier = 0;
@@ -2039,6 +2072,8 @@ AjBool ensQcsubmissionadaptorDelete(EnsPQcsubmissionadaptor qcsba,
 ** @param [u] qcsb [EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2053,13 +2088,13 @@ AjBool ensQcsubmissionadaptorStore(EnsPQcsubmissionadaptor qcsba,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
-    if(ensQcsubmissionGetAdaptor(qcsb) && ensQcsubmissionGetIdentifier(qcsb))
+    if (ensQcsubmissionGetAdaptor(qcsb) && ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
@@ -2089,7 +2124,7 @@ AjBool ensQcsubmissionadaptorStore(EnsPQcsubmissionadaptor qcsba,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         ensQcsubmissionSetIdentifier(qcsb, ajSqlstatementGetIdentifier(sqls));
 
@@ -2117,6 +2152,8 @@ AjBool ensQcsubmissionadaptorStore(EnsPQcsubmissionadaptor qcsba,
 ** @param [r] qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2131,13 +2168,13 @@ AjBool ensQcsubmissionadaptorUpdate(EnsPQcsubmissionadaptor qcsba,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsba)
+    if (!qcsba)
         return ajFalse;
 
-    if(!qcsb)
+    if (!qcsb)
         return ajFalse;
 
-    if(!ensQcsubmissionGetIdentifier(qcsb))
+    if (!ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
@@ -2169,7 +2206,7 @@ AjBool ensQcsubmissionadaptorUpdate(EnsPQcsubmissionadaptor qcsba,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
         result = ajTrue;
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);

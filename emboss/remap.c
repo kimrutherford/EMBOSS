@@ -543,7 +543,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
     if(ajTableGetLength(hittable))
     {
         ajTableToarrayKeys(hittable, &keyarray);
-        qsort(keyarray, ajTableGetLength(hittable), sizeof (*keyarray),
+        qsort(keyarray, (size_t) ajTableGetLength(hittable), sizeof (*keyarray),
 	      ajStrVcmp);
 
 	/* enzymes that cut the required number of times */
@@ -892,7 +892,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
         remap_RenamePreferred(nocutlist, retable, newlist);
         ajListstrFreeData(&nocutlist);
         nocutlist = newlist;
-        ajListSortUnique(nocutlist, remap_cmpcase, remap_strdel);
+        ajListSortUnique(nocutlist, &remap_cmpcase, &remap_strdel);
     }
 
 
@@ -911,8 +911,8 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
      **  nocutlist item is deleted.
      */
 
-    ajListSort(nocutlist, remap_cmpcase);
-    ajListSort(cutlist, remap_cmpcase);
+    ajListSort(nocutlist, &remap_cmpcase);
+    ajListSort(cutlist, &remap_cmpcase);
 
     citer = ajListIterNewread(cutlist);
     niter = ajListIterNew(nocutlist);
@@ -974,7 +974,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     if(html)
 	ajFmtPrintF(outfile, "<PRE>");
 
-    /*  ajListSort(nocutlist, ajStrVcmp);*/
+    /*  ajListSort(nocutlist, &ajStrVcmp);*/
     niter = ajListIterNewread(nocutlist);
     i = 0;
     while((nocutname = (AjPStr)ajListIterGet(niter)) != NULL)

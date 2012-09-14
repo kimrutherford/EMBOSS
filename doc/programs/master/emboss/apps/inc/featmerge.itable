@@ -1,0 +1,365 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-afeatures]<br>(Parameter 1)</td>
+<td>features</td>
+<td>(no help text) features value</td>
+<td>Readable feature table</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-bfeatures]<br>(Parameter 2)</td>
+<td>features</td>
+<td>(no help text) features value</td>
+<td>Readable feature table</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfeat]<br>(Parameter 3)</td>
+<td>featout</td>
+<td>Output features UFO</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-afeatures" associated features qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_afeatures</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_afeatures</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_afeatures</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_afeatures</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fask1<br>-fask_afeatures</td>
+<td>boolean</td>
+<td>Prompt for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fbegin1<br>-fbegin_afeatures</td>
+<td>integer</td>
+<td>Start of the features to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fend1<br>-fend_afeatures</td>
+<td>integer</td>
+<td>End of the features to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -freverse1<br>-freverse_afeatures</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fcircular1<br>-fcircular_afeatures</td>
+<td>boolean</td>
+<td>Circular sequence features</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-bfeatures" associated features qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat2<br>-fformat_bfeatures</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bfeatures</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bfeatures</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile2<br>-fopenfile_bfeatures</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fask2<br>-fask_bfeatures</td>
+<td>boolean</td>
+<td>Prompt for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fbegin2<br>-fbegin_bfeatures</td>
+<td>integer</td>
+<td>Start of the features to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fend2<br>-fend_bfeatures</td>
+<td>integer</td>
+<td>End of the features to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -freverse2<br>-freverse_bfeatures</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fcircular2<br>-fcircular_bfeatures</td>
+<td>boolean</td>
+<td>Circular sequence features</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outfeat" associated featout qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -offormat3<br>-offormat_outfeat</td>
+<td>string</td>
+<td>Output feature format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofopenfile3<br>-ofopenfile_outfeat</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofextension3<br>-ofextension_outfeat</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofdirectory3<br>-ofdirectory_outfeat</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofname3<br>-ofname_outfeat</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofsingle3<br>-ofsingle_outfeat</td>
+<td>boolean</td>
+<td>Separate file for each entry</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>

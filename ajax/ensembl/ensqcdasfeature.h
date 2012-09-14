@@ -1,10 +1,37 @@
+/* @include ensqcdasfeature ***************************************************
+**
+** Ensembl Quality Check DAS Feature functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.7 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSQCDASFEATURE_H
 #define ENSQCDASFEATURE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensqcalignment.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPQcdasfeatureadaptor *********************************************
 **
@@ -28,10 +55,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEQcdasfeatureCategory ********************************************
+/* @enum EnsEQcdasfeatureCategory *********************************************
 **
 ** Ensembl Quality Check DAS Feature Category enumeration
 **
+** @value ensEQcdasfeatureCategoryNULL
+** @value ensEQcdasfeatureCategoryUnknown
+** @value ensEQcdasfeatureCategoryTranscriptPerfect
+** @value ensEQcdasfeatureCategoryTranscriptTolerance
+** @value ensEQcdasfeatureCategoryTranscriptPartial
+** @value ensEQcdasfeatureCategoryTranscriptMissing
+** @value ensEQcdasfeatureCategoryTranscript
+** @value ensEQcdasfeatureCategoryTranslationPerfect
+** @value ensEQcdasfeatureCategoryTranslationTolerance
+** @value ensEQcdasfeatureCategoryTranslationPartial
+** @value ensEQcdasfeatureCategoryTranslationMissing
+** @value ensEQcdasfeatureCategoryTranslation
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcdasfeatureCategory
@@ -53,10 +93,19 @@ typedef enum EnsOQcdasfeatureCategory
 
 
 
-/* @const EnsEQcdasfeatureType ************************************************
+/* @enum EnsEQcdasfeatureType *************************************************
 **
 ** Ensembl Quality Check DAS Feature Type enumeration
 **
+** @value ensEQcdasfeatureTypeNULL
+** @value ensEQcdasfeatureTypeUnknown
+** @value ensEQcdasfeatureTypeExonPerfect
+** @value ensEQcdasfeatureTypeExonPartial
+** @value ensEQcdasfeatureTypeExonMissing
+** @value ensEQcdasfeatureTypeExonFrameshift
+** @value ensEQcdasfeatureTypeExonGap
+** @value ensEQcdasfeatureTypeExon
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcdasfeatureType
@@ -74,9 +123,9 @@ typedef enum EnsOQcdasfeatureType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPQcdasfeature *****************************************************
 **
@@ -133,9 +182,9 @@ typedef struct EnsSQcdasfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -162,7 +211,7 @@ EnsPQcdasfeature ensQcdasfeatureNewIni(EnsPQcdasfeatureadaptor qcdasfa,
 
 EnsPQcdasfeature ensQcdasfeatureNewRef(EnsPQcdasfeature qcdasf);
 
-void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf);
+void ensQcdasfeatureDel(EnsPQcdasfeature *Pqcdasf);
 
 EnsPQcdasfeatureadaptor ensQcdasfeatureGetAdaptor(
     const EnsPQcdasfeature qcdasf);
@@ -254,11 +303,11 @@ size_t ensQcdasfeatureCalculateMemsize(const EnsPQcdasfeature qcdasf);
 
 EnsEQcdasfeatureCategory ensQcdasfeatureCategoryFromStr(const AjPStr category);
 
-const char* ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc);
+const char *ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc);
 
 EnsEQcdasfeatureType ensQcdasfeatureTypeFromStr(const AjPStr type);
 
-const char* ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft);
+const char *ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft);
 
 /* Ensembl Quality Check DAS Feature Adaptor */
 
@@ -268,7 +317,7 @@ EnsPQcdasfeatureadaptor ensRegistryGetQcdasfeatureadaptor(
 EnsPQcdasfeatureadaptor ensQcdasfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor* Pqcdasfa);
+void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor *Pqcdasfa);
 
 EnsPBaseadaptor ensQcdasfeatureadaptorGetBaseadaptor(
     EnsPQcdasfeatureadaptor qcdasfa);
@@ -311,7 +360,7 @@ AjBool ensQcdasfeatureadaptorFetchAllbyRegion(
 AjBool ensQcdasfeatureadaptorFetchByIdentifier(
     EnsPQcdasfeatureadaptor qcdasfa,
     ajuint identifier,
-    EnsPQcdasfeature* Pqcdasf);
+    EnsPQcdasfeature *Pqcdasf);
 
 AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
                                     EnsPQcdasfeature qcdasf);

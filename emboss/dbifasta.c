@@ -77,20 +77,23 @@ static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
 
 static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type);
 
+/* Definition of global variables */
 
-static AjPStr rline  = NULL;
-static EmbPEntry dbifastaEntry = NULL;
-static AjPRegexp dbifastaWrdexp = NULL;
-static AjPRegexp dbifastaIdexp = NULL;
+static AjPList* dbifastaGFdl = NULL;
 
-static AjPStr dbifastaTmpAc  = NULL;
-static AjPStr dbifastaTmpSv  = NULL;
-static AjPStr dbifastaTmpGi  = NULL;
-static AjPStr dbifastaTmpDb  = NULL;
-static AjPStr dbifastaTmpDes = NULL;
-static AjPStr dbifastaTmpFd  = NULL;
-static AjPStr id = NULL;
-static AjPList* fdl = NULL;
+static AjPRegexp dbifastaGWrdexp = NULL;
+static AjPRegexp dbifastaGIdexp  = NULL;
+
+static AjPStr dbifastaGRline  = NULL;
+static AjPStr dbifastaGTmpAc  = NULL;
+static AjPStr dbifastaGTmpSv  = NULL;
+static AjPStr dbifastaGTmpGi  = NULL;
+static AjPStr dbifastaGTmpDb  = NULL;
+static AjPStr dbifastaGTmpDes = NULL;
+static AjPStr dbifastaGTmpFd  = NULL;
+static AjPStr dbifastaGTmpId  = NULL;
+
+static EmbPEntry dbifastaGEntry  = NULL;
 
 
 
@@ -219,8 +222,8 @@ int main(int argc, char **argv)
     ajDebug("writing '%S/'\n", indexdir);
 
     listInputFiles = embDbiFileListExc(directory, filename, exclude);
-    ajListSort(listInputFiles, ajStrVcmp);
-    nfiles = ajListToarray(listInputFiles, &inputFiles);
+    ajListSort(listInputFiles, &ajStrVcmp);
+    nfiles = (ajuint) ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
         ajDie("No input files in '%S' matched filename '%S'",
               directory, filename);
@@ -279,7 +282,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-	    embDbiEntryDel(&dbifastaEntry);
+	    embDbiEntryDel(&dbifastaGEntry);
 	}
 	embDbiLogFile(logfile, curfilename, idCountFile, fields,
 		      countField, nfields);
@@ -366,7 +369,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-	    ajListMap(fieldList[i], embDbiFieldDelMap, NULL);
+	    ajListMap(fieldList[i], &embDbiFieldDelMap, NULL);
 	    ajListFree(&fieldList[i]);
 	}
     }
@@ -385,32 +388,32 @@ int main(int argc, char **argv)
     AJFREE(divfiles);
     AJFREE(inputFiles);
 
-    embDbiEntryDel(&dbifastaEntry);
+    embDbiEntryDel(&dbifastaGEntry);
 
-    ajStrDel(&rline);
-    ajStrDel(&id);
+    ajStrDel(&dbifastaGRline);
+    ajStrDel(&dbifastaGTmpId);
 
-    if(fdl)
+    if(dbifastaGFdl)
     {
 	for(i=0; i < nfields; i++)
-	    ajListFree(&fdl[i]);
-	AJFREE(fdl);
+	    ajListFree(&dbifastaGFdl[i]);
+	AJFREE(dbifastaGFdl);
     }
 
-    ajListMap(idlist, embDbiEntryDelMap, NULL);
+    ajListMap(idlist, &embDbiEntryDelMap, NULL);
     ajListFree(&idlist);
     ajListstrFreeData(&listInputFiles);
     AJFREE(entryIds);
-    ajRegFree(&dbifastaIdexp);
-    ajRegFree(&dbifastaWrdexp);
+    ajRegFree(&dbifastaGIdexp);
+    ajRegFree(&dbifastaGWrdexp);
     ajRegFree(&regIdExp);
 
-    ajStrDel(&dbifastaTmpAc);
-    ajStrDel(&dbifastaTmpSv);
-    ajStrDel(&dbifastaTmpGi);
-    ajStrDel(&dbifastaTmpDb);
-    ajStrDel(&dbifastaTmpDes);
-    ajStrDel(&dbifastaTmpFd);
+    ajStrDel(&dbifastaGTmpAc);
+    ajStrDel(&dbifastaGTmpSv);
+    ajStrDel(&dbifastaGTmpGi);
+    ajStrDel(&dbifastaGTmpDb);
+    ajStrDel(&dbifastaGTmpDes);
+    ajStrDel(&dbifastaGTmpFd);
     ajStrDel(&curfilename);
 
     embExit();
@@ -455,60 +458,62 @@ static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
     static ajint nfields;
     ajint ifield;
 
-    if(!fdl)
+    if(!dbifastaGFdl)
     {
 	nfields = 0;
 	while(fields[nfields])
 	    nfields++;
 	if(nfields)
-	    AJCNEW(fdl, nfields);
+	    AJCNEW(dbifastaGFdl, nfields);
 	for(i=0; i < nfields; i++)
 	{
-	    fdl[i] = ajListNew();
+	    dbifastaGFdl[i] = ajListNew();
 	}
     }
 
-    if(!dbifastaEntry || !systemsort)
-	dbifastaEntry = embDbiEntryNew(nfields);
+    if(!dbifastaGEntry || !systemsort)
+	dbifastaGEntry = embDbiEntryNew(nfields);
 
     if(!dbifasta_ParseFasta(libr, &ir, maxFieldLen,
 			    countfield, idexp, type,
 			    alistfile, systemsort, fields))
 	return NULL;
 
-    /* id to dbifastaEntry->entry */
-    if(ajStrGetLen(id) > *maxidlen)
-	*maxidlen = ajStrGetLen(id);
+    /* id to dbifastaGEntry->entry */
+    if(ajStrGetLen(dbifastaGTmpId) > *maxidlen)
+	*maxidlen = ajStrGetLen(dbifastaGTmpId);
 
     if(systemsort)
-	ajFmtPrintF(elistfile, "%S %d %d %d\n", id, ir, is, ifile+1);
+	ajFmtPrintF(elistfile, "%S %d %d %d\n",
+                    dbifastaGTmpId, ir, is, ifile+1);
     else
     {
-	dbifastaEntry->entry   = ajCharNewS(id);
-	dbifastaEntry->rpos    = ir;
-	dbifastaEntry->spos    = is;
-	dbifastaEntry->filenum = ifile+1;
+	dbifastaGEntry->entry   = ajCharNewS(dbifastaGTmpId);
+	dbifastaGEntry->rpos    = ir;
+	dbifastaGEntry->spos    = is;
+	dbifastaGEntry->filenum = ifile+1;
 
 	/* field tokens as list, then move to ret->field */
 	for(ifield=0; ifield < nfields; ifield++)
 	{
-	    dbifastaEntry->nfield[ifield] = ajListGetLength(fdl[ifield]);
+	    dbifastaGEntry->nfield[ifield] =
+            (ajuint) ajListGetLength(dbifastaGFdl[ifield]);
 
-	    if(dbifastaEntry->nfield[ifield])
+	    if(dbifastaGEntry->nfield[ifield])
 	    {
-		AJCNEW(dbifastaEntry->field[ifield],
-		       dbifastaEntry->nfield[ifield]);
+		AJCNEW(dbifastaGEntry->field[ifield],
+		       dbifastaGEntry->nfield[ifield]);
 
 		i = 0;
-		while(ajListPop(fdl[ifield], (void**) &token))
-		    dbifastaEntry->field[ifield][i++] = token;
+		while(ajListPop(dbifastaGFdl[ifield], (void**) &token))
+		    dbifastaGEntry->field[ifield][i++] = token;
 	    }
 	    else
-		dbifastaEntry->field[ifield] = NULL;
+		dbifastaGEntry->field[ifield] = NULL;
 	}
     }
 
-    return dbifastaEntry;
+    return dbifastaGEntry;
 }
 
 
@@ -528,49 +533,50 @@ static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type)
 {
     AjPRegexp retexp = NULL;
 
-    dbifastaIdexp   = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
+    dbifastaGIdexp = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
 
     if(ajStrMatchC(idformat,"simple"))
     {
 	*type = FASTATYPE_SIMPLE;
-	retexp   = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
+	retexp = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"idacc"))
     {
 	*type = FASTATYPE_IDACC;
-	retexp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+\\(?([A-Za-z0-9_-]+)\\)?");
+	retexp = ajRegCompC(
+                            "^>([.A-Za-z0-9_-]+)+[ \t]+\\(?([A-Za-z0-9_-]+)\\)?");
     }
     else if(ajStrMatchC(idformat,"accid"))
     {
 	*type = FASTATYPE_ACCID;
-	retexp   = ajRegCompC("^>([A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9_-]+)");
+	retexp = ajRegCompC("^>([A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgid"))
     {
 	*type = FASTATYPE_GCGID;
-	retexp   = ajRegCompC("^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)");
+	retexp = ajRegCompC("^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgidacc"))
     {
 	*type = FASTATYPE_GCGIDACC;
-	retexp   = ajRegCompC(
+	retexp = ajRegCompC(
 		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)[ \t]+([A-Za-z0-9-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgaccid"))
     {
 	*type = FASTATYPE_GCGACCID;
-	retexp   = ajRegCompC(
+	retexp = ajRegCompC(
 		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)[ \t]+([A-Za-z0-9-]+)");
     }
     else if(ajStrMatchC(idformat,"ncbi"))
     {
 	*type = FASTATYPE_NCBI;
-	retexp   = ajRegCompC("^>([A-Za-z0-9_-]+)"); /* dummy regexp */
+	retexp = ajRegCompC("^>([A-Za-z0-9_-]+)"); /* dummy regexp */
     }
     else if(ajStrMatchC(idformat,"dbid"))
     {
 	*type = FASTATYPE_DBID;
-	retexp   = ajRegCompC("^>[A-Za-z0-9_-]+[ \t]+([A-Za-z0-9_-]+)");
+	retexp = ajRegCompC("^>[A-Za-z0-9_-]+[ \t]+([A-Za-z0-9_-]+)");
     }
     else
 	return NULL;
@@ -642,32 +648,32 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 	reset = ajFalse;
     }
 
-    if(!dbifastaWrdexp)
-	dbifastaWrdexp = ajRegCompC("([A-Za-z0-9]+)");
+    if(!dbifastaGWrdexp)
+	dbifastaGWrdexp = ajRegCompC("([A-Za-z0-9]+)");
 
     if(!tstr)
 	tstr = ajStrNew();
 
     *dpos = (ajint) ajFileResetPos(libr); /* Lossy cast */
 
-    ajReadline(libr, &rline);
+    ajReadline(libr, &dbifastaGRline);
 
-    if(!ajStrGetLen(rline))
+    if(!ajStrGetLen(dbifastaGRline))
         return ajFalse;
 
-    if(!ajRegExec(idexp,rline))
+    if(!ajRegExec(idexp,dbifastaGRline))
     {
-	ajStrDelStatic(&dbifastaTmpAc);
+	ajStrDelStatic(&dbifastaGTmpAc);
         type = FASTATYPE_SIMPLE;
-        idexp = dbifastaIdexp;
+        idexp = dbifastaGIdexp;
 
-        if(!ajRegExec(idexp, rline))
+        if(!ajRegExec(idexp, dbifastaGRline))
         {
-            ajFatal("Unrecognised ID line format: %S", rline);
+            ajFatal("Unrecognised ID line format: %S", dbifastaGRline);
             return ajFalse;
         }
 
-	ajWarn("Invalid ID line for selected format: %S", rline);
+	ajWarn("Invalid ID line for selected format: %S", dbifastaGRline);
     }
 
     /*
@@ -675,148 +681,152 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
     ** using empty values if they are not found
     */
 
-    ajStrAssignC(&dbifastaTmpSv, "");
-    ajStrAssignC(&dbifastaTmpGi, "");
-    ajStrAssignC(&dbifastaTmpDb, "");
-    ajStrAssignC(&dbifastaTmpDes, "");
-    ajStrAssignC(&dbifastaTmpAc, "");
-    ajStrAssignC(&id, "");
+    ajStrAssignC(&dbifastaGTmpSv, "");
+    ajStrAssignC(&dbifastaGTmpGi, "");
+    ajStrAssignC(&dbifastaGTmpDb, "");
+    ajStrAssignC(&dbifastaGTmpDes, "");
+    ajStrAssignC(&dbifastaGTmpAc, "");
+    ajStrAssignC(&dbifastaGTmpId, "");
 
     switch(type)
     {
     case FASTATYPE_SIMPLE:
-	ajRegSubI(idexp,2,&id);
-	ajStrAssignS(&dbifastaTmpAc,id);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,2,&dbifastaGTmpId);
+	ajStrAssignS(&dbifastaGTmpAc,dbifastaGTmpId);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_DBID:
-	ajRegSubI(idexp,1,&id);
-	ajStrAssignS(&dbifastaTmpAc,id);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpId);
+	ajStrAssignS(&dbifastaGTmpAc,dbifastaGTmpId);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_GCGID:
-	ajRegSubI(idexp,1,&id);
-	ajStrAssignS(&dbifastaTmpAc,id);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpId);
+	ajStrAssignS(&dbifastaGTmpAc,dbifastaGTmpId);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_NCBI:
-	if(!ajSeqParseNcbi(rline,&id,&dbifastaTmpAc,&dbifastaTmpSv,
-			   &dbifastaTmpGi,&dbifastaTmpDb,&dbifastaTmpDes))
+	if(!ajSeqParseNcbi(dbifastaGRline, &dbifastaGTmpId, &dbifastaGTmpAc,
+			   &dbifastaGTmpSv, &dbifastaGTmpGi, &dbifastaGTmpDb,
+                           &dbifastaGTmpDes))
 	{
-	    ajStrDelStatic(&dbifastaTmpAc);
+	    ajStrDelStatic(&dbifastaGTmpAc);
 	    return ajFalse;
 	}
 	break;
     case FASTATYPE_GCGIDACC:
-	ajRegSubI(idexp,1,&id);
-	ajRegSubI(idexp,2,&dbifastaTmpAc);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpId);
+	ajRegSubI(idexp,2,&dbifastaGTmpAc);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_GCGACCID:
-	ajRegSubI(idexp,1,&dbifastaTmpAc);
-	ajRegSubI(idexp,2,&id);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpAc);
+	ajRegSubI(idexp,2,&dbifastaGTmpId);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_IDACC:
-	ajRegSubI(idexp,1,&id);
-	ajRegSubI(idexp,2,&dbifastaTmpAc);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpId);
+	ajRegSubI(idexp,2,&dbifastaGTmpAc);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     case FASTATYPE_ACCID:
-	ajRegSubI(idexp,1,&dbifastaTmpAc);
-	ajRegSubI(idexp,2,&id);
-	ajRegPost(idexp, &dbifastaTmpDes);
+	ajRegSubI(idexp,1,&dbifastaGTmpAc);
+	ajRegSubI(idexp,2,&dbifastaGTmpId);
+	ajRegPost(idexp, &dbifastaGTmpDes);
 	break;
     default:
-	ajStrDelStatic(&dbifastaTmpAc);
+	ajStrDelStatic(&dbifastaGTmpAc);
 	return ajFalse;
     }
 
-    ajStrFmtUpper(&id);
-    ajStrFmtUpper(&dbifastaTmpAc);
+    ajStrFmtUpper(&dbifastaGTmpId);
+    ajStrFmtUpper(&dbifastaGTmpAc);
 
     if(accfield >= 0)
-	embDbiMaxlen(&dbifastaTmpAc, &maxFieldLen[accfield]);
+	embDbiMaxlen(&dbifastaGTmpAc, &maxFieldLen[accfield]);
     if(svnfield >= 0)
     {
-	embDbiMaxlen(&dbifastaTmpSv, &maxFieldLen[svnfield]);
-	embDbiMaxlen(&dbifastaTmpGi, &maxFieldLen[svnfield]);
+	embDbiMaxlen(&dbifastaGTmpSv, &maxFieldLen[svnfield]);
+	embDbiMaxlen(&dbifastaGTmpGi, &maxFieldLen[svnfield]);
     }
 
     if(systemsort)
     {
-	if(accfield >= 0 && ajStrGetLen(dbifastaTmpAc))
+	if(accfield >= 0 && ajStrGetLen(dbifastaGTmpAc))
 	{
 	    countfield[accfield]++;
-	    ajFmtPrintF(alistfile[accfield],"%S %S\n",id,dbifastaTmpAc);
+	    ajFmtPrintF(alistfile[accfield], "%S %S\n",
+                        dbifastaGTmpId, dbifastaGTmpAc);
 	}
-	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpSv))
+	if(svnfield >= 0 && ajStrGetLen(dbifastaGTmpSv))
 	{
 	    countfield[svnfield]++;
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", id, dbifastaTmpSv);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n",
+                        dbifastaGTmpId, dbifastaGTmpSv);
 	}
-	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpGi))
+	if(svnfield >= 0 && ajStrGetLen(dbifastaGTmpGi))
 	{
 	    countfield[svnfield]++;
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", id, dbifastaTmpGi);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n",
+                        dbifastaGTmpId, dbifastaGTmpGi);
 	}
-	if(desfield >= 0 && ajStrGetLen(dbifastaTmpDes))
-	    while(ajRegExec(dbifastaWrdexp, dbifastaTmpDes))
+	if(desfield >= 0 && ajStrGetLen(dbifastaGTmpDes))
+	    while(ajRegExec(dbifastaGWrdexp, dbifastaGTmpDes))
 	    {
-		ajRegSubI(dbifastaWrdexp, 1, &dbifastaTmpFd);
-		embDbiMaxlen(&dbifastaTmpFd, &maxFieldLen[desfield]);
-		ajStrFmtUpper(&dbifastaTmpFd);
+		ajRegSubI(dbifastaGWrdexp, 1, &dbifastaGTmpFd);
+		embDbiMaxlen(&dbifastaGTmpFd, &maxFieldLen[desfield]);
+		ajStrFmtUpper(&dbifastaGTmpFd);
 		ajDebug("++des '%S' tmpdes '%S\n",
-			dbifastaTmpFd, dbifastaTmpDes);
+			dbifastaGTmpFd, dbifastaGTmpDes);
 		countfield[desfield]++;
 		ajFmtPrintF(alistfile[desfield], "%S %S\n",
-			    id, dbifastaTmpFd);
-		ajRegPost(dbifastaWrdexp, &dbifastaTmpDes);
+			    dbifastaGTmpId, dbifastaGTmpFd);
+		ajRegPost(dbifastaGWrdexp, &dbifastaGTmpDes);
 	    }
     }
     else
     {
-	if(accfield >= 0 && ajStrGetLen(dbifastaTmpAc))
+	if(accfield >= 0 && ajStrGetLen(dbifastaGTmpAc))
 	{
-	    fd = ajCharNewS(dbifastaTmpAc);
-	    ajListPushAppend(fdl[accfield],fd);
+	    fd = ajCharNewS(dbifastaGTmpAc);
+	    ajListPushAppend(dbifastaGFdl[accfield],fd);
 	    countfield[accfield]++;
 	}
 
-	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpSv))
+	if(svnfield >= 0 && ajStrGetLen(dbifastaGTmpSv))
 	{
-	    fd = ajCharNewS(dbifastaTmpSv);
-	    ajListPushAppend(fdl[svnfield], fd);
+	    fd = ajCharNewS(dbifastaGTmpSv);
+	    ajListPushAppend(dbifastaGFdl[svnfield], fd);
 	    countfield[svnfield]++;
 	}
 
-	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpGi))
+	if(svnfield >= 0 && ajStrGetLen(dbifastaGTmpGi))
 	{
-	    fd = ajCharNewS(dbifastaTmpGi);
-	    ajListPushAppend(fdl[svnfield], fd);
+	    fd = ajCharNewS(dbifastaGTmpGi);
+	    ajListPushAppend(dbifastaGFdl[svnfield], fd);
 	    countfield[svnfield]++;
 	}
 
-	if(desfield >= 0 && ajStrGetLen(dbifastaTmpDes))
-	    while(ajRegExec(dbifastaWrdexp, dbifastaTmpDes))
+	if(desfield >= 0 && ajStrGetLen(dbifastaGTmpDes))
+	    while(ajRegExec(dbifastaGWrdexp, dbifastaGTmpDes))
 	    {
-		ajRegSubI(dbifastaWrdexp, 1, &dbifastaTmpFd);
-		embDbiMaxlen(&dbifastaTmpFd, &maxFieldLen[desfield]);
-		ajStrFmtUpper(&dbifastaTmpFd);
+		ajRegSubI(dbifastaGWrdexp, 1, &dbifastaGTmpFd);
+		embDbiMaxlen(&dbifastaGTmpFd, &maxFieldLen[desfield]);
+		ajStrFmtUpper(&dbifastaGTmpFd);
 		ajDebug("++des '%S' tmpdes: '%S'\n",
-			dbifastaTmpFd, dbifastaTmpDes);
-		fd = ajCharNewS(dbifastaTmpFd);
-		ajListPushAppend(fdl[desfield], fd);
+			dbifastaGTmpFd, dbifastaGTmpDes);
+		fd = ajCharNewS(dbifastaGTmpFd);
+		ajListPushAppend(dbifastaGFdl[desfield], fd);
 		countfield[desfield]++;
-		ajRegPost(dbifastaWrdexp, &dbifastaTmpDes);
+		ajRegPost(dbifastaGWrdexp, &dbifastaGTmpDes);
 	    }
     }
 
     ipos = ajFileResetPos(libr);
 
-    while(ajReadline(libr, &rline))
+    while(ajReadline(libr, &dbifastaGRline))
     {
-	if(ajStrGetCharFirst(rline) == '>')
+	if(ajStrGetCharFirst(dbifastaGRline) == '>')
 	{
 	    ajFileSeek(libr, ipos, 0);
 	    return ajTrue;

@@ -1,0 +1,84 @@
+application: infoassembly [
+  documentation: "Display information about assemblies"
+  groups: "Data retrieval:Sequence data:Assembly data"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  assembly: assembly [
+     default: ""
+     parameter: "Y"
+  ]
+
+  seqset: refsequence [
+    aligned: "N"
+    type: "nucleotide"
+    nullok: "Y"
+    help: "Reference sequences in the assembly"
+    relations: "EDAM_data:0849 Sequence record"
+    additional: "Y"
+  ]
+  
+endsection: input
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: windowsize [
+    help: "The size of windows on the genome that are used to bin reads."
+    information: "Window size"
+    default: "100"
+    additional: "Y"
+  ]
+
+  boolean: bisulfite [
+    help: "If this is true, it is assumed that the reads were bisulfite
+    	   treated"
+    information: "Bisulfite treated"
+    default: "N"
+    additional: "Y"
+  ]
+
+endsection: additional
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outassembly: outassembly [
+    parameter: "Y"
+  ]
+
+  outfile: gcbiasmetricsoutfile [
+    parameter: "Y"
+    help: "GC bias metrics"
+    nulldefault: "Y"
+    nullok: "Y"
+    knowntype: "infoassembly output"
+  ]
+
+  outfile: qualvaluesdistoutfile [
+    parameter: "Y"
+    help: "Distribution of quality values for the reads"
+    nulldefault: "Y"
+    nullok: "Y"
+    default: ""
+    knowntype: "infoassembly output"
+  ]
+
+endsection: output
+
+

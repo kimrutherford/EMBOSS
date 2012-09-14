@@ -1,10 +1,37 @@
+/* @include ensdatabaseadaptor ************************************************
+**
+** Ensembl Database Adaptor functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.27 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/03/09 20:33:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSDATABASEADAPTOR_H
 #define ENSDATABASEADAPTOR_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdatabaseconnection.h"
 
@@ -13,17 +40,24 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+extern const char *ensKDatabaseadaptorRegCollection;
+extern const char *ensKDatabaseadaptorRegMulti;
+extern const char *ensKDatabaseadaptorRegSpecies;
+
+
+
 
 /* @const EnsMDatabaseadaptorGroups *******************************************
 **
-** Number of Ensembl Database Adaptor groups.
+** Number of Ensembl Database Adaptor groups
 **
 ** The number of Ensembl Database Adaptor groups has to correlate with the
 ** EnsEDatabaseadaptorGroup enumeration list and the
-** static const char* databaseadaptorGroup[] array. It is used by the
+** static const char *databaseadaptorGroup[] array. It is used by the
 ** ensregistry.[ch] module.
 **
 ******************************************************************************/
@@ -33,10 +67,28 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEDatabaseadaptorGroup ********************************************
+/* @enum EnsEDatabaseadaptorGroup *********************************************
 **
-** Ensembl Database Adaptor Group enumeration.
+** Ensembl Database Adaptor Group enumeration
 **
+** @value ensEDatabaseadaptorGroupNULL Null
+** @value ensEDatabaseadaptorGroupCore Core
+** @value ensEDatabaseadaptorGroupVega Vega
+** @value ensEDatabaseadaptorGroupOtherFeatures Other features
+** @value ensEDatabaseadaptorGroupCopyDNA DNA reference
+** @value ensEDatabaseadaptorGroupGeneticVariation Genetic variation
+** @value ensEDatabaseadaptorGroupFunctionalGenomics Functional genomics
+** @value ensEDatabaseadaptorGroupComparativeGenomics Comparative genomics
+** @value ensEDatabaseadaptorGroupOntology Ontology
+** @value ensEDatabaseadaptorGroupQualityCheck Quality check
+** @value ensEDatabaseadaptorGroupPipeline Pipleine
+** @value ensEDatabaseadaptorGroupHive Hive
+** @value ensEDatabaseadaptorGroupCoreExpressionEST Core expression EST
+** @value ensEDatabaseadaptorGroupCoreExpressionGNF Core expression GNF
+** @value ensEDatabaseadaptorGroupAncestral Ancestral
+** @value ensEDatabaseadaptorGroupWebsite Webiste
+** @value ensEDatabaseadaptorGroupProduction Production
+** @@
 ******************************************************************************/
 
 typedef enum EnsODatabaseadaptorGroup
@@ -63,9 +115,9 @@ typedef enum EnsODatabaseadaptorGroup
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPDatabaseadaptor **************************************************
 **
@@ -81,14 +133,15 @@ typedef enum EnsODatabaseadaptorGroup
 ** @alias EnsPGvgenotypeadaptor
 ** @alias EnsPGvsynonymadaptor
 **
-** @attr Databaseconnection [EnsPDatabaseconnection] Ensembl Database
-**                                                   Connection
+** @attr Databaseconnection [EnsPDatabaseconnection]
+** Ensembl Database Connection
 ** @attr Species [AjPStr] Species
-** @attr SpeciesNames [AjPList] AJAX List of AJAX String (species name) objects
-** @attr Group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @attr SpeciesNames [AjPList]
+** AJAX List of AJAX String (species name) objects
+** @attr Group [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 ** @attr Multispecies [AjBool] Multi-species database
-** @attr Identifier [ajuint] Species identifier, defaults to 1
+** @attr Identifier [ajuint] Species identifier, defaults to 1U
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -109,9 +162,9 @@ typedef struct EnsSDatabaseadaptor
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -121,7 +174,7 @@ typedef struct EnsSDatabaseadaptor
 
 EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
     EnsEDatabaseadaptorGroup dbag,
-    const AjPStr alias);
+    AjPStr alias);
 
 EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba);
 
@@ -138,7 +191,7 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewIni(EnsPDatabaseconnection dbc,
 
 EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url);
 
-void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba);
+void ensDatabaseadaptorDel(EnsPDatabaseadaptor *Pdba);
 
 EnsPDatabaseconnection ensDatabaseadaptorGetDatabaseconnection(
     const EnsPDatabaseadaptor dba);
@@ -181,27 +234,27 @@ AjBool ensDatabaseadaptorMatchcomponents(const EnsPDatabaseadaptor dba,
 AjBool ensDatabaseadaptorDisconnect(EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorEscapeC(EnsPDatabaseadaptor dba,
-                                 char** Ptxt,
+                                 char **Ptxt,
                                  const AjPStr str);
 
 AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
-                                 AjPStr* Pstr,
+                                 AjPStr *Pstr,
                                  const AjPStr str);
 
 const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
-                                         AjPSqlstatement* Psqls);
+                                         AjPSqlstatement *Psqls);
 
 AjPSqlstatement ensDatabaseadaptorSqlstatementNew(EnsPDatabaseadaptor dba,
                                                   const AjPStr statement);
 
 AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
-                                          AjPStr* Pbuild);
+                                          AjPStr *Pbuild);
 
 EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group);
 
-const char* ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup dbag);
+const char *ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup dbag);
 
 /*
 ** End of prototype definitions

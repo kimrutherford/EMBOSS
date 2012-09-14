@@ -5,8 +5,8 @@ application: emma [
   batch: "yes"
   cpu: "medium"
   external: "clustalw"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000499 operation Multiple sequence alignment
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0499 Multiple sequence alignment construction
                 (phylogenetic tree-based)"
 ]
 
@@ -18,34 +18,34 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   toggle: onlydend [
     additional: "Y"
     default: "N"
     information: "Only produce dendrogram file"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
-  toggle: dend [
+  toggle: dendreuse [
     additional: "@(!$(onlydend))"
     default: "N"
     information: "Do alignment using an old dendrogram"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   infile: dendfile [
-    additional: "$(dend)"
+    additional: "$(dendreuse)"
     default: ""
-    nullok: "@(!$(dend))"
+    nullok: "@(!$(dendreuse))"
     knowntype: "dendrogram"
     information: "Dendrogram (tree file) from clustalw file
                   (optional)"
-    relations: "EDAM:0000872 data Phylogenetic tree"
+    relations: "EDAM_data:0872 Phylogenetic tree"
   ]
 
-  toggle: slow [
+  toggle: slowalign [
     additional: "Y"
     default: "Y"
     information: "Do you want to carry out slow pairwise
@@ -59,7 +59,7 @@ section: input [
            The slow-accurate method is fine for short sequences but will be
            VERY SLOW for many (e.g. >100) long (e.g. >1000 residue)
            sequences."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   section: pairwisealignsection [
@@ -68,7 +68,7 @@ section: input [
   ]
 
     list: pwmatrix [
-      additional: "@($(acdprotein) & $(slow))"
+      additional: "@($(acdprotein) & $(slowalign))"
       default: "b"
       minimum: "1"
       maximum: "1"
@@ -104,11 +104,11 @@ section: input [
              We also supply an identity matrix which gives a score of 1.0 to
              two identical amino acids and a score of zero otherwise. This
              matrix is not very useful."
-    relations: "EDAM:0001125 data Comparison matrix type"
+    relations: "EDAM_data:1125 Comparison matrix type"
     ]
 
     list: pwdnamatrix [
-      additional: "@(!$(acdprotein) & $(slow))"
+      additional: "@(!$(acdprotein) & $(slowalign))"
       default: "i"
       minimum: "1"
       maximum: "1"
@@ -120,7 +120,7 @@ section: input [
       button: "Y"
       help: "The scoring table which describes the scores assigned to
              matches and mismatches (including IUB ambiguity codes)."
-    relations: "EDAM:0001125 data Comparison matrix type"
+    relations: "EDAM_data:1125 Comparison matrix type"
     ]
 
     variable: usermatrix "@($(pwmatrix) == o)"
@@ -131,7 +131,7 @@ section: input [
       nullok: "@(!$(usermatrix))"
       information: "Comparison matrix file (optional)"
       knowntype: "comparison matrix"
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
     ]
 
   endsection: pairwisealignsection
@@ -182,7 +182,7 @@ section: input [
              two identical amino acids and a score of zero otherwise. This
              matrix is not very useful. Alternatively, you can read in your
              own (just one matrix, not a series)."
-    relations: "EDAM:0001125 data Comparison matrix type"
+    relations: "EDAM_data:1125 Comparison matrix type"
     ]
 
     variable: usermamatrix "@($(matrix) == o)"
@@ -200,7 +200,7 @@ section: input [
       button: "Y"
       help: "This gives a menu where a single matrix (not a series)
              can be selected."
-    relations: "EDAM:0001125 data Comparison matrix type"
+    relations: "EDAM_data:1125 Comparison matrix type"
     ]
 
     variable: umamatrix "@($(dnamatrix) == own)"
@@ -211,7 +211,7 @@ section: input [
       nullok: "@($(usermamatrix)?@(!$(umamatrix)):True)"
       information: "Comparison matrix file (optional)"
       knowntype: "comparison matrix"
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
     ]
 
   endsection: matrixsection
@@ -229,25 +229,25 @@ section: additional [
   ]
 
     float: pwgapopen [
-      additional: "$(slow)"
+      additional: "$(slowalign)"
       default: "10.0"
       minimum: "0.0"
       information: "Slow pairwise alignment: gap opening
                     penalty"
       help: "The penalty for opening a gap in the pairwise
              alignments."
-    relations: "EDAM:0001397 data Gap opening penalty"
+    relations: "EDAM_data:1397 Gap opening penalty"
     ]
 
     float: pwgapextend [
-      additional: "$(slow)"
+      additional: "$(slowalign)"
       default: "0.1"
       minimum: "0.0"
       information: "Slow pairwise alignment: gap extension
                     penalty"
       help: "The penalty for extending a gap by 1 residue in the
              pairwise alignments."
-    relations: "EDAM:0001398 data Gap extension penalty"
+    relations: "EDAM_data:1398 Gap extension penalty"
     ]
 
   endsection: slowalignsection
@@ -258,7 +258,7 @@ section: additional [
   ]
 
     integer: ktup [
-      additional: "@(!$(slow))"
+      additional: "@(!$(slowalign))"
       default: "@($(acdprotein)?1:2)"
       minimum: "0"
       maximum: "4"
@@ -270,11 +270,11 @@ section: additional [
              used. INCREASE for speed (max= 2 for proteins; 4 for DNA),
              DECREASE for sensitivity. For longer sequences (e.g. >1000
              residues) you may need to increase the default."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: gapw [
-      additional: "@(!$(slow))"
+      additional: "@(!$(slowalign))"
       default: "@($(acdprotein)?3:5)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -284,11 +284,11 @@ section: additional [
       help: "This is a penalty for each gap in the fast alignments. It
              has little affect on the speed or sensitivity except for
              extreme values."
-    relations: "EDAM:0002137 data Gap penalty"
+    relations: "EDAM_data:2137 Gap penalty"
     ]
 
     integer: topdiags [
-      additional: "@(!$(slow))"
+      additional: "@(!$(slowalign))"
       default: "@($(acdprotein)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -300,11 +300,11 @@ section: additional [
              (with most matches) are used in the alignment. This parameter
              specifies how many. Decrease for speed; increase for
              sensitivity."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: window [
-      additional: "@(!$(slow))"
+      additional: "@(!$(slowalign))"
       default: "@($(acdprotein)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -314,15 +314,15 @@ section: additional [
       help: "This is the number of diagonals around each of the 'best'
              diagonals that will be used. Decrease for speed; increase for
              sensitivity."
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
     ]
 
     boolean: nopercent [
-      additional: "@(!$(slow))"
+      additional: "@(!$(slowalign))"
       default: "N"
       information: "Fast pairwise alignment: similarity scores:
                     suppresses percentage score"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
   endsection: fastalignsection
@@ -341,7 +341,7 @@ section: additional [
       help: "The penalty for opening a gap in the alignment.
              Increasing the gap opening penalty will make gaps less
              frequent."
-    relations: "EDAM:0001397 data Gap opening penalty"
+    relations: "EDAM_data:1397 Gap opening penalty"
     ]
 
     float: gapextend [
@@ -353,7 +353,7 @@ section: additional [
       help: "The penalty for extending a gap by 1 residue. Increasing
              the gap extension penalty will make gaps shorter. Terminal gaps
              are not penalised."
-    relations: "EDAM:0001398 data Gap extension penalty"
+    relations: "EDAM_data:1398 Gap extension penalty"
     ]
 
     boolean: endgaps [
@@ -366,7 +366,7 @@ section: additional [
              will be ignored for this purpose. This is useful when you wish
              to align fragments where the end gaps are not biologically
              meaningful."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: gapdist [
@@ -380,7 +380,7 @@ section: additional [
              this distance apart are penalised more than other gaps. This
              does not prevent close gaps; it makes them less frequent,
              promoting a block-like appearance of the alignment."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
     ]
 
     boolean: norgap [
@@ -392,7 +392,7 @@ section: additional [
              each position in the alignment or sequence. As an example,
              positions that are rich in glycine are more likely to have an
              adjacent gap than positions that are rich in valine."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     string: hgapres [
@@ -403,7 +403,7 @@ section: additional [
              hydrophilic. It is used when introducing Hydrophilic gap
              penalties."
       knowntype: "protein codes"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: nohgap [
@@ -415,7 +415,7 @@ section: additional [
              acids; these are likely to be loop or random coil regions where
              gaps are more common. The residues that are 'considered' to be
              hydrophilic are set by '-hgapres'."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
   endsection: gapoptions
@@ -434,7 +434,7 @@ section: additional [
            required to delay the addition of a sequence; sequences that are
            less identical than this level to any other sequences will be
            aligned later."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -448,7 +448,7 @@ section: output [
     parameter: "Y"
     extension: "aln"
     aligned: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   outfile: dendoutfile [
@@ -457,7 +457,7 @@ section: output [
     information: "Dendrogram (tree file) from clustalw output
                   file"
     knowntype: "dendrogram"
-    relations: "EDAM:0000872 data Phylogenetic tree"
+    relations: "EDAM_data:0872 Phylogenetic tree"
   ]
 
 endsection: output

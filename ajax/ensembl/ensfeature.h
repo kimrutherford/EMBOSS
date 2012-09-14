@@ -1,10 +1,37 @@
+/* @include ensfeature ********************************************************
+**
+** Ensembl Feature functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.42 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSFEATURE_H
 #define ENSFEATURE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensanalysis.h"
 #include "ensassemblyexception.h"
@@ -16,16 +43,16 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPFeaturepair ******************************************************
 **
@@ -141,9 +168,9 @@ typedef struct EnsSAssemblyexceptionfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -167,7 +194,7 @@ EnsPFeature ensFeatureNewIniS(EnsPAnalysis analysis,
 
 EnsPFeature ensFeatureNewRef(EnsPFeature feature);
 
-void ensFeatureDel(EnsPFeature* Pfeature);
+void ensFeatureDel(EnsPFeature *Pfeature);
 
 EnsPAnalysis ensFeatureGetAnalysis(const EnsPFeature feature);
 
@@ -199,6 +226,8 @@ ajuint ensFeatureCalculateLength(const EnsPFeature feature);
 
 size_t ensFeatureCalculateMemsize(const EnsPFeature feature);
 
+char ensFeatureCalculateStrand(const EnsPFeature feature);
+
 ajint ensFeatureGetSeqregionEnd(const EnsPFeature feature);
 
 ajuint ensFeatureGetSeqregionLength(const EnsPFeature feature);
@@ -215,7 +244,7 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
                                               AjBool all,
                                               AjPList features);
 
-AjBool ensFeatureFetchSequencename(const EnsPFeature feature, AjPStr* Pname);
+AjBool ensFeatureFetchSequencename(const EnsPFeature feature, AjPStr *Pname);
 
 AjBool ensFeatureMove(EnsPFeature feature,
                       ajint start,
@@ -234,7 +263,7 @@ AjBool ensFeatureProjectslice(const EnsPFeature feature,
 EnsPFeature ensFeatureTransform(EnsPFeature feature,
                                 const AjPStr csname,
                                 const AjPStr csversion,
-                                const EnsPSlice slice);
+                                EnsPSlice slice);
 
 EnsPFeature ensFeatureTransfer(EnsPFeature feature, EnsPSlice slice);
 
@@ -247,11 +276,23 @@ AjBool ensFeatureOverlap(const EnsPFeature feature1,
 AjBool ensFeatureSimilarity(const EnsPFeature feature1,
                             const EnsPFeature feature2);
 
+int ensFeatureCompareEndAscending(const EnsPFeature feature1,
+                                  const EnsPFeature feature2);
+
+int ensFeatureCompareEndDescending(const EnsPFeature feature1,
+                                   const EnsPFeature feature2);
+
 int ensFeatureCompareStartAscending(const EnsPFeature feature1,
                                     const EnsPFeature feature2);
 
 int ensFeatureCompareStartDescending(const EnsPFeature feature1,
                                      const EnsPFeature feature2);
+
+/* AJAX List of Ensembl Feature objects */
+
+AjBool ensListFeatureSortEndAscending(AjPList features);
+
+AjBool ensListFeatureSortEndDescending(AjPList features);
 
 AjBool ensListFeatureSortStartAscending(AjPList features);
 
@@ -261,25 +302,25 @@ AjBool ensListFeatureSortStartDescending(AjPList features);
 
 EnsPFeatureadaptor ensFeatureadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char* const* Ptables,
-    const char* const* Pcolumns,
-    EnsPBaseadaptorLeftjoin leftjoin,
-    const char* condition,
-    const char* final,
-    AjBool Fstatement(EnsPDatabaseadaptor dba,
-                      const AjPStr statement,
-                      EnsPAssemblymapper am,
-                      EnsPSlice slice,
-                      AjPList objects),
-    void* Fread(const void* key),
-    void* Freference(void* value),
-    AjBool Fwrite(const void* value),
-    void Fdelete(void** value),
-    size_t Fsize(const void* value),
-    EnsPFeature Fgetfeature(const void* object),
-    const char* label);
+    const char *const *Ptables,
+    const char *const *Pcolumns,
+    const EnsPBaseadaptorLeftjoin leftjoin,
+    const char *condition,
+    const char *final,
+    AjBool (*Fstatement) (EnsPBaseadaptor ba,
+                          const AjPStr statement,
+                          EnsPAssemblymapper am,
+                          EnsPSlice slice,
+                          AjPList objects),
+    void *(*Fread) (const void *key),
+    void *(*Freference) (void *value),
+    AjBool (*Fwrite) (const void *value),
+    void (*Fdelete) (void **Pvalue),
+    size_t (*Fsize) (const void *value),
+    EnsPFeature (*Fgetfeature) (const void *object),
+    const char *label);
 
-void ensFeatureadaptorDel(EnsPFeatureadaptor* Pfa);
+void ensFeatureadaptorDel(EnsPFeatureadaptor *Pfa);
 
 EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(
     const EnsPFeatureadaptor fa);
@@ -293,32 +334,38 @@ EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
 ajint ensFeatureadaptorGetMaximumlength(
     const EnsPFeatureadaptor fa);
 
+AjBool ensFeatureadaptorGetStartequalsend(
+    const EnsPFeatureadaptor fa);
+
 AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
-                                   const char* const* Pcolumns);
+                                   const char *const *Pcolumns);
 
 AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
-                                            const char* condition);
+                                            const char *condition);
 
 AjBool ensFeatureadaptorSetFinalcondition(EnsPFeatureadaptor fa,
-                                          const char* final);
+                                          const char *final);
 
 AjBool ensFeatureadaptorSetMaximumlength(EnsPFeatureadaptor fa,
                                          ajint length);
 
+AjBool ensFeatureadaptorSetStartequalsend(EnsPFeatureadaptor fa,
+                                          AjBool flag);
+
 AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
-                                  const char* const* Ptables);
+                                  const char *const *Ptables);
 
 AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
-                                char** Ptxt,
+                                char **Ptxt,
                                 const AjPStr str);
 
 AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor fa,
-                                AjPStr* Pstr,
+                                AjPStr *Pstr,
                                 const AjPStr str);
 
 AjBool ensFeatureadaptorConstraintAppendAnalysisname(
     const EnsPFeatureadaptor fa,
-    AjPStr* Pconstraint,
+    AjPStr *Pconstraint,
     const AjPStr anname);
 
 AjBool ensFeatureadaptorFetchAllbyAnalysisname(EnsPFeatureadaptor fa,
@@ -357,7 +404,7 @@ EnsPFeaturepair ensFeaturepairNewIni(EnsPFeature srcfeature,
 
 EnsPFeaturepair ensFeaturepairNewRef(EnsPFeaturepair fp);
 
-void ensFeaturepairDel(EnsPFeaturepair* Pfp);
+void ensFeaturepairDel(EnsPFeaturepair *Pfp);
 
 double ensFeaturepairGetEvalue(
     const EnsPFeaturepair fp);
@@ -447,11 +494,35 @@ EnsPFeaturepair ensFeaturepairTransform(const EnsPFeaturepair fp,
                                         const AjPStr csname,
                                         const AjPStr csversion);
 
+ajint ensFeaturepairGetSourceEnd(const EnsPFeaturepair fp);
+
+ajint ensFeaturepairGetSourceStart(const EnsPFeaturepair fp);
+
+ajint ensFeaturepairGetSourceStrand(const EnsPFeaturepair fp);
+
+ajint ensFeaturepairGetTargetEnd(const EnsPFeaturepair fp);
+
+ajint ensFeaturepairGetTargetStart(const EnsPFeaturepair fp);
+
+ajint ensFeaturepairGetTargetStrand(const EnsPFeaturepair fp);
+
+int ensFeaturepairCompareSourceEndAscending(const EnsPFeaturepair fp1,
+                                            const EnsPFeaturepair fp2);
+
+int ensFeaturepairCompareSourceEndDescending(const EnsPFeaturepair fp1,
+                                             const EnsPFeaturepair fp2);
+
 int ensFeaturepairCompareSourceStartAscending(const EnsPFeaturepair fp1,
                                               const EnsPFeaturepair fp2);
 
 int ensFeaturepairCompareSourceStartDescending(const EnsPFeaturepair fp1,
                                                const EnsPFeaturepair fp2);
+
+/* AJAX List of Ensembl Feature Pair objects */
+
+AjBool ensListFeaturepairSortSourceEndAscending(AjPList fps);
+
+AjBool ensListFeaturepairSortSourceEndDescending(AjPList fps);
 
 AjBool ensListFeaturepairSortSourceStartAscending(AjPList fps);
 
@@ -472,7 +543,7 @@ EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewIni(
 EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewRef(
     EnsPAssemblyexceptionfeature aef);
 
-void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature* Paef);
+void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature *Paef);
 
 EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureGetAdaptor(
     const EnsPAssemblyexceptionfeature aef);
@@ -512,14 +583,10 @@ size_t ensAssemblyexceptionfeatureCalculateMemsize(
 
 AjBool ensAssemblyexceptionfeatureFetchDisplayidentifier(
     const EnsPAssemblyexceptionfeature aef,
-    AjPStr* Pidentifier);
+    AjPStr *Pidentifier);
 
 AjBool ensAssemblyexceptionfeatureTrace(const EnsPAssemblyexceptionfeature aef,
                                         ajuint level);
-
-AjBool ensTableAssemblyexceptionfeatureClear(AjPTable table);
-
-AjBool ensTableAssemblyexceptionfeatureDelete(AjPTable* Ptable);
 
 /* Ensembl Assembly Exception Feature Adaptor */
 
@@ -530,7 +597,7 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensAssemblyexceptionfeatureadaptorDel(
-    EnsPAssemblyexceptionfeatureadaptor* Paefa);
+    EnsPAssemblyexceptionfeatureadaptor *Paefa);
 
 AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
     EnsPAssemblyexceptionfeatureadaptor aefa,
@@ -544,7 +611,7 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAllbySlice(
 AjBool ensAssemblyexceptionfeatureadaptorFetchByIdentifier(
     EnsPAssemblyexceptionfeatureadaptor aefa,
     ajuint identifier,
-    EnsPAssemblyexceptionfeature* Paef);
+    EnsPAssemblyexceptionfeature *Paef);
 
 /*
 ** End of prototype definitions

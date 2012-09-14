@@ -1,2 +1,5 @@
-pkgdata_DATA = embossre.equ
-pkgdatadir=$(prefix)/share/$(PACKAGE)/data/REBASE
+## Process this file with automake to produce Makefile.in
+
+rebasedir = $(pkgdatadir)/data/REBASE
+
+dist_rebase_DATA = embossre.equ

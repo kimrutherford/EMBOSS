@@ -80,22 +80,24 @@ typedef char* caddr_t;
 #define TABLESIZE 10000
 #define HDRSIZE 1000
 
+/* Definition of global variables */
 
-static AjPStr id    = NULL;
-static AjPStr hline = NULL;
-static AjPStr acc   = NULL;
-static AjPStr t      = NULL;
-static AjPRegexp wrdexp = NULL;
+static AjPList*  dbiblastGFdl = NULL;
 
-static AjPStr tmpdes = NULL;
-static AjPStr tmpfd  = NULL;
-static AjPStr tmpac  = NULL;
-static AjPStr tmpsv  = NULL;
-static AjPStr tmpgi  = NULL;
-static AjPStr tmpdb  = NULL;
+static AjPRegexp dbiblastGWrdexp = NULL;
 
-static EmbPEntry dbiblastEntry = NULL;
-static AjPList* fdl   = NULL;
+static AjPStr dbiblastGId     = NULL;
+static AjPStr dbiblastGHline  = NULL;
+static AjPStr dbiblastGAcc    = NULL;
+static AjPStr dbiblastGTmpT   = NULL;
+static AjPStr dbiblastGTmpDes = NULL;
+static AjPStr dbiblastGTmpFd  = NULL;
+static AjPStr dbiblastGTmpAc  = NULL;
+static AjPStr dbiblastGTmpSv  = NULL;
+static AjPStr dbiblastGTmpGi  = NULL;
+static AjPStr dbiblastGTmpDb  = NULL;
+
+static EmbPEntry dbiblastGEntry = NULL;
 
 
 
@@ -280,7 +282,7 @@ static AjBool dbiblast_parseUnknown(const AjPStr line,
 ** @alias OParser
 **
 ** @attr Name [const char*] Parser name
-** @attr Parser [(AjBool*)] Parser function
+** @attr Parser [AjBool function] Parser function
 ** @@
 ******************************************************************************/
 
@@ -486,8 +488,8 @@ int main(int argc, char **argv)
     ajDebug("writing '%S/'\n", indexdir);
     
     listTestFiles = embDbiFileListExc(directory, filename, exclude);
-    ajListSort(listTestFiles, ajStrVcmp);
-    nfiles = ajListToarray(listTestFiles, &testFiles);
+    ajListSort(listTestFiles, &ajStrVcmp);
+    nfiles = (ajuint) ajListToarray(listTestFiles, &testFiles);
     if(!nfiles)
         ajDie("No input files in '%S' matched filename '%S'",
               directory, filename);
@@ -626,7 +628,7 @@ int main(int argc, char **argv)
     if(systemsort)
 	embDbiRmEntryFile(dbname, cleanup);
     
-    ajListMap(idlist, embDbiEntryDelMap, NULL);
+    ajListMap(idlist, &embDbiEntryDelMap, NULL);
     ajListFree(&idlist);
     AJFREE(entryIds);
 
@@ -640,7 +642,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-	    ajListMap(fieldList[i], embDbiFieldDelMap, NULL);
+	    ajListMap(fieldList[i], &embDbiFieldDelMap, NULL);
 	    ajListFree(&fieldList[i]);
 	}
     }
@@ -673,25 +675,25 @@ int main(int argc, char **argv)
 
     ajListstrFreeData(&listTestFiles);
 
-    ajStrDel(&t);
-    ajStrDel(&id);
-    ajStrDel(&acc);
-    ajStrDel(&hline);
-    ajStrDel(&tmpdes);
-    ajStrDel(&tmpfd);
-    ajStrDel(&tmpgi);
-    ajStrDel(&tmpdb);
-    ajStrDel(&tmpac);
-    ajStrDel(&tmpsv);
-    ajRegFree(&wrdexp);
+    ajStrDel(&dbiblastGTmpT);
+    ajStrDel(&dbiblastGId);
+    ajStrDel(&dbiblastGAcc);
+    ajStrDel(&dbiblastGHline);
+    ajStrDel(&dbiblastGTmpDes);
+    ajStrDel(&dbiblastGTmpFd);
+    ajStrDel(&dbiblastGTmpGi);
+    ajStrDel(&dbiblastGTmpDb);
+    ajStrDel(&dbiblastGTmpAc);
+    ajStrDel(&dbiblastGTmpSv);
+    ajRegFree(&dbiblastGWrdexp);
 
-    embDbiEntryDel(&dbiblastEntry);
+    embDbiEntryDel(&dbiblastGEntry);
 
-    if(fdl)
+    if(dbiblastGFdl)
     {
         for(i=0; i < nfields; i++)
-            ajListFree(&fdl[i]);
-        AJFREE(fdl);
+            ajListFree(&dbiblastGFdl[i]);
+        AJFREE(dbiblastGFdl);
     }
 
     for(i=0;i<nfiles;i++)
@@ -765,21 +767,21 @@ static EmbPEntry dbiblast_nextblastentry(PBlastDb db, ajint ifile,
 	if(iparser < 0)
 	    ajFatal("idformat '%S' unknown", idformat);
 	ajDebug("idformat '%S' Parser %d\n", idformat, iparser);
-	ajStrSetRes(&id, HDRSIZE);
-	ajStrSetRes(&acc, HDRSIZE);
-	ajStrSetRes(&hline, HDRSIZE);
+	ajStrSetRes(&dbiblastGId, HDRSIZE);
+	ajStrSetRes(&dbiblastGAcc, HDRSIZE);
+	ajStrSetRes(&dbiblastGHline, HDRSIZE);
 	called = 1;
     }
 
-    if(!fdl)
+    if(!dbiblastGFdl)
     {
 	nfields=0;
 	while(fields[nfields])
 	    nfields++;
 	if(nfields)
-	    AJCNEW(fdl, nfields);
+	    AJCNEW(dbiblastGFdl, nfields);
 	for(i=0; i < nfields; i++)
-	    fdl[i] = ajListNew();
+	    dbiblastGFdl[i] = ajListNew();
     }
 
     if(lastfile != ifile)
@@ -791,8 +793,8 @@ static EmbPEntry dbiblast_nextblastentry(PBlastDb db, ajint ifile,
 	iload = TABLESIZE-1;
     }
 
-    if(!dbiblastEntry || !systemsort)
-	dbiblastEntry = embDbiEntryNew(nfields);
+    if(!dbiblastGEntry || !systemsort)
+	dbiblastGEntry = embDbiEntryNew(nfields);
 
     /* pick up the next entry, parse it and dump it */
 
@@ -815,48 +817,51 @@ static EmbPEntry dbiblast_nextblastentry(PBlastDb db, ajint ifile,
 	    ajDebug("No elements read");
     }
 
-    j = dbiblast_ncblreadhdr(&hline, db, tabhdr[jpos], tabhdr[jpos+1]);
+    j = dbiblast_ncblreadhdr(&dbiblastGHline, db, tabhdr[jpos], tabhdr[jpos+1]);
 
-    if(!parser[iparser].Parser(hline, alistfile, systemsort, fields,
-			       maxFieldLen, countfield, &id, fdl))
-	ajFatal("failed to parse '%S'", hline);
+    if(!(*parser[iparser].Parser)(dbiblastGHline, alistfile, systemsort,
+                                  fields, maxFieldLen, countfield,
+                                  &dbiblastGId, dbiblastGFdl))
+	ajFatal("failed to parse '%S'", dbiblastGHline);
 
     ir = ipos;
 
-    if(ajStrGetLen(id) > *maxidlen)
-	*maxidlen = ajStrGetLen(id);
+    if(ajStrGetLen(dbiblastGId) > *maxidlen)
+	*maxidlen = ajStrGetLen(dbiblastGId);
 
     if(systemsort)
-	ajFmtPrintF(elistfile, "%S %d %d %d\n", id, ir, is, ifile+1);
+	ajFmtPrintF(elistfile, "%S %d %d %d\n",
+                    dbiblastGId, ir, is, ifile+1);
     else
     {
-	dbiblastEntry->entry   = ajCharNewS(id);
-	dbiblastEntry->rpos    = ir;
-	dbiblastEntry->spos    = is;
-	dbiblastEntry->filenum = ifile+1;
+	dbiblastGEntry->entry   = ajCharNewS(dbiblastGId);
+	dbiblastGEntry->rpos    = ir;
+	dbiblastGEntry->spos    = is;
+	dbiblastGEntry->filenum = ifile+1;
 
-	/* field tokens as list, then move to dbiblastEntry->field */
+	/* field tokens as list, then move to dbiblastGEntry->field */
 	for(ifield=0; ifield < nfields; ifield++)
 	{
-	    dbiblastEntry->nfield[ifield] = ajListGetLength(fdl[ifield]);
+	    dbiblastGEntry->nfield[ifield] =
+            (ajuint) ajListGetLength(dbiblastGFdl[ifield]);
 
-	    if(dbiblastEntry->nfield[ifield])
+	    if(dbiblastGEntry->nfield[ifield])
 	    {
-		AJCNEW(dbiblastEntry->field[ifield],
-		       dbiblastEntry->nfield[ifield]);
+		AJCNEW(dbiblastGEntry->field[ifield],
+		       dbiblastGEntry->nfield[ifield]);
 
 		i = 0;
-		while(ajListPop(fdl[ifield], (void**) &token))
-		    dbiblastEntry->field[ifield][i++] = token;
+		while(ajListPop(dbiblastGFdl[ifield], (void**) &token))
+		    dbiblastGEntry->field[ifield][i++] = token;
 	    }
 	    else
-		dbiblastEntry->field[ifield] = NULL;
+		dbiblastGEntry->field[ifield] = NULL;
 	}
     }
     ipos++;
     jpos++;
 
-    return dbiblastEntry;
+    return dbiblastGEntry;
 }
 
 
@@ -1174,31 +1179,32 @@ static AjBool dbiblast_parseNcbi(const AjPStr line, AjPFile * alistfile,
 	reset = ajFalse;
     }
 
-    if(!wrdexp)
-	wrdexp = ajRegCompC("([A-Za-z0-9]+)");
+    if(!dbiblastGWrdexp)
+	dbiblastGWrdexp = ajRegCompC("([A-Za-z0-9]+)");
 
-    ajStrAssignC(&tmpdes,"");
-    ajStrAssignC(&t,"");
-    ajStrAssignC(&tmpac,"");
-    ajStrAssignC(&tmpsv,"");
-    ajStrAssignC(&tmpgi,"");
-    ajStrAssignC(&tmpdb,"");
+    ajStrAssignC(&dbiblastGTmpDes, "");
+    ajStrAssignC(&dbiblastGTmpT,   "");
+    ajStrAssignC(&dbiblastGTmpAc,  "");
+    ajStrAssignC(&dbiblastGTmpSv,  "");
+    ajStrAssignC(&dbiblastGTmpGi,  "");
+    ajStrAssignC(&dbiblastGTmpDb,  "");
 
-    ajFmtPrintS(&t,">%S",line);
+    ajFmtPrintS(&dbiblastGTmpT, ">%S", line);
 
-    if(!ajSeqParseNcbi(t,myid,&tmpac,&tmpsv,&tmpgi,&tmpdb,&tmpdes))
+    if(!ajSeqParseNcbi(dbiblastGTmpT, myid, &dbiblastGTmpAc, &dbiblastGTmpSv,
+                       &dbiblastGTmpGi, &dbiblastGTmpDb, &dbiblastGTmpDes))
 	return ajFalse;
 
-    if(ajStrGetLen(tmpac))
-	ajStrFmtUpper(&tmpac);
+    if(ajStrGetLen(dbiblastGTmpAc))
+	ajStrFmtUpper(&dbiblastGTmpAc);
 
     if(accfield >= 0)
-	embDbiMaxlen(&tmpac, &maxFieldLen[accfield]);
+	embDbiMaxlen(&dbiblastGTmpAc, &maxFieldLen[accfield]);
 
     if(svnfield >= 0)
     {
-	embDbiMaxlen(&tmpsv, &maxFieldLen[svnfield]);
-	embDbiMaxlen(&tmpgi, &maxFieldLen[svnfield]);
+	embDbiMaxlen(&dbiblastGTmpSv, &maxFieldLen[svnfield]);
+	embDbiMaxlen(&dbiblastGTmpGi, &maxFieldLen[svnfield]);
     }
 
 
@@ -1208,72 +1214,73 @@ static AjBool dbiblast_parseNcbi(const AjPStr line, AjPFile * alistfile,
 
     if(systemsort)
     {
-	if(accfield >= 0 && ajStrGetLen(tmpac))
+	if(accfield >= 0 && ajStrGetLen(dbiblastGTmpAc))
 	{
 	    countfield[accfield]++;
-	    ajFmtPrintF(alistfile[accfield], "%S %S\n", *myid, tmpac);
+	    ajFmtPrintF(alistfile[accfield], "%S %S\n", *myid, dbiblastGTmpAc);
 	}
-	if(svnfield >= 0 && ajStrGetLen(tmpsv))
+	if(svnfield >= 0 && ajStrGetLen(dbiblastGTmpSv))
 	{
 	    countfield[svnfield]++;
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpsv);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, dbiblastGTmpSv);
 	}
-	if(svnfield >= 0 && ajStrGetLen(tmpgi))
+	if(svnfield >= 0 && ajStrGetLen(dbiblastGTmpGi))
 	{
 	    countfield[svnfield]++;
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpgi);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, dbiblastGTmpGi);
 	}
-	if(desfield >= 0 && ajStrGetLen(tmpdes))
-	    while(ajRegExec(wrdexp, tmpdes))
+	if(desfield >= 0 && ajStrGetLen(dbiblastGTmpDes))
+	    while(ajRegExec(dbiblastGWrdexp, dbiblastGTmpDes))
 	    {
-		ajRegSubI(wrdexp, 1, &tmpfd);
-		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
-		ajStrFmtUpper(&tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
+		ajRegSubI(dbiblastGWrdexp, 1, &dbiblastGTmpFd);
+		embDbiMaxlen(&dbiblastGTmpFd, &maxFieldLen[desfield]);
+		ajStrFmtUpper(&dbiblastGTmpFd);
+		ajDebug("++des '%S'\n", dbiblastGTmpFd);
 		countfield[desfield]++;
-		ajFmtPrintF(alistfile[desfield], "%S %S\n", *myid, tmpfd);
-		ajRegPost(wrdexp, &tmpdes);
+		ajFmtPrintF(alistfile[desfield], "%S %S\n",
+                            *myid, dbiblastGTmpFd);
+		ajRegPost(dbiblastGWrdexp, &dbiblastGTmpDes);
 	    }
     }
     else
     {
-        if(accfield >= 0 && ajStrGetLen(tmpac))
+        if(accfield >= 0 && ajStrGetLen(dbiblastGTmpAc))
 	{
-	    fd = ajCharNewS(tmpac);
+	    fd = ajCharNewS(dbiblastGTmpAc);
 	    countfield[accfield]++;
 	    ajListPushAppend(fdlist[accfield], fd);
 	}
 
-        if(svnfield >= 0 && ajStrGetLen(tmpsv))
+        if(svnfield >= 0 && ajStrGetLen(dbiblastGTmpSv))
 	{
-	    fd = ajCharNewS(tmpsv);
+	    fd = ajCharNewS(dbiblastGTmpSv);
 	    countfield[svnfield]++;
 	    ajListPushAppend(fdlist[svnfield], fd);
 	}
 
-        if(svnfield >= 0 && ajStrGetLen(tmpgi))
+        if(svnfield >= 0 && ajStrGetLen(dbiblastGTmpGi))
 	{
-	    fd = ajCharNewS(tmpgi);
+	    fd = ajCharNewS(dbiblastGTmpGi);
 	    ajListPushAppend(fdlist[svnfield], fd);
 	}
 
-        if(desfield >= 0 && ajStrGetLen(tmpdes))
+        if(desfield >= 0 && ajStrGetLen(dbiblastGTmpDes))
 	{
-	    while(ajRegExec(wrdexp, tmpdes))
+	    while(ajRegExec(dbiblastGWrdexp, dbiblastGTmpDes))
 	    {
-		ajRegSubI(wrdexp, 1, &tmpfd);
-		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
-		ajStrFmtUpper(&tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
-		fd = ajCharNewS(tmpfd);
+		ajRegSubI(dbiblastGWrdexp, 1, &dbiblastGTmpFd);
+		embDbiMaxlen(&dbiblastGTmpFd, &maxFieldLen[desfield]);
+		ajStrFmtUpper(&dbiblastGTmpFd);
+		ajDebug("++des '%S'\n", dbiblastGTmpFd);
+		fd = ajCharNewS(dbiblastGTmpFd);
 		countfield[desfield]++;
 		ajListPushAppend(fdlist[desfield], fd);
-		ajRegPost(wrdexp, &tmpdes);
+		ajRegPost(dbiblastGWrdexp, &dbiblastGTmpDes);
 	    }
 	}
     }
 
-    /* ajDebug("parseNCBI '%S' '%S'\n", *myid, tmpac); */
+    /* ajDebug("parseNCBI '%S' '%S'\n", *myid, dbiblastGTmpAc); */
 
     return ajTrue;
 }

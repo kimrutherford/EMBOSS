@@ -1,31 +1,34 @@
-/* @source Ensembl Genetic Variation Attribute functions
+/* @source ensgvattribute *****************************************************
+**
+** Ensembl Genetic Variation Attribute functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.17 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/08 11:40:49 $ by $Author: mks $
-** @version $Revision: 1.2 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensattribute.h"
 #include "ensgvattribute.h"
@@ -34,94 +37,94 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic gvattributeadaptorTables **************************************
+/* @conststatic gvattributeadaptorKTables *************************************
 **
 ** Array of Ensembl Genetic Variation Attribute Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const gvattributeadaptorTables[] =
+static const char *const gvattributeadaptorKTables[] =
 {
     "attrib",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvattributeadaptorColumns *************************************
+/* @conststatic gvattributeadaptorKColumns ************************************
 **
 ** Array of Ensembl Genetic Variation Attribute Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const gvattributeadaptorColumns[] =
+static const char *const gvattributeadaptorKColumns[] =
 {
     "attrib.attrib_id",
     "attrib.attrib_type_id",
     "attrib.value",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvattributetypeCode *******************************************
+/* @conststatic gvattributetypeKCode ******************************************
 **
-** Ensembl Attribute Type code elements are enumerated for attribute sets in
+** Ensembl Attribute Type code members are enumerated for attribute sets in
 ** the Ensembl Genetic Variation module.
 **
 ******************************************************************************/
 
-static const char* const gvattributetypeCode[] =
+static const char *const gvattributetypeKCode[] =
 {
     "SO_accession",
     "SO_term",
     "display_term",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool gvattributeadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -134,18 +137,14 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa);
 static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa);
 
 static AjBool gvattributeadaptorCacheInsert(EnsPGvattributeadaptor gvaa,
-                                            EnsPGvattribute* Pgva);
-
-static void gvattributeadaptorCacheClearIdentifier(void** key,
-                                                   void** value,
-                                                   void* cl);
+                                            EnsPGvattribute *Pgva);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -165,8 +164,8 @@ static void gvattributeadaptorCacheClearIdentifier(void** key,
 ** Ensembl Genetic Variation Attribute objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::AttributeAdaptor
-** @cc CVS Revision: 1.6
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.10
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -212,6 +211,8 @@ static void gvattributeadaptorCacheClearIdentifier(void** key,
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -221,12 +222,12 @@ EnsPGvattribute ensGvattributeNewCpy(const EnsPGvattribute gva)
 
     AJNEW0(pthis);
 
-    pthis->Use           = 1;
+    pthis->Use           = 1U;
     pthis->Identifier    = gva->Identifier;
     pthis->Adaptor       = gva->Adaptor;
     pthis->Attributetype = ensAttributetypeNewRef(gva->Attributetype);
 
-    if(gva->Value)
+    if (gva->Value)
         pthis->Value = ajStrNewRef(gva->Value);
 
     return pthis;
@@ -246,6 +247,8 @@ EnsPGvattribute ensGvattributeNewCpy(const EnsPGvattribute gva)
 ** @param [u] value [AjPStr] Value
 **
 ** @return [EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -258,12 +261,12 @@ EnsPGvattribute ensGvattributeNewIni(EnsPGvattributeadaptor gvaa,
 
     AJNEW0(gva);
 
-    gva->Use           = 1;
+    gva->Use           = 1U;
     gva->Identifier    = identifier;
     gva->Adaptor       = gvaa;
     gva->Attributetype = ensAttributetypeNewRef(at);
 
-    if(value)
+    if (value)
         gva->Value = ajStrNewRef(value);
 
     return gva;
@@ -280,12 +283,14 @@ EnsPGvattribute ensGvattributeNewIni(EnsPGvattributeadaptor gvaa,
 ** @param [u] gva [EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvattribute ensGvattributeNewRef(EnsPGvattribute gva)
 {
-    if(!gva)
+    if (!gva)
         return NULL;
 
     gva->Use++;
@@ -298,15 +303,15 @@ EnsPGvattribute ensGvattributeNewRef(EnsPGvattribute gva)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Attribute object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Attribute object.
 **
 ** @fdata [EnsPGvattribute]
 **
-** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Attribute object
+** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Attribute
 **
 ** @argrule * Pgva [EnsPGvattribute*]
-** Ensembl Genetic Variation Attribute object address
+** Ensembl Genetic Variation Attribute address
 **
 ** @valrule * [void]
 **
@@ -321,27 +326,40 @@ EnsPGvattribute ensGvattributeNewRef(EnsPGvattribute gva)
 ** Default destructor for an Ensembl Genetic Variation Attribute.
 **
 ** @param [d] Pgva [EnsPGvattribute*]
-** Ensembl Genetic Variation Attribute object address
+** Ensembl Genetic Variation Attribute address
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ensGvattributeDel(EnsPGvattribute* Pgva)
+void ensGvattributeDel(EnsPGvattribute *Pgva)
 {
     EnsPGvattribute pthis = NULL;
 
-    if(!Pgva)
+    if (!Pgva)
         return;
 
-    if(!*Pgva)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGvattributeDel"))
+    {
+        ajDebug("ensGvattributeDel\n"
+                "  *Pgva %p\n",
+                *Pgva);
+
+        ensGvattributeTrace(*Pgva, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pgva)
         return;
 
     pthis = *Pgva;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pgva = NULL;
 
@@ -362,9 +380,9 @@ void ensGvattributeDel(EnsPGvattribute* Pgva)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Attribute object.
 **
 ** @fdata [EnsPGvattribute]
@@ -381,7 +399,7 @@ void ensGvattributeDel(EnsPGvattribute* Pgva)
 ** Ensembl Genetic Variation Attribute Adaptor or NULL
 ** @valrule Attributetype [EnsPAttributetype]
 ** Ensembl Attribute Type or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Value [AjPStr] Value or NULL
 **
 ** @fcategory use
@@ -392,7 +410,7 @@ void ensGvattributeDel(EnsPGvattribute* Pgva)
 
 /* @func ensGvattributeGetAdaptor *********************************************
 **
-** Get the Ensembl Genetic Variation Attribute Adaptor element of an
+** Get the Ensembl Genetic Variation Attribute Adaptor member of an
 ** Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
@@ -400,15 +418,14 @@ void ensGvattributeDel(EnsPGvattribute* Pgva)
 **
 ** @return [EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvattributeadaptor ensGvattributeGetAdaptor(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return gva->Adaptor;
+    return (gva) ? gva->Adaptor : NULL;
 }
 
 
@@ -416,7 +433,7 @@ EnsPGvattributeadaptor ensGvattributeGetAdaptor(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetAttributetype ***************************************
 **
-** Get the Ensembl Attribute Type element of an
+** Get the Ensembl Attribute Type member of an
 ** Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::code
@@ -425,15 +442,14 @@ EnsPGvattributeadaptor ensGvattributeGetAdaptor(const EnsPGvattribute gva)
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [EnsPAttributetype] Ensembl Attribute Type or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPAttributetype ensGvattributeGetAttributetype(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return gva->Attributetype;
+    return (gva) ? gva->Attributetype : NULL;
 }
 
 
@@ -441,22 +457,21 @@ EnsPAttributetype ensGvattributeGetAttributetype(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetIdentifier ******************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensGvattributeGetIdentifier(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return 0;
-
-    return gva->Identifier;
+    return (gva) ? gva->Identifier : 0U;
 }
 
 
@@ -464,21 +479,20 @@ ajuint ensGvattributeGetIdentifier(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetValue ***********************************************
 **
-** Get the value element of an Ensembl Genetic Variation Attribute.
+** Get the value member of an Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::value
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [AjPStr] Value or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvattributeGetValue(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return gva->Value;
+    return (gva) ? gva->Value : NULL;
 }
 
 
@@ -490,7 +504,7 @@ AjPStr ensGvattributeGetValue(const EnsPGvattribute gva)
 **
 ** @fdata [EnsPGvattribute]
 **
-** @nam3rule Trace Report Ensembl Genetic Variation Attribute elements
+** @nam3rule Trace Report Ensembl Genetic Variation Attribute members
 **                 to debug file
 **
 ** @argrule Trace gva [const EnsPGvattribute]
@@ -513,6 +527,8 @@ AjPStr ensGvattributeGetValue(const EnsPGvattribute gva)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -520,7 +536,7 @@ AjBool ensGvattributeTrace(const EnsPGvattribute gva, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!gva)
+    if (!gva)
         return ajFalse;
 
     indent = ajStrNew();
@@ -578,6 +594,8 @@ AjBool ensGvattributeTrace(const EnsPGvattribute gva, ajuint level)
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -585,14 +603,14 @@ size_t ensGvattributeCalculateMemsize(const EnsPGvattribute gva)
 {
     size_t size = 0;
 
-    if(!gva)
+    if (!gva)
         return 0;
 
     size += sizeof (EnsOGvattribute);
 
     size += ensAttributetypeCalculateMemsize(gva->Attributetype);
 
-    if(gva->Value)
+    if (gva->Value)
     {
         size += sizeof (AjOStr);
 
@@ -612,11 +630,11 @@ size_t ensGvattributeCalculateMemsize(const EnsPGvattribute gva)
 ** @fdata [EnsPGvattribute]
 **
 ** @nam3rule Get Get member(s) of associated objects
-** @nam4rule Code Get the code element of the Ensembl Attribute Type
+** @nam4rule Code Get the code member of the Ensembl Attribute Type
 ** linked to an Ensembl Genetic Variation Attribute
-** @nam4rule Description Get the description element of an
+** @nam4rule Description Get the description member of an
 ** Ensembl Attribute Type linked to an Ensembl Genetic Variation Attribute
-** @nam4rule Name Get the name element of an Ensembl Attribute Type
+** @nam4rule Name Get the name member of an Ensembl Attribute Type
 ** linked to an Ensembl Genetic Variation Attribute
 **
 ** @argrule * gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
@@ -633,22 +651,21 @@ size_t ensGvattributeCalculateMemsize(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetCode ************************************************
 **
-** Get the code element of an Ensembl Attribute Type
+** Get the code member of an Ensembl Attribute Type
 ** linked to an Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::code
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [AjPStr] Code or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvattributeGetCode(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return ensAttributetypeGetCode(gva->Attributetype);
+    return (gva) ? ensAttributetypeGetCode(gva->Attributetype) : NULL;
 }
 
 
@@ -656,22 +673,21 @@ AjPStr ensGvattributeGetCode(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetDescription *****************************************
 **
-** Get the description element of an Ensembl Attribute Type
+** Get the description member of an Ensembl Attribute Type
 ** linked to an Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::description
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [AjPStr] Description or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvattributeGetDescription(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return ensAttributetypeGetDescription(gva->Attributetype);
+    return (gva) ? ensAttributetypeGetDescription(gva->Attributetype) : NULL;
 }
 
 
@@ -679,22 +695,21 @@ AjPStr ensGvattributeGetDescription(const EnsPGvattribute gva)
 
 /* @func ensGvattributeGetName ************************************************
 **
-** Get the name element of an Ensembl Attribute Type
+** Get the name member of an Ensembl Attribute Type
 ** linked to an Ensembl Genetic Variation Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::name
 ** @param [r] gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [AjPStr] Name or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvattributeGetName(const EnsPGvattribute gva)
 {
-    if(!gva)
-        return NULL;
-
-    return ensAttributetypeGetName(gva->Attributetype);
+    return (gva) ? ensAttributetypeGetName(gva->Attributetype) : NULL;
 }
 
 
@@ -707,8 +722,8 @@ AjPStr ensGvattributeGetName(const EnsPGvattribute gva)
 ** Ensembl Genetic Variation Attribute Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::AttributeAdaptor
-** @cc CVS Revision: 1.6
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.10
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -724,7 +739,7 @@ AjPStr ensGvattributeGetName(const EnsPGvattribute gva)
 ** Ensembl Genetic Variation Attribute objects before
 ** deleting the AJAX List.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
@@ -732,18 +747,20 @@ AjPStr ensGvattributeGetName(const EnsPGvattribute gva)
 ** AJAX List of Ensembl Genetic Variation Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvattributeadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList gvas)
 {
-    ajuint atid       = 0;
-    ajuint identifier = 0;
+    ajuint atid       = 0U;
+    ajuint identifier = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -751,43 +768,46 @@ static AjBool gvattributeadaptorFetchAllbyStatement(
 
     AjPStr value       = NULL;
 
-    EnsPGvattribute        gva  = NULL;
-    EnsPGvattributeadaptor gvaa = NULL;
-
     EnsPAttributetype        at  = NULL;
     EnsPAttributetypeadaptor ata = NULL;
 
-    if(ajDebugTest("gvattributeadaptorFetchAllbyStatement"))
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvattribute        gva  = NULL;
+    EnsPGvattributeadaptor gvaa = NULL;
+
+    if (ajDebugTest("gvattributeadaptorFetchAllbyStatement"))
         ajDebug("gvattributeadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  gvas %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 gvas);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!gvas)
+    if (!gvas)
         return ajFalse;
 
-    ata = ensRegistryGetAttributetypeadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
+    ata  = ensRegistryGetAttributetypeadaptor(dba);
     gvaa = ensRegistryGetGvattributeadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         atid       = 0;
@@ -803,7 +823,7 @@ static AjBool gvattributeadaptorFetchAllbyStatement(
 
         gva = ensGvattributeNewIni(gvaa, identifier, at, value);
 
-        ajListPushAppend(gvas, (void*) gva);
+        ajListPushAppend(gvas, (void *) gva);
 
         ensAttributetypeDel(&at);
 
@@ -829,38 +849,40 @@ static AjBool gvattributeadaptorFetchAllbyStatement(
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvattributeadaptorSetsClear(EnsPGvattributeadaptor gvaa)
 {
-    register ajuint i  = 0;
-    register ajuint j  = 0;
-    register ajuint l1 = 0;
-    register ajuint l2 = 0;
+    register ajuint i  = 0U;
+    register ajuint j  = 0U;
+    register ajuint l1 = 0U;
+    register ajuint l2 = 0U;
 
     AjPVoid array = NULL;
 
     EnsPGvattribute gva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(!gvaa->CacheBySet)
+    if (!gvaa->CacheBySet)
         return ajTrue;
 
     l1 = ajVoidLen(gvaa->CacheBySet);
 
-    for(i = 0; i < l1; i++)
+    for (i = 0U; i < l1; i++)
     {
         array = (AjPVoid) ajVoidGet(gvaa->CacheBySet, i);
 
-        if(!array)
+        if (!array)
             continue;
 
         l2 = ajVoidLen(array);
 
-        for(j = 0; j < l2; j++)
+        for (j = 0U; j < l2; j++)
         {
             gva = (EnsPGvattribute) ajVoidGet(array, j);
 
@@ -888,13 +910,15 @@ static AjBool gvattributeadaptorSetsClear(EnsPGvattributeadaptor gvaa)
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 {
-    ajuint asid = 0;
-    ajuint atid = 0;
+    ajuint asid = 0U;
+    ajuint atid = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -910,10 +934,10 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(gvaa->CacheBySet)
+    if (gvaa->CacheBySet)
         return ajFalse;
     else
         gvaa->CacheBySet = ajVoidNew();
@@ -931,10 +955,10 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
-        asid = 0;
-        atid = 0;
+        asid = 0U;
+        atid = 0U;
 
         sqlr = ajSqlrowiterGet(sqli);
 
@@ -943,12 +967,12 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 
         ensGvattributeadaptorFetchByIdentifier(gvaa, atid, &gva);
 
-        if(!gva)
+        if (!gva)
             continue;
 
         gvatc = ensGvattributetypeCodeFromStr(ensGvattributeGetCode(gva));
 
-        if(!gvatc)
+        if (!gvatc)
             continue;
 
         /*
@@ -958,17 +982,17 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 
         array = ajVoidGet(gvaa->CacheBySet, asid);
 
-        if(!array)
+        if (!array)
             array = ajVoidNew();
 
-        ajVoidPut(&gvaa->CacheBySet, asid, (void*) array);
+        ajVoidPut(&gvaa->CacheBySet, asid, (void *) array);
 
         /*
         ** Second dimension is the
         ** Ensembl Genetic Variation Attribute Type Code enumeration.
         */
 
-        ajVoidPut(&array, gvatc, (void*) ensGvattributeNewRef(gva));
+        ajVoidPut(&array, gvatc, (void *) ensGvattributeNewRef(gva));
 
         ensGvattributeDel(&gva);
     }
@@ -1029,6 +1053,8 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
 **
 ** @return [EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1037,10 +1063,10 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 {
     EnsPGvattributeadaptor gvaa = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(ajDebugTest("ensGvattributeadaptorNew"))
+    if (ajDebugTest("ensGvattributeadaptorNew"))
         ajDebug("ensGvattributeadaptorNew\n"
                 "  dba %p\n",
                 dba);
@@ -1049,12 +1075,12 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 
     gvaa->Adaptor = ensBaseadaptorNew(
         dba,
-        gvattributeadaptorTables,
-        gvattributeadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        gvattributeadaptorFetchAllbyStatement);
+        gvattributeadaptorKTables,
+        gvattributeadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &gvattributeadaptorFetchAllbyStatement);
 
     /*
     ** NOTE: The cache cannot be initialised here because the
@@ -1109,6 +1135,8 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1118,18 +1146,24 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 
     EnsPGvattribute gva = NULL;
 
-    if(ajDebugTest("gvattributeadaptorCacheInit"))
+    if (ajDebugTest("gvattributeadaptorCacheInit"))
         ajDebug("gvattributeadaptorCacheInit\n"
                 "  gvaa %p\n",
                 gvaa);
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(gvaa->CacheByIdentifier)
+    if (gvaa->CacheByIdentifier)
         return ajFalse;
     else
-        gvaa->CacheByIdentifier = ensTableuintNewLen(0);
+    {
+        gvaa->CacheByIdentifier = ajTableuintNew(0);
+
+        ajTableSetDestroyvalue(
+            gvaa->CacheByIdentifier,
+            (void (*)(void **)) &ensGvattributeDel);
+    }
 
     gvas = ajListNew();
 
@@ -1139,7 +1173,7 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
                                        (EnsPSlice) NULL,
                                        gvas);
 
-    while(ajListPop(gvas, (void**) &gva))
+    while (ajListPop(gvas, (void **) &gva))
     {
         gvattributeadaptorCacheInsert(gvaa, &gva);
 
@@ -1163,7 +1197,7 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 **
 ** Insert an Ensembl Attribute into the Ensembl Genetic Variation Attribute
 ** Adaptor-internal cache.
-** If an Ensembl Attribute with the same identifier element is already present
+** If an Ensembl Attribute with the same identifier member is already present
 ** in the Ensembl Genetic Variation Attribute Adaptor-internal cache, the
 ** Ensembl Attribute is deleted and a pointer to the cached
 ** Ensembl Attribute is returned.
@@ -1174,35 +1208,37 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 ** Ensembl Genetic Variation Attribute address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvattributeadaptorCacheInsert(EnsPGvattributeadaptor gvaa,
-                                            EnsPGvattribute* Pgva)
+                                            EnsPGvattribute *Pgva)
 {
-    ajuint* Pidentifier = NULL;
+    ajuint *Pidentifier = NULL;
 
     EnsPGvattribute gva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(!gvaa->CacheByIdentifier)
+    if (!gvaa->CacheByIdentifier)
         return ajFalse;
 
-    if(!Pgva)
+    if (!Pgva)
         return ajFalse;
 
-    if(!*Pgva)
+    if (!*Pgva)
         return ajFalse;
 
     /* Search the identifer cache. */
 
     gva = (EnsPGvattribute) ajTableFetchmodV(
         gvaa->CacheByIdentifier,
-        (const void*) &((*Pgva)->Identifier));
+        (const void *) &((*Pgva)->Identifier));
 
-    if(!gva)
+    if (!gva)
     {
         /* Insert into the identifier cache. */
 
@@ -1211,8 +1247,8 @@ static AjBool gvattributeadaptorCacheInsert(EnsPGvattributeadaptor gvaa,
         *Pidentifier = (*Pgva)->Identifier;
 
         ajTablePut(gvaa->CacheByIdentifier,
-                   (void*) Pidentifier,
-                   (void*) ensGvattributeNewRef(*Pgva));
+                   (void *) Pidentifier,
+                   (void *) ensGvattributeNewRef(*Pgva));
     }
 
     ajDebug("gvattributeadaptoradaptorCacheInsert replaced "
@@ -1243,82 +1279,32 @@ static AjBool gvattributeadaptorCacheInsert(EnsPGvattributeadaptor gvaa,
 ** @param [u] gva [EnsPGvattribute] Ensembl Genetic Variation Attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvattributeadaptorCacheRemove(EnsPGvattributeadaptor gvaa,
                                             EnsPGvattribute gva)
 {
-    ajuint* Pidentifier = NULL;
+    EnsPGvattribute gva1 = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(!gva)
+    if (!gva)
         return ajFalse;
 
-    /* Remove the table nodes. */
+    gva1 = (EnsPGvattribute) ajTableRemove(
+        gvaa->CacheByIdentifier,
+        (const void *) &gva->Identifier);
 
-    gva = (EnsPGvattribute)
-        ajTableRemoveKey(gvaa->CacheByIdentifier,
-                         (const void*) &gva->Identifier,
-                         (void**) &Pidentifier);
-
-    AJFREE(Pidentifier);
-
-    ensAttributeDel(&gva);
+    ensGvattributeDel(&gva1);
 
     return ajTrue;
 }
 
-#endif
-
-
-
-
-/* @funcstatic gvattributeadaptorCacheClearIdentifier *************************
-**
-** An ajTableMapDel "apply" function to clear the Ensembl Genetic Variation
-** Attribute Adaptor-internal Ensembl Attribute cache.
-** This function deletes the AJAX unsigned integer (identifier) key and
-** the Ensembl Attribute value data.
-**
-** @param [u] key [void**] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl Attribute value data address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void gvattributeadaptorCacheClearIdentifier(void** key,
-                                                   void** value,
-                                                   void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    AJFREE(*key);
-
-    ensGvattributeDel((EnsPGvattribute*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
+#endif /* AJFALSE */
 
 
 
@@ -1332,21 +1318,17 @@ static void gvattributeadaptorCacheClearIdentifier(void** key,
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvattributeadaptorCacheClear(EnsPGvattributeadaptor gvaa)
 {
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    /* Clear and delete the identifier cache. */
-
-    ajTableMapDel(gvaa->CacheByIdentifier,
-                  gvattributeadaptorCacheClearIdentifier,
-                  NULL);
-
-    ajTableFree(&gvaa->CacheByIdentifier);
+    ajTableDel(&gvaa->CacheByIdentifier);
 
     /* Clear the attribute sets cache. */
 
@@ -1360,16 +1342,16 @@ AjBool ensGvattributeadaptorCacheClear(EnsPGvattributeadaptor gvaa)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Attribute Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Attribute Adaptor object.
 **
 ** @fdata [EnsPGvattributeadaptor]
 **
 ** @nam3rule Del Destroy (free) an
-** Ensembl Genetic Variation Attribute Adaptor object.
+** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @argrule * Pgvaa [EnsPGvattributeadaptor*]
-** Ensembl Genetic Variation Attribute Adaptor object address
+** Ensembl Genetic Variation Attribute Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1392,20 +1374,29 @@ AjBool ensGvattributeadaptorCacheClear(EnsPGvattributeadaptor gvaa)
 ** if required.
 **
 ** @param [d] Pgvaa [EnsPGvattributeadaptor*]
-** Ensembl Genetic Variation Attribute Adaptor object address
+** Ensembl Genetic Variation Attribute Adaptor address
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ensGvattributeadaptorDel(EnsPGvattributeadaptor* Pgvaa)
+void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa)
 {
     EnsPGvattributeadaptor pthis = NULL;
 
-    if(!Pgvaa)
+    if (!Pgvaa)
         return;
 
-    if(!*Pgvaa)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGvattributeadaptorDel"))
+        ajDebug("ensGvattributeadaptorDel\n"
+                "  *Pgvaa %p\n",
+                *Pgvaa);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pgvaa)
         return;
 
     pthis = *Pgvaa;
@@ -1424,9 +1415,9 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor* Pgvaa)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Attribute Adaptor object.
 **
 ** @fdata [EnsPGvattributeadaptor]
@@ -1452,23 +1443,22 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor* Pgvaa)
 
 /* @func ensGvattributeadaptorGetBaseadaptor **********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Attribute Adaptor.
 **
 ** @param [r] gvaa [const EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
     const EnsPGvattributeadaptor gvaa)
 {
-    if(!gvaa)
-        return NULL;
-
-    return gvaa->Adaptor;
+    return (gvaa) ? gvaa->Adaptor : NULL;
 }
 
 
@@ -1476,23 +1466,22 @@ EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
 
 /* @func ensGvattributeadaptorGetDatabaseadaptor ******************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Attribute Adaptor.
 **
 ** @param [r] gvaa [const EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvattributeadaptorGetDatabaseadaptor(
     const EnsPGvattributeadaptor gvaa)
 {
-    if(!gvaa)
-        return NULL;
-
-    return ensBaseadaptorGetDatabaseadaptor(gvaa->Adaptor);
+    return (gvaa) ? ensBaseadaptorGetDatabaseadaptor(gvaa->Adaptor) : NULL;
 }
 
 
@@ -1555,6 +1544,8 @@ EnsPDatabaseadaptor ensGvattributeadaptorGetDatabaseadaptor(
 ** AJAX List of Ensembl Genetic Variation Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1563,39 +1554,39 @@ AjBool ensGvattributeadaptorFetchAllbyCode(EnsPGvattributeadaptor gvaa,
                                            const AjPStr value,
                                            AjPList gvas)
 {
-    void** valarray = NULL;
+    void **valarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     EnsPGvattribute gva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if((code == NULL) || (ajStrGetLen(code) == 0))
+    if ((code == NULL) || (ajStrGetLen(code) == 0U))
         return ajFalse;
 
-    if(!gvas)
+    if (!gvas)
         return ajFalse;
 
-    if(!gvaa->CacheByIdentifier)
+    if (!gvaa->CacheByIdentifier)
         gvattributeadaptorCacheInit(gvaa);
 
     ajTableToarrayValues(gvaa->CacheByIdentifier, &valarray);
 
-    for(i = 0; valarray[i]; i++)
+    for (i = 0U; valarray[i]; i++)
     {
         gva = (EnsPGvattribute) valarray[i];
 
-        if(!ajStrMatchS(ensGvattributeGetCode(gva), code))
+        if (!ajStrMatchS(ensGvattributeGetCode(gva), code))
             continue;
 
-        if((value != NULL) && (ajStrGetLen(value) > 0)
-           &&
-           (!ajStrMatchS(ensGvattributeGetValue(gva), value)))
+        if ((value != NULL) && (ajStrGetLen(value) > 0U)
+            &&
+            (!ajStrMatchS(ensGvattributeGetValue(gva), value)))
             continue;
 
-        ajListPushAppend(gvas, (void*) ensGvattributeNewRef(gva));
+        ajListPushAppend(gvas, (void *) ensGvattributeNewRef(gva));
     }
 
     AJFREE(valarray);
@@ -1621,12 +1612,14 @@ AjBool ensGvattributeadaptorFetchAllbyCode(EnsPGvattributeadaptor gvaa,
 ** Ensembl Genetic Variation Attribute address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
                                               ajuint identifier,
-                                              EnsPGvattribute* Pgva)
+                                              EnsPGvattribute *Pgva)
 {
     AjPList gvas = NULL;
 
@@ -1634,13 +1627,13 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
 
     EnsPGvattribute gva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pgva)
+    if (!Pgva)
         return ajFalse;
 
     /*
@@ -1649,13 +1642,13 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
     ** to be incremented manually.
     */
 
-    if(!gvaa->CacheByIdentifier)
+    if (!gvaa->CacheByIdentifier)
         gvattributeadaptorCacheInit(gvaa);
 
     *Pgva = (EnsPGvattribute) ajTableFetchmodV(gvaa->CacheByIdentifier,
-                                               (const void*) &identifier);
+                                               (const void *) &identifier);
 
-    if(*Pgva)
+    if (*Pgva)
     {
         ensGvattributeNewRef(*Pgva);
 
@@ -1674,16 +1667,16 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
                                        (EnsPSlice) NULL,
                                        gvas);
 
-    if(ajListGetLength(gvas) > 1)
+    if (ajListGetLength(gvas) > 1)
         ajWarn("ensGvattributeadaptorFetchByIdentifier got more than one "
                "Ensembl Attribute for (PRIMARY KEY) identifier %u.\n",
                identifier);
 
-    ajListPop(gvas, (void**) Pgva);
+    ajListPop(gvas, (void **) Pgva);
 
     gvattributeadaptorCacheInsert(gvaa, Pgva);
 
-    while(ajListPop(gvas, (void**) &gva))
+    while (ajListPop(gvas, (void **) &gva))
     {
         gvattributeadaptorCacheInsert(gvaa, &gva);
 
@@ -1743,6 +1736,8 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
 ** @param [r] soaccession [const AjPStr] Sequence Ontology accession number
 **
 ** @return [const EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1750,26 +1745,26 @@ const EnsPGvattribute ensGvattributeadaptorGetDisplaytermFromsoaccession(
     EnsPGvattributeadaptor gvaa,
     const AjPStr soaccession)
 {
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPVoid array = NULL;
 
     EnsPGvattribute qgva = NULL;
     EnsPGvattribute tgva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return NULL;
 
-    if(!gvaa->CacheBySet)
+    if (!gvaa->CacheBySet)
         gvattributeadaptorSetsInit(gvaa);
 
-    for(i = 0; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
+    for (i = 0U; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
     {
         qgva = (EnsPGvattribute) ajVoidGet(
             array,
             (ajuint) ensEGvattributetypeCodeSoaccession);
 
-        if(ajStrMatchS(ensGvattributeGetValue(qgva), soaccession))
+        if (ajStrMatchS(ensGvattributeGetValue(qgva), soaccession))
         {
             tgva = (EnsPGvattribute) ajVoidGet(
                 array,
@@ -1797,6 +1792,8 @@ const EnsPGvattribute ensGvattributeadaptorGetDisplaytermFromsoaccession(
 ** @param [r] soterm [const AjPStr] Sequence Ontology term
 **
 ** @return [const EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1804,26 +1801,26 @@ const EnsPGvattribute ensGvattributeadaptorGetDisplaytermFromsoterm(
     EnsPGvattributeadaptor gvaa,
     const AjPStr soterm)
 {
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPVoid array = NULL;
 
     EnsPGvattribute qgva = NULL;
     EnsPGvattribute tgva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return NULL;
 
-    if(!gvaa->CacheBySet)
+    if (!gvaa->CacheBySet)
         gvattributeadaptorSetsInit(gvaa);
 
-    for(i = 0; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
+    for (i = 0U; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
     {
         qgva = (EnsPGvattribute) ajVoidGet(
             array,
             (ajuint) ensEGvattributetypeCodeSoterm);
 
-        if(ajStrMatchS(ensGvattributeGetValue(qgva), soterm))
+        if (ajStrMatchS(ensGvattributeGetValue(qgva), soterm))
         {
             tgva = (EnsPGvattribute) ajVoidGet(
                 array,
@@ -1852,6 +1849,8 @@ const EnsPGvattribute ensGvattributeadaptorGetDisplaytermFromsoterm(
 ** @param [r] soterm [const AjPStr] Sequence Ontology term
 **
 ** @return [const EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1859,26 +1858,26 @@ const EnsPGvattribute ensGvattributeadaptorGetSoaccessionFromsoterm(
     EnsPGvattributeadaptor gvaa,
     const AjPStr soterm)
 {
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPVoid array = NULL;
 
     EnsPGvattribute qgva = NULL;
     EnsPGvattribute tgva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return NULL;
 
-    if(!gvaa->CacheBySet)
+    if (!gvaa->CacheBySet)
         gvattributeadaptorSetsInit(gvaa);
 
-    for(i = 0; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
+    for (i = 0U; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
     {
         qgva = (EnsPGvattribute) ajVoidGet(
             array,
             (ajuint) ensEGvattributetypeCodeSoterm);
 
-        if(ajStrMatchS(ensGvattributeGetValue(qgva), soterm))
+        if (ajStrMatchS(ensGvattributeGetValue(qgva), soterm))
         {
             tgva = (EnsPGvattribute) ajVoidGet(
                 array,
@@ -1906,6 +1905,8 @@ const EnsPGvattribute ensGvattributeadaptorGetSoaccessionFromsoterm(
 ** @param [r] soaccession [const AjPStr] Sequence Ontology accession number
 **
 ** @return [const EnsPGvattribute] Ensembl Genetic Variation Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1913,26 +1914,26 @@ const EnsPGvattribute ensGvattributeadaptorGetSotermFromsoaccession(
     EnsPGvattributeadaptor gvaa,
     const AjPStr soaccession)
 {
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     AjPVoid array = NULL;
 
     EnsPGvattribute qgva = NULL;
     EnsPGvattribute tgva = NULL;
 
-    if(!gvaa)
+    if (!gvaa)
         return NULL;
 
-    if(!gvaa->CacheBySet)
+    if (!gvaa->CacheBySet)
         gvattributeadaptorSetsInit(gvaa);
 
-    for(i = 0; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
+    for (i = 0U; (array = ajVoidGet(gvaa->CacheBySet, i)); i++)
     {
         qgva = (EnsPGvattribute) ajVoidGet(
             array,
             (ajuint) ensEGvattributetypeCodeSoaccession);
 
-        if(ajStrMatchS(ensGvattributeGetValue(qgva), soaccession))
+        if (ajStrMatchS(ensGvattributeGetValue(qgva), soaccession))
         {
             tgva = (EnsPGvattribute) ajVoidGet(
                 array,
@@ -1992,6 +1993,8 @@ const EnsPGvattribute ensGvattributeadaptorGetSotermFromsoaccession(
 **
 ** @return [EnsEGvattributetypeCode]
 ** Ensembl Genetic Variation Attribute Type Code or ensEGvattributetypeCodeNULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2001,14 +2004,14 @@ EnsEGvattributetypeCode ensGvattributetypeCodeFromStr(const AjPStr code)
 
     EnsEGvattributetypeCode gvatc = ensEGvattributetypeCodeNULL;
 
-    for(i = ensEGvattributetypeCodeNULL
-            ;
-        gvattributetypeCode[i];
-        i++)
-        if(ajStrMatchC(code, gvattributetypeCode[i]))
+    for (i = ensEGvattributetypeCodeNULL
+             ;
+         gvattributetypeKCode[i];
+         i++)
+        if (ajStrMatchC(code, gvattributetypeKCode[i]))
             gvatc = i;
 
-    if(!gvatc)
+    if (!gvatc)
         ajDebug("ensTranscriptStatusFromStr encountered "
                 "unexpected string '%S'.\n", code);
 
@@ -2043,13 +2046,15 @@ EnsEGvattributetypeCode ensGvattributetypeCodeFromStr(const AjPStr code)
 /* @func ensGvattributetypeCodeToChar *****************************************
 **
 ** Cast an Ensembl Genetic Variation Attribute Type Code enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
 ** @param [u] gvatc [EnsEGvattributetypeCode]
 ** Ensembl Genetic Variation Attribute Type Code enumeration
 **
 ** @return [const char*] Ensembl Genetic Variation Attribute Type code
-** C-type (char*) string
+** C-type (char *) string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2057,15 +2062,15 @@ const char* ensGvattributetypeCodeToChar(EnsEGvattributetypeCode gvatc)
 {
     register EnsEGvattributetypeCode i = ensEGvattributetypeCodeNULL;
 
-    for(i = ensEGvattributetypeCodeNULL;
-        gvattributetypeCode[i] && (i < gvatc);
-        i++);
+    for (i = ensEGvattributetypeCodeNULL;
+         gvattributetypeKCode[i] && (i < gvatc);
+         i++);
 
-    if(!gvattributetypeCode[i])
+    if (!gvattributetypeKCode[i])
         ajDebug("ensGvattributetypeCodeToChar encountered an "
                 "out of boundary error on Ensembl Genetic Variation "
                 "Attribute Type Code enumeration %d.\n",
                 gvatc);
 
-    return gvattributetypeCode[i];
+    return gvattributetypeKCode[i];
 }

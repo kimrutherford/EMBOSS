@@ -40,7 +40,7 @@ To write out the 10 bases around the start of all 'exon' features in the tembl d
 
 % <b>extractfeat "tembl:*"  -type exon -before 5 -after -5 </b>
 Extract features from sequence(s)
-output sequence [h45989.fasta]: <b></b>
+output sequence [em498477.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -72,8 +72,7 @@ To write out the 7 residues around all phosphorylated serine residues
 
 % <b>extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4 </b>
 Extract features from sequence(s)
-output sequence [12s1_arath.fasta]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+output sequence [cru4_arath.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

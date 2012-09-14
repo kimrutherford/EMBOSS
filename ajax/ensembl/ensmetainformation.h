@@ -1,10 +1,37 @@
+/* @include ensmetainformation ************************************************
+**
+** Ensembl Meta-Information functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.20 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/03/04 12:34:22 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSMETAINFORMATION_H
 #define ENSMETAINFORMATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdatabaseadaptor.h"
 
@@ -13,16 +40,16 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPMetainformationadaptor *******************************************
 **
@@ -84,9 +111,9 @@ typedef struct EnsSMetainformation
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -104,7 +131,7 @@ EnsPMetainformation ensMetainformationNewIni(EnsPMetainformationadaptor mia,
 
 EnsPMetainformation ensMetainformationNewRef(EnsPMetainformation mi);
 
-void ensMetainformationDel(EnsPMetainformation* Pmi);
+void ensMetainformationDel(EnsPMetainformation *Pmi);
 
 EnsPMetainformationadaptor ensMetainformationGetAdaptor(
     const EnsPMetainformation mi);
@@ -133,6 +160,10 @@ AjBool ensMetainformationTrace(const EnsPMetainformation mi, ajuint level);
 
 size_t ensMetainformationCalculateMemsize(const EnsPMetainformation mi);
 
+AjBool ensListMetainformationSortIdentifierAscending(AjPList mis);
+
+AjBool ensListMetainformationSortIdentifierDescending(AjPList mis);
+
 /* Ensembl Meta-Information Adaptor */
 
 EnsPMetainformationadaptor ensRegistryGetMetainformationadaptor(
@@ -141,54 +172,59 @@ EnsPMetainformationadaptor ensRegistryGetMetainformationadaptor(
 EnsPMetainformationadaptor ensMetainformationadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensMetainformationadaptorDel(EnsPMetainformationadaptor* Pmia);
+void ensMetainformationadaptorDel(EnsPMetainformationadaptor *Pmia);
 
 AjBool ensMetainformationadaptorFetchAllbyKey(
     EnsPMetainformationadaptor mia,
     const AjPStr key,
     AjPList mis);
 
+AjBool ensMetainformationadaptorRetrieveAllSpeciesclassifications(
+    EnsPMetainformationadaptor mia,
+    AjPList values);
+
 AjBool ensMetainformationadaptorRetrieveAllSpeciesnames(
     EnsPMetainformationadaptor mia,
-    AjPList names);
+    AjPList values);
 
 AjBool ensMetainformationadaptorRetrieveGenebuildversion(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSchemaversion(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSpeciesCommonname(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSpeciesProductionname(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSpeciesScientificname(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSpeciesShortname(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveTaxonomyidentifier(
     EnsPMetainformationadaptor mia,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveValue(
     EnsPMetainformationadaptor mia,
     const AjPStr key,
-    AjPStr* Pvalue);
+    AjPStr *Pvalue);
 
-AjBool ensMetainformationadaptorCheck(
+AjBool ensMetainformationadaptorCheckExists(
     EnsPMetainformationadaptor mia,
     const AjPStr key,
-    const AjPStr value);
+    const AjPStr value,
+    AjBool *Presult);
 
 /*
 ** End of prototype definitions

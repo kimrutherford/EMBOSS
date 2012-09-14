@@ -1,10 +1,37 @@
+/* @include ensassemblymapper *************************************************
+**
+** Ensembl Assembly Mapper functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSASSEMBLYMAPPER_H
 #define ENSASSEMBLYMAPPER_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdata.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -47,7 +74,7 @@ EnsPGenericassemblymapper ensGenericassemblymapperNewRef(
 
 AjBool ensGenericassemblymapperClear(EnsPGenericassemblymapper gam);
 
-void ensGenericassemblymapperDel(EnsPGenericassemblymapper* Pgam);
+void ensGenericassemblymapperDel(EnsPGenericassemblymapper *Pgam);
 
 EnsPAssemblymapperadaptor ensGenericassemblymapperGetAdaptor(
     const EnsPGenericassemblymapper gam);
@@ -119,7 +146,7 @@ EnsPChainedassemblymapper ensChainedassemblymapperNewIni(
 EnsPChainedassemblymapper ensChainedassemblymapperNewRef(
     EnsPChainedassemblymapper cam);
 
-void ensChainedassemblymapperDel(EnsPChainedassemblymapper* Pcam);
+void ensChainedassemblymapperDel(EnsPChainedassemblymapper *Pcam);
 
 AjBool ensChainedassemblymapperClear(EnsPChainedassemblymapper cam);
 
@@ -185,7 +212,7 @@ EnsPToplevelassemblymapper ensToplevelassemblymapperNewIni(
 EnsPToplevelassemblymapper ensToplevelassemblymapperNewRef(
     EnsPToplevelassemblymapper tlam);
 
-void ensToplevelassemblymapperDel(EnsPToplevelassemblymapper* Ptlam);
+void ensToplevelassemblymapperDel(EnsPToplevelassemblymapper *Ptlam);
 
 EnsPAssemblymapperadaptor ensToplevelassemblymapperGetAdaptor(
     const EnsPToplevelassemblymapper tlam);
@@ -220,7 +247,7 @@ EnsPAssemblymapper ensAssemblymapperNewIni(EnsPAssemblymapperadaptor ama,
 
 EnsPAssemblymapper ensAssemblymapperNewRef(EnsPAssemblymapper am);
 
-void ensAssemblymapperDel(EnsPAssemblymapper* Pam);
+void ensAssemblymapperDel(EnsPAssemblymapper *Pam);
 
 AjBool ensAssemblymapperTrace(const EnsPAssemblymapper am, ajuint level);
 
@@ -265,7 +292,7 @@ EnsPAssemblymapperadaptor ensAssemblymapperadaptorNew(
 
 AjBool ensAssemblymapperadaptorClear(EnsPAssemblymapperadaptor ama);
 
-void ensAssemblymapperadaptorDel(EnsPAssemblymapperadaptor* Pama);
+void ensAssemblymapperadaptorDel(EnsPAssemblymapperadaptor *Pama);
 
 EnsPDatabaseadaptor ensAssemblymapperadaptorGetDatabaseadaptor(
     const EnsPAssemblymapperadaptor ama);
@@ -274,13 +301,13 @@ AjBool ensAssemblymapperadaptorFetchByCoordsystems(
     EnsPAssemblymapperadaptor ama,
     EnsPCoordsystem cs1,
     EnsPCoordsystem cs2,
-    EnsPAssemblymapper* Pam);
+    EnsPAssemblymapper *Pam);
 
 AjBool ensAssemblymapperadaptorFetchBySlices(
     EnsPAssemblymapperadaptor ama,
     EnsPSlice slice1,
     EnsPSlice slice2,
-    EnsPAssemblymapper* Pam);
+    EnsPAssemblymapper *Pam);
 
 AjBool ensAssemblymapperadaptorRegisterChainedAll(
     EnsPAssemblymapperadaptor ama,

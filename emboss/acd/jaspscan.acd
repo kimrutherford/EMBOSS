@@ -1,9 +1,9 @@
 application: jaspscan [
-  documentation: "Scans DNA sequences for transcription
+  documentation: "Scan DNA sequences for transcription
                   factors"
   groups: "Nucleic:Transcription"
-    relations: "EDAM:0000110 topic Transcription"
-    relations: "EDAM:0000445 operation Transcription factor binding site prediction"
+    relations: "EDAM_topic:0110 Transcription"
+    relations: "EDAM_operation:0445 Transcription factor binding site prediction"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   list: menu [
@@ -28,7 +28,7 @@ section: input [
     header: "Jaspar matrix set"
     information: "Matrix set"
     button: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -56,7 +56,7 @@ section: input [
            ma0032* \
            ma0053.1"
     knowntype: "jaspar matrix id"
-    relations: "EDAM:0001119 identifier JASPAR profile ID"
+    relations: "EDAM_identifier:1119 JASPAR profile ID"
   ]
 
 
@@ -73,7 +73,7 @@ section: required [
     information: "Threshold percentage"
     help: "If the matrix score is greater than or equal to this percentage \
              then a hit will be reported"
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: required
@@ -92,7 +92,7 @@ section: additional [
            list. Matrices are specified in the same way as for the \
            selection list."
     knowntype: "jaspar matrix id"
-    relations: "EDAM:0001119 identifier JASPAR profile ID"
+    relations: "EDAM_identifier:1119 JASPAR profile ID"
   ]
 
   boolean: both [
@@ -100,7 +100,7 @@ section: additional [
     default: "N"
     information: "Scan both strands"
     help: "If set then both the forward and reverse strands are searched"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -121,7 +121,7 @@ section: output [
 	      float:info=Info_Content str:jaspar=Closest_Jaspar
 	      str:transfac=Closest_Transfac
               float:mcs=MCS_Score str:built=Built_From"
-    relations: "EDAM:0001315 data Gene features (TFBS)"
+    relations: "EDAM_data:1315 Gene features (TFBS)"
   ]
 
 endsection: output

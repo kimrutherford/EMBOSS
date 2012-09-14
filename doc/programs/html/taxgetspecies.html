@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -89,7 +89,7 @@ Taxon output file [9604.excel]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Get all species under taxon(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-taxons]            taxon      Taxon filename and optional format, or
@@ -102,6 +102,8 @@ Version: EMBOSS:6.4.0.0
 
    "-taxons" associated qualifiers
    -iformat1           string     Input taxonomy format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -178,7 +180,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-taxons" associated taxon qualifiers
+<td align="left" colspan=5>"-taxons" associated taxon qualifiers
 </td>
 </tr>
 
@@ -191,6 +193,22 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_taxons</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_taxons</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -idbname1<br>-idbname_taxons</td>
 <td>string</td>
 <td>User-provided database name</td>
@@ -199,7 +217,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outtaxon qualifiers
+<td align="left" colspan=5>"-outfile" associated outtaxon qualifiers
 </td>
 </tr>
 
@@ -419,18 +437,16 @@ for further information on taxon formats.
 <p><h3>File: 9604.excel</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-9600	9599	species	Y	Pongo pygmaeus
-9601	9599	species	Y	Pongo abelii
-9603	9599	species	Y	Pongo sp.
-502961	9599	species	Y	Pongo abelii x pygmaeus
-499232	9592	species	Y	Gorilla beringei
-9593	9592	species	Y	Gorilla gorilla
-9597	9596	species	Y	Pan paniscus
 9598	9596	species	Y	Pan troglodytes
-317028	9596	species	Y	Pan sp. WO2005014654
-445518	9596	species	Y	Pan sp. WO2007026120
+9597	9596	species	Y	Pan paniscus
 741158	9605	species	Y	Homo sp. Altai
 9606	9605	species	Y	Homo sapiens
+9593	9592	species	Y	Gorilla gorilla
+499232	9592	species	Y	Gorilla beringei
+9603	9599	species	Y	Pongo sp.
+9600	9599	species	Y	Pongo pygmaeus
+9601	9599	species	Y	Pongo abelii
+502961	9599	species	Y	Pongo abelii x pygmaeus
 </pre>
 </td></tr></table><p>
 

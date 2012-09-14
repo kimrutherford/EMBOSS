@@ -319,17 +319,17 @@ static void pepdigest_report_hits(AjPFeattable TabRpt, AjPList l, ajint be,
 	ajStrAssignSubC(&t,s,fr->start,fr->end);
 	gf = ajFeatNewII(TabRpt,fr->start+be,fr->end+be);
 	ajFmtPrintS(&tmpStr, "*molwt %.3f", fr->molwt);
-	ajFeatTagAdd(gf,  NULL, tmpStr);
+	ajFeatTagAddSS(gf,  NULL, tmpStr);
 	if(fr->start>0)
 	{
 	    ajFmtPrintS(&tmpStr, "*cterm %c", *(s+(fr->start)-1));
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 	}
 
 	if(fr->end<len-1)
 	{
 	    ajFmtPrintS(&tmpStr, "*nterm %c", *(s+(fr->end+1)));
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 	}
 
 	AJFREE(fr);

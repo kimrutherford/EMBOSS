@@ -1,26 +1,27 @@
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: "edam:{0000108,0000110}"</h3>
+<p><h3>Database entry: "edam:{0097,0640}"</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000110
-name: Transcription
+id: EDAM_topic:0640
+name: Nucleic acid sequence analysis
 namespace: topic
-def: The study of the transcription of DNA into mRNA and transcription regulation including transcription factors and regulatory motifs, elements or regions in DNA sequences.
-comment: This includes promoters, enhancers, silencers and boundary elements / insulators.
-subset: topic
-xref: BioCatalogue:Transcription Factors
-is_a: EDAM:0000197 ! Gene expression and regulation
+def: Processing and analysis of nucleotide sequences and sequence-based entities such as alignments, motifs and profiles.
+subset: topics
+xref: BioCatalogue:Nucleotide Sequence Analysis
+is_a: EDAM_topic:0080 ! Sequence analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 [Term]
-id: EDAM:0000108
-name: Translation
+id: EDAM_topic:0097
+name: Nucleic acid structure analysis
 namespace: topic
-def: The study of the translation of mRNA into protein.
-subset: topic
-is_a: EDAM:0000197 ! Gene expression and regulation
+def: The processing and analysis of nucleic acid (secondary or tertiary) structural data.
+subset: topics
+is_a: EDAM_topic:0081 ! Structure analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
 </td></tr></table><p>

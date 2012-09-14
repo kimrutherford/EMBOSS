@@ -83,10 +83,6 @@ int main(int argc, char **argv)
     AjPFile infnode = NULL;
     AjPFile infname = NULL;
 
-    AjPBtId  idobj  = NULL;
-    AjPBtPri priobj = NULL;
-    AjPBtHybrid hyb = NULL;
-    
     ajulong nentries = 0L;
     ajulong ientries = 0L;
     AjPTime starttime = NULL;
@@ -105,12 +101,8 @@ int main(int argc, char **argv)
     datestr    = ajAcdGetString("date");
     compressed = ajAcdGetBoolean("compressed");
 
-    entry = embBtreeEntryNew();
+    entry = embBtreeEntryNew(1);
     tmpstr = ajStrNew();
-    
-    idobj   = ajBtreeIdNew();
-    priobj  = ajBtreePriNew();
-    hyb     = ajBtreeHybNew();
     
     dbtype = ajStrNewC("taxonomy");
 
@@ -173,7 +165,7 @@ int main(int argc, char **argv)
               directory, filename);
 
     ajStrAssignC(&filename, "names.dmp");
-    ajListPushAppend(entry->reffiles,(void *)filename);
+    ajListPushAppend(entry->reffiles[0],(void *)filename);
     filename = NULL;
 
     embBtreeWriteEntryFile(entry);
@@ -194,7 +186,7 @@ int main(int argc, char **argv)
     {
         begintime = ajTimeNewToday();
 
-	ajListPop(entry->reffiles,(void **)&thysfile);
+	ajListPop(entry->reffiles[0],(void **)&thysfile);
 	ajListPushAppend(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
 	if(!(infname=ajFileNewInNameS(tmpstr)))
@@ -207,7 +199,7 @@ int main(int argc, char **argv)
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 
 	ajFilenameTrimPath(&tmpstr);
-	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S\n",tmpstr);
 
 	ientries = 0L;
 
@@ -241,7 +233,7 @@ int main(int argc, char **argv)
 	ajFileClose(&infname);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
 		    nentries, ientries,
 		    ajTimeDiff(starttime, nowtime),
 		    ajTimeDiff(begintime, nowtime));
@@ -292,11 +284,6 @@ int main(int argc, char **argv)
 	ajStrDel(&fieldarray[nfields++]);
     AJFREE(fieldarray);
 
-
-    ajBtreeIdDel(&idobj);
-    ajBtreePriDel(&priobj);
-    ajBtreeHybDel(&hyb);
-
     ajRegFree(&dbxtax_wrdexp);
     ajStrDel(&nameline);
 
@@ -340,7 +327,7 @@ static AjBool dbxtax_NextEntry(EmbPBtreeEntry entry, AjPFile infnode,
 
     dbxtax_ParseNode(entry, line);
 
-    entry->reffpos = namePos;
+    entry->reffpos[0] = namePos;
 
     if(!nameline)
         ok = ajReadlineTrim(infname,&nameline);

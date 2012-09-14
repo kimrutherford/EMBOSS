@@ -1,9 +1,9 @@
 application: msbar [
   documentation: "Mutate a sequence"
   groups: "Nucleic:Mutation, Protein:Mutation"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000199 topic Mutation and polymorphism"
-    relations: "EDAM:0000367 operation Sequence mutation and randomization"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_topic:0199 Genetic variation"
+    relations: "EDAM_operation:0367 Sequence mutation and randomization"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqall: othersequence [
@@ -35,7 +35,7 @@ section: input [
            still a match to the set of sequence given here, then the matching
            mutated sequence is written with a warning message."
     nullok: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -51,7 +51,7 @@ section: required [
     minimum: "0"
     information: "Number of times to perform the mutation
                   operations"
-    relations: "EDAM:0001693 data Number of iterations"
+    relations: "EDAM_data:1693 Number of iterations"
   ]
 
   list: point [
@@ -65,7 +65,7 @@ section: required [
     delimiter: ";"
     codedelimiter: ":"
     information: "Types of point mutations to perform"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: block [
@@ -79,7 +79,7 @@ section: required [
     delimiter: ";"
     codedelimiter: ":"
     information: "Types of block mutations to perform"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: codon [
@@ -95,7 +95,7 @@ section: required [
     information: "Types of codon mutations to perform"
     help: "Types of codon mutations to perform. These are only done if
            the sequence is nucleic."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -109,7 +109,7 @@ section: additional [
     additional: "@(!$(acdprotein))"
     default: "N"
     information: "Do 'codon' and 'block' operations in frame"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -123,14 +123,14 @@ section: advanced [
     default: "1"
     minimum: "0"
     information: "Minimum size for a block mutation"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   integer: maximum [
     default: "10"
     minimum: "$(minimum)"
     information: "Maximum size for a block mutation"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
 endsection: advanced
@@ -142,7 +142,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: output

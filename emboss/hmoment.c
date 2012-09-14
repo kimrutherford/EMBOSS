@@ -159,6 +159,7 @@ int main(int argc, char **argv)
 		ajGraphSetMulti(graph,1);
 
 	    ajGraphxySetflagOverlay(graph,ajFalse);
+            ajGraphSetDatanameS(graph, ajSeqGetNameS(seq));
 
 	    hmoment_addgraph(graph,limit,x,ya,ymax,BLACK,aangle,window,
 			     baseline, sname);

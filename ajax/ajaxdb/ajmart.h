@@ -1,15 +1,66 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajmart ************************************************************
+**
+** AJAX Mart (database) functions
+**
+** These functions control all aspects of AJAX sequence database access
+**
+** @author Copyright (C) 2009 Alan Bleasby
+** @version $Revision: 1.17 $
+** @modified Nov 23 ajb First version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajmart_h
-#define ajmart_h
+#ifndef AJMART_H
+#define AJMART_H
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajdom.h"
+#include "ajseqdata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
 
 
 #define MART_CACHE_RD 1
 #define MART_CACHE_WT 2
 #define MART_CACHE_WTIFEMPTY 4
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -62,7 +113,7 @@ typedef AjPMartLoc* AjPPMartLoc;
 
 
 
- /* @data AjPMartDataset ****************************************************
+/* @data AjPMartDataset *******************************************************
 **
 ** Ajax BioMart dataset information
 **
@@ -93,7 +144,7 @@ typedef AjPMartDataset* AjPPMartDataset;
 
 
 
- /* @data AjPMartAttribute ***************************************************
+/* @data AjPMartAttribute *****************************************************
 **
 ** Ajax BioMart attribute information
 **
@@ -124,7 +175,7 @@ typedef AjPMartAttribute* AjPPMartAttribute;
 
 
 
- /* @data AjPMartFilter *****************************************************
+/* @data AjPMartFilter ********************************************************
 **
 ** Ajax BioMart filter information
 **
@@ -155,7 +206,7 @@ typedef AjPMartFilter* AjPPMartFilter;
 
 
 
-/* @data AjMartdsinfo ******************************************************
+/* @data AjPMartdsinfo ********************************************************
 **
 ** Biomart martservice object for holding query dataset info pre conversion
 ** to an XML query string
@@ -183,7 +234,7 @@ typedef struct AjSMartdsinfo
 
 
 
-/* @data AjMartqinfo ******************************************************
+/* @data AjPMartqinfo *********************************************************
 **
 ** Biomart martservice object for holding query info pre conversion
 ** to an XML query string
@@ -223,11 +274,12 @@ typedef struct AjSMartqinfo
 
 
 
-/* @data AjMartquery ******************************************************
+/* @data AjPMartquery *********************************************************
 **
 ** Biomart martservice query object
 **
-** @alias AjSMartquery** @alias AjOMartquery
+** @alias AjSMartquery
+** @alias AjOMartquery
 **
 ** @attr Reghost [AjPStr] Registry host
 ** @attr Regpath [AjPStr] Registry path to mart service on Reghost
@@ -245,6 +297,7 @@ typedef struct AjSMartqinfo
 ** @attr Regport [ajuint] Registry host URL port
 ** @attr Martport [ajuint] Mart host URL port
 ** @attr Cacheflag [ajuint] Control operation of cache
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -266,10 +319,17 @@ typedef struct AjSMartquery
     ajuint Regport;
     ajuint Martport;
     ajuint Cacheflag;
+    ajuint Padding;
 } AjOMartquery;
 
 #define AjPMartquery AjOMartquery*
 
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -394,8 +454,6 @@ void    ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !AJMART_H */

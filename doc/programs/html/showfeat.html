@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -103,7 +103,7 @@ Output file [x65921.showfeat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display features of a sequence in pretty format
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -251,7 +251,7 @@ Version: EMBOSS:6.4.0.0
                                   always directionless (indicated by '0'),
                                   forward is indicated by '+' and reverse is
                                   '-'.
-   -origin             boolean    [N] Set this if you wish to display the
+   -sourceshow         boolean    [N] Set this if you wish to display the
                                   origin of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
@@ -263,12 +263,12 @@ Version: EMBOSS:6.4.0.0
                                   same line, then the start and end positions
                                   will be joined by a comma, for example:
                                   '189-189,225-225'.
-   -[no]type           boolean    [Y] Set this to be false if you do not wish
+   -[no]typeshow       boolean    [Y] Set this to be false if you do not wish
                                   to display the type of the features.
-   -tags               boolean    [N] Set this to be false if you do not wish
+   -tagshow            boolean    [N] Set this to be false if you do not wish
                                   to display the tags and values of the
                                   features.
-   -[no]values         boolean    [Y] Set this to be false if you do not wish
+   -[no]valueshow      boolean    [Y] Set this to be false if you do not wish
                                   to display the tag values of the features.
                                   If this is set to be false, only the tag
                                   names will be displayed. If the tags are not
@@ -295,7 +295,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -525,7 +528,7 @@ If this is set to false then each feature is displayed on a separate line making
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-origin</td>
+<td>-sourceshow</td>
 <td>boolean</td>
 <td>Set this if you wish to display the origin of the features.
 The source name is usually either the name of the program that detected the feature or it is the name of the feature table (eg: EMBL) that the feature came from.</td>
@@ -542,7 +545,7 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-[no]type</td>
+<td>-[no]typeshow</td>
 <td>boolean</td>
 <td>Set this to be false if you do not wish to display the type of the features.</td>
 <td>Boolean value Yes/No</td>
@@ -550,7 +553,7 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-tags</td>
+<td>-tagshow</td>
 <td>boolean</td>
 <td>Set this to be false if you do not wish to display the tags and values of the features.</td>
 <td>Boolean value Yes/No</td>
@@ -558,7 +561,7 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-[no]values</td>
+<td>-[no]valueshow</td>
 <td>boolean</td>
 <td>Set this to be false if you do not wish to display the tag values of the features. If this is set to be false, only the tag names will be displayed. If the tags are not displayed, then the values will not be displayed. The value of the 'translation' tag is never displayed as it is often extremely long.</td>
 <td>Boolean value Yes/No</td>
@@ -578,7 +581,7 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -647,11 +650,35 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -695,7 +722,7 @@ The source name is usually either the name of the program that detected the feat
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -883,7 +910,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -896,6 +923,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -904,15 +940,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1118,7 +1145,7 @@ None.
 
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
@@ -1133,7 +1160,7 @@ None.
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>
@@ -1178,7 +1205,7 @@ None.
 
 <tr>
 <td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
+<td>Display protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -1188,7 +1215,7 @@ None.
 
 <tr>
 <td><a href="twofeat.html">twofeat</a></td>
-<td>Finds neighbouring pairs of features in sequence(s)</td>
+<td>Find neighbouring pairs of features in sequence(s)</td>
 </tr>
 
 </table>

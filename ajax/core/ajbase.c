@@ -1,29 +1,41 @@
-/******************************************************************************
-** @source AJAX IUB base nucleic acid functions
+/* @source ajbase *************************************************************
+**
+** AJAX IUB base nucleic acid functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.31 $
 ** @modified Feb 28 ajb First version
+** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajbase.h"
+#include "ajreg.h"
+#include "ajsys.h"
+#include "ajfiledata.h"
+#include "ajfileio.h"
+
 #include <string.h>
+
 
 #define IUBFILE "Ebases.iub"
 #define IUBPFILE "Eresidues.iub"
@@ -61,7 +73,25 @@ BaseOIub aj_residue_iubS[256];	  /* Residues and their alternatives     */
 ajint    aj_residue_table[256];	  /* Residue numerical codes             */
 float    aj_residue_prob[32][32]; /* Asym base probability matches       */
 
-const char* iubbases = "XACMGRSVTWYHKDBN";
+
+
+
+/* @conststatic iubbases ******************************************************
+**
+** Valid IUB nucleotide base characters
+**
+******************************************************************************/
+
+static const char* iubbases = "XACMGRSVTWYHKDBN";
+
+
+
+
+/* @conststatic BaseAaTable ***************************************************
+**
+** Valid 3-letter amino acid names from A to Z
+**
+******************************************************************************/
 
 static const char *BaseAaTable[]=
 {
@@ -71,6 +101,14 @@ static const char *BaseAaTable[]=
     "TYR","GLX" 
 };
 
+
+
+
+/* @conststatic BaseNucTable **************************************************
+**
+** Valid 2-letter nucleotide names from A to Z for PDB format
+**
+******************************************************************************/
 
 static const char *BaseNucTable[]=
 {
@@ -142,6 +180,8 @@ static AjBool residueInit(void);
 ** @param [r] base2 [ajint] Second base offset
 **
 ** @return [float] Base probability value
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -174,18 +214,6 @@ float  ajBaseAlphaCompare(ajint base, ajint base2)
 
 
 
-/* @obsolete ajBaseProb
-** @rename ajBaseAlphaCompare
-*/
-
-__deprecated float  ajBaseProb(ajint base1, ajint base2)
-{
-    return ajBaseAlphaCompare(base1, base2);
-}
-
-
-
-
 /* @func ajBaseAlphaToBin *****************************************************
 **
 ** Returns a binary OR'd representation of an IUB base where A=1, C=2,
@@ -195,6 +223,8 @@ __deprecated float  ajBaseProb(ajint base1, ajint base2)
 ** @param  [r] base [ajint] character to convert
 **
 ** @return [ajint] Binary OR'd representation
+**
+** @release 6.0.0
 ******************************************************************************/
 
 ajint ajBaseAlphaToBin(ajint base)
@@ -203,18 +233,6 @@ ajint ajBaseAlphaToBin(ajint base)
 	baseInit();
 
     return (aj_base_table[toupper(base)]);
-}
-
-
-
-
-/* @obsolete ajAZToBin
-** @rename ajBaseAlphaToBin
-*/
-
-__deprecated ajint ajAZToBin(ajint c)
-{
-    return ajBaseAlphaToBin(c);
 }
 
 
@@ -251,6 +269,8 @@ __deprecated ajint ajAZToBin(ajint c)
 ** @param [r] c2 [char] Second base to compare
 ** @return [float] estimated match
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 float ajBaseAlphacharCompare(char c, char c2)
@@ -314,6 +334,8 @@ float ajBaseAlphacharCompare(char c, char c2)
 ** @param  [r] c [char] character to convert
 **
 ** @return [char] Binary OR'd representation
+**
+** @release 6.0.0
 ******************************************************************************/
 
 char ajBaseAlphacharToBin(char c)
@@ -322,18 +344,6 @@ char ajBaseAlphacharToBin(char c)
 	baseInit();
 
     return ajSysCastItoc(aj_base_table[toupper((ajint) c)]);
-}
-
-
-
-
-/* @obsolete ajAZToBinC
-** @rename ajBaseAlphacharToBin
-*/
-
-__deprecated char ajAZToBinC(char c)
-{
-    return (char)ajBaseAlphacharToBin((int)c);
 }
 
 
@@ -364,6 +374,8 @@ __deprecated char ajAZToBinC(char c)
 **
 ** @param [r] c [char] Base character.
 ** @return [char] Complementary base.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -384,29 +396,6 @@ char ajBaseAlphacharComp(char c)
     }
 
     return c;
-}
-
-
-
-
-/* @obsolete ajBaseComp
-** @rename ajBaseAlphacharComp
-*/
-__deprecated char ajBaseComp(char base)
-{
-
-    return ajBaseAlphacharComp(base);
-}
-
-
-
-
-/* @obsolete ajSeqBaseComp
-** @rename ajBaseComp
-*/
-__deprecated char ajSeqBaseComp(char base)
-{
-    return ajBaseAlphacharComp(base);
 }
 
 
@@ -442,6 +431,8 @@ __deprecated char ajSeqBaseComp(char base)
 ** @param  [r] c [ajint] character to convert
 **
 ** @return [char] Ambiguous DNA base code
+**
+** @release 6.0.0
 ******************************************************************************/
 
 char ajBaseBinToAlpha(ajint c)
@@ -453,18 +444,6 @@ char ajBaseBinToAlpha(ajint c)
 	return 'N';
 
     return (iubbases[c]);
-}
-
-
-
-
-/* @obsolete ajBinToAZ
-** @rename ajBaseBinToAlpha
-*/
-
-__deprecated char ajBinToAZ(ajint c)
-{
-    return ajBaseBinToAlpha(c);
 }
 
 
@@ -500,6 +479,8 @@ __deprecated char ajBinToAZ(ajint c)
 ** @param [r] base [ajint] Base code in range 0 to 31
 ** @return [AjBool] True if base code is known
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 AjBool ajBaseExistsBin(ajint base)
@@ -523,6 +504,8 @@ AjBool ajBaseExistsBin(ajint base)
 ** @param [r] c [char] Base character
 ** @return [AjBool] True if base code is known
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 AjBool ajBaseExistsChar(char c)
@@ -576,6 +559,8 @@ AjBool ajBaseExistsChar(char c)
 ** @param [r] base [ajint] Original base code
 **
 ** @return [const AjPStr] Base codes
+**
+** @release 6.0.0
 ******************************************************************************/
 
 const AjPStr ajBaseGetCodes(ajint base)
@@ -589,18 +574,6 @@ const AjPStr ajBaseGetCodes(ajint base)
 
 
 
-/* @obsolete ajBaseCodes
-** @rename ajBaseGetCodes
-*/
-
-__deprecated const AjPStr ajBaseCodes(ajint ibase)
-{
-    return ajBaseGetCodes(ibase);
-}
-
-
-
-
 /* @func ajBaseGetMnemonic ****************************************************
 **
 ** Returns a string of matching base codes
@@ -608,6 +581,8 @@ __deprecated const AjPStr ajBaseCodes(ajint ibase)
 ** @param [r] base [ajint] Original base code
 **
 ** @return [const AjPStr] Base codes
+**
+** @release 6.0.0
 ******************************************************************************/
 
 const AjPStr ajBaseGetMnemonic(ajint base)
@@ -621,7 +596,7 @@ const AjPStr ajBaseGetMnemonic(ajint base)
 
 
 
-/* @funcstatic baseInit ******************************************************
+/* @funcstatic baseInit *******************************************************
 **
 ** Sets up binary OR'd representation of an IUB bases in a table
 ** aj_base_table where A=1, C=2, G=4 and T=8
@@ -631,6 +606,8 @@ const AjPStr ajBaseGetMnemonic(ajint base)
 ** Is initialised if necessary from other AJAX functions.
 **
 ** @return [AjBool] True on success
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static AjBool baseInit(void)
@@ -789,7 +766,7 @@ static AjBool baseInit(void)
 
 
 
-/* @func ajBaseFromDoublet ************************************************
+/* @func ajBaseFromDoublet ****************************************************
 **
 ** Takes a 2 character PDB base code and writes a char with the 
 ** corresponding single letter code.
@@ -798,6 +775,8 @@ static AjBool baseInit(void)
 ** @param [w] Pc [char *] Resulting residue code
 **
 ** @return [AjBool] True on success, false if doublet is not recognised
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -849,6 +828,8 @@ AjBool ajBaseFromDoublet(const AjPStr nuc2, char* Pc)
 ** Cleans up sequence base and residue processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -917,6 +898,8 @@ void ajBaseExit(void)
 ** @param  [r] base [ajint] character to convert
 **
 ** @return [ajint] Binary OR'd representation
+**
+** @release 6.0.0
 ******************************************************************************/
 
 ajint ajResidueAlphaToBin(ajint base)
@@ -960,6 +943,8 @@ ajint ajResidueAlphaToBin(ajint base)
 ** @param  [r] c [ajint] character to convert
 **
 ** @return [char] Ambiguous residue code
+**
+** @release 6.0.0
 ******************************************************************************/
 
 char ajResidueBinToAlpha(ajint c)
@@ -1002,13 +987,15 @@ char ajResidueBinToAlpha(ajint c)
 
 
 
-/* @func ajResidueExistsBin **************************************************
+/* @func ajResidueExistsBin ***************************************************
 **
 ** Tests whether a residue code exists
 **
 ** @param [r] base [ajint] Base code in range 0 to 31
 ** @return [AjBool] True if base code is known
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 AjBool ajResidueExistsBin(ajint base)
@@ -1032,6 +1019,8 @@ AjBool ajResidueExistsBin(ajint base)
 ** @param [r] c [char] Base character
 ** @return [AjBool] True if base code is known
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 AjBool ajResidueExistsChar(char c)
@@ -1085,6 +1074,8 @@ AjBool ajResidueExistsChar(char c)
 ** @param [r] base [ajint] Original base code
 **
 ** @return [const AjPStr] Base codes
+**
+** @release 6.0.0
 ******************************************************************************/
 
 const AjPStr ajResidueGetCodes(ajint base)
@@ -1098,13 +1089,15 @@ const AjPStr ajResidueGetCodes(ajint base)
 
 
 
-/* @func ajResidueGetMnemonic ***********************************************
+/* @func ajResidueGetMnemonic *************************************************
 **
 ** Returns a string of matching amino acid residue codes
 **
 ** @param [r] base [ajint] Original base code
 **
 ** @return [const AjPStr] Base codes
+**
+** @release 6.0.0
 ******************************************************************************/
 
 const AjPStr ajResidueGetMnemonic(ajint base)
@@ -1128,6 +1121,8 @@ const AjPStr ajResidueGetMnemonic(ajint base)
 ** Is initialised if necessary from other AJAX functions.
 **
 ** @return [AjBool] True on success
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static AjBool residueInit(void)
@@ -1290,6 +1285,8 @@ static AjBool residueInit(void)
 ** @param [w] Pc [char *] Resulting residue code
 **
 ** @return [AjBool] True on success, false if triplet is not recognised
+**
+** @release 6.0.0
 ** @@
 ****************************************************************************/
 
@@ -1320,18 +1317,6 @@ AjBool  ajResidueFromTriplet(const AjPStr aa3, char *Pc)
 
 
 
-/* @obsolete ajBaseAa3ToAa1
-** @replace ajResidueFromTriplet (1,2/2,1)
-*/
-
-__deprecated AjBool  ajBaseAa3ToAa1(char *Paa1, const AjPStr aa3)
-{
-    return ajResidueFromTriplet(aa3, Paa1);
-}
-
-
-
-
 /* @func ajResidueToTriplet ***************************************************
 **
 ** Writes an AjPStr with an amino acid 3 letter code
@@ -1340,6 +1325,8 @@ __deprecated AjBool  ajBaseAa3ToAa1(char *Paa1, const AjPStr aa3)
 ** @param [w] Paa3  [AjPStr *] AjPStr object
 **
 ** @return [AjBool] True on success
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1353,18 +1340,6 @@ AjBool  ajResidueToTriplet(char c, AjPStr *Paa3)
     ajStrAssignC(Paa3, BaseAaTable[idx]);
 
     return ajTrue;
-}
-
-
-
-
-/* @obsolete ajBaseAa1ToAa3
-** @rename ajResidueToTriplet
-*/
-
-__deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
-{
-    return ajResidueToTriplet(aa1, Paa3);
 }
 
 
@@ -1413,13 +1388,15 @@ __deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
 
 
 
-/* @func ajBasecodeFromInt **************************************************
+/* @func ajBasecodeFromInt ****************************************************
 **
 ** Returns 'A' for 0 to  'Z' for 25
 **
 ** @param  [r] n [ajint] character to convert
 **
 ** @return [ajint] 0 as 'A' up to  25 as 'Z'
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1437,25 +1414,15 @@ ajint ajBasecodeFromInt(ajint n)
 
 
 
-/* @obsolete ajIntToAZ
-** @rename ajBasecodeFromInt
-*/
-
-__deprecated ajint ajIntToAZ(ajint n)
-{
-    return ajBasecodeFromInt(n);
-}
-
-
-
-
-/* @func ajBasecodeToInt *************************************************
+/* @func ajBasecodeToInt ******************************************************
 **
 ** Returns A=0 to Z=25  or 27 otherwise
 **
 ** @param  [r] c [ajint] character to convert
 **
 ** @return [ajint] A=0 to Z=25 or 27 if unknown
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1472,6 +1439,108 @@ ajint ajBasecodeToInt(ajint c)
 
 
 
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajBaseProb
+** @rename ajBaseAlphaCompare
+*/
+
+__deprecated float  ajBaseProb(ajint base1, ajint base2)
+{
+    return ajBaseAlphaCompare(base1, base2);
+}
+
+
+
+
+/* @obsolete ajAZToBin
+** @rename ajBaseAlphaToBin
+*/
+
+__deprecated ajint ajAZToBin(ajint c)
+{
+    return ajBaseAlphaToBin(c);
+}
+
+
+
+
+/* @obsolete ajAZToBinC
+** @rename ajBaseAlphacharToBin
+*/
+
+__deprecated char ajAZToBinC(char c)
+{
+    return (char)ajBaseAlphacharToBin((int)c);
+}
+
+
+
+
+/* @obsolete ajBaseComp
+** @rename ajBaseAlphacharComp
+*/
+__deprecated char ajBaseComp(char base)
+{
+
+    return ajBaseAlphacharComp(base);
+}
+
+
+
+
+/* @obsolete ajSeqBaseComp
+** @rename ajBaseComp
+*/
+__deprecated char ajSeqBaseComp(char base)
+{
+    return ajBaseAlphacharComp(base);
+}
+
+
+
+
+/* @obsolete ajBinToAZ
+** @rename ajBaseBinToAlpha
+*/
+
+__deprecated char ajBinToAZ(ajint c)
+{
+    return ajBaseBinToAlpha(c);
+}
+
+
+
+
+/* @obsolete ajBaseAa1ToAa3
+** @rename ajResidueToTriplet
+*/
+
+__deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
+{
+    return ajResidueToTriplet(aa1, Paa3);
+}
+
+
+
+
+/* @obsolete ajIntToAZ
+** @rename ajBasecodeFromInt
+*/
+
+__deprecated ajint ajIntToAZ(ajint n)
+{
+    return ajBasecodeFromInt(n);
+}
+
+
+
+
 /* @obsolete ajAZToInt
 ** @rename ajBasecodeToInt
 */
@@ -1481,3 +1550,4 @@ __deprecated ajint ajAZToInt(ajint c)
 
     return ajBasecodeToInt(c);
 }
+#endif

@@ -47,7 +47,7 @@ Created wobble.ps
 Command line arguments
 
 Plot third base position variability in a nucleotide sequence
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -76,7 +76,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -161,7 +164,7 @@ RN   [1]
 RP   1167-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-DEC-1988) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
@@ -186,7 +189,7 @@ RN   [4]
 RP   1-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (04-SEP-1991) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
@@ -196,7 +199,6 @@ DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
 
   [Part of this file has been deleted for brevity]
 
-FT                   /replace=""
 FT                   /note="ClaI fragment deleted in pSW36,  constitutive
 FT                   phenotype"
 FT   misc_feature    1
@@ -204,8 +206,9 @@ FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
 FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
-FT   conflict        1281
+FT   misc_difference 1281
 FT                   /replace="g"
+FT                   /note="conflict"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
@@ -320,9 +323,9 @@ Known bugs
 See also
 
    Program name     Description
-   checktrans       Reports STOP codons and ORF statistics of a protein
-   getorf           Finds and extracts open reading frames (ORFs)
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+   checktrans       Report STOP codons and ORF statistics of a protein
+   getorf           Find and extract open reading frames (ORFs)
+   marscan          Find matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
    plotorf          Plot potential open reading frames in a nucleotide sequence
    showorf          Display a nucleotide sequence and translation in pretty format
@@ -330,3 +333,25 @@ See also
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence
    tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+
+Author(s)
+
+   Alan Bleasby
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+   Completed Spring 2000.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

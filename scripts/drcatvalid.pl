@@ -104,6 +104,9 @@ while (<EDAM>){
 }
 close EDAM;
 
+# dbxref.txt from ftp://ftp.ebi.ac.uk/
+# pub/databases/uniprot/current_release/knowledgebase/complete/docs/dbxref.txt
+
 open(DBXREF, "/homes/pmr/devemboss/emboss/data/dbxref.txt") || die "Cannot open dbxref.txt";
 
 $isdata = 0;
@@ -113,6 +116,7 @@ while(<DBXREF>){
 	if(/^$/) {next}
 	elsif(/^AC    : (\S+)/) {
 	    $xrac = $1;
+	    $xrac{$xrac} = $xrac;
 	}
 	elsif(/^Abbrev: (.*)$/) {
 	    $xrid = $1;
@@ -318,7 +322,8 @@ while (<DRCAT>) {
 		    print STDERR "$line: BAD LINE: $_";
 		}
 		elsif(defined($trueid{$term})) {
-		    print STDERR "$line: EDAM-ALTID $trueid{$term} $_";
+		    $newterm = $trueid{$term};
+		    print STDERR "$line: EDAM-ALTID $trueid{$term} '$edam{$newterm}' $_";
 		}
 		elsif ($pref eq "EDAMtpc") {
 		    $edamtpc{$name} = $term;
@@ -362,7 +367,7 @@ while (<DRCAT>) {
 		if($isobs{$term}) {
 		    print STDERR "$line: EDAM-OBSOLETE: $_";
 		}
-		if($edam{$term} ne $name) {
+		if(defined($edam{$term}) && ($edam{$term} ne $name)) {
 		    print STDERR "$line: EDAM-NAME '$edam{$term}': $_";
 		}
 	    }

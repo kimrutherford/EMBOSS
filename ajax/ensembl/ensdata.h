@@ -1,10 +1,37 @@
+/* @include ensdata ***********************************************************
+**
+** Ensembl Data functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.51 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/05/24 16:57:22 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSDATA_H
 #define ENSDATA_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enscache.h"
 #include "enscoordsystem.h"
@@ -15,9 +42,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPAttributeadaptor ************************************************
 **
@@ -87,10 +114,18 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEExternaldatabaseStatus ******************************************
+/* @enum EnsEExternaldatabaseStatus *******************************************
 **
 ** Ensembl External Database Status enumeration
 **
+** @value ensEExternaldatabaseStatusNULL Null
+** @value ensEExternaldatabaseStatusKnownXref Known external reference
+** @value ensEExternaldatabaseStatusKnown Known
+** @value ensEExternaldatabaseStatusXref External reference
+** @value ensEExternaldatabaseStatusPred Predicted
+** @value ensEExternaldatabaseStatusOrth Orthologue
+** @value ensEExternaldatabaseStatusPseudo Pseudo
+** @@
 ******************************************************************************/
 
 typedef enum EnsOExternaldatabaseStatus
@@ -107,10 +142,20 @@ typedef enum EnsOExternaldatabaseStatus
 
 
 
-/* @const EnsEExternaldatabaseType ********************************************
+/* @enum EnsEExternaldatabaseType *********************************************
 **
 ** Ensembl External Database Type enumeration
 **
+** @value ensEExternaldatabaseTypeNULL Null
+** @value ensEExternaldatabaseTypeArray Array
+** @value ensEExternaldatabaseTypeAltTrans Alternative Translation
+** @value ensEExternaldatabaseTypeAltGene Alternative Gene
+** @value ensEExternaldatabaseTypeMisc Miscellaneous
+** @value ensEExternaldatabaseTypeLit Literature
+** @value ensEExternaldatabaseTypePrimaryDbSynonym Primary database synonym
+** @value ensEExternaldatabaseTypeEnsembl  Ensembl
+** @value ensEExternaldatabaseTypeIgnore  Ignore
+** @@
 ******************************************************************************/
 
 typedef enum EnsOExternaldatabaseType
@@ -118,19 +163,32 @@ typedef enum EnsOExternaldatabaseType
     ensEExternaldatabaseTypeNULL,
     ensEExternaldatabaseTypeArray,
     ensEExternaldatabaseTypeAltTrans,
+    ensEExternaldatabaseTypeAltGene,
     ensEExternaldatabaseTypeMisc,
     ensEExternaldatabaseTypeLit,
     ensEExternaldatabaseTypePrimaryDbSynonym,
-    ensEExternaldatabaseTypeEnsembl
+    ensEExternaldatabaseTypeEnsembl,
+    ensEExternaldatabaseTypeIgnore
 } EnsEExternaldatabaseType;
 
 
 
 
-/* @const EnsEExternalreferenceInfotype ***************************************
+/* @enum EnsEExternalreferenceInfotype ****************************************
 **
 ** Ensembl External Reference Information Type enumeration
 **
+** @value ensEExternalreferenceInfotypeNULL Null
+** @value ensEExternalreferenceInfotypeProjection Projection
+** @value ensEExternalreferenceInfotypeMisc Miscellaneous
+** @value ensEExternalreferenceInfotypeDependent Dependent
+** @value ensEExternalreferenceInfotypeDirect Direct
+** @value ensEExternalreferenceInfotypeSequenceMatch Sequence Match
+** @value ensEExternalreferenceInfotypeInferredPair Inferred Pair
+** @value ensEExternalreferenceInfotypeProbe Probe
+** @value ensEExternalreferenceInfotypeUnmapped Unmapped
+** @value ensEExternalreferenceInfotypeCoordinateOverlap Coordinate Overlap
+** @@
 ******************************************************************************/
 
 typedef enum EnsOExternalreferenceInfotype
@@ -150,10 +208,16 @@ typedef enum EnsOExternalreferenceInfotype
 
 
 
-/* @const EnsEExternalreferenceObjecttype *************************************
+/* @enum EnsEExternalreferenceObjecttype **************************************
 **
 ** Ensembl External Reference Object Type enumeration
 **
+** @value ensEExternalreferenceObjecttypeNULL Null
+** @value ensEExternalreferenceObjecttypeRawContig Raw Contig
+** @value ensEExternalreferenceObjectypeTranscript Transcript
+** @value ensEExternalreferenceObjecttypeGene Gene
+** @value ensEExternalreferenceObjecttypeTranslation Translation
+** @@
 ******************************************************************************/
 
 typedef enum EnsOExternalreferenceObjecttype
@@ -168,10 +232,18 @@ typedef enum EnsOExternalreferenceObjecttype
 
 
 
-/* @const EnsEGeneStatus ******************************************************
+/* @enum EnsEGeneStatus *******************************************************
 **
 ** Ensembl Gene Status enumeration
 **
+** @value ensEGeneStatusNULL Null
+** @value ensEGeneStatusKnown Known
+** @value ensEGeneStatusNovel Novel
+** @value ensEGeneStatusPutative Putative
+** @value ensEGeneStatusPredicted Predicted
+** @value ensEGeneStatusKnownByProjection Known by projection
+** @value ensEGeneStatusUnknown Unknown
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGeneStatus
@@ -188,10 +260,14 @@ typedef enum EnsOGeneStatus
 
 
 
-/* @const EnsESliceTopology ***************************************************
+/* @enum EnsESliceTopology ****************************************************
 **
 ** Ensembl Slice Topology enumeration
 **
+** @value ensESliceTopologyNULL Null
+** @value ensESliceTopologyLinear Linear
+** @value ensESliceTopologyCircular Circular
+** @@
 ******************************************************************************/
 
 typedef enum EnsOSliceTopology
@@ -204,10 +280,15 @@ typedef enum EnsOSliceTopology
 
 
 
-/* @const EnsESliceType *******************************************************
+/* @enum EnsESliceType ********************************************************
 **
 ** Ensembl Slice Type enumeration
 **
+** @value ensESliceTypeNULL Null
+** @value ensESliceTypeLinear Linear
+** @value ensESliceTypeCircular Circular
+** @value ensESliceTypeLrg Locus Reference Genome
+** @@
 ******************************************************************************/
 
 typedef enum EnsOSliceType
@@ -221,10 +302,19 @@ typedef enum EnsOSliceType
 
 
 
-/* @const EnsETranscriptStatus ************************************************
+/* @enum EnsETranscriptStatus *************************************************
 **
 ** Ensembl Transcript Status enumeration
 **
+** @value ensETranscriptStatusNULL Null
+** @value ensETranscriptStatusKnown Known
+** @value ensETranscriptStatusNovel Novel
+** @value ensETranscriptStatusPutative Putative
+** @value ensETranscriptStatusPredicted Predicted
+** @value ensETranscriptStatusKnownByProjection Known by projection
+** @value ensETranscriptStatusUnknown Unknown
+** @value ensETranscriptStatusAnnotated Annotated
+** @@
 ******************************************************************************/
 
 typedef enum EnsOTranscriptStatus
@@ -235,15 +325,16 @@ typedef enum EnsOTranscriptStatus
     ensETranscriptStatusPutative,
     ensETranscriptStatusPredicted,
     ensETranscriptStatusKnownByProjection,
-    ensETranscriptStatusUnknown
+    ensETranscriptStatusUnknown,
+    ensETranscriptStatusAnnotated
 } EnsETranscriptStatus;
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPSeqregionadaptor *************************************************
 **
@@ -477,9 +568,7 @@ typedef struct EnsSGenericassemblymapper
 ** Ensembl Generic Assembly Mapper that allows for mappings between
 ** Ensembl Coordinate System objects that require multi-step mapping.
 ** For example if explicit mappings are defined between the following
-** Coordinate System objects,
-**   chromosome ... contig
-**   contig     ... clone
+** Coordinate System objects, chromosome/contig and contig/clone,
 ** the Ensembl Chained Assembly Mapper would be able to perform implicit
 ** mapping between the "chromosome" and "clone" Ensembl Coordinate System
 ** objects. This should be transparent to the user of this module, and users
@@ -496,10 +585,10 @@ typedef struct EnsSGenericassemblymapper
 ** @attr MapperSourceMiddle [EnsPMapper] Source to middle Ensembl Mapper
 ** @attr MapperTargetMiddle [EnsPMapper] Target to middle Ensembl Mapper
 ** @attr MapperSourceTarget [EnsPMapper] Source to target Ensembl Mapper
-** @attr RegistrySource [EnsPMapperrangeregistry] Source Ensembl Mapper
-**                                                Range Registry
-** @attr RegistryTarget [EnsPMapperrangeregistry] Target Ensembl Mapper
-**                                                Range Registry
+** @attr RegistrySource [EnsPMapperrangeregistry]
+** Source Ensembl Mapper Range Registry
+** @attr RegistryTarget [EnsPMapperrangeregistry]
+** Target Ensembl Mapper Range Registry
 ** @attr Maximum [ajuint] Maximum Ensembl Mapper Pair count
 ** @attr Use [ajuint] Use counter
 ** @@
@@ -540,11 +629,14 @@ typedef struct EnsSChainedassemblymapper
 ** @alias EnsSToplevelassemblymapper
 ** @alias EnsOToplevelassemblymapper
 **
-** @attr Adaptor [EnsPAssemblymapperadaptor] Ensembl Assembly Mapper Adaptor
-** @attr Coordsystems [AjPList] AJAX List of Ensembl Coordinate System objects
+** @attr Adaptor [EnsPAssemblymapperadaptor]
+** Ensembl Assembly Mapper Adaptor
+** @attr Coordsystems [AjPList]
+** AJAX List of Ensembl Coordinate System objects
 ** @attr CoordsystemAssembled [EnsPCoordsystem]
-**                            Top-level Ensembl Coordinate System
-** @attr CoordsystemComponent [EnsPCoordsystem] Other Ensembl Coordinate System
+** Top-level Ensembl Coordinate System
+** @attr CoordsystemComponent [EnsPCoordsystem]
+** Other Ensembl Coordinate System
 ** @attr Use [ajuint] Use counter
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
@@ -578,8 +670,8 @@ typedef struct EnsSToplevelassemblymapper
 ** @attr Adaptor [EnsPAssemblymapperadaptor] Ensembl Assembly Mapper Adaptor
 ** @attr Generic [EnsPGenericassemblymapper] Ensembl Generic Assembly Mapper
 ** @attr Chained [EnsPChainedassemblymapper] Ensembl Chained Assembly Mapper
-** @attr Toplevel [EnsPToplevelassemblymapper] Ensembl Top-Level
-**                                             Assembly Mapper
+** @attr Toplevel [EnsPToplevelassemblymapper]
+** Ensembl Top-Level Assembly Mapper
 ** @attr Use [ajuint] Use counter
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
@@ -590,7 +682,7 @@ typedef struct EnsSToplevelassemblymapper
 ** Bio::EnsEMBL::ChainedAssemblyMapper
 ** Bio::EnsEMBL::TopLevelAssemblyMapper
 **
-** The objects can be distinguished by their Type element.
+** The objects can be distinguished by their Type member.
 ******************************************************************************/
 
 typedef struct EnsSAssemblymapper
@@ -622,8 +714,8 @@ typedef struct EnsSAssemblymapper
 
 typedef struct EnsSBaseadaptorLeftjoin
 {
-    const char* Table;
-    const char* Condition;
+    const char *Table;
+    const char *Condition;
 } EnsOBaseadaptorLeftjoin;
 
 #define EnsPBaseadaptorLeftjoin EnsOBaseadaptorLeftjoin*
@@ -656,34 +748,34 @@ typedef struct EnsSBaseadaptorLeftjoin
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @attr Tables [const char* const*] Table names
 ** @attr Columns [const char* const*] Column names
-** @attr Leftjoin [const EnsPBaseadaptorLeftjoin] Ensembl Base Adaptor
-**                                                SQL LEFT JOIN conditions
+** @attr Leftjoin [const EnsPBaseadaptorLeftjoin]
+** Ensembl Base Adaptor SQL LEFT JOIN conditions
 ** @attr Defaultcondition [const char*] SQL SELECT default condition
 ** @attr Finalcondition [const char*] SQL SELECT final condition
-** @attr StraightJoin [AjBool] Set the MySQL-specific SQL SELECT STRAIGHT_JOIN
-**                             option
+** @attr StraightJoin [AjBool]
+** Set the MySQL-specific SQL SELECT STRAIGHT_JOIN option
 ** @attr Padding [ajuint] Padding to alignment boundary
-** @attr Fstatement [(AjBool*)] Statement function address
+** @attr Fstatement [AjBool function] Statement function address
 ** @@
 ** NOTE: In constrast to the Perl API, this implementation does not feature a
-** species_id element, which is already set in the Ensembl Database Adaptor.
+** species_id member, which is already set in the Ensembl Database Adaptor.
 ******************************************************************************/
 
 typedef struct EnsSBaseadaptor
 {
     EnsPDatabaseadaptor Adaptor;
-    const char* const* Tables;
-    const char* const* Columns;
+    const char *const *Tables;
+    const char *const *Columns;
     const EnsPBaseadaptorLeftjoin Leftjoin;
-    const char* Defaultcondition;
-    const char* Finalcondition;
+    const char *Defaultcondition;
+    const char *Finalcondition;
     AjBool StraightJoin;
     ajuint Padding;
-    AjBool (*Fstatement)(EnsPDatabaseadaptor dba,
-                         const AjPStr sql,
-                         EnsPAssemblymapper mapper,
-                         EnsPSlice slice,
-                         AjPList objects);
+    AjBool (*Fstatement) (struct EnsSBaseadaptor *dba,
+                          const AjPStr sql,
+                          EnsPAssemblymapper mapper,
+                          EnsPSlice slice,
+                          AjPList objects);
 } EnsOBaseadaptor;
 
 #define EnsPBaseadaptor EnsOBaseadaptor*
@@ -905,8 +997,8 @@ typedef struct EnsSAttribute
 ** @attr Use [ajuint] Use counter
 ** @cc Bio::EnsEMBL::Storable
 ** @attr Identifier [ajuint] Internal SQL database identifier (primary key)
-** @attr Adaptor [EnsPExternaldatabaseadaptor] Ensembl External
-**                                             Database Adaptor
+** @attr Adaptor [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
 ** @cc Bio::EnsEMBL::???
 ** @cc "external_db" SQL table
 ** @attr Name [AjPStr] Database name
@@ -1182,7 +1274,7 @@ typedef struct EnsSFeature
 **
 ** @attr Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @attr Cache [EnsPCache] Ensembl LRU Cache
-** @attr Tables [char**] One dimensional array of table name character strings,
+** @attr Tables [char**] One-dimensional array of table name character strings,
 **                       which is used for multi-species databases only.
 **                       This array is dynamically allocated to extend for
 **                       "seq_region" and "coord_system" tables. The array is
@@ -1192,12 +1284,14 @@ typedef struct EnsSFeature
 **                         is dynamically allocated to extend for "seq_region"
 **                         and "coord_system" conditions. The string is then
 **                         set in the Ensembl Base Adaptor object.
-** @attr GetFeature [(EnsPFeature*)] Ensembl Object-specific GetFeature
-**                                   element function
-** @attr Reference [(void**)] Ensembl Object-specific referencing function
-** @attr Delete [(void*)] Ensembl Object-specific deletion function
+** @attr FobjectGetFeature [EnsPFeature function]
+** Ensembl Object-specific objectGetFeature member function
+** @attr Freference [void* function]
+** Ensembl Object-specific referencing function
+** @attr Fdelete [void function]
+** Ensembl Object-specific deletion function
+** @attr Startequalsend [AjBool] Simplified SQL in featureadaptorSliceFetch
 ** @attr Maximumlength [ajint] Maximum length of a particular Feature type
-** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -1205,13 +1299,13 @@ typedef struct EnsSFeatureadaptor
 {
     EnsPBaseadaptor Adaptor;
     EnsPCache Cache;
-    char** Tables;
-    char* Condition;
-    EnsPFeature (*GetFeature)(const void* object);
-    void* (*Reference)(void* value);
-    void (*Delete)(void** value);
+    char **Tables;
+    char *Condition;
+    EnsPFeature (*FobjectGetFeature) (const void *object);
+    void *(*Freference) (void *value);
+    void (*Fdelete) (void **Pvalue);
+    AjBool Startequalsend;
     ajint Maximumlength;
-    ajuint Padding;
 } EnsOFeatureadaptor;
 
 #define EnsPFeatureadaptor EnsOFeatureadaptor*
@@ -1268,7 +1362,7 @@ typedef struct EnsSExonadaptor
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr DateCreation [AjPStr] Creation date
 ** @attr DateModification [AjPStr] Modification date
-** @cc Additional elements not in SQL tables
+** @cc Additional members not in SQL tables
 ** @attr SequenceCache [AjPStr] Sequence Cache
 ** @attr Supportingfeatures [AjPList]
 ** AJAX List of Ensembl Base Align Feature objects
@@ -1343,29 +1437,29 @@ typedef struct EnsSIntron
 ** @attr Adaptor [EnsPTranslationadaptor] Ensembl Translation Adaptor
 ** @cc Bio::EnsEMBL::Translation
 ** @cc "translation" SQL table
-** @attr Startexon [EnsPExon] Ensembl Exon in which the Translation
-**                            start coordinate is annotated
-** @attr Endexon [EnsPExon] Ensembl Exon in which the Translation
-**                          end coordinate is annotated
-** @attr Start [ajuint] Start coordinate relative to start Ensembl Exon
-** @attr End [ajuint] End coordinate relative to end Ensembl Exon
+** @attr Startexon [EnsPExon]
+** Ensembl Exon in which the Translation start coordinate is annotated
+** @attr Endexon [EnsPExon]
+** Ensembl Exon in which the Translation end coordinate is annotated
+** @attr Start [ajuint] Start coordinate relative to the start Ensembl Exon
+** @attr End [ajuint] End coordinate relative to the end Ensembl Exon
 ** @cc "translation_stable_id" SQL table
 ** @attr Stableidentifier [AjPStr] Stable identifier
 ** @attr DateCreation [AjPStr] Creation date
 ** @attr DateModification [AjPStr] Modification date
 ** @attr Version [ajuint] Version
 ** @attr Padding [ajuint] Padding to alignment boundary
-** @cc Additional elements not in SQL tables
+** @cc Additional members not in SQL tables
 ** @attr Attributes [AjPList] AJAX List of Ensembl Attribute objects
 ** @attr Databaseentries [AjPList] AJAX List of Ensembl Database Entry objects
 ** @attr Proteinfeatures [AjPList] AJAX List of Ensembl Protein Feature objects
-** @attr Sequence [AjPStr] Translation sequence
+** @attr Sequence [AjPStr] Sequence
 ** @attr TranscriptStart [ajuint]
-** Start coordinate relative to Ensembl Transcript (cDNA)
+** Start coordinate relative to the Ensembl Transcript (cDNA)
 ** @attr TranscriptEnd [ajuint]
-** End coordinate relative to Ensembl Transcript (cDNA)
-** @attr SliceStart [ajint] Start coordinate relative to the Slice
-** @attr SliceEnd [ajint] End coordinate relative to the Slice
+** End coordinate relative to the Ensembl Transcript (cDNA)
+** @attr SliceStart [ajint] Start coordinate relative to the Ensembl Slice
+** @attr SliceEnd [ajint] End coordinate relative to the Ensembl Slice
 ** @@
 ******************************************************************************/
 
@@ -1423,7 +1517,7 @@ typedef struct EnsSTranslation
 ** @attr DateCreation [AjPStr] Creation date
 ** @attr DateModification [AjPStr] Modification date
 ** @attr Version [ajuint] Version
-** @cc Additional elements not in SQL tables
+** @cc Additional members not in SQL tables
 ** @attr Geneidentifier [ajuint] Ensembl Gene identifier
 ** @attr Alternativetranslations [AjPList]
 ** AJAX List of alternative Ensembl Translation objects
@@ -1434,7 +1528,8 @@ typedef struct EnsSTranslation
 ** AJAX List of Ensembl Base Align Feature objects
 ** @attr Translation [EnsPTranslation] Ensembl Translation
 ** @attr Sequenceedits [AjBool] Enable Ensembl Sequence Edit objects
-** @attr Canonical [AjBool] Canonical
+** @attr Padding [ajuint] Padding to alignment boundary
+** @attr Canonical [AjBool*] Canonical attribute
 ** @cc Bio::EnsEMBL::TranscriptMapper
 ** @attr ExonCoordMapper [EnsPMapper] Ensembl Mapper
 ** @@
@@ -1463,7 +1558,8 @@ typedef struct EnsSTranscript
     AjPList Supportingfeatures;
     EnsPTranslation Translation;
     AjBool Sequenceedits;
-    AjBool Canonical;
+    ajuint Padding;
+    AjBool *Canonical;
     EnsPMapper ExonCoordMapper;
 } EnsOTranscript;
 
@@ -1516,14 +1612,14 @@ typedef struct EnsSGeneadaptor
 ** @attr Status [EnsEGeneStatus] Status
 ** @attr Current [AjBool] Current attribute
 ** @attr Canonicalannotation [AjPStr] Canonical annotation
-** @attr Canonicaltranscriptidentifier [ajuint] Canonical Ensembl Transcript
-**                                              identifier
+** @attr Canonicaltranscriptidentifier [ajuint]
+** Canonical Ensembl Transcript identifier
 ** @attr Version [ajuint] Version
 ** @cc "gene_stable_id" SQL table
 ** @attr Stableidentifier [AjPStr] Stable identifier
 ** @attr DateCreation [AjPStr] Creation date
 ** @attr DateModification [AjPStr] Modification date
-** @cc Additional elements not in SQL tables
+** @cc Additional members not in SQL tables
 ** @attr Attributes [AjPList] AJAX List of Ensembl Attribute objects
 ** @attr Databaseentries [AjPList] AJAX List of Ensembl Database Entry objects
 ** @attr Transcripts [AjPList] AJAX List of Ensembl Transcript objects
@@ -1591,9 +1687,17 @@ typedef struct EnsSSeqregionsynonym
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
 
 
 

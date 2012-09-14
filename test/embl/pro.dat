@@ -205,7 +205,7 @@ RX   PUBMED; 6288696.
 RA   Horowitz H., Platt T.;
 RT   "A termination site for LacI transcription is between the CAP site and the
 RT   lac promoter";
-RL   J. Biol. Chem. 257(19):11740-11746(1982).
+RL   J Biol Chem 257(19):11740-11746(1982).
 XX
 RN   [25]
 RX   PUBMED; 6290487.
@@ -213,7 +213,7 @@ RA   Klein R.D., Wells R.D.;
 RT   "Effects of neighboring DNA homopolymers on the biochemical and physical
 RT   properties of the Escherichia coli lactose promoter. I. Cloning and
 RT   characterization studies";
-RL   J. Biol. Chem. 257(21):12954-12961(1982).
+RL   J Biol Chem 257(21):12954-12961(1982).
 XX
 RN   [26]
 RP   1183-1291
@@ -243,7 +243,7 @@ RX   PUBMED; 6309841.
 RA   Cone K.C., Sellitti M.A., Steege D.A.;
 RT   "Lac repressor mRNA transcription terminates in vivo in the lac control
 RT   region";
-RL   J. Biol. Chem. 258(18):11296-11304(1983).
+RL   J Biol Chem 258(18):11296-11304(1983).
 XX
 RN   [30]
 RX   DOI; 10.1073/pnas.80.22.6785.
@@ -388,7 +388,6 @@ FT                   /gene="lacI"
 FT                   /note="lac repressor protein (gtg start codon)"
 FT                   /db_xref="GOA:P03023"
 FT                   /db_xref="InterPro:IPR000843"
-FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="InterPro:IPR010982"
 FT                   /db_xref="PDB:1CJG"
 FT                   /db_xref="PDB:1EFA"
@@ -463,6 +462,9 @@ FT                   /db_xref="InterPro:IPR013781"
 FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="InterPro:IPR017853"
+FT                   /db_xref="InterPro:IPR023230"
+FT                   /db_xref="InterPro:IPR023232"
+FT                   /db_xref="InterPro:IPR023933"
 FT                   /db_xref="PDB:1BGL"
 FT                   /db_xref="PDB:1BGM"
 FT                   /db_xref="PDB:1DP0"
@@ -493,8 +495,32 @@ FT                   /db_xref="PDB:3DYM"
 FT                   /db_xref="PDB:3DYO"
 FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="PDB:3E1F"
+FT                   /db_xref="PDB:3I3B"
+FT                   /db_xref="PDB:3I3D"
+FT                   /db_xref="PDB:3I3E"
 FT                   /db_xref="PDB:3IAP"
 FT                   /db_xref="PDB:3IAQ"
+FT                   /db_xref="PDB:3MUY"
+FT                   /db_xref="PDB:3MUZ"
+FT                   /db_xref="PDB:3MV0"
+FT                   /db_xref="PDB:3MV1"
+FT                   /db_xref="PDB:3SEP"
+FT                   /db_xref="PDB:3T08"
+FT                   /db_xref="PDB:3T09"
+FT                   /db_xref="PDB:3T0A"
+FT                   /db_xref="PDB:3T0B"
+FT                   /db_xref="PDB:3T0D"
+FT                   /db_xref="PDB:3T2O"
+FT                   /db_xref="PDB:3T2P"
+FT                   /db_xref="PDB:3T2Q"
+FT                   /db_xref="PDB:3VD3"
+FT                   /db_xref="PDB:3VD4"
+FT                   /db_xref="PDB:3VD5"
+FT                   /db_xref="PDB:3VD7"
+FT                   /db_xref="PDB:3VD9"
+FT                   /db_xref="PDB:3VDA"
+FT                   /db_xref="PDB:3VDB"
+FT                   /db_xref="PDB:3VDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="AAA24053.1"
 FT                   /translation="MTMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
@@ -524,13 +550,15 @@ FT                   /db_xref="GOA:P02920"
 FT                   /db_xref="InterPro:IPR000576"
 FT                   /db_xref="InterPro:IPR016196"
 FT                   /db_xref="InterPro:IPR018457"
-FT                   /db_xref="InterPro:IPR020480"
+FT                   /db_xref="InterPro:IPR020846"
+FT                   /db_xref="InterPro:IPR022814"
 FT                   /db_xref="PDB:1M2U"
 FT                   /db_xref="PDB:1PV6"
 FT                   /db_xref="PDB:1PV7"
 FT                   /db_xref="PDB:2CFP"
 FT                   /db_xref="PDB:2CFQ"
 FT                   /db_xref="PDB:2V8N"
+FT                   /db_xref="PDB:2Y5Y"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="AAA24054.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
@@ -550,6 +578,7 @@ FT                   /db_xref="GOA:P07464"
 FT                   /db_xref="InterPro:IPR001451"
 FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="InterPro:IPR024688"
 FT                   /db_xref="PDB:1KQA"
 FT                   /db_xref="PDB:1KRR"
 FT                   /db_xref="PDB:1KRU"
@@ -733,6 +762,7 @@ FT                   /db_xref="GOA:P07464"
 FT                   /db_xref="InterPro:IPR001451"
 FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="InterPro:IPR024688"
 FT                   /db_xref="PDB:1KQA"
 FT                   /db_xref="PDB:1KRR"
 FT                   /db_xref="PDB:1KRU"
@@ -813,7 +843,6 @@ FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
 FT                   /db_xref="InterPro:IPR000843"
-FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="InterPro:IPR010982"
 FT                   /db_xref="PDB:1CJG"
 FT                   /db_xref="PDB:1EFA"
@@ -918,6 +947,9 @@ FT                   /db_xref="InterPro:IPR013781"
 FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="InterPro:IPR017853"
+FT                   /db_xref="InterPro:IPR023230"
+FT                   /db_xref="InterPro:IPR023232"
+FT                   /db_xref="InterPro:IPR023933"
 FT                   /db_xref="PDB:1BGL"
 FT                   /db_xref="PDB:1BGM"
 FT                   /db_xref="PDB:1DP0"
@@ -948,8 +980,32 @@ FT                   /db_xref="PDB:3DYM"
 FT                   /db_xref="PDB:3DYO"
 FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="PDB:3E1F"
+FT                   /db_xref="PDB:3I3B"
+FT                   /db_xref="PDB:3I3D"
+FT                   /db_xref="PDB:3I3E"
 FT                   /db_xref="PDB:3IAP"
 FT                   /db_xref="PDB:3IAQ"
+FT                   /db_xref="PDB:3MUY"
+FT                   /db_xref="PDB:3MUZ"
+FT                   /db_xref="PDB:3MV0"
+FT                   /db_xref="PDB:3MV1"
+FT                   /db_xref="PDB:3SEP"
+FT                   /db_xref="PDB:3T08"
+FT                   /db_xref="PDB:3T09"
+FT                   /db_xref="PDB:3T0A"
+FT                   /db_xref="PDB:3T0B"
+FT                   /db_xref="PDB:3T0D"
+FT                   /db_xref="PDB:3T2O"
+FT                   /db_xref="PDB:3T2P"
+FT                   /db_xref="PDB:3T2Q"
+FT                   /db_xref="PDB:3VD3"
+FT                   /db_xref="PDB:3VD4"
+FT                   /db_xref="PDB:3VD5"
+FT                   /db_xref="PDB:3VD7"
+FT                   /db_xref="PDB:3VD9"
+FT                   /db_xref="PDB:3VDA"
+FT                   /db_xref="PDB:3VDB"
+FT                   /db_xref="PDB:3VDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="CAA23570.1"
 FT                   /translation="FQLSAGRYHYQLVWCQK"
@@ -960,13 +1016,15 @@ FT                   /db_xref="GOA:P02920"
 FT                   /db_xref="InterPro:IPR000576"
 FT                   /db_xref="InterPro:IPR016196"
 FT                   /db_xref="InterPro:IPR018457"
-FT                   /db_xref="InterPro:IPR020480"
+FT                   /db_xref="InterPro:IPR020846"
+FT                   /db_xref="InterPro:IPR022814"
 FT                   /db_xref="PDB:1M2U"
 FT                   /db_xref="PDB:1PV6"
 FT                   /db_xref="PDB:1PV7"
 FT                   /db_xref="PDB:2CFP"
 FT                   /db_xref="PDB:2CFQ"
 FT                   /db_xref="PDB:2V8N"
+FT                   /db_xref="PDB:2Y5Y"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
@@ -984,6 +1042,7 @@ FT                   /db_xref="GOA:P07464"
 FT                   /db_xref="InterPro:IPR001451"
 FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="InterPro:IPR024688"
 FT                   /db_xref="PDB:1KQA"
 FT                   /db_xref="PDB:1KRR"
 FT                   /db_xref="PDB:1KRU"
@@ -1071,6 +1130,9 @@ FT                   /db_xref="InterPro:IPR013781"
 FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="InterPro:IPR017853"
+FT                   /db_xref="InterPro:IPR023230"
+FT                   /db_xref="InterPro:IPR023232"
+FT                   /db_xref="InterPro:IPR023933"
 FT                   /db_xref="PDB:1BGL"
 FT                   /db_xref="PDB:1BGM"
 FT                   /db_xref="PDB:1DP0"
@@ -1101,8 +1163,32 @@ FT                   /db_xref="PDB:3DYM"
 FT                   /db_xref="PDB:3DYO"
 FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="PDB:3E1F"
+FT                   /db_xref="PDB:3I3B"
+FT                   /db_xref="PDB:3I3D"
+FT                   /db_xref="PDB:3I3E"
 FT                   /db_xref="PDB:3IAP"
 FT                   /db_xref="PDB:3IAQ"
+FT                   /db_xref="PDB:3MUY"
+FT                   /db_xref="PDB:3MUZ"
+FT                   /db_xref="PDB:3MV0"
+FT                   /db_xref="PDB:3MV1"
+FT                   /db_xref="PDB:3SEP"
+FT                   /db_xref="PDB:3T08"
+FT                   /db_xref="PDB:3T09"
+FT                   /db_xref="PDB:3T0A"
+FT                   /db_xref="PDB:3T0B"
+FT                   /db_xref="PDB:3T0D"
+FT                   /db_xref="PDB:3T2O"
+FT                   /db_xref="PDB:3T2P"
+FT                   /db_xref="PDB:3T2Q"
+FT                   /db_xref="PDB:3VD3"
+FT                   /db_xref="PDB:3VD4"
+FT                   /db_xref="PDB:3VD5"
+FT                   /db_xref="PDB:3VD7"
+FT                   /db_xref="PDB:3VD9"
+FT                   /db_xref="PDB:3VDA"
+FT                   /db_xref="PDB:3VDB"
+FT                   /db_xref="PDB:3VDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="CAA23573.1"
 FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
@@ -1213,8 +1299,8 @@ RT   protein of Escherichia coli";
 RL   Proc. Natl. Acad. Sci. U.S.A. 77(7):3845-3849(1980).
 XX
 DR   GOA; P0A8N0.
-DR   InterPro; IPR009390; DUF1047.
-DR   UniProtKB/Swiss-Prot; P0A8N0; YCBG_ECOLI.
+DR   InterPro; IPR009390; Ter_macrodom_MatS-bd_MatP.
+DR   UniProtKB/Swiss-Prot; P0A8N0; MATP_ECOLI.
 XX
 CC   KST ECO.OMPA
 XX
@@ -1235,14 +1321,16 @@ FT                   /translation="MYTSGYAHRSSSFSSAASKIARVSTENTTAGLISEVVYREDQPMM
 FT                   TQLLLLPLLQQLGQQSRWQLWLTPQQKLSREWVQASGLPLTKVMQISQLSPCHTVESMV
 FT                   RALRTGNYSVVIGWLADDLTEEEHAEVVDAANEGNAMGFIIHSGKRILSRHETTFRAKN
 FT                   SL"
-FT   conflict        906..906
+FT   misc_difference 906..906
 FT                   /note="may be missing [2]"
+FT                   /note="conflict"
 FT                   /citation=[2]
 FT   CDS             1037..2077
 FT                   /transl_table=11
 FT                   /gene="ompA"
 FT                   /product="ompA protein"
 FT                   /db_xref="GOA:P0A910"
+FT                   /db_xref="InterPro:IPR000498"
 FT                   /db_xref="InterPro:IPR002368"
 FT                   /db_xref="InterPro:IPR006664"
 FT                   /db_xref="InterPro:IPR006665"
@@ -1253,6 +1341,7 @@ FT                   /db_xref="PDB:1G90"
 FT                   /db_xref="PDB:1QJP"
 FT                   /db_xref="PDB:2GE4"
 FT                   /db_xref="PDB:2JMM"
+FT                   /db_xref="PDB:3NB3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P0A910"
 FT                   /protein_id="CAA23588.1"
 FT                   /translation="MKKTAIAIAVALAGFATVAQAAPKDNTWYTGAKLGWSQYHDTGFI
@@ -1328,7 +1417,7 @@ RN   [2]
 RP   1-1212
 RA   Wilson S.A.;
 RT   ;
-RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (17-JAN-1994) to the INSDC.
 RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower Street,
 RL   London WC1E 6BT, UK
 XX
@@ -1340,7 +1429,9 @@ RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
 RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
 RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
 RT   (AmiS)";
-RL   J. Biol. Chem. 270(32):18818-18824(1995).
+RL   J Biol Chem 270(32):18818-18824(1995).
+XX
+DR   StrainInfo; 345027; 0.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -1429,6 +1520,7 @@ FT                   /product="aliphatic amidase"
 FT                   /EC_number="3.5.1.4"
 FT                   /db_xref="GOA:P11436"
 FT                   /db_xref="InterPro:IPR003010"
+FT                   /db_xref="InterPro:IPR023719"
 FT                   /db_xref="PDB:1K17"
 FT                   /db_xref="PDB:2UXY"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P11436"
@@ -1480,7 +1572,7 @@ RN   [1]
 RP   1167-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-DEC-1988) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
@@ -1505,7 +1597,7 @@ RN   [4]
 RP   1-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (04-SEP-1991) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
@@ -1574,8 +1666,9 @@ FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
 FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
-FT   conflict        1281
+FT   misc_difference 1281
 FT                   /replace="g"
+FT                   /note="conflict"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
@@ -1642,7 +1735,7 @@ RN   [2]
 RP   1-1130
 RA   Wilson S.A.;
 RT   ;
-RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (17-JAN-1994) to the INSDC.
 RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower Street,
 RL   London WC1E 6BT, UK
 XX
@@ -1654,7 +1747,9 @@ RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
 RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
 RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
 RT   (AmiS)";
-RL   J. Biol. Chem. 270(32):18818-18824(1995).
+RL   J Biol Chem 270(32):18818-18824(1995).
+XX
+DR   StrainInfo; 345027; 0.
 XX
 FH   Key             Location/Qualifiers
 FH

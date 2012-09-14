@@ -1,472 +1,509 @@
-/******************************************************************************
-** 
-** @source ajdmx.c 
+/* @source ajdmx **************************************************************
 **
-** AJAX library code for some of the DOMAINATRIX EMBASSY applications. 
-** For use with the Scophit and Scopalign objects.  The code is disparate 
-** including low-level functions and algorithms.  The functionality will 
-** eventually be subsumed by other AJAX and NUCLEUS libraries. 
-** 
+** AJAX library code for some of the DOMAINATRIX EMBASSY applications.
+** For use with the Scophit and Scopalign objects.  The code is disparate
+** including low-level functions and algorithms.  The functionality will
+** eventually be subsumed by other AJAX and NUCLEUS libraries.
+**
 ** @author Copyright (C) 2004 Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
 ** @author Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
-** @version 1.0 
+** @version $Revision: 1.40 $
+** @modified $Date: 2012/07/02 16:47:42 $ by $Author: rice $
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
-** 
+** version 2.1 of the License, or (at your option) any later version.
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
-** 
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
-****************************************************************************/
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
+#include "ajlib.h"
 
-
-
-/* ======================================================================= */
-/* ============================ include files ============================ */
-/* ======================================================================= */
+#include "ajdmx.h"
+#include "ajarr.h"
+#include "ajmath.h"
+#include "ajfileio.h"
+#include "ajseqwrite.h"
 
 #include <math.h>
-#include "ajax.h"
-
-
-/* ======================================================================= */
-/* ============================ private data ============================= */
-/* ======================================================================= */
-
-
-
-static AjPStr dmxStrline    = NULL;     /* Line of text */
-static AjPStr dmxStrtype    = NULL;
-static AjPStr dmxStrclass   = NULL;
-static AjPStr dmxStrfold    = NULL;
-static AjPStr dmxStrsuper   = NULL;
-static AjPStr dmxStrfamily  = NULL;
-static AjPStr dmxStrarch    = NULL;
-static AjPStr dmxStrtopo    = NULL;
-static AjPStr dmxStrpostsim = NULL;/* Post-similar line */
-static AjPStr dmxStrposttmp = NULL;/* Temp. storage for post-similar line */
-
-static AjPStr dmxStrposisim = NULL;   /* Positions line */
-static AjPStr dmxStrpositmp = NULL;   /* Temp. storage for Positions line */
-static AjPStr dmxStrseq1    = NULL;
-static AjPStr dmxStrcodetmp = NULL;     /* Id code of sequence */
-
-
-/* ======================================================================= */
-/* ================= Prototypes for private functions ==================== */
-/* ======================================================================= */
 
 
 
 
-
-/* ======================================================================= */
-/* ========================== private functions ========================== */
-/* ======================================================================= */
-
-
-static void dmxTraceScophit(const AjPScophit scophit, const char* title);
-
-
-
-/* ======================================================================= */
-/* =========================== constructors ============================== */
-/* ======================================================================= */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* @section Constructors ****************************************************
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
+
+
+
+
+static AjPStr dmxGStrline    = NULL; /* Line of text */
+static AjPStr dmxGStrtype    = NULL;
+static AjPStr dmxGStrclass   = NULL;
+static AjPStr dmxGStrfold    = NULL;
+static AjPStr dmxGStrsuper   = NULL;
+static AjPStr dmxGStrfamily  = NULL;
+static AjPStr dmxGStrarch    = NULL;
+static AjPStr dmxGStrtopo    = NULL;
+static AjPStr dmxGStrpostsim = NULL; /* Post-similar line */
+static AjPStr dmxGStrposttmp = NULL; /* Temp. storage for post-similar line */
+
+static AjPStr dmxGStrposisim = NULL; /* Positions line */
+static AjPStr dmxGStrpositmp = NULL; /* Temp. storage for Positions line */
+static AjPStr dmxGStrseq1    = NULL;
+static AjPStr dmxGStrcodetmp = NULL; /* Id code of sequence */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
+
+
+
+
+static void dmxTraceScophit(const AjPScophit scophit, const char *title);
+
+
+
+
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
+
+
+
+
+/* @section Constructors ******************************************************
 **
-** All constructors return a pointer to a new instance. It is the 
-** responsibility of the user to first destroy any previous instance. The 
-** target pointer does not need to be initialised to NULL, but it is good 
+** All constructors return a pointer to a new instance. It is the
+** responsibility of the user to first destroy any previous instance. The
+** target pointer does not need to be initialised to NULL, but it is good
 ** programming practice to do so anyway.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitNew ****************************************************
+/* @func ajDmxScophitNew ******************************************************
 **
-** Scophit object constructor. 
+** Constructor for an AJAX SCOP Hit object.
 **
-** @return [AjPScophit] Pointer to a Scophit object
+** @return [AjPScophit] AJAX SCOP Hit object
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
 AjPScophit ajDmxScophitNew(void)
 {
-    AjPScophit ret = NULL;
+    AjPScophit scophit = NULL;
 
+    AJNEW0(scophit);
 
-    AJNEW0(ret);
+    scophit->Class        = ajStrNew();
+    scophit->Architecture = ajStrNew();
+    scophit->Topology     = ajStrNew();
+    scophit->Fold         = ajStrNew();
+    scophit->Superfamily  = ajStrNew();
+    scophit->Family       = ajStrNew();
+    scophit->Seq          = ajStrNew();
+    scophit->Acc          = ajStrNew();
+    scophit->Spr          = ajStrNew();
+    scophit->Dom          = ajStrNew();
+    scophit->Typeobj      = ajStrNew();
+    scophit->Typesbj      = ajStrNew();
+    scophit->Model        = ajStrNew();
+    scophit->Alg          = ajStrNew();
+    scophit->Group        = ajStrNew();
+    scophit->Start        = 0U;
+    scophit->End          = 0U;
+    scophit->Rank         = 0U;
+    scophit->Score        = 0.0F;
+    scophit->Sunid_Family = 0U;
+    scophit->Eval         = 0.0F;
+    scophit->Pval         = 0.0F;
+    scophit->Target       = ajFalse;
+    scophit->Target2      = ajFalse;
+    scophit->Priority     = ajFalse;
 
-    ret->Class        = ajStrNew();
-    ret->Architecture = ajStrNew();
-    ret->Topology     = ajStrNew();
-    ret->Fold         = ajStrNew();
-    ret->Superfamily  = ajStrNew();
-    ret->Family       = ajStrNew();
-    ret->Seq          = ajStrNew();
-    ret->Acc          = ajStrNew();
-    ret->Spr          = ajStrNew();
-    ret->Dom          = ajStrNew();
-    ret->Typeobj      = ajStrNew();
-    ret->Typesbj      = ajStrNew(); 
-    ret->Model        = ajStrNew();
-    ret->Alg          = ajStrNew();
-    ret->Group        = ajStrNew();
-    ret->Start        = 0;
-    ret->End          = 0;
-    ret->Rank         = 0;
-    ret->Score        = 0;    
-    ret->Sunid_Family = 0;
-    ret->Eval         = 0;
-    ret->Pval         = 0;
-    ret->Target       = ajFalse;
-    ret->Target2      = ajFalse;
-    ret->Priority     = ajFalse;
-    
-    return ret;
+    return scophit;
 }
 
 
 
 
-/* @func ajDmxScopalgNew ****************************************************
+/* @func ajDmxScopalgNew ******************************************************
 **
-** Scopalg object constructor. This is normally called by the ajDmxScopalgRead
-** function. Fore-knowledge of the number of sequences is required.
+** Constructor for an AJAX SCOP Alignment object.
+** This is normally called by the ajDmxScopalgRead function.
+** Fore-knowledge of the number of sequences is required.
 **
-** @param [r] n [ajint]   Number of sequences
-** 
-** @return [AjPScopalg] Pointer to a Scopalg object
+** @param [r] n [ajuint] Number of sequences
+**
+** @return [AjPScopalg] AJAX SCOP Alignment object
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjPScopalg ajDmxScopalgNew(ajint n)
+AjPScopalg ajDmxScopalgNew(ajuint n)
 {
-    AjPScopalg ret = NULL;
-    ajint i = 0;
-    
-    AJNEW0(ret);
-    ret->Class        = ajStrNew();
-    ret->Architecture = ajStrNew();
-    ret->Topology     = ajStrNew();
-    ret->Fold         = ajStrNew();
-    ret->Superfamily  = ajStrNew();
-    ret->Family       = ajStrNew();
-    ret->Architecture = ajStrNew();
-    ret->Topology     = ajStrNew();
-    ret->Post_similar = ajStrNew();
-    ret->Positions    = ajStrNew();
-    ret->width = 0;
-    ret->N = n;
+    ajuint i = 0U;
+
+    AjPScopalg scopalg = NULL;
+
+    AJNEW0(scopalg);
+
+    scopalg->Class        = ajStrNew();
+    scopalg->Architecture = ajStrNew();
+    scopalg->Topology     = ajStrNew();
+    scopalg->Fold         = ajStrNew();
+    scopalg->Superfamily  = ajStrNew();
+    scopalg->Family       = ajStrNew();
+    scopalg->Architecture = ajStrNew();
+    scopalg->Topology     = ajStrNew();
+    scopalg->Post_similar = ajStrNew();
+    scopalg->Positions    = ajStrNew();
+    scopalg->Width        = 0;
+    scopalg->Number       = n;
 
     if(n)
     {
-	AJCNEW0(ret->Codes,n);
+        AJCNEW0(scopalg->Codes, n);
 
-	for(i=0;i<n;++i)
-	    ret->Codes[i] = ajStrNew();
+        for(i = 0U; i < n; i++)
+            scopalg->Codes[i] = ajStrNew();
 
-	AJCNEW0(ret->Seqs,n);
+        AJCNEW0(scopalg->Seqs, n);
 
-	for(i=0;i<n;++i)
-	    ret->Seqs[i] = ajStrNew();
+        for(i = 0U; i < n; i++)
+            scopalg->Seqs[i] = ajStrNew();
     }
 
-    return ret;
+    return scopalg;
 }
 
 
 
 
-/* @func ajDmxScopalgRead ***************************************************
+/* @func ajDmxScopalgRead *****************************************************
 **
-** Read a Scopalg object from a file. 
-** 
-** @param [u] inf      [AjPFile] Input file stream
-** @param [w] thys     [AjPScopalg*]  Scopalg object
+** Read an AJAX SCOP Alignment object from an AJAX File.
 **
-** @return [AjBool] True if the file contained any data, even an empty 
-** alignment.  False if the file did not contain a 'TY' record, which is 
+** @param [u] inf [AjPFile] Input AJAX File
+** @param [w] Pscopalg [AjPScopalg*] AJAX SCOP Alignment address
+**
+** @return [AjBool] True if the file contained any data, even an empty
+** alignment. False if the file did not contain a 'TY' record, which is
 ** taken to indicate a domain alignment file.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
+AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *Pscopalg)
 {
-    AjBool ok = ajFalse;  /* True if the file contained 'TY' record. */
-    
-    AjBool done_1st_blk   = ajFalse; /* Flag for whether we've read first
-					block of sequences */
+    AjBool ok = ajFalse;    /* True if the file contained 'TY' record. */
 
-    ajint x     = 0;   /* Loop counter */
-    ajint y     = 0;   /* Loop counter */
+    AjBool done_1st_blk = ajFalse; /* Flag for whether we've read first
+                                      block of sequences */
+
+    ajuint i    = 0U;  /* Loop counter */
+    ajuint j    = 0U;  /* Loop counter */
+
     ajint cnt   = 0;   /* Temp. counter of sequence */
-    ajint nseq  = 0;   /* No. of sequences in alignment */
+    ajuint nseq = 0U;  /* No. of sequences in alignment */
     ajint Sunid = 0;   /* SCOP Sunid for family */
     ajint ntok  = 0;   /*
-                       ** No. string tokens in sequence line from alignment.
-		       ** Sequence start and end may or may not be present, 
-		       ** therefore ntok is either 2 or 4:
-		       ** (2)  (ACC       SEQ    ) or 
-		       ** (4)  (ACC start SEQ end)
-                       */
-    
-    
+                        * No. string tokens in sequence line from alignment.
+                        * Sequence start and end may or may not be present,
+                        * therefore ntok is either 2 or 4:
+                        * (2)  (ACC       SEQ    ) or
+                        * (4)  (ACC start SEQ end)
+                        */
+
     AjPList list_seqs  = NULL;     /* List of sequences */
     AjPList list_codes = NULL;     /* List of codes */
     AjPStr  *arr_seqs  = NULL;     /* Array of sequences */
-    AjPStr  seq        = NULL;     
+    AjPStr  seq        = NULL;
     AjPStr  code       = NULL;     /* Id code of sequence */
 
-
-    /* Check args */	
+    /* Check args */
     if(!inf)
-	return ajFalse;
-    
+        return ajFalse;
+
+    if(!Pscopalg)
+        return ajFalse;
 
     /* Allocate strings */
     /* Only initialise strings if this is called for the first time */
-    if(!dmxStrline)
+    if(!dmxGStrline)
     {
-	dmxStrtype    = ajStrNew();
-	dmxStrclass   = ajStrNew();
-	dmxStrfold    = ajStrNew();
-	dmxStrsuper   = ajStrNew();
-	dmxStrfamily  = ajStrNew();
-	dmxStrarch    = ajStrNew();
-	dmxStrtopo    = ajStrNew();
-	dmxStrline    = ajStrNew();
-	dmxStrpostsim = ajStrNew();
-	dmxStrposttmp = ajStrNew();
-	dmxStrposisim = ajStrNew();
-	dmxStrpositmp = ajStrNew();
-	dmxStrcodetmp = ajStrNew();
-	dmxStrseq1    = ajStrNew();
+        dmxGStrtype    = ajStrNew();
+        dmxGStrclass   = ajStrNew();
+        dmxGStrfold    = ajStrNew();
+        dmxGStrsuper   = ajStrNew();
+        dmxGStrfamily  = ajStrNew();
+        dmxGStrarch    = ajStrNew();
+        dmxGStrtopo    = ajStrNew();
+        dmxGStrline    = ajStrNew();
+        dmxGStrpostsim = ajStrNew();
+        dmxGStrposttmp = ajStrNew();
+        dmxGStrposisim = ajStrNew();
+        dmxGStrpositmp = ajStrNew();
+        dmxGStrcodetmp = ajStrNew();
+        dmxGStrseq1    = ajStrNew();
     }
 
-    
     /* Create new lists */
     list_seqs  = ajListstrNew();
     list_codes = ajListstrNew();
 
-
     /* Read the rest of the file */
-    while(ajReadlineTrim(inf,&dmxStrline))
+    while(ajReadlineTrim(inf, &dmxGStrline))
     {
-    	if(ajStrPrefixC(dmxStrline,"# TY"))
-	{
-	    ok = ajTrue;
-	    ajStrAssignC(&dmxStrtype,ajStrGetPtr(dmxStrline)+5);
-	    ajStrRemoveWhiteExcess(&dmxStrtype);
-	}
-    	else if(ajStrPrefixC(dmxStrline,"# SI"))
-	{
-	    ajFmtScanS(dmxStrline, "%*s %*s %d", &Sunid);
-	}
-    	else if(ajStrPrefixC(dmxStrline,"# CL"))
-	{
-	    ajStrAssignC(&dmxStrclass,ajStrGetPtr(dmxStrline)+5);
-	    ajStrRemoveWhiteExcess(&dmxStrclass);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# FO"))
-	{
-	    ajStrAssignC(&dmxStrfold,ajStrGetPtr(dmxStrline)+5);
+        if(ajStrPrefixC(dmxGStrline, "# TY"))
+        {
+            ok = ajTrue;
+            ajStrAssignC(&dmxGStrtype, ajStrGetPtr(dmxGStrline) + 5);
+            ajStrRemoveWhiteExcess(&dmxGStrtype);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# SI"))
+        {
+            ajFmtScanS(dmxGStrline, "%*s %*s %d", &Sunid);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# CL"))
+        {
+            ajStrAssignC(&dmxGStrclass, ajStrGetPtr(dmxGStrline) + 5);
+            ajStrRemoveWhiteExcess(&dmxGStrclass);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# FO"))
+        {
+            ajStrAssignC(&dmxGStrfold, ajStrGetPtr(dmxGStrline) + 5);
 
-	    while((ajReadlineTrim(inf,&dmxStrline)))
-	    {
-		if(ajStrPrefixC(dmxStrline,"# XX"))
-		    break;
+            while((ajReadlineTrim(inf, &dmxGStrline)))
+            {
+                if(ajStrPrefixC(dmxGStrline, "# XX"))
+                    break;
 
-		ajStrAppendC(&dmxStrfold,ajStrGetPtr(dmxStrline)+5);
-	    }
+                ajStrAppendC(&dmxGStrfold, ajStrGetPtr(dmxGStrline) + 5);
+            }
 
-	    ajStrRemoveWhiteExcess(&dmxStrfold);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# SF"))
-	{
-	    ajStrAssignC(&dmxStrsuper,ajStrGetPtr(dmxStrline)+5);
+            ajStrRemoveWhiteExcess(&dmxGStrfold);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# SF"))
+        {
+            ajStrAssignC(&dmxGStrsuper, ajStrGetPtr(dmxGStrline) + 5);
 
-	    while((ajReadlineTrim(inf,&dmxStrline)))
-	    {
-		if(ajStrPrefixC(dmxStrline,"# XX"))
-		    break;
+            while((ajReadlineTrim(inf, &dmxGStrline)))
+            {
+                if(ajStrPrefixC(dmxGStrline, "# XX"))
+                    break;
 
-		ajStrAppendC(&dmxStrsuper,ajStrGetPtr(dmxStrline)+5);
-	    }
+                ajStrAppendC(&dmxGStrsuper, ajStrGetPtr(dmxGStrline) + 5);
+            }
 
-	    ajStrRemoveWhiteExcess(&dmxStrsuper);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# FA"))
-	{
-	    ajStrAssignC(&dmxStrfamily,ajStrGetPtr(dmxStrline)+5);
+            ajStrRemoveWhiteExcess(&dmxGStrsuper);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# FA"))
+        {
+            ajStrAssignC(&dmxGStrfamily, ajStrGetPtr(dmxGStrline) + 5);
 
-	    while((ajReadlineTrim(inf,&dmxStrline)))
-	    {
-		if(ajStrPrefixC(dmxStrline,"# XX"))
-		    break;
+            while((ajReadlineTrim(inf, &dmxGStrline)))
+            {
+                if(ajStrPrefixC(dmxGStrline, "# XX"))
+                    break;
 
-		ajStrAppendC(&dmxStrfamily,ajStrGetPtr(dmxStrline)+5);
-	    }
+                ajStrAppendC(&dmxGStrfamily, ajStrGetPtr(dmxGStrline) + 5);
+            }
 
-	    ajStrRemoveWhiteExcess(&dmxStrfamily);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# AR"))
-	{
-	    ajStrAssignC(&dmxStrarch,ajStrGetPtr(dmxStrline)+5);
+            ajStrRemoveWhiteExcess(&dmxGStrfamily);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# AR"))
+        {
+            ajStrAssignC(&dmxGStrarch, ajStrGetPtr(dmxGStrline) + 5);
 
-	    while((ajReadlineTrim(inf,&dmxStrline)))
-	    {
-		if(ajStrPrefixC(dmxStrline,"# XX"))
-		    break;
+            while((ajReadlineTrim(inf, &dmxGStrline)))
+            {
+                if(ajStrPrefixC(dmxGStrline, "# XX"))
+                    break;
 
-		ajStrAppendC(&dmxStrarch,ajStrGetPtr(dmxStrline)+5);
-	    }
+                ajStrAppendC(&dmxGStrarch, ajStrGetPtr(dmxGStrline) + 5);
+            }
 
-	    ajStrRemoveWhiteExcess(&dmxStrarch);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# TP"))
-	{
-	    ajStrAssignC(&dmxStrtopo,ajStrGetPtr(dmxStrline)+5);
+            ajStrRemoveWhiteExcess(&dmxGStrarch);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# TP"))
+        {
+            ajStrAssignC(&dmxGStrtopo, ajStrGetPtr(dmxGStrline) + 5);
 
-	    while((ajReadlineTrim(inf,&dmxStrline)))
-	    {
-		if(ajStrPrefixC(dmxStrline,"# XX"))
-		    break;
+            while((ajReadlineTrim(inf, &dmxGStrline)))
+            {
+                if(ajStrPrefixC(dmxGStrline, "# XX"))
+                    break;
 
-		ajStrAppendC(&dmxStrtopo,ajStrGetPtr(dmxStrline)+5);
-	    }
+                ajStrAppendC(&dmxGStrtopo, ajStrGetPtr(dmxGStrline) + 5);
+            }
 
-	    ajStrRemoveWhiteExcess(&dmxStrtopo);
-	}
-	else if(ajStrPrefixC(dmxStrline,"# XX"))
-	    continue;
-	else if (ajStrPrefixC(dmxStrline,"# Post_similar"))
-	{
-	    /* Parse post_similar line */
-	    ajFmtScanS(dmxStrline, "%*s %*s %S", &dmxStrposttmp);
+            ajStrRemoveWhiteExcess(&dmxGStrtopo);
+        }
+        else if(ajStrPrefixC(dmxGStrline, "# XX"))
+            continue;
+        else if (ajStrPrefixC(dmxGStrline, "# Post_similar"))
+        {
+            /* Parse post_similar line */
+            ajFmtScanS(dmxGStrline, "%*s %*s %S", &dmxGStrposttmp);
 
-	    if(done_1st_blk == ajTrue)
-		ajStrAppendS(&dmxStrpostsim, dmxStrposttmp);
-	    else
-		ajStrAssignS(&dmxStrpostsim, dmxStrposttmp);
-	    
-	    continue;
-	}
-	else if (ajStrPrefixC(dmxStrline,"# Positions"))
-	{
-	    /* Parse Positions line */
-	    ajFmtScanS(dmxStrline, "%*s %*s %S", &dmxStrpositmp);
+            if(done_1st_blk == ajTrue)
+                ajStrAppendS(&dmxGStrpostsim, dmxGStrposttmp);
+            else
+                ajStrAssignS(&dmxGStrpostsim, dmxGStrposttmp);
 
-	    if(done_1st_blk == ajTrue)
-		ajStrAppendS(&dmxStrposisim, dmxStrpositmp);
-	    else
-		ajStrAssignS(&dmxStrposisim, dmxStrpositmp);
-	    
-	    continue;
-	}
-	/* Ignore any other line beginning with '#' which are 
-	   taken to be comments, e.g. 'Number' lines */
-	else if((ajStrPrefixC(dmxStrline,"#")))
-	    continue;
-	/* ajFileReadLine will have trimmed the tailing \n */
-	else if(ajStrGetCharPos(dmxStrline,1)=='\0')
-	{ 
+            continue;
+        }
+        else if (ajStrPrefixC(dmxGStrline, "# Positions"))
+        {
+            /* Parse Positions line */
+            ajFmtScanS(dmxGStrline, "%*s %*s %S", &dmxGStrpositmp);
+
+            if(done_1st_blk == ajTrue)
+                ajStrAppendS(&dmxGStrposisim, dmxGStrpositmp);
+            else
+                ajStrAssignS(&dmxGStrposisim, dmxGStrpositmp);
+
+            continue;
+        }
+        /* Ignore any other line beginning with '#' which are
+           taken to be comments, e.g. 'Number' lines */
+        else if((ajStrPrefixC(dmxGStrline ,"#")))
+            continue;
+        /* ajFileReadLine will have trimmed the tailing \n */
+        else if(ajStrGetCharPos(dmxGStrline, 1) == '\0')
+        {
             /*
             ** The first blank line therefore the first block of sequences
             ** has been done
             */
-	    
-	    if(!ok)
-	    {
-		ajWarn("ajDmxScopalgRead but file was not identified as "
+
+            if(!ok)
+            {
+                ajWarn("ajDmxScopalgRead but file was not identified as "
                        "being a domain alignment file");
-		return ajFalse;
-	    }
+                return ajFalse;
+            }
 
-	    done_1st_blk=ajTrue;
-	    y++;
+            done_1st_blk = ajTrue;
+            j++;
 
-	    if(y == 1)
-		ajListstrToarray(list_seqs, &arr_seqs);
+            if(j == 1)
+                ajListstrToarray(list_seqs, &arr_seqs);
 
-	    cnt = 0;
-	    continue;
-	}
-	else
-	{
-	    /* Line of sequence */
-	    if(!ok)
-	    {
-		ajWarn("ajDmxScopalgRead but file was not identified as "
+            cnt = 0;
+            continue;
+        }
+        else
+        {
+            /* Line of sequence */
+            if(!ok)
+            {
+                ajWarn("ajDmxScopalgRead but file was not identified as "
                        "being a domain alignment file");
-		return ajFalse;
-	    }
+                return ajFalse;
+            }
 
-	    /* Parse a line of sequence */
-	    if(done_1st_blk == ajTrue)
-	    {
-		/* already read in the first block of sequences */
-		if(ntok == 4)
-		    ajFmtScanS(dmxStrline, "%*s %*s %S", &dmxStrseq1);
-		else if(ntok == 2)
-		    ajFmtScanS(dmxStrline, "%*s %S", &dmxStrseq1);
-		else 	
-		    ajFatal("ajDmxScopalgRead could not parse alignment");
+            /* Parse a line of sequence */
+            if(done_1st_blk == ajTrue)
+            {
+                /* already read in the first block of sequences */
+                if(ntok == 4)
+                    ajFmtScanS(dmxGStrline, "%*s %*s %S", &dmxGStrseq1);
+                else if(ntok == 2)
+                    ajFmtScanS(dmxGStrline, "%*s %S", &dmxGStrseq1);
+                else
+                    ajFatal("ajDmxScopalgRead could not parse alignment");
 
-		ajStrAppendS(&arr_seqs[cnt], dmxStrseq1);
-		cnt++;
-		continue;
-	    }	
-	    else
-	    {
-		/* It is a sequence line from the first block */
-		nseq++;
-		seq = ajStrNew();		
-		code = ajStrNew();		
+                ajStrAppendS(&arr_seqs[cnt], dmxGStrseq1);
+                cnt++;
+                continue;
+            }
+            else
+            {
+                /* It is a sequence line from the first block */
+                nseq++;
+                seq = ajStrNew();
+                code = ajStrNew();
 
-		if(((ntok = ajStrParseCountC(dmxStrline, " ")) == 4))
-		    ajFmtScanS(dmxStrline, "%S %*s %S", &code, &seq);
-		else if(ntok == 2)
-		    ajFmtScanS(dmxStrline, "%S %S", &code, &seq);
-		else 	
-		    ajFatal("ajDmxScopalgRead could not parse alignment");
+                if(((ntok = ajStrParseCountC(dmxGStrline, " ")) == 4))
+                    ajFmtScanS(dmxGStrline, "%S %*s %S", &code, &seq);
+                else if(ntok == 2)
+                    ajFmtScanS(dmxGStrline, "%S %S", &code, &seq);
+                else
+                    ajFatal("ajDmxScopalgRead could not parse alignment");
 
-		/* Push strings onto lists */
-		ajListstrPushAppend(list_seqs,seq);
-		ajListstrPushAppend(list_codes,code);
-		continue;
-	    }
-	}	
+                /* Push strings onto lists */
+                ajListstrPushAppend(list_seqs, seq);
+                ajListstrPushAppend(list_codes, code);
+                continue;
+            }
+        }
     }
-    
+
     if(!ok)
     {
-	ajWarn("ajDmxScopalgRead but file was not identified as being "
+        ajWarn("ajDmxScopalgRead but file was not identified as being "
                "a domain alignment file");
 
-	return ajFalse;
+        return ajFalse;
     }
 
-
     /*
-    ** Cope for cases where alignment is in one block only, 
+    ** Cope for cases where alignment is in one block only,
     ** i.e. there were no empty lines:
     **
     ** XX
@@ -476,320 +513,316 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
     ** # Post_similar 111111111111111111111111111111111111111111111-----
     */
     if(!done_1st_blk && nseq)
-	ajListstrToarray(list_seqs, &arr_seqs);
+        ajListstrToarray(list_seqs, &arr_seqs);
 
-    ajStrDel(&dmxStrseq1);
-    
+    ajStrDel(&dmxGStrseq1);
+
     if(!nseq)
-	ajWarn("No sequences in alignment !\n");
+        ajWarn("No sequences in alignment !\n");
 
     /* Allocate memory for Scopalg structure */
-    (*thys) = ajDmxScopalgNew(nseq);
-
-
+    *Pscopalg = ajDmxScopalgNew(nseq);
 
     /* Assign domain records */
-    if(ajStrMatchC(dmxStrtype, "SCOP"))
-	(*thys)->Type = ajSCOP;
-    else if(ajStrMatchC(dmxStrtype, "CATH"))
-	(*thys)->Type = ajCATH;
+    if(ajStrMatchC(dmxGStrtype, "SCOP"))
+        (*Pscopalg)->Type = ajEDomainTypeSCOP;
+    else if(ajStrMatchC(dmxGStrtype, "CATH"))
+        (*Pscopalg)->Type = ajEDomainTypeCATH;
 
-    ajStrAssignS(&(*thys)->Class,dmxStrclass);
-    ajStrAssignS(&(*thys)->Architecture,dmxStrarch);
-    ajStrAssignS(&(*thys)->Topology,dmxStrtopo);
-    ajStrAssignS(&(*thys)->Fold,dmxStrfold);
-    ajStrAssignS(&(*thys)->Superfamily,dmxStrsuper);
-    ajStrAssignS(&(*thys)->Family,dmxStrfamily); 
-    (*thys)->Sunid_Family = Sunid;
-    
-
+    ajStrAssignS(&(*Pscopalg)->Class, dmxGStrclass);
+    ajStrAssignS(&(*Pscopalg)->Architecture, dmxGStrarch);
+    ajStrAssignS(&(*Pscopalg)->Topology, dmxGStrtopo);
+    ajStrAssignS(&(*Pscopalg)->Fold, dmxGStrfold);
+    ajStrAssignS(&(*Pscopalg)->Superfamily, dmxGStrsuper);
+    ajStrAssignS(&(*Pscopalg)->Family, dmxGStrfamily);
+    (*Pscopalg)->Sunid_Family = Sunid;
 
     if(nseq)
     {
-	/* Assign sequences and free memory */
-	for(x=0; x<nseq; x++)
-	{
-	    ajStrAssignS(&(*thys)->Seqs[x],arr_seqs[x]); 
-	    ajStrDel(&arr_seqs[x]);
+        /* Assign sequences and free memory */
+        for(i = 0U; i < nseq; i++)
+        {
+            ajStrAssignS(&(*Pscopalg)->Seqs[i], arr_seqs[i]);
+            ajStrDel(&arr_seqs[i]);
+        }
+        AJFREE(arr_seqs);
 
-	}
-	AJFREE(arr_seqs);
-	
-	
-	/* Assign width */
-	(*thys)->width = ajStrGetLen((*thys)->Seqs[0]);
-	
-	
-	for(x=0; ajListstrPop(list_codes,&dmxStrcodetmp); x++)
-	{
-	    ajStrAssignS(&(*thys)->Codes[x],dmxStrcodetmp);
-	    ajStrDel(&dmxStrcodetmp);
-	}
-	
-	
-	/* Assign Post_similar line */
-	ajStrAssignS(&(*thys)->Post_similar,dmxStrpostsim); 
+        /* Assign width */
+        (*Pscopalg)->Width = ajStrGetLen((*Pscopalg)->Seqs[0]);
 
-	/* Assign Positions line */
-	ajStrAssignS(&(*thys)->Positions,dmxStrposisim); 
+        for(i = 0U; ajListstrPop(list_codes, &dmxGStrcodetmp); i++)
+        {
+            ajStrAssignS(&(*Pscopalg)->Codes[i], dmxGStrcodetmp);
+            ajStrDel(&dmxGStrcodetmp);
+        }
+
+        /* Assign Post_similar line */
+        ajStrAssignS(&(*Pscopalg)->Post_similar, dmxGStrpostsim);
+
+        /* Assign Positions line */
+        ajStrAssignS(&(*Pscopalg)->Positions, dmxGStrposisim);
     }
-    else 
-	ajWarn("ajDmxScopalgRead called but no sequences found.");
-        
+    else
+        ajWarn("ajDmxScopalgRead called but no sequences found.");
 
-    ajListstrFree(&list_seqs); 
-    ajListstrFree(&list_codes); 
-    
+    ajListstrFree(&list_seqs);
+    ajListstrFree(&list_codes);
+
     return ajTrue;
 }
 
 
 
 
-/* ======================================================================= */
-/* =========================== destructors =============================== */
-/* ======================================================================= */
-
-
-
-
-/* @section Structure Destructors *******************************************
+/* @section Structure Destructors *********************************************
 **
 ** All destructor functions receive the address of the instance to be
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitDel ****************************************************
+/* @func ajDmxScophitDel ******************************************************
 **
-** Destructor for Scophit object.
+** Destructor for an AJAX SCOP Hit object.
 **
-** @param [w] pthis [AjPScophit*] Scophit object pointer
+** @param [w] Pscophit [AjPScophit*] AJAX Scophit address
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-void ajDmxScophitDel(AjPScophit *pthis)
+void ajDmxScophitDel(AjPScophit *Pscophit)
 {
-    if(!*pthis)
-	return;
+    AjPScophit scophit = NULL;
 
-    ajStrDel(&(*pthis)->Class);
-    ajStrDel(&(*pthis)->Architecture);
-    ajStrDel(&(*pthis)->Topology);
-    ajStrDel(&(*pthis)->Fold);
-    ajStrDel(&(*pthis)->Superfamily);
-    ajStrDel(&(*pthis)->Family);
-    ajStrDel(&(*pthis)->Seq);
-    ajStrDel(&(*pthis)->Acc);
-    ajStrDel(&(*pthis)->Spr);
-    ajStrDel(&(*pthis)->Dom);
-    ajStrDel(&(*pthis)->Typeobj);
-    ajStrDel(&(*pthis)->Typesbj);
-    ajStrDel(&(*pthis)->Model);
-    ajStrDel(&(*pthis)->Alg);
-    ajStrDel(&(*pthis)->Group);
+    if(!Pscophit || !*Pscophit)
+        return;
 
-    AJFREE(*pthis);
-    *pthis = NULL;
-    
+    scophit = *Pscophit;
+
+    ajStrDel(&scophit->Class);
+    ajStrDel(&scophit->Architecture);
+    ajStrDel(&scophit->Topology);
+    ajStrDel(&scophit->Fold);
+    ajStrDel(&scophit->Superfamily);
+    ajStrDel(&scophit->Family);
+    ajStrDel(&scophit->Seq);
+    ajStrDel(&scophit->Acc);
+    ajStrDel(&scophit->Spr);
+    ajStrDel(&scophit->Dom);
+    ajStrDel(&scophit->Typeobj);
+    ajStrDel(&scophit->Typesbj);
+    ajStrDel(&scophit->Model);
+    ajStrDel(&scophit->Alg);
+    ajStrDel(&scophit->Group);
+
+    AJFREE(scophit);
+
+    *Pscophit = NULL;
+
     return;
 }
 
 
 
 
-/* @func ajDmxScophitDelWrap ************************************************
+/* @func ajDmxScophitDelWrap **************************************************
 **
-** Wrapper to destructor for Scophit object for use with generic functions.
+** Wrapper to destructor for an AJAX SCOP Hit object for use with generic
+** functions.
 **
-** @param [d] ptr [void **] Object pointer
+** @param [d] Pitem [void**] AJAX SCOP Hit address
+** @see ajListPurge
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-void ajDmxScophitDelWrap(void  **ptr)
+void ajDmxScophitDelWrap(void **Pitem)
 {
-    AjPScophit *del;
-    del = (AjPScophit *) ptr;
-    
-    ajDmxScophitDel(del);
-    
+    ajDmxScophitDel((AjPScophit *) Pitem);
+
     return;
 }
 
 
 
 
-/* @func ajDmxScopalgDel ****************************************************
+/* @func ajDmxScopalgDel ******************************************************
 **
-** Destructor for Scopalg object.
+** Destructor for an AJAX SCOP Alignment object.
 **
-** @param [d] pthis [AjPScopalg*] Scopalg object pointer
+** @param [d] Pscopalg [AjPScopalg*] AJAX SCOP Alignment address
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-void ajDmxScopalgDel(AjPScopalg *pthis)
+void ajDmxScopalgDel(AjPScopalg *Pscopalg)
 {
-    ajuint x = 0;  /* Counter */
+    ajuint i = 0U;
 
-    if(!pthis)
-	return;
+    AjPScopalg scopalg = NULL;
 
-    if(!(*pthis))
-	return;
-    
-    ajStrDel(&(*pthis)->Class);
-    ajStrDel(&(*pthis)->Architecture);
-    ajStrDel(&(*pthis)->Topology);
-    ajStrDel(&(*pthis)->Fold);
-    ajStrDel(&(*pthis)->Superfamily);
-    ajStrDel(&(*pthis)->Family);
-    ajStrDel(&(*pthis)->Architecture);
-    ajStrDel(&(*pthis)->Topology);
-    ajStrDel(&(*pthis)->Post_similar);
-    ajStrDel(&(*pthis)->Positions);
+    if(!Pscopalg || !*Pscopalg)
+        return;
 
-    for(x=0;x<(*pthis)->N; x++)
+    scopalg = *Pscopalg;
+
+    ajStrDel(&scopalg->Class);
+    ajStrDel(&scopalg->Architecture);
+    ajStrDel(&scopalg->Topology);
+    ajStrDel(&scopalg->Fold);
+    ajStrDel(&scopalg->Superfamily);
+    ajStrDel(&scopalg->Family);
+    ajStrDel(&scopalg->Architecture);
+    ajStrDel(&scopalg->Topology);
+    ajStrDel(&scopalg->Post_similar);
+    ajStrDel(&scopalg->Positions);
+
+    for(i = 0U; i < scopalg->Number; i++)
     {
-	ajStrDel(&(*pthis)->Codes[x]);
-	ajStrDel(&(*pthis)->Seqs[x]);
+        ajStrDel(&scopalg->Codes[i]);
+        ajStrDel(&scopalg->Seqs[i]);
     }
-    
-    AJFREE((*pthis)->Codes);
-    AJFREE((*pthis)->Seqs);
-    
-    AJFREE(*pthis);
-    *pthis = NULL;
-    
+
+    AJFREE(scopalg->Codes);
+    AJFREE(scopalg->Seqs);
+
+    AJFREE(scopalg);
+
+    *Pscopalg = NULL;
+
     return;
 }
 
 
 
 
-/* ======================================================================= */
-/* ============================ Assignments ============================== */
-/* ======================================================================= */
-
-
-
-
-/* @section Assignments ****************************************************
+/* @section Assignments *******************************************************
 **
 ** These functions overwrite the instance provided as the first argument
 ** A NULL value is always acceptable so these functions are often used to
 ** create a new instance by assignment.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitListCopy ***********************************************
+/* @func ajDmxScophitListCopy *************************************************
 **
-** Read a list of Scophit structures and returns a pointer to a duplicate 
-** of the list. 
-** 
-** @param [r] ptr [const AjPList]  List of Scophit objects
+** Read an AJAX List of AJAX SCOP Hit objects and return a pointer to a
+** duplicate of the AJAX List.
+**
+** @param [r] scophits [const AjPList] AJAX List of AJAX SCOP Hit objects
 **
 ** @return [AjPList] True on success (list was duplicated ok)
+**
+** @release 2.9.0
 ** @@
 **
 ** Should modify this eventually to fit "standard" method for assignment
 ** functions, i.e. pass in the pointer as the first argument
 **
-****************************************************************************/
+******************************************************************************/
 
-AjPList ajDmxScophitListCopy(const AjPList ptr)
+AjPList ajDmxScophitListCopy(const AjPList scophits)
 {
-    AjPList ret    = NULL;
-    AjIList iter   = NULL;
-    AjPScophit hit = NULL;
-    AjPScophit new = NULL;
+    AjPList list = NULL;
+    AjIList iter = NULL;
+
+    AjPScophit oldscophit = NULL;
+    AjPScophit newscophit = NULL;
 
     /* Check arg's */
-    if(!ptr)
+    if(!scophits)
     {
-	ajWarn("Bad arg's passed to ajDmxScophitListCopy\n");
-	return NULL;
+        ajWarn("Bad arg's passed to ajDmxScophitListCopy\n");
+        return NULL;
     }
-    
-    /* Allocate the new list */
-    ret = ajListNew();
-    
-    /* Initialise the iterator */
-    iter = ajListIterNewread(ptr);
-    
-    /* Iterate through the list of Scophit objects */
-    while((hit=(AjPScophit)ajListIterGet(iter)))
-    {
-	new = ajDmxScophitNew();
-	
-	ajDmxScophitCopy(&new, hit);
 
-	/* Push scophit onto list */
-	ajListPushAppend(ret,new);
+    /* Allocate the new list */
+    list = ajListNew();
+
+    /* Initialise the iterator */
+    iter = ajListIterNewread(scophits);
+
+    /* Iterate through the list of Scophit objects */
+    while((oldscophit = (AjPScophit)ajListIterGet(iter)))
+    {
+        newscophit = ajDmxScophitNew();
+
+        ajDmxScophitCopy(&newscophit, oldscophit);
+
+        /* Push scophit onto list */
+        ajListPushAppend(list, newscophit);
     }
 
     ajListIterDel(&iter);
 
-    return ret;
+    return list;
 }
 
 
 
 
-/* @func ajDmxScophitCopy ***************************************************
+/* @func ajDmxScophitCopy *****************************************************
 **
-** Copies the contents from one Scophit object to another.
+** Copies the contents from one AJAX SCOP Hit object to another.
 **
-** @param [w] to   [AjPScophit*] Scophit object pointer 
-** @param [r] from [const AjPScophit]  Scophit object 
+** @param [w] Pto  [AjPScophit*] AJAX SCOP Hit address
+** @param [r] from [const AjPScophit] AJAX SCOP Hit
 **
 ** @return [AjBool] True if copy was successful.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitCopy(AjPScophit *to, const AjPScophit from)
+AjBool ajDmxScophitCopy(AjPScophit *Pto, const AjPScophit from)
 {
-    /* Check args */
-    if(!(*to) || !from)
-	return ajFalse;
+    if(!Pto || !*Pto)
+        return ajFalse;
 
-    (*to)->Type = from->Type;
-    ajStrAssignS(&(*to)->Class, from->Class);
-    ajStrAssignS(&(*to)->Architecture, from->Architecture);
-    ajStrAssignS(&(*to)->Topology, from->Topology);
-    ajStrAssignS(&(*to)->Fold, from->Fold);
-    ajStrAssignS(&(*to)->Superfamily, from->Superfamily);
-    ajStrAssignS(&(*to)->Family, from->Family);
-    ajStrAssignS(&(*to)->Seq, from->Seq);
-    ajStrAssignS(&(*to)->Acc, from->Acc);
-    ajStrAssignS(&(*to)->Spr, from->Spr);
-    ajStrAssignS(&(*to)->Dom, from->Dom);
-    ajStrAssignS(&(*to)->Typeobj, from->Typeobj);
-    ajStrAssignS(&(*to)->Typesbj, from->Typesbj);
-    ajStrAssignS(&(*to)->Model, from->Model);
-    ajStrAssignS(&(*to)->Alg, from->Alg);
-    ajStrAssignS(&(*to)->Group, from->Group);
-    (*to)->Start = from->Start;
-    (*to)->End = from->End;
-    (*to)->Rank = from->Rank;
-    (*to)->Score = from->Score;
-    (*to)->Eval = from->Eval;
-    (*to)->Pval = from->Pval;
-    (*to)->Target = from->Target;
-    (*to)->Target2 = from->Target2;
-    (*to)->Priority = from->Priority;
-    (*to)->Sunid_Family = from->Sunid_Family;
+    if(!from)
+        return ajFalse;
+
+    (*Pto)->Type = from->Type;
+    ajStrAssignS(&(*Pto)->Class, from->Class);
+    ajStrAssignS(&(*Pto)->Architecture, from->Architecture);
+    ajStrAssignS(&(*Pto)->Topology, from->Topology);
+    ajStrAssignS(&(*Pto)->Fold, from->Fold);
+    ajStrAssignS(&(*Pto)->Superfamily, from->Superfamily);
+    ajStrAssignS(&(*Pto)->Family, from->Family);
+    ajStrAssignS(&(*Pto)->Seq, from->Seq);
+    ajStrAssignS(&(*Pto)->Acc, from->Acc);
+    ajStrAssignS(&(*Pto)->Spr, from->Spr);
+    ajStrAssignS(&(*Pto)->Dom, from->Dom);
+    ajStrAssignS(&(*Pto)->Typeobj, from->Typeobj);
+    ajStrAssignS(&(*Pto)->Typesbj, from->Typesbj);
+    ajStrAssignS(&(*Pto)->Model, from->Model);
+    ajStrAssignS(&(*Pto)->Alg, from->Alg);
+    ajStrAssignS(&(*Pto)->Group, from->Group);
+    (*Pto)->Start        = from->Start;
+    (*Pto)->End          = from->End;
+    (*Pto)->Rank         = from->Rank;
+    (*Pto)->Score        = from->Score;
+    (*Pto)->Eval         = from->Eval;
+    (*Pto)->Pval         = from->Pval;
+    (*Pto)->Target       = from->Target;
+    (*Pto)->Target2      = from->Target2;
+    (*Pto)->Priority     = from->Priority;
+    (*Pto)->Sunid_Family = from->Sunid_Family;
 
     return ajTrue;
 }
@@ -797,43 +830,38 @@ AjBool ajDmxScophitCopy(AjPScophit *to, const AjPScophit from)
 
 
 
-/* ======================================================================= */
-/* ============================= Modifiers =============================== */
-/* ======================================================================= */
-
-
-
-
-/* @section Modifiers *******************************************************
+/* @section Modifiers *********************************************************
 **
 ** These functions use the contents of an instance and update them.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitTargetLowPriority **************************************
+/* @func ajDmxScophitTargetLowPriority ****************************************
 **
-** Sets the Target element of a Scophit object to True if its Priority is low.
+** Sets the Target element of an AJAX SCOP Hit object to ajTrue if its
+** Priority is low.
 **
-** @param [u] h  [AjPScophit *]     Pointer to Scophit object
+** @param [u] Pscophit [AjPScophit*] AJAX SCOP Hit address
 **
 ** @return [AjBool] True on success. False otherwise.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitTargetLowPriority(AjPScophit *h)
+AjBool ajDmxScophitTargetLowPriority(AjPScophit *Pscophit)
 {
-    /* Check args */
-    if(!(*h))
+    if(!Pscophit || !*Pscophit)
     {
-	ajWarn("Bad arg's passed to ajDmxScophitTargetLowPriority\n"); 
-	return ajFalse;
+        ajWarn("Bad arg's passed to ajDmxScophitTargetLowPriority\n");
+        return ajFalse;
     }
 
-    if((*h)->Priority==ajFalse)
-	(*h)->Target = ajTrue;
+    if((*Pscophit)->Priority == ajFalse)
+        (*Pscophit)->Target = ajTrue;
 
     return ajTrue;
 }
@@ -841,26 +869,27 @@ AjBool ajDmxScophitTargetLowPriority(AjPScophit *h)
 
 
 
-/* @func ajDmxScophitTarget2 ************************************************
+/* @func ajDmxScophitTarget2 **************************************************
 **
-** Sets the Target2 element of a Scophit object to True.
+** Sets the Target2 element of an AJAX SCOP Hit object to ajTrue.
 **
-** @param [u] h  [AjPScophit *]     Pointer to Scophit object
+** @param [u] Pscophit [AjPScophit*] AJAX SCOP Hit address
 **
 ** @return [AjBool] True on success. False otherwise.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitTarget2(AjPScophit *h)
+AjBool ajDmxScophitTarget2(AjPScophit *Pscophit)
 {
-    /* Check args */
-    if(!(*h))
+    if(!Pscophit || !*Pscophit)
     {
-	ajWarn("Bad arg's passed to ajDmxScophitTarget2\n");
-	return ajFalse;
+        ajWarn("Bad arg's passed to ajDmxScophitTarget2\n");
+        return ajFalse;
     }
-    
-    (*h)->Target2 = ajTrue;
+
+    (*Pscophit)->Target2 = ajTrue;
 
     return ajTrue;
 }
@@ -868,25 +897,27 @@ AjBool ajDmxScophitTarget2(AjPScophit *h)
 
 
 
-/* @func ajDmxScophitTarget *************************************************
+/* @func ajDmxScophitTarget ***************************************************
 **
-** Sets the Target element of a Scophit object to True.
+** Sets the Target element of an AJAX SCOP Hit object to ajTrue.
 **
-** @param [u] h  [AjPScophit *]     Pointer to Scophit object
+** @param [u] Pscophit [AjPScophit*] AJAX SCOP Hit address
 **
 ** @return [AjBool] True on success. False otherwise.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
-AjBool ajDmxScophitTarget(AjPScophit *h)
+******************************************************************************/
+
+AjBool ajDmxScophitTarget(AjPScophit *Pscophit)
 {
-    /* Check args */
-    if(!(*h))
+    if(!Pscophit || !*Pscophit)
     {
-	ajWarn("Bad arg's passed to ajDmxScophitTarget\n");
-	return ajFalse;
+        ajWarn("Bad arg's passed to ajDmxScophitTarget\n");
+        return ajFalse;
     }
-    
-    (*h)->Target = ajTrue;
+
+    (*Pscophit)->Target = ajTrue;
 
     return ajTrue;
 }
@@ -894,101 +925,83 @@ AjBool ajDmxScophitTarget(AjPScophit *h)
 
 
 
-/* ======================================================================= */
-/* ========================== Operators ===================================*/
-/* ======================================================================= */
-
-
-
-
-/* @section Operators *******************************************************
+/* @section Operators *********************************************************
 **
-** These functions use the contents of an instance but do not make any 
+** These functions use the contents of an instance but do not make any
 ** changes.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitCheckTarget ********************************************
+/* @func ajDmxScophitCheckTarget **********************************************
 **
-** Checks to see if the Target element of a Scophit object == ajTrue.
+** Checks to see if the Target element of an AJAX SCOP Hit object equals
+** ajTrue.
 **
-** @param [r] ptr [const AjPScophit] Scophit object pointer
+** @param [r] scophit [const AjPScophit] AJAX SCOP Hit
 **
-** @return [AjBool] Returns ajTrue if the Target element of the Scophit 
-** object == ajTrue, returns ajFalse otherwise.
+** @return [AjBool] Returns ajTrue if the Target element of the AAX SCOP Hit
+** object equals ajTrue, returns ajFalse otherwise.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitCheckTarget(const AjPScophit ptr)
+AjBool ajDmxScophitCheckTarget(const AjPScophit scophit)
 {
-    return ptr->Target;
+    return scophit->Target;
 }
 
 
 
 
-/* ======================================================================= */
-/* ============================== Casts ===================================*/
-/* ======================================================================= */
-
-
-
-
-/* @section Casts ***********************************************************
+/* @section Casts *************************************************************
 **
 ** These functions examine the contents of an instance and return some
 ** derived information. Some of them provide access to the internal
 ** components of an instance. They are provided for programming convenience
 ** but should be used with caution.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* ======================================================================= */
-/* =========================== Reporters ==================================*/
-/* ======================================================================= */
-
-
-
-
-/* @section Reporters *******************************************************
+/* @section Reporters *********************************************************
 **
 ** These functions return the contents of an instance but do not make any
 ** changes.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScophitCompScore **********************************************
+/* @func ajDmxScophitCompScore ************************************************
 **
-** Function to sort Scophit objects by Score element. Usually called by 
-** ajListSort.  
+** Function to compare AJAX SCOP Hit objects by score member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Hit object 1
-** @param [r] hit2  [const void*] Pointer to Hit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] 1 if score1<score2, 0 if score1==score2, else -1.
+** @return [ajint] 1 if score1 < score2, 0 if score1 == score2, else -1.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompScore(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompScore(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    if(p->Score < q->Score)
+    if(scophit1->Score < scophit2->Score)
         return -1;
-    else if(E_FPEQ(p->Score,q->Score,U_FEPS))
+    else if(E_FPEQ(scophit1->Score, scophit2->Score, U_FEPS))
         return 0;
 
     return 1;
@@ -997,29 +1010,29 @@ ajint ajDmxScophitCompScore(const void *hit1, const void *hit2)
 
 
 
-/* @func ajDmxScophitCompPval ***********************************************
+/* @func ajDmxScophitCompPval *************************************************
 **
-** Function to sort AjOScophit objects by Pval record. Usually called by 
-** ajListSort.
+** Function to compare AJAX SCOP Hit objects by Pval member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Hit object 1
-** @param [r] hit2  [const void*] Pointer to Hit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] 1 if Pval1>Pval2, 0 if Pval1==Pval2, else -1.
+** @return [ajint] 1 if Pval1 > Pval2, 0 if Pval1 == Pval2, else -1.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompPval(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompPval(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    if(p->Pval < q->Pval)
+    if(scophit1->Pval < scophit2->Pval)
         return -1;
-    else if(E_FPEQ(p->Pval,q->Pval,U_FEPS))
+    else if(E_FPEQ(scophit1->Pval, scophit2->Pval, U_FEPS))
         return 0;
 
     return 1;
@@ -1028,60 +1041,61 @@ ajint ajDmxScophitCompPval(const void *hit1, const void *hit2)
 
 
 
-/* @func ajDmxScophitCompAcc ************************************************
+/* @func ajDmxScophitCompAcc **************************************************
 **
-** Function to sort Scophit objects by Acc element. 
+** Function to compare AJAX SCOP Hit objects by Acc member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
 ** @return [ajint] -1 if Acc1 should sort before Acc2,
-**                 +1 if the Acc2 should sort first. 
-**                  0 if they are identical in length and content. 
+**                 +1 if the Acc2 should sort first.
+**                  0 if they are identical in length and content.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompAcc(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompAcc(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
+    dmxTraceScophit(scophit1, "CompAcc scophit1");
+    dmxTraceScophit(scophit2, "CompAcc scophit2");
 
-    dmxTraceScophit(p, "CompAcc p");
-    dmxTraceScophit(q, "CompAcc q");
-
-    return ajStrCmpS(p->Acc, q->Acc);
+    return ajStrCmpS(scophit1->Acc, scophit2->Acc);
 }
 
 
 
 
-/* @func ajDmxScophitCompSunid **********************************************
+/* @func ajDmxScophitCompSunid ************************************************
 **
-** Function to sort Scophit object by Sunid_Family.
+** Function to compare AJAX SCOP Hit objects by Sunid_Family member.
+** Usually called by ajListSort.
 **
-** @param [r] entry1  [const void*] Pointer to AjOScophit object 1
-** @param [r] entry2  [const void*] Pointer to AjOScophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Sunid_Family1 < Sunid_Family2, +1 if the 
+** @return [ajint] -1 if Sunid_Family1 < Sunid_Family2, +1 if the
 ** Sunid_Family2 should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompSunid(const void *entry1, const void *entry2)
+ajint ajDmxScophitCompSunid(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)entry1);
-    q = (*(AjPScophit const *)entry2);
-   
-
-    if(p->Sunid_Family < q->Sunid_Family)
+    if(scophit1->Sunid_Family < scophit2->Sunid_Family)
         return -1;
-    else if(p->Sunid_Family == q->Sunid_Family)
+    else if(scophit1->Sunid_Family == scophit2->Sunid_Family)
         return 0;
 
     return 1;
@@ -1090,66 +1104,62 @@ ajint ajDmxScophitCompSunid(const void *entry1, const void *entry2)
 
 
 
-/* @func ajDmxScophitCompSpr ************************************************
+/* @func ajDmxScophitCompSpr **************************************************
 **
-** Function to sort Scophit object by Spr element. 
+** Function to compare AJAX SCOP Hit objects by Spr member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
 ** @return [ajint] -1 if Spr1 should sort before Spr2,
-**                 +1 if the Spr2 should sort first. 
-**                  0 if they are identical in length and content. 
+**                 +1 if the Spr2 should sort first.
+**                  0 if they are identical in length and content.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompSpr(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompSpr(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    return ajStrCmpS(p->Spr, q->Spr);
+    return ajStrCmpS(scophit1->Spr, scophit2->Spr);
 }
 
 
 
 
-/* @func ajDmxScophitCompEnd ************************************************
+/* @func ajDmxScophitCompEnd **************************************************
 **
-** Function to sort Scophit object by End element. 
+** Function to compare AJAX SCOP Hit objects by End member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if End1 should sort before End2, +1 if the End2 
+** @return [ajint] -1 if End1 should sort before End2, +1 if the End2
 ** should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompEnd(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompEnd(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
+    dmxTraceScophit(scophit1, "CompEnd scophit1");
+    dmxTraceScophit(scophit2, "CompEnd scophit2");
 
-/*
-    p = (const AjPScophit) hit1;
-    q = (const AjPScophit) hit2;
-*/
-   
-    dmxTraceScophit(p, "CompEnd p");
-    dmxTraceScophit(q, "CompEnd q");
-
-
-    if(p->End < q->End)
-	return -1;
-    else if(p->End == q->End)
-	return 0;
+    if(scophit1->End < scophit2->End)
+        return -1;
+    else if(scophit1->End == scophit2->End)
+        return 0;
 
     return 1;
 }
@@ -1157,34 +1167,34 @@ ajint ajDmxScophitCompEnd(const void *hit1, const void *hit2)
 
 
 
-/* @func ajDmxScophitCompStart **********************************************
+/* @func ajDmxScophitCompStart ************************************************
 **
-** Function to sort Scophit object by Start element. 
+** Function to compare AJAX SCOP Hit objects by Start member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2 
+** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2
 ** should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompStart(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompStart(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-   
+    dmxTraceScophit(scophit1, "CompStart scophit1");
+    dmxTraceScophit(scophit2, "CompStart scophit2");
 
-    dmxTraceScophit(p, "CompStart p");
-    dmxTraceScophit(q, "CompStart q");
-
-    if(p->Start < q->Start)
-	return -1;
-    else if(p->Start == q->Start)
-	return 0;
+    if(scophit1->Start < scophit2->Start)
+        return -1;
+    else if(scophit1->Start == scophit2->Start)
+        return 0;
 
     return 1;
 }
@@ -1192,105 +1202,109 @@ ajint ajDmxScophitCompStart(const void *hit1, const void *hit2)
 
 
 
-/* @func ajDmxScophitCompFam ************************************************
+/* @func ajDmxScophitCompFam **************************************************
 **
-** Function to sort Scophit object by Family element. 
+** Function to compare AJAX SCOP Hit objects by Family member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Family1 should sort before Family2, +1 if the 
+** @return [ajint] -1 if Family1 should sort before Family2, +1 if the
 ** Family2 should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompFam(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompFam(const void *item1, const void *item2)
 {
-    const AjPScophit p = NULL;
-    const AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    return ajStrCmpS(p->Family, q->Family);
+    return ajStrCmpS(scophit1->Family, scophit2->Family);
 }
 
 
 
 
-/* @func ajDmxScophitCompSfam ***********************************************
+/* @func ajDmxScophitCompSfam *************************************************
 **
-** Function to sort Scophit object by Superfamily  element. 
+** Function to compare AJAX SCOP Hit objects by Superfamily member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Superfamily1 should sort before Superfamily2, +1 if 
+** @return [ajint] -1 if Superfamily1 should sort before Superfamily2, +1 if
 ** the Superfamily2 should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompSfam(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompSfam(const void *item1, const void *item2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    return ajStrCmpS(p->Superfamily, q->Superfamily);
+    return ajStrCmpS(scophit1->Superfamily, scophit2->Superfamily);
 }
 
 
 
 
-/* @func ajDmxScophitCompClass **********************************************
+/* @func ajDmxScophitCompClass ************************************************
 **
-** Function to sort Scophit object by Class element. 
+** Function to compare AJAX SCOP Hit objects by Class member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Class1 should sort before Class2, +1 if the Class2 
+** @return [ajint] -1 if Class1 should sort before Class2, +1 if the Class2
 ** should sort first. 0 if they are identical.
+**
+** @release 3.0.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompClass(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompClass(const void *item1, const void *item2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    return ajStrCmpS(p->Class, q->Class);
+    return ajStrCmpS(scophit1->Class, scophit2->Class);
 }
 
 
 
 
-/* @func ajDmxScophitCompFold ***********************************************
+/* @func ajDmxScophitCompFold *************************************************
 **
-** Function to sort Scophit object by Fold element. 
+** Function to compare AJAX SCOP Hit objects by Fold member.
+** Usually called by ajListSort.
 **
-** @param [r] hit1  [const void*] Pointer to Scophit object 1
-** @param [r] hit2  [const void*] Pointer to Scophit object 2
+** @param [r] item1 [const void*] AJAX SCOP Hit address 1
+** @param [r] item2 [const void*] AJAX SCOP Hit address 2
+** @see ajListSort
 **
-** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2 
+** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2
 ** should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScophitCompFold(const void *hit1, const void *hit2)
+ajint ajDmxScophitCompFold(const void *item1, const void *item2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    AjPScophit scophit1 = *(AjOScophit *const *) item1;
+    AjPScophit scophit2 = *(AjOScophit *const *) item2;
 
-    p = (*(AjPScophit const *)hit1);
-    q = (*(AjPScophit const *)hit2);
-    
-    return ajStrCmpS(p->Fold, q->Fold);
+    return ajStrCmpS(scophit1->Fold, scophit2->Fold);
 }
 
 
@@ -1303,180 +1317,192 @@ ajint ajDmxScophitCompFold(const void *hit1, const void *hit2)
 
 
 
-/* @func ajDmxScopalgGetseqs ************************************************
+/* @func ajDmxScopalgGetseqs **************************************************
 **
-** Read a Scopalg object and writes an array of AjPStr containing the 
-** sequences without gaps.
-** 
-** @param [r] thys     [const AjPScopalg]  Scopalg object
-** @param [w] arr      [AjPStr **]   Array of AjPStr 
+** Read an AJAX SCOP Alignment object and write an array of AJAX Strong objects
+** containing the sequences without gaps.
 **
-** @return [ajint] Number of sequences read
+** @param [r] scopalg [const AjPScopalg] AJAX SCOP Alignment
+** @param [w] array [AjPStr**] Array of AJAX String objects
+**
+** @return [ajuint] Number of sequences read
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-ajint ajDmxScopalgGetseqs(const AjPScopalg thys, AjPStr **arr)
+ajuint ajDmxScopalgGetseqs(const AjPScopalg scopalg, AjPStr **array)
 {
-    ajuint i;
-        
-    /* Check args */
-    if(!thys)
-    {
-	ajWarn("Null args passed to ajDmxScopalgGetseqs");
-	return 0;
-    }
-    
-    
-    *arr = (AjPStr *) AJCALLOC0(thys->N, sizeof(AjPStr));
-    
-    for(i=0;i<thys->N;++i)
-    {
-	(*arr)[i] = ajStrNew();
+    ajuint i = 0U;
 
-	ajStrAssignS(&((*arr)[i]), thys->Seqs[i]);
-	
-	ajStrRemoveGap(&((*arr)[i]));
-	
+    if(!scopalg || !array)
+    {
+        ajWarn("Null args passed to ajDmxScopalgGetseqs");
+        return 0;
     }
 
-    return thys->N;
+    *array = (AjPStr *) AJCALLOC0(scopalg->Number, sizeof (AjPStr));
+
+    for(i = 0U; i < scopalg->Number; ++i)
+    {
+        (*array)[i] = ajStrNew();
+
+        ajStrAssignS(&((*array)[i]), scopalg->Seqs[i]);
+
+        ajStrRemoveGap(&((*array)[i]));
+
+    }
+
+    return scopalg->Number;
 }
 
 
 
 
-/* @func ajDmxScophitsWrite *************************************************
+/* @func ajDmxScophitsWrite ***************************************************
 **
-** Write contents of a list of Scophits to an output file in embl-like format
+** Write contents of an AJAX List of AJAX SCOP Hit objects to an AJAX File in
+** EMBL-like format.
 ** Text for Class, Architecture, Topology, Fold, Superfamily and Family
 ** is only written if the text is available.
-** 
+**
 ** @param [w] outf [AjPFile] Output file stream
-** @param [r] list [const AjPList] List object
+** @param [r] scophits [const AjPList] AJAX List of AJAX SCOP Hit objects
 **
 ** @return [AjBool] True on success
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitsWrite(AjPFile outf, const AjPList list)
+AjBool ajDmxScophitsWrite(AjPFile outf, const AjPList scophits)
 {
-
     AjIList iter = NULL;
-    
-    AjPScophit thys = NULL;
-    AjPSeqout outseq;
-    
-    iter = ajListIterNewread(list);
-    
 
-    while((thys = (AjPScophit)ajListIterGet(iter)))
+    AjPScophit scophit = NULL;
+
+    AjPSeqout outseq = NULL;
+
+    iter = ajListIterNewread(scophits);
+
+    while((scophit = (AjPScophit) ajListIterGet(iter)))
     {
-        
-        if(!thys)
+        if(!scophit)
             return ajFalse;
 
-	if(thys->Type == ajSCOP)
-	    ajFmtPrintF(outf,"TY   SCOP\nXX\n");  
-	else if(thys->Type == ajCATH)
-	    ajFmtPrintF(outf,"TY   CATH\nXX\n");  
+        if(scophit->Type == ajEDomainTypeSCOP)
+            ajFmtPrintF(outf, "TY   SCOP\nXX\n");
+        else if(scophit->Type == ajEDomainTypeCATH)
+            ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
-	if(MAJSTRGETLEN(thys->Dom))
-	{
-	    ajFmtPrintF(outf, "%-5s%S\n", "DO", thys->Dom);
-	    ajFmtPrintF(outf, "XX\n");
-	}
-	
-        if(MAJSTRGETLEN(thys->Class))
+        if(MAJSTRGETLEN(scophit->Dom))
         {
-	    ajFmtPrintF(outf,"CL   %S\n",thys->Class);	    
-	    ajFmtPrintF(outf, "XX\n");
-	}
-
-        if(MAJSTRGETLEN(thys->Architecture))
-        {
-	    ajFmtPrintF(outf,"AR   %S\n",thys->Architecture);	    
-	    ajFmtPrintF(outf, "XX\n");
-	}
-
-        if(MAJSTRGETLEN(thys->Topology))
-        {
-	    ajFmtPrintF(outf,"TP   %S\n",thys->Topology);	    
-	    ajFmtPrintF(outf, "XX\n");
-	}
-	
-        if(MAJSTRGETLEN(thys->Fold))
-        {
-	    ajFmtPrintSplit(outf,thys->Fold,"FO   ",75," \t\n\r");
-	    ajFmtPrintF(outf, "XX\n");
-
-	    /* ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
-	       ajFmtPrintF(outf, "XX\n"); */
-	}
-	
-        if(MAJSTRGETLEN(thys->Superfamily))
-        { 
-	    ajFmtPrintSplit(outf,thys->Superfamily,"SF   ",75," \t\n\r");
-	    ajFmtPrintF(outf, "XX\n");
-
-	    /* ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
-	       ajFmtPrintF(outf, "XX\n"); */
-	}
-	
-        if(MAJSTRGETLEN(thys->Family))
-        {
-	    ajFmtPrintSplit(outf,thys->Family,"FA   ",75," \t\n\r");
-	    ajFmtPrintF(outf, "XX\n");
-
-	    /* ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
-	       ajFmtPrintF(outf, "XX\n"); */
-	}
-	
-        if(MAJSTRGETLEN(thys->Family))
-        {
-	    ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
-	    ajFmtPrintF(outf, "XX\n");
-	}
-	
-/*	if(MAJSTRGETLEN(thys->Typeobj))
-	    ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->Typeobj); */
-        ajFmtPrintF(outf, "XX\n");
-        ajFmtPrintF(outf, "%-5s%.5f\n", "SC", thys->Score);
-        ajFmtPrintF(outf, "XX\n");
-
-        ajFmtPrintF(outf, "%-5s%.3e\n", "PV", thys->Pval);
-        ajFmtPrintF(outf, "XX\n");
-
-        ajFmtPrintF(outf, "%-5s%.3e\n", "EV", thys->Eval);
-        ajFmtPrintF(outf, "XX\n");
-        
-        if(MAJSTRGETLEN(thys->Group))
-        {
-            ajFmtPrintF(outf, "%-5s%S\n", "GP", thys->Group);
+            ajFmtPrintF(outf, "%-5s%S\n", "DO", scophit->Dom);
             ajFmtPrintF(outf, "XX\n");
         }
 
-        ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->Acc);
+        if(MAJSTRGETLEN(scophit->Class))
+        {
+            ajFmtPrintF(outf, "CL   %S\n", scophit->Class);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        if(MAJSTRGETLEN(scophit->Architecture))
+        {
+            ajFmtPrintF(outf, "AR   %S\n", scophit->Architecture);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        if(MAJSTRGETLEN(scophit->Topology))
+        {
+            ajFmtPrintF(outf, "TP   %S\n", scophit->Topology);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        if(MAJSTRGETLEN(scophit->Fold))
+        {
+            ajFmtPrintSplit(outf, scophit->Fold, "FO   ", 75, " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+
+#if AJFALSE
+            ajFmtPrintSplit(outf, scophit->Fold, "XX\nFO   ", 75,
+                            " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+#endif /* AJFALSE */
+        }
+
+        if(MAJSTRGETLEN(scophit->Superfamily))
+        {
+            ajFmtPrintSplit(outf, scophit->Superfamily, "SF   ", 75,
+                            " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+
+#if AJFALSE
+            ajFmtPrintSplit(outf, scophit->Superfamily, "XX\nSF   ", 75,
+                            " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+#endif /* AJFALSE */
+        }
+
+        if(MAJSTRGETLEN(scophit->Family))
+        {
+            ajFmtPrintSplit(outf, scophit->Family,"FA   ", 75, " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+
+#if AJFALSE
+            ajFmtPrintSplit(outf, scophit->Family, "XX\nFA   ", 75,
+                            " \t\n\r");
+            ajFmtPrintF(outf, "XX\n");
+#endif
+        }
+
+        if(MAJSTRGETLEN(scophit->Family))
+        {
+            ajFmtPrintF(outf, "XX\nSI   %d\n", scophit->Sunid_Family);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+#if AJFALSE
+        if(MAJSTRGETLEN(scophit->Typeobj))
+            ajFmtPrintF(outf, "%-5s%S\n", "TY", scophit->Typeobj);
+#endif /* AJFALSE */
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%.5f\n", "SC", scophit->Score);
         ajFmtPrintF(outf, "XX\n");
 
-	if(MAJSTRGETLEN(thys->Spr))
-	{
-	    ajFmtPrintF(outf, "%-5s%S\n", "SP", thys->Spr);
-	    ajFmtPrintF(outf, "XX\n");
-	}
-	
-        ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA", thys->Start,
-		    thys->End);
+        ajFmtPrintF(outf, "%-5s%.3e\n", "PV", scophit->Pval);
         ajFmtPrintF(outf, "XX\n");
-	outseq = ajSeqoutNewFile(outf);
-        ajSeqoutDumpSwisslike(outseq, thys->Seq, "SQ");
-	ajSeqoutDel(&outseq);
-	ajFmtPrintF(outf, "XX\n");
-    
+
+        ajFmtPrintF(outf, "%-5s%.3e\n", "EV", scophit->Eval);
+        ajFmtPrintF(outf, "XX\n");
+
+        if(MAJSTRGETLEN(scophit->Group))
+        {
+            ajFmtPrintF(outf, "%-5s%S\n", "GP", scophit->Group);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        ajFmtPrintF(outf, "%-5s%S\n", "AC", scophit->Acc);
+        ajFmtPrintF(outf, "XX\n");
+
+        if(MAJSTRGETLEN(scophit->Spr))
+        {
+            ajFmtPrintF(outf, "%-5s%S\n", "SP", scophit->Spr);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA",
+                    scophit->Start, scophit->End);
+        ajFmtPrintF(outf, "XX\n");
+        outseq = ajSeqoutNewFile(outf);
+        ajSeqoutDumpSwisslike(outseq, scophit->Seq, "SQ");
+        ajSeqoutDel(&outseq);
+        ajFmtPrintF(outf, "XX\n");
+
         ajFmtPrintF(outf, "//\n");
     }
 
     ajListIterDel(&iter);
-    
 
     return ajTrue;
 }
@@ -1484,111 +1510,111 @@ AjBool ajDmxScophitsWrite(AjPFile outf, const AjPList list)
 
 
 
-/* @func ajDmxScophitsWriteFasta ********************************************
+/* @func ajDmxScophitsWriteFasta **********************************************
 **
-** Write contents of a list of Scophits to an output file in DHF format
-** Text for Class, Archhitecture, Topology, Fold, Superfamily and Family 
+** Write contents of an AJAX List of AJAX SCOP Hit objects to an AJAX File
+** in DHF format.
+** Text for Class, Archhitecture, Topology, Fold, Superfamily and Family
 ** is only written if the text is available.
-** 
-** @param [w] outf [AjPFile] Output file stream
-** @param [r] list [const AjPList] List object
+**
+** @param [w] outf [AjPFile] AJAX Output File stream
+** @param [r] scophits [const AjPList] AJAX List of AJAX SCOP Hit objects
 **
 ** @return [AjBool] True on success
+**
+** @release 3.0.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScophitsWriteFasta(AjPFile outf, const AjPList list)
+AjBool ajDmxScophitsWriteFasta(AjPFile outf, const AjPList scophits)
 {
 
     AjIList iter = NULL;
-    
-    AjPScophit thys = NULL;
-    
-    iter = ajListIterNewread(list);
-    
 
-    while((thys = (AjPScophit)ajListIterGet(iter)))
+    AjPScophit scophit = NULL;
+
+    iter = ajListIterNewread(scophits);
+
+    while((scophit = (AjPScophit) ajListIterGet(iter)))
     {
-        
-        if(!thys)
+        if(!scophit)
             return ajFalse;
 
-	ajFmtPrintF(outf, "> ");
-	
-	if(MAJSTRGETLEN(thys->Acc))
-	    ajFmtPrintF(outf, "%S^", thys->Acc);
-	else
-	    ajFmtPrintF(outf, ".^");
+        ajFmtPrintF(outf, "> ");
 
-	if(MAJSTRGETLEN(thys->Spr))
-	    ajFmtPrintF(outf, "%S^", thys->Spr);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Acc))
+            ajFmtPrintF(outf, "%S^", scophit->Acc);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	ajFmtPrintF(outf, "%d^%d^", thys->Start, thys->End);
+        if(MAJSTRGETLEN(scophit->Spr))
+            ajFmtPrintF(outf, "%S^", scophit->Spr);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if((thys->Type == ajSCOP))  
-	    ajFmtPrintF(outf, "SCOP^");
-	else if ((thys->Type == ajCATH))
-	    ajFmtPrintF(outf, "CATH^");
-	else
-	    ajFmtPrintF(outf, ".^");
-	
-	if(MAJSTRGETLEN(thys->Dom))
-	    ajFmtPrintF(outf, "%S^", thys->Dom);
-	else
-	    ajFmtPrintF(outf, ".^");
+        ajFmtPrintF(outf, "%d^%d^", scophit->Start, scophit->End);
 
-	ajFmtPrintF(outf,"%d^", thys->Sunid_Family);
+        if((scophit->Type == ajEDomainTypeSCOP))
+            ajFmtPrintF(outf, "SCOP^");
+        else if ((scophit->Type == ajEDomainTypeCATH))
+            ajFmtPrintF(outf, "CATH^");
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Class))
-	    ajFmtPrintF(outf,"%S^",thys->Class);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Dom))
+            ajFmtPrintF(outf, "%S^", scophit->Dom);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Architecture))
-	    ajFmtPrintF(outf,"%S^",thys->Architecture);
-	else
-	    ajFmtPrintF(outf, ".^");
+        ajFmtPrintF(outf,"%d^", scophit->Sunid_Family);
 
-	if(MAJSTRGETLEN(thys->Topology))
-	    ajFmtPrintF(outf,"%S^",thys->Topology);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Class))
+            ajFmtPrintF(outf,"%S^",scophit->Class);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Fold))
-	    ajFmtPrintF(outf,"%S^",thys->Fold);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Architecture))
+            ajFmtPrintF(outf,"%S^",scophit->Architecture);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Superfamily))
-	    ajFmtPrintF(outf,"%S^",thys->Superfamily);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Topology))
+            ajFmtPrintF(outf,"%S^",scophit->Topology);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Family))
-	    ajFmtPrintF(outf,"%S^",thys->Family);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Fold))
+            ajFmtPrintF(outf,"%S^",scophit->Fold);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRGETLEN(thys->Model))
-	    ajFmtPrintF(outf, "%S^", thys->Model);
-	else
-	    ajFmtPrintF(outf, ".^");
+        if(MAJSTRGETLEN(scophit->Superfamily))
+            ajFmtPrintF(outf,"%S^",scophit->Superfamily);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	ajFmtPrintF(outf, "%.2f^", thys->Score);
+        if(MAJSTRGETLEN(scophit->Family))
+            ajFmtPrintF(outf,"%S^",scophit->Family);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	ajFmtPrintF(outf, "%.3e^", thys->Pval);
+        if(MAJSTRGETLEN(scophit->Model))
+            ajFmtPrintF(outf, "%S^", scophit->Model);
+        else
+            ajFmtPrintF(outf, ".^");
 
-	ajFmtPrintF(outf, "%.3e", thys->Eval);
+        ajFmtPrintF(outf, "%.2f^", scophit->Score);
 
-	ajFmtPrintF(outf, "\n");
-	ajFmtPrintF(outf, "%S\n", thys->Seq);
-	
+        ajFmtPrintF(outf, "%.3e^", scophit->Pval);
+
+        ajFmtPrintF(outf, "%.3e", scophit->Eval);
+
+        ajFmtPrintF(outf, "\n");
+        ajFmtPrintF(outf, "%S\n", scophit->Seq);
+
     }
 
     ajListIterDel(&iter);
-    
 
     return ajTrue;
 }
@@ -1596,183 +1622,183 @@ AjBool ajDmxScophitsWriteFasta(AjPFile outf, const AjPList list)
 
 
 
-/* @func ajDmxScophitReadFasta **********************************************
+/* @func ajDmxScophitReadFasta ************************************************
 **
-** Read a Scophit object from a file in extended FASTA format 
-** (see documentation for the DOMAINATRIX "seqsearch" application). 
-** 
-** @param [u] inf      [AjPFile] Input file stream
+** Read an AJAX SCOP Hit object from a file in extended FASTA format
+** (see documentation for the DOMAINATRIX "seqsearch" application).
 **
-** @return [AjPScophit] Scophit object, or NULL if the file was not in 
-** extended FASTA (DHF) format (indicated by a token count of the the lines 
+** @param [u] inf [AjPFile] AJAX Input file stream
+**
+** @return [AjPScophit] AJAX SCOP Hit object, or NULL if the file was not in
+** extended FASTA (DHF) format (indicated by a token count of the the lines
 ** beginning with '>').
+**
+** @release 3.0.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjPScophit ajDmxScophitReadFasta(AjPFile inf) 
+AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 {
-    AjPScophit    hit       = NULL;    /* Current hit */
+    AjPScophit scophit  = NULL;    /* Current hit */
     AjBool    donefirst = ajFalse; /* First '>' line has been read */
     ajint     ntok      = 0;       /* No. tokens in a line */
     const AjPStr token  = NULL;
     AjPStr    line      = NULL;    /* Line of text */
     AjPStr    subline   = NULL;
-    AjPStr    type     = NULL;
-
+    AjPStr    type      = NULL;
 
     /* Allocate strings */
     line     = ajStrNew();
     subline  = ajStrNew();
     type     = ajStrNew();
 
-    while((ajReadlineTrim(inf,&line)))
+    while((ajReadlineTrim(inf, &line)))
     {
-	if(ajStrPrefixC(line,">"))
-	{
-	    /* Process the last hit */
-	    if(donefirst)
-	    {
-		ajStrRemoveWhite(&hit->Seq);
-		ajStrDel(&line);
-		ajStrDel(&subline);
-		ajStrDel(&type);
+        if(ajStrPrefixC(line, ">"))
+        {
+            /* Process the last hit */
+            if(donefirst)
+            {
+                ajStrRemoveWhite(&scophit->Seq);
+                ajStrDel(&line);
+                ajStrDel(&subline);
+                ajStrDel(&type);
 
-		return hit;
-	    }	
-	    else
-		hit = ajDmxScophitNew();
+                return scophit;
+            }
+            else
+                scophit = ajDmxScophitNew();
 
-	    /* Check line has correct no. of tokens and allocate Hit */
-	    ajStrAssignSubS(&subline, line, 1, -1);
+            /* Check line has correct no. of tokens and allocate Hit */
+            ajStrAssignSubS(&subline, line, 1, -1);
 
-	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
-	    {
-		ajWarn("Wrong no. (%d) of tokens for a DHF file on line %S\n", ntok, line);
-		ajStrDel(&line);
-		ajStrDel(&subline);
-		ajDmxScophitDel(&hit);
-		ajStrDel(&type);
-		return NULL;
-	    }
-	    	    
-	    /* Acc */
-	    token = ajStrParseC(subline, "^");
-	    ajStrAssignS(&hit->Acc, token);
-	    ajStrTrimWhite(&hit->Acc); 
+            if( (ntok=ajStrParseCountC(subline, "^")) != 17)
+            {
+                ajWarn("Wrong no. (%d) of tokens for a DHF file on line %S\n",
+                       ntok, line);
+                ajStrDel(&line);
+                ajStrDel(&subline);
+                ajDmxScophitDel(&scophit);
+                ajStrDel(&type);
+                return NULL;
+            }
 
-	    if(ajStrMatchC(hit->Acc, "."))
-		ajStrSetClear(&hit->Acc);
-	    	    
-	    /* Spr */
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Spr, token);
+            /* Acc */
+            token = ajStrParseC(subline, "^");
+            ajStrAssignS(&scophit->Acc, token);
+            ajStrTrimWhite(&scophit->Acc);
 
-	    if(ajStrMatchC(hit->Spr, "."))
-		ajStrSetClear(&hit->Spr);
+            if(ajStrMatchC(scophit->Acc, "."))
+                ajStrSetClear(&scophit->Acc);
 
-	    /* Start */
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%d", &hit->Start);
+            /* Spr */
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Spr, token);
 
-	    /* End */
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%d", &hit->End);
-	    
-	    /* Type */
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&type, token);
+            if(ajStrMatchC(scophit->Spr, "."))
+                ajStrSetClear(&scophit->Spr);
 
-	    if(ajStrMatchC(type, "SCOP"))
-		hit->Type = ajSCOP;
-	    else if(ajStrMatchC(type, "CATH"))
-		hit->Type = ajCATH;
+            /* Start */
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%d", &scophit->Start);
 
-	    /* Dom */
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Dom, token);
+            /* End */
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%d", &scophit->End);
 
-	    if(ajStrMatchC(hit->Dom, "."))
-		ajStrSetClear(&hit->Dom);
+            /* Type */
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&type, token);
 
-	    /* Domain identifier */
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%d", &hit->Sunid_Family);
+            if(ajStrMatchC(type, "SCOP"))
+                scophit->Type = ajEDomainTypeSCOP;
+            else if(ajStrMatchC(type, "CATH"))
+                scophit->Type = ajEDomainTypeCATH;
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Class, token);
+            /* Dom */
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Dom, token);
 
-	    if(ajStrMatchC(hit->Class, "."))
-		ajStrSetClear(&hit->Class);		
+            if(ajStrMatchC(scophit->Dom, "."))
+                ajStrSetClear(&scophit->Dom);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Architecture, token);
+            /* Domain identifier */
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%d", &scophit->Sunid_Family);
 
-	    if(ajStrMatchC(hit->Architecture, "."))
-		ajStrSetClear(&hit->Architecture);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Class, token);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Topology, token);
-	    if(ajStrMatchC(hit->Topology, "."))
-		ajStrSetClear(&hit->Topology);
+            if(ajStrMatchC(scophit->Class, "."))
+                ajStrSetClear(&scophit->Class);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Fold, token);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Architecture, token);
 
-	    if(ajStrMatchC(hit->Fold, "."))
-		ajStrSetClear(&hit->Fold);
+            if(ajStrMatchC(scophit->Architecture, "."))
+                ajStrSetClear(&scophit->Architecture);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Superfamily, token);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Topology, token);
+            if(ajStrMatchC(scophit->Topology, "."))
+                ajStrSetClear(&scophit->Topology);
 
-	    if(ajStrMatchC(hit->Superfamily, "."))
-		ajStrSetClear(&hit->Superfamily);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Fold, token);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Family, token);
+            if(ajStrMatchC(scophit->Fold, "."))
+                ajStrSetClear(&scophit->Fold);
 
-	    if(ajStrMatchC(hit->Family, "."))
-		ajStrSetClear(&hit->Family);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Superfamily, token);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajStrAssignS(&hit->Model, token);
+            if(ajStrMatchC(scophit->Superfamily, "."))
+                ajStrSetClear(&scophit->Superfamily);
 
-	    if(ajStrMatchC(hit->Model, "."))
-		ajStrSetClear(&hit->Model);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Family, token);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%f", &hit->Score);
-	    
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%f", &hit->Pval);
+            if(ajStrMatchC(scophit->Family, "."))
+                ajStrSetClear(&scophit->Family);
 
-	    token = ajStrParseC(NULL, "^");
-	    ajFmtScanS(token, "%f", &hit->Eval);
+            token = ajStrParseC(NULL, "^");
+            ajStrAssignS(&scophit->Model, token);
 
-	    donefirst = ajTrue;
-	}
-	else
-	{
-	    if(hit)
-		ajStrAppendS(&hit->Seq, line);
-	}
+            if(ajStrMatchC(scophit->Model, "."))
+                ajStrSetClear(&scophit->Model);
+
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%f", &scophit->Score);
+
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%f", &scophit->Pval);
+
+            token = ajStrParseC(NULL, "^");
+            ajFmtScanS(token, "%f", &scophit->Eval);
+
+            donefirst = ajTrue;
+        }
+        else
+        {
+            if(scophit)
+                ajStrAppendS(&scophit->Seq, line);
+        }
     }
 
     /* EOF therefore process last hit */
     if(donefirst)
     {
-	ajStrRemoveWhite(&hit->Seq);
-	ajStrDel(&line);
-	ajStrDel(&subline);
-	ajStrDel(&type);
-	return hit;
+        ajStrRemoveWhite(&scophit->Seq);
+        ajStrDel(&line);
+        ajStrDel(&subline);
+        ajStrDel(&type);
+        return scophit;
     }
-    
 
-    /* Tidy up */
     ajStrDel(&line);
     ajStrDel(&subline);
     ajStrDel(&type);
-    ajDmxScophitDel(&hit);
+    ajDmxScophitDel(&scophit);
 
     return NULL;
 }
@@ -1780,12 +1806,12 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 
 
 
-/* @func ajDmxScopalgWrite **************************************************
+/* @func ajDmxScopalgWrite ****************************************************
 **
-** Write a Scopalg object to file in EMBOSS simple multiple sequence format
-** (same as that used by clustal) annotated with domain classification as 
-** below (records are for SCOP domains in this example):
-**
+** Write an AJAX SCOP Alignment object to an AJAX FIle in EMBOSS simple
+** multiple sequence format (same as that used by clustal) annotated with
+** domain classification as below (records are for SCOP domains in this
+** example):
 **
 **
 ** # TY   SCOP
@@ -1802,207 +1828,222 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 ** # XX
 ** d1f0ia1    1 AATPHLDAVEQTLRQVSPGLEGDVWERTSGNKLDGSAADPSDWLLQTP-GCWGDDKC    50
 ** d1f0ia2    1 -----------------------------NVPV---------IAVG-GLG---VGIK    15
-** 
+**
 ** d1f0ia1   51 A-------------------------------D-RVGTKRLLAKMTENIGNATRTVD    75
 ** d1f0ia2   16 DVDPKSTFRPDLPTASDTKCVVGLHDNTNADRDYDTV-NPEESALRALVASAKGHIE    65
 **
 **
-** 
-** @param [r] scop [const AjPScopalg]  Scopalg object
-** @param [u] outf [AjPFile]     Output file stream
+**
+** @param [r] scopalg [const AjPScopalg] AJAX SCOP Alignment
+** @param [u] outf [AjPFile] AJAX Output file stream
 **
 ** @return [AjBool] True on success (an alignment was written)
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopalgWrite(const AjPScopalg scop, AjPFile outf)
+AjBool ajDmxScopalgWrite(const AjPScopalg scopalg, AjPFile outf)
 {
-    ajuint x = 0;    
-    ajuint y = 0;    
+    ajuint i = 0U;
+    ajuint j = 0U;
+
     ajint tmp_wid  = 0;     /* Temp. variable for width */
     ajint code_wid = 0;     /* Max. code width +1 */
     ajint seq_wid  = 0;     /* Width of alignment rounded up to nearest 60 */
-    ajuint nblk    = 0;     /* Number of blocks of alignment in output */
-    
+    ajuint nblk    = 0U;    /* Number of blocks of alignment in output */
+
     AjPStr tmp_seq = NULL;  /* Temp. variable for sequence */
-    AjPStr nogap = NULL;    /* Temp. variable for sequence w/o gaps */
+    AjPStr nogap   = NULL;  /* Temp. variable for sequence w/o gaps */
+
     ajint  len_nogap = 0;   /* Length of no_gap */
     ajint pos      = 0;     /* House-keeping */
-    
-    ajint start    = 0;     /* Start position of sequence fragment wrt full
-				 length alignment */
-    ajuint end     =0;      /* End position of sequence fragment wrt full
-				 length alignment */
-    AjPInt    idx  = NULL;  /* Index */
-    
-    idx = ajIntNewRes(scop->N); 
 
-    for(x=0; x<scop->N; x++)
-	ajIntPut(&idx, scop->N, 1);
+    ajint start    = 0;     /* Start position of sequence fragment wrt full
+                               length alignment */
+    ajuint end     = 0;     /* End position of sequence fragment wrt full
+                               length alignment */
+    AjPInt    idx  = NULL;  /* Index */
+
+    idx = ajIntNewRes(scopalg->Number);
+
+    for(i = 0U; i < scopalg->Number; i++)
+        ajIntPut(&idx, scopalg->Number, 1);
 
     /* Write SCOP classification records to file */
-    if(scop->Type == ajSCOP)
+    if(scopalg->Type == ajEDomainTypeSCOP)
     {
-	ajFmtPrintF(outf,"# TY   SCOP\n# XX\n");
-	ajFmtPrintF(outf,"# CL   %S\n# XX\n",scop->Class);
+        ajFmtPrintF(outf,"# TY   SCOP\n# XX\n");
+        ajFmtPrintF(outf,"# CL   %S\n# XX\n", scopalg->Class);
 
-	ajFmtPrintSplit(outf,scop->Fold,"# FO   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
-	ajFmtPrintSplit(outf,scop->Superfamily,"# SF   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
-	ajFmtPrintSplit(outf,scop->Family,"# FA   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf, scopalg->Fold, "# FO   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf, scopalg->Superfamily, "# SF   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf,scopalg->Family, "# FA   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
 
-	/* 
-	ajFmtPrintSplit(outf,scop->Fold,"\nXX\n# FO   ",75," \t\n\r");
-	ajFmtPrintSplit(outf,scop->Superfamily,"# XX\n# SF   ",75," \t\n\r");
-	ajFmtPrintSplit(outf,scop->Family,"# XX\n# FA   ",75," \t\n\r");
-	ajFmtPrintF(outf,"# XX\n"); */
+#if AJFALSE
+        ajFmtPrintSplit(outf,scopalg->Fold, "\nXX\n# FO   ", 75,
+                        " \t\n\r");
+        ajFmtPrintSplit(outf,scopalg->Superfamily, "# XX\n# SF   ", 75,
+                        " \t\n\r");
+        ajFmtPrintSplit(outf,scopalg->Family, "# XX\n# FA   ", 75,
+                        " \t\n\r");
+        ajFmtPrintF(outf,"# XX\n");
+#endif /* AJFALSE */
 
-	ajFmtPrintF(outf,"# SI   %d\n# XX",scop->Sunid_Family);
+        ajFmtPrintF(outf, "# SI   %d\n# XX", scopalg->Sunid_Family);
     }
     else
     {
-	ajFmtPrintF(outf,"# TY   CATH\n# XX\n");
-	ajFmtPrintF(outf,"# CL   %S\n# XX\n",scop->Class);
+        ajFmtPrintF(outf, "# TY   CATH\n# XX\n");
+        ajFmtPrintF(outf, "# CL   %S\n# XX\n", scopalg->Class);
 
-	ajFmtPrintSplit(outf,scop->Architecture,"# AR   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
-	ajFmtPrintSplit(outf,scop->Topology,"# TP   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
-	ajFmtPrintSplit(outf,scop->Superfamily,"# SF   ",75," \t\n\r");
-	ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf, scopalg->Architecture, "# AR   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf, scopalg->Topology, "# TP   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
+        ajFmtPrintSplit(outf, scopalg->Superfamily, "# SF   ", 75, " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
 
-	/* ajFmtPrintSplit(outf,scop->Architecture,
-                           "\nXX\n# AR   ",75," \t\n\r");
-	ajFmtPrintSplit(outf,scop->Topology,"# XX\n# TP   ",75," \t\n\r");
-	ajFmtPrintSplit(outf,scop->Superfamily,"# XX\n# SF   ",75," \t\n\r");
-	ajFmtPrintF(outf,"# XX\n"); */
+#if AJFALSE
+        ajFmtPrintSplit(outf, scopalg->Architecture,
+                        "\nXX\n# AR   ", 75, " \t\n\r");
+        ajFmtPrintSplit(outf, scopalg->Topology, "# XX\n# TP   ", 75,
+                        " \t\n\r");
+        ajFmtPrintSplit(outf, scopalg->Superfamily, "# XX\n# SF   ", 75,
+                        " \t\n\r");
+        ajFmtPrintF(outf, "# XX\n");
+#endif /* AJFALSE */
 
-	ajFmtPrintF(outf,"# SI   %d\n# XX",scop->Sunid_Family);
+        ajFmtPrintF(outf, "# SI   %d\n# XX", scopalg->Sunid_Family);
     }
-    
 
     /* Find max. width of code, and add 1 to it for 1 whitespace */
-    for(x=0;x<scop->N;x++)
-	if( (tmp_wid=MAJSTRGETLEN(scop->Codes[x]))>code_wid)
-	    code_wid = tmp_wid;
+    for(i = 0U; i < scopalg->Number; i++)
+        if((tmp_wid = MAJSTRGETLEN(scopalg->Codes[i])) > code_wid)
+            code_wid = tmp_wid;
     code_wid++;
-    
 
     /* Calculate no. of blocks in alignment */
-    seq_wid = ajRound(scop->width, 50);
+    seq_wid = ajRound(scopalg->Width, 50);
     nblk    = (ajint) (seq_wid / 50);
-    
-    
+
+
     /* Print out sequence in blocks */
-    for(x=0;x<nblk;x++)
+    for(i = 0U; i < nblk; i++)
     {
-	start = x*50;
-	end   = start + 49;
+        start = i * 50;
+        end   = start + 49;
 
-	if(end>=scop->width)
-	    end = scop->width - 1;
-	
-	ajFmtPrintF(outf, "\n");
-	for(y=0; y<scop->N; y++)
-	{
-	    ajStrAssignSubS(&tmp_seq, scop->Seqs[y], start, end);
-	    ajStrAssignS(&nogap, tmp_seq);
-	    /* Remove gap characters */
-	    ajStrRemoveSetC(&nogap, " -");
-	    len_nogap = MAJSTRGETLEN(nogap);
-	    	    
-	    pos = ajIntGet(idx, y);
+        if(end>=scopalg->Width)
+            end = scopalg->Width - 1;
 
-	    ajFmtPrintF(outf, "%*S%7d %-50S%7d\n", 
-			code_wid, 
-			pos, 
-			scop->Codes[y], 
-			tmp_seq, 
-			pos+len_nogap-1);
+        ajFmtPrintF(outf, "\n");
+        for(j = 0U; j < scopalg->Number; j++)
+        {
+            ajStrAssignSubS(&tmp_seq, scopalg->Seqs[j], start, end);
+            ajStrAssignS(&nogap, tmp_seq);
+            /* Remove gap characters */
+            ajStrRemoveSetC(&nogap, " -");
+            len_nogap = MAJSTRGETLEN(nogap);
 
-	    ajIntPut(&idx, y, pos+len_nogap);
-	}
+            pos = ajIntGet(idx, j);
+
+            ajFmtPrintF(outf, "%*S%7d %-50S%7d\n",
+                        code_wid,
+                        pos,
+                        scopalg->Codes[j],
+                        tmp_seq,
+                        pos + len_nogap - 1);
+
+            ajIntPut(&idx, j, pos + len_nogap);
+        }
     }
 
-    ajIntDel(&idx);    
+    ajIntDel(&idx);
+
     return ajTrue;
 }
 
 
 
 
-/* @func ajDmxScopalgWriteClustal *******************************************
+/* @func ajDmxScopalgWriteClustal *********************************************
 **
-** Writes a Scopalg object to a specified file in CLUSTAL format (just the 
-** alignment without the domain classification information).
+** Write an AJAX SCOP Alignment object to an AJAX File in CLUSTAL format
+** (just the alignment without the domain classification information).
 **
-** @param [r] align      [const AjPScopalg]  Scopalg object
-** @param [u] outf       [AjPFile]   Outfile file pointer
-** 
+** @param [r] scopalg [const AjPScopalg] AJAX SCOP Alignment
+** @param [u] outf [AjPFile] AJAX Outfile file
+**
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopalgWriteClustal(const AjPScopalg align, AjPFile outf)
+AjBool ajDmxScopalgWriteClustal(const AjPScopalg scopalg, AjPFile outf)
 {
-    ajuint i;
-    
-    /* Check args */
-    if(!align)
+    ajuint i = 0U;
+
+    if(!scopalg)
     {
-	ajWarn("Null args passed to ajDmxScopalgWriteClustal");
-	return ajFalse;
+        ajWarn("Null args passed to ajDmxScopalgWriteClustal");
+        return ajFalse;
     }
-    
+
     /* remove i from the print statement before committing */
-    ajFmtPrintF(outf,"CLUSTALW\n\n");
-    ajFmtPrintF(outf, "\n"); 
+    ajFmtPrintF(outf, "CLUSTALW\n\n");
+    ajFmtPrintF(outf, "\n");
 
-    for(i=0;i<align->N;++i)
-    	ajFmtPrintF(outf,"%S_%d   %S\n",align->Codes[i],i,align->Seqs[i]);
+    for(i = 0U; i < scopalg->Number; ++i)
+        ajFmtPrintF(outf, "%S_%d   %S\n", scopalg->Codes[i], i,
+                    scopalg->Seqs[i]);
 
-    ajFmtPrintF(outf,"\n");
-    ajFmtPrintF(outf,"\n"); 
-    
+    ajFmtPrintF(outf, "\n");
+    ajFmtPrintF(outf, "\n");
+
     return ajTrue;
 }
 
 
 
 
-/* @func ajDmxScopalgWriteClustal2 ******************************************
+/* @func ajDmxScopalgWriteClustal2 ********************************************
 **
-** Writes a Scopalg object to a specified file in CLUSTAL format (just the 
-** alignment without the domain classification information).
+** Write an AJAX SCOP Alignment object to an AJAX File in CLUSTAL format
+** (just the alignment without the domain classification information).
 **
-** @param [r] align      [const AjPScopalg]  Scopalg object.
-** @param [u] outf       [AjPFile]   Outfile file pointer.
-** 
+** @param [r] scopalg [const AjPScopalg] AJAX SCOP Alignment
+** @param [u] outf [AjPFile] AJAX Outfile file
+**
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
+AjBool ajDmxScopalgWriteClustal2(const AjPScopalg scopalg, AjPFile outf)
 {
-    ajuint i;
-    
-    /* Check args */
-    if(!align)
+    ajuint i = 0U;
+
+    if(!scopalg)
     {
-	ajWarn("Null args passed to ajDmxScopalgWriteClustal2");
-	return ajFalse;
+        ajWarn("Null args passed to ajDmxScopalgWriteClustal2");
+        return ajFalse;
     }
-    
+
     /* remove i from the print statement before committing */
-    ajFmtPrintF(outf, "\n"); 
+    ajFmtPrintF(outf, "\n");
 
-    for(i=0;i<align->N;++i)
-    	ajFmtPrintF(outf,"%S_%d   %S\n",align->Codes[i],i,align->Seqs[i]);
+    for(i = 0; i < scopalg->Number; i++)
+        ajFmtPrintF(outf, "%S_%d   %S\n", scopalg->Codes[i], i,
+                    scopalg->Seqs[i]);
 
     ajFmtPrintF(outf,"\n");
-    
+
     return ajTrue;
 }
 
@@ -2010,91 +2051,92 @@ AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
 
 
 
-/* @func ajDmxScopalgWriteFasta ********************************************
+/* @func ajDmxScopalgWriteFasta ***********************************************
 **
-** Writes a Scopalg object to a specified file in FASTA format (just the 
-** alignment without the domain classification information).
+** Write an AJAX SCOP Alignment object to an AJAX File in FASTA format
+** (just the alignment without the domain classification information).
 **
-** @param [r] align      [const AjPScopalg]  A list of hit list structures.
-** @param [u] outf       [AjPFile]     Outfile file pointer
-** 
+** @param [r] scopalg [const AjPScopalg] AJAX SCOP Alignment
+** @param [u] outf [AjPFile] AJAX Outfile file
+**
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopalgWriteFasta(const AjPScopalg align, AjPFile outf)
+AjBool ajDmxScopalgWriteFasta(const AjPScopalg scopalg, AjPFile outf)
 {
-    ajuint i;
-    
-    /*Check args*/
-    if(!align)
-    {
-	ajWarn("Null args passed to ajDmxScopalgWriteFasta");
-	return ajFalse;
-    }
-    
-    /* remove i from the print statement before committing
-    ajFmtPrintF(*outf,"CLUSTALW\n\n");
-    ajFmtPrintF(*outf, "\n");*/ 
+    ajuint i = 0U;
 
-    for(i=0;i<align->N;++i)
-    	ajFmtPrintF(outf,">%S_%d\n%S\n",align->Codes[i],i,align->Seqs[i]);
+    if(!scopalg)
+    {
+        ajWarn("Null args passed to ajDmxScopalgWriteFasta");
+        return ajFalse;
+    }
+
+#if AJFALSE
+    /* remove i from the print statement before committing */
+    ajFmtPrintF(outf, "CLUSTALW\n\n");
+    ajFmtPrintF(outf, "\n");
+#endif /* AJFALSE */
+
+    for(i = 0U; i < scopalg->Number; i++)
+        ajFmtPrintF(outf, ">%S_%d\n%S\n", scopalg->Codes[i], i,
+                    scopalg->Seqs[i]);
 
     ajFmtPrintF(outf,"\n");
-    ajFmtPrintF(outf,"\n"); 
-    
+    ajFmtPrintF(outf,"\n");
+
     return ajTrue;
-}	
+}
 
 
 
 
-/* ======================================================================= */
-/* ======================== Miscellaneous =================================*/
-/* ======================================================================= */
-
-
-
-
-/* @section Miscellaneous ***************************************************
+/* @section Miscellaneous *****************************************************
 **
 ** These functions may have diverse functions that do not fit into the other
-** categories. 
+** categories.
 **
-****************************************************************************/
+******************************************************************************/
 
 
 
 
-/* @func ajDmxScopSeqFromSunid **********************************************
+/* @func ajDmxScopSeqFromSunid ************************************************
 **
-** Writes a sequence corresponding to a Scop domain given a Sunid for the 
-** domain. The sequence is taken from one of a list of Scop objects that is
-** provided.  The swissprot sequence is taken in priority over the pdb 
+** Write a sequence corresponding to an AJAX SCOP domain given a Sunid for the
+** domain. The sequence is taken from one of an AJAX List of AJAX SCOP objects
+** that is provided. The SWISS-Prot sequence is taken in priority over the PDB
 ** sequence.
-** 
-** @param [r] id   [ajint]    Search term
-** @param [w] seq  [AjPStr*]  Result sequence
-** @param [r] list [const AjPList]  Sorted list of Scop objects
 **
-** @return [AjBool]  True if a swissprot identifier code was found for the
-**                   Pdb code.
+** @param [r] identifier [ajint] Search term
+** @param [w] seq [AjPStr*] Result sequence
+** @param [r] scops [const AjPList] Sorted AJAX List of AJAX SCOP objects
+**
+** @return [AjBool] True if a SWISS-Prot identifier code was found for the
+**                  PDB code.
+**
+** @release 2.9.0
 ** @@
-****************************************************************************/
+******************************************************************************/
 
-AjBool ajDmxScopSeqFromSunid(ajint id, AjPStr *seq, const AjPList list)
+AjBool ajDmxScopSeqFromSunid(ajint identifier, AjPStr *seq,
+                             const AjPList scops)
 {
-    AjPScop *arr = NULL;  /* Array derived from list */
-    ajint dim =0;         /* Size of array */
-    ajint idx =0;         /* Index into array for the Pdb code */
+    ajuint dim = 0U;      /* Size of array */
+    ajint  idx = 0;       /* Index into array for the Pdb code */
 
-    if(!id || !list)
+    AjPScop *array = NULL;  /* Array derived from list */
+
+    if(!identifier || !scops)
     {
         ajWarn("Bad args passed to ajDmxScopSeqFromSunid");
         return ajFalse;
     }
-      
-    dim = ajListToarray(list, (void ***) &(arr));
+
+    dim = (ajuint) ajListToarray(scops, (void ***) &array);
 
     if(!dim)
     {
@@ -2102,19 +2144,19 @@ AjBool ajDmxScopSeqFromSunid(ajint id, AjPStr *seq, const AjPList list)
         return ajFalse;
     }
 
-    if((idx = ajScopArrFindSunid(arr, dim, id))==-1)
+    if((idx = ajScopArrFindSunid(array, dim, identifier)) == -1)
     {
-        AJFREE(arr);
+        AJFREE(array);
         return ajFalse;
     }
 
     /* swissprot sequence has priority */
-    if((ajStrGetLen(arr[idx]->SeqSpr))==0)
-	ajStrAssignS(seq, arr[idx]->SeqPdb);
+    if((ajStrGetLen(array[idx]->SeqSpr)) == 0)
+        ajStrAssignS(seq, array[idx]->SeqPdb);
     else
-	ajStrAssignS(seq, arr[idx]->SeqSpr);
-    
-    AJFREE(arr);
+        ajStrAssignS(seq, array[idx]->SeqSpr);
+
+    AJFREE(array);
 
     return ajTrue;
 }
@@ -2127,25 +2169,29 @@ AjBool ajDmxScopSeqFromSunid(ajint id, AjPStr *seq, const AjPList list)
 ** Cleanup of Dmx function internals.
 **
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
 void ajDmxExit(void)
 {
-    ajStrDel(&dmxStrline);
-    ajStrDel(&dmxStrtype);
-    ajStrDel(&dmxStrclass);
-    ajStrDel(&dmxStrfold);
-    ajStrDel(&dmxStrsuper);
-    ajStrDel(&dmxStrfamily);
-    ajStrDel(&dmxStrarch);
-    ajStrDel(&dmxStrtopo);
-    ajStrDel(&dmxStrpostsim);
-    ajStrDel(&dmxStrposttmp);
-    ajStrDel(&dmxStrposisim);
-    ajStrDel(&dmxStrpositmp);
-    ajStrDel(&dmxStrseq1);
-    ajStrDel(&dmxStrcodetmp);
+    ajStrDel(&dmxGStrline);
+    ajStrDel(&dmxGStrtype);
+    ajStrDel(&dmxGStrclass);
+    ajStrDel(&dmxGStrfold);
+    ajStrDel(&dmxGStrsuper);
+    ajStrDel(&dmxGStrfamily);
+    ajStrDel(&dmxGStrarch);
+    ajStrDel(&dmxGStrtopo);
+    ajStrDel(&dmxGStrpostsim);
+    ajStrDel(&dmxGStrposttmp);
+    ajStrDel(&dmxGStrposisim);
+    ajStrDel(&dmxGStrpositmp);
+    ajStrDel(&dmxGStrseq1);
+    ajStrDel(&dmxGStrcodetmp);
+
+    return;
 }
 
 
@@ -2158,6 +2204,8 @@ void ajDmxExit(void)
 **
 ** @return [void]
 **
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajDmxDummyFunction(void)
@@ -2168,16 +2216,18 @@ void ajDmxDummyFunction(void)
 
 
 
-/* @funcstatic dmxTraceScophit ***********************************************
+/* @funcstatic dmxTraceScophit ************************************************
 **
 ** Reports internals of a SCOPhit object
 **
-** @param [r] scophit [const AjPScophit] SCOP hit object
+** @param [r] scophit [const AjPScophit] AJAX SCOP Hit object
 ** @param [r] title [const char*] title
 ** @return [void]
+**
+** @release 4.1.0
 ******************************************************************************/
 
-static void dmxTraceScophit(const AjPScophit scophit, const char* title)
+static void dmxTraceScophit(const AjPScophit scophit, const char *title)
 {
     ajDebug("SCOPhit trace: %s\n", title);
     ajDebug("Type: %d\n", scophit->Type);

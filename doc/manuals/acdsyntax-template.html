@@ -443,6 +443,12 @@ no.</p>
 <!-- #acdtype-section-input -->
 <h4>2.3.1.2 Input<a href="#fn1">[1]</a></h4>
 
+<!-- #acdtype-assembly -->
+<h5>Assembly</h5>
+
+<p>An assembly of sequence reads. The sequence data is read only is the
+resulotion is at the single base level.</p>
+
 <!-- #acdtype-codon -->
 <h5>Codon</h5>
 
@@ -613,6 +619,12 @@ applications to define weights, ancestral states and factors
 provide detailed type checking, and can automatically detect and
 validate the various alternative formats that phylip supports without
 the need for complex extra command line options.</p>
+
+<!-- #acdtype-refseq -->
+<h5>Refseq</h5>
+
+<p>A reference sequence. The sequence data is read only is the
+resulotion is at the single base level.</p>
 
 <!-- #acdtype-regexp -->
 <h5>Regexp</h5>
@@ -794,6 +806,13 @@ sequence formats.</p>
 Can also be stored with the sequence if the sequence output
 "features" attribute is set.</p>
 
+<!-- #acdtype-outassembly -->
+<h5>Outassembly</h5>
+
+<p>Output file containing sequence assembly data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
 <!-- #acdtype-outcodon -->
 <h5>Outcodon</h5>
 
@@ -881,6 +900,13 @@ which the <i>-oformat</i> associated qualifier can override.</p>
 <h5>Outproperties</h5>
 
 <p>Output file containing phylogenetics property data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outrefseq -->
+<h5>Outrefseq</h5>
+
+<p>Output file containing reference sequence data.
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
@@ -1926,6 +1952,12 @@ they can fix the value, or provide parsers for each alternative.
 
 <!-- #section-input -->
 
+<!-- #acdattr-assembly -->
+<h5>Assembly</h5>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
+
 <!-- #acdattr-codon -->
 <h5>Codon</h5>
 
@@ -2212,6 +2244,12 @@ by an empty string or by -noxxx on the command line if the application
 can run without a properties file.
 </p>
 
+
+<!-- #acdattr-refseq -->
+<h5>Refseq</h5>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
 
 <!-- #acdattr-regexp -->
 <h5>Regexp</h5>
@@ -2644,6 +2682,26 @@ for programs where an alignment file is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
 
+<!-- #acdattr-outassembly -->
+<h5>Outassembly</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
 <!-- #acdattr-featout -->
 <h5>Featout</h5>
 
@@ -2905,6 +2963,26 @@ file extension.</p>
 
 <!-- #acdattr-outproperties -->
 <h5>Outproperties</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outrefseq -->
+<h5>Outrefseq</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
 
 <p>The <i>extension:</i> attribute will default to the output file
 format.</p>
@@ -3246,6 +3324,11 @@ for programs where a graph is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
 
+<p>The <i>sequence:</i> attribute specifies that the X-axis positions
+relate to sequence positions in the first input sequence. The sequence
+name becomes the default x-axis title and is used for datafile outputs
+that need a source name.
+
 <p>The <i>goutfile:</i> attribute specifies the base file name for
 output. It can be used to direct output to a named file rather than
 default to the first sequence name in the input.</p>
@@ -3267,6 +3350,11 @@ generation, and uses an empty string (no graph) as the default
 for programs where a graph is only occasionally
 required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
+
+<p>The <i>sequence:</i> attribute specifies that the X-axis positions
+relate to sequence positions in the first input sequence. The sequence
+name becomes the default x-axis title and is used for datafile outputs
+that need a source name.
 
 <p>The command line qualifiers can be defined as ACD attributes. The
 most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and

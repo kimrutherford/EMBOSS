@@ -30,8 +30,10 @@ RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
 RT   gene";
-RL   J. Biol. Chem. 265(33):20277-20284(1990).
+RL   J Biol Chem 265(33):20277-20284(1990).
 XX
+DR   Ensembl-Gn; ENSG00000176890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000323274; Homo_sapiens.
 DR   GDB; 163670.
 DR   GDB; 182340.
 XX
@@ -55,8 +57,6 @@ FT   repeat_region   1..148
 FT                   /rpt_family="Alu"
 FT   repeat_region   202..477
 FT                   /rpt_family="Alu"
-FT   prim_transcript 822..16246
-FT                   /note="thymidylate synthase mRNA and introns"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

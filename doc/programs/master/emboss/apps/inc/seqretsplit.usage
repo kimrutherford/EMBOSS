@@ -5,7 +5,7 @@ Here is a sample session with <b>seqretsplit</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqretsplit tembl:m1190* </b>
-Reads sequences and writes them to individual files
+Read sequences and write them to individual files
 output sequence(s) [m11903.fasta]: <b></b>
 
 </pre></td></tr></table><p>

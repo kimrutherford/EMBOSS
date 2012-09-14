@@ -1,31 +1,34 @@
-/* @source Ensembl Sequence functions
+/* @source enssequence ********************************************************
+**
+** Ensembl Sequence functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.44 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.29 $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enscache.h"
 #include "ensprojectionsegment.h"
@@ -35,32 +38,32 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic sequenceChunkPower ********************************************
+/* @conststatic sequenceKChunkPower *******************************************
 **
 ** The Ensembl Sequence Adaptor handles sequences in larger chunks internally.
 ** Both, memory allocation and SQL database operations become more efficient,
@@ -71,12 +74,12 @@
 **
 ******************************************************************************/
 
-static const ajuint sequenceChunkPower = 18;
+static const ajuint sequenceKChunkPower = 18U;
 
 
 
 
-/* @conststatic sequenceadaptorCacheMaxBytes **********************************
+/* @conststatic sequenceadaptorKCacheMaxBytes *********************************
 **
 ** The maximum memory size in bytes the Ensembl Sequence Adaptor-internal
 ** Ensembl Cache can use.
@@ -85,12 +88,12 @@ static const ajuint sequenceChunkPower = 18;
 **
 ******************************************************************************/
 
-static const size_t sequenceadaptorCacheMaxBytes = 1 << 26;
+static const size_t sequenceadaptorKCacheMaxBytes = 1U << 26U;
 
 
 
 
-/* @conststatic sequenceadaptorCacheMaxCount **********************************
+/* @conststatic sequenceadaptorKCacheMaxCount *********************************
 **
 ** The mamximum number of sequence chunks the Ensembl Sequence Adaptor-internal
 ** Ensembl Cache can hold.
@@ -99,24 +102,24 @@ static const size_t sequenceadaptorCacheMaxBytes = 1 << 26;
 **
 ******************************************************************************/
 
-static const ajuint sequenceadaptorCacheMaxCount = 1 << 16;
+static const ajuint sequenceadaptorKCacheMaxCount = 1U << 16U;
 
 
 
 
-/* @conststatic sequenceadaptorCacheMaxSize ***********************************
+/* @conststatic sequenceadaptorKCacheMaxSize **********************************
 **
 ** Maximum size of a sequence chunk to be allowed into the
 ** Ensembl Sequence Adaptor-internal Ensembl Cache.
 **
 ******************************************************************************/
 
-static const size_t sequenceadaptorCacheMaxSize = 0;
+static const size_t sequenceadaptorKCacheMaxSize = 0U;
 
 
 
 
-/* @conststatic sequenceadaptorCacheMaxLength *********************************
+/* @conststatic sequenceadaptorKCacheMaxLength ********************************
 **
 ** Maximum length of a sequence request up to which it gets chunked and cached.
 ** Larger request are returned directly.
@@ -125,41 +128,37 @@ static const size_t sequenceadaptorCacheMaxSize = 0;
 **
 ******************************************************************************/
 
-static const ajuint sequenceadaptorCacheMaxLength = 1 << 21;
+static const ajuint sequenceadaptorKCacheMaxLength = 1U << 21U;
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static void* sequenceadaptorCacheReference(void* value);
-
-static void sequenceadaptorCacheDelete(void** value);
-
-static size_t sequenceadaptorCacheSize(const void* value);
+static size_t sequenceadaptorCacheSize(const void *value);
 
 static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
                                                       EnsPSlice slice,
                                                       ajint start,
                                                       ajint end,
                                                       ajint strand,
-                                                      AjPStr* Psequence);
+                                                      AjPStr *Psequence);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -179,58 +178,10 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 ** Ensembl Sequence Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::Sequenceadaptor
-** @cc CVS Revision: 1.48
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.53
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
-
-
-
-
-/* @funcstatic sequenceadaptorCacheReference **********************************
-**
-** Wrapper function to reference an Ensembl Sequence (i.e. an AJAX String)
-** from an Ensembl Cache.
-**
-** @param [u] value [void*] AJAX String
-**
-** @return [void*] AJAX String or NULL
-** @@
-******************************************************************************/
-
-static void* sequenceadaptorCacheReference(void* value)
-{
-    if(!value)
-        return NULL;
-
-    return (void*) ajStrNewRef((AjPStr) value);
-}
-
-
-
-
-/* @funcstatic sequenceadaptorCacheDelete *************************************
-**
-** Wrapper function to delete an Ensembl Sequence
-** (i.e. an AJAX String) from an Ensembl Cache.
-**
-** @param [u] value [void**] AJAX String address
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void sequenceadaptorCacheDelete(void** value)
-{
-    if(!value)
-        return;
-
-    ajStrDel((AjPStr*) value);
-
-    *value = NULL;
-
-    return;
-}
 
 
 
@@ -243,14 +194,16 @@ static void sequenceadaptorCacheDelete(void** value)
 ** @param [r] value [const void*] AJAX String
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static size_t sequenceadaptorCacheSize(const void* value)
+static size_t sequenceadaptorCacheSize(const void *value)
 {
     size_t size = 0;
 
-    if(!value)
+    if (!value)
         return 0;
 
     size += sizeof (AjOStr);
@@ -278,7 +231,7 @@ static size_t sequenceadaptorCacheSize(const void* value)
 ** @argrule Obj object [EnsPSequenceadaptor] Ensembl Sequence Adaptor
 ** @argrule Ref object [EnsPSequenceadaptor] Ensembl Sequence Adaptor
 **
-** @valrule * [EnsPSequenceadaptor] Ensembl Sequence Adaptor
+** @valrule * [EnsPSequenceadaptor] Ensembl Sequence Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -305,6 +258,8 @@ static size_t sequenceadaptorCacheSize(const void* value)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPSequenceadaptor] Ensembl Sequence Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -313,10 +268,10 @@ EnsPSequenceadaptor ensSequenceadaptorNew(
 {
     EnsPSequenceadaptor sa = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(ajDebugTest("ensSequenceadaptorNew"))
+    if (ajDebugTest("ensSequenceadaptorNew"))
         ajDebug("ensSequenceadaptorNew\n"
                 "  dba %p\n",
                 dba);
@@ -325,17 +280,18 @@ EnsPSequenceadaptor ensSequenceadaptorNew(
 
     sa->Adaptor = dba;
 
-    sa->Cache = ensCacheNew(ensECacheTypeAlphaNumeric,
-                            sequenceadaptorCacheMaxBytes,
-                            sequenceadaptorCacheMaxCount,
-                            sequenceadaptorCacheMaxSize,
-                            sequenceadaptorCacheReference,
-                            sequenceadaptorCacheDelete,
-                            sequenceadaptorCacheSize,
-                            (void* (*)(const void* key)) NULL,
-                            (AjBool (*)(const void* value)) NULL,
-                            ajFalse,
-                            "Sequence");
+    sa->Cache = ensCacheNew(
+        ensECacheTypeAlphaNumeric,
+        sequenceadaptorKCacheMaxBytes,
+        sequenceadaptorKCacheMaxCount,
+        sequenceadaptorKCacheMaxSize,
+        (void *(*)(void *)) &ajStrNewRef,
+        (void (*)(void **)) &ajStrDel,
+        &sequenceadaptorCacheSize,
+        (void *(*)(const void *)) NULL,
+        (AjBool (*)(const void *)) NULL,
+        ajFalse,
+        "Sequence");
 
     return sa;
 }
@@ -345,15 +301,14 @@ EnsPSequenceadaptor ensSequenceadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Sequence Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Sequence Adaptor object.
 **
 ** @fdata [EnsPSequenceadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Sequence Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Sequence Adaptor
 **
-** @argrule * Psa [EnsPSequenceadaptor*] Ensembl Sequence Adaptor
-**                                       object address
+** @argrule * Psa [EnsPSequenceadaptor*] Ensembl Sequence Adaptor address
 **
 ** @valrule * [void]
 **
@@ -373,31 +328,34 @@ EnsPSequenceadaptor ensSequenceadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Psa [EnsPSequenceadaptor*] Ensembl Sequence Adaptor
-**                                       object address
+** @param [d] Psa [EnsPSequenceadaptor*] Ensembl Sequence Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensSequenceadaptorDel(EnsPSequenceadaptor* Psa)
+void ensSequenceadaptorDel(EnsPSequenceadaptor *Psa)
 {
     EnsPSequenceadaptor pthis = NULL;
 
-    if(!Psa)
+    if (!Psa)
         return;
 
-    if(!*Psa)
-        return;
-
-    if(ajDebugTest("ensSequenceadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensSequenceadaptorDel"))
         ajDebug("ensSequenceadaptorDel\n"
                 "  *Psa %p\n",
                 *Psa);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Psa)
+        return;
 
     pthis = *Psa;
 
-    if(pthis->Cache)
+    if (pthis->Cache)
         ensCacheDel(&pthis->Cache);
 
     AJFREE(pthis);
@@ -454,6 +412,8 @@ void ensSequenceadaptorDel(EnsPSequenceadaptor* Psa)
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** This function will only return biological sequence information for Ensembl
 ** Sequence Regions, which are in the sequence-level Coordinate System. All
@@ -466,15 +426,15 @@ void ensSequenceadaptorDel(EnsPSequenceadaptor* Psa)
 
 AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sa,
                                               const EnsPSeqregion sr,
-                                              AjPSeq* Psequence)
+                                              AjPSeq *Psequence)
 {
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!sr)
+    if (!sr)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     return ensSequenceadaptorFetchSeqregionSubSeq(
@@ -501,6 +461,8 @@ AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sa,
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** This function will only return biological sequence information for Ensembl
 ** Sequence Regions, which are in the sequence-level Coordinate System. All
@@ -513,15 +475,15 @@ AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sa,
 
 AjBool ensSequenceadaptorFetchSeqregionAllStr(EnsPSequenceadaptor sa,
                                               const EnsPSeqregion sr,
-                                              AjPStr* Psequence)
+                                              AjPStr *Psequence)
 {
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!sr)
+    if (!sr)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     return ensSequenceadaptorFetchSeqregionSubStr(
@@ -551,6 +513,8 @@ AjBool ensSequenceadaptorFetchSeqregionAllStr(EnsPSequenceadaptor sa,
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** This function will only return biological sequence information for Ensembl
 ** Sequence Regions, which are in the sequence-level Coordinate System. All
@@ -565,12 +529,12 @@ AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
                                               const EnsPSeqregion sr,
                                               ajuint start,
                                               ajuint length,
-                                              AjPSeq* Psequence)
+                                              AjPSeq *Psequence)
 {
     AjPStr name     = NULL;
     AjPStr sequence = NULL;
 
-    if(ajDebugTest("ensSequenceadaptorFetchSeqregionSubSeq"))
+    if (ajDebugTest("ensSequenceadaptorFetchSeqregionSubSeq"))
     {
         ajDebug("ensSequenceadaptorFetchSeqregionSubSeq\n"
                 "  sa %p\n"
@@ -587,14 +551,19 @@ AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
         ensSeqregionTrace(sr, 1);
     }
 
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!sr)
+    if (!sr)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
+
+    /*
+    ** It is sligtly more efficient, if undefined AJAX String objects are
+    ** directly allocated by the following functions to their final size.
+    */
 
     name = ajFmtStr("%S:%S:%S:%u:%u:1",
                     ensCoordsystemGetName(ensSeqregionGetCoordsystem(sr)),
@@ -605,7 +574,15 @@ AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
 
     ensSequenceadaptorFetchSeqregionSubStr(sa, sr, start, length, &sequence);
 
-    *Psequence = ajSeqNewNameS(sequence, name);
+    if (*Psequence)
+    {
+        ajSeqClear(*Psequence);
+
+        ajSeqAssignNameS(*Psequence, name);
+        ajSeqAssignSeqS(*Psequence, sequence);
+    }
+    else
+        *Psequence = ajSeqNewNameS(sequence, name);
 
     ajSeqSetNuc(*Psequence);
 
@@ -636,6 +613,8 @@ AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** This function will only return biological sequence information for Ensembl
 ** Sequence Regions, which are in the sequence-level Coordinate System. All
@@ -650,13 +629,13 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
                                               const EnsPSeqregion sr,
                                               ajuint start,
                                               ajuint length,
-                                              AjPStr* Psequence)
+                                              AjPStr *Psequence)
 {
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
-    ajuint chkmin = 0;
-    ajuint chkmax = 0;
-    ajuint posmin = 0;
+    ajuint chkmin = 0U;
+    ajuint chkmax = 0U;
+    ajuint posmin = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -667,7 +646,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
     AjPStr key       = NULL;
     AjPStr statement = NULL;
 
-    if(ajDebugTest("ensSequenceadaptorFetchSeqregionSubStr"))
+    if (ajDebugTest("ensSequenceadaptorFetchSeqregionSubStr"))
     {
         ajDebug("ensSequenceadaptorFetchSeqregionSubStr\n"
                 "  sa %p\n"
@@ -682,13 +661,13 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
         ensSeqregionTrace(sr, 1);
     }
 
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!sr)
+    if (!sr)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     /*
@@ -696,35 +675,35 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
     ** plus one position for the 'nul' string terminator.
     */
 
-    if(*Psequence)
+    if (*Psequence)
         ajStrAssignClear(Psequence);
     else
-        *Psequence = ajStrNewRes((((length + 1) >> sequenceChunkPower) + 1)
-                                 << sequenceChunkPower);
+        *Psequence = ajStrNewRes((((length + 1) >> sequenceKChunkPower) + 1)
+                                 << sequenceKChunkPower);
 
-    if(length < sequenceadaptorCacheMaxLength)
+    if (length < sequenceadaptorKCacheMaxLength)
     {
-        chkmin = (start - 1) >> sequenceChunkPower;
+        chkmin = (start - 1) >> sequenceKChunkPower;
 
-        chkmax = (start + length - 1) >> sequenceChunkPower;
+        chkmax = (start + length - 1) >> sequenceKChunkPower;
 
         /*
         ** Allocate an AJAX String and reserve space for the number of
         ** sequence chunks plus one for the 'nul' string terminator.
         */
 
-        tmpstr = ajStrNewRes(((1 << sequenceChunkPower) + 1) *
+        tmpstr = ajStrNewRes(((1 << sequenceKChunkPower) + 1) *
                              (chkmax - chkmin + 1));
 
         /* Piece together sequence from cached sequence chunks. */
 
-        for(i = chkmin; i <= chkmax; i++)
+        for (i = chkmin; i <= chkmax; i++)
         {
             key = ajFmtStr("%u:%u", ensSeqregionGetIdentifier(sr), i);
 
-            ensCacheFetch(sa->Cache, (void*) key, (void**) &chkstr);
+            ensCacheFetch(sa->Cache, (void *) key, (void **) &chkstr);
 
-            if(chkstr)
+            if (chkstr)
             {
                 ajStrAppendS(&tmpstr, chkstr);
 
@@ -734,7 +713,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
             {
                 /* Retrieve uncached sequence chunks. */
 
-                posmin = (i << sequenceChunkPower) + 1;
+                posmin = (i << sequenceKChunkPower) + 1;
 
                 statement = ajFmtStr(
                     "SELECT "
@@ -744,7 +723,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
                     "WHERE "
                     "dna.seq_region_id = %u",
                     posmin,
-                    1 << sequenceChunkPower,
+                    1 << sequenceKChunkPower,
                     ensSeqregionGetIdentifier(sr));
 
                 sqls = ensDatabaseadaptorSqlstatementNew(sa->Adaptor,
@@ -752,7 +731,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
 
                 sqli = ajSqlrowiterNew(sqls);
 
-                while(!ajSqlrowiterDone(sqli))
+                while (!ajSqlrowiterDone(sqli))
                 {
                     sqlr = ajSqlrowiterGet(sqli);
 
@@ -762,7 +741,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
                     ** terminator.
                     */
 
-                    chkstr = ajStrNewRes((1 << sequenceChunkPower) + 1);
+                    chkstr = ajStrNewRes((1 << sequenceKChunkPower) + 1);
 
                     ajSqlcolumnToStr(sqlr, &chkstr);
 
@@ -773,7 +752,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
 
                     ajStrFmtUpper(&chkstr);
 
-                    ensCacheStore(sa->Cache, (void*) key, (void**) &chkstr);
+                    ensCacheStore(sa->Cache, (void *) key, (void **) &chkstr);
 
                     ajStrAppendS(&tmpstr, chkstr);
 
@@ -792,7 +771,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
 
         /* Return only the requested portion of the entire sequence. */
 
-        posmin = (chkmin << sequenceChunkPower) + 1;
+        posmin = (chkmin << sequenceKChunkPower) + 1;
 
         ajStrAssignSubS(Psequence,
                         tmpstr,
@@ -819,7 +798,7 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
 
         sqli = ajSqlrowiterNew(sqls);
 
-        while(!ajSqlrowiterDone(sqli))
+        while (!ajSqlrowiterDone(sqli))
         {
             sqlr = ajSqlrowiterGet(sqli);
 
@@ -868,20 +847,22 @@ AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSequenceadaptorFetchSliceAllSeq(EnsPSequenceadaptor sa,
                                           EnsPSlice slice,
-                                          AjPSeq* Psequence)
+                                          AjPSeq *Psequence)
 {
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     return ensSequenceadaptorFetchSliceSubSeq(
@@ -907,20 +888,22 @@ AjBool ensSequenceadaptorFetchSliceAllSeq(EnsPSequenceadaptor sa,
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSequenceadaptorFetchSliceAllStr(EnsPSequenceadaptor sa,
                                           EnsPSlice slice,
-                                          AjPStr* Psequence)
+                                          AjPStr *Psequence)
 {
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     return ensSequenceadaptorFetchSliceSubStr(
@@ -951,6 +934,8 @@ AjBool ensSequenceadaptorFetchSliceAllStr(EnsPSequenceadaptor sa,
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -959,30 +944,30 @@ AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
                                           ajint start,
                                           ajint end,
                                           ajint strand,
-                                          AjPSeq* Psequence)
+                                          AjPSeq *Psequence)
 {
     ajint srstart  = 0;
     ajint srend    = 0;
     ajint srstrand = 0;
 
-    AjPStr name = NULL;
+    AjPStr name     = NULL;
     AjPStr sequence = NULL;
 
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!strand)
+    if (!strand)
         strand = 1;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     /* Transform relative into absolute coordinates for the Slice name. */
 
-    if(ensSliceGetStrand(slice) > 0)
+    if (ensSliceGetStrand(slice) > 0)
     {
         srstart = ensSliceGetStart(slice) + start - 1;
 
@@ -999,6 +984,11 @@ AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
         srstrand = -strand;
     }
 
+    /*
+    ** It is sligtly more efficient, if undefined AJAX String objects are
+    ** directly allocated by the following functions to their final size.
+    */
+
     name = ajFmtStr("%S:%S:%S:%d:%d:%d",
                     ensSliceGetCoordsystemName(slice),
                     ensSliceGetCoordsystemVersion(slice),
@@ -1014,7 +1004,15 @@ AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
                                        strand,
                                        &sequence);
 
-    *Psequence = ajSeqNewNameS(sequence, name);
+    if (*Psequence)
+    {
+        ajSeqClear(*Psequence);
+
+        ajSeqAssignNameS(*Psequence, name);
+        ajSeqAssignSeqS(*Psequence, sequence);
+    }
+    else
+        *Psequence = ajSeqNewNameS(sequence, name);
 
     ajSeqSetNuc(*Psequence);
 
@@ -1045,6 +1043,8 @@ AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1053,19 +1053,19 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
                                           ajint start,
                                           ajint end,
                                           ajint strand,
-                                          AjPStr* Psequence)
+                                          AjPStr *Psequence)
 {
-    const char* Ptr = NULL;
+    const char *Ptr = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     ajint five   = 0;
     ajint three  = 0;
     ajint fshift = 0;
     ajint tshift = 0;
 
-    ajuint padding = 0;
-    ajuint total   = 0;
+    ajuint padding = 0U;
+    ajuint total   = 0U;
 
     AjBool circular = AJFALSE;
     AjBool debug    = AJFALSE;
@@ -1089,7 +1089,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     debug = ajDebugTest("ensSequenceadaptorFetchSliceSubStr");
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensSequenceadaptorFetchSliceSubStr\n"
                 "  sa %p\n"
@@ -1108,21 +1108,21 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
         ensSliceTrace(slice, 1);
     }
 
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    if(!ensSliceIsCircular(slice, &circular))
+    if (!ensSliceIsCircular(slice, &circular))
         return ajFalse;
 
-    if(circular == ajTrue)
+    if (circular == ajTrue)
     {
-        if(start > end)
+        if (start > end)
             return sequenceadaptorFetchCircularsliceSubStr(
                 sa,
                 slice,
@@ -1131,13 +1131,13 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
                 strand,
                 Psequence);
 
-        if(start < 0)
+        if (start < 0)
             start += ensSliceGetSeqregionLength(slice);
 
-        if(end < 0)
+        if (end < 0)
             end += ensSliceGetSeqregionLength(slice);
 
-        if(ensSliceGetStart(slice) > ensSliceGetEnd(slice))
+        if (ensSliceGetStart(slice) > ensSliceGetEnd(slice))
             return sequenceadaptorFetchCircularsliceSubStr(
                 sa,
                 slice,
@@ -1146,20 +1146,17 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
                 strand,
                 Psequence);
     }
-    else
-    {
-        if(start > end)
-        {
-            ajDebug("ensSequenceadaptorFetchSliceSubStr requires the start %d "
-                    "to be less than or equal to the end %d coordinate for "
-                    "linear Ensembl Slice objects.\n",
-                    start, end);
 
-            return ajFalse;
-        }
+    if (start > end)
+    {
+        ajDebug("ensSequenceadaptorFetchSliceSubStr requires the start %d "
+                "to be less than or equal to the end %d coordinate.\n",
+                start, end);
+
+        return ajFalse;
     }
 
-    if(!strand)
+    if (!strand)
         strand = 1;
 
     /*
@@ -1167,12 +1164,12 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
     ** plus one position for the 'nul' string terminator.
     */
 
-    if(*Psequence)
+    if (*Psequence)
         ajStrAssignClear(Psequence);
     else
         *Psequence = ajStrNewRes(
             (((ensSliceCalculateRegion(slice, start, end) + 1)
-              >> sequenceChunkPower) + 1) << sequenceChunkPower);
+              >> sequenceKChunkPower) + 1) << sequenceKChunkPower);
 
     /*
     ** Get a new Slice that spans the exact region to retrieve DNA from.
@@ -1186,7 +1183,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     three = end - ensSliceCalculateLength(slice);
 
-    if(five || three)
+    if (five || three)
         ensSliceFetchSliceexpanded(slice,
                                    five,
                                    three,
@@ -1208,7 +1205,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     ensSliceadaptorRetrieveNormalisedprojection(sla, eslice, pslist);
 
-    if(!ajListGetLength(pslist))
+    if (!ajListGetLength(pslist))
         ajFatal("ensSequenceadaptorFetchSliceSubStr could not "
                 "retrieve normalised Slices. Database contains incorrect "
                 "information in the 'assembly_exception' table.\n");
@@ -1218,14 +1215,14 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
     ** Slice.
     */
 
-    ajListPeekFirst(pslist, (void**) &ps);
+    ajListPeekFirst(pslist, (void **) &ps);
 
-    if((ajListGetLength(pslist) != 1) ||
-       (!ensSliceMatch(ensProjectionsegmentGetTargetSlice(ps), slice)))
+    if ((ajListGetLength(pslist) != 1) ||
+        (!ensSliceMatch(ensProjectionsegmentGetTargetSlice(ps), slice)))
     {
         tmpstr = ajStrNew();
 
-        while(ajListPop(pslist, (void**) &ps))
+        while (ajListPop(pslist, (void **) &ps))
         {
             nslice = ensProjectionsegmentGetTargetSlice(ps);
 
@@ -1240,7 +1237,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
         ajListFree(&pslist);
 
-        if(strand < 0)
+        if (strand < 0)
             ajSeqstrReverse(Psequence);
 
         ensSliceDel(&eslice);
@@ -1254,7 +1251,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
     ** Slice objects.
     */
 
-    while(ajListPop(pslist, (void**) &ps))
+    while (ajListPop(pslist, (void **) &ps))
         ensProjectionsegmentDel(&ps);
 
     /*
@@ -1282,7 +1279,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     tmpstr = ajStrNewRes((1 << 19) + 1);
 
-    while(ajListPop(pslist, (void**) &ps))
+    while (ajListPop(pslist, (void **) &ps))
     {
         /*
         ** Check for gaps between Projection Segment objects and
@@ -1291,11 +1288,11 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
         padding = ensProjectionsegmentGetSourceStart(ps) - total - 1;
 
-        if(padding)
+        if (padding)
         {
             ajStrAppendCountK(Psequence, 'N', padding);
 
-            if(debug)
+            if (debug)
                 ajDebug("ensSequenceadaptorFetchSliceSubStr got total %u "
                         "and Projection Segment source start %u, "
                         "therefore added %u N padding between.\n",
@@ -1313,7 +1310,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
             ensSliceCalculateLength(sslice),
             &tmpstr);
 
-        if(ensSliceGetStrand(sslice) < 0)
+        if (ensSliceGetStrand(sslice) < 0)
             ajSeqstrReverse(&tmpstr);
 
         ajStrAppendS(Psequence, tmpstr);
@@ -1331,11 +1328,11 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     padding = ensSliceCalculateLength(slice) - total;
 
-    if(padding)
+    if (padding)
     {
         ajStrAppendCountK(Psequence, 'N', padding);
 
-        if(debug)
+        if (debug)
             ajDebug("ensSequenceadaptorFetchSliceSubStr got total %u "
                     "and Ensembl Slice length %u, "
                     "therefore added %u N padding.\n",
@@ -1353,17 +1350,17 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
     ** padding = ensSliceCalculateLength(slice) - ajStrGetLen(*Psequence);
     */
 
-    for(i = 0, Ptr = ajStrGetPtr(*Psequence); (Ptr && *Ptr); i++, Ptr++)
-        if(i == UINT_MAX)
+    for (i = 0U, Ptr = ajStrGetPtr(*Psequence); (Ptr && *Ptr); i++, Ptr++)
+        if (i == UINT_MAX)
             ajFatal("ensSequenceadaptorFetchSliceSubStr exeeded UINT_MAX.");
 
     padding = ensSliceCalculateLength(slice) - i;
 
-    if(padding)
+    if (padding)
     {
         ajStrAppendCountK(Psequence, 'N', padding);
 
-        if(debug)
+        if (debug)
             ajDebug("ensSequenceadaptorFetchSliceSubStr got "
                     "sequence length %u, but Slice length %u, "
                     "therefore added %u N final padding.\n",
@@ -1385,7 +1382,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     ensListSequenceeditSortStartDescending(ses);
 
-    while(ajListPop(ses, (void**) &se))
+    while (ajListPop(ses, (void **) &se))
     {
         /* Adjust Sequence Edit coordinates to the Sub-Slice. */
 
@@ -1400,7 +1397,7 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 
     /* Reverse sequence if requested. */
 
-    if(strand < 0)
+    if (strand < 0)
         ajSeqstrReverse(Psequence);
 
     ensSliceDel(&eslice);
@@ -1429,6 +1426,8 @@ AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1437,11 +1436,11 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
                                                       ajint start,
                                                       ajint end,
                                                       ajint strand,
-                                                      AjPStr* Psequence)
+                                                      AjPStr *Psequence)
 {
-    const char* Ptr = NULL;
+    const char *Ptr = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     ajint mpoint = 0;
 
@@ -1450,8 +1449,8 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
     ajint fshift = 0;
     ajint tshift = 0;
 
-    ajuint padding = 0;
-    ajuint total   = 0;
+    ajuint padding = 0U;
+    ajuint total   = 0U;
 
     AjBool circular = AJFALSE;
     AjBool debug    = AJFALSE;
@@ -1477,7 +1476,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     debug = ajDebugTest("sequenceadaptorFetchCircularsliceSubStr");
 
-    if(debug)
+    if (debug)
     {
         ajDebug("sequenceadaptorFetchCircularsliceSubStr\n"
                 "  sa %p\n"
@@ -1496,26 +1495,26 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
         ensSliceTrace(slice, 1);
     }
 
-    if(!sa)
+    if (!sa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    if(*Psequence)
+    if (*Psequence)
         ajStrAssignClear(Psequence);
     else
         *Psequence = ajStrNewRes(
             (((ensSliceCalculateRegion(slice, start, end) + 1)
-              >> sequenceChunkPower) + 1) << sequenceChunkPower);
+              >> sequenceKChunkPower) + 1) << sequenceKChunkPower);
 
-    if(!ensSliceIsCircular(slice, &circular))
+    if (!ensSliceIsCircular(slice, &circular))
         return ajFalse;
 
-    if((start > end) && (circular == ajTrue))
+    if ((start > end) && (circular == ajTrue))
     {
         mpoint
             = ensSliceGetSeqregionLength(slice)
@@ -1541,7 +1540,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
             1,
             &sequence1);
 
-        if(ensSliceGetStrand(slice) >= 0)
+        if (ensSliceGetStrand(slice) >= 0)
         {
             ajStrAppendS(Psequence, sequence1);
             ajStrAppendS(Psequence, sequence2);
@@ -1568,9 +1567,9 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     three = end - ensSliceCalculateLength(slice);
 
-    if(five || three)
+    if (five || three)
     {
-        if(ensSliceGetStrand(slice) >= 0)
+        if (ensSliceGetStrand(slice) >= 0)
             ensSliceFetchSliceexpanded(slice,
                                        five,
                                        three,
@@ -1599,7 +1598,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     ensSliceadaptorRetrieveNormalisedprojection(sla, eslice, pslist);
 
-    if(!ajListGetLength(pslist))
+    if (!ajListGetLength(pslist))
         ajFatal("sequenceadaptorFetchCircularsliceSubStr could not "
                 "retrieve normalised Slices. Database contains incorrect "
                 "information in the 'assembly_exception' table.\n");
@@ -1610,14 +1609,14 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
     ** Slice.
     */
 
-    ajListPeekFirst(pslist, (void**) &ps);
+    ajListPeekFirst(pslist, (void **) &ps);
 
-    if((ajListGetLength(pslist) != 1) ||
-       (!ensSliceMatch(ensProjectionsegmentGetTargetSlice(ps), slice)))
+    if ((ajListGetLength(pslist) != 1) ||
+        (!ensSliceMatch(ensProjectionsegmentGetTargetSlice(ps), slice)))
     {
         tmpstr = ajStrNew();
 
-        while(ajListPop(pslist, (void**) &ps))
+        while (ajListPop(pslist, (void **) &ps))
         {
             nslice = ensProjectionsegmentGetTargetSlice(ps);
 
@@ -1632,7 +1631,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
         ajListFree(&pslist);
 
-        if(strand < 0)
+        if (strand < 0)
             ajSeqstrReverse(Psequence);
 
         ensSliceDel(&eslice);
@@ -1646,7 +1645,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
     ** Slice objects.
     */
 
-    while(ajListPop(pslist, (void**) &ps))
+    while (ajListPop(pslist, (void **) &ps))
         ensProjectionsegmentDel(&ps);
 
     /*
@@ -1674,7 +1673,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     tmpstr = ajStrNewRes((1 << 19) + 1);
 
-    while(ajListPop(pslist, (void**) &ps))
+    while (ajListPop(pslist, (void **) &ps))
     {
         /*
         ** Check for gaps between Projection Segment objects and
@@ -1683,11 +1682,11 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
         padding = ensProjectionsegmentGetSourceStart(ps) - total - 1;
 
-        if(padding)
+        if (padding)
         {
             ajStrAppendCountK(Psequence, 'N', padding);
 
-            if(debug)
+            if (debug)
                 ajDebug("sequenceadaptorFetchCircularsliceSubStr got total %u "
                         "and Projection Segment source start %u, "
                         "therefore added %u N padding between.\n",
@@ -1705,7 +1704,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
             ensSliceCalculateLength(sslice),
             &tmpstr);
 
-        if(ensSliceGetStrand(sslice) < 0)
+        if (ensSliceGetStrand(sslice) < 0)
             ajSeqstrReverse(&tmpstr);
 
         ajStrAppendS(Psequence, tmpstr);
@@ -1719,11 +1718,11 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     padding = ensSliceCalculateLength(slice) - total;
 
-    if(padding)
+    if (padding)
     {
         ajStrAppendCountK(Psequence, 'N', padding);
 
-        if(debug)
+        if (debug)
             ajDebug("sequenceadaptorFetchCircularsliceSubStr got total %u "
                     "and Ensembl Slice length %u, "
                     "therefore added %u N padding.\n",
@@ -1741,18 +1740,18 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
     ** padding = ensSliceCalculateLength(slice) - ajStrGetLen(*Psequence);
     */
 
-    for(i = 0, Ptr = ajStrGetPtr(*Psequence); (Ptr && *Ptr); i++, Ptr++)
-        if(i == UINT_MAX)
+    for (i = 0U, Ptr = ajStrGetPtr(*Psequence); (Ptr && *Ptr); i++, Ptr++)
+        if (i == UINT_MAX)
             ajFatal("sequenceadaptorFetchCircularsliceSubStr exeeded "
                     "UINT_MAX.");
 
     padding = ensSliceCalculateLength(slice) - i;
 
-    if(padding)
+    if (padding)
     {
         ajStrAppendCountK(Psequence, 'N', padding);
 
-        if(debug)
+        if (debug)
             ajDebug("sequenceadaptorFetchCircularsliceSubStr got "
                     "sequence length %u, but Slice length %u, "
                     "therefore added %u N final padding.\n",
@@ -1774,7 +1773,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     ensListSequenceeditSortStartDescending(ses);
 
-    while(ajListPop(ses, (void**) &se))
+    while (ajListPop(ses, (void **) &se))
     {
         /* Adjust Sequence Edit coordinates to the Sub-Slice. */
 
@@ -1789,7 +1788,7 @@ static AjBool sequenceadaptorFetchCircularsliceSubStr(EnsPSequenceadaptor sa,
 
     /* Reverse sequence if requested. */
 
-    if(strand < 0)
+    if (strand < 0)
         ajSeqstrReverse(Psequence);
 
     ensSliceDel(&eslice);

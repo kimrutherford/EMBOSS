@@ -89,7 +89,6 @@ int main(int argc, char **argv)
 		    "   method: \"das\"\n"
 		    "   url: \"http://%S%S\"\n"
 		    "]\n",servername, host,path);
-	    ajWarn("ignoring -runtestqueries option...");
 	}
 	else
 	{
@@ -159,7 +158,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
     ajFileClose(&cachef);
 
-    ajTableDelValdel(&titlecount, ajMemFree);
+    ajTableDelValdel(&titlecount, &ajMemFree);
 
     embExit();
 
@@ -173,7 +172,7 @@ int main(int argc, char **argv)
 **
 ** Returns record of in how many different sources titles are used.
 **
-** Note: if a title is used more than once 'source' 'uri' attributes
+** If a title is used in more than once 'source', 'uri' attributes
 ** are also used to get DB names to make sure they are unique.
 **
 ** @param [r] server [const AjPDasServer] DAS server obj

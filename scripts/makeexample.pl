@@ -37,8 +37,6 @@ while (<VERS>) {
 }
 close VERS;
 
-# where the qa directories are
-$qatop = "$distribtop/test";
 $scripts = "$distribtop/scripts";
 $embassy = "";
 
@@ -61,10 +59,12 @@ $doctop = "$ENV{HOME}/devemboss";
 if ($embassy eq "") {
     $docdir = "$doctop/doc/programs/master/emboss/apps";
     $incdir = "$docdir/inc";
+    $qatop = "$doctop/test";
 }
 else {
     $docdir = "$doctop/embassy/$embassy/emboss_doc/master";
     $incdir = "$docdir/inc";
+    $qatop = "$doctop/embassy/$embassy/test";
 }
 
 
@@ -144,7 +144,7 @@ if ($#dirs == -1) {
 # sort the directory names
 @dirs = sort @dirs;
 
-chdir ("$qatop/qa");
+chdir ("$doctop/test/qa");
 
 ###################################################################
 # get next example directory
@@ -303,8 +303,12 @@ foreach $dotest (@dirs) {
         $f =~ s/\@//g;
 # deal with '*' in quotes
         $f =~ s/[*]/\\*/g;
+
+# fix {} braces so regex for filename doesn't throw an error on query
+        $xf = $f;
+        $xf =~ s/[\}]/\\}/g;
 # check to see if this is an output file existing in the -ex directory
-        if (grep /^$f$/, @outfiles) {
+        if (grep /^$xf$/, @outfiles) {
             next;
         }
 
@@ -823,6 +827,12 @@ sub writeUsage {
     $usage =~ s/\/data1\/[Uu]sers\/pmr\/local/\/homes\/pmr\/local/go;
     $usage =~ s/\/data1\/[Uu]sers\/pmr\/devemboss/\/homes\/user/go;
     $usage =~ s/\/homes\/pmr\/devemboss/\/homes\/user/go;
+    $usage =~ s/\/home\/pmr\/devemboss/\/homes\/user/go;
+    $usage =~ s/\/data\/pmr\/devemboss/\/homes\/user/go;
+    $usage =~ s/\/homes\/pmr/\/homes\/user/go;
+    $usage =~ s/\/home\/pmr/\/homes\/user/go;
+    $usage =~ s/\/data\/pmr/\/homes\/user/go;
+    $usage =~ s/\/homes\/user\/local\/bin/\/shared\/software\/bin/go;
     $usage =~ s/(Guide tree +file created: +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/(GCG-Alignment file created +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/domainalign\-[0-9]+[.][0-9]+/domainalign-1234567890.1234/go;
@@ -874,6 +884,11 @@ sub writeOutput {
     $output =~ s/\/data1\/[Uu]sers\/pmr\/local/\/homes\/pmr\/local/go;
     $output =~ s/\/data1\/[Uu]sers\/pmr\/devemboss/\/homes\/user/go;
     $output =~ s/\/homes\/pmr\/devemboss/\/homes\/user/go;
+    $output =~ s/\/home\/pmr\/devemboss/\/homes\/user/go;
+    $output =~ s/\/data\/pmr\/devemboss/\/homes\/user/go;
+    $output =~ s/\/homes\/pmr/\/homes\/user/go;
+    $output =~ s/\/home\/pmr/\/homes\/user/go;
+    $output =~ s/\/data\/pmr/\/homes\/user/go;
     $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Fri Jul 15 12:00:00 2011/go;
     $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Fri Jul 15 12:00:00 2011/gom;
     $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Fri Jul 15 2011 12:00:00/gom;

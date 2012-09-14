@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -34,7 +34,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Finds PEST motifs as potential proteolytic cleavage sites
+Find PEST motifs as potential proteolytic cleavage sites
 <H2>
     Description
 </H2>
@@ -158,7 +158,7 @@ Here is a sample session with <b>epestfind</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>epestfind -graph cps -invalid </b>
-Finds PEST motifs as potential proteolytic cleavage sites
+Find PEST motifs as potential proteolytic cleavage sites
 Input protein sequence: <b>exu2_drops.embl</b>
 Window length [10]: <b></b>
 Sort order of results
@@ -180,8 +180,8 @@ Created epestfind.ps
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.4.0.0
+Find PEST motifs as potential proteolytic cleavage sites
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -231,7 +231,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -393,7 +396,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -462,11 +465,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -510,7 +537,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -523,7 +550,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated xygraph qualifiers
+<td align="left" colspan=5>"-graph" associated xygraph qualifiers
 </td>
 </tr>
 
@@ -1094,7 +1121,7 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
+<td>Find antigenic sites in proteins</td>
 </tr>
 
 <tr>
@@ -1109,7 +1136,7 @@ None.
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
+<td>Search protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
@@ -1124,12 +1151,12 @@ None.
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+<td>Scan protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
+<td>Report on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

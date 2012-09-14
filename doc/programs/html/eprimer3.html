@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -34,7 +34,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Picks PCR primers and hybridization oligos
+Pick PCR primers and hybridization oligos
 <H2>
     Description
 </H2>
@@ -149,7 +149,7 @@ Here is a sample session with <b>eprimer3</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>eprimer3 tembl:x65921 x65921.eprimer3 -explain </b>
-Picks PCR primers and hybridization oligos
+Pick PCR primers and hybridization oligos
 
 </pre></td></tr></table><p>
 <p>
@@ -161,8 +161,8 @@ Picks PCR primers and hybridization oligos
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.4.0.0
+Pick PCR primers and hybridization oligos
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -283,7 +283,7 @@ Version: EMBOSS:6.4.0.0
                                   parameter has no effect on the internal
                                   oligo if one is requested.) (Integer 0 or
                                   more)
-*  -osize              integer    [20] Optimum length (in bases) of a primer
+*  -optsize            integer    [20] Optimum length (in bases) of a primer
                                   oligo. EPrimer3 will attempt to pick primers
                                   close to this length. (Integer 0 or more)
 *  -minsize            integer    [18] Minimum acceptable length of a primer.
@@ -295,7 +295,7 @@ Version: EMBOSS:6.4.0.0
                                   the maximum oligo size for which EPrimer3's
                                   melting-temperature is valid. (Integer up
                                   to 35)
-*  -otm                float      [60.0] Optimum melting temperature(Celsius)
+*  -opttm              float      [60.0] Optimum melting temperature(Celsius)
                                   for a primer oligo. EPrimer3 will try to
                                   pick primers with melting temperatures are
                                   close to this temperature. The oligo melting
@@ -717,7 +717,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -880,7 +883,7 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-osize</td>
+<td>-optsize</td>
 <td>integer</td>
 <td>Optimum length (in bases) of a primer oligo. EPrimer3 will attempt to pick primers close to this length.</td>
 <td>Integer 0 or more</td>
@@ -904,7 +907,7 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-otm</td>
+<td>-opttm</td>
 <td>float</td>
 <td>Optimum melting temperature(Celsius) for a primer oligo. EPrimer3 will try to pick primers with melting temperatures are close to this temperature. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 21, pp 6409-6412 and Breslauer, Frank, Bloecker and Marky, Proc. Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the former paper for background discussion.</td>
 <td>Any numeric value</td>
@@ -1293,7 +1296,7 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -1362,11 +1365,35 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1410,7 +1437,7 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -1588,7 +1615,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -1601,6 +1628,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -1609,15 +1645,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1871,7 +1898,7 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="eprimer32.html">eprimer32</a></td>
-<td>Picks PCR primers and hybridization oligos</td>
+<td>Pick PCR primers and hybridization oligos</td>
 </tr>
 
 <tr>

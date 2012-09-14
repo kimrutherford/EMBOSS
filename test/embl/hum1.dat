@@ -18,7 +18,7 @@ RN   [1]
 RP   1-3169
 RA   Suzuki S.;
 RT   ;
-RL   Submitted (16-MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-MAY-1991) to the INSDC.
 RL   S. Suzuki, Doheny Eye Institute, 1355 San Pablo St, Los Angeles, CA 90033,
 RL   USA
 XX
@@ -34,11 +34,12 @@ RN   [3]
 RP   1-3170
 RA   Suzuki S.;
 RT   ;
-RL   Submitted (24-JAN-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (24-JAN-1995) to the INSDC.
 RL   S. Suzuki, Doheny Eye Institute, 1355 San Pablo St, Los Angeles, CA 90033,
 RL   USA
 XX
-DR   H-InvDB; HIT000322346.
+DR   Ensembl-Gn; ENSG00000179776; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000341529; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -52,6 +53,7 @@ FT   CDS             104..2446
 FT                   /product="cadherin-5"
 FT                   /db_xref="GDB:134230"
 FT                   /db_xref="GOA:P33151"
+FT                   /db_xref="H-InvDB:HIT000322346.11"
 FT                   /db_xref="HGNC:1764"
 FT                   /db_xref="InterPro:IPR000233"
 FT                   /db_xref="InterPro:IPR002126"
@@ -210,7 +212,9 @@ RA   Baralle F.E., Shoulders C.C., Goodbourn S., Jeffreys A., Proudfoot N.J.;
 RT   "The 5' flanking region of human epsilon-globin gene";
 RL   Nucleic Acids Res. 8(19):4393-4404(1980).
 XX
-DR   EPD; EP11110; HS_HBE1.
+DR   Ensembl-Gn; ENSG00000213931; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000292896; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000380237; Homo_sapiens.
 DR   GDB; 192814.
 DR   GDB; 196474.
 XX
@@ -323,7 +327,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -335,7 +339,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -355,12 +367,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -405,7 +419,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -418,6 +432,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -450,6 +473,7 @@ FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46714.1"
@@ -546,7 +570,8 @@ RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
 RT   "Human fos gene";
 RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
-DR   EPD; EP11145; HS_FOS.
+DR   Ensembl-Gn; ENSG00000170345; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000303562; Homo_sapiens.
 XX
 CC   [2]  sites; promoter region.
 CC   C-fos is the human cellular homolog of the v-fos oncogene of
@@ -744,7 +769,7 @@ RN   [1]
 RP   1-3075
 RA   Scheit K.H.;
 RT   ;
-RL   Submitted (18-JAN-1990) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (18-JAN-1990) to the INSDC.
 RL   Scheit K.H., MPI fuer Biophysikalische Chemie, 3400 Goettingen.
 XX
 RN   [2]
@@ -755,7 +780,8 @@ RT   "Complete sequence of the coding region of human elongation factor 2 (EF-2)
 RT   by enzymatic amplification of cDNA from human ovarian granulosa cells";
 RL   Biol. Chem. Hoppe-Seyler 370(10):1071-1075(1989).
 XX
-DR   H-InvDB; HIT000321658.
+DR   Ensembl-Gn; ENSG00000167658; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000309311; Homo_sapiens.
 XX
 CC   See also  for partial elongation factor 2 mRNA.CC   
 CC   Data kindly reviewed (16-JUL-1990) by Sheit K.H.
@@ -775,6 +801,7 @@ FT   CDS             1..2577
 FT                   /product="elongation factor 2"
 FT                   /db_xref="GDB:119104"
 FT                   /db_xref="GOA:P13639"
+FT                   /db_xref="H-InvDB:HIT000321658.10"
 FT                   /db_xref="HGNC:3214"
 FT                   /db_xref="InterPro:IPR000640"
 FT                   /db_xref="InterPro:IPR000795"
@@ -877,7 +904,7 @@ RN   [1]
 RP   1-1658
 RA   Day A.J.;
 RT   ;
-RL   Submitted (03-MAY-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (03-MAY-1988) to the INSDC.
 RL   Day A.J., Dept. of Biochemistry, University of Oxford, MRC Immunochemistry
 RL   Unit, South Parks Road, Oxford OX1 3QU .
 XX
@@ -889,12 +916,10 @@ RL   Biochem. J. 249(2):593-602(1988).
 XX
 DR   Ensembl-Gn; ENSG00000000971; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000359637; Homo_sapiens.
-DR   Ensembl-Tr; ENST00000367428; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000367429; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000391986; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000439155; Homo_sapiens.
 DR   GDB; 733642.
-DR   H-InvDB; HIT000321262.
 XX
 CC   Data kindly reviewed (06-JUN-1988) by Day A.J.
 XX
@@ -916,6 +941,7 @@ FT   CDS             74..1423
 FT                   /product="complement factor H"
 FT                   /db_xref="GDB:120041"
 FT                   /db_xref="GOA:P08603"
+FT                   /db_xref="H-InvDB:HIT000321262.13"
 FT                   /db_xref="HGNC:4883"
 FT                   /db_xref="InterPro:IPR000436"
 FT                   /db_xref="InterPro:IPR016060"
@@ -940,9 +966,16 @@ FT                   /db_xref="PDB:2V8E"
 FT                   /db_xref="PDB:2W80"
 FT                   /db_xref="PDB:2W81"
 FT                   /db_xref="PDB:2WII"
+FT                   /db_xref="PDB:2XQW"
 FT                   /db_xref="PDB:3GAU"
 FT                   /db_xref="PDB:3GAV"
 FT                   /db_xref="PDB:3GAW"
+FT                   /db_xref="PDB:3KXV"
+FT                   /db_xref="PDB:3KZJ"
+FT                   /db_xref="PDB:3OXU"
+FT                   /db_xref="PDB:3R62"
+FT                   /db_xref="PDB:3RJ3"
+FT                   /db_xref="PDB:3SW0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P08603"
 FT                   /protein_id="CAA30403.1"
 FT                   /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPEG
@@ -1018,8 +1051,10 @@ RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
 RT   gene";
-RL   J. Biol. Chem. 265(33):20277-20284(1990).
+RL   J Biol Chem 265(33):20277-20284(1990).
 XX
+DR   Ensembl-Gn; ENSG00000176890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000323274; Homo_sapiens.
 DR   GDB; 163670.
 DR   GDB; 182340.
 XX
@@ -1065,6 +1100,7 @@ FT                   /db_xref="GOA:P04818"
 FT                   /db_xref="HGNC:12441"
 FT                   /db_xref="InterPro:IPR000398"
 FT                   /db_xref="InterPro:IPR020940"
+FT                   /db_xref="InterPro:IPR023451"
 FT                   /db_xref="PDB:1HVY"
 FT                   /db_xref="PDB:1HW3"
 FT                   /db_xref="PDB:1HW4"
@@ -1087,6 +1123,11 @@ FT                   /db_xref="PDB:3EJL"
 FT                   /db_xref="PDB:3GG5"
 FT                   /db_xref="PDB:3GH0"
 FT                   /db_xref="PDB:3GH2"
+FT                   /db_xref="PDB:3H9K"
+FT                   /db_xref="PDB:3HB8"
+FT                   /db_xref="PDB:3N5E"
+FT                   /db_xref="PDB:3N5G"
+FT                   /db_xref="PDB:3OB7"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P04818"
 FT                   /protein_id="BAA00472.1"
 FT                   /translation="MPVAGSELPRRPLPPAAQERDAEPRPPHGELQYLGQIQHILRCGV
@@ -1482,15 +1523,42 @@ RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (09-JAN-2009) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (09-JAN-2009) to the INSDC.
 RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
 RL   E-mail enquiries: vega@sanger.ac.uk Clone requests: Geneservice
 RL   (http://www.geneservice.co.uk/) and BACPAC Resources
 RL   (http://bacpac.chori.org/)
 XX
 DR   EMBL-CON; GL000124.
+DR   Ensembl-Gn; ENSG00000007384; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000161980; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000161981; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000262316; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000293860; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000293861; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000338527; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383018; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417043; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417493; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419764; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420545; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428730; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450643; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454039; Homo_sapiens.
 DR   GDB; 11502921.
-DR   RFAM; RF00017; SRP_euk_arch.
+DR   GOA; E9PGJ1.
+DR   GOA; F5GWL4.
+DR   GOA; F8WBS4.
+DR   GOA; H0Y6L9.
+DR   InterPro; IPR022241; Rhomboid_SP.
+DR   InterPro; IPR022764; Peptidase_S54_rhomboid_dom.
+DR   UniProtKB/TrEMBL; E9PGJ1; E9PGJ1_HUMAN.
+DR   UniProtKB/TrEMBL; F5GWL4; F5GWL4_HUMAN.
+DR   UniProtKB/TrEMBL; F8WBS4; F8WBS4_HUMAN.
+DR   UniProtKB/TrEMBL; F8WCF7; F8WCF7_HUMAN.
+DR   UniProtKB/TrEMBL; H0Y6L9; H0Y6L9_HUMAN.
+DR   UniProtKB/TrEMBL; H7BYR9; H7BYR9_HUMAN.
 XX
 CC   -------------- Genome Center
 CC   Center: Wellcome Trust Sanger Institute
@@ -1618,6 +1686,7 @@ FT                   /db_xref="GOA:Q9Y2Y1"
 FT                   /db_xref="HGNC:14121"
 FT                   /db_xref="InterPro:IPR001222"
 FT                   /db_xref="InterPro:IPR001529"
+FT                   /db_xref="InterPro:IPR012164"
 FT                   /db_xref="InterPro:IPR019761"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y2Y1"
 FT                   /protein_id="CAI95605.1"
@@ -1698,8 +1767,8 @@ FT                   /locus_tag="Z69719.3-008"
 FT                   /standard_name="OTTHUMP00000067142"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /db_xref="GOA:Q4TT60"
-FT                   /db_xref="HGNC:20561"
 FT                   /db_xref="InterPro:IPR002610"
+FT                   /db_xref="InterPro:IPR022764"
 FT                   /db_xref="UniProtKB/TrEMBL:Q4TT60"
 FT                   /protein_id="CAI95607.1"
 FT                   /translation="RPCCIGTKGRCEITSREYCDFMRGYFHEEATLCSQVHCMDDVCGL
@@ -1746,6 +1815,7 @@ FT                   /db_xref="GOA:Q96CC6"
 FT                   /db_xref="HGNC:20561"
 FT                   /db_xref="InterPro:IPR002610"
 FT                   /db_xref="InterPro:IPR022241"
+FT                   /db_xref="InterPro:IPR022764"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96CC6"
 FT                   /protein_id="CAI95608.1"
 FT                   /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQA
@@ -1775,7 +1845,9 @@ FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-010"
 FT                   /standard_name="OTTHUMP00000194925"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /db_xref="GOA:A2IDA2"
 FT                   /db_xref="HGNC:20561"
+FT                   /db_xref="InterPro:IPR002610"
 FT                   /db_xref="InterPro:IPR022241"
 FT                   /db_xref="UniProtKB/TrEMBL:A2IDA2"
 FT                   /protein_id="CAM26658.1"
@@ -2401,7 +2473,7 @@ RN   [1]
 RP   1-2399
 RA   Denda K.;
 RT   ;
-RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (24-DEC-1996) to the INSDC.
 RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science;
 RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
 RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
@@ -2413,12 +2485,19 @@ RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
 RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
 RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
 RT   protease inhibitor";
-RL   J. Biol. Chem. 272(10):6370-6376(1997).
+RL   J Biol Chem 272(10):6370-6376(1997).
 XX
 DR   Ensembl-Gn; ENSG00000166145; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000344051; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000431806; Homo_sapiens.
-DR   H-InvDB; HIT000057890.
+DR   Ensembl-Tr; ENST00000536281; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000562057; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000563656; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000564375; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000566928; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000568580; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000568823; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000569589; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2430,12 +2509,14 @@ FT   CDS             176..1717
 FT                   /product="hepatocyte growth factor activator inhibitor"
 FT                   /db_xref="GDB:118879"
 FT                   /db_xref="GOA:O43278"
+FT                   /db_xref="H-InvDB:HIT000057890.12"
 FT                   /db_xref="HGNC:11246"
 FT                   /db_xref="InterPro:IPR002172"
 FT                   /db_xref="InterPro:IPR002223"
 FT                   /db_xref="InterPro:IPR011106"
 FT                   /db_xref="InterPro:IPR013980"
 FT                   /db_xref="InterPro:IPR020901"
+FT                   /db_xref="InterPro:IPR023415"
 FT                   /db_xref="PDB:1YC0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O43278"
 FT                   /protein_id="BAA25014.1"
@@ -2512,7 +2593,7 @@ RN   [1]
 RP   1-6290
 RA   Tanaka T.;
 RT   ;
-RL   Submitted (21-NOV-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-NOV-1997) to the INSDC.
 RL   Toshihiro Tanaka, Institute of Medical Science, University of Tokyo,
 RL   Laboratory of Molecular Medicine; 4-6-1 Shirokanedai, Minato-ku, Tokyo,
 RL   108-8639, Japan (E-mail:toshitan@ims.u-tokyo.ac.jp, Tel:81-3-5449-5374,
@@ -2526,6 +2607,9 @@ RA   Tomoike H., Sakurada H., Yazaki Y., Nakamura Y.;
 RT   "Genomic organization and mutational analysis of HERG, a gene responsible
 RT   for familial long QT syndrome";
 RL   Hum. Genet. 102(4):435-439(1998).
+XX
+DR   Ensembl-Gn; ENSG00000055118; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000262186; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2554,11 +2638,14 @@ FT                   /db_xref="InterPro:IPR001610"
 FT                   /db_xref="InterPro:IPR003938"
 FT                   /db_xref="InterPro:IPR003967"
 FT                   /db_xref="InterPro:IPR005821"
-FT                   /db_xref="InterPro:IPR013767"
 FT                   /db_xref="InterPro:IPR014710"
 FT                   /db_xref="InterPro:IPR018490"
 FT                   /db_xref="PDB:1BYW"
 FT                   /db_xref="PDB:1UJL"
+FT                   /db_xref="PDB:2L0W"
+FT                   /db_xref="PDB:2L1M"
+FT                   /db_xref="PDB:2L4R"
+FT                   /db_xref="PDB:2LE7"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q12809"
 FT                   /protein_id="BAA37096.1"
 FT                   /translation="MPVRRGHVAPQNTFLDTIIRKFEGQSRKFIIANARVENCAVIYCN
@@ -2784,7 +2871,9 @@ RA   Delius H., Cortese R.;
 RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
-DR   EPD; EP11112; HS_FTH1.
+DR   Ensembl-Gn; ENSG00000167996; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000273550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000406545; Homo_sapiens.
 DR   RFAM; RF00037; IRE.
 XX
 FH   Key             Location/Qualifiers
@@ -2825,6 +2914,9 @@ FT                   /db_xref="PDB:2CN7"
 FT                   /db_xref="PDB:2FHA"
 FT                   /db_xref="PDB:2IU2"
 FT                   /db_xref="PDB:2Z6M"
+FT                   /db_xref="PDB:3AJO"
+FT                   /db_xref="PDB:3AJP"
+FT                   /db_xref="PDB:3AJQ"
 FT                   /db_xref="PDB:3ERZ"
 FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
@@ -2871,6 +2963,10 @@ RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
 RA   Delius H., Cortese R.;
 RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
+XX
+DR   Ensembl-Gn; ENSG00000167996; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000273550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000406545; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2953,7 +3049,7 @@ RA   Kimmerly W., Bondoc M., Cheng J., Connolly K.S., Gunning K.M., Kadner K.,
 RA   Miguel T., Miller C., Pitluck S., Pollard M., Rojeski H., Subramanian S.,
 RA   Martin C.H.;
 RT   ;
-RL   Submitted (29-APR-1998) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1998) to the INSDC.
 RL   Human Genome Center, DOE Joint Genome Institute, Lawrence Berkeley National
 RL   Laboratory, MS 74-157, Berkeley, CA 94720, U.S.A.
 XX
@@ -5103,7 +5199,7 @@ RN   [1]
 RP   1-2229817
 RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
 RT   ;
-RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-AUG-2001) to the INSDC.
 RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
 RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
 RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
@@ -5124,12 +5220,1005 @@ DR   EPD; EP74203; HS_MRPS18B.
 DR   EPD; EP74346; HS_HLA-E.
 DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
+DR   Ensembl-Gn; ENSG00000096155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000096171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000111971; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137310; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137313; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137331; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137332; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137337; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137384; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137394; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137403; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000166278; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000172850; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000183311; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000184494; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000196230; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000198563; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000203623; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204364; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204366; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204371; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204385; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204386; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204387; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204388; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204389; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204390; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204392; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204394; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204396; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204410; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204420; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204421; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204424; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204427; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204428; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204435; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204438; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204444; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204463; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204469; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204472; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204475; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204482; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204487; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204490; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204511; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204520; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204531; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204536; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204538; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204540; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204560; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204569; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204574; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204576; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204580; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204590; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204610; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204613; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204618; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204619; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204632; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204642; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206355; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206366; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206372; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206376; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206378; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206379; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206380; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206394; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206395; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206396; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206398; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206402; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206403; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206404; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206406; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206409; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206428; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206430; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206433; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206437; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206440; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206445; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206447; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206449; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206454; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206457; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206459; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206478; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206480; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206486; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206489; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206490; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206491; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206492; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206493; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206501; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206503; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206506; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206509; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000212866; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213719; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213722; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213760; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213780; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000215425; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000215522; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000221974; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223448; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223465; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223532; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223639; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223757; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223766; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223833; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223887; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223932; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223952; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223957; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224156; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224290; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224393; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224398; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224501; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224544; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224552; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224587; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224774; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224979; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225073; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225211; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225228; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225589; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225635; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225748; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225859; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225989; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225993; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225998; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226060; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226103; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226182; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226187; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226215; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226248; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226384; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226404; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226417; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226531; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226560; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226589; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226603; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226634; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226651; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226710; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226841; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226850; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226882; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226923; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226979; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227074; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227129; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227144; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227147; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227231; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227246; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227314; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227315; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227317; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227333; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227472; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227507; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227565; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227567; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227587; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227720; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227739; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227772; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227804; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227861; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228128; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228177; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228186; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228250; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228263; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228321; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228435; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228575; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228581; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228691; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228727; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228849; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228859; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228875; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228881; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228883; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229077; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229094; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229176; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229202; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229252; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229300; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229346; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229381; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229470; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229496; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229524; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229684; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229698; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230048; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230060; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230108; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230128; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230143; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230230; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230254; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230279; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230293; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230332; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230336; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230413; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230456; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230475; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230624; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230685; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230700; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230791; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230900; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230995; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231002; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231003; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231048; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231094; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231129; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231225; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231314; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231325; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231377; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231408; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231479; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231488; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231502; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231543; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231555; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231641; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231737; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231974; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231975; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232127; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232143; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232169; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232180; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232280; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232421; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232575; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232804; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232810; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232960; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233049; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233051; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233076; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233095; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233149; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233314; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233348; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233418; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233561; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233564; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233599; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233841; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233904; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233911; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234012; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234046; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234058; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234078; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234114; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234127; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234196; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234258; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234343; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234370; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234433; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234443; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234475; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234514; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234530; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234605; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234668; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234728; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234836; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234846; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234852; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234920; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234951; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235017; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235022; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235025; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235030; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235067; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235068; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235125; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235220; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235222; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235259; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235291; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235336; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235346; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235360; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235452; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235487; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235588; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235676; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235680; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235696; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235754; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235915; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235925; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235941; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235960; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235985; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235986; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236063; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236149; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236183; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236196; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236237; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236315; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236342; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236346; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236560; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236759; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236826; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236895; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236902; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236925; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236967; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236979; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237095; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237103; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237114; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237165; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237192; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237216; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237403; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237459; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237495; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237508; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237582; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237703; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237724; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237727; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237808; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237829; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237900; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237918; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000238104; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000238114; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000238203; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000238238; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000239741; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240008; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240053; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240433; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240957; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000241132; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000241713; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000243003; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000244355; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000244672; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000263020; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000211402; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000229725; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000229729; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000244360; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259845; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259874; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259881; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259895; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259915; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000259930; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000299367; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000303892; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000324540; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000324771; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000326195; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000327357; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000327892; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000334668; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000340027; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000342322; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000354038; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000360323; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000361076; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000364810; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000366431; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000366432; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375510; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375525; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375527; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375537; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375631; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375633; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375635; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375636; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375638; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375640; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375641; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375642; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375650; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375651; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375654; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375661; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375663; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375688; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375750; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375755; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375779; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375780; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375784; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375787; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375789; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375792; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375819; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375825; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375832; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375842; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375864; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375865; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375866; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375882; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375885; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375895; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375896; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375900; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375906; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375911; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375916; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375964; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376007; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376033; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376059; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376122; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376191; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376255; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376257; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376266; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376316; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376326; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376389; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376406; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376442; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376511; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376560; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376568; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376575; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376621; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376694; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376772; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376809; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376828; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376861; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383237; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383341; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383362; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383373; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383377; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383379; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383382; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383383; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383384; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383385; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383391; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383404; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383405; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383409; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383413; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383425; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383427; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383433; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383438; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383474; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383477; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383493; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383496; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383503; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383508; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383512; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383524; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383527; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383530; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383560; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383562; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383564; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383577; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383586; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383588; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383592; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383596; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383597; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383607; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383612; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383621; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383626; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000391548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000391555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395788; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395789; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395892; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395952; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396172; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396268; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396558; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396634; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400034; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400035; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400037; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400038; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400039; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400052; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400058; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400062; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400063; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400071; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400080; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400110; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400116; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400264; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400285; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400295; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400296; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400352; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400412; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400414; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400450; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400491; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400492; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400665; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400682; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000409525; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000409691; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411456; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411490; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411774; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411803; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412106; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412275; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412329; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412330; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412802; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412851; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413113; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413314; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413349; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413532; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413638; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413655; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413678; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413853; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413924; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414149; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414434; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414440; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414455; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414536; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414873; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415123; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415179; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415289; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415517; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415525; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415649; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415669; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415689; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415728; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415923; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416027; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416163; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416252; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416384; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416487; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416549; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416773; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416863; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416884; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416886; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417199; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417308; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417428; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417601; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417834; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417894; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418230; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418285; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418357; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418386; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418502; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418800; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419122; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419389; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419792; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419939; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420019; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420214; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420320; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420378; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420402; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420425; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420458; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420556; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420559; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420949; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421039; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421095; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421209; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421268; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421473; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421605; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421984; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422131; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422167; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422261; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422316; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422349; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422371; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422567; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422650; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422674; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422711; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422733; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422978; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423011; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423055; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423143; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423247; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423373; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423382; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423640; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423804; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423881; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423916; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424446; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424502; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424652; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424672; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424790; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424816; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424832; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424962; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424975; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425238; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425424; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425464; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425523; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425620; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425748; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425831; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425848; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425956; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426149; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426219; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426299; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426800; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426843; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426845; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426875; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426938; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426996; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427091; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427126; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427406; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427477; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427507; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427535; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427729; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427735; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427936; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428121; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428189; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428416; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428483; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428486; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428498; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428701; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428952; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429266; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429299; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429506; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429597; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429603; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429633; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429699; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429735; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429874; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430065; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430282; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430472; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430482; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430599; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430632; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430690; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430726; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430784; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430933; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431059; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431114; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431256; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431258; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431360; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431424; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431476; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431921; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431977; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432044; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432122; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432160; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432252; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432290; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432326; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432371; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432462; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432598; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432617; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432647; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433063; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433314; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433487; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433697; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433752; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433916; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434125; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434202; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434226; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434314; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434464; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434496; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434616; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434881; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434915; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435058; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435242; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435498; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435674; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435856; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435938; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436030; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436169; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436205; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436219; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436495; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436519; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436558; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436591; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436628; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436822; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436931; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437089; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437137; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437432; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437517; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437747; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437889; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437917; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437937; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438075; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438348; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438384; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438415; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438708; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438725; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438750; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438908; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439094; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439190; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439572; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439648; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439710; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439865; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439907; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440095; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440361; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440369; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440777; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440824; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440907; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441092; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441395; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441401; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441425; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441436; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441604; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441618; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441959; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442045; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442152; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442947; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442972; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443153; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443156; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443340; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443405; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443533; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443673; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443707; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443741; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443974; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444088; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444098; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444192; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444331; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444479; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444632; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444699; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444818; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444880; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444891; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444974; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000445218; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000445259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000445736; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000445893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000446062; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000446529; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000446697; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447101; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447248; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447338; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447369; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447587; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447711; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447811; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447852; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448091; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448206; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448296; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448378; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448386; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448455; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448596; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448645; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448781; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449113; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449127; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449153; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449208; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449264; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449450; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449518; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449742; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449748; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449754; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449857; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449868; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449934; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450015; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450075; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450236; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450392; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450610; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450744; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000450984; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451411; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451456; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451546; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451727; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451917; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451932; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452093; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452195; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452329; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452441; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452630; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452679; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452985; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453044; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453138; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453195; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453232; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453234; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453534; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453746; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453831; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453995; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454138; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454306; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454370; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454382; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454399; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454511; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454612; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454678; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454714; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454783; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454829; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454889; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455000; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455003; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455161; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455376; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455632; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455705; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455753; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455901; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456093; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456113; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456156; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456268; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456476; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456666; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456690; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456770; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456839; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456863; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456968; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456988; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457078; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457111; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457185; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457366; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457485; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457552; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457742; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457796; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457875; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457884; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458081; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458094; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458242; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458330; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458514; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458589; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458640; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000469626; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000471674; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000480515; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000480530; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000484964; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000542758; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546528; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546529; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546545; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546634; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546660; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546926; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547096; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547161; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547241; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547325; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547662; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547767; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547931; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000548003; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000548423; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000548507; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000548987; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000549475; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000549543; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000550719; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000550897; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000550904; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000550942; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000551708; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000551778; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000551903; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000552172; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000552302; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000552589; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000552797; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000553052; Homo_sapiens.
 DR   GDB; 11515913.
 DR   GOA; P59942.
 DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02629; J*01:01:01:02.
-DR   IMGT/HLA; HLA02802; V*01:01:01:02.
-DR   RFAM; RF00017; SRP_euk_arch.
+DR   IMGT/HLA; J*01:01:01:02; HLA02629.
+DR   IMGT/HLA; V*01:01:01:02; HLA02802.
 DR   RFAM; RF00019; Y_RNA.
 DR   RFAM; RF00026; U6.
 DR   RFAM; RF00100; 7SK.
@@ -5140,10 +6229,6 @@ DR   RFAM; RF00428; SNORA38.
 DR   RFAM; RF00495; IRES_Hsp70.
 DR   RFAM; RF00554; SNORA48.
 DR   RFAM; RF00912; mir-877.
-DR   RFAM; RF00951; mir-1302.
-DR   RFAM; RF00994; mir-1255.
-DR   RFAM; RF01029; mir-649.
-DR   RFAM; RF01045; mir-544.
 DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
 XX
 CC   This sequence is conducted by Tokai University as a JST sequencing
@@ -5174,7 +6259,6 @@ FT                   /transl_table=1
 FT                   /gene="C2"
 FT                   /function="complement classical pathway serine protease"
 FT                   /db_xref="GOA:Q95IG1"
-FT                   /db_xref="HGNC:1248"
 FT                   /db_xref="HSSP:1DLE"
 FT                   /db_xref="InterPro:IPR000436"
 FT                   /db_xref="InterPro:IPR001254"
@@ -5251,6 +6335,7 @@ FT                   /db_xref="InterPro:IPR000210"
 FT                   /db_xref="InterPro:IPR007087"
 FT                   /db_xref="InterPro:IPR011333"
 FT                   /db_xref="InterPro:IPR013069"
+FT                   /db_xref="InterPro:IPR013087"
 FT                   /db_xref="InterPro:IPR015880"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y330"
 FT                   /protein_id="BAB63293.1"
@@ -5279,6 +6364,7 @@ FT                   /db_xref="InterPro:IPR020683"
 FT                   /db_xref="PDB:2O8J"
 FT                   /db_xref="PDB:3DM1"
 FT                   /db_xref="PDB:3K5K"
+FT                   /db_xref="PDB:3RJW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96KQ7"
 FT                   /protein_id="BAB63294.1"
 FT                   /translation="MGALLLEKETRGATERVHGSLGDTPRSEETLPKANPDSLEPAGPS
@@ -5322,6 +6408,7 @@ FT                   /db_xref="InterPro:IPR020683"
 FT                   /db_xref="PDB:2O8J"
 FT                   /db_xref="PDB:3DM1"
 FT                   /db_xref="PDB:3K5K"
+FT                   /db_xref="PDB:3RJW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96KQ7"
 FT                   /protein_id="BAB63295.1"
 FT                   /translation="MSDDVHSLGKVTSDLAKRRKLNSGGGLSEELGSARRSGEVTLTKG
@@ -5567,9 +6654,8 @@ FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G8"
 FT                   /note="unknown function"
-FT                   /db_xref="HGNC:10202"
 FT                   /db_xref="HGNC:19078"
-FT                   /db_xref="UniProtKB/TrEMBL:Q9UBA7"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q9UBA6"
 FT                   /protein_id="BAB63298.1"
 FT                   /translation="MERSFVWLSCLDSDSCNLTFRLGEVESHACSPSLLWNLLTQYLPP
 FT                   GAGHILRTYNFPVLSCVSSCHLIGGKMPEN"
@@ -5605,6 +6691,11 @@ FT                   /db_xref="PDB:1S3X"
 FT                   /db_xref="PDB:1XQS"
 FT                   /db_xref="PDB:2E88"
 FT                   /db_xref="PDB:2E8A"
+FT                   /db_xref="PDB:2LMG"
+FT                   /db_xref="PDB:3A8Y"
+FT                   /db_xref="PDB:3ATU"
+FT                   /db_xref="PDB:3ATV"
+FT                   /db_xref="PDB:3AY9"
 FT                   /db_xref="PDB:3D2E"
 FT                   /db_xref="PDB:3D2F"
 FT                   /db_xref="PDB:3JXU"
@@ -5649,6 +6740,11 @@ FT                   /db_xref="PDB:1S3X"
 FT                   /db_xref="PDB:1XQS"
 FT                   /db_xref="PDB:2E88"
 FT                   /db_xref="PDB:2E8A"
+FT                   /db_xref="PDB:2LMG"
+FT                   /db_xref="PDB:3A8Y"
+FT                   /db_xref="PDB:3ATU"
+FT                   /db_xref="PDB:3ATV"
+FT                   /db_xref="PDB:3AY9"
 FT                   /db_xref="PDB:3D2E"
 FT                   /db_xref="PDB:3D2F"
 FT                   /db_xref="PDB:3JXU"
@@ -5774,7 +6870,6 @@ FT                   /db_xref="InterPro:IPR010987"
 FT                   /db_xref="InterPro:IPR013155"
 FT                   /db_xref="InterPro:IPR014729"
 FT                   /db_xref="InterPro:IPR017933"
-FT                   /db_xref="InterPro:IPR019754"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P26640"
 FT                   /protein_id="BAB63303.1"
 FT                   /translation="MSTLYVSPHPDAFPSLRALIAARYGEAGEGPGWGGAHPRICLQPP
@@ -6114,13 +7209,19 @@ FT                   /db_xref="GOA:O00299"
 FT                   /db_xref="HGNC:2062"
 FT                   /db_xref="InterPro:IPR002946"
 FT                   /db_xref="InterPro:IPR010987"
-FT                   /db_xref="InterPro:IPR012335"
 FT                   /db_xref="InterPro:IPR012336"
 FT                   /db_xref="InterPro:IPR017933"
 FT                   /db_xref="PDB:1K0M"
 FT                   /db_xref="PDB:1K0N"
 FT                   /db_xref="PDB:1K0O"
 FT                   /db_xref="PDB:1RK4"
+FT                   /db_xref="PDB:3O3T"
+FT                   /db_xref="PDB:3P8W"
+FT                   /db_xref="PDB:3P90"
+FT                   /db_xref="PDB:3QR6"
+FT                   /db_xref="PDB:3SWL"
+FT                   /db_xref="PDB:3TGZ"
+FT                   /db_xref="PDB:3UVH"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00299"
 FT                   /protein_id="BAB63376.1"
 FT                   /translation="MAEEQPQVELFVKAGSDGAKIGNCPFSQRLFMVLWLKGVTFNVTT
@@ -6280,7 +7381,6 @@ FT                   /transl_table=1
 FT                   /gene="G6E"
 FT                   /note="Partial coding region"
 FT                   /db_xref="GDB:11504817"
-FT                   /db_xref="HGNC:13934"
 FT                   /db_xref="UniProtKB/TrEMBL:Q9UKT1"
 FT                   /protein_id="BAB63381.1"
 FT                   /translation="MGTSSIFLCVLFLCGALGLTMSPARGRLRCYICGFTKPCHPVPTE
@@ -6348,7 +7448,6 @@ FT                   /note="alternative name: NG26"
 FT                   /note="unknown function"
 FT                   /db_xref="GOA:O95870"
 FT                   /db_xref="HGNC:13921"
-FT                   /db_xref="InterPro:IPR000073"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95870"
 FT                   /protein_id="BAB63383.1"
 FT                   /translation="MAKLLSCVLGPRLYKIYRERDSERAPASVPETPTAVTAPHSSSWD
@@ -6504,6 +7603,7 @@ FT                   /db_xref="PDB:1DS5"
 FT                   /db_xref="PDB:1JWH"
 FT                   /db_xref="PDB:1QF8"
 FT                   /db_xref="PDB:3EED"
+FT                   /db_xref="PDB:4DGL"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P67870"
 FT                   /protein_id="BAB63386.1"
 FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
@@ -6596,8 +7696,11 @@ FT                   /db_xref="GDB:11509994"
 FT                   /db_xref="GOA:O95445"
 FT                   /db_xref="HGNC:13916"
 FT                   /db_xref="InterPro:IPR011038"
+FT                   /db_xref="InterPro:IPR012674"
+FT                   /db_xref="InterPro:IPR022734"
 FT                   /db_xref="PDB:2WEW"
 FT                   /db_xref="PDB:2WEX"
+FT                   /db_xref="PDB:2YG2"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95445"
 FT                   /protein_id="BAB63389.1"
 FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
@@ -6645,6 +7748,8 @@ FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR021925"
 FT                   /db_xref="PDB:1WX9"
+FT                   /db_xref="PDB:4DWF"
+FT                   /db_xref="PDB:4EEW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P46379"
 FT                   /protein_id="BAB63390.1"
 FT                   /translation="MEPNDSTSTAVEEPDSLEVLVKTLDSQTRTFIVGAQMNVKEFKEH
@@ -6955,6 +8060,8 @@ FT                   /db_xref="InterPro:IPR003599"
 FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013106"
 FT                   /db_xref="InterPro:IPR013783"
+FT                   /db_xref="PDB:3NOI"
+FT                   /db_xref="PDB:3PV6"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O14931"
 FT                   /protein_id="BAB63393.1"
 FT                   /translation="MAWMLLLILIMVHPGSCALWVSQPPEIRTLEGSSAFLPCSFNASQ
@@ -7068,6 +8175,7 @@ FT                   /db_xref="PDB:2E7A"
 FT                   /db_xref="PDB:2TUN"
 FT                   /db_xref="PDB:2ZJC"
 FT                   /db_xref="PDB:2ZPX"
+FT                   /db_xref="PDB:3ALQ"
 FT                   /db_xref="PDB:3IT8"
 FT                   /db_xref="PDB:3L9J"
 FT                   /db_xref="PDB:4TSV"
@@ -7227,7 +8335,6 @@ FT                   /db_xref="InterPro:IPR001650"
 FT                   /db_xref="InterPro:IPR011545"
 FT                   /db_xref="InterPro:IPR014001"
 FT                   /db_xref="InterPro:IPR014014"
-FT                   /db_xref="InterPro:IPR014021"
 FT                   /db_xref="PDB:1T5I"
 FT                   /db_xref="PDB:1T6N"
 FT                   /db_xref="PDB:1XTI"
@@ -7492,6 +8599,7 @@ FT                   /db_xref="PDB:1AGF"
 FT                   /db_xref="PDB:1M05"
 FT                   /db_xref="PDB:1MI5"
 FT                   /db_xref="PDB:3FFC"
+FT                   /db_xref="PDB:3SJV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P30460"
 FT                   /protein_id="BAB63309.1"
 FT                   /translation="MLVMAPRTVLLLLSAALALTETWAGSHSMRYFDTAMSRPGRGEPR
@@ -7584,6 +8692,7 @@ FT                   /transl_table=1
 FT                   /gene="HLA-C"
 FT                   /note="Classical HLA Class I gene"
 FT                   /db_xref="GOA:O19617"
+FT                   /db_xref="HGNC:4933"
 FT                   /db_xref="HSSP:1M05"
 FT                   /db_xref="InterPro:IPR001039"
 FT                   /db_xref="InterPro:IPR003597"
@@ -7674,7 +8783,6 @@ FT                   /db_xref="InterPro:IPR000327"
 FT                   /db_xref="InterPro:IPR001356"
 FT                   /db_xref="InterPro:IPR009057"
 FT                   /db_xref="InterPro:IPR010982"
-FT                   /db_xref="InterPro:IPR012287"
 FT                   /db_xref="InterPro:IPR013847"
 FT                   /db_xref="InterPro:IPR015585"
 FT                   /db_xref="InterPro:IPR017970"
@@ -7714,6 +8822,7 @@ FT                   /db_xref="InterPro:IPR000253"
 FT                   /db_xref="InterPro:IPR001965"
 FT                   /db_xref="InterPro:IPR008984"
 FT                   /db_xref="InterPro:IPR011011"
+FT                   /db_xref="InterPro:IPR013083"
 FT                   /db_xref="InterPro:IPR019786"
 FT                   /db_xref="InterPro:IPR019787"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y242"
@@ -7995,7 +9104,7 @@ FT                   /db_xref="InterPro:IPR008266"
 FT                   /db_xref="InterPro:IPR008979"
 FT                   /db_xref="InterPro:IPR011009"
 FT                   /db_xref="InterPro:IPR020635"
-FT                   /db_xref="InterPro:IPR020685"
+FT                   /db_xref="PDB:4AG4"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q08345"
 FT                   /protein_id="BAB63318.1"
 FT                   /translation="MGPEALSSLLLLLLVASGDADMKGHFDPAKCRYALGMQDRTIPDS
@@ -8080,6 +9189,7 @@ FT                   /note="alternative name: IEX-1"
 FT                   /db_xref="GDB:9958865"
 FT                   /db_xref="GOA:P46695"
 FT                   /db_xref="HGNC:5392"
+FT                   /db_xref="InterPro:IPR024829"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P46695"
 FT                   /protein_id="BAB63319.1"
 FT                   /translation="MCHSRSCHPTMTILQAPTPAPSTIPGPRRGSGPEIFTFDPLPEPA
@@ -8182,7 +9292,9 @@ FT                   /db_xref="InterPro:IPR008280"
 FT                   /db_xref="InterPro:IPR013838"
 FT                   /db_xref="InterPro:IPR017975"
 FT                   /db_xref="InterPro:IPR018316"
-FT                   /db_xref="InterPro:IPR019746"
+FT                   /db_xref="InterPro:IPR023123"
+FT                   /db_xref="PDB:3QNZ"
+FT                   /db_xref="PDB:3QO0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07437"
 FT                   /protein_id="BAB63321.1"
 FT                   /translation="MREIVHIQAGQCGNQIGAKFWEVISDEHGIDPTGTYHGDSDLQLD
@@ -8231,6 +9343,11 @@ FT                   /db_xref="PDB:2ADO"
 FT                   /db_xref="PDB:2AZM"
 FT                   /db_xref="PDB:2ETX"
 FT                   /db_xref="PDB:3K05"
+FT                   /db_xref="PDB:3UMZ"
+FT                   /db_xref="PDB:3UN0"
+FT                   /db_xref="PDB:3UNM"
+FT                   /db_xref="PDB:3UNN"
+FT                   /db_xref="PDB:3UOT"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q14676"
 FT                   /protein_id="BAB63322.1"
 FT                   /translation="MEDTQAIDWDVEEEEETEQSSESLRCNVEPVGRLHIFSGAHGPEK
@@ -8352,7 +9469,6 @@ FT                   /db_xref="InterPro:IPR007502"
 FT                   /db_xref="InterPro:IPR011545"
 FT                   /db_xref="InterPro:IPR011709"
 FT                   /db_xref="InterPro:IPR014001"
-FT                   /db_xref="InterPro:IPR014021"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O60231"
 FT                   /protein_id="BAB63323.1"
 FT                   /translation="MATPAGLERWVQDELHSVLGLSERHVAQFLIGTAQRCTSAEEFVQ
@@ -8673,7 +9789,6 @@ FT                   /transl_table=1
 FT                   /gene="CAT56"
 FT                   /note="Unknown function, proline rich sequence"
 FT                   /db_xref="GOA:Q96QB9"
-FT                   /db_xref="HGNC:21149"
 FT                   /db_xref="InterPro:IPR000571"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB9"
 FT                   /protein_id="BAB63326.1"
@@ -8716,8 +9831,7 @@ FT                   /transl_table=1
 FT                   /gene="HSR1"
 FT                   /product="GTP-binding protein"
 FT                   /db_xref="GOA:Q96QB8"
-FT                   /db_xref="HGNC:4413"
-FT                   /db_xref="InterPro:IPR002917"
+FT                   /db_xref="InterPro:IPR006073"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB8"
 FT                   /protein_id="BAB63327.1"
 FT                   /translation="MSDIVLLITDIRHPVVNFPPALYEYVTGELGLALVLVLNKVDLAP
@@ -8795,6 +9909,7 @@ FT                   /db_xref="PDB:1KPR"
 FT                   /db_xref="PDB:1KTL"
 FT                   /db_xref="PDB:1MHE"
 FT                   /db_xref="PDB:2ESV"
+FT                   /db_xref="PDB:3AM8"
 FT                   /db_xref="PDB:3BZE"
 FT                   /db_xref="PDB:3BZF"
 FT                   /db_xref="PDB:3CDG"
@@ -8836,10 +9951,10 @@ FT                   /gene="TC4"
 FT                   /note="Ras-like"
 FT                   /db_xref="GDB:11516217"
 FT                   /db_xref="GOA:Q96QB7"
-FT                   /db_xref="HGNC:9846"
 FT                   /db_xref="HSSP:1HUQ"
+FT                   /db_xref="InterPro:IPR001806"
 FT                   /db_xref="InterPro:IPR002041"
-FT                   /db_xref="InterPro:IPR013753"
+FT                   /db_xref="InterPro:IPR005225"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB7"
 FT                   /protein_id="BAB63329.1"
 FT                   /translation="MAAQGQPQVQFKLVLVGDGGTGKTTFVKHHLTGEFEKKYVATLGV
@@ -9015,8 +10130,9 @@ FT                   /db_xref="InterPro:IPR001870"
 FT                   /db_xref="InterPro:IPR003877"
 FT                   /db_xref="InterPro:IPR003879"
 FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR008985"
+FT                   /db_xref="InterPro:IPR013083"
 FT                   /db_xref="InterPro:IPR018355"
-FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q12899"
 FT                   /protein_id="BAB63330.1"
 FT                   /translation="MATSAPLRSLEEEVTCSICLDYLRDPVTIDCGHVFCRSCTTDVRP
@@ -9079,9 +10195,10 @@ FT                   /db_xref="InterPro:IPR001870"
 FT                   /db_xref="InterPro:IPR003877"
 FT                   /db_xref="InterPro:IPR003879"
 FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR008985"
+FT                   /db_xref="InterPro:IPR013083"
 FT                   /db_xref="InterPro:IPR017907"
 FT                   /db_xref="InterPro:IPR018355"
-FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9C019"
 FT                   /protein_id="BAB63331.1"
 FT                   /translation="MPATPSLKVVHELPACTLCAGPLEDAVTIPCGHTFCRLCLPALSQ
@@ -9128,9 +10245,10 @@ FT                   /db_xref="InterPro:IPR001870"
 FT                   /db_xref="InterPro:IPR003877"
 FT                   /db_xref="InterPro:IPR003879"
 FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR008985"
+FT                   /db_xref="InterPro:IPR013083"
 FT                   /db_xref="InterPro:IPR017907"
 FT                   /db_xref="InterPro:IPR018355"
-FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9UDY6"
 FT                   /protein_id="BAB63332.1"
 FT                   /translation="MASAASVTSLADEVNCPICQGTLREPVTIDCGHNFCRACLTRYCE
@@ -9191,15 +10309,15 @@ FT                   /transl_table=1
 FT                   /gene="HCGV"
 FT                   /note="Testis expressed gene"
 FT                   /db_xref="GOA:Q96QB5"
-FT                   /db_xref="HGNC:18064"
 FT                   /db_xref="HSSP:1JM7"
 FT                   /db_xref="InterPro:IPR001841"
 FT                   /db_xref="InterPro:IPR001870"
 FT                   /db_xref="InterPro:IPR003877"
 FT                   /db_xref="InterPro:IPR003879"
 FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR008985"
+FT                   /db_xref="InterPro:IPR013083"
 FT                   /db_xref="InterPro:IPR017907"
-FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB5"
 FT                   /protein_id="BAB63333.1"
 FT                   /translation="MWWRDLTRLRLWLKREAIPGEGRKAAKVNAGVGEKGIYTASSRGG
@@ -9474,6 +10592,8 @@ FT                   /db_xref="InterPro:IPR010579"
 FT                   /db_xref="InterPro:IPR011161"
 FT                   /db_xref="InterPro:IPR011162"
 FT                   /db_xref="InterPro:IPR013783"
+FT                   /db_xref="PDB:2XPG"
+FT                   /db_xref="PDB:3RL2"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P04439"
 FT                   /protein_id="BAB63400.1"
 FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
@@ -9762,6 +10882,8 @@ FT                   /db_xref="PDB:2DYP"
 FT                   /db_xref="PDB:3BZE"
 FT                   /db_xref="PDB:3CDG"
 FT                   /db_xref="PDB:3CII"
+FT                   /db_xref="PDB:3KYN"
+FT                   /db_xref="PDB:3KYO"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P17693"
 FT                   /protein_id="BAB63336.1"
 FT                   /translation="MVVMAPRTLFLLLSGALTLTETWAGSHSMRYFSAAVSRPGRGEPR
@@ -47236,7 +48358,7 @@ RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (22-FEB-1999) to the INSDC.
 RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
 RL   Seattle, WA 98195, USA
 XX
@@ -47244,12 +48366,368 @@ RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (28-OCT-1999) to the INSDC.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
 XX
-DR   EPD; EP11158; HS_TNF.
-DR   EPD; EP11159; HS_LTA.
+DR   Ensembl-Gn; ENSG00000096155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000111971; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000203623; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204410; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204420; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204421; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204424; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204427; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204428; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204435; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204438; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204444; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204463; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204469; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204472; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204475; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204482; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204487; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000204490; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206394; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206395; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206396; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206398; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206402; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206403; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206404; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206406; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206409; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206428; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206430; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206433; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206437; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000206439; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213719; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213722; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223448; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223465; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223639; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223833; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223932; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223952; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224290; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224393; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224398; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224552; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000224774; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225211; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225635; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225748; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000225993; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226103; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226182; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226187; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226215; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226248; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226404; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226417; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226531; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226603; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226634; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226651; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000226979; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227314; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227317; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227507; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000227567; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228128; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228177; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228250; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228321; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228435; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228849; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228859; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228875; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000228883; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000229524; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230060; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230108; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230279; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230293; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230475; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230685; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230700; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000230791; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231003; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231048; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231314; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231325; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231408; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231488; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000231974; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232810; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000232960; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233076; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000233348; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234443; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234514; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000234836; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235222; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235360; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235452; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235588; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235676; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235754; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235915; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235925; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000235985; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236063; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236183; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236237; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236315; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236902; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236925; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000236979; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237103; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237459; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237495; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237727; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000237808; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000238114; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000239741; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240008; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240053; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240433; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000240957; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000241132; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000241713; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000243003; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000244355; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000244672; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000263020; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000324540; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000340027; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000361076; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000366431; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000366432; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375750; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375755; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375779; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375780; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375784; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375787; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375789; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375792; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375819; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375825; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375832; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375842; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375864; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375865; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375866; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375882; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375885; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375893; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375895; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375896; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375900; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375906; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375911; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375916; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000375964; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376007; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376033; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376059; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000376122; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383237; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383404; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383405; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383409; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383413; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383425; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383427; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383433; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383438; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383474; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383477; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383493; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000383496; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395892; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000395952; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000396117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400052; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400058; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400062; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400063; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400071; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400080; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400110; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400116; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000400264; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000409525; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000409691; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411456; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000411490; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412275; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412802; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000412851; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413113; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413349; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413532; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413655; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000413853; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414149; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000414455; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415123; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415179; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000415728; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416384; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000416549; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417428; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000417890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418117; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418230; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418285; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418357; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418386; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000418502; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419389; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000419939; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420378; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420402; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420425; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420458; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000420556; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000421268; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422131; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422167; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422261; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000422567; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423055; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423143; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000423804; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424502; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000424790; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425464; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000425748; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426149; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426800; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426845; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000426938; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427126; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427507; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000427735; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428121; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428483; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000428498; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429266; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429299; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429633; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429735; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000429874; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430282; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430482; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430599; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000430632; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431114; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431256; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431476; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000431921; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432252; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432290; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432598; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000432617; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000433916; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434202; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434314; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434464; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434915; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435242; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000435674; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436030; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436169; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436519; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000436931; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437137; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437517; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000437889; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438075; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438708; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000438750; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439572; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000439710; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440095; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440777; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000440907; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441395; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441401; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000441436; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442045; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000442972; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443340; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443533; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443673; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443707; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000443741; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444479; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444699; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444818; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000444880; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000446062; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000446529; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447101; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447248; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447338; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447369; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447587; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000447811; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448091; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448386; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448596; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000448781; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449264; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449450; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000449868; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451411; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451546; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451917; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000451932; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000452985; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453044; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453234; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453746; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000453995; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454138; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454306; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454382; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454511; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454550; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000454783; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455003; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455161; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455632; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455753; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000455901; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456113; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456839; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000456863; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457366; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457485; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457552; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457742; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000457884; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458081; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000458330; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000469626; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000471674; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000480515; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000480530; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000484964; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000546528; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547161; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000547325; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000549543; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000550719; Homo_sapiens.
 DR   GDB; 11415850.
 DR   GDB; 11415852.
 DR   GDB; 11415884.
@@ -47373,13 +48851,19 @@ FT                   /db_xref="GOA:O00299"
 FT                   /db_xref="HGNC:2062"
 FT                   /db_xref="InterPro:IPR002946"
 FT                   /db_xref="InterPro:IPR010987"
-FT                   /db_xref="InterPro:IPR012335"
 FT                   /db_xref="InterPro:IPR012336"
 FT                   /db_xref="InterPro:IPR017933"
 FT                   /db_xref="PDB:1K0M"
 FT                   /db_xref="PDB:1K0N"
 FT                   /db_xref="PDB:1K0O"
 FT                   /db_xref="PDB:1RK4"
+FT                   /db_xref="PDB:3O3T"
+FT                   /db_xref="PDB:3P8W"
+FT                   /db_xref="PDB:3P90"
+FT                   /db_xref="PDB:3QR6"
+FT                   /db_xref="PDB:3SWL"
+FT                   /db_xref="PDB:3TGZ"
+FT                   /db_xref="PDB:3UVH"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00299"
 FT                   /protein_id="AAD18073.1"
 FT                   /translation="MAEEQPQVELFVKAGSDGAKIGNCPFSQRLFMVLWLKGVTFNVTT
@@ -47525,7 +49009,6 @@ FT                   /product="G6e"
 FT                   /note="Intron-exon boundaries defined in relation to
 FT                   AJ245419"
 FT                   /db_xref="GDB:11504817"
-FT                   /db_xref="HGNC:13934"
 FT                   /db_xref="UniProtKB/TrEMBL:Q9UKT1"
 FT                   /protein_id="AAF04398.1"
 FT                   /translation="MGTSSIFLCVLFLCGALGLTMSPARGRLRCYICGFTKPCHPVPTE
@@ -47626,7 +49109,6 @@ FT                   encoded by a gene named F37A4.1. This gene is also known as
 FT                   NG26"
 FT                   /db_xref="GOA:O95870"
 FT                   /db_xref="HGNC:13921"
-FT                   /db_xref="InterPro:IPR000073"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95870"
 FT                   /protein_id="AAD18079.1"
 FT                   /translation="MAKLLSCVLGPRLYKIYRERDSERAPASVPETPTAVTAPHSSSWD
@@ -47782,6 +49264,7 @@ FT                   /db_xref="PDB:1DS5"
 FT                   /db_xref="PDB:1JWH"
 FT                   /db_xref="PDB:1QF8"
 FT                   /db_xref="PDB:3EED"
+FT                   /db_xref="PDB:4DGL"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P67870"
 FT                   /protein_id="AAD18081.1"
 FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
@@ -47872,8 +49355,11 @@ FT                   /db_xref="GDB:11509994"
 FT                   /db_xref="GOA:O95445"
 FT                   /db_xref="HGNC:13916"
 FT                   /db_xref="InterPro:IPR011038"
+FT                   /db_xref="InterPro:IPR012674"
+FT                   /db_xref="InterPro:IPR022734"
 FT                   /db_xref="PDB:2WEW"
 FT                   /db_xref="PDB:2WEX"
+FT                   /db_xref="PDB:2YG2"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95445"
 FT                   /protein_id="AAD18084.1"
 FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
@@ -47928,6 +49414,8 @@ FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR021925"
 FT                   /db_xref="PDB:1WX9"
+FT                   /db_xref="PDB:4DWF"
+FT                   /db_xref="PDB:4EEW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P46379"
 FT                   /protein_id="AAD18085.1"
 FT                   /translation="MLKCPRIRSATHAGVVRSPGRQRWRLLGVLGSLPPRPAPARLALR
@@ -48381,6 +49869,8 @@ FT                   /db_xref="InterPro:IPR003599"
 FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013106"
 FT                   /db_xref="InterPro:IPR013783"
+FT                   /db_xref="PDB:3NOI"
+FT                   /db_xref="PDB:3PV6"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O14931"
 FT                   /protein_id="AAD18088.1"
 FT                   /translation="MAWMLLLILIMVHPGSCALWVSQPPEIRTLEGSSAFLPCSFNASQ
@@ -48530,6 +50020,7 @@ FT                   /db_xref="PDB:2E7A"
 FT                   /db_xref="PDB:2TUN"
 FT                   /db_xref="PDB:2ZJC"
 FT                   /db_xref="PDB:2ZPX"
+FT                   /db_xref="PDB:3ALQ"
 FT                   /db_xref="PDB:3IT8"
 FT                   /db_xref="PDB:3L9J"
 FT                   /db_xref="PDB:4TSV"
@@ -51772,7 +53263,7 @@ RN   [1]
 RP   1-2582
 RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
-RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (08-JAN-1997) to the INSDC.
 RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
 RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
@@ -51784,6 +53275,11 @@ RT   "Structures and chromosomal localizations of the
 RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
 RT   PIGCP1";
 RL   Genomics 44(3):347-349(1997).
+XX
+DR   Ensembl-Gn; ENSG00000135845; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000258324; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000344529; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000367728; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -51887,7 +53383,7 @@ OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
 RN   [1]
-RP   62409-62631, 63482-63610
+RP   62409-62631,63482-63610
 RX   DOI; 10.1073/pnas.71.6.2300.
 RX   PUBMED; 4135409.
 RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
@@ -51950,7 +53446,7 @@ RX   PUBMED; 873928.
 RA   Marotta C.A., Forget B.G., Cohne-Solal M., Wilson J.T., Weissman S.M.;
 RT   "Human beta-globin messenger RNA. I. Nucleotide sequences derived from
 RT   complementary RNA";
-RL   J. Biol. Chem. 252(14):5019-5031(1977).
+RL   J Biol Chem 252(14):5019-5031(1977).
 XX
 RN   [9]
 RP   62187-63610
@@ -51958,15 +53454,15 @@ RX   PUBMED; 318159.
 RA   Cohen-Solal M., Forget B.G., Prensky W., Marotta C.A., Weissman S.M.;
 RT   "Human beta-globin messenger RNA. II. nucleotide sequences derived from
 RT   125I-labeled globin messenger RNA";
-RL   J. Biol. Chem. 252(14):5032-5039(1977).
+RL   J Biol Chem 252(14):5032-5039(1977).
 XX
 RN   [10]
-RP   54790-54881, 62409-62631, 63482-63715
+RP   54790-54881,62409-62631,63482-63715
 RX   PUBMED; 68958.
 RA   Marotta C.A., Wilson J.T., Forget B.G., Weissman S.M.;
 RT   "Human beta-globin messenger RNA. III. Nucleotide sequences derived from
 RT   complementary DNA";
-RL   J. Biol. Chem. 252(14):5040-5053(1977).
+RL   J Biol Chem 252(14):5040-5053(1977).
 XX
 RN   [11]
 RP   62137-62189
@@ -51987,7 +53483,7 @@ RT   from a cloned library of human DNA";
 RL   Cell 15(4):1157-1174(1978).
 XX
 RN   [13]
-RP   35854-35946, 63482-63531
+RP   35854-35946,63482-63531
 RX   DOI; 10.1038/273640a0.
 RX   PUBMED; 318161.
 RA   Little P., Curtis P., Coutelle C., Van den Berg J., Dalgleish R.,
@@ -52007,7 +53503,7 @@ RT   plasmids";
 RL   Nucleic Acids Res. 5(2):563-581(1978).
 XX
 RN   [15]
-RP   34478-34563, 39414-39499
+RP   34478-34563,39414-39499
 RX   DOI; 10.1093/nar/5.10.3515.
 RX   PUBMED; 318162.
 RA   Chang J.C., Poon R., Neumann K.H., Kan Y.W.;
@@ -52024,7 +53520,7 @@ RT   gamma-globin mRNA";
 RL   Nucleic Acids Res. 5(12):4625-4630(1978).
 XX
 RN   [17]
-RP   35826-35907, 40742-40823
+RP   35826-35907,40742-40823
 RX   DOI; 10.1126/science.725604.
 RX   PUBMED; 725604.
 RA   Smithies O., Blechl A.E., Denniston-Thompson K., Newell N., Richards J.E.,
@@ -52034,7 +53530,7 @@ RT   characterization and partial sequencing";
 RL   Science 202(4374):1284-1289(1978).
 XX
 RN   [18]
-RP   34478-34536, 62137-62192, 63608-63742
+RP   34478-34536,62137-62192,63608-63742
 RA   Kan Y.W., Chang C.S., Poon R.;
 RT   "Nucleotide sequences of the untranslated 5' and 3' regions of human
 RT   alpha-, beta-, and gamma-globin mRNAS";
@@ -52081,7 +53577,7 @@ RT   "The primary structure of the human epsilon-globin gene";
 RL   Cell 21(3):621-626(1980).
 XX
 RN   [24]
-RP   34422-36069, 39358-40986
+RP   34422-36069,39358-40986
 RX   DOI; 10.1016/0092-8674(80)90426-2.
 RX   PUBMED; 7438203.
 RA   Slightom J.L., Blechl A.E., Smithies O.;
@@ -52140,7 +53636,7 @@ RT   in an intron";
 RL   Cell 27(2 Pt 1):289-298(1981).
 XX
 RN   [31]
-RP   32353-33218, 51978-52472
+RP   32353-33218,51978-52472
 RX   DOI; 10.1016/0378-1119(81)90007-X.
 RX   PUBMED; 6165649.
 RA   Duncan C.H., Jagadeeswaran P., Wang R.R., Weissman S.M.;
@@ -52153,7 +53649,7 @@ RX   PUBMED; 6985481.
 RA   Orkin S.H., Goff S.C.;
 RT   "Nonsense and frameshift mutations in beta 0-thalassemia detected in cloned
 RT   beta-globin genes";
-RL   J. Biol. Chem. 256(19):9782-9784(1981).
+RL   J Biol Chem 256(19):9782-9784(1981).
 XX
 RN   [33]
 RP   62454-62613
@@ -52264,10 +53760,10 @@ RX   PUBMED; 7076659.
 RA   Poncz M., Ballantine M., Solowiejczyk D., Barak I., Schwartz E., Surrey S.;
 RT   "beta-Thalassemia in a Kurdish Jew. Single base changes in the T-A-T-A
 RT   box";
-RL   J. Biol. Chem. 257(11):5994-5996(1982).
+RL   J Biol Chem 257(11):5994-5996(1982).
 XX
 RN   [46]
-RP   61873-62198, 62375-62448
+RP   61873-62198,62375-62448
 RX   DOI; 10.1016/S0022-2836(82)80012-0.
 RX   PUBMED; 6896219.
 RA   Gorski J., Fiori M., Mach B.;
@@ -52408,10 +53904,10 @@ RX   PUBMED; 6311816.
 RA   Poncz M., Schwartz E., Ballantine M., Surrey S.;
 RT   "Nucleotide sequence analysis of the delta beta-globin gene region in
 RT   humans";
-RL   J. Biol. Chem. 258(19):11599-11609(1983).
+RL   J Biol Chem 258(19):11599-11609(1983).
 XX
 RN   [63]
-RP   62050-62050, 62279-62279, 62283-62283
+RP   62050-62050,62279-62279,62283-62283
 RX   DOI; 10.1038/302591a0.
 RX   PUBMED; 6188062.
 RA   Treisman R., Orkin S.H., Maniatis T.;
@@ -52473,14 +53969,14 @@ RP   61557-61623
 RX   PUBMED; 6327661.
 RA   Semenza G.L., Malladi P., Surrey S., Delgrosso K., Poncz M., Schwartz E.;
 RT   "Detection of a novel DNA polymorphism in the beta-globin gene cluster";
-RL   J. Biol. Chem. 259(10):6045-6048(1984).
+RL   J Biol Chem 259(10):6045-6048(1984).
 XX
 RN   [71]
 RX   PUBMED; 6086605.
 RA   Orkin S.H., Antonarakis S.E., Kazazian H.H.Jr.;
 RT   "Base substitution at position -88 in a beta-thalassemic globin gene.
 RT   Further evidence for the role of distal promoter element ACACCC";
-RL   J. Biol. Chem. 259(14):8679-8681(1984).
+RL   J Biol Chem 259(14):8679-8681(1984).
 XX
 RN   [72]
 RP   45336-47463
@@ -52521,7 +54017,7 @@ RT   "The molecular genetics of human hemoglobin";
 RL   Prog. Nucleic Acid Res. Mol. Biol. 31:315-462(1984).
 XX
 RN   [77]
-RP   34276-34276, 34282-34282, 34321-34321
+RP   34276-34276,34282-34282,34321-34321
 RX   PUBMED; 2412616.
 RA   Gilman J.G., Huisman T.H.;
 RT   "DNA sequence variation associated with elevated fetal G gamma globin
@@ -52549,7 +54045,7 @@ RX   PUBMED; 4066658.
 RA   Li Q., Powers P.A., Smithies O.;
 RT   "Nucleotide sequence of 16-kilobase pairs of DNA 5' to the human
 RT   epsilon-globin gene";
-RL   J. Biol. Chem. 260(28):14901-14910(1985).
+RL   J Biol Chem 260(28):14901-14910(1985).
 XX
 RN   [81]
 RX   DOI; 10.1038/313323a0.
@@ -52607,7 +54103,7 @@ RT   ;
 RL   Unpublished.
 XX
 RN   [88]
-RP   58799-58958, 63036-63295
+RP   58799-58958,63036-63295
 RX   PUBMED; 3799598.
 RA   Popovich B.W., Rosenblatt D.S., Kendall A.G., Nishioka Y.;
 RT   "Molecular characterization of an atypical beta-thalassemia caused by a
@@ -52632,7 +54128,7 @@ RT   alternative splice acceptor site in an intron";
 RL   EMBO J. 5(10):2551-2557(1986).
 XX
 RN   [91]
-RP   37640-37677, 40162-40199
+RP   37640-37677,40162-40199
 RX   DOI; 10.1093/nar/14.12.4743.
 RX   PUBMED; 2425337.
 RA   Tate V.E., Hill A.V., Bowden D.K., Sadler J.R., Weatherall D.J.,
@@ -52649,7 +54145,7 @@ RT   cytosine) resulting in a failure to cleave amino-terminal methionine";
 RL   Proc. Natl. Acad. Sci. U.S.A. 83(1):24-27(1986).
 XX
 RN   [93]
-RP   59589-59718, 72211-72340
+RP   59589-59718,72211-72340
 RX   PUBMED; 3593292.
 RA   Gilman J.G., Abraham J.;
 RT   "DNA sequence analysis of the Dutch beta-0-thalassemia deletion";
@@ -52716,6 +54212,18 @@ DR   EPD; EP11104; HS_HBB.
 DR   EPD; EP11105; HS_HBD.
 DR   EPD; EP11107; HS_HBG2.
 DR   EPD; EP11110; HS_HBE1.
+DR   Ensembl-Gn; ENSG00000196565; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213931; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000213934; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000223609; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000244734; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000292896; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000330597; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000335295; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000336906; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000380237; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000380259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000380299; Homo_sapiens.
 DR   GDB; 187639.
 DR   RFAM; RF00621; CoTC_ribozyme.
 XX
@@ -53074,8 +54582,9 @@ FT   exon            35854..36069
 FT                   /gene="HBG2"
 FT                   /number=3
 FT                   /note="G-gamma globin"
-FT   conflict        37486
+FT   misc_difference 37486
 FT                   /replace="t"
+FT                   /note="conflict"
 FT                   /citation=[29]
 FT   variation       37657..40179
 FT                   /note="g-25 kb-c in wt; gc in silent deletion [91]"
@@ -53474,8 +54983,25 @@ FT                   /db_xref="PDB:3D17"
 FT                   /db_xref="PDB:3D7O"
 FT                   /db_xref="PDB:3DUT"
 FT                   /db_xref="PDB:3HHB"
+FT                   /db_xref="PDB:3HXN"
 FT                   /db_xref="PDB:3IC0"
 FT                   /db_xref="PDB:3IC2"
+FT                   /db_xref="PDB:3KMF"
+FT                   /db_xref="PDB:3NL7"
+FT                   /db_xref="PDB:3NMM"
+FT                   /db_xref="PDB:3ODQ"
+FT                   /db_xref="PDB:3ONZ"
+FT                   /db_xref="PDB:3OO4"
+FT                   /db_xref="PDB:3OO5"
+FT                   /db_xref="PDB:3P5Q"
+FT                   /db_xref="PDB:3QJB"
+FT                   /db_xref="PDB:3QJC"
+FT                   /db_xref="PDB:3QJD"
+FT                   /db_xref="PDB:3QJE"
+FT                   /db_xref="PDB:3R5I"
+FT                   /db_xref="PDB:3S65"
+FT                   /db_xref="PDB:3S66"
+FT                   /db_xref="PDB:3SZK"
 FT                   /db_xref="PDB:4HHB"
 FT                   /db_xref="PDB:6HBW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P68871"
@@ -54848,7 +56374,7 @@ RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
 RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
 RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
 RT   ;
-RL   Submitted (16-NOV-2003) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-NOV-2003) to the INSDC.
 RL   Celera Genomics, 45 West Gude Drive, Rockville, MD 20850, USA
 XX
 CC   This sequence was made by sequencing genomic exons and ordering
@@ -54905,6 +56431,9 @@ RA   Seino S., Seino M., Bell G.I.;
 RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
 RT   by polymerase chain reaction";
 RL   Diabetes 39(1):123-128(1990).
+XX
+DR   Ensembl-Gn; ENSG00000171105; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000302850; Homo_sapiens.
 XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.

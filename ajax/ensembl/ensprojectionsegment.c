@@ -1,82 +1,85 @@
-/* @source Ensembl Projection Segment functions
+/* @source ensprojectionsegment ***********************************************
+**
+** Ensembl Projection Segment functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.17 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensprojectionsegment.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -96,8 +99,8 @@
 ** Ensembl Projection Segment objects
 **
 ** @cc Bio::EnsEMBL::ProjectionSegment
-** @cc CVS Revision: 1.7
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.8
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -139,6 +142,8 @@
 ** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
 ** @return [EnsPProjectionsegment] Ensembl Projection Segment or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -147,7 +152,7 @@ EnsPProjectionsegment ensProjectionsegmentNewCpy(
 {
     EnsPProjectionsegment pthis = NULL;
 
-    if(!ps)
+    if (!ps)
         return NULL;
 
     AJNEW0(pthis);
@@ -155,7 +160,7 @@ EnsPProjectionsegment ensProjectionsegmentNewCpy(
     pthis->SourceStart = ps->SourceStart;
     pthis->SourceEnd   = ps->SourceEnd;
     pthis->TargetSlice = ensSliceNewRef(ps->TargetSlice);
-    pthis->Use         = 1;
+    pthis->Use         = 1U;
 
     return pthis;
 }
@@ -172,6 +177,8 @@ EnsPProjectionsegment ensProjectionsegmentNewCpy(
 ** @param [u] trgslice [EnsPSlice] Target Ensembl Slice
 **
 ** @return [EnsPProjectionsegment] Ensembl Projection Segment or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -181,7 +188,7 @@ EnsPProjectionsegment ensProjectionsegmentNewIni(ajuint srcstart,
 {
     EnsPProjectionsegment ps = NULL;
 
-    if(ajDebugTest("ensProjectionsegmentNewIni"))
+    if (ajDebugTest("ensProjectionsegmentNewIni"))
     {
         ajDebug("ensProjectionsegmentNewIni\n"
                 "  srcstart %u\n"
@@ -194,7 +201,7 @@ EnsPProjectionsegment ensProjectionsegmentNewIni(ajuint srcstart,
         ensSliceTrace(trgslice, 1);
     }
 
-    if(!trgslice)
+    if (!trgslice)
         return NULL;
 
     AJNEW0(ps);
@@ -202,7 +209,7 @@ EnsPProjectionsegment ensProjectionsegmentNewIni(ajuint srcstart,
     ps->SourceStart = srcstart;
     ps->SourceEnd   = srcend;
     ps->TargetSlice = ensSliceNewRef(trgslice);
-    ps->Use         = 1;
+    ps->Use         = 1U;
 
     return ps;
 }
@@ -217,13 +224,15 @@ EnsPProjectionsegment ensProjectionsegmentNewIni(ajuint srcstart,
 **
 ** @param [u] ps [EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [EnsPProjectionsegment] Ensembl Projection Segment
+** @return [EnsPProjectionsegment] Ensembl Projection Segment or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 {
-    if(!ps)
+    if (!ps)
         return NULL;
 
     ps->Use++;
@@ -236,15 +245,14 @@ EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Projection Segment object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Projection Segment object.
 **
 ** @fdata [EnsPProjectionsegment]
 **
-** @nam3rule Del Destroy (free) an Ensembl Projection Segment object
+** @nam3rule Del Destroy (free) an Ensembl Projection Segment
 **
-** @argrule * Pps [EnsPProjectionsegment*] Ensembl Projection Segment
-**                                         object address
+** @argrule * Pps [EnsPProjectionsegment*] Ensembl Projection Segment address
 **
 ** @valrule * [void]
 **
@@ -258,28 +266,40 @@ EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 **
 ** Default destructor for an Ensembl Projection Segment.
 **
-** @param [d] Pps [EnsPProjectionsegment*] Ensembl Projection Segment
-**                                         object address
+** @param [d] Pps [EnsPProjectionsegment*] Ensembl Projection Segment address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensProjectionsegmentDel(EnsPProjectionsegment* Pps)
+void ensProjectionsegmentDel(EnsPProjectionsegment *Pps)
 {
     EnsPProjectionsegment pthis = NULL;
 
-    if(!Pps)
+    if (!Pps)
         return;
 
-    if(!*Pps)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensProjectionsegmentDel"))
+    {
+        ajDebug("ensProjectionsegmentDel\n"
+                "  *Pps %p\n",
+                *Pps);
+
+        ensProjectionsegmentTrace(*Pps, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pps)
         return;
 
     pthis = *Pps;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pps = NULL;
 
@@ -298,24 +318,24 @@ void ensProjectionsegmentDel(EnsPProjectionsegment* Pps)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Projection Segment.
+** Functions for returning members of an Ensembl Projection Segment.
 **
 ** @fdata [EnsPProjectionsegment]
 **
 ** @nam3rule Get Get an attribute of an Ensembl Projection Segment
 ** @nam4rule Source Get source members
-** @nam5rule End Get source end element
-** @nam5rule Start Get source start element
+** @nam5rule End Get source end member
+** @nam5rule Start Get source start member
 ** @nam4rule Target Get tagret members
 ** @nam5rule Slice Get the target Ensembl Slice
 **
 ** @argrule * ps [const EnsPProjectionsegment] Projection Segment object
 ** address
 **
-** @valrule SourceEnd [ajuint] Source end or 0
-** @valrule SourceStart [ajuint] Source start or 0
+** @valrule SourceEnd [ajuint] Source end or 0U
+** @valrule SourceStart [ajuint] Source start or 0U
 ** @valrule TargetSlice [EnsPSlice] Target Ensembl Slice or NULL
 **
 ** @fcategory delete
@@ -326,20 +346,19 @@ void ensProjectionsegmentDel(EnsPProjectionsegment* Pps)
 
 /* @func ensProjectionsegmentGetSourceEnd *************************************
 **
-** Get the source end element of an Ensembl Projection Segment.
+** Get the source end member of an Ensembl Projection Segment.
 **
 ** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [ajuint] Source end coordinate or 0
+** @return [ajuint] Source end coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensProjectionsegmentGetSourceEnd(const EnsPProjectionsegment ps)
 {
-    if(!ps)
-        return 0;
-
-    return ps->SourceEnd;
+    return (ps) ? ps->SourceEnd : 0U;
 }
 
 
@@ -347,20 +366,19 @@ ajuint ensProjectionsegmentGetSourceEnd(const EnsPProjectionsegment ps)
 
 /* @func ensProjectionsegmentGetSourceStart ***********************************
 **
-** Get the source start element of an Ensembl Projection Segment.
+** Get the source start member of an Ensembl Projection Segment.
 **
 ** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [ajuint] Source start coordinate or 0
+** @return [ajuint] Source start coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensProjectionsegmentGetSourceStart(const EnsPProjectionsegment ps)
 {
-    if(!ps)
-        return 0;
-
-    return ps->SourceStart;
+    return (ps) ? ps->SourceStart : 0U;
 }
 
 
@@ -368,20 +386,19 @@ ajuint ensProjectionsegmentGetSourceStart(const EnsPProjectionsegment ps)
 
 /* @func ensProjectionsegmentGetTargetSlice ***********************************
 **
-** Get the target Ensembl Slice element of an Ensembl Projection Segment.
+** Get the target Ensembl Slice member of an Ensembl Projection Segment.
 **
 ** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
 ** @return [EnsPSlice] Target Ensembl Slice or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPSlice ensProjectionsegmentGetTargetSlice(const EnsPProjectionsegment ps)
 {
-    if(!ps)
-        return NULL;
-
-    return ps->TargetSlice;
+    return (ps) ? ps->TargetSlice : NULL;
 }
 
 
@@ -393,7 +410,7 @@ EnsPSlice ensProjectionsegmentGetTargetSlice(const EnsPProjectionsegment ps)
 **
 ** @fdata [EnsPProjectionsegment]
 **
-** @nam3rule Trace Report Ensembl Projection Segment elements to debug file
+** @nam3rule Trace Report Ensembl Projection Segment members to debug file
 **
 ** @argrule Trace ps [const EnsPProjectionsegment] Ensembl Projection Segment
 ** @argrule Trace level [ajuint] Indentation level
@@ -414,6 +431,8 @@ EnsPSlice ensProjectionsegmentGetTargetSlice(const EnsPProjectionsegment ps)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -421,7 +440,7 @@ AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!ps)
+    if (!ps)
         return ajFalse;
 
     indent = ajStrNew();
@@ -475,6 +494,8 @@ AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level)
 ** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -482,7 +503,7 @@ size_t ensProjectionsegmentCalculateMemsize(const EnsPProjectionsegment ps)
 {
     size_t size = 0;
 
-    if(!ps)
+    if (!ps)
         return 0;
 
     size += sizeof (EnsOProjectionsegment);

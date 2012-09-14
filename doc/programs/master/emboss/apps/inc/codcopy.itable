@@ -48,7 +48,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-infile" associated codon qualifiers
+<td align="left" colspan=5>"-infile" associated codon qualifiers
 </td>
 </tr>
 
@@ -61,7 +61,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outcodon qualifiers
+<td align="left" colspan=5>"-outfile" associated outcodon qualifiers
 </td>
 </tr>
 

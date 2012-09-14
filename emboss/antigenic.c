@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 		    }
 		}
 		ajFmtPrintS(&tmpFeatStr, "*pos %d", maxscorepos);
-		ajFeatTagAdd (gf, NULL, tmpFeatStr);
+		ajFeatTagAddSS(gf, NULL, tmpFeatStr);
 	    }
 
 	    /* obsolete - use -rf with a feature format to get this output */

@@ -1,0 +1,512 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: embossupdate
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+embossupdate
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Checks for more recent updates to EMBOSS
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>embossupdate</b> checks for the latest EMBOSS updates and reports
+if a more recent version is available.
+
+
+<H2>
+    Algorithm
+</H2>
+
+The EMBOSS webite maintains a page for the latest release with all
+fixes available as patches or as new distributions.
+
+<p>
+<b>embossupdate</b> reads this page and reports a description of any
+changes and instructions for updating. These are read from the updates
+page and subject to change.
+
+<p>
+If no later version is found <b>embossupdate</b> reports success.
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>embossupdate</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>embossupdate </b>
+Checks for more recent updates to EMBOSS
+
+EMBOSS 6.5.0.0 is the latest version (6.5.0.0)
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Checks for more recent updates to EMBOSS
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] EMBOSS update output file
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>EMBOSS update output file</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>embossupdate</b> reads a page from the EMBOSS website at
+http://emboss.open-bio.org/updates/EMBOSS.fixes for a Unix version, and
+http://emboss.open-bio.org/updates/mEMBOSS.fixes for Windows releases.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>embossupdate</b> reports any more recent updates, or reports that
+the current version is up to date.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="embossdata.html">embossdata</a></td>
+<td>Find and retrieve EMBOSS data files</td>
+</tr>
+
+<tr>
+<td><a href="embossversion.html">embossversion</a></td>
+<td>Report the current EMBOSS version number</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

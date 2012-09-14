@@ -4,9 +4,9 @@ Here is a sample session with <b>ontogetroot</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontogetroot edam:0001234 </b>
+% <b>ontogetroot edam:1234 </b>
 Get ontology root terms by child identifier
-Obo output file [0001234.obo]: <b></b>
+Obo output file [1234.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

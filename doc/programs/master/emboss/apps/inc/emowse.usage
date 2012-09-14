@@ -10,8 +10,7 @@ Input protein sequence(s): <b>tsw:*</b>
 Peptide molecular weight values file: <b>test.mowse</b>
 Whole sequence molwt [0]: <b></b>
 Use monoisotopic weights [N]: <b></b>
-Output file [12s1_arath.emowse]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output file [cru4_arath.emowse]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

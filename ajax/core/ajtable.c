@@ -1,80 +1,116 @@
-/******************************************************************************
-** @source AJAX table functions
+/* @source ajtable ************************************************************
+**
+** AJAX table functions
 **
 ** Hash table functions.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version 1.0
+** @version $Revision: 1.73 $
+** @modified 2011 pmr Auto-resizing, destructors, table merges
+** @modified $Date: 2012/07/03 16:21:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
+
+#include "ajlib.h"
+
+#include "ajtable.h"
+#include "ajassert.h"
+
 #include <limits.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <ctype.h>
 #include <string.h>
-#include <math.h>
-
-#include "ajax.h"
+#include <ctype.h>
 
 
-enum TableEType
-{
-    TABLE_UNKNOWN,			/* no type set */
-    TABLE_CHAR,				/* char* type */
-    TABLE_STR,				/* AjPStr type */
-    TABLE_INT,				/* int type */
-    TABLE_UINT,                         /* unsigned int type */
-    TABLE_LONG,				/* long int type */
-    TABLE_ULONG,                        /* unsigned long int type */
-    TABLE_USER,				/* user-defined type */
-    TABLE_MAX
-};
 
 
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 #ifdef AJ_SAVESTATS
-static ajuint tableNewCnt = 0;
-static ajint tableDelCnt = 0;
-static ajuint tableMaxNum = 0;
+static ajuint tableNewCnt = 0U;
+static ajint tableDelCnt  = 0;
+static ajuint tableMaxNum = 0U;
 static size_t tableMaxMem = 0;
 #endif
 
 static AjPStr tableTmpkeyStr = NULL;
 
-static ajint tableFreeNext = 0;
-static ajint tableFreeMax = 0;
-static struct binding ** tableFreeSet = NULL;
+static ajulong tableFreeNext = 0UL;
+static ajulong tableFreeMax  = 0UL;
+static AjPTableNode* tableFreeSet = NULL;
 
-static ajint  tableCmpAtom(const void *x, const void *y);
-static void   tableDel(void** key, void** value, void* cl);
-static void   tableDelKey(void** key, void** value, void* cl);
+
+
+
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
+
+static ajint  tableCmpAtom(const void* key1, const void* key2);
+static void   tableDel(void** Pkey, void** Pvalue, void* cl);
+static void   tableDelKey(void** Pkey, void** Pvalue, void* cl);
 static void   tableFreeSetExpand (void);
-static ajuint tableHashAtom(const void *key, ajuint hashsize);
-static void   tableStrDel(void** key, void** value, void* cl);
-static void   tableStrDelKey(void** key, void** value, void* cl);
+static ajulong tableHashAtom(const void* key, ajulong hashsize);
+static void   tableStrDel(void** Pkey, void** Pvalue, void* cl);
+static void   tableStrDelKey(void** Pkey, void** Pvalue, void* cl);
 
-
-static void   tableDelStr(void** Pdata);
+static void   tableDelStr(void** Pstr);
 static const char* tableType(const AjPTable table);
-static void tableStrFromKey(const AjPTable table, const void *key,
-                            AjPStr* Pstr);
+static void   tableStrFromKey(const AjPTable table, const void* key,
+                              AjPStr* Pstr);
+
+
+
+
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -116,10 +152,10 @@ static void tableStrFromKey(const AjPTable table, const void *key,
 ** @nam3rule New Constructor
 ** @nam4rule Function Functions defined by caller
 **
-** @argrule New size [ajuint] Number of key values
+** @argrule New size [ajulong] Number of key values
 ** @argrule Function cmp [ajint function] Comparison function returning
 **                                        +1, zero or -1
-** @argrule Function hash [ajuint function] Hash function for keys
+** @argrule Function hash [ajulong function] Hash function for keys
 ** @argrule Function keydel [void function] key destructor function
 ** @argrule Function valdel [void function] value destructor function
 **
@@ -138,40 +174,25 @@ static void tableStrFromKey(const AjPTable table, const void *key,
 ** Current method defines the table size as the number of entries divided by 4
 ** to avoid a huge table.
 **
-** @param [r] size [ajuint] number of key-value pairs
+** @param [r] size [ajulong] number of key-value pairs
 **
 ** @return [AjPTable] new table.
 **
+**
+** @release 1.0.0
 ** @@
 **
 ******************************************************************************/
 
-AjPTable ajTableNew(ajuint size)
+AjPTable ajTableNew(ajulong size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, tableCmpAtom, tableHashAtom,
-                                NULL, NULL);
-    ret->Type = TABLE_USER;
+    table = ajTableNewFunctionLen(size, &tableCmpAtom, &tableHashAtom,
+                                  NULL, NULL);
+    table->Type = ajETableTypeUser;
 
-    return ret;
-}
-
-
-
-
-/* @obsolete ajTableNewLen
-** @rename ajTableNew
-*/
-__deprecated AjPTable ajTableNewLen(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, tableCmpAtom, tableHashAtom,
-                                NULL, NULL);
-    ret->Type = TABLE_USER;
-
-    return ret;
+    return table;
 }
 
 
@@ -185,97 +206,87 @@ __deprecated AjPTable ajTableNewLen(ajuint size)
 ** Current method defines the table size as the number of entries divided by 4
 ** to avoid a huge table.
 **
-** @param [r] size [ajuint] number of key-value pairs
+** @param [r] size [ajulong] number of key-value pairs
 ** @param [fN] cmp  [ajint function] function for comparing
-** @param [fN] hash [ajuint function] function for hashing keys
+** @param [fN] hash [ajulong function] function for hashing keys
 ** @param [fN] keydel [void function] key destructor function
 ** @param [fN] valdel [void function] value destructor function
 **
 ** @return [AjPTable] new table.
 **
+**
+** @release 5.0.0
 ** @@
 **
 ******************************************************************************/
 
-AjPTable ajTableNewFunctionLen(ajuint size,
-			       ajint cmp(const void *x, const void *y),
-			       ajuint hash(const void *key, ajuint hashsize),
-                               void keydel(void** key),
-                               void valdel(void** value))
+AjPTable ajTableNewFunctionLen(ajulong size,
+                               ajint (*cmp)(const void* key1,
+					    const void* key2),
+                               ajulong (*hash)(const void* key,
+					       ajulong hashsize),
+                               void (*keydel)(void** Pkey),
+                               void (*valdel)(void** Pvalue))
 {
-    ajuint hint;
-    ajuint i;
-    ajuint iprime;
-    AjPTable table;
+    ajulong hint  = 0UL;
+    ajulong i     = 0UL;
+    ajulong iprime = 0UL;
+
+    AjPTable table = NULL;
 
     /* largest primes just under 2**8 to 2**31 */
 
     static ajuint primes[] =
-    {
-        3, 7, 13, 31, 61, 127,
-	251, 509,
-	1021, 2039, 4093, 8191,
-	16381, 32749, 65521,
-	131071, 262139, 524287,
-	1048573, 2097143, 4194301, 8388593,
-	16777213, 33554393, 67108859,
-	134217689, 268435399, 536870909,
-	1073741789, 2147483647,
-	UINT_MAX
-    };
+        {
+            3, 7, 13, 31, 61, 127,
+            251, 509,
+            1021, 2039, 4093, 8191,
+            16381, 32749, 65521,
+            131071, 262139, 524287,
+            1048573, 2097143, 4194301, 8388593,
+            16777213, 33554393, 67108859,
+            134217689, 268435399, 536870909,
+            1073741789, 2147483647,
+            UINT_MAX
+        };
 
     hint = size/4;
 
-    for(i = 1; primes[i] <= hint; i++); /* else use default primes[0] */
+    for(i = 1U; primes[i] <= hint; i++); /* else use default primes[0] */
 
-    iprime = primes[i-1];
+    iprime = primes[i - 1];
 
     /*ajDebug("ajTableNewFunctionLen hint %d size %d\n", hint, iprime);*/
 
     AJNEW0(table);
-    table->size = iprime;
-    table->cmp  = cmp;
-    table->hash = hash;
-    table->defdel = keydel;
-    table->keydel = keydel;
-    table->valdel = valdel;
-    AJCNEW(table->buckets, iprime);
+    table->Size    = iprime;
+    table->Fcmp    = cmp;
+    table->Fhash   = hash;
+    table->Fkeydel = keydel;
+    table->Fvaldel = valdel;
 
-    for(i = 0; i < table->size; i++)
-	table->buckets[i] = NULL;
+    AJCNEW(table->Buckets, iprime);
 
-    table->length = 0;
-    table->timestamp = 0;
+    for(i = 0UL; i < table->Size; i++)
+        table->Buckets[i] = NULL;
+
+    table->Length    = 0UL;
+    table->Timestamp = 0U;
 
 #ifdef AJ_SAVESTATS
     tableNewCnt++;
 
     if(iprime > tableMaxNum)
-	tableMaxNum = iprime;
+        tableMaxNum = iprime;
 
     if(sizeof(*table) > tableMaxMem)
-	tableMaxMem = sizeof(*table);
+        tableMaxMem = sizeof(*table);
 #endif
 
     table->Use = 1;
-    table->Type = TABLE_USER;
+    table->Type = ajETableTypeUser;
 
     return table;
-}
-
-
-
-
-/* @obsolete ajTableNewL
-** @rename ajTableNewFunctionLen
-*/
-
-__deprecated AjPTable ajTableNewL(ajuint size,
-				  ajint cmp(const void *x, const void *y),
-				  ajuint hash(const void *key, ajuint hashsize))
-{
-
-    return ajTableNewFunctionLen(size, cmp, hash, NULL, NULL);
 }
 
 
@@ -313,6 +324,8 @@ __deprecated AjPTable ajTableNewL(ajuint size,
 **
 ** @param [d] Ptable [AjPTable*] Table (by reference)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -333,13 +346,13 @@ void ajTableDel(AjPTable* Ptable)
     --thys->Use;
 
     if(!thys->Use)
-    {					/* any other references? */
+    {                                   /* any other references? */
         ajTableClearDelete(thys);
 
-        AJFREE(thys->buckets);
+        AJFREE(thys->Buckets);
         AJFREE(*Ptable);
     }
-    
+
     *Ptable = NULL;
 
     return;
@@ -356,12 +369,14 @@ void ajTableDel(AjPTable* Ptable)
 ** @param [f] keydel [void function] key destructor
 ** @param [f] valdel [void function] value destructor
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableDelKeydelValdel(AjPTable* Ptable,
-                            void keydel(void** Pkey),
-                            void valdel(void** Pvalue))
+                            void (*keydel)(void** Pkey),
+                            void (*valdel)(void** Pvalue))
 {
     AjPTable thys;
 
@@ -378,16 +393,16 @@ void ajTableDelKeydelValdel(AjPTable* Ptable,
     --thys->Use;
 
     if(!thys->Use)
-    {					/* any other references? */
-        thys->keydel = keydel;
-        thys->valdel = valdel;
+    {                                   /* any other references? */
+        thys->Fkeydel = keydel;
+        thys->Fvaldel = valdel;
 
         ajTableClearDelete(thys);
 
-        AJFREE(thys->buckets);
+        AJFREE(thys->Buckets);
         AJFREE(*Ptable);
     }
-    
+
     *Ptable = NULL;
 
     return;
@@ -403,11 +418,13 @@ void ajTableDelKeydelValdel(AjPTable* Ptable,
 ** @param [d] Ptable [AjPTable*] Table (by reference)
 ** @param [f] valdel [void function] value destructor
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableDelValdel(AjPTable* Ptable,
-                      void valdel(void** Pvalue))
+                      void (*valdel)(void** Pvalue))
 {
     AjPTable thys;
 
@@ -424,15 +441,15 @@ void ajTableDelValdel(AjPTable* Ptable,
     --thys->Use;
 
     if(!thys->Use)
-    {					/* any other references? */
-        thys->valdel = valdel;
+    {                                   /* any other references? */
+        thys->Fvaldel = valdel;
 
         ajTableClearDelete(thys);
 
-        AJFREE(thys->buckets);
+        AJFREE(thys->Buckets);
         AJFREE(*Ptable);
     }
-    
+
     *Ptable = NULL;
 
     return;
@@ -447,6 +464,8 @@ void ajTableDelValdel(AjPTable* Ptable,
 **
 ** @param [d] Ptable [AjPTable*] Table (by reference)
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -461,19 +480,19 @@ void ajTableFree(AjPTable* Ptable)
 
     thys = *Ptable;
 
-     if(!thys->Use)
+    if(!thys->Use)
         ajErr("trying to delete unused table");
 
     --thys->Use;
 
     if(!thys->Use)
-    {					/* any other references? */
+    {                                   /* any other references? */
         ajTableClear(thys);
 
-        AJFREE(thys->buckets);
+        AJFREE(thys->Buckets);
         AJFREE(*Ptable);
     }
-    
+
     *Ptable = NULL;
 
     return;
@@ -484,14 +503,16 @@ void ajTableFree(AjPTable* Ptable)
 
 /* @funcstatic tableFreeSetExpand *********************************************
 **
-** Expand the list of free structure bindings
+** Expand the list of free AJAX Table Node objects.
 **
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static void tableFreeSetExpand (void)
 {
-    ajint newsize;
+    ajulong newsize;
 
     if(!tableFreeSet)
     {
@@ -505,7 +526,7 @@ static void tableFreeSetExpand (void)
         return;
 
     newsize = tableFreeMax + tableFreeMax;
-    AJCRESIZE0(tableFreeSet, tableFreeMax, newsize);
+    AJCRESIZE0(tableFreeSet, (size_t) tableFreeMax, (size_t) newsize);
     tableFreeMax = newsize;
 
     return;
@@ -518,20 +539,21 @@ static void tableFreeSetExpand (void)
 **
 ** Delete an entry in a table by freeing the key and value pointers
 **
-** @param [d] key [void**] Standard argument. Table key.
-** @param [d] value [void**] Standard argument. Table item.
+** @param [d] Pkey [void**] Standard argument. Table key.
+** @param [d] Pvalue [void**] Standard argument. Table item.
 ** @param [u] cl [void*] Standard argument. Usually NULL.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static void tableDel(void** key, void** value, void* cl)
+static void tableDel(void** Pkey, void** Pvalue, void* cl)
 {
-    AJFREE(*key);
-    AJFREE(*value);
-    
-    if(!cl)
-	return;
+    AJFREE(*Pkey);
+    AJFREE(*Pvalue);
+
+    (void) cl;
 
     return;
 }
@@ -543,20 +565,21 @@ static void tableDel(void** key, void** value, void* cl)
 **
 ** Delete an entry in a table by freeing the key pointers
 **
-** @param [d] key [void**] Standard argument. Table key.
-** @param [d] value [void**] Standard argument. Table item.
+** @param [d] Pkey [void**] Standard argument. Table key.
+** @param [d] Pvalue [void**] Standard argument. Table item.
 ** @param [u] cl [void*] Standard argument. Usually NULL.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static void tableDelKey(void** key, void** value, void* cl)
+static void tableDelKey(void** Pkey, void** Pvalue, void* cl)
 {
-    AJFREE(*key);
-    *value = NULL;
-    
-    if(!cl)
-	return;
+    AJFREE(*Pkey);
+    *Pvalue = NULL;
+
+    (void) cl;
 
     return;
 }
@@ -595,10 +618,10 @@ static void tableDelKey(void** key, void** value, void* cl)
 ** @valrule Fetch [const void*] Value
 ** @valrule Fetchmod [void*] Value
 ** @valrule *Fetchkey [const void*] Key
-** @valrule *Length [ajuint] Number of unique keys and values
+** @valrule *Length [ajulong] Number of unique keys and values
 ** @valrule *Match [AjBool] True if a match was found
-** @valrule *Size [ajuint] Hash array size
-** @valrule *Toarray [ajuint] Array size (not counting trailing NULL)
+** @valrule *Size [ajulong] Hash array size
+** @valrule *Toarray [ajulong] Array size (not counting trailing NULL)
 ** @fcategory cast
 **
 ******************************************************************************/
@@ -606,7 +629,7 @@ static void tableDelKey(void** key, void** value, void* cl)
 
 
 
-/* @func ajTableFetchC *****************************************************
+/* @func ajTableFetchC ********************************************************
 **
 ** returns the value associated with key in table, or null
 ** if table does not hold key.
@@ -615,42 +638,45 @@ static void tableDelKey(void** key, void** value, void* cl)
 ** @param [r] txtkey [const char*] key to find.
 ** @return [const void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 const void* ajTableFetchC(const AjPTable table, const char* txtkey)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!txtkey)
-	return NULL;
+    if(!txtkey)
+        return NULL;
 
-    if(table->Type == TABLE_STR)
+    if(table->Type == ajETableTypeStr)
     {
         ajStrAssignC(&tableTmpkeyStr, txtkey);
         return ajTableFetchS(table, tableTmpkeyStr);
     }
 
-    if(table->Type != TABLE_CHAR)
+    if(table->Type != ajETableTypeChar)
         ajFatal("ajTableFetchC called for %s table", tableType(table));
 
-    i = (*table->hash)(txtkey, table->size);
+    i = (*table->Fhash)(txtkey, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(txtkey, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(txtkey, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
+    return node ? node->Value : NULL;
 }
 
 
 
 
-/* @func ajTableFetchS *****************************************************
+/* @func ajTableFetchS ********************************************************
 **
 ** returns the value associated with key in table, or null
 ** if table does not hold key.
@@ -659,33 +685,36 @@ const void* ajTableFetchC(const AjPTable table, const char* txtkey)
 ** @param [r] key   [const AjPStr] key to find.
 ** @return [const void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 const void* ajTableFetchS(const AjPTable table, const AjPStr key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!key)
-	return NULL;
+    if(!key)
+        return NULL;
 
-    if(table->Type == TABLE_CHAR)
+    if(table->Type == ajETableTypeChar)
         return ajTableFetchC(table, MAJSTRGETPTR(key));
 
-    if(table->Type != TABLE_STR)
+    if(table->Type != ajETableTypeStr)
         ajFatal("ajTableFetchS called for %s table", tableType(table));
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
+    return node ? node->Value : NULL;
 }
 
 
@@ -700,60 +729,36 @@ const void* ajTableFetchS(const AjPTable table, const AjPStr key)
 ** @param [r] key   [const void*] key to find.
 ** @return [const void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-const void * ajTableFetchV(const AjPTable table, const void *key)
+const void* ajTableFetchV(const AjPTable table, const void* key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!key)
-	return NULL;
+    if(!key)
+        return NULL;
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
+    return node ? node->Value : NULL;
 }
 
 
 
 
-/* @obsolete ajTableFetch
-** @rename ajTableFetchmodV
-*/
-
-__deprecated void * ajTableFetch(const AjPTable table, const void *key)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!key)
-	return NULL;
-
-    i = (*table->hash)(key, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
-
-    return p ? p->value : NULL;
-}
-
-
-
-
-/* @func ajTableFetchmodC **************************************************
+/* @func ajTableFetchmodC *****************************************************
 **
 ** returns the value associated with key in table, or null
 ** if table does not hold key.
@@ -762,43 +767,45 @@ __deprecated void * ajTableFetch(const AjPTable table, const void *key)
 ** @param [r] txtkey [const char*] key to find.
 ** @return [void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void* ajTableFetchmodC(const AjPTable table, const char* txtkey)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
 
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!txtkey)
-	return NULL;
+    if(!txtkey)
+        return NULL;
 
-    if(table->Type == TABLE_STR)
+    if(table->Type == ajETableTypeStr)
     {
         ajStrAssignC(&tableTmpkeyStr, txtkey);
         return ajTableFetchmodS(table, tableTmpkeyStr);
     }
 
-    if(table->Type != TABLE_CHAR)
+    if(table->Type != ajETableTypeChar)
         ajFatal("ajTableFetchmodC called for %s table", tableType(table));
 
-    i = (*table->hash)(txtkey, table->size);
+    i = (*table->Fhash)(txtkey, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(txtkey, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(txtkey, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
+    return node ? node->Value : NULL;
 }
 
 
 
 
-/* @func ajTableFetchmodS **************************************************
+/* @func ajTableFetchmodS *****************************************************
 **
 ** returns the value associated with key in table, or null
 ** if table does not hold key.
@@ -807,45 +814,36 @@ void* ajTableFetchmodC(const AjPTable table, const char* txtkey)
 ** @param [r] key   [const AjPStr] key to find.
 ** @return [void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void* ajTableFetchmodS(const AjPTable table, const AjPStr key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!key)
-	return NULL;
+    if(!key)
+        return NULL;
 
-    if(table->Type == TABLE_CHAR)
+    if(table->Type == ajETableTypeChar)
         return ajTableFetchmodC(table, MAJSTRGETPTR(key));
 
-    if(table->Type != TABLE_STR)
+    if(table->Type != ajETableTypeStr)
         ajFatal("ajTableFetchmodS called for %s table", tableType(table));
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
-}
-
-
-
-
-/* @obsolete ajTablestrFetch
-** @rename ajTablestrFetchS
-*/
-__deprecated const AjPStr ajTablestrFetch(const AjPTable table,
-                                          const AjPStr key)
-{
-    return ajTablestrFetchS(table, key);
+    return node ? node->Value : NULL;
 }
 
 
@@ -860,67 +858,30 @@ __deprecated const AjPStr ajTablestrFetch(const AjPTable table,
 ** @param [r] key   [const void*] key to find.
 ** @return [void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void * ajTableFetchmodV(const AjPTable table, const void *key)
+void* ajTableFetchmodV(const AjPTable table, const void* key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!key)
-	return NULL;
+    if(!key)
+        return NULL;
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? p->value : NULL;
-}
-
-
-
-
-/* @obsolete ajTableGet
-** @rename ajTableFetchmodV
-*/
-
-__deprecated void * ajTableGet(const AjPTable table, const void *key)
-{
-    return ajTableFetchmodV(table, key);
-}
-
-
-
-
-/* @obsolete ajTableFetchKey
-** @rename ajTablestrFetchKeyS
-*/
-
-__deprecated const void * ajTableFetchKey(const AjPTable table,
-                                          const void *key)
-{
-    ajint i;
-    const struct binding *p;
-
-    if (!table)
-	return NULL;
-
-    if (!key)
-	return NULL;
-
-    i = (*table->hash)(key, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
-
-    return p ? (const void*)p->key : NULL;
+    return node ? node->Value : NULL;
 }
 
 
@@ -937,43 +898,47 @@ __deprecated const void * ajTableFetchKey(const AjPTable table,
 ** @param [r] key   [const void*] key to find.
 ** @return [void*]  value associated with key
 ** @error NULL if key not found in table.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void * ajTableFetchmodTraceV(const AjPTable table, const void *key)
+void* ajTableFetchmodTraceV(const AjPTable table, const void* key)
 {
-    ajuint i;
-    ajuint j = 0;
-    struct binding *p;
+    ajulong i = 0UL;
+    ajulong j = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
-    if (!key)
-	return NULL;
+    if(!key)
+        return NULL;
 
-    ajDebug("ajTableFetch length %u key %x (%Lu)\n",
-            table->length, key, key);
+    ajDebug("ajTableFetchmodTraceV length %Lu key %x (%Lu)\n",
+            table->Length, key, key);
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    ajDebug("...hash to bucket %u\n", i);
+    ajDebug("...hash to bucket %Lu\n", i);
 
-    for(p = table->buckets[i]; p; p = p->link)
+    for(node = table->Buckets[i]; node; node = node->Link)
     {
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
         j++;
     }
 
-    if(p)
+    if(node)
     {
-        ajDebug("...tested %u keys found %x (%Lu)\n", j, p->value, p->value);
+        ajDebug("...tested %Lu keys found %x (%Lu)\n",
+                j, node->Value, node->Value);
     }
     else
-        ajDebug("...tested %u keys no match\n", j);
+        ajDebug("...tested %Lu keys no match\n", j);
 
-    return p ? p->value : NULL;
+    return node ? node->Value : NULL;
 }
 
 
@@ -984,28 +949,18 @@ void * ajTableFetchmodTraceV(const AjPTable table, const void *key)
 ** returns the number of key-value pairs in table.
 **
 ** @param [r] table [const AjPTable] Table to be applied.
-** @return [ajuint] number of key-value pairs.
+** @return [ajulong] number of key-value pairs.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
-ajuint ajTableGetLength(const AjPTable table)
+ajulong ajTableGetLength(const AjPTable table)
 {
     if(!table)
-	return 0;
+        return 0UL;
 
-    return table->length;
-}
-
-
-
-
-/* @obsolete ajTableLength
-** @rename ajTableGetLength
-*/
-
-__deprecated ajint ajTableLength(const AjPTable table)
-{
-    return (ajuint) ajTableGetLength(table);
+    return table->Length;
 }
 
 
@@ -1016,16 +971,18 @@ __deprecated ajint ajTableLength(const AjPTable table)
 ** returns the size of the hash array in a table.
 **
 ** @param [r] table [const AjPTable] Table to be applied.
-** @return [ajuint] number of hash array positions
+** @return [ajulong] number of hash array positions
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-ajuint ajTableGetSize(const AjPTable table)
+ajulong ajTableGetSize(const AjPTable table)
 {
     if(!table)
-	return 0;
+        return 0UL;
 
-    return table->size;
+    return table->Size;
 }
 
 
@@ -1040,36 +997,39 @@ ajuint ajTableGetSize(const AjPTable table)
 ** @param [r] table [const AjPTable] table to search
 ** @param [r] txtkey [const char*] key to find.
 ** @return [AjBool] True if key was found[
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ajTableMatchC(const AjPTable table, const char* txtkey)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return ajFalse;
+        return ajFalse;
 
-    if (!txtkey)
-	return ajFalse;
+    if(!txtkey)
+        return ajFalse;
 
-    if(table->Type == TABLE_STR)
+    if(table->Type == ajETableTypeStr)
     {
         ajStrAssignC(&tableTmpkeyStr, txtkey);
         return ajTableMatchS(table, tableTmpkeyStr);
     }
 
-    if(table->Type != TABLE_CHAR)
+    if(table->Type != ajETableTypeChar)
         ajFatal("ajTableMatchC called for %s table", tableType(table));
 
-    i = (*table->hash)(txtkey, table->size);
+    i = (*table->Fhash)(txtkey, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(txtkey, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(txtkey, node->Key) == 0)
+            break;
 
-    return p ? ajTrue : ajFalse;
+    return node ? ajTrue : ajFalse;
 }
 
 
@@ -1084,33 +1044,36 @@ AjBool ajTableMatchC(const AjPTable table, const char* txtkey)
 ** @param [r] table [const AjPTable] table to search
 ** @param [r] key   [const AjPStr] key to find.
 ** @return [AjBool] True if key was found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ajTableMatchS(const AjPTable table, const AjPStr key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return ajFalse;
+        return ajFalse;
 
-    if (!key)
-	return ajFalse;
+    if(!key)
+        return ajFalse;
 
-    if(table->Type == TABLE_CHAR)
+    if(table->Type == ajETableTypeChar)
         return ajTableMatchC(table, MAJSTRGETPTR(key));
 
-    if(table->Type != TABLE_STR)
+    if(table->Type != ajETableTypeStr)
         ajFatal("ajTableMatchS called for %s table", tableType(table));
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? ajTrue : ajFalse;
+    return node ? ajTrue : ajFalse;
 }
 
 
@@ -1125,27 +1088,30 @@ AjBool ajTableMatchS(const AjPTable table, const AjPStr key)
 ** @param [r] table [const AjPTable] table to search
 ** @param [r] key [const void*] key to find.
 ** @return [AjBool] True if key was found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ajTableMatchV(const AjPTable table, const void* key)
 {
-    ajint i;
-    struct binding *p;
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return ajFalse;
+        return ajFalse;
 
-    if (!key)
-	return ajFalse;
+    if(!key)
+        return ajFalse;
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    return p ? ajTrue : ajFalse;
+    return node ? ajTrue : ajFalse;
 }
 
 
@@ -1159,48 +1125,35 @@ AjBool ajTableMatchV(const AjPTable table, const void* key)
 **
 ** @param [r] table [const AjPTable] Table
 ** @param [w] keyarray [void***] NULL terminated array of keys.
-** @return [ajuint] size of array returned
+** @return [ajulong] size of array returned
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-ajuint ajTableToarrayKeys(const AjPTable table,
+ajulong ajTableToarrayKeys(const AjPTable table,
                           void*** keyarray)
 {
-    ajuint i;
-    ajint j = 0;
-    struct binding *p;
+    ajulong i = 0UL;
+    ajulong j = 0UL;
 
-    if (*keyarray)
-	AJFREE(*keyarray);
+    AjPTableNode node = NULL;
+
+    if(*keyarray)
+        AJFREE(*keyarray);
 
     if(!table)
-	return 0;
- 
-    *keyarray = AJALLOC((table->length + 1)*sizeof(keyarray));
+        return 0UL;
 
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	{
-	    (*keyarray)[j++] = p->key;
-	}
+    *keyarray = AJALLOC((size_t)(table->Length + 1) * sizeof(keyarray));
+
+    for(i = 0UL; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+            (*keyarray)[j++] = node->Key;
 
     (*keyarray)[j] = NULL;
 
-    return table->length;
-}
-
-
-
-
-/* @obsolete ajTableToarray
-** @rename ajTableToarrayKeysValues
-*/
-
-__deprecated ajuint ajTableToarray(const AjPTable table,
-                                   void*** keyarray, void*** valarray)
-{
-
-    return ajTableToarrayKeysValues(table, keyarray, valarray);
+    return table->Length;
 }
 
 
@@ -1215,40 +1168,43 @@ __deprecated ajuint ajTableToarray(const AjPTable table,
 ** @param [r] table [const AjPTable] Table
 ** @param [w] keyarray [void***] NULL terminated array of keys.
 ** @param [w] valarray [void***] NULL terminated array of values.
-** @return [ajuint] size of arrays returned
+** @return [ajulong] size of arrays returned
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-ajuint ajTableToarrayKeysValues(const AjPTable table,
+ajulong ajTableToarrayKeysValues(const AjPTable table,
                                 void*** keyarray, void*** valarray)
 {
-    ajuint i;
-    ajint j = 0;
-    struct binding *p;
+    ajulong i = 0UL;
+    ajulong j = 0UL;
 
-    if (*keyarray)
-	AJFREE(*keyarray);
+    AjPTableNode node = NULL;
 
-    if (*valarray)
-	AJFREE(*valarray);
+    if(*keyarray)
+        AJFREE(*keyarray);
+
+    if(*valarray)
+        AJFREE(*valarray);
 
     if(!table)
-	return 0;
- 
-    *keyarray = AJALLOC((table->length + 1)*sizeof(keyarray));
-    *valarray = AJALLOC((table->length + 1)*sizeof(valarray));
+        return 0UL;
 
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	{
-	    (*keyarray)[j] = p->key;
-	    (*valarray)[j++] = p->value;
-	}
+    *keyarray = AJALLOC((size_t)(table->Length + 1) * sizeof(keyarray));
+    *valarray = AJALLOC((size_t)(table->Length + 1) * sizeof(valarray));
+
+    for(i = 0UL; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+        {
+            (*keyarray)[j]   = node->Key;
+            (*valarray)[j++] = node->Value;
+        }
 
     (*keyarray)[j] = NULL;
     (*valarray)[j] = NULL;
 
-    return table->length;
+    return table->Length;
 }
 
 
@@ -1262,34 +1218,37 @@ ajuint ajTableToarrayKeysValues(const AjPTable table,
 **
 ** @param [r] table [const AjPTable] Table
 ** @param [w] valarray [void***] NULL terminated array of values.
-** @return [ajuint] size of array returned
+** @return [ajulong] size of array returned
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-ajuint ajTableToarrayValues(const AjPTable table,
-                            void*** valarray)
+ajulong ajTableToarrayValues(const AjPTable table,
+			     void*** valarray)
 {
-    ajuint i;
-    ajint j = 0;
-    struct binding *p;
+    ajulong i = 0UL;
+    ajulong j = 0UL;
 
-    if (*valarray)
-	AJFREE(*valarray);
+    AjPTableNode node = NULL;
+
+    if(*valarray)
+        AJFREE(*valarray);
 
     if(!table)
-	return 0;
- 
-    *valarray = AJALLOC((table->length + 1)*sizeof(valarray));
+        return 0;
 
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	{
-	    (*valarray)[j++] = p->value;
-	}
+    *valarray = AJALLOC((size_t)(table->Length + 1) * sizeof(valarray));
+
+    for(i = 0UL; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+        {
+            (*valarray)[j++] = node->Value;
+        }
 
     (*valarray)[j] = NULL;
 
-    return table->length;
+    return table->Length;
 }
 
 
@@ -1316,36 +1275,39 @@ ajuint ajTableToarrayValues(const AjPTable table,
 **
 ** @param [r] table [const AjPTable] Table
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 void ajTableTrace(const AjPTable table)
 {
-    ajuint i;
-    ajint j;
-    ajint k = 0;
-    struct binding *p;
+    ajulong i = 0UL;
+    ajulong j = 0UL;
+    ajulong k = 0UL;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return;
+        return;
 
     ajDebug("table trace: ");
-    ajDebug(" length: %d", table->length);
-    ajDebug(" size: %d", table->size);
-    ajDebug(" timestamp: %u", table->timestamp);
+    ajDebug(" length: %Lu", table->Length);
+    ajDebug(" size: %Lu", table->Size);
+    ajDebug(" timestamp: %u", table->Timestamp);
 
-    for(i = 0; i < table->size; i++)
-	if(table->buckets[i])
-	{
-	    j = 0;
+    for(i = 0UL; i < table->Size; i++)
+        if(table->Buckets[i])
+        {
+            j = 0UL;
 
-	    for(p = table->buckets[i]; p; p = p->link)
-		j++;
+            for(node = table->Buckets[i]; node; node = node->Link)
+                j++;
 
-	    k += j;
-	}
+            k += j;
+        }
 
-    ajDebug(" links: %d\n", k);
+    ajDebug(" links: %Lu\n", k);
 
     return;
 }
@@ -1390,57 +1352,61 @@ void ajTableTrace(const AjPTable table)
 ** @param [o] key [void*] key
 ** @param [u] value [void*] value of key
 ** @return [void*] previous value if key exists, NULL if not.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
-void * ajTablePut(AjPTable table, void *key, void *value)
+void* ajTablePut(AjPTable table, void* key, void* value)
 {
-    ajint i;
-    struct binding *p;
-    void *prev;
-    ajuint minsize;
+    ajulong i       = 0UL;
+    ajulong minsize = 0UL;
+
+    AjPTableNode node = NULL;
+
+    void* prev = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
     if(!key)
-	return NULL;
+        return NULL;
 
-    minsize = table->length/8;
-    if(table->size < minsize)
+    minsize = table->Length / 8UL;
+    if(table->Size < minsize)
         ajTableResizeCount(table, 6*minsize);
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    if(p == NULL)
+    if(node == NULL)
     {
         if(tableFreeNext)
-            p = tableFreeSet[--tableFreeNext];
+            node = tableFreeSet[--tableFreeNext];
         else
-            AJNEW0(p);
+            AJNEW0(node);
 
-	p->key = key;
-	p->link = table->buckets[i];
-	table->buckets[i] = p;
-	table->length++;
-	prev = NULL;
+        node->Key = key;
+        node->Link = table->Buckets[i];
+        table->Buckets[i] = node;
+        table->Length++;
+        prev = NULL;
     }
     else
     {
-        if(table->keydel)
+        if(table->Fkeydel)
         {
-            table->keydel(&(p->key));
-            p->key = key;
+            (*table->Fkeydel)(&node->Key);
+            node->Key = key;
         }
-	prev = p->value;
+        prev = node->Value;
     }
 
-    p->value = value;
-    table->timestamp++;
+    node->Value = value;
+    table->Timestamp++;
 
     return prev;
 }
@@ -1462,82 +1428,86 @@ void * ajTablePut(AjPTable table, void *key, void *value)
 ** @param [f] keydel [void function] key destructor
 ** @param [f] valdel [void function] value destructor
 ** @return [AjBool] previous value was found and deleted.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ajTablePutClean(AjPTable table, void *key, void *value,
-                       void keydel(void** Pkey),
-                       void valdel(void** Pvalue))
+AjBool ajTablePutClean(AjPTable table, void* key, void* value,
+                       void (*keydel)(void** Pkey),
+                       void (*valdel)(void** Pvalue))
 {
-    ajint i;
-    struct binding *p;
-    ajuint minsize;
-    AjBool ret = ajFalse;
+    ajulong i       = 0UL;
+    ajulong minsize = 0UL;
+
+    AjPTableNode node = NULL;
+
+    AjBool result = ajFalse;
 
     if(!table)
-	return ajFalse;
+        return ajFalse;
 
     if(!key)
-	return ajFalse;
+        return ajFalse;
 
-    minsize = table->length/8;
-    if(table->size < minsize)
+    minsize = table->Length / 8UL;
+    if(table->Size < minsize)
         ajTableResizeCount(table, 6*minsize);
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
 
-    if(p == NULL)
+    if(node == NULL)
     {
         if(tableFreeNext)
-            p = tableFreeSet[--tableFreeNext];
+            node = tableFreeSet[--tableFreeNext];
         else
-            AJNEW0(p);
+            AJNEW0(node);
 
-	p->key = key;
-	p->link = table->buckets[i];
-	table->buckets[i] = p;
-	table->length++;
+        node->Key = key;
+        node->Link = table->Buckets[i];
+        table->Buckets[i] = node;
+        table->Length++;
     }
     else
     {
 /*
-        {
-            AjPStr tmpkey = NULL;
-            AjPStr newkey = NULL;
-            tableStrFromKey(table, p->key, &tmpkey);
-            tableStrFromKey(table, key, &newkey);
-            ajDebug("ajTablePutClean duplicate key %x (%S) == %x (%S)\n",
-                    p->key, tmpkey, key, newkey);
-            ajStrDel(&tmpkey);
-            ajStrDel(&newkey);
-        }
+  {
+  AjPStr tmpkey = NULL;
+  AjPStr newkey = NULL;
+  tableStrFromKey(table, node->Key, &tmpkey);
+  tableStrFromKey(table, key, &newkey);
+  ajDebug("ajTablePutClean duplicate key %x (%S) == %x (%S)\n",
+  node->Key, tmpkey, key, newkey);
+  ajStrDel(&tmpkey);
+  ajStrDel(&newkey);
+  }
 */
-        if((void *) keydel)
+        if(keydel)
         {
-            keydel(&(p->key));
+            (*keydel)(&node->Key);
         }
 
-        else if(table->keydel)
+        else if(table->Fkeydel)
         {
-            table->keydel(&(p->key));
+            (*table->Fkeydel)(&node->Key);
         }
 
-        p->key = key;
+        node->Key = key;
 
-        if((void *) valdel)
-            valdel(&(p->value));
+        if(valdel)
+            (*valdel)(&node->Value);
 
-        ret = ajTrue;
+        result = ajTrue;
     }
 
-    p->value = value;
-    table->timestamp++;
+    node->Value = value;
+    table->Timestamp++;
 
-    return ret;
+    return result;
 }
 
 
@@ -1545,7 +1515,6 @@ AjBool ajTablePutClean(AjPTable table, void *key, void *value,
 
 /* @funcstatic tableStrFromKey ************************************************
 **
-
 ** Tries to print the value of a key by checking the internal hash functions
 ** against the hash function for the table to identify a known key type
 **
@@ -1556,36 +1525,39 @@ AjBool ajTablePutClean(AjPTable table, void *key, void *value,
 ** @param [w] Pstr [AjPStr*] Output string
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
-static void tableStrFromKey(const AjPTable table, const void *key,
+
+static void tableStrFromKey(const AjPTable table, const void* key,
                             AjPStr* Pstr)
 {
-    if(table->hash == ajTablecharHash)
+    if(table->Fhash == &ajTablecharHash)
     {
         ajFmtPrintS(Pstr, "key '%s' (char*)",
                     (const char*) key);
     }
-    else if(table->hash == ajTableintHash)
+    else if(table->Fhash == &ajTableintHash)
     {
         ajFmtPrintS(Pstr, "key '%d' (int)",
                     *((const ajint*) key));
     }
-    else if(table->hash == ajTablelongHash)
+    else if(table->Fhash == &ajTablelongHash)
     {
         ajFmtPrintS(Pstr, "key '%Ld' (int)",
                     *((const ajlong*) key));
     }
-    else if(table->hash == ajTablestrHash)
+    else if(table->Fhash == &ajTablestrHash)
     {
         ajFmtPrintS(Pstr, "key '%S' (string)",
                     (const AjPStr) key);
     }
-    else if(table->hash == ajTableuintHash)
+    else if(table->Fhash == &ajTableuintHash)
     {
         ajFmtPrintS(Pstr, "key '%u' (unsigned int)",
                     *((const ajuint*) key));
     }
-    else if(table->hash == ajTableulongHash)
+    else if(table->Fhash == &ajTableulongHash)
     {
         ajFmtPrintS(Pstr, "key '%Lu' (unsigned long)",
                     *((const ajulong*) key));
@@ -1595,7 +1567,7 @@ static void tableStrFromKey(const AjPTable table, const void *key,
         ajFmtPrintS(Pstr, "key '%x' (unknown)",
                     (const void*) key);
     }
-    
+
     return;
 }
 
@@ -1612,67 +1584,71 @@ static void tableStrFromKey(const AjPTable table, const void *key,
 ** @param [o] key [void*] key
 ** @param [u] value [void*] value of key
 ** @return [void*] previous value if key exists, NULL if not.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void * ajTablePutTrace(AjPTable table, void *key, void *value)
+void* ajTablePutTrace(AjPTable table, void* key, void* value)
 {
-    ajuint i;
-    ajuint j = 0;
-    struct binding *p;
-    void *prev;
-    ajuint minsize;
+    ajulong i       = 0UL;
+    ajulong j       = 0UL;
+    ajulong minsize = 0UL;
+
+    AjPTableNode node = NULL;
+
+    void* prev = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
     if(!key)
-	return NULL;
+        return NULL;
 
     if(!value)
-	return NULL;
+        return NULL;
 
-    minsize = table->length/6;
-    if(table->size < minsize)
-        ajTableResizeCount(table, 4*table->length);
+    minsize = table->Length / 6UL;
+    if(table->Size < minsize)
+        ajTableResizeCount(table, 4 * table->Length);
 
-    ajDebug("ajTablePut length %u key %x (%Lu) value %x (%Lu)\n",
-            table->length, key, key, value, value);
+    ajDebug("ajTablePut length %Lu key %x (%Lu) value %x (%Lu)\n",
+            table->Length, key, key, value, value);
 
-    i = (*table->hash)(key, table->size);
+    i = (*table->Fhash)(key, table->Size);
 
-    ajDebug("...hash to bucket %u\n", i);
+    ajDebug("...hash to bucket %Lu\n", i);
 
-    for(p = table->buckets[i]; p; p = p->link)
+    for(node = table->Buckets[i]; node; node = node->Link)
     {
-        if((*table->cmp)(key, p->key) == 0)
-	    break;
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
         j++;
     }
-    
-    ajDebug("...tested %u keys\n", j);
 
-    if(p == NULL)
+    ajDebug("...tested %Lu keys\n", j);
+
+    if(node == NULL)
     {
         if(tableFreeNext)
-            p = tableFreeSet[--tableFreeNext];
+            node = tableFreeSet[--tableFreeNext];
         else
-            AJNEW0(p);
+            AJNEW0(node);
 
-	p->key = key;
-	p->link = table->buckets[i];
-	table->buckets[i] = p;
-	table->length++;
-	prev = NULL;
+        node->Key = key;
+        node->Link = table->Buckets[i];
+        table->Buckets[i] = node;
+        table->Length++;
+        prev = NULL;
     }
     else
     {
-        ajDebug("...existing value %x %Lu\n", p->value, p->value);
-	prev = p->value;
+        ajDebug("...existing value %x %Lu\n", node->Value, node->Value);
+        prev = node->Value;
     }
 
-    p->value = value;
-    table->timestamp++;
+    node->Value = value;
+    table->Timestamp++;
 
     return prev;
 }
@@ -1690,19 +1666,22 @@ void * ajTablePutTrace(AjPTable table, void *key, void *value)
 ** @param [r] key [const void*] key to be removed
 ** @return [void*] removed value.
 ** @error NULL if key not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
-void * ajTableRemove(AjPTable table, const void *key)
+void* ajTableRemove(AjPTable table, const void* key)
 {
-    ajint i;
-    struct binding **pp;
+    ajulong i = 0UL;
+
+    AjPTableNode* Pnode = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
     if(!key)
-	return NULL;
+        return NULL;
 
     {
         AjPStr newkey = NULL;
@@ -1711,38 +1690,38 @@ void * ajTableRemove(AjPTable table, const void *key)
         ajStrDel(&newkey);
     }
 
-    table->timestamp++;
-    i = (*table->hash)(key, table->size);
+    table->Timestamp++;
+    i = (*table->Fhash)(key, table->Size);
 
-    for(pp = &table->buckets[i]; *pp; pp = &(*pp)->link)
-	if((*table->cmp)(key, (*pp)->key) == 0)
-	{
-	    struct binding *p = *pp;
-	    void *value = p->value;
-	    *pp = p->link;
+    for(Pnode = &table->Buckets[i]; *Pnode; Pnode = &(*Pnode)->Link)
+        if((*table->Fcmp)(key, (*Pnode)->Key) == 0)
+        {
+            AjPTableNode node = *Pnode;
+            void* value = node->Value;
+            *Pnode = node->Link;
 
-            if(table->keydel)
+            if(table->Fkeydel)
             {
                 AjPStr tmpkey = NULL;
                 AjPStr newkey = NULL;
-                tableStrFromKey(table, p->key, &tmpkey);
+                tableStrFromKey(table, node->Key, &tmpkey);
                 tableStrFromKey(table, key, &newkey);
                 ajDebug("ajTableRemove key %x (%S) matched key %x (%S)\n",
-                        key, newkey, p->key, tmpkey);
-                table->keydel(&p->key);
+                        key, newkey, node->Key, tmpkey);
+                (*table->Fkeydel)(&node->Key);
                 ajStrDel(&tmpkey);
                 ajStrDel(&newkey);
             }
 
             if(tableFreeNext >= tableFreeMax)
-                AJFREE(p);
+                AJFREE(node);
             else
-                tableFreeSet[tableFreeNext++] = p;
+                tableFreeSet[tableFreeNext++] = node;
 
-	    table->length--;
+            table->Length--;
 
-	    return value;
-	}
+            return value;
+        }
 
     return NULL;
 }
@@ -1761,40 +1740,43 @@ void * ajTableRemove(AjPTable table, const void *key)
 ** @param [w] truekey [void**] true internal key returned, now owned by caller
 ** @return [void*] removed value.
 ** @error NULL if key not found.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
-void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
+void* ajTableRemoveKey(AjPTable table, const void* key, void** truekey)
 {
-    ajint i;
-    struct binding **pp;
+    ajulong i = 0UL;
+
+    AjPTableNode* Pnode = NULL;
 
     if(!table)
-	return NULL;
+        return NULL;
 
     if(!key)
-	return NULL;
+        return NULL;
 
-    table->timestamp++;
-    i = (*table->hash)(key, table->size);
+    table->Timestamp++;
+    i = (*table->Fhash)(key, table->Size);
 
-    for(pp = &table->buckets[i]; *pp; pp = &(*pp)->link)
-	if((*table->cmp)(key, (*pp)->key) == 0)
-	{
-	    struct binding *p = *pp;
-	    void *value = p->value;
-	    *truekey = p->key;
-	    *pp = p->link;
+    for(Pnode = &table->Buckets[i]; *Pnode; Pnode = &(*Pnode)->Link)
+        if((*table->Fcmp)(key, (*Pnode)->Key) == 0)
+        {
+            AjPTableNode node = *Pnode;
+            void* value = node->Value;
+            *truekey = node->Key;
+            *Pnode   = node->Link;
 
             if(tableFreeNext >= tableFreeMax)
-                AJFREE(p);
+                AJFREE(node);
             else
-                tableFreeSet[tableFreeNext++] = p;
+                tableFreeSet[tableFreeNext++] = node;
 
-	    table->length--;
+            table->Length--;
 
-	    return value;
-	}
+            return value;
+        }
 
     return NULL;
 }
@@ -1837,28 +1819,31 @@ void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
 ** @param [f] apply [void function] function to be applied
 ** @param [u] cl [void*] Standard. Usually NULL. To be passed to apply
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 void ajTableMap(AjPTable table,
-		void apply(const void *key, void **value, void *cl),
-		void *cl)
+                void (*apply)(const void* key, void** Pvalue, void* cl),
+                void* cl)
 {
-    ajuint i;
-    ajuint stamp;
-    struct binding *p;
+    ajulong i     = 0UL;
+    ajuint stamp = 0U;
+
+    AjPTableNode node = NULL;
 
     if(!table)
-	return;
+        return;
 
-    stamp = table->timestamp;
+    stamp = table->Timestamp;
 
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	{
-	    apply(p->key, &p->value, cl);
-	    assert(table->timestamp == stamp);
-	}
+    for(i = 0UL; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+        {
+            (*apply)(node->Key, &node->Value, cl);
+            assert(table->Timestamp == stamp);
+        }
 
     return;
 }
@@ -1878,39 +1863,43 @@ void ajTableMap(AjPTable table,
 ** @param [f] apply [void function] function to be applied
 ** @param [u] cl [void*] Standard. Usually NULL. To be passed to apply
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
 void ajTableMapDel(AjPTable table,
-                   void apply(void **key, void **value, void *cl),
-                   void *cl)
+                   void (*apply)(void** Pkey, void** Pvalue, void* cl),
+                   void* cl)
 {
-    ajuint i;
-    ajuint stamp;
-    struct binding *p, *q;
+    ajulong i    = 0UL;
+    ajuint stamp = 0U;
+
+    AjPTableNode node1 = NULL;
+    AjPTableNode node2 = NULL;
 
     if(!table)
-	return;
+        return;
 
-    stamp = table->timestamp;
+    stamp = table->Timestamp;
 
-    for(i = 0; i < table->size; i++)
+    for(i = 0UL; i < table->Size; i++)
     {
-	for(p = table->buckets[i]; p; p = q)
-	{
-            q = p->link;
+        for(node1 = table->Buckets[i]; node1; node1 = node2)
+        {
+            node2 = node1->Link;
 
-	    apply(&p->key, &p->value, cl);
-	    assert(table->timestamp == stamp);
-            table->length--;
+            (*apply)(&node1->Key, &node1->Value, cl);
+            assert(table->Timestamp == stamp);
+            table->Length--;
             if(tableFreeNext >= tableFreeMax)
                 tableFreeSetExpand();
             if(tableFreeNext >= tableFreeMax)
-                AJFREE(p);
+                AJFREE(node1);
             else
-                tableFreeSet[tableFreeNext++] = p;
-	}
-        table->buckets[i] = NULL;
+                tableFreeSet[tableFreeNext++] = node1;
+        }
+        table->Buckets[i] = NULL;
     }
 
     return;
@@ -1947,11 +1936,11 @@ void ajTableMapDel(AjPTable table,
 ** @nam5rule Case Case-insensitive string comparison
 **
 ** @argrule * table [AjPTable] Hash table
-** @argrule ResizeCount size [ajuint] Expected number of key-value pairs
-** @argrule ResizeHashsize hashsize [ajuint] Required minimum hash array size
+** @argrule ResizeCount size [ajulong] Expected number of key-value pairs
+** @argrule ResizeHashsize hashsize [ajulong] Required minimum hash array size
 ** @argrule SettypeUser cmp [ajint function] Comparison function returning
-**                                        +1, zero or -1
-** @argrule SettypeUser hash [ajuint function] Hash function for keys
+**                                            +1, zero or -1
+** @argrule SettypeUser hash [ajulong function] Hash function for keys
 ** @argrule Destroy keydel [void function] key destructor function
 ** @argrule Destroykey keydel [void function] key destructor function
 ** @argrule Destroy valdel [void function] value destructor function
@@ -1971,45 +1960,48 @@ void ajTableMapDel(AjPTable table,
 **
 ** @param [u] table [AjPTable] Table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableClear(AjPTable table)
 {
-    ajuint i;
-    ajuint ikeys;
+    ajulong i     = 0UL;
+    ajulong ikeys = 0UL;
 
-    if (!table)
-	return;
+    if(!table)
+        return;
 
-    /*ajDebug("ajTableClear length: %u size: %u type: %u\n",
-      table->length, table->size, table->Type);*/
+    /*ajDebug("ajTableClear length: %Lu size: %Lu type: %u\n",
+      table->Length, table->Size, table->Type);*/
 
-    if(table->length > 0)
+    if(table->Length > 0)
     {
-	struct binding *p, *q;
+        AjPTableNode node1 = NULL;
+        AjPTableNode node2 = NULL;
 
-	for(i = 0; i < table->size; i++)
-	{
-            ikeys = 0;
-            for(p = table->buckets[i]; p; p = q)
-	    {
+        for(i = 0UL; i < table->Size; i++)
+        {
+            ikeys = 0UL;
+            for(node1 = table->Buckets[i]; node1; node1 = node2)
+            {
                 ikeys++;
 
-		q = p->link;
+                node2 = node1->Link;
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
                 if(tableFreeNext >= tableFreeMax)
-                    AJFREE(p);
+                    AJFREE(node1);
                 else
-                    tableFreeSet[tableFreeNext++] = p;
+                    tableFreeSet[tableFreeNext++] = node1;
             }
-            table->buckets[i] = NULL;
+            table->Buckets[i] = NULL;
         }
     }
 
-    table->length = 0;
+    table->Length = 0UL;
 
     return;
 }
@@ -2023,44 +2015,48 @@ void ajTableClear(AjPTable table)
 **
 ** @param [u] table [AjPTable] Table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableClearDelete(AjPTable table)
 {
-    ajuint i;
-    struct binding *p, *q;
+    ajulong i = 0UL;
 
-    if (!table)
-	return;
+    AjPTableNode node1 = NULL;
+    AjPTableNode node2 = NULL;
 
-    if(table->length > 0)
+    if(!table)
+        return;
+
+    if(table->Length > 0)
     {
 
-	for(i = 0; i < table->size; i++)
-	{
-            for(p = table->buckets[i]; p; p = q)
-	    {
-		q = p->link;
+        for(i = 0UL; i < table->Size; i++)
+        {
+            for(node1 = table->Buckets[i]; node1; node1 = node2)
+            {
+                node2 = node1->Link;
 
-                if(table->keydel)
-                    table->keydel(&p->key);
+                if(table->Fkeydel)
+                    (*table->Fkeydel)(&node1->Key);
 
-                if(table->valdel)
-                    table->valdel(&p->value);
+                if(table->Fvaldel)
+                    (*table->Fvaldel)(&node1->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
                 if(tableFreeNext >= tableFreeMax)
-                    AJFREE(p);
+                    AJFREE(node1);
                 else
-                    tableFreeSet[tableFreeNext++] = p;
+                    tableFreeSet[tableFreeNext++] = node1;
             }
-            table->buckets[i] = NULL;
+            table->Buckets[i] = NULL;
         }
     }
 
-    table->length = 0;
+    table->Length = 0UL;
 
     return;
 }
@@ -2073,12 +2069,14 @@ void ajTableClearDelete(AjPTable table)
 ** Resizes a hash table to a new number of expected values.
 **
 ** @param [u] table [AjPTable] Table
-** @param [r] size [ajuint] Expected number of key-value pairs
+** @param [r] size [ajulong] Expected number of key-value pairs
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ajTableResizeCount(AjPTable table, ajuint size)
+void ajTableResizeCount(AjPTable table, ajulong size)
 {
     ajTableResizeHashsize(table, size/4);
 
@@ -2093,41 +2091,64 @@ void ajTableResizeCount(AjPTable table, ajuint size)
 ** Resizes a hash table to a new size.
 **
 ** @param [u] table [AjPTable] Table
-** @param [r] hashsize [ajuint] Expected number of key-value pairs
+** @param [r] hashsize [ajulong] Expected number of key-value pairs
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ajTableResizeHashsize(AjPTable table, ajuint hashsize)
+void ajTableResizeHashsize(AjPTable table, ajulong hashsize)
 {
-    ajuint n;
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint hint;
-    ajuint iprime;
-    ajuint ibucket;
-    ajuint i;
-    struct binding *p;
-    ajuint savelength;
+    ajulong n         = 0UL;
+    void** keyarray   = NULL;
+    void** valarray   = NULL;
+    ajulong hint      = 0UL;
+    ajulong iprime    = 0UL;
+    ajulong ibucket   = 0UL;
+    ajulong i         = 0UL;
+    AjPTableNode node = NULL;
+    ajulong savelength = 0UL;
 
     /* largest primes just under 2**8 to 2**31 */
 
-    static ajuint primes[] =
-    {
-        3, 7, 13, 31, 61, 127,
-	251, 509,
-	1021, 2039, 4093, 8191,
-	16381, 32749, 65521,
-	131071, 262139, 524287,
-	1048573, 2097143, 4194301, 8388593,
-	16777213, 33554393, 67108859,
-	134217689, 268435399, 536870909,
-	1073741789, 2147483647,
-	UINT_MAX
-    };
+    static ajulong primes[] =
+        {
+            3UL,
+            7UL,
+            13UL,
+            31UL,
+            61UL,
+            127UL,
+            251UL,
+            509UL,
+            1021UL,
+            2039UL,
+            4093UL,
+            8191UL,
+            16381UL,
+            32749UL,
+            65521UL,
+            131071UL,
+            262139UL,
+            524287UL,
+            1048573UL,
+            2097143UL,
+            4194301UL,
+            8388593UL,
+            16777213UL,
+            33554393UL,
+            67108859UL,
+            134217689UL,
+            268435399UL,
+            536870909UL,
+            1073741789UL,
+            2147483647UL,
+            UINT_MAX
+        };
 
-    if (!table)
-	return;
+    if(!table)
+        return;
 
     /* check the size required */
 
@@ -2135,58 +2156,58 @@ void ajTableResizeHashsize(AjPTable table, ajuint hashsize)
 
     for(i = 1; primes[i] <= hint; i++); /* else use default i=0 */
 
-    iprime = primes[i-1];
+    iprime = primes[i - 1];
 
-    /*ajDebug("ajTableResizeHashsize test %x entries %u newhashsize %u "
-            "hashsize %u newsize %u\n",
-            table, table->length, hashsize, table->size, iprime);*/
+    /*ajDebug("ajTableResizeHashsize test %x entries %Lu newhashsize %Lu "
+      "hashsize %Lu newsize %Lu\n",
+      table, table->Length, hashsize, table->Size, iprime);*/
 
-    if(iprime == table->size)
+    if(iprime == table->Size)
         return;
 
     /* save the current keys and values */
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
-    AJCRESIZE0(table->buckets, table->size, iprime);
-    table->size = iprime;
+    AJCRESIZE0(table->Buckets, (size_t) table->Size, (size_t) iprime);
+    table->Size = iprime;
 
     /* empty the old buckets */
 
-    savelength = table->length;
+    savelength = table->Length;
     ajTableClear(table);
-    table->length = savelength;
+    table->Length = savelength;
 
-    /*ajDebug("ajTableResizeHashsize yes %x length %u nkeys %u hashsize %u\n",
-      table, table->length, n, table->size);*/
+    /*ajDebug("ajTableResizeHashsize yes %x length %Lu nkeys %Lu hashsize %Lu\n",
+      table, table->Length, n, table->Size);*/
 
     /* repopulate the new bucket array */
 
     for(i=0; i < n; i++)
     {
-        ibucket = (*table->hash)(keys[i], table->size);
-        for(p = table->buckets[ibucket]; p; p = p->link)
-            if((*table->cmp)(keys[i], p->key) == 0)
+        ibucket = (*table->Fhash)(keyarray[i], table->Size);
+        for(node = table->Buckets[ibucket]; node; node = node->Link)
+            if((*table->Fcmp)(keyarray[i], node->Key) == 0)
                 break;
 
-        if(p == NULL)
+        if(node == NULL)
         {
             if(tableFreeNext)
-                p = tableFreeSet[--tableFreeNext];
+                node = tableFreeSet[--tableFreeNext];
             else
-                AJNEW0(p);
+                AJNEW0(node);
 
-            p->key = keys[i];
-            p->link = table->buckets[ibucket];
-            table->buckets[ibucket] = p;
+            node->Key = keyarray[i];
+            node->Link = table->Buckets[ibucket];
+            table->Buckets[ibucket] = node;
         }
 
-        p->value = values[i];
+        node->Value = valarray[i];
     }
 
-    AJFREE(keys);
-    AJFREE(values);
-    table->timestamp++;
+    AJFREE(keyarray);
+    AJFREE(valarray);
+    table->Timestamp++;
 
     return;
 }
@@ -2202,18 +2223,20 @@ void ajTableResizeHashsize(AjPTable table, ajuint hashsize)
 ** @param [fN] keydel [void function] key destructor function
 ** @param [fN] valdel [void function] value destructor function
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSetDestroy(AjPTable table,
-                       void keydel(void** key),
-                       void valdel(void** value))
+                       void (*keydel)(void** Pkey),
+                       void (*valdel)(void** Pvalue))
 {
     if(!table)
         return;
 
-    table->keydel = keydel;
-    table->valdel = valdel;
+    table->Fkeydel = keydel;
+    table->Fvaldel = valdel;
 
     return;
 }
@@ -2227,6 +2250,8 @@ void ajTableSetDestroy(AjPTable table,
 **
 ** @param [u] table [AjPTable] Table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2235,7 +2260,7 @@ void ajTableSetDestroyboth(AjPTable table)
     if(!table)
         return;
 
-       table->valdel = table->keydel;
+    table->Fvaldel = table->Fkeydel;
 
     return;
 }
@@ -2250,16 +2275,18 @@ void ajTableSetDestroyboth(AjPTable table)
 ** @param [u] table [AjPTable] Table
 ** @param [fN] keydel [void function] key destructor function
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSetDestroykey(AjPTable table,
-                          void keydel(void** key))
+                          void (*keydel)(void** Pkey))
 {
     if(!table)
         return;
 
-    table->keydel = keydel;
+    table->Fkeydel = keydel;
 
     return;
 }
@@ -2274,16 +2301,18 @@ void ajTableSetDestroykey(AjPTable table,
 ** @param [u] table [AjPTable] Table
 ** @param [fN] valdel [void function] value destructor function
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSetDestroyvalue(AjPTable table,
-                            void valdel(void** value))
+                            void (*valdel)(void** Pvalue))
 {
     if(!table)
         return;
 
-    table->valdel = valdel;
+    table->Fvaldel = valdel;
 
     return;
 }
@@ -2297,33 +2326,36 @@ void ajTableSetDestroyvalue(AjPTable table,
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeChar(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTablecharCmp;
-    table->hash = ajTablecharHash;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_CHAR;
+
+    table->Fcmp    = &ajTablecharCmp;
+    table->Fhash   = &ajTablecharHash;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeChar;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2337,33 +2369,36 @@ void ajTableSettypeChar(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeCharCase(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTablecharCmpCase;
-    table->hash = ajTablecharHashCase;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_CHAR;
+
+    table->Fcmp    = &ajTablecharCmpCase;
+    table->Fhash   = &ajTablecharHashCase;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeChar;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2377,33 +2412,36 @@ void ajTableSettypeCharCase(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeDefault(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = tableCmpAtom;
-    table->hash = tableHashAtom;
-    table->keydel = NULL;
-    table->Type = TABLE_UNKNOWN;
+
+    table->Fcmp    = &tableCmpAtom;
+    table->Fhash   = &tableHashAtom;
+    table->Fkeydel = NULL;
+    table->Type    = ajETableTypeUnknown;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2417,33 +2455,36 @@ void ajTableSettypeDefault(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeInt(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTableintCmp;
-    table->hash = ajTableintHash;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_INT;
+
+    table->Fcmp    = &ajTableintCmp;
+    table->Fhash   = &ajTableintHash;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeInt;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0Ul; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2457,33 +2498,36 @@ void ajTableSettypeInt(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeLong(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTablelongCmp;
-    table->hash = ajTablelongHash;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_LONG;
+
+    table->Fcmp    = &ajTablelongCmp;
+    table->Fhash   = &ajTablelongHash;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeLong;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2497,33 +2541,36 @@ void ajTableSettypeLong(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeString(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTablestrCmp;
-    table->hash = ajTablestrHash;
-    table->keydel = tableDelStr;
-    table->Type = TABLE_STR;
+
+    table->Fcmp    = &ajTablestrCmp;
+    table->Fhash   = &ajTablestrHash;
+    table->Fkeydel = &tableDelStr;
+    table->Type    = ajETableTypeStr;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2537,33 +2584,36 @@ void ajTableSettypeString(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeStringCase(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTablestrCmpCase;
-    table->hash = ajTablestrHashCase;
-    table->keydel = tableDelStr;
-    table->Type = TABLE_STR;
+
+    table->Fcmp    = &ajTablestrCmpCase;
+    table->Fhash   = &ajTablestrHashCase;
+    table->Fkeydel = &tableDelStr;
+    table->Type    = ajETableTypeStr;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2577,33 +2627,36 @@ void ajTableSettypeStringCase(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeUint(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTableuintCmp;
-    table->hash = ajTableuintHash;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_UINT;
+
+    table->Fcmp    = &ajTableuintCmp;
+    table->Fhash   = &ajTableuintHash;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeUint;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2617,33 +2670,36 @@ void ajTableSettypeUint(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeUlong(AjPTable table)
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = ajTableulongCmp;
-    table->hash = ajTableulongHash;
-    table->keydel = ajMemFree;
-    table->Type = TABLE_ULONG;
+
+    table->Fcmp    = &ajTableulongCmp;
+    table->Fhash   = &ajTableulongHash;
+    table->Fkeydel = &ajMemFree;
+    table->Type    = ajETableTypeUlong;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2658,37 +2714,40 @@ void ajTableSettypeUlong(AjPTable table)
 **
 ** @param [u] table [AjPTable] Hash table
 ** @param [fN] cmp  [ajint function] function for comparing
-** @param [fN] hash [ajuint function] function for hashing keys
+** @param [fN] hash [ajulong function] function for hashing keys
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajTableSettypeUser(AjPTable table,
-                        ajint cmp(const void *x, const void *y),
-                        ajuint hash(const void *key, ajuint hashsize))
+                        ajint (*cmp)(const void* P1, const void* P2),
+                        ajulong (*hash)(const void* key, ajulong hashsize))
 {
-    void** keys = NULL;
-    void** values = NULL;
-    ajuint n = 0;
-    ajuint i = 0;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
-    n = ajTableToarrayKeysValues(table, &keys, &values);
+    ajulong n = 0UL;
+    ajulong i = 0UL;
+
+    n = ajTableToarrayKeysValues(table, &keyarray, &valarray);
 
     ajTableClear(table);
-    
-    table->cmp = cmp;
-    table->hash = hash;
-    table->keydel = NULL;
-    table->Type = TABLE_USER;
+
+    table->Fcmp    = cmp;
+    table->Fhash   = hash;
+    table->Fkeydel = NULL;
+    table->Type    = ajETableTypeUser;
 
     if(n)
     {
-        for(i=0; i<n; i++)
-            ajTablePut(table, keys[i], values[i]);
+        for(i = 0UL; i < n; i++)
+            ajTablePut(table, keyarray[i], valarray[i]);
     }
 
-    AJFREE(keys);
-    AJFREE(values);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -2728,33 +2787,36 @@ void ajTableSettypeUser(AjPTable table,
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTableMergeAnd(AjPTable thys, AjPTable table)
 {
-    ajuint i;
-    struct binding *p;
-    struct binding *q;
-    struct binding *tmpnode;
-    struct binding *pprev;
-    struct binding *pfirst;
-    struct binding *qfirst;
+    ajulong i = 0UL;
 
-    AjBool ismatch;
+    AjBool ismatch = ajFalse;
+
+    AjPTableNode p       = NULL;
+    AjPTableNode q       = NULL;
+    AjPTableNode tmpnode = NULL;
+    AjPTableNode pprev   = NULL;
+    AjPTableNode pfirst  = NULL;
+    AjPTableNode qfirst  = NULL;
 
     /* first we make both tables have the same hashsize */
 
-    if(table->size > thys->size)
-        ajTableResizeHashsize(thys, table->size);
-    else if (thys->size > table->size)
-        ajTableResizeHashsize(table, thys->size);
+    if(table->Size > thys->Size)
+        ajTableResizeHashsize(thys, table->Size);
+    else if(thys->Size > table->Size)
+        ajTableResizeHashsize(table, thys->Size);
 
     /* compare keys and find matches */
 
-    for(i=0; i < thys->size; i++)
+    for(i = 0UL; i < thys->Size; i++)
     {
-        pfirst = thys->buckets[i];
-        qfirst = table->buckets[i];
+        pfirst = thys->Buckets[i];
+        qfirst = table->Buckets[i];
 
         pprev = NULL;
         p = pfirst;
@@ -2763,28 +2825,28 @@ AjBool ajTableMergeAnd(AjPTable thys, AjPTable table)
         {
             ismatch = ajFalse;
 
-            for(q = qfirst; q; q = q->link)
+            for(q = qfirst; q; q = q->Link)
             {
-                if(!thys->cmp(p->key, q->key))
+                if((*thys->Fcmp)(p->Key, q->Key) == 0)
                 {
                     ismatch = ajTrue;
                     break;
                 }
             }
-            
+
             if(ismatch)
             {
                 pprev = p;
-                p = p->link;
+                p = p->Link;
             }
             else
             {
-                tmpnode = p->link;
+                tmpnode = p->Link;
 
-                if(thys->keydel)
-                    thys->keydel(&p->key);
-                if(thys->valdel)
-                    thys->valdel(&p->value);
+                if(thys->Fkeydel)
+                    (*thys->Fkeydel)(&p->Key);
+                if(thys->Fvaldel)
+                    (*thys->Fvaldel)(&p->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
@@ -2796,23 +2858,23 @@ AjBool ajTableMergeAnd(AjPTable thys, AjPTable table)
                 p = tmpnode;
 
                 if(pprev)
-                    pprev->link = tmpnode;
+                    pprev->Link = tmpnode;
                 else
-                    thys->buckets[i] = tmpnode;
+                    thys->Buckets[i] = tmpnode;
 
-                --thys->length;
+                --thys->Length;
             }
         }
 
         for(q = qfirst; q; q = tmpnode)
         {
-            tmpnode = q->link;
+            tmpnode = q->Link;
 
-            if(table->keydel)
-                table->keydel(&q->key);
+            if(table->Fkeydel)
+                (*table->Fkeydel)(&q->Key);
 
-            if(table->valdel)
-                table->valdel(&q->value);
+            if(table->Fvaldel)
+                (*table->Fvaldel)(&q->Value);
 
             if(tableFreeNext >= tableFreeMax)
                 tableFreeSetExpand();
@@ -2821,9 +2883,9 @@ AjBool ajTableMergeAnd(AjPTable thys, AjPTable table)
             else
                 tableFreeSet[tableFreeNext++] = q;
 
-            --table->length;
+            --table->Length;
         }
-        table->buckets[i] = NULL;
+        table->Buckets[i] = NULL;
     }
 
     return ajTrue;
@@ -2841,35 +2903,38 @@ AjBool ajTableMergeAnd(AjPTable thys, AjPTable table)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTableMergeEor(AjPTable thys, AjPTable table)
 {
-    ajuint i;
-    struct binding *p;
-    struct binding *q;
-    struct binding *tmpnode;
-    struct binding *pprev;
-    struct binding *qprev;
-    struct binding *pfirst;
-    struct binding *qfirst;
-    struct binding *qtmp;
+    ajulong i = 0UL;
 
-    AjBool ismatch;
+    AjBool ismatch = ajFalse;
+
+    AjPTableNode p       = NULL;
+    AjPTableNode q       = NULL;
+    AjPTableNode tmpnode = NULL;
+    AjPTableNode pprev   = NULL;
+    AjPTableNode qprev   = NULL;
+    AjPTableNode pfirst  = NULL;
+    AjPTableNode qfirst  = NULL;
+    AjPTableNode qtmp    = NULL;
 
     /* first we make both tables have the same hashsize */
 
-    if(table->size > thys->size)
-        ajTableResizeHashsize(thys, table->size);
-    else if (thys->size > table->size)
-        ajTableResizeHashsize(table, thys->size);
+    if(table->Size > thys->Size)
+        ajTableResizeHashsize(thys, table->Size);
+    else if(thys->Size > table->Size)
+        ajTableResizeHashsize(table, thys->Size);
 
     /* compare keys and find matches */
 
-    for(i=0; i < thys->size; i++)
+    for(i=0; i < thys->Size; i++)
     {
-        pfirst = thys->buckets[i];
-        qfirst = table->buckets[i];
+        pfirst = thys->Buckets[i];
+        qfirst = table->Buckets[i];
 
         pprev = NULL;
         p = pfirst;
@@ -2878,29 +2943,29 @@ AjBool ajTableMergeEor(AjPTable thys, AjPTable table)
             ismatch = ajFalse;
 
             qprev = NULL;
-            for(q = qfirst; q; q = q->link)
+            for(q = qfirst; q; q = q->Link)
             {
-                if(!thys->cmp(p->key, q->key))
+                if((*thys->Fcmp)(p->Key, q->Key) == 0)
                 {
                     ismatch = ajTrue;
                     break;
                 }
                 qprev = q;
             }
-            
+
             if(!ismatch)
             {
                 pprev = p;
-                p = p->link;
+                p = p->Link;
             }
             else
             {
-                tmpnode = p->link;
+                tmpnode = p->Link;
 
-                if(thys->keydel)
-                    thys->keydel(&p->key);
-                if(thys->valdel)
-                    thys->valdel(&p->value);
+                if(thys->Fkeydel)
+                    (*thys->Fkeydel)(&p->Key);
+                if(thys->Fvaldel)
+                    (*thys->Fvaldel)(&p->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
@@ -2912,19 +2977,19 @@ AjBool ajTableMergeEor(AjPTable thys, AjPTable table)
                 p = tmpnode;
 
                 if(pprev)
-                    pprev->link = tmpnode;
+                    pprev->Link = tmpnode;
                 else
-                    thys->buckets[i] = tmpnode;
+                    thys->Buckets[i] = tmpnode;
 
-                --thys->length;
+                --thys->Length;
 
-                tmpnode = q->link;
+                tmpnode = q->Link;
 
-                if(table->keydel)
-                    table->keydel(&q->key);
+                if(table->Fkeydel)
+                    (*table->Fkeydel)(&q->Key);
 
-                if(table->valdel)
-                    table->valdel(&q->value);
+                if(table->Fvaldel)
+                    (*table->Fvaldel)(&q->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
@@ -2935,25 +3000,25 @@ AjBool ajTableMergeEor(AjPTable thys, AjPTable table)
 
 
                 if(qprev)
-                    qprev->link = tmpnode;
+                    qprev->Link = tmpnode;
                 else
-                    qfirst = table->buckets[i] = tmpnode;
+                    qfirst = table->Buckets[i] = tmpnode;
 
-                --table->length;
+                --table->Length;
             }
         }
 
-        for(q = table->buckets[i]; q; q = qtmp)
+        for(q = table->Buckets[i]; q; q = qtmp)
         {
-            qtmp = q->link;
-            tmpnode = thys->buckets[i];
-            thys->buckets[i] = q;
-            q->link = tmpnode;
+            qtmp = q->Link;
+            tmpnode = thys->Buckets[i];
+            thys->Buckets[i] = q;
+            q->Link = tmpnode;
 
-            --table->length;
-            ++thys->length;
+            --table->Length;
+            ++thys->Length;
         }
-        table->buckets[i] = NULL;
+        table->Buckets[i] = NULL;
     }
 
     return ajTrue;
@@ -2971,33 +3036,36 @@ AjBool ajTableMergeEor(AjPTable thys, AjPTable table)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
 {
-    ajuint i;
-    struct binding *p;
-    struct binding *q;
-    struct binding *tmpnode;
-    struct binding *pprev;
-    struct binding *pfirst;
-    struct binding *qfirst;
+    ajulong i = 0UL;
 
-    AjBool ismatch;
+    AjBool ismatch = ajFalse;
+
+    AjPTableNode p       = NULL;
+    AjPTableNode q       = NULL;
+    AjPTableNode tmpnode = NULL;
+    AjPTableNode pprev   = NULL;
+    AjPTableNode pfirst  = NULL;
+    AjPTableNode qfirst  = NULL;
 
     /* first we make both tables have the same hashsize */
 
-    if(table->size > thys->size)
-        ajTableResizeHashsize(thys, table->size);
-    else if (thys->size > table->size)
-        ajTableResizeHashsize(table, thys->size);
+    if(table->Size > thys->Size)
+        ajTableResizeHashsize(thys, table->Size);
+    else if(thys->Size > table->Size)
+        ajTableResizeHashsize(table, thys->Size);
 
     /* compare keys and find matches */
 
-    for(i=0; i < thys->size; i++)
+    for(i=0UL; i < thys->Size; i++)
     {
-        pfirst = thys->buckets[i];
-        qfirst = table->buckets[i];
+        pfirst = thys->Buckets[i];
+        qfirst = table->Buckets[i];
 
         pprev = NULL;
         p = pfirst;
@@ -3006,28 +3074,28 @@ AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
         {
             ismatch = ajFalse;
 
-            for(q = qfirst; q; q = q->link)
+            for(q = qfirst; q; q = q->Link)
             {
-                if(!thys->cmp(p->key, q->key))
+                if((*thys->Fcmp)(p->Key, q->Key) == 0)
                 {
                     ismatch = ajTrue;
                     break;
                 }
             }
-            
+
             if(!ismatch)
             {
                 pprev = p;
-                p = p->link;
+                p = p->Link;
             }
             else
             {
-                tmpnode = p->link;
+                tmpnode = p->Link;
 
-                if(thys->keydel)
-                    thys->keydel(&p->key);
-                if(thys->valdel)
-                    thys->valdel(&p->value);
+                if(thys->Fkeydel)
+                    (*thys->Fkeydel)(&p->Key);
+                if(thys->Fvaldel)
+                    (*thys->Fvaldel)(&p->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
@@ -3039,22 +3107,22 @@ AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
                 p = tmpnode;
 
                 if(pprev)
-                    pprev->link = tmpnode;
+                    pprev->Link = tmpnode;
                 else
-                    thys->buckets[i] = tmpnode;
+                    thys->Buckets[i] = tmpnode;
 
-                --thys->length;
+                --thys->Length;
             }
         }
         for(q = qfirst; q; q = tmpnode)
         {
-            tmpnode = q->link;
+            tmpnode = q->Link;
 
-            if(table->keydel)
-                table->keydel(&q->key);
+            if(table->Fkeydel)
+                (*table->Fkeydel)(&q->Key);
 
-            if(table->valdel)
-                table->valdel(&q->value);
+            if(table->Fvaldel)
+                (*table->Fvaldel)(&q->Value);
 
             if(tableFreeNext >= tableFreeMax)
                 tableFreeSetExpand();
@@ -3063,9 +3131,9 @@ AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
             else
                 tableFreeSet[tableFreeNext++] = q;
 
-            --table->length;
+            --table->Length;
         }
-        table->buckets[i] = NULL;
+        table->Buckets[i] = NULL;
     }
 
     return ajTrue;
@@ -3074,7 +3142,7 @@ AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
 
 
 
-/* @func ajTableMergeOr ******************************************************
+/* @func ajTableMergeOr *******************************************************
 **
 ** Merge two tables, adding all unique keys from the new table
 **
@@ -3083,34 +3151,37 @@ AjBool ajTableMergeNot(AjPTable thys, AjPTable table)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTableMergeOr(AjPTable thys, AjPTable table)
 {
-    ajuint i;
-    struct binding *p;
-    struct binding *q;
-    struct binding *tmpnode;
-    struct binding *qprev;
-    struct binding *pfirst;
-    struct binding *qfirst;
-    struct binding *qtmp;
+    ajulong i = 0UL;
 
-    AjBool ismatch;
+    AjBool ismatch = ajFalse;
 
-     /* first we make both tables have the same hashsize */
+    AjPTableNode p       = NULL;
+    AjPTableNode q       = NULL;
+    AjPTableNode tmpnode = NULL;
+    AjPTableNode qprev   = NULL;
+    AjPTableNode pfirst  = NULL;
+    AjPTableNode qfirst  = NULL;
+    AjPTableNode qtmp    = NULL;
 
-    if(table->size > thys->size)
-        ajTableResizeHashsize(thys, table->size);
-    else if (thys->size > table->size)
-        ajTableResizeHashsize(table, thys->size);
+    /* first we make both tables have the same hashsize */
+
+    if(table->Size > thys->Size)
+        ajTableResizeHashsize(thys, table->Size);
+    else if(thys->Size > table->Size)
+        ajTableResizeHashsize(table, thys->Size);
 
     /* compare keys and find matches */
 
-    for(i=0; i < thys->size; i++)
+    for(i=0UL; i < thys->Size; i++)
     {
-        pfirst = thys->buckets[i];
-        qfirst = table->buckets[i];
+        pfirst = thys->Buckets[i];
+        qfirst = table->Buckets[i];
 
         p = pfirst;
 
@@ -3119,26 +3190,26 @@ AjBool ajTableMergeOr(AjPTable thys, AjPTable table)
             ismatch = ajFalse;
 
             qprev = NULL;
-            for(q = qfirst; q; q = q->link)
+            for(q = qfirst; q; q = q->Link)
             {
-                if(!thys->cmp(p->key, q->key))
+                if((*thys->Fcmp)(p->Key, q->Key) == 0)
                 {
                     ismatch = ajTrue;
                     break;
                 }
                 qprev = q;
             }
-            
-            p = p->link;
+
+            p = p->Link;
 
             if(ismatch)
             {
-                tmpnode = q->link;
+                tmpnode = q->Link;
 
-                if(table->keydel)
-                    table->keydel(&q->key);
-                if(table->valdel)
-                    table->valdel(&q->value);
+                if(table->Fkeydel)
+                    (*table->Fkeydel)(&q->Key);
+                if(table->Fvaldel)
+                    (*table->Fvaldel)(&q->Value);
 
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
@@ -3150,25 +3221,25 @@ AjBool ajTableMergeOr(AjPTable thys, AjPTable table)
                 q = tmpnode;
 
                 if(qprev)
-                    qprev->link = tmpnode;
+                    qprev->Link = tmpnode;
                 else
-                    qfirst = table->buckets[i] = tmpnode;
+                    qfirst = table->Buckets[i] = tmpnode;
 
-                --table->length;
+                --table->Length;
             }
         }
 
-        for(q = table->buckets[i]; q; q = qtmp)
+        for(q = table->Buckets[i]; q; q = qtmp)
         {
-            qtmp = q->link;
-            tmpnode = thys->buckets[i];
-            thys->buckets[i] = q;
-            q->link = tmpnode;
+            qtmp = q->Link;
+            tmpnode = thys->Buckets[i];
+            thys->Buckets[i] = q;
+            q->Link = tmpnode;
 
-            --table->length;
-            ++thys->length;
+            --table->Length;
+            ++thys->Length;
         }
-        table->buckets[i] = NULL;
+        table->Buckets[i] = NULL;
     }
 
     return ajTrue;
@@ -3186,14 +3257,15 @@ AjBool ajTableMergeOr(AjPTable thys, AjPTable table)
 ** @nam3rule Cmp Comparison
 ** @nam3rule Hash Hashing keys
 **
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
 ** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
+** @argrule Hash hashsize [ajulong] Hash table size
 ** @suffix Case Case insensitive keys
 **
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
 **
 ** @fcategory misc
 **
@@ -3206,16 +3278,18 @@ AjBool ajTableMergeOr(AjPTable thys, AjPTable table)
 **
 ** Default comparison function for key comparison
 **
-** @param [r] x [const void*] First key
-** @param [r] y [const void*] Second key
+** @param [r] key1 [const void*] First key
+** @param [r] key2 [const void*] Second key
 ** @return [ajint] 0 for success, 1 for different keys
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
 
-static ajint tableCmpAtom(const void *x, const void *y)
+static ajint tableCmpAtom(const void* key1, const void* key2)
 {
-    return x != y;
+    return (ajint) (key1 != key2);
 }
 
 
@@ -3226,12 +3300,14 @@ static ajint tableCmpAtom(const void *x, const void *y)
 ** Default hash function for key indexing
 **
 ** @param [r] key [const void*] Key
-** @param [r] hashsize [ajuint] Hash size (maximum hash value)
-** @return [ajuint] Hash value in range 0 to hashsize-1
+** @param [r] hashsize [ajulong] Hash size (maximum hash value)
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
-static ajuint tableHashAtom(const void *key, ajuint hashsize)
+static ajulong tableHashAtom(const void* key, ajulong hashsize)
 {
     return((unsigned long)key>>2) % hashsize;
 }
@@ -3252,7 +3328,7 @@ static ajuint tableHashAtom(const void *key, ajuint hashsize)
 ** @valrule * [void]
 **
 ** @fcategory misc
-*/
+******************************************************************************/
 
 
 
@@ -3262,31 +3338,32 @@ static ajuint tableHashAtom(const void *key, ajuint hashsize)
 ** Prints a summary of table usage with debug calls
 **
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
 void ajTableExit(void)
 {
-    ajint i;
+    ajulong i = 0UL;
 
 #ifdef AJ_SAVESTATS
     ajDebug("Table usage : %d opened, %d closed, %d maxsize, %d maxmem\n",
-	    tableNewCnt, tableDelCnt, tableMaxNum, tableMaxMem);
+            tableNewCnt, tableDelCnt, tableMaxNum, tableMaxMem);
 #endif
 
     if(tableFreeNext)
-        for(i=0;i<tableFreeNext;i++)
+        for(i = 0UL; i < tableFreeNext; i++)
             AJFREE(tableFreeSet[i]);
 
-            
-    if(tableFreeSet) 
+    if(tableFreeSet)
         AJFREE(tableFreeSet);
 
     ajStrDel(&tableTmpkeyStr);
 
-    tableFreeNext = 0;
-    tableFreeMax = 0;
-    
+    tableFreeNext = 0UL;
+    tableFreeMax  = 0UL;
+
     return;
 }
 
@@ -3314,7 +3391,7 @@ void ajTableExit(void)
 ** @nam4rule Case Case-sensitive keys
 ** @suffix Const Constant keys with no destructor
 **
-** @argrule New size [ajuint] Number of key values
+** @argrule New size [ajulong] Number of key values
 **
 ** @valrule * [AjPTable] New hash table
 **
@@ -3327,20 +3404,22 @@ void ajTableExit(void)
 **
 ** Creates a table with a character string key.
 **
-** @param [r] size [ajuint] number of key-value pairs
+** @param [r] size [ajulong] number of key-value pairs
 ** @return [AjPTable] New table object with a character string key.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
-AjPTable ajTablecharNew(ajuint size)
+AjPTable ajTablecharNew(ajulong size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablecharCmp, ajTablecharHash,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_CHAR;
+    table = ajTableNewFunctionLen(size, &ajTablecharCmp, &ajTablecharHash,
+                                  &ajMemFree, NULL);
+    table->Type = ajETableTypeChar;
 
-    return ret;
+    return table;
 }
 
 
@@ -3350,20 +3429,22 @@ AjPTable ajTablecharNew(ajuint size)
 **
 ** Creates a table with a character string key and case insensitive searching.
 **
-** @param [r] size [ajuint] Hash size estimate.
+** @param [r] size [ajulong] Hash size estimate.
 ** @return [AjPTable] New table object with a character string key.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
-AjPTable ajTablecharNewCase(ajuint size)
+AjPTable ajTablecharNewCase(ajulong size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablecharCmpCase, ajTablecharHashCase,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_CHAR;
+    table = ajTableNewFunctionLen(size, &ajTablecharCmpCase,
+                                  &ajTablecharHashCase, &ajMemFree, NULL);
+    table->Type = ajETableTypeChar;
 
-    return ret;
+    return table;
 }
 
 
@@ -3373,20 +3454,23 @@ AjPTable ajTablecharNewCase(ajuint size)
 **
 ** Creates a table with a character string key and case insensitive searching.
 **
-** @param [r] size [ajuint] Hash size estimate.
+** @param [r] size [ajulong] Hash size estimate.
 ** @return [AjPTable] New table object with a character string key.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjPTable ajTablecharNewCaseConst(ajuint size)
+AjPTable ajTablecharNewCaseConst(ajulong size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablecharCmpCase, ajTablecharHashCase,
-                                NULL, NULL);
-    ret->Type = TABLE_CHAR;
+    table = ajTableNewFunctionLen(size, &ajTablecharCmpCase,
+                                  &ajTablecharHashCase,
+                                  NULL, NULL);
+    table->Type = ajETableTypeChar;
 
-    return ret;
+    return table;
 }
 
 
@@ -3396,20 +3480,2702 @@ AjPTable ajTablecharNewCaseConst(ajuint size)
 **
 ** Creates a table with a character string key.
 **
-** @param [r] size [ajuint] number of key-value pairs
+** @param [r] size [ajulong] number of key-value pairs
 ** @return [AjPTable] New table object with a character string key.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjPTable ajTablecharNewConst(ajuint size)
+AjPTable ajTablecharNewConst(ajulong size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablecharCmp, ajTablecharHash,
-                                NULL, NULL);
-    ret->Type = TABLE_CHAR;
+    table = ajTableNewFunctionLen(size, &ajTablecharCmp, &ajTablecharHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeChar;
 
-    return ret;
+    return table;
+}
+
+
+
+
+/* @section Trace functions ***************************************************
+**
+** @fdata [AjPTable]
+**
+** @nam3rule Print Trace contents to standard error
+** @nam3rule Trace Trace contents to debug file
+**
+** @argrule * table [const AjPTable] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablecharPrint *****************************************************
+**
+** Print function for a table with a character string key.
+**
+** @param [r] table [const AjPTable] Table.
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+void ajTablecharPrint(const AjPTable table)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return;
+
+    for(i = 0UL; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+        {
+            ajUser("key '%s' value '%s'",
+                   (const char*) node->Key, (char*) node->Value);
+        }
+
+    return;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablecharCmp *******************************************************
+**
+** Comparison function for a table with a character string key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajint ajTablecharCmp(const void* key1, const void* key2)
+{
+    return (ajint) strcmp((const char*) key1, (const char*) key2);
+}
+
+
+
+
+/* @func ajTablecharCmpCase ***************************************************
+**
+** Comparison function for a table with a character string key
+** and case insensitivity.
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajint ajTablecharCmpCase(const void* key1, const void* key2)
+{
+    return (ajint) ajCharCmpCase((const char*) key1, (const char*) key2);
+}
+
+
+
+
+/* @func ajTablecharHash ******************************************************
+**
+** Hash function for a table with a character string key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajulong ajTablecharHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const char* s = NULL;
+
+    s = (const char*) key;
+
+    for(hash = 0UL; *s; s++)
+        hash = (hash * 127 + *s) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @func ajTablecharHashCase **************************************************
+**
+** Hash function for a table with a character string key and
+** case insensitivity.
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajulong ajTablecharHashCase(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const char* s = NULL;
+
+    s = (const char*) key;
+
+    for(hash = 0UL; *s; s++)
+        hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @datasection [AjPTable] Integer hash tables ********************************
+**
+** @nam2rule Tableint Integer hash tables
+**
+******************************************************************************/
+
+
+
+
+/* @section Constructors ******************************************************
+**
+** Constructors for hash tables
+**
+** @fdata [AjPTable]
+**
+** @fcategory new
+**
+** @nam3rule New Constructor
+** @nam4rule Case Case-sensitive keys
+** @suffix Const Constant keys with no destructor
+**
+** @argrule New size [ajulong] Number of key values
+**
+** @valrule * [AjPTable] New hash table
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableintNew ********************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableintNew(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableintCmp, &ajTableintHash,
+                                  &ajMemFree, NULL);
+    table->Type = ajETableTypeInt;
+
+    return table;
+}
+
+
+
+
+/* @func ajTableintNewConst ***************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableintNewConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableintCmp, &ajTableintHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeInt;
+
+    return table;
+}
+
+
+
+
+/* @section Destructors *******************************************************
+**
+** @fdata [AjPTable]
+**
+** Destructors know they are dealing with strings and can
+** clean up keys and values
+**
+** @nam3rule Free Delete table, keys and values
+** @nam4rule FreeKey Delete table, keys and values
+**
+** @argrule * Ptable [AjPTable*] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableintFree *******************************************************
+**
+** Free keys and value strings in a table and free the table.  Use
+** only where the keys and data in the table are real, and not just
+** copies of pointers. Otherwise a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableintFree(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDel, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @func ajTableintFreeKey ****************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableintFreeKey(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDelKey, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @section Retrieval *********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval function
+**
+** @argrule Fetch table [const AjPTable] Hash table
+** @argrule Fetch intkey [const ajint*] Key
+**
+** @valrule Fetch [const ajint*] Value
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableintFetch ******************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] intkey [const ajint*] key to find.
+** @return [const ajint*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const ajint* ajTableintFetch(const AjPTable table, const ajint* intkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!intkey)
+        return NULL;
+
+    i = (*table->Fhash)(intkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(intkey, node->Key) == 0)
+            break;
+
+    return node ? (const ajint*) node->Value : NULL;
+}
+
+
+
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval function
+**
+** @argrule * table [AjPTable] Hash table
+** @argrule Fetchmod intkey [const ajint*] Key
+**
+** @valrule Fetchmod [ajint*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableintFetchmod ***************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] intkey   [const ajint*] key to find.
+** @return [ajint*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajint* ajTableintFetchmod(AjPTable table, const ajint* intkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!intkey)
+        return NULL;
+
+    i = (*table->Fhash)(intkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(intkey, node->Key) == 0)
+            break;
+
+    return node ? (ajint*) (&node->Value) : NULL;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableintCmp ********************************************************
+**
+** Comparison function for a table with an integer key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajint ajTableintCmp(const void* key1, const void* key2)
+{
+    return (ajint) (*((const ajint*) key1) != *((const ajint*) key2));
+}
+
+
+
+
+/* @func ajTableintHash *******************************************************
+**
+** Hash function for a table with an integer key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajulong ajTableintHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const ajint* ia = NULL;
+
+    if(!key)
+        return 0;
+
+    if(!hashsize)
+        return 0;
+
+    ia = (const ajint*) key;
+
+    hash = (*ia >> 2) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @datasection [AjPTable] Long integer hash tables ***************************
+**
+** @nam2rule Tablelong Long integer hash tables
+**
+******************************************************************************/
+
+
+
+
+/* @section Constructors ******************************************************
+**
+** Constructors for hash tables
+**
+** @fdata [AjPTable]
+**
+** @fcategory new
+**
+** @nam3rule New Constructor
+** @suffix Const Constant keys with no destructor
+**
+** @argrule New size [ajulong] Number of key values
+**
+** @valrule * [AjPTable] New hash table
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablelongNew *******************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of long integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablelongNew(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablelongCmp, &ajTablelongHash,
+                                  &ajMemFree, NULL);
+    table->Type = ajETableTypeLong;
+
+    return table;
+}
+
+
+
+
+/* @func ajTablelongNewConst **************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of long integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablelongNewConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablelongCmp, &ajTablelongHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeLong;
+
+    return table;
+}
+
+
+
+
+/* @section Destructors *******************************************************
+**
+** @fdata [AjPTable]
+**
+** Destructors know they are dealing with strings and can
+** clean up keys and values
+**
+** @nam3rule Free Delete table, keys and values
+** @nam4rule FreeKey Delete table, keys and values
+**
+** @argrule * Ptable [AjPTable*] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablelongFree ******************************************************
+**
+** Free keys and value strings in a table and free the table.  Use
+** only where the keys and data in the table are real, and not just
+** copies of pointers. Otherwise a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTablelongFree(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDel, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @func ajTablelongFreeKey ***************************************************
+**
+** Free keys and value strings in a table and free the table.  Use
+** only where the keys in the table are real, and not just copies of
+** pointers. Otherwise a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTablelongFreeKey(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDelKey, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @section Retrieval *********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval function
+**
+** @argrule * table [const AjPTable] Hash table
+** @argrule Fetch longkey [const ajlong*] Key
+**
+** @valrule Fetch [const ajlong*] Value
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablelongFetch *****************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] longkey [const ajlong*] key to find.
+** @return [const ajlong*] value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const ajlong* ajTablelongFetch(const AjPTable table, const ajlong* longkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!longkey)
+        return NULL;
+
+    i = (*table->Fhash)(longkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(longkey, node->Key) == 0)
+            break;
+
+    return node ? (const ajlong*) node->Value : NULL;
+}
+
+
+
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval function
+**
+** @argrule * table [AjPTable] Hash table
+** @argrule Fetchmod longkey [const ajlong*] Key
+**
+** @valrule Fetchmod [ajlong*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablelongFetchmod **************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] longkey   [const ajlong*] key to find.
+** @return [ajlong*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajlong* ajTablelongFetchmod(AjPTable table, const ajlong* longkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!longkey)
+        return NULL;
+
+    i = (*table->Fhash)(longkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(longkey, node->Key) == 0)
+            break;
+
+    return node ? (ajlong*) (&node->Value) : NULL;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablelongCmp *******************************************************
+**
+** Comparison function for a table with a long integer key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajint ajTablelongCmp(const void* key1, const void* key2)
+{
+    return (ajint) (*((const ajlong*) key1) != *((const ajlong*) key2));
+}
+
+
+
+
+/* @func ajTablelongHash ******************************************************
+**
+** Hash function for a table with a long integer key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajulong ajTablelongHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const ajlong* ia = NULL;
+
+    if(!key)
+        return 0;
+
+    if(!hashsize)
+        return 0;
+
+    ia = (const ajlong*) key;
+
+    hash = (*ia >> 2) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @datasection [AjPTable] String hash tables *********************************
+**
+** @nam2rule Tablestr String hash tables
+**
+******************************************************************************/
+
+
+
+
+/* @section Constructors ******************************************************
+**
+** Constructors for hash tables
+**
+** @fdata [AjPTable]
+**
+** @fcategory new
+**
+** @nam3rule New Constructor
+** @nam4rule Case Case-sensitive keys
+** @suffix Const Constant keys with no destructor
+**
+** @argrule New size [ajulong] Number of key values
+**
+** @valrule * [AjPTable] New hash table
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrNew ********************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 5.0.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablestrNew(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablestrCmp, &ajTablestrHash,
+                                  &tableDelStr, NULL);
+    table->Type = ajETableTypeStr;
+
+    return table;
+}
+
+
+
+
+/* @func ajTablestrNewCase ****************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 5.0.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablestrNewCase(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablestrCmpCase, &ajTablestrHashCase,
+                                  &tableDelStr, NULL);
+    table->Type = ajETableTypeStr;
+
+    return table;
+}
+
+
+
+
+/* @func ajTablestrNewCaseConst ***********************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablestrNewCaseConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablestrCmpCase, &ajTablestrHashCase,
+                                  NULL, NULL);
+    table->Type = ajETableTypeStr;
+
+    return table;
+}
+
+
+
+
+/* @func ajTablestrNewConst ***************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTablestrNewConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTablestrCmp, &ajTablestrHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeStr;
+
+    return table;
+}
+
+
+
+
+/* @section Destructors *******************************************************
+**
+** @fdata [AjPTable]
+**
+** Destructors know they are dealing with strings and can
+** clean up keys and values
+**
+** @nam3rule Free Delete table, keys and values
+** @nam4rule FreeKey Delete table, keys and values
+**
+** @argrule * Ptable [AjPTable*] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrFree *******************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys and strings
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+void ajTablestrFree(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableStrDel, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @func ajTablestrFreeKey ****************************************************
+**
+** Free string keys in a table and free the table. Do not free the values.
+** Use only where the keys
+** in the table are real strings, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough. The data is simply freed.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+void ajTablestrFreeKey(AjPTable* Ptable)
+{
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableStrDelKey, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @funcstatic tableStrDel ****************************************************
+**
+** Delete an entry in a string table.
+**
+** @param [d] Pkey [void**] AJAX String key address.
+** @param [d] Pvalue [void**] AJAX String value address.
+** @param [u] cl [void*] Standard argument. Usually NULL.
+** @return [void]
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+static void tableStrDel(void** Pkey, void** Pvalue, void* cl)
+{
+    (void) cl;
+
+    ajStrDel((AjPStr*) Pvalue);
+    ajStrDel((AjPStr*) Pkey);
+
+    *Pkey   = NULL;
+    *Pvalue = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic tableStrDelKey *************************************************
+**
+** Delete an entry in a table with a string key and ignore the value.
+**
+** @param [d] Pkey [void**] AJAX String key address.
+** @param [d] Pvalue [void**] Value address.
+** @param [u] cl [void*] Standard argument. Usually NULL.
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+static void tableStrDelKey(void** Pkey, void** Pvalue, void* cl)
+{
+    (void) cl;
+
+    ajStrDel((AjPStr*) Pkey);
+
+    *Pkey   = NULL;
+    *Pvalue = NULL;
+
+    return;
+}
+
+
+
+
+/* @section Retrieval *********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval function for string values
+** @nam3rule Fetchkey Retrieval function for string keys
+** @suffix C [char*] C character string
+** @suffix S [AjPStr] string object
+**
+** @argrule * table [const AjPTable] Hash table
+** @argrule *C txtkey [const char*] Key
+** @argrule *S key [const AjPStr] Key
+**
+** @valrule Fetch [void*] Value
+** @valrule Fetchkey [const AjPStr] Value
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrFetchC *****************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] txtkey [const char*] key to find.
+** @return [void*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void* ajTablestrFetchC(const AjPTable table, const char* txtkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    ajStrAssignC(&tableTmpkeyStr, txtkey);
+
+    if(!table)
+        return NULL;
+
+    if(!txtkey)
+        return NULL;
+
+    i = (*table->Fhash)(tableTmpkeyStr, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(tableTmpkeyStr, node->Key) == 0)
+            break;
+
+    return node ? node->Value : NULL;
+}
+
+
+
+
+/* @func ajTablestrFetchS *****************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] key   [const AjPStr] key to find.
+** @return [void*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void* ajTablestrFetchS(const AjPTable table, const AjPStr key)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!key)
+        return NULL;
+
+    i = (*table->Fhash)(key, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
+
+    return node ? node->Value : NULL;
+}
+
+
+
+
+/* @func ajTablestrFetchkeyC **************************************************
+**
+** returns the key value associated with key in table, or null
+** if table does not hold key.
+**
+** Intended for case-insensitive keys, to return the true key
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] txtkey   [const char*] key to find.
+** @return [const AjPStr] key value as stored in the table
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const AjPStr ajTablestrFetchkeyC(const AjPTable table, const char* txtkey)
+{
+    ajulong i = 0UL;
+
+    const AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!txtkey)
+        return NULL;
+
+    if(table->Type == ajETableTypeStr)
+    {
+        ajStrAssignC(&tableTmpkeyStr, txtkey);
+        return ajTablestrFetchkeyS(table, tableTmpkeyStr);
+    }
+
+    if(table->Type != ajETableTypeChar)
+        ajFatal("ajTablestrFetchkeyC called for %s table", tableType(table));
+
+    i = (*table->Fhash)(txtkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(txtkey, node->Key) == 0)
+            break;
+
+    return node ? (const void*) node->Key : NULL;
+}
+
+
+
+
+/* @func ajTablestrFetchkeyS **************************************************
+**
+** returns the key value associated with key in table, or null
+** if table does not hold key.
+**
+** Intended for case-insensitive keys, to return the true key
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] key   [const AjPStr] key to find.
+** @return [const AjPStr] key value as stored in the table
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const AjPStr ajTablestrFetchkeyS(const AjPTable table, const AjPStr key)
+{
+    ajulong i = 0UL;
+
+    const AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!key)
+        return NULL;
+
+    if(table->Type == ajETableTypeChar)
+    {
+        return ajTablestrFetchkeyC(table, MAJSTRGETPTR(key));
+    }
+
+    if(table->Type != ajETableTypeStr)
+        ajFatal("ajTablestrFetchkeyS called for %s table", tableType(table));
+
+    i = (*table->Fhash)(key, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
+
+    return node ? (const void*) node->Key : NULL;
+}
+
+
+
+
+/* @funcstatic tableType ******************************************************
+**
+** returns the name of a table type.
+**
+** @param [r] table [const AjPTable] table type
+** @return [const char*] Name of table type
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static const char* tableType(const AjPTable table)
+{
+    const char* typenames[] = {"unknown", "char", "string",
+                               "int", "uint", "long", "ulong", "user", NULL};
+    ajint i = table->Type;
+
+    if(i < ajETableTypeUnknown || i >= ajETableTypeMax)
+        return "unknown";
+
+    return typenames[i];
+}
+
+
+
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval function
+**
+** @argrule * table [AjPTable] Hash table
+** @argrule Fetchmod key [const AjPStr] Key
+**
+** @valrule Fetchmod [AjPStr*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrFetchmod ***************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] key   [const AjPStr] key to find.
+** @return [AjPStr*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.0.0
+** @@
+******************************************************************************/
+
+AjPStr* ajTablestrFetchmod(AjPTable table, const AjPStr key)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!key)
+        return NULL;
+
+    i = (*table->Fhash)(key, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
+
+    return node ? (AjPStr*) (&node->Value) : NULL;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrCmp ********************************************************
+**
+** Comparison function for a table with a string key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajint ajTablestrCmp(const void* key1, const void* key2)
+{
+    return (ajint) ajStrCmpS((const AjPStr) key1, (const AjPStr) key2);
+}
+
+
+
+
+/* @func ajTablestrCmpCase ****************************************************
+**
+** Comparison function for a table with a string key
+** and case insensitivity.
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajint ajTablestrCmpCase(const void* key1, const void* key2)
+{
+    return (ajint) ajStrCmpCaseS((const AjPStr) key1, (const AjPStr) key2);
+}
+
+
+
+
+/* @func ajTablestrHash *******************************************************
+**
+** Hash function for a table with a string key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajulong ajTablestrHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const char* s = NULL;
+
+    const AjPStr str = NULL;
+
+    str = (const AjPStr) key;
+    s   = ajStrGetPtr(str);
+
+    for(hash = 0; *s; s++)
+        hash = (hash * 127 + *s) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @func ajTablestrHashCase ***************************************************
+**
+** Hash function for a table with a string key and
+** case insensitivity.
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+ajulong ajTablestrHashCase(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const char* s = NULL;
+
+    const AjPStr str = NULL;
+
+    str = (const AjPStr) key;
+    s   = ajStrGetPtr(str);
+
+    for(hash = 0; *s; s++)
+        hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @section Trace functions ***************************************************
+**
+** @fdata [AjPTable]
+**
+** @nam3rule Print Trace contents to standard error
+** @nam3rule Trace Trace contents to debug file
+** @nam3rule Tracekeys Trace keys only to debug file
+**
+** @argrule * table [const AjPTable] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @section Trace functions ***************************************************
+**
+** @fdata [AjPTable]
+**
+** @nam3rule Print Trace contents to standard error
+** @nam3rule Trace Trace contents to debug file
+** @nam3rule Tracekeys Trace keys only to debug file
+**
+** @argrule * table [const AjPTable] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTablestrPrint ******************************************************
+**
+** Print function for a table with a string key.
+**
+** @param [r] table [const AjPTable] Table.
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+void ajTablestrPrint(const AjPTable table)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return;
+
+    for(i = 0; i < table->Size; i++)
+        for(node = table->Buckets[i]; node; node = node->Link)
+            ajUser("key '%S' value '%S'",
+                   (const AjPStr) node->Key, (AjPStr) node->Value);
+
+    return;
+}
+
+
+
+
+/* @func ajTablestrTrace ******************************************************
+**
+** Writes debug messages to trace the contents of a table,
+** assuming all keys and values are strings.
+**
+** @param [r] table [const AjPTable] Table
+** @return [void]
+**
+** @release 5.0.0
+** @@
+******************************************************************************/
+
+void ajTablestrTrace(const AjPTable table)
+{
+    ajulong i = 0UL;
+    ajulong j = 0UL;
+    ajulong k = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return;
+
+    ajDebug("(string) table trace: ");
+    ajDebug(" length: %Lu", table->Length);
+    ajDebug(" size: %Lu", table->Size);
+    ajDebug(" timestamp: %u\n", table->Timestamp);
+
+    for(i = 0UL; i < table->Size; i++)
+        if(table->Buckets[i])
+        {
+            j = 0UL;
+            ajDebug("buckets[%Lu]\n", i);
+
+            for(node = table->Buckets[i]; node; node = node->Link)
+            {
+                ajDebug("   '%S' => '%S'\n",
+                        (const AjPStr) node->Key, (AjPStr) node->Value);
+                j++;
+            }
+
+            k += j;
+        }
+
+    ajDebug(" links: %Lu\n", k);
+
+    return;
+}
+
+
+
+
+/* @func ajTablestrTracekeys **************************************************
+**
+** Writes debug messages to trace the keys of a string table,
+** assuming all keys and values are strings.
+**
+** @param [r] table [const AjPTable] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTablestrTracekeys(const AjPTable table)
+{
+    ajulong i = 0UL;
+    ajulong j = 0UL;
+    ajulong k = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return;
+
+    ajDebug("(string) table trace: ");
+    ajDebug(" length: %Lu", table->Length);
+    ajDebug(" size: %Lu", table->Size);
+    ajDebug(" timestamp: %u\n", table->Timestamp);
+
+    for(i = 0UL; i < table->Size; i++)
+        if(table->Buckets[i])
+        {
+            j = 0UL;
+            ajDebug("buckets[%Lu]\n", i);
+
+            for(node = table->Buckets[i]; node; node = node->Link)
+            {
+                ajDebug("   '%S' => '%xS\n",
+                        (const AjPStr) node->Key, node->Value);
+                j++;
+            }
+
+            k += j;
+        }
+
+    ajDebug(" links: %Lu\n", k);
+
+    return;
+}
+
+
+
+
+/* @datasection [AjPTable] Unsigned integer hash tables ***********************
+**
+** @nam2rule Tableuint Unsigned integer hash tables
+**
+******************************************************************************/
+
+
+
+
+/* @section Constructors ******************************************************
+**
+** Constructors for hash tables
+**
+** @fdata [AjPTable]
+**
+** @fcategory new
+**
+** @nam3rule New Constructor
+** @suffix Const Constant keys with no destructor
+**
+** @argrule New size [ajulong] Number of key values
+**
+** @valrule * [AjPTable] New hash table
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableuintNew *******************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of unsigned integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableuintNew(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableuintCmp, &ajTableuintHash,
+                                  &ajMemFree, NULL);
+    table->Type = ajETableTypeUint;
+
+    return table;
+}
+
+
+
+
+/* @func ajTableuintNewConst **************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold a
+** specified number of unsigned integer key-value pairs.
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+**
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableuintNewConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableuintCmp, &ajTableuintHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeUint;
+
+    return table;
+}
+
+
+
+
+/* @section Destructors *******************************************************
+**
+** @fdata [AjPTable]
+**
+** Destructors know they are dealing with strings and can clean up
+** keys and values
+**
+** @nam3rule Free Delete table, keys and values
+** @nam4rule FreeKey Delete table, keys and values
+**
+** @argrule * Ptable [AjPTable*] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableuintFree ******************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys and data
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableuintFree(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDel, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @func ajTableuintFreeKey ***************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableuintFreeKey(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDelKey, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @section Retrieval *********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval function
+**
+** @argrule * table [const AjPTable] Hash table
+** @argrule Fetch uintkey [const ajuint*] Key
+**
+** @valrule Fetch [const ajuint*] Value
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableuintFetch *****************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] uintkey [const ajuint*] key to find.
+** @return [const ajuint*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const ajuint* ajTableuintFetch(const AjPTable table, const ajuint* uintkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!uintkey)
+        return NULL;
+
+    i = (*table->Fhash)(uintkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(uintkey, node->Key) == 0)
+            break;
+
+    return node ? (const ajuint*) node->Value : NULL;
+}
+
+
+
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval function
+**
+** @argrule * table [AjPTable] Hash table
+** @argrule Fetchmod uintkey [const ajuint*] Key
+**
+** @valrule Fetchmod [ajuint*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableuintFetchmod **************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] uintkey   [const ajuint*] key to find.
+** @return [ajuint*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajuint* ajTableuintFetchmod(AjPTable table, const ajuint* uintkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!uintkey)
+        return NULL;
+
+    i = (*table->Fhash)(uintkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(uintkey, node->Key) == 0)
+            break;
+
+    return node ? (ajuint*) (&node->Value) : NULL;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableuintCmp *******************************************************
+**
+** Comparison function for a table with an unsigned integer key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajint ajTableuintCmp(const void* key1, const void* key2)
+{
+    return (ajint) (*((const ajuint*) key1) != *((const ajuint*) key2));
+}
+
+
+
+
+/* @func ajTableuintHash ******************************************************
+**
+** Hash function for a table with an unsigned integer key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajulong ajTableuintHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const ajuint* ia = NULL;
+
+    if(!key)
+        return 0;
+
+    if(!hashsize)
+        return 0;
+
+    ia = (const ajuint *) key;
+
+    hash = (*ia >> 2) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @datasection [AjPTable] Unsigned long hash tables **************************
+**
+** @nam2rule Tableulong Unsigned long integer hash tables
+**
+******************************************************************************/
+
+
+
+
+/* @section Constructors ******************************************************
+**
+** Constructors for hash tables
+**
+** @fdata [AjPTable]
+**
+** @fcategory new
+**
+** @nam3rule New Constructor
+** @suffix Const Constant keys with no destructor
+**
+** @argrule New size [ajulong] Number of key values
+**
+** @valrule * [AjPTable] New hash table
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableulongNew ******************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold an
+** arbitrary number of unsigned long integer key-value pairs
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableulongNew(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableulongCmp, &ajTableulongHash,
+                                  &ajMemFree, NULL);
+    table->Type = ajETableTypeUlong;
+
+    return table;
+}
+
+
+
+
+
+/* @func ajTableulongNewConst *************************************************
+**
+** Creates, initialises, and returns a new, empty table that can hold an
+** arbitrary number of unsigned long integer key-value pairs
+**
+** @param [r] size [ajulong] estimate of number of unique keys
+** @return [AjPTable] new table.
+**
+** @release 6.4.0
+** @@
+**
+******************************************************************************/
+
+AjPTable ajTableulongNewConst(ajulong size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &ajTableulongCmp, &ajTableulongHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeUlong;
+
+    return table;
+}
+
+
+
+
+
+/* @section Destructors *******************************************************
+**
+** @fdata [AjPTable]
+**
+** Destructors know they are dealing with strings and can
+** clean up keys and values
+**
+** @nam3rule Free Delete table, keys and values
+** @nam4rule FreeKey Delete table, keys and values
+**
+** @argrule * Ptable [AjPTable*] Hash table
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableulongFree *****************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys and data
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableulongFree(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDel, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @func ajTableulongFreeKey **************************************************
+**
+** Free keys and value strings in a table and free the table.
+** Use only where the keys
+** in the table are real, and not just copies of pointers. Otherwise
+** a call to ajTableFree is enough.
+**
+** @param [d] Ptable [AjPTable*] Table
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+void ajTableulongFreeKey(AjPTable* Ptable)
+{
+    if(!Ptable)
+        return;
+
+    if(!*Ptable)
+        return;
+
+    ajTableMapDel(*Ptable, &tableDelKey, NULL);
+
+    ajTableFree(Ptable);
+
+    return;
+}
+
+
+
+
+/* @section Retrieval *********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval function
+**
+** @argrule * table [const AjPTable] Hash table
+** @argrule Fetch ulongkey [const ajulong*] Key
+**
+** @valrule Fetch [const ajulong*] Value
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableulongFetch ****************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] ulongkey [const ajulong*] key to find.
+** @return [const ajulong*] value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+const ajulong* ajTableulongFetch(const AjPTable table, const ajulong* ulongkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!ulongkey)
+        return NULL;
+
+    i = (*table->Fhash)(ulongkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(ulongkey, node->Key) == 0)
+            break;
+
+    return node ? (const ajulong*) node->Value : NULL;
+}
+
+
+
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval function
+**
+** @argrule * table [AjPTable] Hash table
+** @argrule Fetchmod ulongkey [const ajulong*] Key
+**
+** @valrule Fetchmod [ajulong*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableulongFetchmod *************************************************
+**
+** Returns the value associated with key in table, or null if table
+** does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] ulongkey   [const ajulong*] key to find.
+** @return [ajulong*]  value associated with key
+** @error NULL if key not found in table.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajulong* ajTableulongFetchmod(AjPTable table, const ajulong* ulongkey)
+{
+    ajulong i = 0UL;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if(!ulongkey)
+        return NULL;
+
+    i = (*table->Fhash)(ulongkey, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(ulongkey, node->Key) == 0)
+            break;
+
+    return node ? (ajulong*) (&node->Value) : NULL;
+}
+
+
+
+
+/* @section Comparison functions **********************************************
+**
+** @fdata [AjPTable]
+**
+** Comparison functions for table keys
+**
+** @nam3rule Cmp Comparison
+** @nam3rule Hash Hashing keys
+**
+** @argrule Cmp key1 [const void*] First key
+** @argrule Cmp key2 [const void*] Second key
+** @argrule Hash key [const void*] Key
+** @argrule Hash hashsize [ajulong] Hash table size
+** @suffix Case Case insensitive keys
+**
+** @valrule Cmp [ajint] Comparison result 0 for a match,
+**                      -1 or +1 for a mismatch
+** @valrule Hash [ajulong] hash value
+**
+** @fcategory misc
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTableulongCmp ******************************************************
+**
+** Comparison function for a table with an unsigned long integer key
+**
+** @param [r] key1 [const void*] First key.
+** @param [r] key2 [const void*] Second key.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajint ajTableulongCmp(const void* key1, const void* key2)
+{
+    return (ajint) (*((const ajulong*) key1) != *((const ajulong*) key2));
+}
+
+
+
+
+/* @func ajTableulongHash *****************************************************
+**
+** Hash function for a table with an unsigned long integer key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajulong] Standard argument. Estimated Hash size.
+** @return [ajulong] Hash value in range 0 to hashsize-1
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+ajulong ajTableulongHash(const void* key, ajulong hashsize)
+{
+    ajulong hash = 0UL;
+
+    const ajulong* ia = NULL;
+
+    if(!key)
+        return 0;
+
+    if(!hashsize)
+        return 0;
+
+    ia = (const ajulong*) key;
+
+    hash = (*ia >> 2) % hashsize;
+
+    return hash;
+}
+
+
+
+
+/* @funcstatic tableDelStr ****************************************************
+**
+** Delete a string object value
+**
+** @param [d] Pstr [void**] AJAX String object
+** @return [void]
+**
+** @release 6.4.0
+******************************************************************************/
+
+static void tableDelStr(void** Pstr)
+{
+    if(!Pstr)
+        return;
+    if(!*Pstr)
+        return;
+
+    ajStrDel((AjPStr*) Pstr);
+
+    return;
+}
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajTableNewLen
+** @rename ajTableNew
+*/
+__deprecated AjPTable ajTableNewLen(ajuint size)
+{
+    AjPTable table = NULL;
+
+    table = ajTableNewFunctionLen(size, &tableCmpAtom, &tableHashAtom,
+                                  NULL, NULL);
+    table->Type = ajETableTypeUser;
+
+    return table;
+}
+
+
+
+
+/* @obsolete ajTableNewL
+** @rename ajTableNewFunctionLen
+*/
+
+__deprecated AjPTable ajTableNewL(
+    ajuint size,
+    ajint (*cmp)(const void* key1, const void* key2),
+    ajuint (*hash)(const void* key,
+                   ajuint hashsize))
+{
+
+    return ajTableNewFunctionLen(size, cmp, hash, NULL, NULL);
+}
+
+
+
+
+/* @obsolete ajTableFetch
+** @rename ajTableFetchmodV
+*/
+
+__deprecated void* ajTableFetch(const AjPTable table, const void* key)
+{
+    ajuint i = 0U;
+
+    AjPTableNode node = NULL;
+
+    if(!table)
+        return NULL;
+
+    if (!key)
+        return NULL;
+
+    i = (*table->Fhash)(key, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
+
+    return node ? node->Value : NULL;
+}
+
+
+
+
+/* @obsolete ajTablestrFetch
+** @rename ajTablestrFetchS
+*/
+__deprecated const AjPStr ajTablestrFetch(const AjPTable table,
+                                          const AjPStr key)
+{
+    return ajTablestrFetchS(table, key);
+}
+
+
+
+
+/* @obsolete ajTableGet
+** @rename ajTableFetchmodV
+*/
+
+__deprecated void* ajTableGet(const AjPTable table, const void* key)
+{
+    return ajTableFetchmodV(table, key);
+}
+
+
+
+
+/* @obsolete ajTableFetchKey
+** @rename ajTablestrFetchKeyS
+*/
+
+__deprecated const void* ajTableFetchKey(const AjPTable table,
+                                         const void* key)
+{
+    ajuint i = 0U;
+
+    const AjPTableNode node = NULL;
+
+    if (!table)
+        return NULL;
+
+    if (!key)
+        return NULL;
+
+    i = (*table->Fhash)(key, table->Size);
+
+    for(node = table->Buckets[i]; node; node = node->Link)
+        if((*table->Fcmp)(key, node->Key) == 0)
+            break;
+
+    return node ? (const void*) node->Key : NULL;
+}
+
+
+
+
+/* @obsolete ajTableLength
+** @rename ajTableGetLength
+*/
+
+__deprecated ajint ajTableLength(const AjPTable table)
+{
+    return (ajuint) ajTableGetLength(table);
+}
+
+
+
+
+/* @obsolete ajTableToarray
+** @rename ajTableToarrayKeysValues
+*/
+
+__deprecated ajuint ajTableToarray(const AjPTable table,
+                                   void*** keyarray, void*** valarray)
+{
+
+    return ajTableToarrayKeysValues(table, keyarray, valarray);
 }
 
 
@@ -3475,54 +6241,6 @@ __deprecated AjPTable ajStrTableNew(ajuint hint)
 
 
 
-/* @section Trace functions ***************************************************
-**
-** @fdata [AjPTable]
-**
-** @nam3rule Print Trace contents to standard error
-** @nam3rule Trace Trace contents to debug file
-**
-** @argrule * table [const AjPTable] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablecharPrint *****************************************************
-**
-** Print function for a table with a character string key.
-**
-** @param [r] table [const AjPTable] Table.
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablecharPrint(const AjPTable table)
-{
-    ajuint i;
-    struct binding *p;
-
-    if(!table)
-	return;
-
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	{
-	    ajUser("key '%s' value '%s'",
-		   (const char*) p->key, (char*) p->value);
-	}
-
-    return;
-}
-
-
-
-
 /* @obsolete ajStrTablePrintC
 ** @rename ajTablecharPrint
 */
@@ -3537,87 +6255,13 @@ __deprecated void ajStrTablePrintC(const AjPTable table)
 
 
 
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablecharCmp *******************************************************
-**
-** Comparison function for a table with a character string key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTablecharCmp(const void* x, const void* y)
-{
-    const char* sx;
-    const char* sy;
-
-    sx = (const char*) x;
-    sy = (const char*) y;
-
-    return (ajint)strcmp(sx, sy);
-}
-
-
-
-
 /* @obsolete ajStrTableCmpC
 ** @rename ajTablecharCmp
 */
 
-__deprecated ajint ajStrTableCmpC(const void* x, const void* y)
+__deprecated ajint ajStrTableCmpC(const void* key1, const void* key2)
 {
-    return ajTablecharCmp(x, y);
-}
-
-
-
-
-/* @func ajTablecharCmpCase ***************************************************
-**
-** Comparison function for a table with a character string key
-** and case insensitivity.
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTablecharCmpCase(const void* x, const void* y)
-{
-    const char* sx;
-    const char* sy;
-
-    sx = (const char*) x;
-    sy = (const char*) y;
-
-    return (ajint)ajCharCmpCase(sx, sy);
+    return ajTablecharCmp(key1, key2);
 }
 
 
@@ -3627,35 +6271,9 @@ ajint ajTablecharCmpCase(const void* x, const void* y)
 ** @rename ajTablecharCmpCase
 */
 
-__deprecated ajint ajStrTableCmpCaseC(const void* x, const void* y)
+__deprecated ajint ajStrTableCmpCaseC(const void* key1, const void* key2)
 {
-    return ajTablecharCmpCase(x, y);
-}
-
-
-
-
-/* @func ajTablecharHash ******************************************************
-**
-** Hash function for a table with a character string key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value.
-** @@
-******************************************************************************/
-
-ajuint ajTablecharHash(const void* key, ajuint hashsize)
-{
-    ajuint hash;
-    const char* s;
-
-    s = (const char*) key;
-
-    for(hash = 0; *s; s++)
-	hash = (hash * 127 + *s) % hashsize;
-
-    return hash;
+    return ajTablecharCmpCase(key1, key2);
 }
 
 
@@ -3673,33 +6291,6 @@ __deprecated ajuint ajStrTableHashC(const void* key, ajuint hashsize)
 
 
 
-/* @func ajTablecharHashCase **************************************************
-**
-** Hash function for a table with a character string key and
-** case insensitivity.
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value.
-** @@
-******************************************************************************/
-
-ajuint ajTablecharHashCase(const void* key, ajuint hashsize)
-{
-    ajuint hash;
-    const char* s;
-
-    s = (const char*) key;
-
-    for(hash = 0; *s; s++)
-	hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
-
-    return hash;
-}
-
-
-
-
 /* @obsolete ajStrTableHashCaseC
 ** @rename ajTablecharHashCase
 */
@@ -3712,802 +6303,19 @@ __deprecated ajuint ajStrTableHashCaseC(const void* key, ajuint hashsize)
 
 
 
-/* @datasection [AjPTable] Integer hash tables ********************************
-**
-** @nam2rule Tableint Integer hash tables
-**
-******************************************************************************/
-
-
-
-
-/* @section Constructors ******************************************************
-**
-** Constructors for hash tables
-**
-** @fdata [AjPTable]
-**
-** @fcategory new
-**
-** @nam3rule New Constructor
-** @nam4rule Case Case-sensitive keys
-** @suffix Const Constant keys with no destructor
-**
-** @argrule New size [ajuint] Number of key values
-**
-** @valrule * [AjPTable] New hash table
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableintNew ********************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableintNew(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableintCmp, ajTableintHash,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_INT;
-
-    return ret;
-}
-
-
-
-
-/* @func ajTableintNewConst ***************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableintNewConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableintCmp, ajTableintHash,
-                                NULL, NULL);
-    ret->Type = TABLE_INT;
-
-    return ret;
-}
-
-
-
-
-/* @section Destructors *******************************************************
-**
-** @fdata [AjPTable]
-**
-** Destructors know they are dealing with strings and can
-** clean up keys and values
-**
-** @nam3rule Free Delete table, keys and values
-** @nam4rule FreeKey Delete table, keys and values
-**
-** @argrule * Ptable [AjPTable*] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory delete
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableintFree *******************************************************
-**
-** Free keys and value strings in a table and free the table.  Use
-** only where the keys and data in the table are real, and not just
-** copies of pointers. Otherwise a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableintFree(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDel, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @func ajTableintFreeKey ****************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableintFreeKey(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDelKey, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @section Retrieval *********************************************************
-**
-** @fdata [AjPTable]
-**
-** Retrieves values from a hash table
-**
-** @nam3rule Fetch Retrieval function
-**
-** @argrule Fetch table [const AjPTable] Hash table
-** @argrule Fetch intkey [const ajint*] Key
-**
-** @valrule Fetch [const ajint*] Value
-**
-** @fcategory cast
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableintFetch ******************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] intkey [const ajint*] key to find.
-** @return [const ajint*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const ajint* ajTableintFetch(const AjPTable table, const ajint *intkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!intkey)
-	return NULL;
-
-    i = (*table->hash)(intkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(intkey, p->key) == 0)
-	    break;
-
-    return p ? (const ajint*) p->value : NULL;
-}
-
-
-
-
-/* @section Modify ************************************************************
-**
-** @fdata [AjPTable]
-**
-** Updates values from a hash table
-**
-** @nam3rule Fetchmod Retrieval function
-**
-** @argrule * table [AjPTable] Hash table
-** @argrule Fetchmod intkey [const ajint*] Key
-**
-** @valrule Fetchmod [ajint*] Value
-**
-** @fcategory modify
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableintFetchmod ***************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [u] table [AjPTable] table to search
-** @param [r] intkey   [const ajint *] key to find.
-** @return [ajint*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-ajint* ajTableintFetchmod(AjPTable table, const ajint *intkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!intkey)
-	return NULL;
-
-    i = (*table->hash)(intkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(intkey, p->key) == 0)
-	    break;
-
-    return p ? (ajint*) (&p->value) : NULL;
-}
-
-
-
-
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableintCmp ********************************************************
-**
-** Comparison function for a table with an integer key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTableintCmp(const void* x, const void* y)
-{
-    const ajint *ix;
-    const ajint *iy;
-
-    ix = (const ajint*) x;
-    iy = (const ajint*) y;
-
-    return (*ix != *iy);
-}
-
-
-
-
-/* @func ajTableintHash *******************************************************
-**
-** Hash function for a table with an integer key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTableintHash(const void* key, ajuint hashsize)
-{
-    const ajint *ia;
-    ajuint hash;
-
-    if(!key)
-        return 0;
-
-    if(!hashsize)
-        return 0;
-
-    ia = (const ajint *) key;
-
-    hash = (*ia >> 2) % hashsize;
-
-    return hash;
-}
-
-
-
-
-/* @datasection [AjPTable] Long integer hash tables ***************************
-**
-** @nam2rule Tablelong Long integer hash tables
-**
-******************************************************************************/
-
-
-
-
-/* @section Constructors ******************************************************
-**
-** Constructors for hash tables
-**
-** @fdata [AjPTable]
-**
-** @fcategory new
-**
-** @nam3rule New Constructor
-** @suffix Const Constant keys with no destructor
-**
-** @argrule New size [ajuint] Number of key values
-**
-** @valrule * [AjPTable] New hash table
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablelongNew *******************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of long integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablelongNew(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablelongCmp, ajTablelongHash,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_LONG;
-
-    return ret;
-}
-
-
-
-
-/* @func ajTablelongNewConst **************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of long integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablelongNewConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablelongCmp, ajTablelongHash,
-                                NULL, NULL);
-    ret->Type = TABLE_LONG;
-
-    return ret;
-}
-
-
-
-
-/* @section Destructors *******************************************************
-**
-** @fdata [AjPTable]
-**
-** Destructors know they are dealing with strings and can
-** clean up keys and values
-**
-** @nam3rule Free Delete table, keys and values
-** @nam4rule FreeKey Delete table, keys and values
-**
-** @argrule * Ptable [AjPTable*] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory delete
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablelongFree ******************************************************
-**
-** Free keys and value strings in a table and free the table.  Use
-** only where the keys and data in the table are real, and not just
-** copies of pointers. Otherwise a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablelongFree(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDel, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @func ajTablelongFreeKey ***************************************************
-**
-** Free keys and value strings in a table and free the table.  Use
-** only where the keys in the table are real, and not just copies of
-** pointers. Otherwise a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablelongFreeKey(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDelKey, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @section Retrieval *********************************************************
-**
-** @fdata [AjPTable]
-**
-** Retrieves values from a hash table
-**
-** @nam3rule Fetch Retrieval function
-**
-** @argrule * table [const AjPTable] Hash table
-** @argrule Fetch longkey [const ajlong*] Key
-**
-** @valrule Fetch [const ajlong*] Value
-** @fcategory cast
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablelongFetch *****************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] longkey [const ajlong*] key to find.
-** @return [const ajlong*] value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const ajlong* ajTablelongFetch(const AjPTable table, const ajlong *longkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!longkey)
-	return NULL;
-
-    i = (*table->hash)(longkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(longkey, p->key) == 0)
-	    break;
-
-    return p ? (const ajlong*) p->value : NULL;
-}
-
-
-
-
-/* @section Modify ************************************************************
-**
-** @fdata [AjPTable]
-**
-** Updates values from a hash table
-**
-** @nam3rule Fetchmod Retrieval function
-**
-** @argrule * table [AjPTable] Hash table
-** @argrule Fetchmod longkey [const ajlong*] Key
-**
-** @valrule Fetchmod [ajlong*] Value
-**
-** @fcategory modify
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablelongFetchmod **************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [u] table [AjPTable] table to search
-** @param [r] longkey   [const ajlong*] key to find.
-** @return [ajlong*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-ajlong* ajTablelongFetchmod(AjPTable table, const ajlong *longkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!longkey)
-	return NULL;
-
-    i = (*table->hash)(longkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(longkey, p->key) == 0)
-	    break;
-
-    return p ? (ajlong*) (&p->value) : NULL;
-}
-
-
-
-
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablelongCmp *******************************************************
-**
-** Comparison function for a table with a long integer key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTablelongCmp(const void* x, const void* y)
-{
-    const ajlong *ix;
-    const ajlong *iy;
-
-    ix = (const ajlong*) x;
-    iy = (const ajlong*) y;
-
-    return (*ix != *iy);
-}
-
-
-
-
-/* @func ajTablelongHash ******************************************************
-**
-** Hash function for a table with a long integer key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTablelongHash(const void* key, ajuint hashsize)
-{
-    const ajlong *ia;
-    ajuint hash;
-
-    if(!key)
-        return 0;
-
-    if(!hashsize)
-        return 0;
-
-    ia = (const ajlong *) key;
-
-    hash = (*ia >> 2) % hashsize;
-
-    return hash;
-}
-
-
-
-
-/* @datasection [AjPTable] String hash tables *********************************
-**
-** @nam2rule Tablestr String hash tables
-**
-******************************************************************************/
-
-
-
-
-/* @section Constructors ******************************************************
-**
-** Constructors for hash tables
-**
-** @fdata [AjPTable]
-**
-** @fcategory new
-**
-** @nam3rule New Constructor
-** @nam4rule Case Case-sensitive keys
-** @suffix Const Constant keys with no destructor
-**
-** @argrule New size [ajuint] Number of key values
-**
-** @valrule * [AjPTable] New hash table
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrNew *****************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablestrNew(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablestrCmp, ajTablestrHash,
-                                tableDelStr, NULL);
-    ret->Type = TABLE_STR;
-
-    return ret;
-}
-
-
-
-
 /* @obsolete ajTablestrNewLen
 ** @rename ajTablestrNew
 */
 
 __deprecated AjPTable ajTablestrNewLen(ajuint size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablestrCmp, ajTablestrHash,
-                                NULL, NULL);
-    ret->Type = TABLE_STR;
+    table = ajTableNewFunctionLen(size, &ajTablestrCmp, &ajTablestrHash,
+                                  NULL, NULL);
+    table->Type = ajETableTypeStr;
 
-    return ret;
-}
-
-
-
-
-/* @func ajTablestrNewCase ****************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablestrNewCase(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablestrCmpCase, ajTablestrHashCase,
-                                tableDelStr, NULL);
-    ret->Type = TABLE_STR;
-
-    return ret;
+    return table;
 }
 
 
@@ -4518,116 +6326,13 @@ AjPTable ajTablestrNewCase(ajuint size)
 */
 __deprecated AjPTable ajTablestrNewCaseLen(ajuint size)
 {
-    AjPTable ret;
+    AjPTable table = NULL;
 
-    ret = ajTableNewFunctionLen(size, ajTablestrCmpCase, ajTablestrHashCase,
-                                NULL, NULL);
-    ret->Type = TABLE_STR;
+    table = ajTableNewFunctionLen(size, &ajTablestrCmpCase, &ajTablestrHashCase,
+                                  NULL, NULL);
+    table->Type = ajETableTypeStr;
 
-    return ret;
-}
-
-
-
-
-/* @func ajTablestrNewCaseConst ***********************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablestrNewCaseConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablestrCmpCase, ajTablestrHashCase,
-                                NULL, NULL);
-    ret->Type = TABLE_STR;
-
-    return ret;
-}
-
-
-
-
-/* @func ajTablestrNewConst ***************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTablestrNewConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTablestrCmp, ajTablestrHash,
-                                NULL, NULL);
-    ret->Type = TABLE_STR;
-
-    return ret;
-}
-
-
-
-
-/* @section Destructors *******************************************************
-**
-** @fdata [AjPTable]
-**
-** Destructors know they are dealing with strings and can
-** clean up keys and values
-**
-** @nam3rule Free Delete table, keys and values
-** @nam4rule FreeKey Delete table, keys and values
-**
-** @argrule * Ptable [AjPTable*] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory delete
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrFree *******************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys and strings
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablestrFree(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableStrDel, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
+    return table;
 }
 
 
@@ -4640,33 +6345,6 @@ void ajTablestrFree(AjPTable* Ptable)
 __deprecated void ajStrTableFree(AjPTable* ptable)
 {
     ajTablestrFree(ptable);
-
-    return;
-}
-
-
-
-
-/* @func ajTablestrFreeKey ****************************************************
-**
-** Free string keys in a table and free the table. Do not free the values.
-** Use only where the keys
-** in the table are real strings, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough. The data is simply freed.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablestrFreeKey(AjPTable* Ptable)
-{
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableStrDelKey, NULL);
-
-    ajTableFree(Ptable);
 
     return;
 }
@@ -4688,394 +6366,13 @@ __deprecated void ajStrTableFreeKey(AjPTable* ptable)
 
 
 
-/* @funcstatic tableStrDel ****************************************************
-**
-** Delete an entry in a string table.
-**
-** @param [d] key [void**] Standard argument. Table key.
-** @param [d] value [void**] Standard argument. Table item.
-** @param [u] cl [void*] Standard argument. Usually NULL.
-** @return [void]
-** @@
-******************************************************************************/
-
-static void tableStrDel(void** key, void** value, void* cl)
-{
-    AjPStr p;
-    AjPStr q;
-
-    p = (AjPStr) *value;
-    q = (AjPStr) *key;
-
-    ajStrDel(&p);
-    ajStrDel(&q);
-
-    *key = NULL;
-    *value = NULL;
-
-    if(!cl)
-	return;
-
-    return;
-}
-
-
-
-
-/* @funcstatic tableStrDelKey *************************************************
-**
-** Delete an entry in a table with a string key and ignore the value.
-**
-** @param [d] key [void**] Standard argument. Table key.
-** @param [d] value [void**] Standard argument. Table item.
-** @param [u] cl [void*] Standard argument. Usually NULL.
-** @return [void]
-** @@
-******************************************************************************/
-
-static void tableStrDelKey(void** key, void** value, void* cl)
-{
-    AjPStr q;
-
-    q = (AjPStr) *key;
-
-    ajStrDel(&q);
-
-    *key = NULL;
-    *value = NULL;
-
-    if(!cl)
-	return;
-
-    return;
-}
-
-
-
-
-/* @section Retrieval *********************************************************
-**
-** @fdata [AjPTable]
-**
-** Retrieves values from a hash table
-**
-** @nam3rule Fetch Retrieval function for string values
-** @nam3rule Fetchkey Retrieval function for string keys
-** @suffix C [char*] C character string
-** @suffix S [AjPStr] string object
-**
-** @argrule * table [const AjPTable] Hash table
-** @argrule *C txtkey [const char*] Key
-** @argrule *S key [const AjPStr] Key
-**
-** @valrule Fetch [void*] Value
-** @valrule Fetchkey [const AjPStr] Value
-**
-** @fcategory cast
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrFetchC *****************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] txtkey [const char*] key to find.
-** @return [void*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-void* ajTablestrFetchC(const AjPTable table, const char* txtkey)
-{
-    ajint i;
-    struct binding *p;
-
-    ajStrAssignC(&tableTmpkeyStr, txtkey);
-
-    if(!table)
-	return NULL;
-
-    if (!txtkey)
-	return NULL;
-
-    i = (*table->hash)(tableTmpkeyStr, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(tableTmpkeyStr, p->key) == 0)
-	    break;
-
-    return p ? p->value : NULL;
-}
-
-
-
-
-/* @func ajTablestrFetchS *****************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] key   [const AjPStr] key to find.
-** @return [void*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-void* ajTablestrFetchS(const AjPTable table, const AjPStr key)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!key)
-	return NULL;
-
-    i = (*table->hash)(key, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
-
-    return p ? p->value : NULL;
-}
-
-
-
-
-/* @func ajTablestrFetchkeyC **************************************************
-**
-** returns the key value associated with key in table, or null
-** if table does not hold key.
-**
-** Intended for case-insensitive keys, to return the true key
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] txtkey   [const char*] key to find.
-** @return [const AjPStr] key value as stored in the table
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const AjPStr ajTablestrFetchkeyC(const AjPTable table, const char *txtkey)
-{
-    ajint i;
-    const struct binding *p;
-
-    if (!table)
-	return NULL;
-
-    if (!txtkey)
-	return NULL;
-
-    if(table->Type == TABLE_STR)
-    {
-        ajStrAssignC(&tableTmpkeyStr, txtkey);
-        return ajTablestrFetchkeyS(table, tableTmpkeyStr);
-    }
-
-    if(table->Type != TABLE_CHAR)
-        ajFatal("ajTablestrFetchkeyC called for %s table", tableType(table));
-
-    i = (*table->hash)(txtkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(txtkey, p->key) == 0)
-	    break;
-
-    return p ? (const void*)p->key : NULL;
-}
-
-
-
-
-/* @func ajTablestrFetchkeyS **************************************************
-**
-** returns the key value associated with key in table, or null
-** if table does not hold key.
-**
-** Intended for case-insensitive keys, to return the true key
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] key   [const AjPStr] key to find.
-** @return [const AjPStr] key value as stored in the table
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const AjPStr ajTablestrFetchkeyS(const AjPTable table, const AjPStr key)
-{
-    ajint i;
-    const struct binding *p;
-
-    if (!table)
-	return NULL;
-
-    if (!key)
-	return NULL;
-
-    if(table->Type == TABLE_CHAR)
-    {
-        return ajTablestrFetchkeyC(table, MAJSTRGETPTR(key));
-    }
-
-    if(table->Type != TABLE_STR)
-        ajFatal("ajTablestrFetchkeyS called for %s table", tableType(table));
-
-    i = (*table->hash)(key, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
-
-    return p ? (const void*)p->key : NULL;
-}
-
-
-
-
 /* @obsolete ajTableKey
 ** @rename ajTablestrFetchKeyS
 */
 
-__deprecated const void * ajTableKey(const AjPTable table, const void *key)
+__deprecated const void* ajTableKey(const AjPTable table, const void* key)
 {
     return ajTablestrFetchkeyS(table, key);
-}
-
-
-
-
-/* @funcstatic tableType ******************************************************
-**
-** returns the name of a table type.
-**
-** @param [r] table [const AjPTable] table type
-** @return [const char*] Name of table type
-** @@
-******************************************************************************/
-
-static const char* tableType(const AjPTable table)
-{
-    const char* typenames[] = {"unknown", "char", "string",
-                               "int", "uint", "long", "ulong", "user", NULL};
-    ajint i = table->Type;
-
-    if(i < TABLE_UNKNOWN || i >= TABLE_MAX)
-        return "unknown";
-
-    return typenames[i];
-}
-
-
-
-
-/* @section Modify ************************************************************
-**
-** @fdata [AjPTable]
-**
-** Updates values from a hash table
-**
-** @nam3rule Fetchmod Retrieval function
-**
-** @argrule * table [AjPTable] Hash table
-** @argrule Fetchmod key [const AjPStr] Key
-**
-** @valrule Fetchmod [AjPStr*] Value
-**
-** @fcategory modify
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrFetchmod ***************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [u] table [AjPTable] table to search
-** @param [r] key   [const AjPStr] key to find.
-** @return [AjPStr*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-AjPStr* ajTablestrFetchmod(AjPTable table, const AjPStr key)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!key)
-	return NULL;
-
-    i = (*table->hash)(key, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(key, p->key) == 0)
-	    break;
-
-    return p ? (AjPStr*) (&p->value) : NULL;
-}
-
-
-
-
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrCmp ********************************************************
-**
-** Comparison function for a table with a string key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTablestrCmp(const void* x, const void* y)
-{
-    const AjPStr sx;
-    const AjPStr sy;
-
-    sx = (const AjPStr) x;
-    sy = (const AjPStr) y;
-
-    return (ajint)ajStrCmpS(sx, sy);
 }
 
 
@@ -5085,34 +6382,9 @@ ajint ajTablestrCmp(const void* x, const void* y)
 ** @rename ajTablestrCmp
 */
 
-__deprecated ajint ajStrTableCmp(const void* x, const void* y)
+__deprecated ajint ajStrTableCmp(const void* key1, const void* key2)
 {
-    return ajTablestrCmp(x, y);
-}
-
-
-
-
-/* @func ajTablestrCmpCase ****************************************************
-**
-** Comparison function for a table with a string key
-** and case insensitivity.
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTablestrCmpCase(const void* x, const void* y)
-{
-    const AjPStr sx;
-    const AjPStr sy;
-
-    sx = (const AjPStr) x;
-    sy = (const AjPStr) y;
-
-    return (ajint)ajStrCmpCaseS(sx, sy);
+    return ajTablestrCmp(key1, key2);
 }
 
 
@@ -5122,37 +6394,9 @@ ajint ajTablestrCmpCase(const void* x, const void* y)
 ** @rename ajTablestrCmpCase
 */
 
-__deprecated ajint ajStrTableCmpCase(const void* x, const void* y)
+__deprecated ajint ajStrTableCmpCase(const void* key1, const void* key2)
 {
-    return ajTablestrCmpCase(x, y);
-}
-
-
-
-
-/* @func ajTablestrHash *******************************************************
-**
-** Hash function for a table with a string key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTablestrHash(const void* key, ajuint hashsize)
-{
-    const AjPStr str;
-    const char* s;
-    ajuint hash;
-
-    str = (const AjPStr) key;
-    s   = ajStrGetPtr(str);
-
-    for(hash = 0; *s; s++)
-	hash = (hash * 127 + *s) % hashsize;
-
-    return hash;
+    return ajTablestrCmpCase(key1, key2);
 }
 
 
@@ -5170,35 +6414,6 @@ __deprecated ajuint ajStrTableHash(const void* key, ajuint hashsize)
 
 
 
-/* @func ajTablestrHashCase ***************************************************
-**
-** Hash function for a table with a string key and
-** case insensitivity.
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTablestrHashCase(const void* key, ajuint hashsize)
-{
-    const AjPStr str;
-    const char* s;
-    ajuint hash;
-
-    str = (const AjPStr) key;
-    s   = ajStrGetPtr(str);
-
-    for(hash = 0; *s; s++)
-	hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
-
-    return hash;
-}
-
-
-
-
 /* @obsolete ajStrTableHashCase
 ** @rename ajTablestrHashCase
 */
@@ -5206,72 +6421,6 @@ ajuint ajTablestrHashCase(const void* key, ajuint hashsize)
 __deprecated ajuint ajStrTableHashCase(const void* key, ajuint hashsize)
 {
     return ajTablestrHashCase(key, hashsize);
-}
-
-
-
-
-/* @section Trace functions ***************************************************
-**
-** @fdata [AjPTable]
-**
-** @nam3rule Print Trace contents to standard error
-** @nam3rule Trace Trace contents to debug file
-** @nam3rule Tracekeys Trace keys only to debug file
-**
-** @argrule * table [const AjPTable] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @section Trace functions ***************************************************
-**
-** @fdata [AjPTable]
-**
-** @nam3rule Print Trace contents to standard error
-** @nam3rule Trace Trace contents to debug file
-** @nam3rule Tracekeys Trace keys only to debug file
-**
-** @argrule * table [const AjPTable] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTablestrPrint ******************************************************
-**
-** Print function for a table with a string key.
-**
-** @param [r] table [const AjPTable] Table.
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablestrPrint(const AjPTable table)
-{
-    ajuint i;
-    struct binding *p;
-
-    if(!table)
-	return;
-
-    for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
-	    ajUser("key '%S' value '%S'",
-		   (const AjPStr) p->key, (AjPStr) p->value);
-
-    return;
 }
 
 
@@ -5289,55 +6438,6 @@ __deprecated void ajStrTablePrint(const AjPTable table)
 
 
 
-/* @func ajTablestrTrace ******************************************************
-**
-** Writes debug messages to trace the contents of a table,
-** assuming all keys and values are strings.
-**
-** @param [r] table [const AjPTable] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablestrTrace(const AjPTable table)
-{
-    ajuint i;
-    ajint j;
-    ajint k = 0;
-    struct binding *p;
-
-    if(!table)
-	return;
-
-    ajDebug("(string) table trace: ");
-    ajDebug(" length: %d", table->length);
-    ajDebug(" size: %d", table->size);
-    ajDebug(" timestamp: %u\n", table->timestamp);
-
-    for(i = 0; i < table->size; i++)
-	if(table->buckets[i])
-	{
-	    j = 0;
-	    ajDebug("buckets[%d]\n", i);
-
-	    for(p = table->buckets[i]; p; p = p->link)
-	    {
-		ajDebug("   '%S' => '%S'\n",
-			(const AjPStr) p->key, (AjPStr) p->value);
-		j++;
-	    }
-
-	    k += j;
-	}
-
-    ajDebug(" links: %d\n", k);
-
-    return;
-}
-
-
-
-
 /* @obsolete ajStrTableTrace
 ** @rename ajTablestrTrace
 */
@@ -5348,784 +6448,4 @@ __deprecated void ajStrTableTrace(const AjPTable table)
 
     return;
 }
-
-
-
-
-/* @func ajTablestrTracekeys **************************************************
-**
-** Writes debug messages to trace the keys of a string table,
-** assuming all keys and values are strings.
-**
-** @param [r] table [const AjPTable] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTablestrTracekeys(const AjPTable table)
-{
-    ajuint i;
-    ajint j;
-    ajint k = 0;
-    struct binding *p;
-
-    if(!table)
-	return;
-
-    ajDebug("(string) table trace: ");
-    ajDebug(" length: %d", table->length);
-    ajDebug(" size: %d", table->size);
-    ajDebug(" timestamp: %u\n", table->timestamp);
-
-    for(i = 0; i < table->size; i++)
-	if(table->buckets[i])
-	{
-	    j = 0;
-	    ajDebug("buckets[%d]\n", i);
-
-	    for(p = table->buckets[i]; p; p = p->link)
-	    {
-		ajDebug("   '%S' => '%xS\n",
-			(const AjPStr) p->key, p->value);
-		j++;
-	    }
-
-	    k += j;
-	}
-
-    ajDebug(" links: %d\n", k);
-
-    return;
-}
-
-
-
-
-/* @datasection [AjPTable] Unsigned integer hash tables ***********************
-**
-** @nam2rule Tableuint Unsigned integer hash tables
-**
-******************************************************************************/
-
-
-
-
-/* @section Constructors ******************************************************
-**
-** Constructors for hash tables
-**
-** @fdata [AjPTable]
-**
-** @fcategory new
-**
-** @nam3rule New Constructor
-** @suffix Const Constant keys with no destructor
-**
-** @argrule New size [ajuint] Number of key values
-**
-** @valrule * [AjPTable] New hash table
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableuintNew *******************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of unsigned integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableuintNew(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableuintCmp, ajTableuintHash,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_UINT;
-
-    return ret;
-}
-
-
-
-
-/* @func ajTableuintNewConst **************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold a
-** specified number of unsigned integer key-value pairs.
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-**
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableuintNewConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableuintCmp, ajTableuintHash,
-                                NULL, NULL);
-    ret->Type = TABLE_UINT;
-
-    return ret;
-}
-
-
-
-
-/* @section Destructors *******************************************************
-**
-** @fdata [AjPTable]
-**
-** Destructors know they are dealing with strings and can clean up
-** keys and values
-**
-** @nam3rule Free Delete table, keys and values
-** @nam4rule FreeKey Delete table, keys and values
-**
-** @argrule * Ptable [AjPTable*] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory delete
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableuintFree ******************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys and data
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableuintFree(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDel, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @func ajTableuintFreeKey ***************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableuintFreeKey(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDelKey, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @section Retrieval *********************************************************
-**
-** @fdata [AjPTable]
-**
-** Retrieves values from a hash table
-**
-** @nam3rule Fetch Retrieval function
-**
-** @argrule * table [const AjPTable] Hash table
-** @argrule Fetch uintkey [const ajuint*] Key
-**
-** @valrule Fetch [const ajuint*] Value
-** @fcategory cast
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableuintFetch *****************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] uintkey [const ajuint*] key to find.
-** @return [const ajuint*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const ajuint* ajTableuintFetch(const AjPTable table, const ajuint *uintkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!uintkey)
-	return NULL;
-
-    i = (*table->hash)(uintkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(uintkey, p->key) == 0)
-	    break;
-
-    return p ? (const ajuint*) p->value : NULL;
-}
-
-
-
-
-/* @section Modify ************************************************************
-**
-** @fdata [AjPTable]
-**
-** Updates values from a hash table
-**
-** @nam3rule Fetchmod Retrieval function
-**
-** @argrule * table [AjPTable] Hash table
-** @argrule Fetchmod uintkey [const ajuint*] Key
-**
-** @valrule Fetchmod [ajuint*] Value
-**
-** @fcategory modify
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableuintFetchmod **************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [u] table [AjPTable] table to search
-** @param [r] uintkey   [const ajuint *] key to find.
-** @return [ajuint*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-ajuint* ajTableuintFetchmod(AjPTable table, const ajuint *uintkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!uintkey)
-	return NULL;
-
-    i = (*table->hash)(uintkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(uintkey, p->key) == 0)
-	    break;
-
-    return p ? (ajuint*) (&p->value) : NULL;
-}
-
-
-
-
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableuintCmp *******************************************************
-**
-** Comparison function for a table with an unsigned integer key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTableuintCmp(const void* x, const void* y)
-{
-    const ajuint *ix;
-    const ajuint *iy;
-
-    ix = (const ajuint*) x;
-    iy = (const ajuint*) y;
-
-    return (*ix != *iy);
-}
-
-
-
-
-/* @func ajTableuintHash ******************************************************
-**
-** Hash function for a table with an unsigned integer key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTableuintHash(const void* key, ajuint hashsize)
-{
-    const ajuint *ia;
-    ajuint hash;
-
-    if(!key)
-        return 0;
-
-    if(!hashsize)
-        return 0;
-
-    ia = (const ajuint *) key;
-
-    hash = (*ia >> 2) % hashsize;
-
-    return hash;
-}
-
-
-
-
-/* @datasection [AjPTable] Unsigned long hash tables **************************
-**
-** @nam2rule Tableulong Unsigned long integer hash tables
-**
-******************************************************************************/
-
-
-
-
-/* @section Constructors ******************************************************
-**
-** Constructors for hash tables
-**
-** @fdata [AjPTable]
-**
-** @fcategory new
-**
-** @nam3rule New Constructor
-** @suffix Const Constant keys with no destructor
-**
-** @argrule New size [ajuint] Number of key values
-**
-** @valrule * [AjPTable] New hash table
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableulongNew ******************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold an
-** arbitrary number of unsigned long integer key-value pairs
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableulongNew(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableulongCmp, ajTableulongHash,
-                                ajMemFree, NULL);
-    ret->Type = TABLE_ULONG;
-
-    return ret;
-}
-
-
-
-
-
-/* @func ajTableulongNewConst *************************************************
-**
-** Creates, initialises, and returns a new, empty table that can hold an
-** arbitrary number of unsigned long integer key-value pairs
-**
-** @param [r] size [ajuint] estimate of number of unique keys
-** @return [AjPTable] new table.
-** @@
-**
-******************************************************************************/
-
-AjPTable ajTableulongNewConst(ajuint size)
-{
-    AjPTable ret;
-
-    ret = ajTableNewFunctionLen(size, ajTableulongCmp, ajTableulongHash,
-                                NULL, NULL);
-    ret->Type = TABLE_ULONG;
-
-    return ret;
-}
-
-
-
-
-
-/* @section Destructors *******************************************************
-**
-** @fdata [AjPTable]
-**
-** Destructors know they are dealing with strings and can
-** clean up keys and values
-**
-** @nam3rule Free Delete table, keys and values
-** @nam4rule FreeKey Delete table, keys and values
-**
-** @argrule * Ptable [AjPTable*] Hash table
-**
-** @valrule * [void]
-**
-** @fcategory delete
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableulongFree *****************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys and data
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableulongFree(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDel, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @func ajTableulongFreeKey **************************************************
-**
-** Free keys and value strings in a table and free the table.
-** Use only where the keys
-** in the table are real, and not just copies of pointers. Otherwise
-** a call to ajTableFree is enough.
-**
-** @param [d] Ptable [AjPTable*] Table
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTableulongFreeKey(AjPTable* Ptable)
-{
-    if(!Ptable)
-        return;
-
-    if(!*Ptable)
-	return;
-
-    ajTableMapDel(*Ptable, tableDelKey, NULL);
-
-    ajTableFree(Ptable);
-
-    return;
-}
-
-
-
-
-/* @section Retrieval *********************************************************
-**
-** @fdata [AjPTable]
-**
-** Retrieves values from a hash table
-**
-** @nam3rule Fetch Retrieval function
-**
-** @argrule * table [const AjPTable] Hash table
-** @argrule Fetch ulongkey [const ajulong*] Key
-**
-** @valrule Fetch [const ajulong*] Value
-**
-** @fcategory cast
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableulongFetch ****************************************************
-**
-** returns the value associated with key in table, or null
-** if table does not hold key.
-**
-** @param [r] table [const AjPTable] table to search
-** @param [r] ulongkey [const ajulong*] key to find.
-** @return [const ajulong*] value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-const ajulong* ajTableulongFetch(const AjPTable table, const ajulong *ulongkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!ulongkey)
-	return NULL;
-
-    i = (*table->hash)(ulongkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(ulongkey, p->key) == 0)
-	    break;
-
-    return p ? (const ajulong*) p->value : NULL;
-}
-
-
-
-
-/* @section Modify ************************************************************
-**
-** @fdata [AjPTable]
-**
-** Updates values from a hash table
-**
-** @nam3rule Fetchmod Retrieval function
-**
-** @argrule * table [AjPTable] Hash table
-** @argrule Fetchmod ulongkey [const ajulong*] Key
-**
-** @valrule Fetchmod [ajulong*] Value
-**
-** @fcategory modify
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableulongFetchmod *************************************************
-**
-** Returns the value associated with key in table, or null if table
-** does not hold key.
-**
-** @param [u] table [AjPTable] table to search
-** @param [r] ulongkey   [const ajulong*] key to find.
-** @return [ajulong*]  value associated with key
-** @error NULL if key not found in table.
-** @@
-******************************************************************************/
-
-ajulong* ajTableulongFetchmod(AjPTable table, const ajulong *ulongkey)
-{
-    ajint i;
-    struct binding *p;
-
-    if(!table)
-	return NULL;
-
-    if (!ulongkey)
-	return NULL;
-
-    i = (*table->hash)(ulongkey, table->size);
-
-    for(p = table->buckets[i]; p; p = p->link)
-	if((*table->cmp)(ulongkey, p->key) == 0)
-	    break;
-
-    return p ? (ajulong*) (&p->value) : NULL;
-}
-
-
-
-
-/* @section Comparison functions **********************************************
-**
-** @fdata [AjPTable]
-**
-** Comparison functions for table keys
-**
-** @nam3rule Cmp Comparison
-** @nam3rule Hash Hashing keys
-**
-** @argrule Cmp x [const void*] First key
-** @argrule Cmp y [const void*] Second key
-** @argrule Hash key [const void*] Key
-** @argrule Hash hashsize [ajuint] Hash table size
-** @suffix Case Case insensitive keys
-**
-** @valrule Cmp [ajint] Comparison result 0 for a match, -1 or +1 for a mismatch
-** @valrule Hash [ajuint] hash value
-**
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-
-/* @func ajTableulongCmp ******************************************************
-**
-** Comparison function for a table with an unsigned long integer key
-**
-** @param [r] x [const void*] Standard argument. Item value.
-** @param [r] y [const void*] Standard argument. Comparison item value.
-** @return [ajint] Comparison result. Zero if equal, non-zero if different.
-** @@
-******************************************************************************/
-
-ajint ajTableulongCmp(const void* x, const void* y)
-{
-    const ajulong ix = *(const ajulong*)x;
-    const ajulong iy = *(const ajulong*)y;
-
-    if(ix == iy)
-        return 0;
-
-    return 1;
-}
-
-
-
-
-/* @func ajTableulongHash *****************************************************
-**
-** Hash function for a table with an unsigned long integer key
-**
-** @param [r] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value in range 0 to hashsize-1
-** @@
-******************************************************************************/
-
-ajuint ajTableulongHash(const void* key, ajuint hashsize)
-{
-    const ajulong *ia;
-    ajuint hash;
-
-    if(!key)
-        return 0;
-
-    if(!hashsize)
-        return 0;
-
-    ia = (const ajulong *) key;
-
-    hash = (*ia >> 2) % hashsize;
-
-    return hash;
-}
-
-
-
-
-/* @funcstatic tableDelStr ****************************************************
-**
-** Delete a string object value
-**
-** @param [d] Pdata [void**] Object to be deleted
-** @return [void]
-******************************************************************************/
-
-static void tableDelStr(void** Pdata)
-{
-    AjPStr s;
-
-    if(!Pdata)
-        return;
-    if(!*Pdata)
-        return;
-
-    s = (AjPStr) *Pdata;
-
-    ajStrDel(&s);
-
-    *Pdata = NULL;
-
-    return;
-}
+#endif

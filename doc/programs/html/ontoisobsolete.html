@@ -2,18 +2,18 @@
 
 <HEAD>
   <TITLE>
-  EMBOSS: ontoget
+  EMBOSS: ontoisobsolete
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-ontoget
+ontoisobsolete
 </font></b>
 </td></tr>
 </table>
@@ -36,31 +36,34 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Get ontology term(s)
+Report whether an ontology term id is obsolete
 <H2>
     Description
 </H2>
 
-<p><b>ontoget</b> displays on-screen for a named ontology whether term statement(s) with the supplied IDs are obsolete or not. The information may be written to an output file in various formats.</p>
+<p><b>ontoisobsolete</b> tests and ontology term retrieved by a query and returns "Obsolete" if the term is obsoleted in the ontology.
+
 
 <p>Ontologies from the EMBOSS data directory are used.</p>
 
 <H2>
     Usage
 </H2>
-Here is a sample session with <b>ontoget</b>
+Here is a sample session with <b>ontoisobsolete</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoget edam:0001234 </b>
-Get ontology term(s)
-Obo output file [0001234.obo]: <b></b>
+% <b>ontoisobsolete edam:0195 </b>
+Report whether an ontology term id is obsolete
+Output file [stdout]: <b></b>
+
+Obsolete
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<a href="#input.1">Go to the input files for this example</a><br><p>
 <p>
 <b>Example 2</b>
 <p>
@@ -68,45 +71,41 @@ Obo output file [0001234.obo]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoget edam:0000850 -subclasses </b>
-Get ontology term(s)
-Obo output file [0000850.obo]: <b></b>
+% <b>ontoisobsolete edam:0575 </b>
+Report whether an ontology term id is obsolete
+Output file [stdout]: <b></b>
+
+EDAM_operation:0575 OK
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+<a href="#input.2">Go to the input files for this example</a><br><p>
 
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Get ontology term(s)
-Version: EMBOSS:6.4.0.0
+Report whether an ontology term id is obsolete
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
                                   reference (input query)
-  [-outfile]           outobo     [*.ontoget] Output ontology term file name
+  [-outfile]           outfile    [stdout] Output file name
 
-   Additional (Optional) qualifiers:
-   -subclasses         boolean    [N] Extend the query matches to include all
-                                  terms which are specialisations
-                                  (sub-classes) of the matched terms.
-   -obsolete           boolean    [N] The default behaviour is to not use or
-                                  return obsolete terms. This option if set
-                                  will include all terms.
-
+   Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory
-   -oformat2           string     Ontology term output format
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -151,30 +150,18 @@ Version: EMBOSS:6.4.0.0
 
 <tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>outobo</td>
-<td>Output ontology term file name</td>
-<td>OBO ontology term(s)</td>
-<td><i>&lt;*&gt;</i>.ontoget</td>
+<td>outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr bgcolor="#FFFFCC">
-<td>-subclasses</td>
-<td>boolean</td>
-<td>Extend the query matches to include all terms which are specialisations (sub-classes) of the matched terms.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-obsolete</td>
-<td>boolean</td>
-<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<tr>
+<td colspan=5>(none)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -190,7 +177,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+<td align="left" colspan=5>"-oboterms" associated obo qualifiers
 </td>
 </tr>
 
@@ -203,6 +190,22 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_oboterms</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_oboterms</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -idbname1<br>-idbname_oboterms</td>
 <td>string</td>
 <td>User-provided database name</td>
@@ -211,7 +214,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -219,14 +222,6 @@ Version: EMBOSS:6.4.0.0
 <td> -odirectory2<br>-odirectory_outfile</td>
 <td>string</td>
 <td>Output directory</td>
-<td>Any string</td>
-<td>&nbsp;</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -oformat2<br>-oformat_outfile</td>
-<td>string</td>
-<td>Ontology term output format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
 </tr>
@@ -341,34 +336,37 @@ Version: EMBOSS:6.4.0.0
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: edam:0001234</h3>
+<p><h3>Database entry: edam:0195</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0001234
-name: Sequence set (nucleic acid)
-namespace: data
-def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+id: EDAM_topic:0195
+name: Virtual PCR
+namespace: topic
+def: Topic concerning simulated polymerase chain reaction (PCR).
+subset: topics
+synonym: "PCR" EXACT [http://edamontology.org]
+synonym: "Polymerase chain reaction" EXACT [http://edamontology.org]
+is_obsolete: true ! {since=beta13}
+consider: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
 </td></tr></table><p>
 
 <a name="input.2"></a>
 <h3>Input files for usage example 2</h3>
-<p><h3>Database entry: edam:0000850</h3>
+<p><h3>Database entry: edam:0575</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000850
-name: Sequence set
-namespace: data
-def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
-subset: data
-is_a: EDAM:0002955 ! Sequence report
+id: EDAM_operation:0575
+name: Restriction map rendering
+namespace: operation
+def: Visualise restriction maps in DNA sequences.
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
+relationship: has_output EDAM_data:1289 ! Restriction map
 
 </pre>
 </td></tr></table><p>
@@ -380,136 +378,6 @@ is_a: EDAM:0002955 ! Sequence report
 <p>A single line per term is is given, including the term id, namespace and name, and whether it is obsolete or not.</p>
 
 <p>
-
-<a name="output.1"></a>
-<h3>Output files for usage example </h3>
-<p><h3>File: 0001234.obo</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-[Term]
-id: EDAM:0001234
-name: Sequence set (nucleic acid)
-namespace: data
-def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
-
-</pre>
-</td></tr></table><p>
-
-<a name="output.2"></a>
-<h3>Output files for usage example 2</h3>
-<p><h3>File: 0000850.obo</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-[Term]
-id: EDAM:0000850
-name: Sequence set
-namespace: data
-def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
-subset: data
-is_a: EDAM:0002955 ! Sequence report
-
-[Term]
-id: EDAM:0001234
-name: Sequence set (nucleic acid)
-namespace: data
-def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
-
-[Term]
-id: EDAM:0001240
-name: PCR primers
-namespace: data
-def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set.
-subset: data
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-
-[Term]
-id: EDAM:0001246
-name: Sequence cluster (nucleic acid)
-namespace: data
-def: A cluster of nucleotide sequences.
-comment: The sequences are typically related, for example a family of sequences.
-subset: data
-synonym: "Nucleotide sequence cluster" EXACT []
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-is_a: EDAM:0001235 ! Sequence cluster
-
-[Term]
-id: EDAM:0002198
-name: Gene cluster
-namespace: data
-def: A cluster of similar genes.
-subset: data
-is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
-
-[Term]
-id: EDAM:0002874
-name: Sequence set (polymorphic)
-namespace: data
-def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-
-[Term]
-id: EDAM:0001245
-name: Sequence cluster (protein)
-namespace: data
-def: A cluster of protein sequences.
-comment: The sequences are typically related, for example a family of sequences.
-subset: data
-synonym: "Protein sequence cluster" EXACT []
-is_a: EDAM:0001233 ! Sequence set (protein)
-is_a: EDAM:0001235 ! Sequence cluster
-
-[Term]
-id: EDAM:0001238
-name: Proteolytic digest
-namespace: data
-def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses.
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001262
-name: Peptide molecular weight hits
-namespace: data
-def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001235
-name: Sequence cluster
-namespace: data
-def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
-comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-relationship: in_topic EDAM:0000164 ! Sequence clustering
-relationship: in_topic EDAM:0000724 ! Protein families
-
-[Term]
-id: EDAM:0002245
-name: Sequence set (bootstrapped)
-namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedure.
-comment: Bootstrapping is often performed in phylogenetic analysis.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-
-</pre>
-</td></tr></table><p>
 
 <H2>
     Data files
@@ -602,6 +470,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="ontoget.html">ontoget</a></td>
+<td>Get ontology term(s)</td>
+</tr>
+
+<tr>
 <td><a href="ontogetcommon.html">ontogetcommon</a></td>
 <td>Get common ancestor for terms</td>
 </tr>
@@ -632,11 +505,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
-<td>Report whether an ontology term id is obsolete</td>
-</tr>
-
-<tr>
 <td><a href="ontotext.html">ontotext</a></td>
 <td>Get ontology term(s) original full text</td>
 </tr>
@@ -656,15 +524,6 @@ Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;embos
 
 
 
-<p>
-
-This application was modified by 
-Jon Ison
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

@@ -31,6 +31,7 @@ Basename for index files: emrod
 Resource name: emblresource
     simple : >ID
      idacc : >ID ACC or >ID (ACC)
+      idsv : >ID SV or >ID (SV)
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
       dbid : >db ID
@@ -52,7 +53,7 @@ General log output file [outfile.dbxfasta]:
 Command line arguments
 
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -62,9 +63,10 @@ Version: EMBOSS:6.4.0.0
                                   characters, matching regular expression
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [idacc] ID line format (Values: simple
-                                  (>ID); idacc (>ID ACC or >ID (ACC)); gcgid
-                                  (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
-                                  ID); ncbi (| formats))
+                                  (>ID); idacc (>ID ACC or >ID (ACC)); idsv
+                                  (>ID SV or >ID (SV)); gcgid (>db:ID);
+                                  gcgidacc (>db:ID ACC); dbid (>db ID); ncbi
+                                  (| formats))
    -directory          directory  [.] Database directory
    -filenames          string     [*.fasta] Wildcard database filename (Any
                                   string)
@@ -80,6 +82,8 @@ Version: EMBOSS:6.4.0.0
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -statistics         boolean    [N] Report I/O statistics for each input
+                                  file
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -133,8 +137,11 @@ Output file format
   File: outfile.dbxfasta
 
 Processing directory: /homes/user/test/data/
-Processing file: emrod entries: 6 (6) time: 0.0s (0.0s)
+Processing file: emrod
+entries: 6 (6) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 15 OK. Maximum ID length was 6 for 'L48662'.
+Field acc acclen 15 OK. Maximum acc term length was 6 for 'L48662'.
 
   File: emrod.ent
 
@@ -146,35 +153,43 @@ emrod
 
   File: emrod.pxac
 
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     6
-Fullcount 6
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        6
+Fullcount    6
+Kwlimit      15
+Reffiles     0
 
   File: emrod.pxid
 
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     6
-Fullcount 6
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        169
+Secpagesize  512
+Seccachesize 2000
+Count        6
+Fullcount    6
+Kwlimit      15
+Reffiles     0
 
   File: emrod.xac
 

@@ -7,11 +7,11 @@ Search for programs with 'codon' in their operation:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wossoperation codon </b>
-Finds programs by EDAM operation
+Find programs by EDAM operation
 
 SEARCH FOR OPERATION 'CODON'
 cai     Calculate codon adaptation index
-chips   Calculates Nc codon usage statistic
+chips   Calculate Nc codon usage statistic
 codcmp  Codon usage table comparison
 codcopy Copy and reformat a codon usage table
 cusp    Create a codon usage table from nucleotide sequence(s)

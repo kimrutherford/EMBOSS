@@ -41,7 +41,7 @@ Molecular weights output file [outfile.mwcontam]:
 Command line arguments
 
 Find weights common to multiple molecular weights files
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-files]             filelist   Molecular weights file list
@@ -182,10 +182,10 @@ See also
    freak            Generate residue/base frequency table or plot
    mwfilter         Filter noisy data from molecular weights file
    oddcomp          Identify proteins with specified sequence word composition
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

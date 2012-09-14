@@ -1,5 +1,5 @@
 Get data resource entries
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-resources]         resource   Data resource filename and optional format,
@@ -12,6 +12,8 @@ Version: EMBOSS:6.4.0.0
 
    "-resources" associated qualifiers
    -iformat1           string     Input resource format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers

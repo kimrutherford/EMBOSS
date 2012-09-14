@@ -1,37 +1,83 @@
-/******************************************************************************
-** @source AJAX utility functions
+/* @source ajutil *************************************************************
+**
+**AJAX utility functions
 **
 ** @author Copyright (C) 1998 Ian Longden
 ** @author Copyright (C) 1998 Peter Rice
-** @version 1.0
+** @version $Revision: 1.66 $
+** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajutil.h"
+
+/* include anything with an Exit function */
+
+#include "ajindex.h"
+#include "ajsql.h"
+#include "ajmatrices.h"
+#include "ajtree.h"
+#include "ajdmx.h"
+#include "ajdomain.h"
+#include "ajquery.h"
+#include "ajtext.h"
+#include "ajfeat.h"
+#include "ajseq.h"
+#include "ajobo.h"
+#include "ajassem.h"
+#include "ajrefseq.h"
+#include "ajtax.h"
+#include "ajurl.h"
+#include "ajvar.h"
+#include "ajresource.h"
+#include "ajphylo.h"
+#include "ajnexus.h"
+#include "ajalign.h"
+#include "ajreport.h"
+#include "ajnam.h"
+#include "ajsys.h"
+#include "ajcall.h"
+#include "ajbase.h"
+#include "ajcod.h"
+#include "ajtranslate.h"
+#include "ajdan.h"
+#include "ajtime.h"
+#include "ajreg.h"
+#include "ajarr.h"
+#include "ajfiledata.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajtable.h"
+#include "ajstr.h"
+#include "ajmem.h"
+
 #include <stdarg.h>
 #ifdef WIN32
 #include "win32.h"
 #include <winsock2.h>
 #include <lmcons.h> /* for UNLEN */
-#else
+#else /* !WIN32 */
 #include <pwd.h>
 #include <unistd.h>
-#endif
+#endif /* WIN32 */
 
 
 
@@ -90,13 +136,15 @@ static unsigned char utilBase64Decode(char c);
 ** No cleanup or reporting routines are called. Simply crashes.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 __noreturn void ajExit(void)
 {
     ajReset();
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
 
@@ -115,6 +163,8 @@ __noreturn void ajExit(void)
 ** No cleanup or reporting routines are called. Simply crashes.
 **
 ** @return [void]
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -133,6 +183,8 @@ __noreturn void  ajExitAbort(void)
 ** No cleanup or reporting routines are called. Simply crashes.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -177,6 +229,8 @@ __noreturn void  ajExitBad(void)
 ** Intended to be called at the end of processing by exit functions.
 **
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -184,7 +238,7 @@ void ajReset(void)
 {
 #ifdef WIN32
     WSACleanup();
-#endif
+#endif /* WIN32 */
     ajDebug("\nFinal Summary\n=============\n\n");
     ajBtreeExit();
     ajSqlExit();
@@ -195,16 +249,17 @@ void ajReset(void)
     ajDomainExit();
     ajQueryExit();
     ajTextExit();
- /*    ajResourceExit(); */
     ajFeatExit();
     ajSeqExit();
     ajOboExit();
     ajAssemExit();
+    ajRefseqExit();
     ajTaxExit();
     ajUrlExit();
     ajVarExit();
     ajResourceExit();
     ajPhyloExit();
+    ajNexusExit();
     ajAlignExit();
     ajReportExit();
     ajNamExit();
@@ -288,6 +343,8 @@ void ajReset(void)
 ** @param [u] ival [ajint*] Integer in wrong byte order.
 **                        Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -321,20 +378,6 @@ void ajByteRevInt(ajint* ival)
 
 
 
-/* @obsolete ajUtilRevInt
-** @rename ajByteRevInt
-*/
-
-__deprecated void ajUtilRevInt(ajint* ival)
-{
-    ajByteRevInt(ival);
-
-    return;
-}
-
-
-
-
 /* @func ajByteRevLen2 ********************************************************
 **
 ** Reverses the byte order in a 2 byte integer.
@@ -345,6 +388,8 @@ __deprecated void ajUtilRevInt(ajint* ival)
 ** @param [u] sval [ajshort*] Short integer in wrong byte order.
 **                          Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -378,20 +423,6 @@ void ajByteRevLen2(ajshort* sval)
 
 
 
-/* @obsolete ajUtilRev2
-** @rename ajByteRev2
-*/
-
-__deprecated void ajUtilRev2(ajshort* sval)
-{
-    ajByteRevLen2(sval);
-
-    return;
-}
-
-
-
-
 /* @func ajByteRevLen2u *******************************************************
 **
 ** Reverses the byte order in a 2 byte integer.
@@ -402,6 +433,8 @@ __deprecated void ajUtilRev2(ajshort* sval)
 ** @param [u] sval [ajushort*] Short integer in wrong byte order.
 **                          Returned in correct order.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -445,6 +478,8 @@ void ajByteRevLen2u(ajushort* sval)
 ** @param [u] ival [ajint*] Integer in wrong byte order.
 **                        Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -478,20 +513,6 @@ void ajByteRevLen4(ajint* ival)
 
 
 
-/* @obsolete ajUtilRev4
-** @rename ajByteRevLen4
-*/
-
-__deprecated void ajUtilRev4(ajint* ival)
-{
-    ajByteRevLen4(ival);
-
-    return;
-}
-
-
-
-
 /* @func ajByteRevLen4u *******************************************************
 **
 ** Reverses the byte order in a 4 byte integer.
@@ -502,6 +523,8 @@ __deprecated void ajUtilRev4(ajint* ival)
 ** @param [u] ival [ajuint*] Integer in wrong byte order.
 **                        Returned in correct order.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -545,6 +568,8 @@ void ajByteRevLen4u(ajuint* ival)
 ** @param [u] lval [ajlong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -578,18 +603,6 @@ void ajByteRevLen8(ajlong* lval)
 
 
 
-/* @obsolete ajUtilRev8
-** @rename ajByteRevLen8
-*/
-
-__deprecated void ajUtilRev8(ajlong* lval)
-{
-    ajByteRevLen8(lval);
-}
-
-
-
-
 /* @func ajByteRevLen8u *******************************************************
 **
 ** Reverses the byte order in an 8 byte long.
@@ -600,6 +613,8 @@ __deprecated void ajUtilRev8(ajlong* lval)
 ** @param [u] lval [ajulong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -640,6 +655,8 @@ void ajByteRevLen8u(ajulong* lval)
 ** @param [u] lval [ajlong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -673,20 +690,6 @@ void ajByteRevLong(ajlong* lval)
 
 
 
-/* @obsolete ajUtilRevLong
-** @rename ajByteRevLong
-*/
-
-__deprecated void ajUtilRevLong(ajlong* lval)
-{
-    ajByteRevLong(lval);
-
-    return;
-}
-
-
-
-
 /* @func ajByteRevShort *******************************************************
 **
 ** Reverses the byte order in a short integer.
@@ -694,6 +697,8 @@ __deprecated void ajUtilRevLong(ajlong* lval)
 ** @param [u] sval [ajshort*] Short integer in wrong byte order.
 **                          Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -727,18 +732,6 @@ void ajByteRevShort(ajshort* sval)
 
 
 
-/* @obsolete ajUtilRevShort
-** @rename ajByteRevShort
-*/
-
-__deprecated void ajUtilRevShort(ajshort* sval)
-{
-    ajByteRevShort(sval);
-}
-
-
-
-
 /* @func ajByteRevUint ********************************************************
 **
 ** Reverses the byte order in an unsigned integer.
@@ -746,6 +739,8 @@ __deprecated void ajUtilRevShort(ajshort* sval)
 ** @param [u] ival [ajuint*] Unsigned integer in wrong byte order.
 **                        Returned in correct order.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -779,18 +774,6 @@ void ajByteRevUint(ajuint* ival)
 
 
 
-/* @obsolete ajUtilRevUint
-** @rename ajByteRevUint
-*/
-
-__deprecated void ajUtilRevUint(ajuint* ival)
-{
-    ajByteRevUint(ival);
-}
-
-
-
-
 /* @func ajByteRevUlong *******************************************************
 **
 ** Reverses the byte order in an unsigned long.
@@ -798,6 +781,8 @@ __deprecated void ajUtilRevUint(ajuint* ival)
 ** @param [u] lval [ajulong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -888,6 +873,8 @@ void ajByteRevUlong(ajulong* lval)
 ** @param [w] Pdest [AjPStr*] Decoded string
 ** @param [r] src [const char*] source base64 string
 ** @return [size_t] Length of decoded string (zero if decode error)
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -973,6 +960,8 @@ size_t ajUtilBase64DecodeC(AjPStr *Pdest, const char *src)
 ** @param [r] size [size_t] Size of data to encode
 ** @param [r] src [const unsigned char *] source data
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1041,6 +1030,8 @@ AjBool ajUtilBase64EncodeC(AjPStr *Pdest, size_t size, const unsigned char *src)
 **
 ** @param [r] c [char] Character
 ** @return [AjBool] True if valid base64 character
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1052,7 +1043,7 @@ static AjBool utilIsBase64(char c)
        (c == '/')             || (c == '='))
         return ajTrue;
   
-    return ajFalse;;
+    return ajFalse;
 }
 
 
@@ -1064,6 +1055,8 @@ static AjBool utilIsBase64(char c)
 **
 ** @param [r] u [unsigned char] Character
 ** @return [char] Encoded character
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1094,6 +1087,8 @@ static char utilBase64Encode(unsigned char u)
 **
 ** @param [r] c [char] Character
 ** @return [unsigned char] Decoded character
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1127,6 +1122,8 @@ static unsigned char utilBase64Decode(char c)
 ** "break ajUtilCatch" in gdb to get a traceback.
 **
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -1147,6 +1144,8 @@ void ajUtilCatch(void)
 ** Tests whether the host system uses big endian byte order.
 **
 ** @return [AjBool] ajTrue if host is big endian.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1176,23 +1175,14 @@ AjBool ajUtilGetBigendian(void)
 
 
 
-/* @obsolete ajUtilBigendian
-** @rename ajUtilGetBigendian
-*/
-__deprecated AjBool ajUtilBigendian(void)
-{
-    return ajUtilGetBigendian();
-}
-
-
-
-
 /* @func ajUtilGetUid *********************************************************
 **
 ** Returns the user's userid
 **
 ** @param [w] Puid [AjPStr*] String to return result
 ** @return [AjBool] ajTrue on success
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1229,7 +1219,7 @@ AjBool ajUtilGetUid(AjPStr* Puid)
 
     return ajTrue;
 
-#else	/* WIN32 */
+#else /* WIN32 */
     char nameBuf[UNLEN+1];
     DWORD nameLen = UNLEN+1;
 
@@ -1246,19 +1236,7 @@ AjBool ajUtilGetUid(AjPStr* Puid)
     ajStrAssignC(Puid, "");
 
     return ajFalse;
-#endif
-}
-
-
-
-
-/* @obsolete ajUtilUid
-** @rename ajUtilGetUid
-*/
-
-__deprecated AjBool ajUtilUid(AjPStr* dest)
-{
-    return ajUtilGetUid(dest);
+#endif /* !WIN32 */
 }
 
 
@@ -1269,6 +1247,8 @@ __deprecated AjBool ajUtilUid(AjPStr* dest)
 ** If a log file is in use, writes run details to end of file.
 **
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1316,20 +1296,6 @@ void ajUtilLoginfo(void)
 
 
 
-/* @obsolete ajLogInfo
-** @rename ajUtilLoginfo
-*/
-
-__deprecated void ajLogInfo(void)
-{
-    ajUtilLoginfo();
-
-    return;
-}
-
-
-
-
 /* @section provenance ********************************************************
 **
 ** Functions providing information about the run-time environment
@@ -1356,22 +1322,13 @@ __deprecated void ajLogInfo(void)
 **
 ** @return [const AjPStr] Commandline with newlines between qualifiers
 ** and parameters
+**
+** @release 6.2.0
 ******************************************************************************/
 
 const AjPStr ajUtilGetCmdline (void)
 {
     return acdArgSave;
-}
-
-
-
-
-/* @obsolete ajAcdGetCmdline
-** @rename ajUtilGetCmdline
-*/
-__deprecated const AjPStr ajAcdGetCmdline (void)
-{
-    return ajUtilGetCmdline();
 }
 
 
@@ -1383,11 +1340,179 @@ __deprecated const AjPStr ajAcdGetCmdline (void)
 **
 ** @return [const AjPStr] Commandline with newlines between qualifiers
 ** and parameters
+**
+** @release 6.2.0
 ******************************************************************************/
 
 const AjPStr ajUtilGetInputs (void)
 {
     return acdInputSave;
+}
+
+
+
+
+/* @func ajUtilGetProgram *****************************************************
+**
+** Returns the application (program) name from the ACD definition.
+**
+** @return [const AjPStr] Program name
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+const AjPStr ajUtilGetProgram(void)
+{
+    return acdProgram;
+}
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajUtilRevInt
+** @rename ajByteRevInt
+*/
+
+__deprecated void ajUtilRevInt(ajint* ival)
+{
+    ajByteRevInt(ival);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajUtilRev2
+** @rename ajByteRev2
+*/
+
+__deprecated void ajUtilRev2(ajshort* sval)
+{
+    ajByteRevLen2(sval);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajUtilRev4
+** @rename ajByteRevLen4
+*/
+
+__deprecated void ajUtilRev4(ajint* ival)
+{
+    ajByteRevLen4(ival);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajUtilRev8
+** @rename ajByteRevLen8
+*/
+
+__deprecated void ajUtilRev8(ajlong* lval)
+{
+    ajByteRevLen8(lval);
+}
+
+
+
+
+/* @obsolete ajUtilRevLong
+** @rename ajByteRevLong
+*/
+
+__deprecated void ajUtilRevLong(ajlong* lval)
+{
+    ajByteRevLong(lval);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajUtilRevShort
+** @rename ajByteRevShort
+*/
+
+__deprecated void ajUtilRevShort(ajshort* sval)
+{
+    ajByteRevShort(sval);
+}
+
+
+
+
+/* @obsolete ajUtilRevUint
+** @rename ajByteRevUint
+*/
+
+__deprecated void ajUtilRevUint(ajuint* ival)
+{
+    ajByteRevUint(ival);
+}
+
+
+
+
+/* @obsolete ajUtilBigendian
+** @rename ajUtilGetBigendian
+*/
+__deprecated AjBool ajUtilBigendian(void)
+{
+    return ajUtilGetBigendian();
+}
+
+
+
+
+/* @obsolete ajUtilUid
+** @rename ajUtilGetUid
+*/
+
+__deprecated AjBool ajUtilUid(AjPStr* dest)
+{
+    return ajUtilGetUid(dest);
+}
+
+
+
+
+/* @obsolete ajLogInfo
+** @rename ajUtilLoginfo
+*/
+
+__deprecated void ajLogInfo(void)
+{
+    ajUtilLoginfo();
+
+    return;
+}
+
+
+
+
+/* @obsolete ajAcdGetCmdline
+** @rename ajUtilGetCmdline
+*/
+__deprecated const AjPStr ajAcdGetCmdline (void)
+{
+    return ajUtilGetCmdline();
 }
 
 
@@ -1418,22 +1543,6 @@ __deprecated void  ajAcdProgramS(AjPStr* pgm)
 
 
 
-/* @func ajUtilGetProgram *****************************************************
-**
-** Returns the application (program) name from the ACD definition.
-**
-** @return [const AjPStr] Program name
-** @@
-******************************************************************************/
-
-const AjPStr ajUtilGetProgram(void)
-{
-    return acdProgram;
-}
-
-
-
-
 /* @obsolete ajAcdGetProgram
 ** @rename ajUtilGetProgram
 */
@@ -1454,6 +1563,4 @@ __deprecated const char*  ajAcdProgram(void)
     return ajStrGetPtr(acdProgram);
 }
 
-
-
-
+#endif /* AJ_COMPILE_DEPRECATED */

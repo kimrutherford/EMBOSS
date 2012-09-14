@@ -13,7 +13,7 @@ XX
 OS   Mus musculus (house mouse)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
-OC   Muridae; Murinae; Mus.
+OC   Muridae; Murinae; Mus; Mus.
 XX
 RN   [1]
 RP   1-366
@@ -69,13 +69,13 @@ RX   PUBMED; 8662634.
 RA   Huber A., Sander P.H., Paulsen R.;
 RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
 RT   required for recovery of visual excitation";
-RL   J. Biol. Chem. 271(20):11710-11717(1996).
+RL   J Biol Chem 271(20):11710-11717(1996).
 XX
 RN   [2]
 RP   1-1493
 RA   Huber A.;
 RT   ;
-RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (20-DEC-1994) to the INSDC.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
@@ -172,7 +172,7 @@ RN   [2]
 RP   1-1218
 RA   Abramovitz M., Boie Y.;
 RT   ;
-RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (26-AUG-1996) to the INSDC.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
@@ -368,6 +368,9 @@ RT   "Sequence organisation of rat seminal vesicle F gene: location of
 RT   transcriptional start point and sequence comparison with six other
 RT   androgen-regulated genes";
 RL   Nucleic Acids Res. 13(3):659-672(1985).
+XX
+DR   Ensembl-Gn; ENSRNOG00000013834; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000018537; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH

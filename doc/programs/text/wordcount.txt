@@ -37,7 +37,7 @@ Output file [u68037.wordcount]:
 Command line arguments
 
 Count and extract unique words in molecular sequence(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -62,7 +62,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -144,7 +147,7 @@ RN   [2]
 RP   1-1218
 RA   Abramovitz M., Boie Y.;
 RT   ;
-RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (26-AUG-1996) to the INSDC.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
@@ -323,18 +326,18 @@ See also
    btwisted         Calculate the twisting in a B-DNA sequence
    chaos            Draw a chaos game representation plot for a nucleotide sequence
    compseq          Calculate the composition of unique words in sequences
-   dan              Calculates nucleic acid melting temperature
+   dan              Calculate nucleic acid melting temperature
    density          Draw a nucleic acid density plot
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
-   isochore         Plots isochores in DNA sequences
+   isochore         Plot isochores in DNA sequences
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
    oddcomp          Identify proteins with specified sequence word composition
-   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+   pepdigest        Report on protein proteolytic enzyme or reagent cleavage
                     sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
 
 Author(s)
 

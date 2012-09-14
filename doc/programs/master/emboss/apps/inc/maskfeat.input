@@ -27,7 +27,7 @@ RN   [1]
 RP   1-2582
 RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
-RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (08-JAN-1997) to the INSDC.
 RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
 RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
@@ -39,6 +39,11 @@ RT   "Structures and chromosomal localizations of the
 RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
 RT   PIGCP1";
 RL   Genomics 44(3):347-349(1997).
+XX
+DR   Ensembl-Gn; ENSG00000135845; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000258324; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000344529; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000367728; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -52,11 +57,6 @@ FT   exon            808..2266
 FT   CDS             1101..1994
 FT                   /codon_start=1
 FT                   /transl_table=1
-FT                   /gene="PIGC"
-FT                   /standard_name="glycosylphosphatidylinositol-synthesis
-FT                   gene"
-FT                   /db_xref="GDB:6045444"
-FT                   /db_xref="GOA:Q92535"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

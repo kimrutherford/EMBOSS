@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Draws linear maps of DNA constructs
+   Draw linear maps of DNA constructs
 
 Description
 
@@ -29,7 +29,7 @@ Usage
 
 
 % lindna -graph cps
-Draws linear maps of DNA constructs
+Draw linear maps of DNA constructs
 Commands to the lindna drawing program file [inputfile]: data.linp
 Draw a ruler [Y]:
       Open : Open blocks
@@ -45,8 +45,8 @@ Created lindna.ps
 
 Command line arguments
 
-Draws linear maps of DNA constructs
-Version: EMBOSS:6.4.0.0
+Draw linear maps of DNA constructs
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the lindna drawing
@@ -288,7 +288,7 @@ See also
 
                    Program name                            Description
                    abiview      Display the trace in an ABI sequencer file
-                   cirdna       Draws circular maps of DNA constructs
+                   cirdna       Draw circular map of DNA constructs
                    iep          Calculate the isoelectric point of proteins
                    pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
@@ -298,7 +298,7 @@ See also
                    prettyseq    Write a nucleotide sequence and its translation to file
                    remap        Display restriction enzyme binding sites in a nucleotide sequence
                    showfeat     Display features of a sequence in pretty format
-                   showpep      Displays protein sequences with features in pretty format
+                   showpep      Display protein sequences with features in pretty format
                    sixpack      Display a DNA sequence with 6-frame translation and ORFs
 
 Author(s)

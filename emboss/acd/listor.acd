@@ -2,8 +2,8 @@ application: listor [
   documentation: "Write a list file of the logical OR of two
                   sets of sequences"
   groups: "Edit"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0002120 operation Listfile processing"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:2120 Listfile processing"
 ]
 
 section: input [
@@ -15,14 +15,14 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqset: secondsequences [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -53,7 +53,7 @@ section: additional [
            not in both \
            NOT - gives those which occur in the first set except for those
            that also occur in the second"
-    relations: "EDAM:0002133 identifier Logical operator"
+    relations: "EDAM_identifier:2133 Logical operator"
   ]
 
 endsection: additional
@@ -70,7 +70,7 @@ section: output [
     help: "The list of sequence names will be written to this list
            file"
     information: "List of USAs output file"
-    relations: "EDAM:0001111 data EMBOSS listfile"
+    relations: "EDAM_data:1111 EMBOSS listfile"
   ]
 
 endsection: output

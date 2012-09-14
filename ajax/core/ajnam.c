@@ -1,43 +1,65 @@
-/******************************************************************************
-** @source AJAX nam functions
+/* @source ajnam **************************************************************
+**
+** AJAX nam functions
+**
 ** Creates a hash table of initial values and allow access to this
 ** via the routines ajNamDatabase and ajNamGetValueS.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version 1.0
+** @version $Revision: 1.184 $
+** @modified 2000-2011 Peter Rice
+** @modified $Date: 2012/07/15 18:36:14 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
-** This library is distributedajnam.h
- in the hope that it will be useful,
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajnam.h"
+#include "ajsys.h"
+#include "ajfileio.h"
+#include "ajquery.h"
+#include "ajreg.h"
+#include "ajtagval.h"
+#include "ajassemread.h"
+#include "ajfeatread.h"
+#include "ajoboread.h"
+#include "ajrefseqread.h"
+#include "ajresourceread.h"
+#include "ajseqread.h"
+#include "ajtaxread.h"
+#include "ajtextread.h"
+#include "ajurlread.h"
+#include "ajvarread.h"
 
 #ifndef WIN32
 #include <dirent.h>
 #include <unistd.h>
-#else
+#else /* !WIN32 */
 #include "win32.h"
 #include <winsock2.h>
 #include <stdlib.h>
-#endif
+#endif /* WIN32 */
 
-#ifdef AJ_MEMPROBE
+#ifdef HAVE_MCHECK
 #include <mcheck.h>
-#endif
+#endif /* ! HAVE_MCHECK */
+
 
 enum NamEType
 {
@@ -256,167 +278,290 @@ typedef struct NamSType
 
 NamOAttr namSvrAttrs[] =
 {
-    {"method", ATTR_STR, "", "access method (required, at some level)"},
-    {"type", ATTR_STR, "", "database type(s) 'Nucleotide', 'Protein', etc (required)"},
-    {"cachedirectory", ATTR_STR, "", "cache directory name"},
+    {"method", ATTR_STR, "",
+     "access method (required, at some level)"},
+    {"type", ATTR_STR, "",
+     "database type(s) 'Nucleotide', 'Protein', etc (required)"},
+    {"cachedirectory", ATTR_STR, "",
+     "cache directory name"},
     {"cachefile", ATTR_STR, "", "cache file name"},
 
-    {"accession", ATTR_STR, "", "secondary identifier field"},
-    {"app", ATTR_STR, "", "external application commandline (APP, EXTERNAL)"},
-    {"appall", ATTR_STR, "", "external commandline for 'methodall' (APP, EXTERNAL)"},
-    {"appentry", ATTR_STR, "", "external commandline for 'methodentry' (APP, EXTERNAL)"},
-    {"appquery", ATTR_STR, "", "external commandline for 'methodquery' (APP, EXTERNAL)"},
+    {"accession", ATTR_STR, "",
+     "secondary identifier field"},
+    {"app", ATTR_STR, "",
+     "external application commandline (APP, EXTERNAL)"},
+    {"appall", ATTR_STR, "",
+     "external commandline for 'methodall' (APP, EXTERNAL)"},
+    {"appentry", ATTR_STR, "",
+     "external commandline for 'methodentry' (APP, EXTERNAL)"},
+    {"appquery", ATTR_STR, "",
+     "external commandline for 'methodquery' (APP, EXTERNAL)"},
 
-    {"caseidmatch", ATTR_BOOL, "N", "match exact case of entry identifier"},
-    {"comment", ATTR_STR, "", "text comment for the server definition"},
-    {"directory", ATTR_STR, "", "data directory"},
-/*    {"exclude", ATTR_STR, "", "wildcard filenames to exclude from 'filename'"},*/
-    {"field", ATTR_LIST, "", "database query field, with altnames and description"},
-    {"filters", ATTR_STR, "", "database query filters to apply to all retrievals"},
-/*    {"filename", "", "(wildcard) database filename"},*/
+    {"caseidmatch", ATTR_BOOL, "N",
+     "match exact case of entry identifier"},
+    {"comment", ATTR_STR, "",
+     "text comment for the server definition"},
+    {"directory", ATTR_STR, "",
+     "data directory"},
+/*    {"exclude", ATTR_STR, "",
+      "wildcard filenames to exclude from 'filename'"},*/
+    {"field", ATTR_LIST, "",
+     "database query field, with altnames and description"},
+    {"filters", ATTR_STR, "",
+     "database query filters to apply to all retrievals"},
+/*    {"filename", "",
+      "(wildcard) database filename"},*/
 
-    {"format", ATTR_STR, "", "database entry format(s)"},
-    {"formatall", ATTR_STR, "", "database entry format(s) for 'methodall' access"},
-    {"formatentry", ATTR_STR, "", "database entry format(s) for 'methodentry' access"},
-    {"formatquery", ATTR_STR, "", "database query format(s) for 'methodquery' access"},
+    {"format", ATTR_STR, "",
+     "database entry format(s)"},
+    {"formatall", ATTR_STR, "",
+     "database entry format(s) for 'methodall' access"},
+    {"formatentry", ATTR_STR, "",
+     "database entry format(s) for 'methodentry' access"},
+    {"formatquery", ATTR_STR, "",
+     "database query format(s) for 'methodquery' access"},
 
-    {"hasaccession", ATTR_BOOL, "Y", "database has an acc field as an alternate id"},
-    {"httpversion", ATTR_STR, "", "HTTP version for GET requests"},
-    {"identifier", ATTR_STR, "", "standard identifier field"},
-    {"indexdirectory", ATTR_STR, "", "Index directory, defaults to data 'directory'"},
+    {"hasaccession", ATTR_BOOL, "Y",
+     "database has an acc field as an alternate id"},
+    {"httpversion", ATTR_STR, "",
+     "HTTP version for GET requests"},
+    {"identifier", ATTR_STR, "",
+     "standard identifier field"},
+    {"indexdirectory", ATTR_STR, "",
+     "Index directory, defaults to data 'directory'"},
 
-    {"methodall", ATTR_STR, "", "access method for all entries"},
-    {"methodentry", ATTR_STR, "","access method for single entry"},
-    {"methodquery", ATTR_STR, "", "access method for query (several entries)"},
+    {"methodall", ATTR_STR, "",
+     "access method for all entries"},
+    {"methodentry", ATTR_STR, "",
+     "access method for single entry"},
+    {"methodquery", ATTR_STR, "",
+     "access method for query (several entries)"},
 
-    {"proxy", ATTR_STR, "", "http proxy server, or ':' to cancel a global proxy "},
-    {"query", ATTR_STR, "", "database query (SQL, SPARQL, etc.)"},
-/*    {"release", ATTR_STR, "", "release of the database, comment only"},*/
-    {"return", ATTR_STR, "", "names fields to be returned"},
-    {"sequence", ATTR_STR, "", "sequence field to be returned"},
-    {"serverversion", ATTR_STR, "", "Version of database server"},
-    {"url", ATTR_STR, "", "Basic URL for data access"},
-    {"view", ATTR_STR, "", "Access method view"},
+    {"proxy", ATTR_STR, "",
+     "http proxy server, or ':' to cancel a global proxy "},
+    {"query", ATTR_STR, "",
+     "database query (SQL, SPARQL, etc.)"},
+/*    {"release", ATTR_STR, "",
+      "release of the database, comment only"},*/
+    {"return", ATTR_STR, "",
+     "names fields to be returned"},
+    {"sequence", ATTR_STR, "",
+     "sequence field to be returned"},
+    {"serverversion", ATTR_STR, "",
+     "Version of database server"},
+    {"special", ATTR_LIST, "",
+     "name:value attributes for access method"},
+    {"url", ATTR_STR, "",
+     "Basic URL for data access"},
+    {"view", ATTR_STR, "",
+     "Access method view"},
 
-    {"edamdat", ATTR_LIST, "", "EDAM datatype term references"},
-    {"edamfmt", ATTR_LIST, "", "EDAM format term references"},
-    {"edamid", ATTR_LIST, "", "EDAM identifier term references"},
-    {"edamtpc", ATTR_LIST, "", "EDAM topic term references"},
-    {"taxon", ATTR_LIST, "", "taxon id and name"},
+    {"edamdat", ATTR_LIST, "",
+     "EDAM datatype term references"},
+    {"edamfmt", ATTR_LIST, "",
+     "EDAM format term references"},
+    {"edamid", ATTR_LIST, "",
+     "EDAM identifier term references"},
+    {"edamtpc", ATTR_LIST, "",
+     "EDAM topic term references"},
+    {"taxon", ATTR_LIST, "",
+     "taxon id and name"},
 
-    {NULL, ATTR_UNKNOWN, NULL, NULL}
+    {NULL, ATTR_UNKNOWN, NULL,
+     NULL}
 };
 
 NamOAttr namDbAttrs[] =
 {
-    {"format", ATTR_STR, "", "database entry format(s) (required, at some level)"},
-    {"method", ATTR_STR, "", "access method (required, at some level)"},
-    {"type", ATTR_STR, "", "database type(s) 'Nucleotide', 'Protein', etc (required)"},
+    {"format", ATTR_STR, "",
+     "database entry format(s) (required, at some level)"},
+    {"method", ATTR_STR, "",
+     "access method (required, at some level)"},
+    {"type", ATTR_STR, "",
+     "database type(s) 'Nucleotide', 'Protein', etc (required)"},
 
-    {"accession", ATTR_STR, "", "secondary identifier field"},
-    {"app", ATTR_STR, "", "external application commandline (APP, EXTERNAL)"},
-    {"appall", ATTR_STR, "", "external commandline for 'methodall' (APP, EXTERNAL)"},
-    {"appentry", ATTR_STR, "", "external commandline for 'methodentry' (APP, EXTERNAL)"},
-    {"appquery", ATTR_STR, "", "external commandline for 'methodquery' (APP, EXTERNAL)"},
+    {"accession", ATTR_STR, "",
+     "secondary identifier field"},
+    {"app", ATTR_STR, "",
+     "external application commandline (APP, EXTERNAL)"},
+    {"appall", ATTR_STR, "",
+     "external commandline for 'methodall' (APP, EXTERNAL)"},
+    {"appentry", ATTR_STR, "",
+     "external commandline for 'methodentry' (APP, EXTERNAL)"},
+    {"appquery", ATTR_STR, "",
+     "external commandline for 'methodquery' (APP, EXTERNAL)"},
 
-    {"caseidmatch", ATTR_BOOL, "N", "match exact case of entry identifier"},
-    {"comment", ATTR_STR, "", "text comment for the DB definition"},
-    {"dbalias", ATTR_STR, "", "database name(s) to be used by access method if different"},
-    {"directory", ATTR_STR, "", "data directory"},
-    {"example", ATTR_STR, "", "example identifier"},
-    {"exclude", ATTR_STR, "", "wildcard filenames to exclude from 'filename'"},
-    {"field", ATTR_LIST, "", "database query field, with altnames and description"},
-    {"fields", ATTR_STR, "", "extra database query fields, ID and ACC are standard"},
-    {"filters", ATTR_STR, "", "database query filters to apply to all retrievals"},
-    {"filename", ATTR_STR, "", "(wildcard) database filename"},
+    {"caseidmatch", ATTR_BOOL, "N",
+     "match exact case of entry identifier"},
+    {"comment", ATTR_STR, "",
+     "text comment for the DB definition"},
+    {"dbalias", ATTR_STR, "",
+     "database name(s) to be used by access method if different"},
+    {"directory", ATTR_STR, "",
+     "data directory"},
+    {"example", ATTR_STR, "",
+     "example identifier"},
+    {"exclude", ATTR_STR, "",
+     "wildcard filenames to exclude from 'filename'"},
+    {"field", ATTR_LIST, "",
+     "database query field, with altnames and description"},
+    {"fields", ATTR_STR, "",
+     "extra database query fields, ID and ACC are standard"},
+    {"filters", ATTR_STR, "",
+     "database query filters to apply to all retrievals"},
+    {"filename", ATTR_STR, "",
+     "(wildcard) database filename"},
 
-    {"formatall", ATTR_STR, "", "database entry format(s) for 'methodall' access"},
-    {"formatentry", ATTR_STR, "", "database entry format(s) for 'methodentry' access"},
-    {"formatquery", ATTR_STR, "", "database query format(s) for 'methodquery' access"},
+    {"formatall", ATTR_STR, "",
+     "database entry format(s) for 'methodall' access"},
+    {"formatentry", ATTR_STR, "",
+     "database entry format(s) for 'methodentry' access"},
+    {"formatquery", ATTR_STR, "",
+     "database query format(s) for 'methodquery' access"},
 
-    {"hasaccession", ATTR_BOOL, "Y", "database has an acc field as an alternate id"},
+    {"hasaccession", ATTR_BOOL, "Y",
+     "database has an acc field as an alternate id"},
     {"httpversion", ATTR_STR, "", "HTTP version for GET requests"},
     {"identifier", ATTR_STR, "", "standard identifier field"},
-    {"indexdirectory", ATTR_STR, "", "Index directory, defaults to data 'directory'"},
+    {"indexdirectory", ATTR_STR, "",
+     "Index directory, defaults to data 'directory'"},
 
-    {"methodall", ATTR_STR, "", "access method for all entries"},
-    {"methodentry", ATTR_STR, "","access method for single entry"},
-    {"methodquery", ATTR_STR, "", "access method for query (several entries)"},
+    {"methodall", ATTR_STR, "",
+     "access method for all entries"},
+    {"methodentry", ATTR_STR, "",
+     "access method for single entry"},
+    {"methodquery", ATTR_STR, "",
+     "access method for query (several entries)"},
 
-    {"proxy", ATTR_STR, "", "http proxy server, or ':' to cancel a global proxy"},
-    {"query", ATTR_STR, "", "database query (SQL, SPARQL, etc.)"},
-    {"release", ATTR_STR, "", "release of the database, comment only"},
-    {"return", ATTR_STR, "", "names of fields to be returned"},
-    {"sequence", ATTR_STR, "", "sequence field to be returned"},
-    {"serverversion", ATTR_STR, "", "version of database server"},
-    {"url", ATTR_STR, "", "Basic URL for data access"},
-    {"view", ATTR_STR, "", "Access method view"},
+    {"namespace", ATTR_STR, "",
+     "namespace query to restrict ontology searches"},
+    {"organisms", ATTR_STR, "",
+     "organism/taxonomy query to restrict biological searches"},
+    {"proxy", ATTR_STR, "",
+     "http proxy server, or ':' to cancel a global proxy"},
+    {"query", ATTR_STR, "",
+     "database query (SQL, SPARQL, etc.)"},
+    {"release", ATTR_STR, "",
+     "release of the database, comment only"},
+    {"return", ATTR_STR, "",
+     "names of fields to be returned"},
+    {"sequence", ATTR_STR, "",
+     "sequence field to be returned"},
+    {"serverversion", ATTR_STR, "",
+     "version of database server"},
+    {"special", ATTR_LIST, "",
+     "name:value attributes for access method"},
+    {"url", ATTR_STR, "",
+     "Basic URL for data access"},
+    {"view", ATTR_STR, "",
+     "Access method view"},
 
-    {"edamdat", ATTR_LIST, "", "EDAM datatype term references"},
-    {"edamfmt", ATTR_LIST, "", "EDAM format term references"},
-    {"edamid", ATTR_LIST, "", "EDAM identifier term references"},
-    {"edamtpc", ATTR_LIST, "", "EDAM topic term references"},
-    {"taxon", ATTR_LIST, "", "taxon id and name"},
+    {"edamdat", ATTR_LIST, "",
+     "EDAM datatype term references"},
+    {"edamfmt", ATTR_LIST, "",
+     "EDAM format term references"},
+    {"edamid", ATTR_LIST, "",
+     "EDAM identifier term references"},
+    {"edamtpc", ATTR_LIST, "",
+     "EDAM topic term references"},
+    {"taxon", ATTR_LIST, "",
+     "taxon id and name"},
 
-    {NULL, ATTR_UNKNOWN, NULL, NULL}
+    {NULL, ATTR_UNKNOWN, NULL,
+     NULL}
 };
 
 NamOAttr namRsAttrs[] =
 {
-    {"type", ATTR_STR, "", "resource type (required)"},
+    {"type", ATTR_STR, "",
+     "resource type (required)"},
 
-/*    {"identifier",ATTR_STR,  "", "standard identifier (defaults to name)"},*/
-    {"release", ATTR_STR, "", "release of the resource"},
-    {"pagesize", ATTR_STR, "", "default index pagesize"},
-    {"cachesize", ATTR_STR, "", "default index cache size"},
+/*    {"identifier",ATTR_STR,  "",
+      "standard identifier (defaults to name)"},*/
+    {"release", ATTR_STR, "",
+     "release of the resource"},
+    {"pagesize", ATTR_STR, "",
+     "default index pagesize"},
+    {"secpagesize", ATTR_STR, "",
+     "default index secondary pagesize"},
+    {"cachesize", ATTR_STR, "",
+     "default index cache size"},
+    {"seccachesize", ATTR_STR, "",
+     "default index secondary cache size"},
 
-    {"fields", ATTR_STR, "id,acc,sv,key,des,org,nam,isa,xref",
+    {"fields", ATTR_STR,
+     "id,acc,sv,key,des,org,nam,isa,xref",
                     "known database query fields"},
 
-    {"value", ATTR_STR, "", "value appropriate to the resource type"},
-    {NULL, ATTR_UNKNOWN, NULL, NULL}
+    {"value", ATTR_STR, "",
+     "value appropriate to the resource type"},
+    {NULL, ATTR_UNKNOWN, NULL,
+     NULL}
 };
 
 NamOType namDbTypes[] =
 {
-    {"N",            "sequence", "Nucleotide (obsolete short name)",
+    {"N",            "sequence",
+     "Nucleotide (obsolete short name)",
      AJDATATYPE_SEQUENCE},
-    {"P",            "sequence", "Protein (obsolete short name)",
+    {"P",            "sequence",
+     "Protein (obsolete short name)",
      AJDATATYPE_SEQUENCE},
-    {"Nucleotide",   "sequence", "Nucleotide sequence data",
+    {"Nucleotide",   "sequence",
+     "Nucleotide sequence data",
      AJDATATYPE_SEQUENCE},
-    {"Protein",      "sequence", "Protein sequence data",
+    {"Protein",      "sequence",
+     "Protein sequence data",
      AJDATATYPE_SEQUENCE},
-    {"Sequence",     "sequence", "Both nucleotide and protein sequence data",
+    {"Sequence",     "sequence",
+     "Both nucleotide and protein sequence data",
      AJDATATYPE_SEQUENCE},
-    {"Nucfeatures",  "features", "Nucleotide features data",
+    {"Nucfeatures",  "features",
+     "Nucleotide features data",
      AJDATATYPE_FEATURES},
-    {"Protfeatures", "features", "Protein features data",
+    {"Protfeatures", "features",
+     "Protein features data",
      AJDATATYPE_FEATURES},
-    {"Features",     "features", "Both nucleotide and protein features data",
+    {"Features",     "features",
+     "Both nucleotide and protein features data",
      AJDATATYPE_FEATURES},
-/*    {"Pattern",      "pattern",  "Pattern data"},*/
-    {"Assembly",     "assembly", "Assembly of sequence reads",
+/*    {"Pattern",      "pattern",
+      "Pattern data"},*/
+    {"Assembly",     "assembly",
+     "Assembly of sequence reads",
      AJDATATYPE_ASSEMBLY},
-    {"Obo",          "obo",      "OBO ontology",
+    {"Obo",          "obo",
+     "OBO ontology",
      AJDATATYPE_OBO},
-    {"Resource" ,    "resource", "Data resource data",
+    {"Refseq",       "refseq",
+     "Reference sequence",
+     AJDATATYPE_REFSEQ},
+    {"Resource" ,    "resource",
+     "Data resource data",
      AJDATATYPE_RESOURCE},
-    {"Taxonomy",     "taxon",    "NCBI taxonomy",
+    {"Taxonomy",     "taxon",
+     "NCBI taxonomy",
      AJDATATYPE_TAXON},
-    {"Html",         "text",     "HTML data",
+    {"Html",         "text",
+     "HTML data",
      AJDATATYPE_TEXT},
-    {"Xml",          "text",     "XML data",
+    {"Xml",          "text",
+     "XML data",
      AJDATATYPE_TEXT},
-    {"Text",         "text",     "Text data",
+    {"Text",         "text",
+     "Text data",
      AJDATATYPE_TEXT},
-    {"Url",          "url",      "Url",
+    {"Url",          "url",
+     "Url",
      AJDATATYPE_URL},
-    {"Variation",    "variation", "Variation",
+    {"Variation",    "variation",
+     "Variation",
      AJDATATYPE_URL},
-    {"Unknown",      "text",     "Unknown type",
+    {"Unknown",      "text",
+     "Unknown type",
      AJDATATYPE_UNKNOWN},
-    {NULL, NULL, NULL,
+    {NULL, NULL,
+     NULL,
      AJDATATYPE_UNKNOWN}
 };
 
@@ -533,6 +678,8 @@ static void namSvrAttrtableFree(AjPTable* Ptable);
 ** @param [d] Pentry [NamPEntry*] The entry to be deleted.
 ** @param [r] which [ajint] Internal table entry type
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -602,19 +749,21 @@ static void namEntryDelete(NamPEntry* Pentry, ajint which)
 **
 ** @param [d] Ptable [AjPTable*] Attribute table
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void namDbAttrtableFree(AjPTable* Ptable)
 {
     AjPStr *keys = NULL;
     void** values = NULL;
-    ajuint n;
-    ajuint i;
+    ajulong n;
+    ajulong i;
     const NamPAttr attr = NULL;
 
     n = ajTableToarrayKeysValues(*Ptable, (void***)&keys, &values);
 
-    for(i=0; i < n; i++)
+    for(i=0UL; i < n; i++)
     {
         attr = ajTableFetchS(namDbAttrTable, keys[i]);
 
@@ -653,19 +802,21 @@ static void namDbAttrtableFree(AjPTable* Ptable)
 **
 ** @param [d] Ptable [AjPTable*] Attribute table
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void namRsAttrtableFree(AjPTable* Ptable)
 {
     AjPStr *keys = NULL;
     void** values = NULL;
-    ajuint n;
-    ajuint i;
+    ajulong n;
+    ajulong i;
     const NamPAttr attr = NULL;
 
     n = ajTableToarrayKeysValues(*Ptable, (void***) &keys, &values);
 
-    for(i=0; i < n; i++)
+    for(i=0UL; i < n; i++)
     {
         attr = ajTableFetchS(namResAttrTable, keys[i]);
 
@@ -698,25 +849,27 @@ static void namRsAttrtableFree(AjPTable* Ptable)
 
 
 
-/* @funcstatic namSvrAttrtableFree *********************************************
+/* @funcstatic namSvrAttrtableFree ********************************************
 **
 ** Free a server attribute table
 **
 ** @param [d] Ptable [AjPTable*] Attribute table
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void namSvrAttrtableFree(AjPTable* Ptable)
 {
     AjPStr *keys = NULL;
     void** values = NULL;
-    ajuint n;
-    ajuint i;
+    ajulong n;
+    ajulong i;
     const NamPAttr attr = NULL;
 
     n = ajTableToarrayKeysValues(*Ptable, (void***) &keys, &values);
 
-    for(i=0; i < n; i++)
+    for(i=0UL; i < n; i++)
     {
         attr = ajTableFetchS(namSvrAttrTable, keys[i]);
 
@@ -749,7 +902,7 @@ static void namSvrAttrtableFree(AjPTable* Ptable)
 
 
 
-/* @funcstatic namListMasterDelete *****************************************
+/* @funcstatic namListMasterDelete ********************************************
 **
 ** Deletes all databases in the internal table. The table is converted to
 ** an array, and each entry in turn is passed to namEntryDelete.
@@ -757,6 +910,8 @@ static void namSvrAttrtableFree(AjPTable* Ptable)
 ** @param [u] table [AjPTable] Table object
 ** @param [r] which [ajint] Internal table entry type
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -788,13 +943,15 @@ static void namListMasterDelete(AjPTable table, ajint which)
 
 
 
-/* @func ajNamPrintSvrAttr *****************************************************
+/* @func ajNamPrintSvrAttr ****************************************************
 **
 ** Prints a report of the server attributes available (for entrails)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajNamPrintSvrAttr(AjPFile outf, AjBool full)
@@ -822,7 +979,7 @@ void ajNamPrintSvrAttr(AjPFile outf, AjBool full)
     }
 
     if(maxtmp > 12)
-        ajWarn("ajNamPrintSvrAttr max tmpstr len %d",
+        ajWarn("ajNamPrintSvrAttr max tmpstr len %u",
                maxtmp);	      
 
     ajFmtPrintF(outf, "}\n\n");
@@ -841,6 +998,8 @@ void ajNamPrintSvrAttr(AjPFile outf, AjBool full)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
+**
+** @release 2.5.0
 ******************************************************************************/
 
 void ajNamPrintDbAttr(AjPFile outf, AjBool full)
@@ -868,7 +1027,7 @@ void ajNamPrintDbAttr(AjPFile outf, AjBool full)
     }
 
     if(maxtmp > 12)
-        ajWarn("ajNamPrintDbAttr max tmpstr len %d",
+        ajWarn("ajNamPrintDbAttr max tmpstr len %u",
                maxtmp);	      
 
     ajFmtPrintF(outf, "}\n\n");
@@ -887,6 +1046,8 @@ void ajNamPrintDbAttr(AjPFile outf, AjBool full)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
+**
+** @release 2.7.0
 ******************************************************************************/
 
 void ajNamPrintRsAttr(AjPFile outf, AjBool full)
@@ -916,7 +1077,7 @@ void ajNamPrintRsAttr(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "}\n\n");
 
     if(maxtmp > 36)
-        ajWarn("ajNamPrintRsAttr max tmpstr len %d",
+        ajWarn("ajNamPrintRsAttr max tmpstr len %u",
                maxtmp);	      
 
     ajStrDel(&tmpstr);
@@ -933,20 +1094,22 @@ void ajNamPrintRsAttr(AjPFile outf, AjBool full)
 **
 ** @param [r] dbtable [const AjPTable] Attribute table from a database entry.
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
 static void namDebugDatabase(const AjPTable dbtable)
 {
-    ajuint i;
-    ajuint nkeys;
+    ajulong i;
+    ajulong nkeys;
     AjPStr *names = NULL;
     AjPStr *values = NULL;
 
     nkeys = ajTableToarrayKeysValues(dbtable,
                                      (void***) &names, (void***) &values);
     
-   for(i=0; i < nkeys; i++) 
+   for(i=0UL; i < nkeys; i++) 
 	if(ajStrGetLen(values[i]))
 	    namUser("\t%S: %S\n", names[i], values[i]);
 
@@ -965,20 +1128,22 @@ static void namDebugDatabase(const AjPTable dbtable)
 **
 ** @param [r] svrtable [const AjPTable] Attribute table from a server entry.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static void namDebugServer(const AjPTable svrtable)
 {
-    ajuint i;
-    ajuint nkeys;
+    ajulong i;
+    ajulong nkeys;
     AjPStr *names = NULL;
     AjPStr *values = NULL;
 
     nkeys = ajTableToarrayKeysValues(svrtable,
                                      (void***) &names, (void***) &values);
     
-   for(i=0; i < nkeys; i++) 
+   for(i=0UL; i < nkeys; i++) 
 	if(ajStrGetLen(values[i]))
 	    namUser("\t%S: %S\n", names[i], values[i]);
 
@@ -997,20 +1162,22 @@ static void namDebugServer(const AjPTable svrtable)
 **
 ** @param [r] rstable [const AjPTable] Attribute table from a database entry.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
 static void namDebugResource(const AjPTable rstable)
 {
-    ajuint i;
-    ajuint nkeys;
+    ajulong i;
+    ajulong nkeys;
     AjPStr *names = NULL;
     AjPStr *values = NULL;
 
     nkeys = ajTableToarrayKeysValues(rstable,
                                      (void***) &names, (void***) &values);
     
-   for(i=0; i < nkeys; i++) 
+   for(i=0UL; i < nkeys; i++) 
 	if(ajStrGetLen(values[i]))
 	    namUser("\t%S: %S\n", names[i], values[i]);
 
@@ -1023,7 +1190,7 @@ static void namDebugResource(const AjPTable rstable)
 
 
 
-/* @funcstatic namDebugMaster **********************************************
+/* @funcstatic namDebugMaster *************************************************
 **
 ** Lists databases or variables defined in the internal table.
 **
@@ -1032,6 +1199,8 @@ static void namDebugResource(const AjPTable rstable)
 **                        variables or TYPE_DB for databases or
 **                        TYPE_RESOURCE for resources.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -1096,6 +1265,8 @@ static void namDebugMaster(const AjPTable table, ajint which)
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1152,6 +1323,8 @@ AjBool ajNamSvrGetAttrC(const AjPStr name, const char *attribute,
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1164,13 +1337,116 @@ AjBool ajNamSvrGetAttrS(const AjPStr name, const AjPStr attribute,
 
 
 
-/* @func ajNamSvrGetAttrlist ***************************************************
+/* @func ajNamSvrGetAttrSpecialC **********************************************
+**
+** Return the value for the first occurrence of a named special attribute
+**
+** @param [r] name [const AjPStr] server name
+** @param [r] attribute [const char*] special attribute name
+** @param [w] value [AjPStr*] value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamSvrGetAttrSpecialC(const AjPStr name, const char *attribute,
+                               AjPStr* value)
+{
+    ajuint ret = 0;
+    ajint j;
+    NamPEntry fnew = NULL;
+    AjPTable svrtable;
+    AjPList svrvalue;
+    AjIList iter;
+    const AjPStr tmpstr = NULL;
+    ajuint attrlen = 0;
+
+    ajDebug("ajNamSvrGetAttrSpecial '%S' '%s'\n", name, attribute);
+
+    attrlen = strlen(attribute);
+
+    fnew = ajTableFetchmodS(namSvrMasterTable, name);
+
+    if(!fnew)
+    {
+        ajWarn("unknown database '%S'",
+               name);
+	return ajFalse;
+    }
+
+    svrtable = (AjPTable) fnew->data;
+    j = namSvrAttrC("special");
+
+    if(j < 0)
+    {
+	ajWarn("unknown attribute '%s' requested for server '%S'",
+               "special", name);
+        return ajFalse;
+    }
+
+    svrvalue = ajTableFetchmodC(svrtable, "special");
+
+    if(ajListGetLength(svrvalue))
+    {
+        iter = ajListIterNewread(svrvalue);
+
+        while(!ajListIterDone(iter))
+        {
+            tmpstr = ajListIterGet(iter);
+            if(ajStrPrefixC(tmpstr, attribute) &&
+               ajStrGetCharPos(tmpstr, attrlen) == '=')
+            {
+                if(!ret++)
+                {
+                    ajStrAssignS(value, tmpstr);
+                    ajStrCutStart(value, attrlen+1);
+                }
+            }
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    return ret;
+}
+
+
+
+
+/* @func ajNamSvrGetAttrSpecialS **********************************************
+**
+** Return the value for the first occurrence of a named special attribute
+**
+** @param [r] name [const AjPStr] server name
+** @param [r] attribute [const AjPStr] special attribute name
+** @param [w] value [AjPStr*] value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamSvrGetAttrSpecialS(const AjPStr name, const AjPStr attribute,
+                               AjPStr* value)
+{
+    return ajNamSvrGetAttrSpecialC(name, MAJSTRGETPTR(attribute), value);
+}
+
+
+
+
+/* @func ajNamSvrGetAttrlist **************************************************
 **
 ** Return a list of names and values for all of a server defined attributes
 **
 ** @param [r] name [const AjPStr] server name
 **
-** @return [AjPList] Nam-value list
+** @return [AjPList] Tag-value list
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1211,18 +1487,14 @@ AjPList ajNamSvrGetAttrlist(const AjPStr name)
                     while(!ajListIterDone(iter))
                     {
                         tmpstr = ajListIterGet(iter);
-                        AJNEW0(tagval);
-                        tagval->Tag = ajStrNewC(svrattr);
-                        tagval->Value = ajStrNewS(tmpstr);
+                        tagval = ajTagvalNewC(svrattr,MAJSTRGETPTR(tmpstr));
                         ajListPushAppend(ret, tagval);
                     }
 
                     ajListIterDel(&iter);
                     break;
                 default:
-                    AJNEW0(tagval);
-                    tagval->Tag = ajStrNewC(svrattr);
-                    tagval->Value = ajStrNewS(svrvalue);
+                    tagval = ajTagvalNewC(svrattr,ajStrGetPtr(svrvalue));
                     ajListPushAppend(ret, tagval);
                    break;
             }
@@ -1236,7 +1508,7 @@ AjPList ajNamSvrGetAttrlist(const AjPStr name)
 
 
 
-/* @func ajNamSvrGetdbAttrC ****************************************************
+/* @func ajNamSvrGetdbAttrC ***************************************************
 **
 ** Return the value for a server database attribute
 **
@@ -1246,6 +1518,8 @@ AjPList ajNamSvrGetAttrlist(const AjPStr name)
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1276,7 +1550,7 @@ AjBool ajNamSvrGetdbAttrC(const AjPStr name, const AjPStr dbname,
 
     if(j < 0)
     {
-	ajWarn("unknown attribute '%s' requested for database '%s'",
+	ajWarn("unknown attribute '%s' requested for database '%S'",
                attribute, name);
         return ajFalse;
     }
@@ -1306,6 +1580,8 @@ AjBool ajNamSvrGetdbAttrC(const AjPStr name, const AjPStr dbname,
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1314,6 +1590,114 @@ AjBool ajNamSvrGetdbAttrS(const AjPStr name, const AjPStr dbname,
                           AjPStr *value)
 {
     return ajNamSvrGetdbAttrC(name, dbname, MAJSTRGETPTR(attribute), value);
+}
+
+
+
+
+/* @func ajNamSvrGetdbAttrSpecialC ********************************************
+**
+** Return the value for a server database special attribute
+**
+** @param [r] name [const AjPStr] server name
+** @param [r] dbname [const AjPStr] database name
+** @param [r] attribute [const char *] database special attribute name
+** @param [w] value [AjPStr *] attribute value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamSvrGetdbAttrSpecialC(const AjPStr name, const AjPStr dbname,
+                                 const char *attribute,
+                                 AjPStr *value)
+{
+    ajuint ret = 0;
+    ajint j;
+    NamPEntry fnew = NULL;
+    NamPEntry dbdata = NULL;
+    AjPTable sdbtable;
+    AjPTable dbtable;
+    AjPList dbvalue;
+    AjIList iter;
+    const AjPStr tmpstr = NULL;
+    ajuint attrlen = 0;
+
+    ajDebug("ajNamSvrGetdbAttrSpecialC '%S' '%S' '%s'\n",
+            name, dbname, attribute);
+
+    if(!ajNamDatabaseServer(dbname, name))
+        return ajFalse;
+
+    attrlen = strlen(attribute);
+    
+    dbdata = ajTableFetchmodS(namSvrDatabaseTable, name);
+    sdbtable = (AjPTable) dbdata->data;
+
+    fnew = ajTableFetchmodS(sdbtable, dbname);
+
+    dbtable = (AjPTable) fnew->data;
+    j = namDbAttrC("special");
+
+    if(j < 0)
+    {
+	ajWarn("unknown attribute '%s' requested for database '%S'",
+               "special", name);
+        return ajFalse;
+    }
+
+    dbvalue = ajTableFetchmodC(dbtable, "special");
+
+    if(ajListGetLength(dbvalue))
+    {
+        iter = ajListIterNewread(dbvalue);
+
+        while(!ajListIterDone(iter))
+        {
+            tmpstr = ajListIterGet(iter);
+            if(ajStrPrefixC(tmpstr, attribute) &&
+               ajStrGetCharPos(tmpstr, attrlen) == '=')
+            {
+                if(!ret++)
+                {
+                    ajStrAssignS(value, tmpstr);
+                    ajStrCutStart(value, attrlen+1);
+                }
+            }
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    return ret;
+}
+
+
+
+
+/* @func ajNamSvrGetdbAttrSpecialS ********************************************
+**
+** Return the value for a database special attribute
+**
+** @param [r] name [const AjPStr] server name
+** @param [r] dbname [const AjPStr] database name
+** @param [r] attribute [const AjPStr] database special attribute name
+** @param [w] value [AjPStr *] attribute value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamSvrGetdbAttrSpecialS(const AjPStr name, const AjPStr dbname,
+                                 const AjPStr attribute,
+                                 AjPStr *value)
+{
+    return ajNamSvrGetdbAttrSpecialC(name, dbname, MAJSTRGETPTR(attribute),
+                                     value);
 }
 
 
@@ -1337,6 +1721,8 @@ AjBool ajNamSvrGetdbAttrS(const AjPStr name, const AjPStr dbname,
 ** @param [w] cachefile [AjPStr*] cache file name
 ** @param [w] url [AjPStr*] server URL
 ** @return [AjBool] ajTrue if server details were found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1571,6 +1957,8 @@ AjBool ajNamSvrDetails(const AjPStr name, AjPStr* type, AjPStr *scope,
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1627,6 +2015,8 @@ AjBool ajNamDbGetAttrC(const AjPStr name, const char *attribute,
 ** @param [w] value [AjPStr *] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1639,13 +2029,116 @@ AjBool ajNamDbGetAttrS(const AjPStr name, const AjPStr attribute,
 
 
 
+/* @func ajNamDbGetAttrSpecialC ***********************************************
+**
+** Return the value for the first occurrence of a named special attribute
+**
+** @param [r] name [const AjPStr] database name
+** @param [r] attribute [const char*] special attribute name
+** @param [w] value [AjPStr*] value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamDbGetAttrSpecialC(const AjPStr name, const char *attribute,
+                              AjPStr* value)
+{
+    ajuint ret = 0;
+    ajint j;
+    NamPEntry fnew = NULL;
+    AjPTable dbtable;
+    AjPList dbvalue;
+    AjIList iter;
+    const AjPStr tmpstr = NULL;
+    ajuint attrlen = 0;
+
+    ajDebug("ajNamDbGetAttrSpecial '%S' '%s'\n", name, attribute);
+
+    attrlen = strlen(attribute);
+
+    fnew = ajTableFetchmodS(namDbMasterTable, name);
+
+    if(!fnew)
+    {
+        ajWarn("unknown database '%S'",
+               name);
+	return ajFalse;
+    }
+
+    dbtable = (AjPTable) fnew->data;
+    j = namDbAttrC("special");
+
+    if(j < 0)
+    {
+	ajWarn("unknown attribute '%s' requested for database '%S'",
+               "special", name);
+        return ajFalse;
+    }
+
+    dbvalue = ajTableFetchmodC(dbtable, "special");
+
+    if(ajListGetLength(dbvalue))
+    {
+        iter = ajListIterNewread(dbvalue);
+
+        while(!ajListIterDone(iter))
+        {
+            tmpstr = ajListIterGet(iter);
+            if(ajStrPrefixC(tmpstr, attribute) &&
+               ajStrGetCharPos(tmpstr, attrlen) == '=')
+            {
+                if(!ret++)
+                {
+                    ajStrAssignS(value, tmpstr);
+                    ajStrCutStart(value, attrlen+1);
+                }
+            }
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    return ret;
+}
+
+
+
+
+/* @func ajNamDbGetAttrSpecialS ***********************************************
+**
+** Return the value for the first occurrence of a named special attribute
+**
+** @param [r] name [const AjPStr] database name
+** @param [r] attribute [const AjPStr] special attribute name
+** @param [w] value [AjPStr*] value
+**
+** @return [ajuint] Number of matching special values
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+ajuint ajNamDbGetAttrSpecialS(const AjPStr name, const AjPStr attribute,
+                              AjPStr* value)
+{
+    return ajNamDbGetAttrSpecialC(name, MAJSTRGETPTR(attribute), value);
+}
+
+
+
+
 /* @func ajNamDbGetAttrlist ***************************************************
 **
 ** Return a list of names and values for all of a database defined attributes
 **
 ** @param [r] name [const AjPStr] database name
 **
-** @return [AjPList] Nam-value list
+** @return [AjPList] Tag-value list
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1689,18 +2182,14 @@ AjPList ajNamDbGetAttrlist(const AjPStr name)
                     while(!ajListIterDone(iter))
                     {
                         tmpstr = ajListIterGet(iter);
-                        AJNEW0(tagval);
-                        tagval->Tag = ajStrNewC(dbattr);
-                        tagval->Value = ajStrNewS(tmpstr);
+                        tagval = ajTagvalNewC(dbattr, MAJSTRGETPTR(tmpstr));
                         ajListPushAppend(ret, tagval);
                     }
 
                     ajListIterDel(&iter);
                     break;
                 default:
-                    AJNEW0(tagval);
-                    tagval->Tag = ajStrNewC(dbattr);
-                    tagval->Value = ajStrNewS(dbvalue);
+                    tagval = ajTagvalNewC(dbattr, ajStrGetPtr(dbvalue));
                     ajListPushAppend(ret, tagval);
                    break;
             }
@@ -1723,6 +2212,8 @@ AjPList ajNamDbGetAttrlist(const AjPStr name)
 ** @param [u] Pvalue [AjPStr*] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1781,6 +2272,8 @@ static AjBool namDbtablePutAttrS(AjPTable dbtable, AjPStr *Pattribute,
 ** @param [u] Pvalue [AjPStr*] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1836,7 +2329,7 @@ static AjBool namRstablePutAttrS(AjPTable rstable, AjPStr *Pattribute,
 
 
 
-/* @funcstatic namSvrtablePutAttrS *********************************************
+/* @funcstatic namSvrtablePutAttrS ********************************************
 **
 ** Store the value for a server attribute
 **
@@ -1845,6 +2338,8 @@ static AjBool namRstablePutAttrS(AjPTable rstable, AjPStr *Pattribute,
 ** @param [u] Pvalue [AjPStr*] attribute value
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1908,6 +2403,8 @@ static AjBool namSvrtablePutAttrS(AjPTable svrtable, AjPStr *Pattribute,
 ** @param [w] methods [AjPStr*] database access methods formatted
 ** @param [w] defined [AjPStr*] database definition file short name
 ** @return [AjBool] ajTrue if database details were found
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2073,13 +2570,15 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 
 
 
-/* @funcstatic namAccessTest ***************************************************
+/* @funcstatic namAccessTest **************************************************
 **
 ** Tests whether a named access method is known for a given data type
 **
 ** @param [r] method [const AjPStr] Access method name
 ** @param [r] dbtype [const AjPStr] Database type
 ** @return [AjBool] True if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2113,6 +2612,8 @@ static AjBool namAccessTest(const AjPStr method, const AjPStr dbtype)
             result = ajUrlaccessMethodTest(method);
         else if(namtype->DataType == AJDATATYPE_VARIATION)
             result = ajVaraccessMethodTest(method);
+        else if(namtype->DataType == AJDATATYPE_REFSEQ)
+            result = ajRefseqaccessMethodTest(method);
     }
 
     return result;
@@ -2121,13 +2622,15 @@ static AjBool namAccessTest(const AjPStr method, const AjPStr dbtype)
 
 
 
-/* @funcstatic namInformatTest *********************************************
+/* @funcstatic namInformatTest ************************************************
 **
 ** Tests whether a named data input format is known for a given data type
 **
 ** @param [r] format [const AjPStr] Format name
 ** @param [r] dbtype [const AjPStr] Database type
 ** @return [AjBool] True if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2162,6 +2665,8 @@ static AjBool namInformatTest(const AjPStr format, const AjPStr dbtype)
         result = ajVarinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_TEXT)
         result = ajTextinformatTest(format);
+    else if(namtype->DataType == AJDATATYPE_REFSEQ)
+        result = ajRefseqinformatTest(format);
 
     return result;
 }
@@ -2177,6 +2682,8 @@ static AjBool namInformatTest(const AjPStr format, const AjPStr dbtype)
 ** @param [r] method [const AjPStr] Access method string
 ** @param [r] datatype [ajint] Enumerated database type
 ** @return [const char*] Query link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2189,7 +2696,7 @@ static const char* namMethod2Qlinks(const AjPStr method, ajint datatype)
     if(ajCharMatchC(result, "DATA"))
        result = namDatatype2Qlinks(datatype);
 
-    ajDebug("namMethod2Qlinks method: '%S' datatype: %u text: '%s'\n",
+    ajDebug("namMethod2Qlinks method: '%S' datatype: %d text: '%s'\n",
            method, datatype, result);
 
     if(datatype == AJDATATYPE_TEXT)
@@ -2229,6 +2736,8 @@ static const char* namMethod2Qlinks(const AjPStr method, ajint datatype)
 ** @param [r] method [const AjPStr] Access method string
 ** @param [r] dbtype [const AjPStr] Database type
 ** @return [ajuint] OR'ed values for the valid scope of the access method given
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2268,6 +2777,8 @@ static ajuint namMethod2Scope(const AjPStr method, const AjPStr dbtype)
                 result = ajUrlaccessMethodGetScope(method);
              else if(namtype->DataType == AJDATATYPE_VARIATION)
                 result = ajVaraccessMethodGetScope(method);
+             else if(namtype->DataType == AJDATATYPE_REFSEQ)
+                result = ajRefseqaccessMethodGetScope(method);
         }
     }
 
@@ -2287,6 +2798,8 @@ static ajuint namMethod2Scope(const AjPStr method, const AjPStr dbtype)
 **
 ** @param [r] datatype [ajint] Enumerated data type
 ** @return [const char*] Field name list
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2294,27 +2807,25 @@ static const char* namDatatype2Fields(ajint datatype)
 {
     const char* result = NULL;
 
-    result = ajTextinTypeGetFields();
+    if(datatype == AJDATATYPE_ASSEMBLY)
+        result = ajAsseminTypeGetFields();
+    else if(datatype == AJDATATYPE_FEATURES)
+        result = ajFeattabinTypeGetFields();
+    else if(datatype == AJDATATYPE_OBO)
+        result = ajOboinTypeGetFields();
+    else if(datatype == AJDATATYPE_RESOURCE)
+        result = ajResourceinTypeGetFields();
+    else if(datatype == AJDATATYPE_SEQUENCE)
+        result = ajSeqinTypeGetFields();
+    else if(datatype == AJDATATYPE_TAXON)
+        result = ajTaxinTypeGetFields();
+    else if(datatype == AJDATATYPE_URL)
+        result = ajUrlinTypeGetFields();
+    else if(datatype == AJDATATYPE_VARIATION)
+        result = ajVarinTypeGetFields();
 
     if(!result)
-    {
-        if(datatype == AJDATATYPE_ASSEMBLY)
-            result = ajAsseminTypeGetFields();
-        else if(datatype == AJDATATYPE_FEATURES)
-            result = ajFeattabinTypeGetFields();
-        else if(datatype == AJDATATYPE_OBO)
-            result = ajOboinTypeGetFields();
-        else if(datatype == AJDATATYPE_RESOURCE)
-            result = ajResourceinTypeGetFields();
-        else if(datatype == AJDATATYPE_SEQUENCE)
-            result = ajSeqinTypeGetFields();
-        else if(datatype == AJDATATYPE_TAXON)
-            result = ajTaxinTypeGetFields();
-        else if(datatype == AJDATATYPE_URL)
-            result = ajUrlinTypeGetFields();
-        else if(datatype == AJDATATYPE_VARIATION)
-            result = ajVarinTypeGetFields();
-    }
+        result = ajTextinTypeGetFields();
 
     return result;
 }
@@ -2329,6 +2840,8 @@ static const char* namDatatype2Fields(ajint datatype)
 **
 ** @param [r] datatype [ajint] Enumerated data type
 ** @return [const char*] Known query link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2336,27 +2849,25 @@ static const char* namDatatype2Qlinks(ajint datatype)
 {
     const char* result = NULL;
 
-    result = ajTextinTypeGetQlinks();
+    if(datatype == AJDATATYPE_ASSEMBLY)
+        result = ajAsseminTypeGetQlinks();
+    else if(datatype == AJDATATYPE_FEATURES)
+        result = ajFeattabinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_OBO)
+        result = ajOboinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_RESOURCE)
+        result = ajResourceinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_SEQUENCE)
+        result = ajSeqinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_TAXON)
+        result = ajTaxinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_URL)
+        result = ajUrlinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_VARIATION)
+        result = ajVarinTypeGetQlinks();
 
     if(!result)
-    {
-        if(datatype == AJDATATYPE_ASSEMBLY)
-            result = ajAsseminTypeGetQlinks();
-        else if(datatype == AJDATATYPE_FEATURES)
-            result = ajFeattabinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_OBO)
-            result = ajOboinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_RESOURCE)
-            result = ajResourceinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_SEQUENCE)
-            result = ajSeqinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_TAXON)
-            result = ajTaxinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_URL)
-            result = ajUrlinTypeGetQlinks();
-        else if(datatype == AJDATATYPE_VARIATION)
-            result = ajVarinTypeGetQlinks();
-    }
+        result = ajTextinTypeGetQlinks();
 
     return result;
 }
@@ -2369,6 +2880,8 @@ static const char* namDatatype2Qlinks(ajint datatype)
 ** Writes a simple list of where the internal tables came from..
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2387,6 +2900,8 @@ void ajNamDebugOrigin(void)
 ** Writes a simple debug report of all servers in the internal table.
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2408,6 +2923,8 @@ void ajNamDebugServers(void)
 ** Writes a simple debug report of all databases in the internal table.
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2429,6 +2946,8 @@ void ajNamDebugDatabases(void)
 ** Writes a simple debug report of all databases in the internal table.
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -2451,6 +2970,8 @@ void ajNamDebugResources(void)
 ** in the internal table.
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -2473,6 +2994,8 @@ void ajNamDebugVariables(void)
 ** in the internal table.
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2495,6 +3018,8 @@ void ajNamDebugAliases(void)
 **
 ** @param [w] svrnames [AjPList] Str List of names to be populated
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2528,6 +3053,8 @@ void ajNamListListServers(AjPList svrnames)
 **
 ** @param [w] dbnames [AjPList] Str List of names to be populated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2561,6 +3088,8 @@ void ajNamListListDatabases(AjPList dbnames)
 **
 ** @param [w] rsnames [AjPList] Str List of names to be populated
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -2587,11 +3116,13 @@ void ajNamListListResources(AjPList rsnames)
 
 
 
-/* @funcstatic namDebugVariables *****************************************
+/* @funcstatic namDebugVariables **********************************************
 **
 ** Writes a simple list of all variables in the internal table.
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -2613,6 +3144,8 @@ static void namDebugVariables(void)
 ** Writes a simple list of all aliases in the internal table.
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2641,6 +3174,8 @@ static void namDebugAliases(void)
 ** @param [u] file [AjPFile] Input file only for name in messages
 ** @param [r] shortname [const AjPStr] Definition file short name
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2653,7 +3188,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
     static NamPAttr attrvalue  = NULL;
     static char quoteopen  = '\0';
     static char quoteclose = '\0';
-    static AjPTable svrattr  = NULL;
+    static AjPTable svattr  = NULL;
     static AjPTable dbattr  = NULL;
     static AjPTable rsattr  = NULL;
     static ajint  svr_input = -1;
@@ -2795,14 +3330,14 @@ static void namListParse(AjPList listwords, AjPList listcount,
     quoteclose = '\0';
     
     namLine = 1;
-    namUser("namListParse of %F '%S' words: %d lines: %d\n", 
+    namUser("namListParse of %F '%S' words: %Lu lines: %Lu\n", 
 	    file, name, ajListGetLength(listwords), ajListGetLength(listcount));
     
     while(ajListstrPop(listwords, &curword))
     {
 	while(ajListGetLength(listcount) && (lineword < wordcount))
 	{
-	    namUser("ajListPop %d < %d list %d\n",
+	    namUser("ajListPop %d < %d list %Lu\n",
 		    lineword, wordcount, ajListGetLength(listcount));
 	    ajListPop(listcount, (void**) &iword);
 	    lineword = *iword;
@@ -3025,8 +3560,8 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	
 	else if(namParseType == TYPE_SVR)
 	{
-	    if(ajStrMatchC(curword, "[")) /* [ therefore new database */
-		svrattr = ajTablestrNew(100); /* new server obj */
+	    if(ajStrMatchC(curword, "[")) /* [ therefore new server */
+		svattr = ajTablestrNew(100); /* new server obj */
 	    else if(ajStrMatchC(curword, "]"))	/* ] therefore end of server */
 		saveit = ajTrue;
 	    else if(name)
@@ -3332,7 +3867,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	    /* Save the keyword value */
             key = ajStrNewC(namSvrAttrs[svr_input].Name);
             namUser("store svr attr '%S' => '%S\n", key, value);
-            namSvrtablePutAttrS(svrattr, &key, &value);
+            namSvrtablePutAttrS(svattr, &key, &value);
 
 	    svr_input =-1;
 	    svrsave = ajFalse;
@@ -3383,8 +3918,8 @@ static void namListParse(AjPList listwords, AjPList listcount,
                 else
                     namIfNow = ajFalse;
             }
-            namUser("endif %B (block %u)\n", namIfNow, teststr, namIfBlock);
-                ajStrDel(&teststr);
+            namUser("endif %B (block %u)\n", namIfNow, /* FIXME teststr, */ namIfBlock);
+            ajStrDel(&teststr);
             namParseType = 0;
 	    namListParseOK = ajTrue;
         }
@@ -3433,7 +3968,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
                 namUser("if value '%S' '%S' %B (block %u)\n",
                        value, teststr, namIfNow, namIfBlock);
                 namParseType = 0;
-                teststr = NULL;
+                ajStrDel(&teststr);
                 namListParseOK = ajTrue;
                 ajStrDel(&value);
             }
@@ -3447,11 +3982,11 @@ static void namListParse(AjPList listwords, AjPList listcount,
                 namUser("skipping type %d name '%S' value '%S' line:%d\n",
                         namParseType, name, value, namLine);
                 ajStrDel(&name);
-                ajStrDel(&value);
                 saveTable = NULL;
-                svrattr = NULL;
-                dbattr = NULL;
-                rsattr = NULL;
+
+		namSvrAttrtableFree(&svattr);
+                namDbAttrtableFree(&dbattr);
+                namRsAttrtableFree(&rsattr);
             }
             else
             {
@@ -3467,9 +4002,9 @@ static void namListParse(AjPList listwords, AjPList listcount,
 
                 if(namParseType == TYPE_SVR)
                 {
-                    fnew->data = (AjPTable) svrattr;
+                    fnew->data = (AjPTable) svattr;
                     saveTable = namSvrMasterTable;
-                    svrattr = NULL;
+                    svattr = NULL;
                 }
                 else if(namParseType == TYPE_DB)
                 {
@@ -3551,7 +4086,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
     
     if(ajListGetLength(listcount))	/* cleanup the wordcount list */
     {
-	namUser("** remaining wordcount items: %d\n",
+	namUser("** remaining wordcount items: %lu\n",
                 ajListGetLength(listcount));
 
 	while(ajListGetLength(listcount))
@@ -3583,6 +4118,8 @@ static void namListParse(AjPList listwords, AjPList listcount,
 **
 ** @param [r] name [const AjPStr] character string to find in getenv list
 ** @return [AjBool] True if name was defined.
+**
+** @release 3.0.0
 ** @@
 **
 ******************************************************************************/
@@ -3622,6 +4159,8 @@ AjBool ajNamIsDbname(const AjPStr name)
 ** @param [r] name [const char*] character string to find in getenv list
 ** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 2.9.0
 ** @@
 **
 ******************************************************************************/
@@ -3648,7 +4187,7 @@ AjBool ajNamGetenvC(const char* name,
 
 
 
-/* @func ajNamGetenvS **********************************************************
+/* @func ajNamGetenvS *********************************************************
 **
 ** Looks for name as an environment variable.
 ** the AjPStr for this in "value". If not found returns NULL;
@@ -3656,6 +4195,8 @@ AjBool ajNamGetenvC(const char* name,
 ** @param [r] name [const AjPStr] character string to find in getenv list
 ** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 6.1.0
 ** @@
 **
 ******************************************************************************/
@@ -3669,18 +4210,6 @@ AjBool ajNamGetenvS(const AjPStr name,
 
 
 
-/* @obsolete ajNamGetenv
-** @rename ajNamGetenvS
-*/
-__deprecated AjBool ajNamGetenv(const AjPStr name,
-		    AjPStr* value)
-{
-    return ajNamGetenvS(name, value);
-}
-
-
-
-
 /* @func ajNamGetAliasC *******************************************************
 **
 ** Looks for name as an alias in the hash table and if found returns
@@ -3689,6 +4218,8 @@ __deprecated AjBool ajNamGetenv(const AjPStr name,
 ** @param [r] name [const char*] character string find in hash table.
 ** @param [w] value [AjPStr*] Str for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -3722,6 +4253,8 @@ AjBool ajNamGetAliasC(const char* name, AjPStr* value)
 ** @param [r] namestr [const AjPStr] character string find in hash table.
 ** @param [w] value [AjPStr*] Str for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -3756,6 +4289,8 @@ AjBool ajNamGetAliasS(const AjPStr namestr, AjPStr* value)
 ** @param [r] name [const char*] character string find in hash table.
 ** @param [w] value [AjPStr*] Str for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 1.0.0
 ** @@
 **
 ******************************************************************************/
@@ -3856,7 +4391,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 
 
 
-/* @func ajNamGetValueS ********************************************************
+/* @func ajNamGetValueS *******************************************************
 **
 ** Looks for name as an (upper case) environment variable,
 ** and then as-is in the hash table and if found returns
@@ -3865,23 +4400,13 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 ** @param [r] name [const AjPStr] character string find in hash table.
 ** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
+**
+** @release 6.1.0
 ** @@
 **
 ******************************************************************************/
 
 AjBool ajNamGetValueS(const AjPStr name, AjPStr* value)
-{
-    return ajNamGetValueC(ajStrGetPtr(name), value);
-}
-
-
-
-
-/* @obsolete ajNamGetValue
-** @rename ajNamGetValusS
-*/
-
-__deprecated AjBool ajNamGetValue(const AjPStr name, AjPStr* value)
 {
     return ajNamGetValueC(ajStrGetPtr(name), value);
 }
@@ -3897,6 +4422,8 @@ __deprecated AjBool ajNamGetValue(const AjPStr name, AjPStr* value)
 ** @param [r] name [const AjPStr] character string find in hash table.
 ** @return [AjBool] true if server name is valid.
 ** @error  NULL if name not found in the table
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -3930,6 +4457,8 @@ AjBool ajNamServer(const AjPStr name)
 ** @param [r] name [const AjPStr] character string find in hash table.
 ** @return [AjBool] true if database name is valid.
 ** @error  NULL if name not found in the table
+**
+** @release 1.0.0
 ** @@
 **
 ******************************************************************************/
@@ -3963,6 +4492,8 @@ AjBool ajNamDatabase(const AjPStr name)
 **
 ** @param [u] Pname [AjPStr*] character string to find in hash table.
 ** @return [AjBool] true if database name is valid.
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -4013,6 +4544,8 @@ AjBool ajNamAliasDatabase(AjPStr *Pname)
 ** @param [r] server [const AjPStr] Server name
 ** @return [AjBool] true if database name is valid.
 ** @error  NULL if name not found in the table
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -4095,6 +4628,8 @@ AjBool ajNamDatabaseServer(const AjPStr name, const AjPStr server)
 ** @param [u] Pname [AjPStr*] character string to find in hash table.
 ** @param [r] server [const AjPStr] Server name
 ** @return [AjBool] true if database name is valid.
+**
+** @release 6.4.0
 ** @@
 **
 ******************************************************************************/
@@ -4207,6 +4742,8 @@ AjBool ajNamAliasServer(AjPStr *Pname, const AjPStr server)
 ** @param [u] alitable [AjPTable] Alias table for server
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool namSvrCacheParse(AjPFile cachefile, AjPTable dbtable,
@@ -4238,7 +4775,7 @@ static AjBool namSvrCacheParse(AjPFile cachefile, AjPTable dbtable,
     {
 	iline++;
  	AJNEW0(k);
-	*k = ajListGetLength(listwords);
+	*k = (ajuint) ajListGetLength(listwords);
 	ajListPushAppend(listcount, k);
 
 	if(!ajStrCutCommentsStart(&rdline))
@@ -4308,14 +4845,14 @@ static AjBool namSvrCacheParse(AjPFile cachefile, AjPTable dbtable,
     ajStrDel(&rdline);
     
     AJNEW0(k);
-    *k = ajListGetLength(listwords);
+    *k = (ajuint) ajListGetLength(listwords);
     ajListPushAppend(listcount, k);
     
     if(!namSvrCacheParseList(listwords, listcount, cachefile,
                              dbtable, alitable))
     {
 	ajErr("%F: Unexpected end of file in %S at line %d\n",
-              cachefile, iline);
+              cachefile, iline); /* FIXME */
         ret = ajFalse;
     }
 
@@ -4342,6 +4879,8 @@ static AjBool namSvrCacheParse(AjPFile cachefile, AjPTable dbtable,
 ** @param [u] dbtable [AjPTable] Database table for server
 ** @param [u] alitable [AjPTable] Alias table for server
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4390,7 +4929,7 @@ static AjBool namSvrCacheParseList(AjPList listwords, AjPList listcount,
     {
 	while(ajListGetLength(listcount) && (lineword < wordcount))
 	{
-	    namUser("ajListPop %d < %d list %d\n",
+	    namUser("ajListPop %d < %d list %Lu\n",
 		    lineword, wordcount, ajListGetLength(listcount));
 	    ajListPop(listcount, (void**) &iword);
 	    lineword = *iword;
@@ -4724,7 +5263,7 @@ static AjBool namSvrCacheParseList(AjPList listwords, AjPList listcount,
     
     if(ajListGetLength(listcount))	/* cleanup the wordcount list */
     {
-	namUser("** remaining wordcount items: %d\n",
+	namUser("** remaining wordcount items: %Lu\n",
                 ajListGetLength(listcount));
 
 	while(ajListGetLength(listcount))
@@ -4760,6 +5299,8 @@ static AjBool namSvrCacheParseList(AjPList listwords, AjPList listcount,
 ** @param [r] server [const AjPStr] Server name
 ** @return [ajuint] Number of databases
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajNamSvrCount(const AjPStr server)
@@ -4809,7 +5350,7 @@ ajuint ajNamSvrCount(const AjPStr server)
     dbtable = (AjPTable) dbdata->data;
 
     ajStrDel(&cachefile);
-    return ajTableGetLength(dbtable);
+    return (ajuint) ajTableGetLength(dbtable);
 }
 
 
@@ -4829,6 +5370,8 @@ ajuint ajNamSvrCount(const AjPStr server)
 ** @param [w] dbnames [AjPList] Str List of names to be populated
 ** @return [void]
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajNamSvrListListDatabases(const AjPStr server, AjPList dbnames)
@@ -4919,6 +5462,8 @@ void ajNamSvrListListDatabases(const AjPStr server, AjPList dbnames)
 ** @param [r] cachename [const AjPStr] Cache file name
 ** @return [AjPFile] Filename of selected cache file
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjPFile namSvrCacheOpen(const AjPStr cachename)
@@ -5010,6 +5555,8 @@ static AjPFile namSvrCacheOpen(const AjPStr cachename)
 ** @param [r] cachename [const AjPStr] Cache file name
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool namSvrCacheRead(const AjPStr server, const AjPStr cachename)
@@ -5057,6 +5604,8 @@ static AjBool namSvrCacheRead(const AjPStr server, const AjPStr cachename)
 ** @param [u] file [AjPFile] Input file object
 ** @param [r] shortname [const AjPStr] Definitions file short name
 ** @return [AjBool] ajTrue if no error were found
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5088,7 +5637,7 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
     {
 	iline++;
 	AJNEW0(k);
-	*k = ajListGetLength(listwords);
+	*k = (ajuint) ajListGetLength(listwords);
 	ajListPushAppend(listcount, k);
 	
         /* Ignore if the line is a comment */
@@ -5158,7 +5707,7 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
     ajStrDel(&rdline);
     
     AJNEW0(k);
-    *k = ajListGetLength(listwords);
+    *k = (ajuint) ajListGetLength(listwords);
     ajListPushAppend(listcount, k);
     
     namListParseOK = ajTrue;
@@ -5199,6 +5748,8 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 ** @param [r] prefix [const char*] Default prefix for all file
 **                                 and variable names.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5241,7 +5792,7 @@ void ajNamInit(const char* prefix)
        namResMasterTable)
 	return;
 
-#ifdef AJ_MPROBE
+#ifdef HAVE_MCHECK
     /*
     ** mcheck turns on checking of all malloc/calloc/realloc/free calls
     **
@@ -5254,7 +5805,7 @@ void ajNamInit(const char* prefix)
     */
     if(mcheck(ajMemCheck))
 	ajWarn("ajNamInit called after first malloc - ajMemCheck ignored");
-#endif
+#endif /* ! HAVE_MCHECK */
 
 #ifdef WIN32
     WSAStartup(MAKEWORD(1, 1), &wsaData);
@@ -5531,7 +6082,7 @@ void ajNamInit(const char* prefix)
     ** no concept of HOME
     */
     
-    prefixRoot= getenv("HOME");
+    prefixRoot = ajSysGetHomedir();
     
     ajStrAssignC(&namUserDir, prefixRoot);
     ajStrAppendC(&namUserDir, SLASH_STRING);
@@ -5605,6 +6156,8 @@ void ajNamInit(const char* prefix)
 **
 ** @param [u] thys [AjPStr*] String.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5625,6 +6178,8 @@ static void namNoColon(AjPStr* thys)
 **
 ** @param [r] str [const char*] Attribute name.
 ** @return [ajint] Index in namDbAttrs, or -1 on failure.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5664,6 +6219,8 @@ static ajint namDbAttrC(const char* str)
 **
 ** @param [r] thys [const AjPStr] Attribute name.
 ** @return [ajint] Index in namDbAttrs, or -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5681,6 +6238,8 @@ static ajint namDbAttrS(const AjPStr thys)
 **
 ** @param [r] str [const char*] Attribute name.
 ** @return [ajint] Index in namSvrAttrs, or -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5714,12 +6273,14 @@ static ajint namSvrAttrC(const char* str)
 
 
 
-/* @funcstatic namSvrAttrS *****************************************************
+/* @funcstatic namSvrAttrS ****************************************************
 **
 ** Return the index for a server attribute name.
 **
 ** @param [r] thys [const AjPStr] Attribute name.
 ** @return [ajint] Index in namSvrAttrs, or -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5737,6 +6298,8 @@ static ajint namSvrAttrS(const AjPStr thys)
 **
 ** @param [r] str [const char*] Attribute name.
 ** @return [ajint] Index in namRsAttrs, or -1 on failure.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -5777,6 +6340,8 @@ static ajint namRsAttrC(const char* str)
 **
 ** @param [r] thys [const AjPStr] Attribute name.
 ** @return [ajint] Index in namRsAttrs, or -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5795,6 +6360,8 @@ static ajint namRsAttrS(const AjPStr thys)
 ** @param [r] rstable [const AjPTable] Resource table
 ** @param [r] str [const char*] Attribute name.
 ** @return [AjBool] Attribute name matches a defined field and property
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5817,8 +6384,12 @@ static AjBool namRsAttrFieldC(const AjPTable rstable, const char* str)
 
     if(ajCharSuffixC(str, "len"))
         ajStrAssignSubC(&prefix, str, 0, -4);
+    else if(ajCharSuffixC(str, "seccachesize"))
+        ajStrAssignSubC(&prefix, str, 0, -13);
     else if(ajCharSuffixC(str, "cachesize"))
         ajStrAssignSubC(&prefix, str, 0, -10);
+    else if(ajCharSuffixC(str, "secpagesize"))
+        ajStrAssignSubC(&prefix, str, 0, -12);
     else if(ajCharSuffixC(str, "pagesize"))
         ajStrAssignSubC(&prefix, str, 0, -9);
     else
@@ -5891,6 +6462,8 @@ static AjBool namRsAttrFieldC(const AjPTable rstable, const char* str)
 ** @param [r] rstable [const AjPTable] Resource table
 ** @param [r] str [const AjPStr] Attribute name.
 ** @return [AjBool] Attribute name matches a defined field and property
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5913,8 +6486,12 @@ static AjBool namRsAttrFieldS(const AjPTable rstable, const AjPStr str)
 
     if(ajStrSuffixC(str, "len"))
         ajStrAssignSubS(&prefix, str, 0, -4);
+    else if(ajStrSuffixC(str, "seccachesize"))
+        ajStrAssignSubS(&prefix, str, 0, -13);
     else if(ajStrSuffixC(str, "cachesize"))
         ajStrAssignSubS(&prefix, str, 0, -10);
+    else if(ajStrSuffixC(str, "secpagesize"))
+        ajStrAssignSubS(&prefix, str, 0, -12);
     else if(ajStrSuffixC(str, "pagesize"))
         ajStrAssignSubS(&prefix, str, 0, -9);
     else
@@ -5992,6 +6569,8 @@ static AjBool namRsAttrFieldS(const AjPTable rstable, const AjPStr str)
 **
 ** Delete the initialisation values in the table.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6049,12 +6628,14 @@ void ajNamExit(void)
 
 
 
-/* @func ajNamSvrTest **********************************************************
+/* @func ajNamSvrTest *********************************************************
 **
 ** Looks for a server name in the known definitions.
 **
 ** @param [r] svrname [const AjPStr] Server name.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6080,6 +6661,8 @@ AjBool ajNamSvrTest(const AjPStr svrname)
 ** @param [r] svrname [const AjPStr] Server name.
 ** @param [w] url [AjPStr*] URL returned.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6118,6 +6701,8 @@ AjBool ajNamSvrGetUrl(const AjPStr svrname, AjPStr* url)
 **
 ** @param [r] qry [const AjPQuery] Database query
 ** @return [const char*] Database type
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6145,6 +6730,8 @@ const char* ajNamQueryGetDatatypeC(const AjPQuery qry)
 **
 ** @param [r] qry [const AjPQuery] Database query
 ** @return [const AjPStr] URL value
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6180,6 +6767,8 @@ const AjPStr ajNamQueryGetUrl(const AjPQuery qry)
 **
 ** @param [r] qry [const AjPQuery] Query.
 ** @return [const AjPTable] DatabaseServer attributes table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6208,6 +6797,8 @@ static const AjPTable namQuerySvrdata(const AjPQuery qry)
 **
 ** @param [r] qry [const AjPQuery] Database query
 ** @return [const AjPTable] Database attributes table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6248,6 +6839,8 @@ static const AjPTable namQueryDbdata(const AjPQuery qry)
 ** @param [r] svrname [const AjPStr] Server name.
 ** @param [w] dbalias [AjPStr*] Alias returned.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6280,7 +6873,7 @@ AjBool ajNamSvrGetDbalias(const AjPStr svrname, AjPStr* dbalias)
 
 
 
-/* @func ajNamSvrData **********************************************************
+/* @func ajNamSvrData *********************************************************
 **
 ** Given a query with server name, database name and search fields,
 ** fill in the common fields. The query fields are set later.
@@ -6296,6 +6889,8 @@ AjBool ajNamSvrGetDbalias(const AjPStr svrname, AjPStr* dbalias)
 ** @param [r] argc [ajuint] Number of additional attribute name/value pairs
 ** @param [v] [...] Variable length argument list
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6319,6 +6914,10 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
     AjBool ok = ajTrue;
     AjEDataType testDataType = AJDATATYPE_UNKNOWN;
     AjPStr saveType = NULL;
+    AjBool donecaseid = ajFalse;
+    AjBool donehasacc = ajFalse;
+    AjBool caseid = ajFalse;
+    AjBool hasacc = ajFalse;
 
     if(qry->SetServer)
         return ajTrue;
@@ -6434,9 +7033,17 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
     namSvrSetAttrStrC(svrtable, "url", &qry->DbUrl);
     namSvrSetAttrStrC(svrtable, "proxy", &qry->DbProxy);
     namSvrSetAttrStrC(svrtable, "httpversion", &qry->DbHttpVer);
-    namSvrSetAttrBoolC(svrtable, "caseidmatch", &qry->CaseId);
-    namSvrSetAttrBoolC(svrtable, "hasaccession", &qry->HasAcc);
     namSvrSetAttrStrC(svrtable, "serverversion", &qry->ServerVer);
+    if(namSvrSetAttrBoolC(svrtable, "caseidmatch", &caseid))
+    {
+        donecaseid = ajTrue;
+        qry->CaseId = caseid;
+    }
+    if(namSvrSetAttrBoolC(svrtable, "hasaccession", &hasacc))
+    {
+        donehasacc = ajTrue;
+        qry->HasAcc = hasacc;
+    }
 
 #ifdef WIN32
     ajStrExchangeKK(&qry->Directory, '/', '\\');
@@ -6602,6 +7209,8 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
         namDbSetAttrStrC(dbtable, "indexdirectory", &qry->IndexDir);
         namDbSetAttrStrC(dbtable, "indexdirectory", &qry->Directory);
         namDbSetAttrStrC(dbtable, "directory", &qry->Directory);
+        namDbSetAttrStrC(dbtable, "namespace", &qry->Namespace);
+        namDbSetAttrStrC(dbtable, "organisms", &qry->Organisms);
         namDbSetAttrStrC(dbtable, "exclude", &qry->Exclude);
         namDbSetAttrStrC(dbtable, "filename", &qry->Filename);
         if(!namDbSetAttrStrC(dbtable, "field", &qry->DbFields))
@@ -6609,14 +7218,27 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
         namDbSetAttrStrC(dbtable, "url", &qry->DbUrl);
         namDbSetAttrStrC(dbtable, "proxy", &qry->DbProxy);
         namDbSetAttrStrC(dbtable, "httpversion", &qry->DbHttpVer);
-        namDbSetAttrBoolC(dbtable, "caseidmatch", &qry->CaseId);
-        namDbSetAttrBoolC(dbtable, "hasaccession", &qry->HasAcc);
         namDbSetAttrStrC(dbtable, "serverversion", &qry->ServerVer);
+        if(namDbSetAttrBoolC(dbtable, "caseidmatch", &caseid))
+        {
+            donecaseid = ajTrue;
+            qry->CaseId = caseid;
+        }
+        if(namDbSetAttrBoolC(dbtable, "hasaccession", &hasacc))
+        {
+            donehasacc = ajTrue;
+            qry->HasAcc = hasacc;
+        }
 
         namDbSetAttrStrC(dbtable, "identifier", &qry->DbIdentifier);
         namDbSetAttrStrC(dbtable, "accession", &qry->DbAccession);
         namDbSetAttrStrC(dbtable, "filters", &qry->DbFilter);
         namDbSetAttrStrC(dbtable, "return", &qry->DbReturn);
+
+        if(!donecaseid)
+            qry->CaseId = caseid;
+        if(!donehasacc)
+            qry->HasAcc = hasacc;
 
 #ifdef WIN32
 	ajStrExchangeKK(&qry->Directory, '/', '\\');
@@ -6658,7 +7280,7 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
 
 
 
-/* @func ajNamSvrQuery *********************************************************
+/* @func ajNamSvrQuery ********************************************************
 **
 ** Given a query with server name and search fields,
 ** fill in the access method and some common fields according
@@ -6667,6 +7289,8 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
 ** @param [u] qry [AjPQuery] Query structure with at least
 **                                    svrname filled in
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6735,6 +7359,8 @@ AjBool ajNamSvrQuery(AjPQuery qry)
 ** @param [r] attrib [const char*] Attribute name.
 ** @param [w] qrystr [AjPStr*] Returned attribute value.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6811,7 +7437,7 @@ static AjBool namSvrSetAttrStrC(const AjPTable svrtable, const char* attrib,
 
 
 
-/* @funcstatic namSvrSetAttrBoolC **********************************************
+/* @funcstatic namSvrSetAttrBoolC *********************************************
 **
 ** Sets a named boolean attribute value from an attribute list.
 **
@@ -6819,6 +7445,8 @@ static AjBool namSvrSetAttrStrC(const AjPTable svrtable, const char* attrib,
 ** @param [r] attrib [const char*] Attribute name.
 ** @param [w] qrybool [AjBool*] Returned attribute value.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6874,6 +7502,8 @@ static AjBool namSvrSetAttrBoolC(const AjPTable svrtable, const char* attrib,
 **
 ** @param [r] dbname [const AjPStr] Database name.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6899,6 +7529,8 @@ AjBool ajNamDbTest(const AjPStr dbname)
 ** @param [r] dbname [const AjPStr] Database name.
 ** @param [w] itype [ajuint*] Database enumerated type
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6957,6 +7589,8 @@ AjBool ajNamDbGetType(const AjPStr dbname, ajuint *itype)
 ** @param [r] dbname [const AjPStr] Database name.
 ** @param [w] url [AjPStr*] URL returned.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6999,6 +7633,8 @@ AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url)
 ** @param [r] dbname [const AjPStr] Database name.
 ** @param [w] dbalias [AjPStr*] Alias returned.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7032,13 +7668,15 @@ AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias)
 
 
 
-/* @func ajNamDbGetIndexdir ****************************************************
+/* @func ajNamDbGetIndexdir ***************************************************
 **
 ** Gets the index directory for a database.
 **
 ** @param [r] dbname [const AjPStr] Database name.
 ** @param [w] indexdir [AjPStr*] Directory path returned.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7084,6 +7722,8 @@ AjBool ajNamDbGetIndexdir(const AjPStr dbname, AjPStr* indexdir)
 **
 ** @param [u] qry [AjPQuery] Database query.
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7151,6 +7791,8 @@ AjBool ajNamQuerySetDbalias(AjPQuery qry)
 ** @param [r] argc [ajuint] Number of additional attribute name/value pairs
 ** @param [v] [...] Variable length argument list
 ** @return [AjBool] ajTrue if success.
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -7192,9 +7834,11 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
 
         while(ajStrTokenNextParse(&handle, &token))
         {
-            if(ajStrPrefixCaseC(token, "n"))
+            if(ajStrMatchCaseC(token, "n"))
                 ajStrAssignC(&token, "Nucleotide");
-            else if(ajStrPrefixCaseC(token, "p"))
+            else if(ajStrMatchCaseC(token, "p"))
+                ajStrAssignC(&token, "Protein");
+            else if(ajStrMatchCaseC(token, "prot"))
                 ajStrAssignC(&token, "Protein");
 
             namtype = ajTableFetchS(namDbTypeTable, token);
@@ -7268,6 +7912,8 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
     namDbSetAttrStrC(dbtable, "indexdirectory", &qry->IndexDir);
     namDbSetAttrStrC(dbtable, "indexdirectory", &qry->Directory);
     namDbSetAttrStrC(dbtable, "directory", &qry->Directory);
+    namDbSetAttrStrC(dbtable, "namespace", &qry->Namespace);
+    namDbSetAttrStrC(dbtable, "organisms", &qry->Organisms);
     namDbSetAttrStrC(dbtable, "exclude", &qry->Exclude);
     namDbSetAttrStrC(dbtable, "filename", &qry->Filename);
 
@@ -7277,9 +7923,9 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
     namDbSetAttrStrC(dbtable, "url", &qry->DbUrl);
     namDbSetAttrStrC(dbtable, "proxy", &qry->DbProxy);
     namDbSetAttrStrC(dbtable, "httpversion", &qry->DbHttpVer);
+    namDbSetAttrStrC(dbtable, "serverversion", &qry->ServerVer);
     namDbSetAttrBoolC(dbtable, "caseidmatch", &qry->CaseId);
     namDbSetAttrBoolC(dbtable, "hasaccession", &qry->HasAcc);
-    namDbSetAttrStrC(dbtable, "serverversion", &qry->ServerVer);
 
     namDbSetAttrStrC(dbtable, "identifier", &qry->DbIdentifier);
     namDbSetAttrStrC(dbtable, "accession", &qry->DbAccession);
@@ -7325,6 +7971,8 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
 ** @param [u] qry [AjPQuery] Query structure with at least
 **                                    dbname filled in
 ** @return [AjBool] ajTrue if success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7337,7 +7985,7 @@ AjBool ajNamDbQuery(AjPQuery qry)
     const AjPTable sdbtable;
 
     const AjPTable dbtable;
-    const char* qlinks = NULL;
+    const char* qlinks;
 
     ajDebug("ajNamDbQuery SetQuery:%B QueryType:%d\n",
             qry->SetQuery, qry->QueryType);
@@ -7347,9 +7995,12 @@ AjBool ajNamDbQuery(AjPQuery qry)
 
     qry->SetQuery = ajTrue;
 
+    if(qry->InDrcat)
+        return ajTrue;
+
     if(ajStrGetLen(qry->SvrName))
     {
-	if(ajStrGetLen(qry->DbType))
+        if(ajStrGetLen(qry->DbType))
             ajNamSvrData(qry, 0);
 
         ajNamSvrQuery(qry);
@@ -7361,7 +8012,7 @@ AjBool ajNamDbQuery(AjPQuery qry)
         data = ajTableFetchS(namDbMasterTable, qry->DbName);
 
     if(!data)
-	ajFatal("database %S unknown", qry->DbName);
+        ajFatal("database %S unknown", qry->DbName);
 
     dbtable = (const AjPTable) data->data;
 
@@ -7439,12 +8090,14 @@ AjBool ajNamDbQuery(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] Query structure with no database name
 ** @return [AjBool] ajTrue if success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ajNamFileQuery(AjPQuery qry)
 {
-/*    const char* fields = NULL; */
+    const char* fields = NULL;
     const char* qlinks = NULL;
 
     if(qry->SetQuery)
@@ -7473,12 +8126,14 @@ AjBool ajNamFileQuery(AjPQuery qry)
             break;
     }
 
+    /*
     if(!ajStrGetLen(qry->Formatstr))
     {
-	ajErr("No format defined for file access");
+	ajErr("No format defined for file access query");
 
 	return ajFalse;
     }
+    */
 
     qlinks = namDatatype2Qlinks(qry->DataType);
 
@@ -7491,10 +8146,10 @@ AjBool ajNamFileQuery(AjPQuery qry)
         ajStrAssignC(&qry->Qlinks, "|");
     }
 
-    /*    fields = */ namDatatype2Fields(qry->DataType);
+    fields = namDatatype2Fields(qry->DataType);
 
-    if(qlinks)
-        ajStrAssignC(&qry->DbFields, qlinks);
+    if(fields)
+        ajStrAssignC(&qry->DbFields, fields);
     else
     {
         ajWarn("no fields defined for type; '%s'",
@@ -7516,6 +8171,8 @@ AjBool ajNamFileQuery(AjPQuery qry)
 ** @param [r] attrib [const char*] Attribute name.
 ** @param [w] qrystr [AjPStr*] Returned attribute value.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7600,6 +8257,8 @@ static AjBool namDbSetAttrStrC(const AjPTable dbtable, const char* attrib,
 ** @param [r] attrib [const char*] Attribute name.
 ** @param [w] qrybool [AjBool*] Returned attribute value.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7655,6 +8314,8 @@ static AjBool namDbSetAttrBoolC(const AjPTable dbtable, const char* attrib,
 **
 ** @param [u] var [AjPStr*] String value
 ** @return [AjBool] Always ajTrue so far
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7699,6 +8360,8 @@ static AjBool namVarResolve(AjPStr* var)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7726,6 +8389,8 @@ static void namUser(const char* fmt, ...)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -7755,6 +8420,8 @@ static void namError(const char* fmt, ...)
 ** (package level)
 **
 ** @return [const AjPStr] Install directory root
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7766,27 +8433,13 @@ const AjPStr ajNamValueInstalldir(void)
 
 
 
-/* @obsolete ajNamRootInstall
-** @remove Use ajNamValueinstalldir
-*/
-__deprecated AjBool ajNamRootInstall(AjPStr* root)
-{
-    ajStrAssignS(root, namFixedInstallStr);
-
-    if(!ajStrGetLen(*root))
-        return ajFalse;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajNamValuePackage *****************************************************
+/* @func ajNamValuePackage ****************************************************
 **
 ** Returns the package name for the library
 **
 ** @return [const AjPStr] Package name
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7798,27 +8451,13 @@ const AjPStr ajNamValuePackage(void)
 
 
 
-/* @obsolete ajNamRootPack
-** @remove Use ajNamValuePackage
-*/
-__deprecated AjBool ajNamRootPack(AjPStr* root)
-{
-    ajStrAssignS(root, namFixedPackageStr);
-
-    if(!ajStrGetLen(*root))
-        return ajFalse;
-
-    return ajTrue;
-}
-
-
-
-
 /* @func ajNamValueSystem *****************************************************
 **
 ** Returns the system information for the library
 **
 ** @return [const AjPStr] Version number
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7830,11 +8469,13 @@ const AjPStr ajNamValueSystem(void)
 
 
 
-/* @func ajNamValueVersion *****************************************************
+/* @func ajNamValueVersion ****************************************************
 **
 ** Returns the version number for the library
 **
 ** @return [const AjPStr] Version number
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7846,25 +8487,14 @@ const AjPStr ajNamValueVersion(void)
 
 
 
-/* @obsolete ajNamRootVersion
-** @remove Use ajNamValueVersion
-*/
-__deprecated AjBool ajNamRootVersion(AjPStr* version)
-{
-    ajStrAssignS(version, namFixedVersionStr);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajNamValueRootdir *****************************************************
+/* @func ajNamValueRootdir ****************************************************
 **
 ** Returns the directory for all file searches
 ** (package level)
 **
 ** @return [const AjPStr] Package level root directory
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7876,43 +8506,19 @@ const AjPStr ajNamValueRootdir(void)
 
 
 
-/* @obsolete ajNamRoot
-** @remove Use ajNamValueRootdir
-*/
-__deprecated AjBool ajNamRoot(AjPStr* root)
-{
-    ajStrAssignS(root, namFixedRootStr);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajNamValueBasedir *****************************************************
+/* @func ajNamValueBasedir ****************************************************
 **
 ** Returns the base directory for all for all file searches
 ** (above package level).
 **
 ** @return [const AjPStr] Base directory
+**
+** @release 6.0.0
 ******************************************************************************/
 
 const AjPStr ajNamValueBasedir(void)
 {
     return namFixedBaseStr;
-}
-
-
-
-
-/* @obsolete ajNamRootBase
-** @remove Use ajNamValueBasedir
-*/
-__deprecated AjBool ajNamRootBase(AjPStr* rootbase)
-{
-    ajStrAssignS(rootbase, namFixedBaseStr);
-
-    return ajTrue;
 }
 
 
@@ -7924,6 +8530,8 @@ __deprecated AjBool ajNamRootBase(AjPStr* rootbase)
 **
 ** @param [w] name [AjPStr*] String
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7979,6 +8587,8 @@ AjBool ajNamResolve(AjPStr* name)
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @param [r] entrytype [ajint] Internal table entry type
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -8005,12 +8615,14 @@ static AjBool namValid(const NamPEntry entry, ajint entrytype)
 
 
 
-/* @funcstatic namValidAlias ***********************************************
+/* @funcstatic namValidAlias **************************************************
 **
 ** Validation of a master table alias entry
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8040,6 +8652,8 @@ static AjBool namValidAlias(const NamPEntry entry)
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8157,6 +8771,8 @@ static AjBool namValidServer(const NamPEntry entry)
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -8172,6 +8788,10 @@ static AjBool namValidDatabase(const NamPEntry entry)
     AjBool hasmethod = ajFalse;
     AjBool hastype   = ajFalse;
     AjPStr name = NULL;
+    AjPStr token = NULL;
+    AjPStr typetoken = NULL;
+    AjPStrTok handle = NULL;
+    AjPStrTok typehandle = NULL;
     const AjPStr value = NULL;
     const AjPStr dbtype = NULL;
 
@@ -8202,18 +8822,45 @@ static AjBool namValidDatabase(const NamPEntry entry)
 	    {
 		hasformat=ajTrue;
 
-                if(!namInformatTest(value, dbtype))  /* test: dbunknowns.rc */
-                        namError("Database '%S' %S: '%S' unknown",
-                                 entry->name, name, value);
+                ajStrTokenAssignC(&typehandle, dbtype, " ,;");
+
+                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                {
+                    ok = ajFalse;
+                    ajStrTokenAssignC(&handle, value, " ,;");
+                    while(ajStrTokenNextParse(&handle, &token))
+                    {
+                        if(namInformatTest(token, typetoken))
+                            ok = ajTrue;
+                    }
+
+                    if(!ok) /* test: dbunknowns.rc */
+                        namError("Database '%S' %S: '%S' unknown for type '%S'",
+                                 entry->name, name, value, typetoken);
+                }
+
             }
 
             if(ajStrPrefixC(name, "method"))
 	    {
 		hasmethod=ajTrue;
 
-		if(!namAccessTest(value, dbtype))  /* test: dbunknowns.rc */
-                        namError("Database '%S' %S: '%S' unknown",
-                                 entry->name, name, value);
+                ajStrTokenAssignC(&typehandle, dbtype, " ,;");
+ 
+                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                {
+                    ok = ajFalse;
+                    ajStrTokenAssignC(&handle, value, " ,;");
+                    while(ajStrTokenNextParse(&handle, &token))
+                    {
+                        if(namAccessTest(value, typetoken))
+                            ok = ajTrue;
+                    }
+
+                    if(!ok)  /* test: dbunknowns.rc */
+                        namError("Database '%S' %S: '%S' unknown for type '%S'",
+                                 entry->name, name, value, typetoken);
+                }
             }
 
 	    if(ajStrPrefixC(name, "type"))
@@ -8221,9 +8868,13 @@ static AjBool namValidDatabase(const NamPEntry entry)
 		hastype=ajTrue;
 		oktype = ajFalse;
 
-		for(k=0; namDbTypes[k].Name; k++)
-		    if(ajStrMatchCaseC(value, namDbTypes[k].Name)) 
-			oktype = ajTrue;
+                ajStrTokenAssignC(&typehandle, value, " ,;");
+                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                {
+                    for(k=0; namDbTypes[k].Name; k++)
+                        if(ajStrMatchCaseC(typetoken, namDbTypes[k].Name)) 
+                            oktype = ajTrue;
+                }
 
 		if(!oktype)		/* test: dbunknowns.rc */
 		    namError("Database '%S' %S: '%S' unknown",
@@ -8260,6 +8911,10 @@ static AjBool namValidDatabase(const NamPEntry entry)
     }
 
     ajStrDel(&name);
+    ajStrTokenDel(&handle);
+    ajStrTokenDel(&typehandle);
+    ajStrDel(&token);
+    ajStrDel(&typetoken);
 
     return ok;
 }
@@ -8273,6 +8928,8 @@ static AjBool namValidDatabase(const NamPEntry entry)
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -8316,6 +8973,8 @@ static AjBool namValidResource(const NamPEntry entry)
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -8347,6 +9006,8 @@ static AjBool namValidVariable(const NamPEntry entry)
 **
 ** @param [r] optionName [const char*] option name
 ** @return [AjBool] ajTrue if option was recognised
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -8375,7 +9036,7 @@ AjBool ajNamSetControl(const char* optionName)
 
 
 
-/* @func ajNamRsAttrValueC **************************************************
+/* @func ajNamRsAttrValueC ****************************************************
 **
 ** Return the value for a resource attribute
 **
@@ -8385,6 +9046,8 @@ AjBool ajNamSetControl(const char* optionName)
 
 **
 ** @return [AjBool] true if found
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -8430,7 +9093,7 @@ AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 
 
 
-/* @func ajNamRsAttrValueS *************************************************
+/* @func ajNamRsAttrValueS ****************************************************
 **
 ** Return the value for a resource attribute
 **
@@ -8440,6 +9103,8 @@ AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 
 **
 ** @return [AjBool] true if found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8489,19 +9154,7 @@ AjBool ajNamRsAttrValueS(const AjPStr name, const AjPStr attribute,
 
 
 
-/* @obsolete ajNamRsAttrValue
-** @rename ajNamRsAttrValueS
-*/
-__deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
-			 AjPStr *value)
-{
-    return ajNamRsAttrValueS(name, attribute, value);
-}
-
-
-
-
-/* @func ajNamRsListValue **************************************************
+/* @func ajNamRsListValue *****************************************************
 **
 ** Return the value for a resource attribute of type 'list'
 **
@@ -8509,6 +9162,8 @@ __deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
 ** @param [w] value [AjPStr *] resource value
 **
 ** @return [AjBool] true if found
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -8537,3 +9192,118 @@ AjBool ajNamRsListValue(const AjPStr name, AjPStr *value)
 
     return ajFalse;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajNamGetenv
+** @rename ajNamGetenvS
+*/
+__deprecated AjBool ajNamGetenv(const AjPStr name,
+		    AjPStr* value)
+{
+    return ajNamGetenvS(name, value);
+}
+
+
+
+
+/* @obsolete ajNamGetValue
+** @rename ajNamGetValusS
+*/
+
+__deprecated AjBool ajNamGetValue(const AjPStr name, AjPStr* value)
+{
+    return ajNamGetValueC(ajStrGetPtr(name), value);
+}
+
+
+
+
+/* @obsolete ajNamRootInstall
+** @remove Use ajNamValueinstalldir
+*/
+__deprecated AjBool ajNamRootInstall(AjPStr* root)
+{
+    ajStrAssignS(root, namFixedInstallStr);
+
+    if(!ajStrGetLen(*root))
+        return ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+/* @obsolete ajNamRootPack
+** @remove Use ajNamValuePackage
+*/
+__deprecated AjBool ajNamRootPack(AjPStr* root)
+{
+    ajStrAssignS(root, namFixedPackageStr);
+
+    if(!ajStrGetLen(*root))
+        return ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+/* @obsolete ajNamRootVersion
+** @remove Use ajNamValueVersion
+*/
+__deprecated AjBool ajNamRootVersion(AjPStr* version)
+{
+    ajStrAssignS(version, namFixedVersionStr);
+
+    return ajTrue;
+}
+
+
+
+
+/* @obsolete ajNamRoot
+** @remove Use ajNamValueRootdir
+*/
+__deprecated AjBool ajNamRoot(AjPStr* root)
+{
+    ajStrAssignS(root, namFixedRootStr);
+
+    return ajTrue;
+}
+
+
+
+
+/* @obsolete ajNamRootBase
+** @remove Use ajNamValueBasedir
+*/
+__deprecated AjBool ajNamRootBase(AjPStr* rootbase)
+{
+    ajStrAssignS(rootbase, namFixedBaseStr);
+
+    return ajTrue;
+}
+
+
+
+
+/* @obsolete ajNamRsAttrValue
+** @rename ajNamRsAttrValueS
+*/
+__deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+			 AjPStr *value)
+{
+    return ajNamRsAttrValueS(name, attribute, value);
+}
+#endif

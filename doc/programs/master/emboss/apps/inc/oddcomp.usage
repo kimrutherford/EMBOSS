@@ -11,8 +11,7 @@ Identify proteins with specified sequence word composition
 Input protein sequence(s): <b>tsw:*</b>
 Program compseq output file: <b>oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
-Output file [12s1_arath.oddcomp]: <b>out.odd</b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output file [cru4_arath.oddcomp]: <b>out.odd</b>
 
 </pre></td></tr></table><p>
 <p>

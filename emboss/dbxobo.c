@@ -77,10 +77,6 @@ int main(int argc, char **argv)
     ajint i;
     AjPFile inf = NULL;
 
-    AjPBtId  idobj  = NULL;
-    AjPBtPri priobj = NULL;
-    AjPBtHybrid hyb = NULL;
-    
     ajulong nentries = 0L;
     ajulong ientries = 0L;
     AjPTime starttime = NULL;
@@ -102,17 +98,12 @@ int main(int argc, char **argv)
     datestr    = ajAcdGetString("date");
     compressed = ajAcdGetBoolean("compressed");
 
-    ajStrAppendK(&dbprefix, ':');
     ajStrFmtUpper(&dbprefix);
 
-    entry = embBtreeEntryNew();
+    entry = embBtreeEntryNew(0);
     if(compressed)
         embBtreeEntrySetCompressed(entry);
     tmpstr = ajStrNew();
-    
-    idobj   = ajBtreeIdNew();
-    priobj  = ajBtreePriNew();
-    hyb     = ajBtreeHybNew();
     
     dbtype = ajStrNewC("obo");
 
@@ -182,7 +173,7 @@ int main(int argc, char **argv)
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
 	ajFilenameTrimPath(&tmpstr);
-	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S\n",tmpstr);
 
 	ientries = 0L;
 
@@ -211,7 +202,7 @@ int main(int argc, char **argv)
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
 		    nentries, ientries,
 		    ajTimeDiff(starttime, nowtime),
 		    ajTimeDiff(begintime, nowtime));
@@ -263,11 +254,6 @@ int main(int argc, char **argv)
     while(fieldarray[nfields])
 	ajStrDel(&fieldarray[nfields++]);
     AJFREE(fieldarray);
-
-
-    ajBtreeIdDel(&idobj);
-    ajBtreePriDel(&priobj);
-    ajBtreeHybDel(&hyb);
 
     ajRegFree(&dbxobo_wrdexp);
     ajRegFree(&dbxobo_synonymexp);
@@ -353,6 +339,7 @@ static AjBool dbxobo_ParseObo(EmbPBtreeEntry entry, const AjPStr line,
     AjPStr name = NULL;
     AjPStr rest = NULL;
     AjPStr token = NULL;
+    ajlong ipos;
 
     static AjPStr saveline = NULL;
 
@@ -399,7 +386,11 @@ static AjBool dbxobo_ParseObo(EmbPBtreeEntry entry, const AjPStr line,
     if(ajStrMatchC(name, "id:"))
     {
         if(ajStrPrefixS(rest, dbprefix))
-            ajStrCutStart(&rest, ajStrGetLen(dbprefix));
+        {
+            ipos = ajStrFindAnyK(rest, ':');
+            if(ipos > 0)
+                ajStrCutStart(&rest, (size_t)(ipos+1));
+        }
         ajStrAssignS(&entry->id, rest);
     }
     else if(ajStrMatchC(name, "alt_id:"))
@@ -407,7 +398,11 @@ static AjBool dbxobo_ParseObo(EmbPBtreeEntry entry, const AjPStr line,
         if(accfield)
         {
             if(ajStrPrefixS(rest, dbprefix))
-                ajStrCutStart(&rest, ajStrGetLen(dbprefix));
+            {
+                ipos = ajStrFindAnyK(rest, ':');
+                if(ipos > 0)
+                    ajStrCutStart(&rest, (size_t)(ipos+1));
+            }
             ajListstrPush(accfield->data,ajStrNewS(rest));
         }
     }
@@ -449,7 +444,11 @@ static AjBool dbxobo_ParseObo(EmbPBtreeEntry entry, const AjPStr line,
         if(isafield)
         {
             if(ajStrPrefixS(rest, dbprefix))
-                ajStrCutStart(&rest, ajStrGetLen(dbprefix));
+            {
+                ipos = ajStrFindAnyK(rest, ':');
+                if(ipos > 0)
+                    ajStrCutStart(&rest, (size_t)(ipos+1));
+            }
             ajListstrPush(isafield->data,ajStrNewS(rest));
         }
     }

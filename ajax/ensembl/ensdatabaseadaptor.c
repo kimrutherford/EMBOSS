@@ -1,31 +1,34 @@
-/* @source Ensembl Database Adaptor functions
+/* @source ensdatabaseadaptor *************************************************
+**
+** Ensembl Database Adaptor functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.42 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.28 $
+** @modified $Date: 2012/04/26 06:37:32 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdatabaseadaptor.h"
 #include "ensmetainformation.h"
@@ -34,40 +37,101 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-
-
-
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
-
-
-
-
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
-
-
-
-
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
-
-/* @conststatic databaseadaptorGroup ******************************************
+/* @const ensKDatabaseadaptorRegCollection ************************************
 **
-** The Ensembl Database Adaptor group element is enumerated in the data
+** Regular expression to match Ensembl collection databases.
+**
+******************************************************************************/
+
+const char *ensKDatabaseadaptorRegCollection =
+    "^"                     /* Start of string assertion */
+    "(\\w+)"                /* Genus name (1) */
+    "_"                     /* Separator */
+    "collection"            /* Prefix */
+    "_"                     /* Separator */
+    "([a-z]+)"              /* Ensembl Database group (2) */
+    "(?:_\\d+)?"            /* Ensembl Genomes version */
+    "_"                     /* Separator */
+    "(\\d+)"                /* Ensembl Software version (3) */
+    "_"                     /* Separator */
+    "[0-9a-z]+"             /* Assembly suffix */
+    "$";                    /* End of string assertion */
+
+
+
+
+/* @const ensKDatabaseadaptorRegMulti *****************************************
+**
+** Regular expression to match Ensembl multi-species databases.
+**
+******************************************************************************/
+
+const char *ensKDatabaseadaptorRegMulti =
+    "^"                     /* Start of string assertion */
+    "ensembl(?:genomes)?"   /* Prefix */
+    "_"                     /* Separator */
+    "([a-z]+)"              /* Ensembl Database group (1) */
+    "(_\\w+?)*?"            /* Ensembl Genomes section (2) */
+    "(?:_\\d+)?"            /* Ensembl Genomes version */
+    "_"                     /* Separator */
+    "(\\d+)"                /* Ensembl Software version (3) */
+    "$";                    /* End of string assertion */
+
+
+
+
+/* @const ensKDatabaseadaptorRegSpecies ***************************************
+**
+** Regular expression to match Ensembl species-specific databases.
+**
+******************************************************************************/
+
+const char *ensKDatabaseadaptorRegSpecies =
+    "^"                     /* Start of string assertion */
+    "([a-z]+_[0-9a-z]+)"    /* Species name (1) */
+    "_"                     /* Separator */
+    "([a-z]+)"              /* Database group (2) */
+    "(?:_\\d+)?"            /* Ensembl Genomes version */
+    "_"                     /* Separator */
+    "(\\d+)"                /* Ensembl Software version (3) */
+    "_"                     /* Separator */
+    "[0-9a-z]+"             /* Assembly suffix */
+    "$";                    /* End of string assertion */
+
+
+
+
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
+
+/* @conststatic databaseadaptorKGroup *****************************************
+**
+** The Ensembl Database Adaptor group member is enumerated in the data
 ** structure. The following strings are used for conversion in database
 ** operations and correspond to EnsEDatabaseadaptorGroup.
 **
 ******************************************************************************/
 
-static const char* databaseadaptorGroup[] =
+static const char *databaseadaptorKGroup[] =
 {
     "",
     "core",
@@ -86,29 +150,29 @@ static const char* databaseadaptorGroup[] =
     "ancestral",
     "website",
     "production",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -128,8 +192,8 @@ static const char* databaseadaptorGroup[] =
 ** Ensembl Database Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor
-** @cc CVS Revision: 1.219
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.225
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -156,8 +220,8 @@ static const char* databaseadaptorGroup[] =
 ** @argrule Ini dbc [EnsPDatabaseconnection] Ensembl Database Connection
 ** @argrule Ini database [AjPStr] Database name
 ** @argrule Ini species [AjPStr] Species
-** @argrule Ini dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @argrule Ini dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 ** @argrule Ini multi [AjBool] Multiple species
 ** @argrule Ini identifier [ajuint] Species identifier
 ** @argrule Url url [const AjPStr] Uniform Resource Locator
@@ -197,6 +261,8 @@ static const char* databaseadaptorGroup[] =
 ** @param [u] database [AjPStr] Database name
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -206,9 +272,9 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
 {
     AjBool debug = AJFALSE;
 
-    AjPRegexp multire      = NULL;
-    AjPRegexp speciesre    = NULL;
-    AjPRegexp collectionre = NULL;
+    AjPRegexp rec = NULL;
+    AjPRegexp rem = NULL;
+    AjPRegexp res = NULL;
 
     AjPStr group     = NULL;
     AjPStr prefix    = NULL;
@@ -221,7 +287,7 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
 
     debug = ajDebugTest("ensDatabaseadaptorNewDatabasename");
 
-    if(debug)
+    if (debug)
     {
         ajDebug("ensDatabaseadaptorNewDatabasename\n"
                 "  dbc %p\n"
@@ -232,43 +298,40 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         ensDatabaseconnectionTrace(dbc, 1);
     }
 
-    if(!dbc)
+    if (!dbc)
         return NULL;
 
-    if((database == NULL) || (ajStrGetLen(database) == 0))
+    if ((database == NULL) || (ajStrGetLen(database) == 0))
         return NULL;
 
-    collectionre =
-        ajRegCompC("^\\w+_collection_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
-
-    multire =
-        ajRegCompC("^ensembl_([a-z]+)(_\\w+?)*?(?:_\\d+)?_(\\d+)$");
-
-    speciesre =
-        ajRegCompC("^([a-z]+_[a-z0-9]+)_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
+    rec = ajRegCompC(ensKDatabaseadaptorRegCollection);
+    rem = ajRegCompC(ensKDatabaseadaptorRegMulti);
+    res = ajRegCompC(ensKDatabaseadaptorRegSpecies);
 
     multi = ajStrNewC("default");
 
-    if(ajRegExec(collectionre, database))
+    if (ajRegExec(rec, database))
     {
         /* Ensembl Collection databases have to be matched first. */
 
         group     = ajStrNew();
+        prefix    = ajStrNew();
         swversion = ajStrNew();
 
-        ajRegSubI(collectionre, 1, &group);
-        ajRegSubI(collectionre, 2, &swversion);
+        ajRegSubI(rec, 1, &prefix);
+        ajRegSubI(rec, 2, &group);
+        ajRegSubI(rec, 3, &swversion);
 
-        if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+        if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "collection database '%S'.\n",
                         database);
 
             dbag = ensDatabaseadaptorGroupFromStr(group);
 
-            if(dbag)
+            if (dbag)
                 dba = ensDatabaseadaptorNewIni(dbc,
                                                database,
                                                prefix,
@@ -282,17 +345,18 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         }
         else
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "collection database '%S', "
                         "but not the software version '%s'.\n",
-                        database, ensSoftwareVersion);
+                        database, ensKSoftwareVersion);
         }
 
         ajStrDel(&group);
+        ajStrDel(&prefix);
         ajStrDel(&swversion);
     }
-    else if(ajRegExec(multire, database))
+    else if (ajRegExec(rem, database))
     {
         /* Multi-species databases */
 
@@ -300,31 +364,31 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         prefix    = ajStrNew();
         swversion = ajStrNew();
 
-        ajRegSubI(multire, 1, &group);
+        ajRegSubI(rem, 1, &group);
 
-        if(ajRegLenI(multire, 3))
+        if (ajRegLenI(rem, 3))
         {
-            ajRegSubI(multire, 2, &prefix);
-            ajRegSubI(multire, 3, &swversion);
+            ajRegSubI(rem, 2, &prefix);
+            ajRegSubI(rem, 3, &swversion);
 
             /* Remove leading underscores from the species prefix. */
 
-            if(ajStrPrefixC(prefix, "_"))
+            if (ajStrPrefixC(prefix, "_"))
                 ajStrCutStart(&prefix, 1);
         }
         else
-            ajRegSubI(multire, 2, &swversion);
+            ajRegSubI(rem, 2, &swversion);
 
-        if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+        if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "multi-species database '%S'.\n",
                         database);
 
             dbag = ensDatabaseadaptorGroupFromStr(group);
 
-            if(dbag)
+            if (dbag)
                 dba = ensDatabaseadaptorNewIni(dbc,
                                                database,
                                                (ajStrGetLen(prefix))
@@ -339,18 +403,18 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         }
         else
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "multi-species database '%S', "
                         "but not the software version '%s'.\n",
-                        database, ensSoftwareVersion);
+                        database, ensKSoftwareVersion);
         }
 
         ajStrDel(&group);
         ajStrDel(&prefix);
         ajStrDel(&swversion);
     }
-    else if(ajRegExec(speciesre, database))
+    else if (ajRegExec(res, database))
     {
         /* Species-specific databases */
 
@@ -358,20 +422,20 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         group     = ajStrNew();
         swversion = ajStrNew();
 
-        ajRegSubI(speciesre, 1, &prefix);
-        ajRegSubI(speciesre, 2, &group);
-        ajRegSubI(speciesre, 3, &swversion);
+        ajRegSubI(res, 1, &prefix);
+        ajRegSubI(res, 2, &group);
+        ajRegSubI(res, 3, &swversion);
 
-        if(ajStrMatchCaseC(swversion, ensSoftwareVersion))
+        if (ajStrMatchCaseC(swversion, ensKSoftwareVersion))
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "species-specific database '%S'.\n",
                         database);
 
             dbag = ensDatabaseadaptorGroupFromStr(group);
 
-            if(dbag)
+            if (dbag)
                 dba = ensDatabaseadaptorNewIni(dbc,
                                                database,
                                                prefix,
@@ -385,11 +449,11 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
         }
         else
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensDatabaseadaptorNewDatabasename matched "
                         "species-specific database '%S', "
                         "but not the software version '%s'.\n",
-                        database, ensSoftwareVersion);
+                        database, ensKSoftwareVersion);
         }
 
         ajStrDel(&prefix);
@@ -401,9 +465,9 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
                 "database name '%S'.\n",
                 database);
 
-    ajRegFree(&collectionre);
-    ajRegFree(&multire);
-    ajRegFree(&speciesre);
+    ajRegFree(&rec);
+    ajRegFree(&rem);
+    ajRegFree(&res);
 
     ajStrDel(&multi);
 
@@ -416,6 +480,9 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
 /* @func ensDatabaseadaptorNewIni *********************************************
 **
 ** Constructor for an Ensembl Database Adaptor with initial values.
+**
+** If a database name has not been provided, the database name of the
+** Ensembl Database Connection will be used.
 **
 ** Ensembl Database Adaptors are singleton objects in the sense that a single
 ** instance of an Ensembl Database Adaptor connected to a particular database
@@ -430,16 +497,16 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::new
 ** @param [u] dbc [EnsPDatabaseconnection] Ensembl Database Connection
-** @param [u] database [AjPStr] Database name (optional). If not provided, the
-**                              database name in the Database Connection will
-**                              be used.
+** @param [uN] database [AjPStr] Database name
 ** @param [u] species [AjPStr] Species
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 ** @param [r] multi [AjBool] Multiple species
 ** @param [r] identifier [ajuint] Species identifier
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ** NOTE: The Perl API automatically registers the Ensembl Database Adaptor in
 ** the Ensembl Registry via Bio::EnsEMBL::Utils::ConfigRegistry::gen_load.
@@ -458,7 +525,7 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewIni(
 {
     EnsPDatabaseadaptor dba = NULL;
 
-    if(ajDebugTest("ensDatabaseadaptorNewIni"))
+    if (ajDebugTest("ensDatabaseadaptorNewIni"))
     {
         ajDebug("ensDatabaseadaptorNewIni\n"
                 "  dbc %p\n"
@@ -477,20 +544,20 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewIni(
         ensDatabaseconnectionTrace(dbc, 1);
     }
 
-    if(!dbc)
+    if (!dbc)
         return NULL;
 
-    if(!species)
+    if (!species)
         return NULL;
 
-    if(!dbag)
+    if (!dbag)
         return NULL;
 
     AJNEW0(dba);
 
     dba->Databaseconnection = ensDatabaseconnectionNewCpy(dbc, database);
 
-    if(species)
+    if (species)
         dba->Species = ajStrNewRef(species);
 
     dba->Group = dbag;
@@ -524,6 +591,8 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewIni(
 ** @param [r] url [const AjPStr] Uniform Resource Locator
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -533,12 +602,12 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url)
 
     EnsPDatabaseconnection dbc = NULL;
 
-    if((url == NULL) || (ajStrGetLen(url) == 0))
+    if ((url == NULL) || (ajStrGetLen(url) == 0))
         return NULL;
 
     dbc = ensDatabaseconnectionNewUrl(url);
 
-    if(!dbc)
+    if (!dbc)
         return NULL;
 
     dba = ensDatabaseadaptorNewDatabasename(
@@ -555,15 +624,15 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Database Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Database Adaptor object.
 **
 ** @fdata [EnsPDatabaseadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Database Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Database Adaptor
 **
-** @argrule * Pdba [EnsPDatabaseadaptor*] Ensembl Database Adaptor
-**                                        object address
+** @argrule * Pdba [EnsPDatabaseadaptor*]
+** Ensembl Database Adaptor address
 **
 ** @valrule * [void]
 **
@@ -586,10 +655,11 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url)
 ** @see ensExit
 ** @see ensRegistryExit
 **
-** @param [d] Pdba [EnsPDatabaseadaptor*] Ensembl Database Adaptor
-**                                        object address
+** @param [d] Pdba [EnsPDatabaseadaptor*] Ensembl Database Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ** NOTE: The Perl API removes the Ensembl Database Adaptor from the
 ** Ensembl Registry via Bio::EnsEMBL::Registry::remove_db.
@@ -597,17 +667,15 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url)
 ** Adaptors are deleted from the Ensembl Registry.
 ******************************************************************************/
 
-void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba)
+void ensDatabaseadaptorDel(EnsPDatabaseadaptor *Pdba)
 {
     EnsPDatabaseadaptor pthis = NULL;
 
-    if(!Pdba)
+    if (!Pdba)
         return;
 
-    if(!*Pdba)
-        return;
-
-    if(ajDebugTest("ensDatabaseadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensDatabaseadaptorDel"))
     {
         ajDebug("ensDatabaseadaptorDel\n"
                 "  *Pdba %p\n",
@@ -615,6 +683,10 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba)
 
         ensDatabaseadaptorTrace(*Pdba, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pdba)
+        return;
 
     pthis = *Pdba;
 
@@ -634,9 +706,9 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Database Adaptor object.
+** Functions for returning members of an Ensembl Database Adaptor object.
 **
 ** @fdata [EnsPDatabaseadaptor]
 **
@@ -652,10 +724,10 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba)
 ** @valrule Databaseconnection [EnsPDatabaseconnection]
 ** Ensembl Database Connection or NULL
 ** @valrule Species [AjPStr] Species or NULL
-** @valrule Group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration or ensEDatabaseadaptorGroupNULL
+** @valrule Group [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration or ensEDatabaseadaptorGroupNULL
 ** @valrule Multispecies [AjBool] Multiple species or ajFalse
-** @valrule Identifier [ajuint] Species identifier or 0
+** @valrule Identifier [ajuint] Species identifier or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -665,22 +737,21 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba)
 
 /* @func ensDatabaseadaptorGetDatabaseconnection ******************************
 **
-** Get the Ensembl Database Connection element of an Ensembl Database Adaptor.
+** Get the Ensembl Database Connection member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::dbc
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDatabaseconnection] Ensembl Database Connection or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseconnection ensDatabaseadaptorGetDatabaseconnection(
     const EnsPDatabaseadaptor dba)
 {
-    if(!dba)
-        return NULL;
-
-    return dba->Databaseconnection;
+    return (dba) ? dba->Databaseconnection : NULL;
 }
 
 
@@ -688,23 +759,22 @@ EnsPDatabaseconnection ensDatabaseadaptorGetDatabaseconnection(
 
 /* @func ensDatabaseadaptorGetGroup *******************************************
 **
-** Get the group element of an Ensembl Database Adaptor.
+** Get the group member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::group
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration or ensEDatabaseadaptorGroupNULL
+** @return [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration or ensEDatabaseadaptorGroupNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEDatabaseadaptorGroup ensDatabaseadaptorGetGroup(
     const EnsPDatabaseadaptor dba)
 {
-    if(!dba)
-        return ensEDatabaseadaptorGroupNULL;
-
-    return dba->Group;
+    return (dba) ? dba->Group : ensEDatabaseadaptorGroupNULL;
 }
 
 
@@ -712,22 +782,24 @@ EnsEDatabaseadaptorGroup ensDatabaseadaptorGetGroup(
 
 /* @func ensDatabaseadaptorGetIdentifier **************************************
 **
-** Get the species identifier element of an Ensembl Database Adaptor.
+** Get the species identifier member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::species_id
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [ajuint] Species identifier, defaults to 1
+** @return [ajuint] Species identifier or 0U, defaults to 1U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba)
 {
-    if(!dba)
-        return 0;
+    if (!dba)
+        return 0U;
 
-    if(!dba->Identifier)
-        return 1;
+    if (!dba->Identifier)
+        return 1U;
 
     return dba->Identifier;
 }
@@ -737,21 +809,20 @@ ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba)
 
 /* @func ensDatabaseadaptorGetMultispecies ************************************
 **
-** Get the multi-species element of an Ensembl Database Adaptor.
+** Get the multi-species member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::is_multispecies
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [AjBool] ajTrue if the database contains multiple species
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba)
 {
-    if(!dba)
-        return ajFalse;
-
-    return dba->Multispecies;
+    return (dba) ? dba->Multispecies : ajFalse;
 }
 
 
@@ -759,33 +830,32 @@ AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba)
 
 /* @func ensDatabaseadaptorGetSpecies *****************************************
 **
-** Get the species element of an Ensembl Database Adaptor.
+** Get the species member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::species
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [AjPStr] Species or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba)
 {
-    if(!dba)
-        return NULL;
-
-    return dba->Species;
+    return (dba) ? dba->Species : NULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Database Adaptor object.
+** Functions for assigning members of an Ensembl Database Adaptor object.
 **
 ** @fdata [EnsPDatabaseadaptor]
 **
-** @nam3rule Set Set one element of an Ensembl Database Adaptor
+** @nam3rule Set Set one member of an Ensembl Database Adaptor
 ** @nam4rule Databaseconnection Set the Ensembl Database Connection
 ** @nam4rule Group Set the group
 ** @nam4rule Identifier Set the species identifier
@@ -793,10 +863,10 @@ AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba)
 ** @nam4rule Species Set the species
 **
 ** @argrule * dba [EnsPDatabaseadaptor] Ensembl Database Adaptor object
-** @argrule Databaseconnection dbc [EnsPDatabaseconnection] Ensembl Database
-** Connection
-** @argrule Group dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor
-** Group enumeration
+** @argrule Databaseconnection dbc [EnsPDatabaseconnection]
+** Ensembl Database Connection
+** @argrule Group dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 ** @argrule Identifier identifier [ajuint] Species identifier
 ** @argrule Multispecies multi [AjBool] Multi-species attribute
 ** @argrule Species species [AjPStr] Species
@@ -811,20 +881,22 @@ AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba)
 
 /* @func ensDatabaseadaptorSetDatabaseconnection ******************************
 **
-** Set the Ensembl Database Connection element of an Ensembl Database Adaptor.
+** Set the Ensembl Database Connection member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::dbc
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [u] dbc [EnsPDatabaseconnection] Ensembl Database Connection
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSetDatabaseconnection(EnsPDatabaseadaptor dba,
                                                EnsPDatabaseconnection dbc)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     ensDatabaseconnectionDel(&dba->Databaseconnection);
@@ -839,21 +911,23 @@ AjBool ensDatabaseadaptorSetDatabaseconnection(EnsPDatabaseadaptor dba,
 
 /* @func ensDatabaseadaptorSetGroup *******************************************
 **
-** Set the group element of an Ensembl Database Adaptor.
+** Set the group member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::group
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSetGroup(EnsPDatabaseadaptor dba,
                                   EnsEDatabaseadaptorGroup dbag)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     dba->Group = dbag;
@@ -866,20 +940,22 @@ AjBool ensDatabaseadaptorSetGroup(EnsPDatabaseadaptor dba,
 
 /* @func ensDatabaseadaptorSetIdentifier **************************************
 **
-** Set the species identifier element of an Ensembl Database Adaptor.
+** Set the species identifier member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::species_id
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] identifier [ajuint] Species identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSetIdentifier(EnsPDatabaseadaptor dba,
                                        ajuint identifier)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     dba->Identifier = identifier;
@@ -892,20 +968,22 @@ AjBool ensDatabaseadaptorSetIdentifier(EnsPDatabaseadaptor dba,
 
 /* @func ensDatabaseadaptorSetMultispecies ************************************
 **
-** Set the multi-species element of an Ensembl Database Adaptor.
+** Set the multi-species member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::is_multispecies
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] multi [AjBool] Multi-species attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSetMultispecies(EnsPDatabaseadaptor dba,
                                          AjBool multi)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     dba->Multispecies = multi;
@@ -918,24 +996,26 @@ AjBool ensDatabaseadaptorSetMultispecies(EnsPDatabaseadaptor dba,
 
 /* @func ensDatabaseadaptorSetSpecies *****************************************
 **
-** Set the species element of an Ensembl Database Adaptor.
+** Set the species member of an Ensembl Database Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor::species
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [u] species [AjPStr] Species
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSetSpecies(EnsPDatabaseadaptor dba, AjPStr species)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     ajStrDel(&dba->Species);
 
-    if(species)
+    if (species)
         dba->Species = ajStrNewRef(species);
 
     return ajTrue;
@@ -950,7 +1030,7 @@ AjBool ensDatabaseadaptorSetSpecies(EnsPDatabaseadaptor dba, AjPStr species)
 **
 ** @fdata [EnsPDatabaseadaptor]
 **
-** @nam3rule Trace Report Ensembl Database Adaptor elements to debug file
+** @nam3rule Trace Report Ensembl Database Adaptor members to debug file
 **
 ** @argrule Trace dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @argrule Trace level [ajuint] Indentation level
@@ -971,6 +1051,8 @@ AjBool ensDatabaseadaptorSetSpecies(EnsPDatabaseadaptor dba, AjPStr species)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -981,7 +1063,7 @@ AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level)
     AjPStr indent = NULL;
     AjPStr name = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1007,14 +1089,14 @@ AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level)
 
     /* Trace the AJAX List of AJAX String (species name) objects. */
 
-    if(dba->SpeciesNames)
+    if (dba->SpeciesNames)
     {
         ajDebug("%S    AJAX List %p of AJAX String (species name) objects:\n",
                 indent, dba->SpeciesNames);
 
         iter = ajListIterNewread(dba->SpeciesNames);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             name = (AjPStr) ajListIterGet(iter);
 
@@ -1069,38 +1151,40 @@ AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level)
 ** @param [r] dba2 [const EnsPDatabaseadaptor] Second Ensembl Database Adaptor
 **
 ** @return [AjBool] ajTrue if the Ensembl Database Adaptors are equal
+**
+** @release 6.2.0
 ** @@
 ** The comparison is based on initial pointer equality and if that fails a
-** comparison of the group element, the species identifier and a
-** case-insensitive string comparison of the species element.
+** comparison of the group member, the species identifier and a
+** case-insensitive string comparison of the species member.
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorMatch(const EnsPDatabaseadaptor dba1,
                                const EnsPDatabaseadaptor dba2)
 {
-    if(!dba1)
+    if (!dba1)
         return ajFalse;
 
-    if(!dba2)
+    if (!dba2)
         return ajFalse;
 
-    if(dba1 == dba2)
+    if (dba1 == dba2)
         return ajTrue;
 
-    if(!ensDatabaseconnectionMatch(dba1->Databaseconnection,
-                                   dba2->Databaseconnection))
+    if (!ensDatabaseconnectionMatch(dba1->Databaseconnection,
+                                    dba2->Databaseconnection))
         return ajFalse;
 
-    if(dba1->Group != dba2->Group)
+    if (dba1->Group != dba2->Group)
         return ajFalse;
 
-    if(dba1->Multispecies != dba2->Multispecies)
+    if (dba1->Multispecies != dba2->Multispecies)
         return ajFalse;
 
-    if(dba1->Identifier != dba2->Identifier)
+    if (dba1->Identifier != dba2->Identifier)
         return ajFalse;
 
-    if(!ajStrMatchCaseS(dba1->Species, dba2->Species))
+    if (!ajStrMatchCaseS(dba1->Species, dba2->Species))
         return ajFalse;
 
     return ajTrue;
@@ -1111,17 +1195,19 @@ AjBool ensDatabaseadaptorMatch(const EnsPDatabaseadaptor dba1,
 
 /* @func ensDatabaseadaptorMatchcomponents ************************************
 **
-** Tests whether an Ensembl Database Adaptor matches component elements.
+** Tests whether an Ensembl Database Adaptor matches component members.
 **
 ** @param [r] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] dbc [const EnsPDatabaseconnection] Ensembl Database Connection
 ** @param [r] species [const AjPStr] Species
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 ** @param [r] multi [AjBool] Multiple species
 ** @param [r] identifier [ajuint] Species identifier
 **
-** @return [AjBool] ajTrue if all elements match
+** @return [AjBool] ajTrue if all members match
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1132,31 +1218,31 @@ AjBool ensDatabaseadaptorMatchcomponents(const EnsPDatabaseadaptor dba,
                                          AjBool multi,
                                          ajuint identifier)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!dbc)
+    if (!dbc)
         return ajFalse;
 
-    if(!species)
+    if (!species)
         return ajFalse;
 
-    if(!dbag)
+    if (!dbag)
         return ajFalse;
 
-    if(dba->Group != dbag)
+    if (dba->Group != dbag)
         return ajFalse;
 
-    if(dba->Multispecies != multi)
+    if (dba->Multispecies != multi)
         return ajFalse;
 
-    if(dba->Identifier != identifier)
+    if (dba->Identifier != identifier)
         return ajFalse;
 
-    if(!ensDatabaseconnectionMatch(dba->Databaseconnection, dbc))
+    if (!ensDatabaseconnectionMatch(dba->Databaseconnection, dbc))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(dba->Species, species))
+    if (!ajStrMatchCaseS(dba->Species, species))
         return ajFalse;
 
     return ajTrue;
@@ -1212,12 +1298,14 @@ AjBool ensDatabaseadaptorMatchcomponents(const EnsPDatabaseadaptor dba,
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorDisconnect(EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     return ensDatabaseconnectionDisconnect(dba->Databaseconnection);
@@ -1239,23 +1327,25 @@ AjBool ensDatabaseadaptorDisconnect(EnsPDatabaseadaptor dba)
 ** @param [r] str [const AjPStr] AJAX String to be escaped
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorEscapeC(EnsPDatabaseadaptor dba,
-                                 char** Ptxt,
+                                 char **Ptxt,
                                  const AjPStr str)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!Ptxt)
+    if (!Ptxt)
         return ajFalse;
 
-    if(!str)
+    if (!str)
         return ajFalse;
 
-    if(ajDebugTest("ensDatabaseadaptorEscapeC"))
+    if (ajDebugTest("ensDatabaseadaptorEscapeC"))
     {
         ajDebug("ensDatabaseadaptorEscapeC\n"
                 "  dba %p\n"
@@ -1287,23 +1377,25 @@ AjBool ensDatabaseadaptorEscapeC(EnsPDatabaseadaptor dba,
 ** @param [r] str [const AjPStr] AJAX String to be escaped
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
-                                 AjPStr* Pstr,
+                                 AjPStr *Pstr,
                                  const AjPStr str)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
-    if(!str)
+    if (!str)
         return ajFalse;
 
-    if(ajDebugTest("ensDatabaseadaptorEscapeS"))
+    if (ajDebugTest("ensDatabaseadaptorEscapeS"))
     {
         ajDebug("ensDatabaseadaptorEscapeS\n"
                 "  dba %p\n"
@@ -1330,6 +1422,9 @@ AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [const AjPList] AJAX List of AJAX String objects or NULL
+**
+** @release 6.4.0
+** FIXME: This should become ensDatabaseadaptorLoadAllSpeciesnames
 ** @@
 ******************************************************************************/
 
@@ -1337,21 +1432,21 @@ const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba)
 {
     EnsPMetainformationadaptor mia = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(dba->SpeciesNames)
+    if (dba->SpeciesNames)
         return dba->SpeciesNames;
     else
         dba->SpeciesNames = ajListstrNew();
 
     mia = ensRegistryGetMetainformationadaptor(dba);
 
-    if(dba->Multispecies)
+    if (dba->Multispecies)
         ensMetainformationadaptorRetrieveAllSpeciesnames(mia,
                                                          dba->SpeciesNames);
     else
-        ajListPushAppend(dba->SpeciesNames, (void*) ajStrNewS(dba->Species));
+        ajListPushAppend(dba->SpeciesNames, (void *) ajStrNewS(dba->Species));
 
     return dba->SpeciesNames;
 }
@@ -1368,19 +1463,21 @@ const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba)
 ** @param [d] Psqls [AjPSqlstatement*] AJAX SQL Statement address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
-                                         AjPSqlstatement* Psqls)
+                                         AjPSqlstatement *Psqls)
 {
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!Psqls)
+    if (!Psqls)
         return ajFalse;
 
-    if(ajDebugTest("ensDatabaseadaptorSqlstatementDel"))
+    if (ajDebugTest("ensDatabaseadaptorSqlstatementDel"))
         ajDebug("ensDatabaseadaptorSqlstatementDel\n"
                 "  dba %p\n"
                 "  PSqls %p\n",
@@ -1402,16 +1499,18 @@ AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
 ** @param [r] statement [const AjPStr] SQL statement
 **
 ** @return [AjPSqlstatement] AJAX SQL Statement or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPSqlstatement ensDatabaseadaptorSqlstatementNew(EnsPDatabaseadaptor dba,
                                                   const AjPStr statement)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(!statement)
+    if (!statement)
         return NULL;
 
     return ensDatabaseconnectionSqlstatementNew(dba->Databaseconnection,
@@ -1453,26 +1552,28 @@ AjPSqlstatement ensDatabaseadaptorSqlstatementNew(EnsPDatabaseadaptor dba,
 ** @param [u] Pbuild [AjPStr*] Schema build
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
-                                          AjPStr* Pbuild)
+                                          AjPStr *Pbuild)
 {
-    ajuint i = 0;
-    ajuint tokens = 0;
+    register ajuint i = 0U;
+    ajuint tokens = 0U;
 
     AjPStr database = NULL;
     AjPStr temp = NULL;
     AjPStrTok token = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!Pbuild)
+    if (!Pbuild)
         return ajFalse;
 
-    if(*Pbuild)
+    if (*Pbuild)
         ajStrAssignClear(Pbuild);
     else
         *Pbuild = ajStrNew();
@@ -1481,7 +1582,7 @@ AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
 
     tokens = ajStrParseCountC(database, "_");
 
-    if(tokens < 2)
+    if (tokens < 2U)
         return ajFalse;
 
     token = ajStrTokenNewC(database, "_");
@@ -1490,7 +1591,7 @@ AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
 
     temp = ajStrNew();
 
-    for(i = 0; i < (tokens - 2); i++)
+    for (i = 0U; i < (tokens - 2U); i++)
         ajStrTokenNextParse(&token, &temp);
 
     ajStrDel(&temp);
@@ -1528,8 +1629,8 @@ AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
 **
 ** @argrule  Str  group  [const AjPStr] Group string
 **
-** @valrule * [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration or ensEDatabaseadaptorGroupNULL
+** @valrule * [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration or ensEDatabaseadaptorGroupNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1543,8 +1644,10 @@ AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
 **
 ** @param [r] group [const AjPStr] Group string
 **
-** @return [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration or ensEDatabaseadaptorGroupNULL
+** @return [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration or ensEDatabaseadaptorGroupNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1554,13 +1657,13 @@ EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group)
 
     EnsEDatabaseadaptorGroup dbag = ensEDatabaseadaptorGroupNULL;
 
-    for(i = ensEDatabaseadaptorGroupNULL;
-        databaseadaptorGroup[i];
-        i++)
-        if(ajStrMatchCaseC(group, databaseadaptorGroup[i]))
+    for (i = ensEDatabaseadaptorGroupNULL;
+         databaseadaptorKGroup[i];
+         i++)
+        if (ajStrMatchCaseC(group, databaseadaptorKGroup[i]))
             dbag = i;
 
-    if(!dbag)
+    if (!dbag)
         ajDebug("ensDatabaseadaptorGroupFromStr encountered "
                 "unexpected string '%S'.\n", group);
 
@@ -1580,11 +1683,11 @@ EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group)
 ** @nam4rule To   Return Ensembl Database Adaptor Group enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @argrule To dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 **
-** @valrule Char [const char*] Ensembl Database Adaptor Group C-type
-** (char*) string
+** @valrule Char [const char*]
+** Ensembl Database Adaptor Group C-type (char *) string
 **
 ** @fcategory cast
 ******************************************************************************/
@@ -1595,12 +1698,14 @@ EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group)
 /* @func ensDatabaseadaptorGroupToChar ****************************************
 **
 ** Convert an Ensembl Database Adaptor Group enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
-** @param [u] dbag [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
-** enumeration
+** @param [u] dbag [EnsEDatabaseadaptorGroup]
+** Ensembl Database Adaptor Group enumeration
 **
-** @return [const char*] Ensembl Database Adaptor Group C-type (char*) string
+** @return [const char*] Ensembl Database Adaptor Group C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1608,15 +1713,15 @@ const char* ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup dbag)
 {
     register EnsEDatabaseadaptorGroup i = ensEDatabaseadaptorGroupNULL;
 
-    for(i = ensEDatabaseadaptorGroupNULL;
-        databaseadaptorGroup[i] && (i < dbag);
-        i++);
+    for (i = ensEDatabaseadaptorGroupNULL;
+         databaseadaptorKGroup[i] && (i < dbag);
+         i++);
 
-    if(!databaseadaptorGroup[i])
+    if (!databaseadaptorKGroup[i])
         ajDebug("ensDatabaseadaptorGroupToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Databaseadaptor Group enumeration %d.\n",
                 dbag);
 
-    return databaseadaptorGroup[i];
+    return databaseadaptorKGroup[i];
 }

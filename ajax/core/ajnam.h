@@ -1,17 +1,68 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajnam *************************************************************
+**
+** AJAX nam functions
+**
+** Creates a hash table of initial values and allow access to this
+** via the routines ajNamDatabase and ajNamGetValueS.
+**
+** @author Copyright (C) 1998 Ian Longden
+** @version $Revision: 1.46 $
+** @modified 2000-2011 Peter Rice
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajnam_h
-#define ajnam_h
+#ifndef AJNAM_H
+#define AJNAM_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajfile.h"
+#include "ajquerydata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
 
 
 #define AJMETHOD_ENTRY 1
 #define AJMETHOD_QUERY 2
 #define AJMETHOD_ALL   4
 
-#include "ajquerydata.h"
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
 
 
 /*
@@ -28,14 +79,22 @@ AjBool ajNamDbGetAttrC(const AjPStr name, const char *attribute,
                        AjPStr *value);
 AjBool ajNamDbGetAttrS(const AjPStr name, const AjPStr attribute,
                        AjPStr *value);
-AjBool ajNamDbDetails (const AjPStr name, AjPStr* type,
-                       AjBool* id, AjBool* qry, AjBool* all,
-		       AjPStr* comment, AjPStr* release,
-		       AjPStr* methods, AjPStr* defined);
+AjBool ajNamDbDetails(const AjPStr name, AjPStr* type,
+                      AjBool* id, AjBool* qry, AjBool* all,
+                      AjPStr* comment, AjPStr* release,
+                      AjPStr* methods, AjPStr* defined);
 AjBool ajNamSvrGetAttrC(const AjPStr name, const char *attribute,
                         AjPStr *value);
 AjBool ajNamSvrGetAttrS(const AjPStr name, const AjPStr attribute,
                         AjPStr *value);
+ajuint ajNamDbGetAttrSpecialC(const AjPStr name, const char *attribute,
+                              AjPStr* value);
+ajuint ajNamDbGetAttrSpecialS(const AjPStr name, const AjPStr attribute,
+                              AjPStr* value);
+ajuint ajNamSvrGetAttrSpecialC(const AjPStr name, const char *attribute,
+                               AjPStr* value);
+ajuint ajNamSvrGetAttrSpecialS(const AjPStr name, const AjPStr attribute,
+                               AjPStr* value);
 AjPList ajNamSvrGetAttrlist(const AjPStr name);
 AjBool ajNamSvrGetdbAttrC(const AjPStr name, const AjPStr dbname,
                           const char *attribute,
@@ -43,12 +102,18 @@ AjBool ajNamSvrGetdbAttrC(const AjPStr name, const AjPStr dbname,
 AjBool ajNamSvrGetdbAttrS(const AjPStr name, const AjPStr dbname,
                           const AjPStr attribute,
                           AjPStr *value);
-AjBool ajNamSvrDetails (const AjPStr name, AjPStr* type, AjPStr *scope,
-                        AjBool* id, AjBool* qry, AjBool* all,
-                        AjPStr* comment, AjPStr *version,
-                        AjPStr* methods, AjPStr* defined,
-                        AjPStr* cachedirectory, AjPStr* cachefile,
-                        AjPStr* url);
+ajuint ajNamSvrGetdbAttrSpecialC(const AjPStr name, const AjPStr dbname,
+                                 const char *attribute,
+                                 AjPStr *value);
+ajuint ajNamSvrGetdbAttrSpecialS(const AjPStr name, const AjPStr dbname,
+                                 const AjPStr attribute,
+                                 AjPStr *value);
+AjBool ajNamSvrDetails(const AjPStr name, AjPStr* type, AjPStr *scope,
+                       AjBool* id, AjBool* qry, AjBool* all,
+                       AjPStr* comment, AjPStr *version,
+                       AjPStr* methods, AjPStr* defined,
+                       AjPStr* cachedirectory, AjPStr* cachefile,
+                       AjPStr* url);
 AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetIndexdir(const AjPStr dbname, AjPStr* indexdir);
 AjBool ajNamDbGetType(const AjPStr dbname, ajuint *itype);
@@ -104,9 +169,9 @@ const AjPStr ajNamValueSystem(void);
 const AjPStr ajNamValueVersion(void);
 
 AjBool ajNamRsAttrValueS(const AjPStr name, const AjPStr attribute,
-			 AjPStr *value);
+                         AjPStr *value);
 AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
-			 AjPStr *value);
+                         AjPStr *value);
 AjBool ajNamRsListValue(const AjPStr name, AjPStr *value);
 AjBool ajNamSetControl(const char* optionName);
 
@@ -114,17 +179,8 @@ AjBool ajNamSetControl(const char* optionName);
 ** End of prototype definitions
 */
 
-__deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
-			 AjPStr *value);
-__deprecated AjBool ajNamGetenv (const AjPStr name, AjPStr* value);
-__deprecated AjBool ajNamGetValue (const AjPStr name, AjPStr* value);
-__deprecated AjBool ajNamRootInstall (AjPStr* root);
-__deprecated AjBool ajNamRoot (AjPStr* root);
-__deprecated AjBool ajNamRootBase (AjPStr* rootbase);
-__deprecated AjBool ajNamRootPack (AjPStr* pack);
-__deprecated AjBool ajNamRootVersion (AjPStr* version);
 
-#endif
+
 
 #ifdef WIN32
 #ifdef AJAXDLL_EXPORTS
@@ -134,7 +190,29 @@ __declspec(dllimport) const char* EMBOSSWINROOT_ENVVAR;
 #endif
 #endif
 
-#ifdef __cplusplus
-}
-#endif
 
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+#ifdef AJ_COMPILE_DEPRECATED
+
+__deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+                                     AjPStr *value);
+__deprecated AjBool ajNamGetenv(const AjPStr name, AjPStr* value);
+__deprecated AjBool ajNamGetValue(const AjPStr name, AjPStr* value);
+__deprecated AjBool ajNamRootInstall(AjPStr* root);
+__deprecated AjBool ajNamRoot(AjPStr* root);
+__deprecated AjBool ajNamRootBase(AjPStr* rootbase);
+__deprecated AjBool ajNamRootPack(AjPStr* pack);
+__deprecated AjBool ajNamRootVersion(AjPStr* version);
+
+#endif /* AJ_COMPILE_DEPRECATED */
+
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJNAM_H */

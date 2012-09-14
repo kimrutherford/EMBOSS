@@ -1,9 +1,9 @@
 application: codcopy [
   documentation: "Copy and reformat a codon usage table"
   groups: "Data retrieval, Nucleic:Codon usage, Edit"
-    relations: "EDAM:0000107 topic Codon usage"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0000563 operation Codon usage table reformatting"
+    relations: "EDAM_topic:0107 Codon usage analysis"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:0563 Codon usage table reformatting"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
 
   codon: infile [
     parameter: "Y"
-    relations: "EDAM:0001597 data Codon usage table"
+    relations: "EDAM_data:1597 Codon usage table"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: output [
 
   outcodon: outfile [
     parameter: "Y"
-    relations: "EDAM:0001597 data Codon usage table"
+    relations: "EDAM_data:1597 Codon usage table"
   ]
 
 endsection: output

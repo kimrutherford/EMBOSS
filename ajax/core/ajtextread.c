@@ -1,20 +1,58 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajtextread *********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX text data reading functions
+**
+** These functions control all aspects of AJAX text data reading
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.36 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/12 12:10:00 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajtextread.h"
+#include "ajtext.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+#include "ajhttp.h"
+#include "ajftp.h"
+
+
+#include <string.h>
+
+#ifndef WIN32
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+
 
 AjPTable textDbMethods = NULL;
 
@@ -42,7 +80,7 @@ static AjBool    textinReadPdb(AjPTextin thys, AjPText text);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Read [AjBool function] Input function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -63,39 +101,42 @@ static TextOInFormat textinFormatDef[] =
 /* "Name",        "Description" */
 /*     Alias,   Try,     */
 /*     ReadFunction */
-    {"unknown",     "0000000", "Unknown format",
+    {"unknown",     "0000", "Unknown format",
        AJFALSE, AJFALSE,
-       textinReadText}, /* alias for text */
-    {"text",        "0002330", "Plain text format",
+       &textinReadText}, /* alias for text */
+    {"text",        "2330", "Plain text format",
        AJFALSE, AJTRUE,
-       textinReadText},
-    {"xml",         "0002332", "XML data",
+       &textinReadText},
+    {"xml",         "2332", "XML data",
        AJFALSE, AJTRUE,
-       textinReadXml},
-    {"obo",         "0002196", "OBO data",
+       &textinReadXml},
+    {"obo",         "2196", "OBO data",
        AJFALSE, AJTRUE,
-       textinReadObo},
-    {"embl",        "0001927", "EMBL data",
+       &textinReadObo},
+    {"embl",        "1927", "EMBL data",
        AJFALSE, AJFALSE,
-       textinReadEmbl},
-    {"swissprot",   "0001963", "SwissProt data",
+       &textinReadEmbl},
+    {"swissprot",   "1963", "SwissProt data",
        AJTRUE, AJFALSE,
-       textinReadEmbl},
-    {"uniprot",     "0002188", "UniProt data",
+       &textinReadEmbl},
+    {"swiss",       "1963", "SwissProt data",
        AJTRUE, AJFALSE,
-       textinReadEmbl},
-    {"uniprotkb",   "0002187", "UniProt-like data",
+       &textinReadEmbl},
+    {"uniprot",     "2188", "UniProt data",
        AJTRUE, AJFALSE,
-       textinReadEmbl},
-    {"ipi",         "0002189", "UniProt-like data",
+       &textinReadEmbl},
+    {"uniprotkb",   "2187", "UniProt-like data",
        AJTRUE, AJFALSE,
-       textinReadEmbl},
-    {"uniprotxml",  "0000000", "Uniprot XML data",
-        AJTRUE, AJFALSE,
-        textinReadXml},
-    {"pdb",         "0001476", "PDB data",
+       &textinReadEmbl},
+    {"ipi",         "2189", "UniProt-like data",
+       AJTRUE, AJFALSE,
+       &textinReadEmbl},
+    {"uniprotxml",  "0000", "Uniprot XML data",
+       AJTRUE, AJFALSE,
+       &textinReadXml},
+    {"pdb",         "1476", "PDB data",
        AJFALSE, AJFALSE,
-       textinReadPdb},
+       &textinReadPdb},
   {NULL, NULL, NULL, 0, 0, NULL}
 };
 
@@ -168,6 +209,8 @@ static AjBool textinQueryMatch(const AjPQuery thys, const AjPText text);
 **
 ** @return [AjPTextin] New text input object.
 ** @category new [AjPTextin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -186,6 +229,8 @@ AjPTextin ajTextinNew(void)
 ** @param [r] datatype [const AjEDataType] Enumerated datatype
 ** @return [AjPTextin] New text input object.
 ** @category new [AjPTextin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -198,6 +243,7 @@ AjPTextin ajTextinNewDatatype(const AjEDataType datatype)
     pthis->Db  = ajStrNew();
     pthis->Qry  = ajStrNew();
     pthis->Formatstr = ajStrNew();
+    pthis->QryFields = ajStrNew();
     pthis->Filename  = ajStrNew();
 
     pthis->Query     = ajQueryNew(datatype);
@@ -238,6 +284,8 @@ AjPTextin ajTextinNewDatatype(const AjEDataType datatype)
 ** @param [d] pthis [AjPTextin*] Text input
 ** @return [void]
 ** @category delete [AjPTextin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -254,11 +302,13 @@ void ajTextinDel(AjPTextin* pthis)
     if(!thys)
         return;
 
-    ajDebug("ajTextinDel called qry:'%S'\n", thys->Qry);
+    ajDebug("ajTextinDel called qry:'%S' filebuff: %x\n",
+            thys->Qry, thys->Filebuff);
 
     ajStrDel(&thys->Db);
     ajStrDel(&thys->Qry);
     ajStrDel(&thys->Formatstr);
+    ajStrDel(&thys->QryFields);
     ajStrDel(&thys->Filename);
 
     while(ajListGetLength(thys->List))
@@ -292,6 +342,8 @@ void ajTextinDel(AjPTextin* pthis)
 ** @param [d] pthis [AjPTextin*] Text input
 ** @return [void]
 ** @category delete [AjPTextin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -313,6 +365,7 @@ void ajTextinDelNofile(AjPTextin* pthis)
     ajStrDel(&thys->Db);
     ajStrDel(&thys->Qry);
     ajStrDel(&thys->Formatstr);
+    ajStrDel(&thys->QryFields);
     ajStrDel(&thys->Filename);
 
     while(ajListGetLength(thys->List))
@@ -368,6 +421,8 @@ void ajTextinDelNofile(AjPTextin* pthis)
 **
 ** @param [w] thys [AjPTextin] Text input
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -382,6 +437,7 @@ void ajTextinClear(AjPTextin thys)
     ajStrSetClear(&thys->Db);
     ajStrSetClear(&thys->Qry);
     ajStrSetClear(&thys->Formatstr);
+    ajStrSetClear(&thys->QryFields);
     ajStrSetClear(&thys->Filename);
 
     /* preserve thys->List */
@@ -403,6 +459,9 @@ void ajTextinClear(AjPTextin thys)
     thys->ChunkEntries = ajFalse;
 
     thys->Count     = 0;
+    thys->Dataread = ajFalse;
+    thys->Datadone = ajFalse;
+    thys->Datacount = 0;
 
     /* preserve thys->Filecount */
     /* preserve thys->Entrycount */
@@ -424,6 +483,8 @@ void ajTextinClear(AjPTextin thys)
 ** @param [w] thys [AjPTextin] Text input
 ** @return [void]
 ** @category modify [AjPTextin] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -435,6 +496,7 @@ void ajTextinClearNofile(AjPTextin thys)
     ajStrSetClear(&thys->Db);
     ajStrSetClear(&thys->Qry);
     ajStrSetClear(&thys->Formatstr);
+    ajStrSetClear(&thys->QryFields);
     ajStrSetClear(&thys->Filename);
 
     /* preserve thys->List */
@@ -471,6 +533,8 @@ void ajTextinClearNofile(AjPTextin thys)
 ** @param [u] thys [AjPTextin] text input object.
 ** @param [r] txt [const char*] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -494,6 +558,8 @@ void ajTextinQryC(AjPTextin thys, const char* txt)
 ** @param [u] thys [AjPTextin] Text input object.
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -531,12 +597,14 @@ void ajTextinQryS(AjPTextin thys, const AjPStr str)
 
 
 
-/* @func ajTextinGetQryS *******************************************************
+/* @func ajTextinGetQryS ******************************************************
 **
 ** Returns the query of a text input object
 **
 ** @param [r] thys [const AjPTextin] Text input object.
 ** @return [const AjPStr] Query string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -554,6 +622,8 @@ const AjPStr ajTextinGetQryS(const AjPTextin thys)
 **
 ** @param [r] thys [const AjPTextin] Text input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -568,6 +638,9 @@ void ajTextinTrace(const AjPTextin thys)
     if(ajStrGetLen(thys->Formatstr))
 	ajDebug( "  Format: '%S' (%u)\n", thys->Formatstr, thys->Format);
 
+    if(ajStrGetLen(thys->QryFields))
+	ajDebug( "  Fields: '%S'\n", thys->QryFields);
+
     if(ajStrGetLen(thys->Qry))
 	ajDebug( "  Query: '%S'\n", thys->Qry);
 
@@ -575,7 +648,7 @@ void ajTextinTrace(const AjPTextin thys)
 	ajDebug( "  Filename: '%S'\n", thys->Filename);
 
     if(ajListGetLength(thys->List))
-	ajDebug( "  List: (%d)\n", ajListGetLength(thys->List));
+	ajDebug( "  List: (%Lu)\n", ajListGetLength(thys->List));
 
     if(thys->Filebuff)
 	ajDebug( "  Filebuff: %F (%Ld)\n",
@@ -655,6 +728,8 @@ void ajTextinTrace(const AjPTextin thys)
 ** @return [AjBool] ajTrue on success.
 ** @category input [AjPText] Master text data input, calls specific functions
 **                  for file access type and text data format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -776,6 +851,8 @@ AjBool ajTextinRead(AjPTextin textin, AjPText text)
 ** @param [r] thys [const AjPQuery] query.
 ** @param [r] text [const AjPText] Text data.
 ** @return [AjBool] ajTrue if the text data matches the query.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -786,7 +863,7 @@ static AjBool textinQueryMatch(const AjPQuery thys, const AjPText text)
     AjPQueryField field = NULL;
     AjBool ok = ajFalse;
 
-    ajDebug("textinQueryMatch '%S' fields: %u Case %B Done %B\n",
+    ajDebug("textinQueryMatch '%S' fields: %Lu Case %B Done %B\n",
 	    text->Id, ajListGetLength(thys->QueryFields),
             thys->CaseId, thys->QryDone);
 
@@ -866,6 +943,8 @@ static AjBool textinQueryMatch(const AjPQuery thys, const AjPText text)
 ** @param [w] thys [AjPText] Text data returned.
 ** @param [u] textin [AjPTextin] Text data input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -899,6 +978,8 @@ static AjBool textDefine(AjPText thys, AjPTextin textin)
 **                  1 if the query match failed.
 **                  2 if the text data type failed
 **                  3 if it failed to read an text data
+**
+** @release 6.4.0
 ** @@
 ** This is the only function that calls the appropriate Read function
 ** textinReadXxxxxx where Xxxxxxx is the supported text data format.
@@ -921,7 +1002,7 @@ static ajuint textinReadFmt(AjPTextin textin, AjPText text,
     textin->Records = 0;
 
     /* Calling funclist textinFormatDef() */
-    if(textinFormatDef[format].Read(textin, text))
+    if((*textinFormatDef[format].Read)(textin, text))
     {
 	ajDebug("textinReadFmt success with format %d (%s)\n",
 		format, textinFormatDef[format].Name);
@@ -985,6 +1066,8 @@ static ajuint textinReadFmt(AjPTextin textin, AjPText text,
 ** @param [u] textin [AjPTextin] text data input object
 ** @param [w] text [AjPText] text data object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1019,9 +1102,9 @@ static AjBool textinRead(AjPTextin textin, AjPText text)
 	/* Calling funclist textinAccess() */
 	if(textaccess)
         {
-            if(!textaccess->Access(textin))
+            if(!(*textaccess->Access)(textin))
             {
-                ajDebug("textinRead: textaccess->Access(textin) "
+                ajDebug("textinRead: (*textaccess->Access)(textin) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -1030,9 +1113,9 @@ static AjBool textinRead(AjPTextin textin, AjPText text)
 
 	if(textonlyaccess)
         {
-            if(!textonlyaccess->Access(textin))
+            if(!(*textonlyaccess->Access)(textin))
             {
-                ajDebug("textinRead: textonlyaccess->Access(textin) "
+                ajDebug("textinRead: (*textonlyaccess->Access)(textin) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -1192,9 +1275,9 @@ static AjBool textinRead(AjPTextin textin, AjPText text)
 
     if(ajFilebuffIsEmpty(buff) && textin->ChunkEntries)
     {
-	if(textaccess && !textaccess->Access(textin))
+	if(textaccess && !(*textaccess->Access)(textin))
             return ajFalse;
-	else if(textonlyaccess && !textonlyaccess->Access(textin))
+	else if(textonlyaccess && !(*textonlyaccess->Access)(textin))
             return ajFalse;
         buff = textin->Filebuff;
     }
@@ -1263,7 +1346,7 @@ static AjBool textinRead(AjPTextin textin, AjPText text)
 
 
 
-/* @funcstatic textinReadText ************************************************
+/* @funcstatic textinReadText *************************************************
 **
 ** Given data in a text structure, tries to read everything needed
 ** using the TEXT format.
@@ -1271,6 +1354,8 @@ static AjBool textinRead(AjPTextin textin, AjPText text)
 ** @param [u] textin [AjPTextin] Text input object
 ** @param [w] text [AjPText] Text object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1316,6 +1401,8 @@ static AjBool textinReadText(AjPTextin textin, AjPText text)
 ** @param [u] textin [AjPTextin] Text input object
 ** @param [w] text [AjPText] Text object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1361,6 +1448,8 @@ static AjBool textinReadXml(AjPTextin textin, AjPText text)
 ** @param [u] textin [AjPTextin] Text input object
 ** @param [w] text [AjPText] Text object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1430,6 +1519,8 @@ static AjBool textinReadEmbl(AjPTextin textin, AjPText text)
 ** @param [u] textin [AjPTextin] Text input object
 ** @param [w] text [AjPText] Text object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1490,7 +1581,7 @@ static AjBool textinReadObo(AjPTextin textin, AjPText text)
 
 
 
-/* @funcstatic textinReadPdb * *************************************************
+/* @funcstatic textinReadPdb * ************************************************
 **
 ** Given data in an obo structure, tries to read everything needed
 ** using the PDB format.
@@ -1498,6 +1589,8 @@ static AjBool textinReadObo(AjPTextin textin, AjPText text)
 ** @param [u] textin [AjPTextin] Text input object
 ** @param [w] text [AjPText] Text object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1568,6 +1661,8 @@ static AjBool textinReadPdb(AjPTextin textin, AjPText text)
 ** @nam3rule Access Access method
 ** @nam4rule Asis Reads text using the 'filename' as the single input line
 ** @nam4rule File Reading an input file
+** @nam4rule Ftp  Reads text using the 'filename' as an FTP URL
+** @nam4rule Http Reads text using the 'filename' as an HTTP URL
 ** @nam4rule Offset Reading an input file starting at a given offset position
 **                  within the text input query
 **
@@ -1587,6 +1682,8 @@ static AjBool textinReadPdb(AjPTextin textin, AjPText text)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1630,6 +1727,8 @@ AjBool ajTextinAccessAsis(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1671,12 +1770,196 @@ AjBool ajTextinAccessFile(AjPTextin textin)
 
 
 
+/* @func ajTextinAccessFtp ****************************************************
+**
+** Reads data from an FTP URL
+**
+** @param [u] textin [AjPTextin] Text input.
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ajTextinAccessFtp(AjPTextin textin)
+{
+    AjPQuery qry;
+    AjPStr url = NULL;
+
+    AjPStr host  = NULL;
+    ajint iport;
+
+    AjPStr urlget    = NULL;
+    AjPUrlref urlref = NULL;
+
+    iport = 21;
+    qry = textin->Query;
+
+    if(!ajStrGetLen(qry->Filename))
+    {
+	ajErr("FILE access: no filename");
+
+	return ajFalse;
+    }
+
+    ajDebug("ajTextinAccessFtp %S\n", qry->Filename);
+
+    /* ajStrTraceT(qry->Filename, "qry->Filename (before):"); */
+
+    ajStrAssignS(&url, qry->Filename);
+
+    urlref = ajHttpUrlrefNew();
+    ajHttpUrlrefParseS(&urlref, url);
+    ajHttpUrlrefSplitPort(urlref);
+    ajStrAssignS(&host,urlref->Host);
+    if(ajStrGetLen(urlref->Port))
+        ajStrToInt(urlref->Port, &iport);
+    ajFmtPrintS(&urlget,"/%S",urlref->Absolute);
+    ajHttpUrlrefDel(&urlref);
+
+    ajFilebuffDel(&textin->Filebuff);
+    textin->Filebuff = ajFtpRead(NULL, host, iport, textin->Fpos, urlget);
+
+    ajStrDel(&host);
+    ajStrDel(&urlget);
+
+    if(!textin->Filebuff)
+    {
+	ajDebug("FTP access: unable to open file '%S'\n", qry->Filename);
+
+	return ajFalse;
+    }
+
+    /* ajStrTraceT(textin->Filename, "textin->Filename:"); */
+    /* ajStrTraceT(qry->Filename, "qry->Filename (after):"); */
+
+    ajStrAssignS(&textin->Filename, qry->Filename);
+
+    ajDebug("FTP access: opened file '%S'\n", qry->Filename);
+
+    ajStrDel(&url);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajTextinAccessHttp ***************************************************
+**
+** Reads data from an HTTP URL. No HTML is stripped.
+**
+** @param [u] textin [AjPTextin] Text input.
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ajTextinAccessHttp(AjPTextin textin)
+{
+    AjPQuery qry;
+    AjPStr url = NULL;
+
+    AjPStr host  = NULL;
+    ajint iport;
+
+    AjPStr urlget    = NULL;
+    AjPUrlref urlref = NULL;
+    AjPStr version10 = NULL;
+    AjBool ok;
+
+    iport = 80;
+    qry = textin->Query;
+
+    if(!ajStrGetLen(qry->Filename))
+    {
+	ajErr("HTTP access: no filename");
+
+	return ajFalse;
+    }
+
+    ajDebug("ajTextinAccessHttp %S\n", qry->Filename);
+
+    ajStrAssignS(&url, qry->Filename);
+
+    urlref = ajHttpUrlrefNew();
+    ajHttpUrlrefParseS(&urlref, url);
+    ajHttpUrlrefSplitPort(urlref);
+    ajStrAssignS(&host,urlref->Host);
+    if(ajStrGetLen(urlref->Port))
+        ajStrToInt(urlref->Port, &iport);
+    ajFmtPrintS(&urlget,"/%S",urlref->Absolute);
+    ajHttpUrlrefDel(&urlref);
+   
+    version10 = ajStrNewC("1.0");
+
+    ajFilebuffDel(&textin->Filebuff);
+    textin->Filebuff = ajHttpReadPos(version10, url,
+                                     NULL, host, iport, urlget, qry->Fpos);
+    ajStrDel(&version10);
+
+    if(!textin->Filebuff)
+    {
+        if(iport == 80)
+            ajErr("Cannot open HTTP connection 'http://%S%S'",
+                  host, urlget);
+        else
+            ajErr("Cannot open HTTP connection 'http://%S:%d%S'",
+                  host, iport, urlget);
+        return ajFalse;
+    }
+
+    /* skip past the header */
+
+    ok = ajBuffreadLine(textin->Filebuff, &textinReadLine);
+
+    switch(ajStrGetCharPos(textinReadLine, 9))
+    {
+        case '4':
+            return ajFalse;
+        default:
+            break;        
+    }
+
+    while(ok && ajStrFindRestC(textinReadLine, "\r\n") >= 0)
+        ajBuffreadLine(textin->Filebuff, &textinReadLine);
+
+    ajFilebuffClear(textin->Filebuff,1);
+
+
+
+    ajStrDel(&host);
+    ajStrDel(&urlget);
+
+    if(!textin->Filebuff)
+    {
+	ajDebug("HTTP access: unable to open file '%S'\n", qry->Filename);
+
+	return ajFalse;
+    }
+
+    /* ajStrTraceT(textin->Filename, "textin->Filename:"); */
+    /* ajStrTraceT(qry->Filename, "qry->Filename (after):"); */
+
+    ajStrAssignS(&textin->Filename, url);
+
+    ajStrDel(&url);
+
+    return ajTrue;
+}
+
+
+
+
 /* @func ajTextinAccessOffset *************************************************
 **
 ** Reads a text from a named file, at a given offset within the file.
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1768,12 +2051,14 @@ AjBool ajTextinAccessOffset(AjPTextin textin)
 
 
 
-/* @func ajTextinprintBook *****************************************************
+/* @func ajTextinprintBook ****************************************************
 **
 ** Reports the internal data structures as a Docbook table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1817,7 +2102,7 @@ void ajTextinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -1858,6 +2143,8 @@ void ajTextinprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1917,6 +2204,8 @@ void ajTextinprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1957,6 +2246,8 @@ void ajTextinprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2045,6 +2336,8 @@ void ajTextinprintWiki(AjPFile outf)
 ** Cleans up text data input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2087,6 +2380,8 @@ void ajTextinExit(void)
 ** Returns the listof known field names for ajTextinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2103,6 +2398,8 @@ const char* ajTextinTypeGetFields(void)
 ** Returns the listof known query link operators for ajTextinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2159,6 +2456,8 @@ const char* ajTextinTypeGetQlinks(void)
 ** Returns the table in which text database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2180,6 +2479,8 @@ AjPTable ajTextaccessGetDb(void)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2204,6 +2505,8 @@ const char* ajTextaccessMethodGetQlinks(const AjPStr method)
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2234,6 +2537,8 @@ ajuint ajTextaccessMethodGetScope(const AjPStr method)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2255,12 +2560,16 @@ AjBool ajTextaccessMethodTest(const AjPStr method)
 ** @param [w] textin [AjPTextin] Text input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void textinQryRestore(AjPTextin textin, const AjPQueryList node)
 {
     textin->Format = node->Format;
+    textin->Fpos   = node->Fpos;
     ajStrAssignS(&textin->Formatstr, node->Formatstr);
+    ajStrAssignS(&textin->QryFields, node->QryFields);
 
     return;
 }
@@ -2275,12 +2584,16 @@ static void textinQryRestore(AjPTextin textin, const AjPQueryList node)
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] textin [const AjPTextin] Text input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void textinQrySave(AjPQueryList node, const AjPTextin textin)
 {
     node->Format   = textin->Format;
+    node->Fpos     = textin->Fpos;
     ajStrAssignS(&node->Formatstr, textin->Formatstr);
+    ajStrAssignS(&node->QryFields, textin->QryFields);
 
     return;
 }
@@ -2309,6 +2622,8 @@ static void textinQrySave(AjPQueryList node, const AjPTextin textin)
 ** @param [u] text [AjPText] text data to be read. The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2363,9 +2678,10 @@ static AjBool textinQryProcess(AjPTextin textin, AjPText text)
         ajDebug("textinQryProcess ...  query format  '%S'\n",
                 qry->Formatstr);
 /*
-        qry->Access = ajCallTableGetS(oboDbMethods,qry->Method);
-  oboaccess = qry->Access;
-        return oboaccess->Access(oboin);
+** skip this for text .... we already tried text access methods!
+        qry->Access = ajCallTableGetS(xxxDbMethods,qry->Method);
+        xxxaccess = qry->Access;
+        return (*xxxaccess->Access)(oboin);
 */    }
 
     ajDebug("seqinUsaProcess text method '%S' success\n", qry->Method);
@@ -2404,6 +2720,8 @@ static AjBool textinQryProcess(AjPTextin textin, AjPText text)
 ** @param [u] text [AjPText] text data
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2514,6 +2832,8 @@ static AjBool textinListProcess(AjPTextin textin, AjPText text,
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2551,6 +2871,8 @@ static void textinListNoComment(AjPStr* text)
 ** @param [u] textin [AjPTextin] text term input.
 ** @param [u] text [AjPText] text term.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2620,6 +2942,8 @@ static AjBool textinFormatSet(AjPTextin textin, AjPText text)
 ** Creates a new text input stream object.
 **
 ** @return [AjPTextall] New text input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2672,6 +2996,8 @@ AjPTextall ajTextallNew(void)
 **
 ** @param [d] pthis [AjPTextall*] Text input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2733,6 +3059,8 @@ void ajTextallDel(AjPTextall* pthis)
 **
 ** @param [w] thys [AjPTextall] Text input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2769,7 +3097,7 @@ void ajTextallClear(AjPTextall thys)
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -2791,6 +3119,8 @@ void ajTextallClear(AjPTextall thys)
 ** @param [w] thys [AjPTextall] Text input stream
 ** @param [u] Ptext [AjPText*] Text block returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2880,6 +3210,8 @@ AjBool ajTextallNext(AjPTextall thys, AjPText *Ptext)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2921,6 +3253,8 @@ static AjBool textinformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2944,6 +3278,8 @@ AjBool ajTextinformatTerm(const AjPStr term)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if format was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

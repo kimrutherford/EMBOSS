@@ -1,3 +1,5 @@
+   HTML>
+
                                    fuzzpro
 
 
@@ -38,8 +40,7 @@ Usage
 Search for patterns in protein sequences
 Input protein sequence(s): tsw:*
 Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Output report [12s1_arath.fuzzpro]:
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output report [cru4_arath.fuzzpro]:
 
 
    Go to the input files for this example
@@ -48,7 +49,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 Command line arguments
 
 Search for patterns in protein sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -98,7 +99,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -184,7 +188,7 @@ Input file format
        brackets `{ }' the amino acids that are not accepted at a given
        position. For example: {AM} stands for any amino acid except Ala
        and Met.
-     * Each element in a pattern is separated from its neighbor by a `-'.
+     * Each element in a pattern is separated from its neighbour by a `-'.
        (Optional in fuzzpro).
      * Repetition of an element of the pattern can be indicated by
        following that element with a numerical value or a numerical range
@@ -223,16 +227,16 @@ Output file format
 
   Output files for usage example
 
-  File: 12s1_arath.fuzzpro
+  File: cru4_arath.fuzzpro
 
 ########################################
 # Program: fuzzpro
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
-# Report_file: 12s1_arath.fuzzpro
+# Report_file: cru4_arath.fuzzpro
 ########################################
 
 #=======================================
@@ -245,9 +249,9 @@ Output file format
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSK
-RG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKR
+G
 
 #---------------------------------------
 #---------------------------------------
@@ -261,9 +265,9 @@ RG
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSK
-RG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKR
+G
 
 #---------------------------------------
 #---------------------------------------
@@ -290,9 +294,9 @@ RG
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSK
-RG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKR
+G
 
 #---------------------------------------
 #---------------------------------------
@@ -306,9 +310,9 @@ RG
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSK
-RG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKR
+G
 
 #---------------------------------------
 #---------------------------------------
@@ -322,16 +326,16 @@ RG
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSK
-RG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKR
+G
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35357
+# Total_length: 37225
 # Reported_sequences: 8
 # Reported_hitcount: 8
 #---------------------------------------
@@ -367,16 +371,16 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   antigenic        Find antigenic sites in proteins
+   epestfind        Find PEST motifs as potential proteolytic cleavage sites
    fuzztran         Search for patterns in protein sequences (translated)
-   patmatdb         Searches protein sequences with a sequence motif
+   patmatdb         Search protein sequences with a sequence motif
    patmatmotifs     Scan a protein sequence with motifs from the PROSITE
                     database
    preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+   pscan            Scan protein sequence(s) with fingerprints from the PRINTS
                     database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
+   sigcleave        Report on signal cleavage sites in a protein sequence
 
 Author(s)
 

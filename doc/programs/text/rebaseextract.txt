@@ -41,7 +41,7 @@ REBASE database proto file: proto
 Command line arguments
 
 Process the REBASE database for use by restriction enzyme applications
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     REBASE database withrefm file
@@ -573,8 +573,7 @@ See also
    cutgextract      Extract codon usage tables from CUTG database
    jaspextract      Extract data from JASPAR
    printsextract    Extract data from PRINTS database for use by pscan
-   prosextract      Processes the PROSITE motif database for use by
-                    patmatmotifs
+   prosextract      Process the PROSITE motif database for use by patmatmotifs
    tfextract        Process TRANSFAC transcription factor database for use by
                     tfscan
 

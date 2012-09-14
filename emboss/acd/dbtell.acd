@@ -2,8 +2,8 @@ application: dbtell
 [
   documentation: "Display information about a public database"
   groups: "Data resources"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input 
@@ -19,7 +19,7 @@ section: input
       information: "Database name"
       help: "The name of the database defined locally for use by EMBOSS."
       knowntype: "emboss database name"
-      relations: "EDAM:0001048 identifier Database identifier"
+      relations: "EDAM_identifier:1048 Database identifier"
   ]
 
 endsection: input
@@ -42,7 +42,7 @@ boolean: full
     information: "Verbose output"
     help: "The default behaviour is to report for relevant databases only
            basic information from the EMBOSS database definition"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -75,7 +75,7 @@ section: output
     additional: "Y"
     default: "stdout"
     knowntype: "dbtell output"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 

@@ -4,7 +4,7 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
@@ -14,7 +14,7 @@
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -39,7 +39,7 @@
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>
@@ -73,6 +73,11 @@
 </tr>
 
 <tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
+</tr>
+
+<tr>
 <td><a href="remap.html">remap</a></td>
 <td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
@@ -99,12 +104,17 @@
 
 <tr>
 <td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
+<td>Display protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="sixpack.html">sixpack</a></td>
 <td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
 </tr>
 
 <tr>

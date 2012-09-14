@@ -1,29 +1,38 @@
-/******************************************************************************
-** @source support for DAS sequence data sources
+/* @source ajdas **************************************************************
 **
+** support for DAS sequence data sources
+**
+** @author Copyright (c) 2009 Mahmut Uludag
+** @version $Revision: 1.27 $
+** @modified $Date: 2011/10/18 14:23:39 $ by $Author: rice $
+** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajdas.h"
+
+#include "ajlib.h"
+#include "ajfileio.h"
+#include "ajhttp.h"
+#include "ajsys.h"
+#include "ajtime.h"
+#include "ajtextread.h"
+
 #include "expat.h"
-#include "ajdas.h"
-#include "ajdas.h"
-#include "ajmart.h"
-#include "ajseqdb.h"
 
 
 
@@ -49,6 +58,8 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 ** Returns a new DasServer object
 **
 ** @return [AjPDasServer] DAS server object
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPDasServer ajDasServerNew(void)
@@ -75,6 +86,8 @@ AjPDasServer ajDasServerNew(void)
 **
 ** @param [u] thys [AjPDasServer*] DASserver object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajDasServerDel(AjPDasServer *thys)
@@ -140,12 +153,14 @@ void ajDasServerDel(AjPDasServer *thys)
 
 
 
-/* @func ajDasSegmentDel *****************************************************
+/* @func ajDasSegmentDel ******************************************************
 **
 ** Delete DAS segment objects returned by entry_points queries
 **
 ** @param [u] Psegment [AjPDasSegment*] DAS segment object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajDasSegmentDel(AjPDasSegment* Psegment)
@@ -174,6 +189,8 @@ void ajDasSegmentDel(AjPDasSegment* Psegment)
 ** @param [r] atts [const XML_Char**] array of element attributes,
 **                                    name/value pairs
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void dasRegistryElementstart(void *data, const XML_Char *name,
@@ -292,6 +309,8 @@ static void dasRegistryElementstart(void *data, const XML_Char *name,
 ** @param [r] name [const XML_Char*] XML element name
 ** @param [r] atts [const XML_Char**] array of name/value pairs
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void dasEntrypointsElementstart(void *data, const XML_Char *name,
@@ -371,6 +390,8 @@ static void dasEntrypointsElementstart(void *data, const XML_Char *name,
 ** @param [u] sources [AjPList] pointer to the data structure for storing
 **                              parser results of DAS/XML 'source' objects
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajDasParseRegistry(AjPFilebuff buff, AjPList sources)
@@ -391,6 +412,8 @@ AjBool ajDasParseRegistry(AjPFilebuff buff, AjPList sources)
 ** @param [u] segments [AjPList] pointer to the data structure for storing
 **                               parser results of DAS/XML 'segment' objects
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajDasParseEntrypoints(AjPFilebuff buff, AjPList segments)
@@ -409,6 +432,8 @@ AjBool ajDasParseEntrypoints(AjPFilebuff buff, AjPList segments)
 ** @param [u] server [AjPDasServer]  DASserver object
 ** @param [r] host [const AjPStr] DAS server host name
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajDasServerSethostS(AjPDasServer server, const AjPStr host)
@@ -428,6 +453,8 @@ AjBool ajDasServerSethostS(AjPDasServer server, const AjPStr host)
 ** @param [u] server [AjPDasServer]  DASserver object
 ** @param [r] path [const AjPStr] DAS server URL path
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajDasServerSetpathS(AjPDasServer server, const AjPStr path)
@@ -447,6 +474,8 @@ AjBool ajDasServerSetpathS(AjPDasServer server, const AjPStr path)
 ** @param [u] server [AjPDasServer]  DASserver object
 ** @param [r] port [ajuint] DAS server port
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajDasServerSetport(AjPDasServer server, ajuint port)
@@ -469,6 +498,8 @@ AjBool ajDasServerSetport(AjPDasServer server, ajuint port)
 ** @param [r] cmd [const AjPStr] DAS 'sources' command, queries either
 **                         all DAS sources or a particular DAS source
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajDasServerGetSources(AjPDasServer server, const AjPStr cmd)
@@ -517,6 +548,8 @@ void ajDasServerGetSources(AjPDasServer server, const AjPStr cmd)
 ** @param [r] sourceURIorTitle [const AjPStr] DAS source URI or title
 **                                      specified in current query
 ** @return [AjPStr] sequence-query URI, null if not found
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjPStr ajDasGetSequenceQueryURI(const AjPQuery qry,
@@ -654,6 +687,8 @@ AjPStr ajDasGetSequenceQueryURI(const AjPQuery qry,
 ** @param [u] elementh [XML_CharacterDataHandler] handler for processing
 **                                                XML element data
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool dasQueryParse(AjPFilebuff buff, void* results,
@@ -687,15 +722,10 @@ static AjBool dasQueryParse(AjPFilebuff buff, void* results,
 	done = ajFilebuffIsEmpty(buff);
 	len = ajStrGetLen(line);
 
-	ajDebug("ajDasQueryParse: line: %S", line);
-
 	if(!XML_Parse(parser, line->Ptr, len, done))
 	{
-	    ajDebug("ajDasQueryParse: %s at line %d\n",
-	            XML_ErrorString(XML_GetErrorCode(parser)),
-	            XML_GetCurrentLineNumber(parser));
-
-	    ajErr("Failed to parse received DAS response: %s",
+	    ajErr("Failed to parse received DAS response at line %d: '%s'",
+		    XML_GetCurrentLineNumber(parser),
 		    XML_ErrorString(XML_GetErrorCode(parser)));
 
 	    XML_ParserFree(parser);
@@ -715,13 +745,15 @@ static AjBool dasQueryParse(AjPFilebuff buff, void* results,
 
 
 
-/* @func ajDasSourceGetDBname ************************************************
+/* @func ajDasSourceGetDBname *************************************************
 **
 ** Returns an EMBOSS DB name for a given DAS source
 **
 ** @param [r] source [const AjPDasSource] DAS source object
 ** @param [r] titleAndURI [AjBool] Include URI in name
 ** @return [AjPStr] DB name
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -752,13 +784,15 @@ AjPStr ajDasSourceGetDBname(const AjPDasSource source, AjBool titleAndURI)
 
 
 
-/* @func ajDasPrintCachefile *************************************************
+/* @func ajDasPrintCachefile **************************************************
 **
 ** Prints DB definition for the specified DAS server object
 **
 ** @param [r] server [const AjPDasServer] DAS server object
 ** @param [w] cachef [AjPFile] server cachefile with DB definitions
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -826,7 +860,7 @@ void ajDasPrintCachefile(const AjPDasServer server, AjPFile cachef)
     }
 
     ajListIterDel(&iter);
-    ajTableDelValdel(&titlecount, ajMemFree);
+    ajTableDelValdel(&titlecount, &ajMemFree);
 
     return;
 }
@@ -842,6 +876,8 @@ void ajDasPrintCachefile(const AjPDasServer server, AjPFile cachef)
 ** @param [r] source [const AjPDasSource] DAS source object
 ** @param [r] titleAndURI [AjBool] Include URI in name
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -993,7 +1029,7 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 
 
 
-/* @func ajDasTestrangeParse *************************************************
+/* @func ajDasTestrangeParse **************************************************
 **
 ** Parses a DAS test_range attribute and returns sequence identifier, and
 ** 'begin' and 'end' positions if any.
@@ -1003,6 +1039,8 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 ** @param [w] ibegin [ajint*] sequence begin position
 ** @param [w] iend [ajint*] sequence end position
 ** @return [AjPStr] returns the example query in EMBOSS USA syntax
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

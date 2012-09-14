@@ -1,93 +1,96 @@
-/* @source Ensembl Genetic Variation Individual functions
+/* @source ensgvindividual ****************************************************
+**
+** Ensembl Genetic Variation Individual functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.45 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.29 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvindividual.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic gvindividualGender ********************************************
+/* @conststatic gvindividualKGender *******************************************
 **
-** The Ensembl Genetic Variation Individual gender element is enumerated in
+** The Ensembl Genetic Variation Individual gender member is enumerated in
 ** both, the SQL table definition and the data structure. The following
 ** strings are used for conversion in database operations and correspond to
 ** EnsEGvindividualGender.
 **
 ******************************************************************************/
 
-static const char* gvindividualGender[] =
+static const char *gvindividualKGender[] =
 {
     "",
     "Male",
     "Female",
     "Unknown",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvindividualType **********************************************
+/* @conststatic gvindividualKType *********************************************
 **
-** The Ensembl Genetic Variation Individual type element is enumerated in
+** The Ensembl Genetic Variation Individual type member is enumerated in
 ** both, the SQL table definition and the data structure. The following
 ** strings are used for conversion in database operations and correspond to
 ** EnsEGvindividualType.
 **
 ******************************************************************************/
 
-static const char* gvindividualType[] =
+static const char *gvindividualKType[] =
 {
     "",
     "Fully_inbred",
@@ -95,36 +98,36 @@ static const char* gvindividualType[] =
     "Outbred",
     "Mutant",
     "Unknown",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvindividualadaptorTables *************************************
+/* @conststatic gvindividualadaptorKTables ************************************
 **
 ** Array of Ensembl Genetic Variation Individual Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* gvindividualadaptorTables[] =
+static const char *gvindividualadaptorKTables[] =
 {
     "sample",
     "individual",
     "individual_type",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvindividualadaptorColumns ************************************
+/* @conststatic gvindividualadaptorKColumns ***********************************
 **
 ** Array of Ensembl Genetic Variation Individual Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* gvindividualadaptorColumns[] =
+static const char *gvindividualadaptorKColumns[] =
 {
     "sample.sample_id",
     "sample.name",
@@ -136,19 +139,19 @@ static const char* gvindividualadaptorColumns[] =
     "individual.mother_individual_sample_id",
     "individual_type.name",
     "individual_type.description",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic gvindividualadaptorDefaultcondition ***************************
+/* @conststatic gvindividualadaptorKDefaultcondition **************************
 **
 ** Ensembl Genetic Variation Individual Adaptor SQL default condition
 **
 ******************************************************************************/
 
-static const char* gvindividualadaptorDefaultcondition =
+static const char *gvindividualadaptorKDefaultcondition =
     "sample.sample_id = individual.sample_id "
     "AND "
     "individual.individual_type_id = individual_type.individual_type_id";
@@ -156,19 +159,19 @@ static const char* gvindividualadaptorDefaultcondition =
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool gvindividualadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -177,9 +180,9 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -199,8 +202,8 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
 ** Ensembl Genetic Variation Individual objects
 **
 ** @cc Bio::EnsEMBL::Variation::Individual
-** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -234,7 +237,7 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
 ** @argrule Ini description [AjPStr] Description
 ** @argrule Ref gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 **
-** @valrule * [EnsPGvindividual] Ensembl Genetic Variation Individual
+** @valrule * [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -246,10 +249,12 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
 **
 ** Object-based constructor function, which returns an independent object.
 **
-** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation
-**                                         Individual
+** @param [r] gvi [const EnsPGvindividual]
+** Ensembl Genetic Variation Individual
 **
 ** @return [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -257,28 +262,21 @@ EnsPGvindividual ensGvindividualNewCpy(const EnsPGvindividual gvi)
 {
     EnsPGvindividual pthis = NULL;
 
-    if(!gvi)
+    if (!gvi)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = gvi->Identifier;
+    pthis->Adaptor    = gvi->Adaptor;
+    pthis->Gvsample   = ensGvsampleNewRef(gvi->Gvsample);
+    pthis->Father     = ensGvindividualNewRef(gvi->Father);
+    pthis->Mother     = ensGvindividualNewRef(gvi->Mother);
+    pthis->Gender     = gvi->Gender;
+    pthis->Type       = gvi->Type;
 
-    pthis->Adaptor = gvi->Adaptor;
-
-    pthis->Gvsample = ensGvsampleNewRef(gvi->Gvsample);
-
-    pthis->Father = ensGvindividualNewRef(gvi->Father);
-
-    pthis->Mother = ensGvindividualNewRef(gvi->Mother);
-
-    pthis->Gender = gvi->Gender;
-
-    pthis->Type = gvi->Type;
-
-    if(gvi->Description)
+    if (gvi->Description)
         pthis->Description = ajStrNewRef(gvi->Description);
 
     return pthis;
@@ -292,8 +290,8 @@ EnsPGvindividual ensGvindividualNewCpy(const EnsPGvindividual gvi)
 ** Constructor for an Ensembl Genetic Variation Individual with initial values.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Variation::Sample::new
 ** @param [u] gvs [EnsPGvsample] Ensembl Genetic Variation Sample
@@ -305,6 +303,8 @@ EnsPGvindividual ensGvindividualNewCpy(const EnsPGvindividual gvi)
 ** @param [u] description [AjPStr] Description
 **
 ** @return [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -319,28 +319,21 @@ EnsPGvindividual ensGvindividualNewIni(EnsPGvindividualadaptor gvia,
 {
     EnsPGvindividual gvi = NULL;
 
-    if(!gvs)
+    if (!gvs)
         return NULL;
 
     AJNEW0(gvi);
 
-    gvi->Use = 1;
-
+    gvi->Use        = 1U;
     gvi->Identifier = identifier;
+    gvi->Adaptor    = gvia;
+    gvi->Gvsample   = ensGvsampleNewRef(gvs);
+    gvi->Father     = ensGvindividualNewRef(father);
+    gvi->Mother     = ensGvindividualNewRef(mother);
+    gvi->Gender     = gender;
+    gvi->Type       = type;
 
-    gvi->Adaptor = gvia;
-
-    gvi->Gvsample = ensGvsampleNewRef(gvs);
-
-    gvi->Father = ensGvindividualNewRef(father);
-
-    gvi->Mother = ensGvindividualNewRef(mother);
-
-    gvi->Gender = gender;
-
-    gvi->Type = type;
-
-    if(description)
+    if (description)
         gvi->Description = ajStrNewRef(description);
 
     return gvi;
@@ -356,13 +349,15 @@ EnsPGvindividual ensGvindividualNewIni(EnsPGvindividualadaptor gvia,
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 **
-** @return [EnsPGvindividual] Ensembl Genetic Variation Individual
+** @return [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvindividual ensGvindividualNewRef(EnsPGvindividual gvi)
 {
-    if(!gvi)
+    if (!gvi)
         return NULL;
 
     gvi->Use++;
@@ -375,15 +370,15 @@ EnsPGvindividual ensGvindividualNewRef(EnsPGvindividual gvi)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Individual object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Individual object.
 **
 ** @fdata [EnsPGvindividual]
 **
-** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Individual object
+** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Individual
 **
-** @argrule * Pgvi [EnsPGvindividual*] Ensembl Genetic Variation Individual
-**                                     object address
+** @argrule * Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual address
 **
 ** @valrule * [void]
 **
@@ -397,24 +392,24 @@ EnsPGvindividual ensGvindividualNewRef(EnsPGvindividual gvi)
 **
 ** Default destructor for an Ensembl Genetic Variation Individual.
 **
-** @param [d] Pgvi [EnsPGvindividual*] Ensembl Genetic Variation Individual
-**                                     object address
+** @param [d] Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensGvindividualDel(EnsPGvindividual* Pgvi)
+void ensGvindividualDel(EnsPGvindividual *Pgvi)
 {
     EnsPGvindividual pthis = NULL;
 
-    if(!Pgvi)
+    if (!Pgvi)
         return;
 
-    if(!*Pgvi)
-        return;
-
-    if(ajDebugTest("ensGvindividualDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGvindividualDel"))
     {
         ajDebug("ensGvindividualDel\n"
                 "  *Pgvi %p\n",
@@ -422,12 +417,16 @@ void ensGvindividualDel(EnsPGvindividual* Pgvi)
 
         ensGvindividualTrace(*Pgvi, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pgvi)
+        return;
 
     pthis = *Pgvi;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pgvi = NULL;
 
@@ -452,9 +451,9 @@ void ensGvindividualDel(EnsPGvindividual* Pgvi)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Individual object.
 **
 ** @fdata [EnsPGvindividual]
@@ -479,7 +478,7 @@ void ensGvindividualDel(EnsPGvindividual* Pgvi)
 ** @valrule Gender [EnsEGvindividualGender] Gender or
 ** ensEGvindividualGenderNULL
 ** @valrule Gvsample [EnsPGvsample] Ensembl Genetic Variation Sample or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Mother [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** or NULL
 ** @valrule Type [EnsEGvindividualType] Type ensEGvindividualTypeNULL
@@ -492,22 +491,21 @@ void ensGvindividualDel(EnsPGvindividual* Pgvi)
 
 /* @func ensGvindividualGetAdaptor ********************************************
 **
-** Get the Ensembl Genetic Variation Individual Adaptor element of an
+** Get the Ensembl Genetic Variation Individual Adaptor member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsPGvindividualadaptor] Ensembl Genetic Variation
 **                                   Individual Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvindividualadaptor ensGvindividualGetAdaptor(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return NULL;
-
-    return gvi->Adaptor;
+    return (gvi) ? gvi->Adaptor : NULL;
 }
 
 
@@ -515,20 +513,19 @@ EnsPGvindividualadaptor ensGvindividualGetAdaptor(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetDescription ****************************************
 **
-** Get the description element of an Ensembl Genetic Variation Individual.
+** Get the description member of an Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [AjPStr] Description or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensGvindividualGetDescription(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return NULL;
-
-    return gvi->Description;
+    return (gvi) ? gvi->Description : NULL;
 }
 
 
@@ -536,21 +533,20 @@ AjPStr ensGvindividualGetDescription(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetFather *********************************************
 **
-** Get the father Ensembl Genetic Variation Individual element of an
+** Get the father Ensembl Genetic Variation Individual member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvindividual ensGvindividualGetFather(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return NULL;
-
-    return gvi->Father;
+    return (gvi) ? gvi->Father : NULL;
 }
 
 
@@ -558,20 +554,19 @@ EnsPGvindividual ensGvindividualGetFather(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetGender *********************************************
 **
-** Get the gender element of an Ensembl Genetic Variation Individual.
+** Get the gender member of an Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsEGvindividualGender] Gender or ensEGvindividualGenderNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEGvindividualGender ensGvindividualGetGender(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return ensEGvindividualGenderNULL;
-
-    return gvi->Gender;
+    return (gvi) ? gvi->Gender : ensEGvindividualGenderNULL;
 }
 
 
@@ -579,21 +574,20 @@ EnsEGvindividualGender ensGvindividualGetGender(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetGvsample *******************************************
 **
-** Get the Ensembl Genetic Variation Sample element of an
+** Get the Ensembl Genetic Variation Sample member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsPGvsample] Ensembl Genetic Variation Sample or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvsample ensGvindividualGetGvsample(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return NULL;
-
-    return gvi->Gvsample;
+    return (gvi) ? gvi->Gvsample : NULL;
 }
 
 
@@ -601,21 +595,20 @@ EnsPGvsample ensGvindividualGetGvsample(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetIdentifier *****************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensGvindividualGetIdentifier(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return 0;
-
-    return gvi->Identifier;
+    return (gvi) ? gvi->Identifier : 0U;
 }
 
 
@@ -623,21 +616,20 @@ ajuint ensGvindividualGetIdentifier(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetMother *********************************************
 **
-** Get the mother Ensembl Genetic Variation Individual element of an
+** Get the mother Ensembl Genetic Variation Individual member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsPGvindividual] Ensembl Genetic Variation Individual or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvindividual ensGvindividualGetMother(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return NULL;
-
-    return gvi->Mother;
+    return (gvi) ? gvi->Mother : NULL;
 }
 
 
@@ -645,33 +637,32 @@ EnsPGvindividual ensGvindividualGetMother(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualGetType ***********************************************
 **
-** Get the type element of an Ensembl Genetic Variation Individual.
+** Get the type member of an Ensembl Genetic Variation Individual.
 **
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [EnsEGvindividualType] Type or ensEGvindividualTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEGvindividualType ensGvindividualGetType(const EnsPGvindividual gvi)
 {
-    if(!gvi)
-        return ensEGvindividualTypeNULL;
-
-    return gvi->Type;
+    return (gvi) ? gvi->Type : ensEGvindividualTypeNULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Genetic Variation Individual object.
 **
 ** @fdata [EnsPGvindividual]
 **
-** @nam3rule Set Set one element of a Genetic Variation Population
+** @nam3rule Set Set one member of a Genetic Variation Population
 ** @nam4rule Adaptor Set the Ensembl Genetic Variation Population Adaptor
 ** @nam4rule Description Set the description
 ** @nam4rule Gender Set the gender
@@ -704,7 +695,7 @@ EnsEGvindividualType ensGvindividualGetType(const EnsPGvindividual gvi)
 
 /* @func ensGvindividualSetAdaptor ********************************************
 **
-** Set the Ensembl Genetic Variation Individual Adaptor element of an
+** Set the Ensembl Genetic Variation Individual Adaptor member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
@@ -712,13 +703,15 @@ EnsEGvindividualType ensGvindividualGetType(const EnsPGvindividual gvi)
 **                                           Individual Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetAdaptor(EnsPGvindividual gvi,
                                  EnsPGvindividualadaptor gvia)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     gvi->Adaptor = gvia;
@@ -731,24 +724,26 @@ AjBool ensGvindividualSetAdaptor(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetDescription ****************************************
 **
-** Set the description element of an Ensembl Genetic Variation Individual.
+** Set the description member of an Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] description [AjPStr] Description
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetDescription(EnsPGvindividual gvi,
                                      AjPStr description)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     ajStrDel(&gvi->Description);
 
-    if(description)
+    if (description)
         gvi->Description = ajStrNewRef(description);
 
     return ajTrue;
@@ -759,20 +754,22 @@ AjBool ensGvindividualSetDescription(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetFather *********************************************
 **
-** Set the father Ensembl Genetic Variation Individual element of an
+** Set the father Ensembl Genetic Variation Individual member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] father [EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetFather(EnsPGvindividual gvi,
                                 EnsPGvindividual father)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     ensGvindividualDel(&gvi->Father);
@@ -787,19 +784,21 @@ AjBool ensGvindividualSetFather(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetGender *********************************************
 **
-** Set the gender element of an Ensembl Genetic Variation Individual.
+** Set the gender member of an Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] gender [EnsEGvindividualGender] Gender
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetGender(EnsPGvindividual gvi,
                                 EnsEGvindividualGender gender)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     gvi->Gender = gender;
@@ -812,20 +811,22 @@ AjBool ensGvindividualSetGender(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetGvsample *******************************************
 **
-** Set the Ensembl Genetic Variation Sample element of an
+** Set the Ensembl Genetic Variation Sample member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] gvs [EnsPGvsample] Ensembl Genetic Variation Sample
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetGvsample(EnsPGvindividual gvi,
                                   EnsPGvsample gvs)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     ensGvsampleDel(&gvi->Gvsample);
@@ -840,20 +841,22 @@ AjBool ensGvindividualSetGvsample(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetIdentifier *****************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetIdentifier(EnsPGvindividual gvi,
                                     ajuint identifier)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     gvi->Identifier = identifier;
@@ -866,20 +869,22 @@ AjBool ensGvindividualSetIdentifier(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetMother *********************************************
 **
-** Set the mother Ensembl Genetic Variation Individual element of an
+** Set the mother Ensembl Genetic Variation Individual member of an
 ** Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] mother [EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetMother(EnsPGvindividual gvi,
                                 EnsPGvindividual mother)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     ensGvindividualDel(&gvi->Mother);
@@ -894,19 +899,21 @@ AjBool ensGvindividualSetMother(EnsPGvindividual gvi,
 
 /* @func ensGvindividualSetType ***********************************************
 **
-** Set the type element of an Ensembl Genetic Variation Individual.
+** Set the type member of an Ensembl Genetic Variation Individual.
 **
 ** @param [u] gvi [EnsPGvindividual] Ensembl Genetic Variation Individual
 ** @param [u] type [EnsEGvindividualType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualSetType(EnsPGvindividual gvi,
                               EnsEGvindividualType type)
 {
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     gvi->Type = type;
@@ -923,7 +930,7 @@ AjBool ensGvindividualSetType(EnsPGvindividual gvi,
 **
 ** @fdata [EnsPGvindividual]
 **
-** @nam3rule Trace Report Ensembl Genetic Variation Individual elements to
+** @nam3rule Trace Report Ensembl Genetic Variation Individual members to
 **                 debug file
 **
 ** @argrule Trace gvi [const EnsPGvindividual] Ensembl Genetic Variation
@@ -946,6 +953,8 @@ AjBool ensGvindividualSetType(EnsPGvindividual gvi,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -953,7 +962,7 @@ AjBool ensGvindividualTrace(const EnsPGvindividual gvi, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!gvi)
+    if (!gvi)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1022,6 +1031,8 @@ AjBool ensGvindividualTrace(const EnsPGvindividual gvi, ajuint level)
 ** @param [r] gvi [const EnsPGvindividual] Ensembl Genetic Variation Individual
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1029,7 +1040,7 @@ size_t ensGvindividualCalculateMemsize(const EnsPGvindividual gvi)
 {
     size_t size = 0;
 
-    if(!gvi)
+    if (!gvi)
         return 0;
 
     size += sizeof (EnsOGvindividual);
@@ -1040,7 +1051,7 @@ size_t ensGvindividualCalculateMemsize(const EnsPGvindividual gvi)
 
     size += ensGvindividualCalculateMemsize(gvi->Mother);
 
-    if(gvi->Description)
+    if (gvi->Description)
     {
         size += sizeof (AjOStr);
 
@@ -1078,9 +1089,9 @@ size_t ensGvindividualCalculateMemsize(const EnsPGvindividual gvi)
 **
 ** @argrule  Str  gender  [const AjPStr] Gender string
 **
-** @valrule * [EnsEGvindividualGender] Ensembl Genetic Variation Individual
-**                                     Gender enumeration or
-**                                     ensEGvindividualGenderNULL
+** @valrule * [EnsEGvindividualGender]
+** Ensembl Genetic Variation Individual Gender enumeration or
+** ensEGvindividualGenderNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1096,7 +1107,9 @@ size_t ensGvindividualCalculateMemsize(const EnsPGvindividual gvi)
 ** @param [r] gender [const AjPStr] Gender string
 **
 ** @return [EnsEGvindividualGender] Ensembl Genetic Variation Individual gender
-**                                  enumeration or ensEGvindividualGenderNULL
+** enumeration or ensEGvindividualGenderNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1106,13 +1119,13 @@ EnsEGvindividualGender ensGvindividualGenderFromStr(const AjPStr gender)
 
     EnsEGvindividualGender egender = ensEGvindividualGenderNULL;
 
-    for(i = ensEGvindividualGenderNULL;
-        gvindividualGender[i];
-        i++)
-        if(ajStrMatchC(gender, gvindividualGender[i]))
+    for (i = ensEGvindividualGenderNULL;
+         gvindividualKGender[i];
+         i++)
+        if (ajStrMatchC(gender, gvindividualKGender[i]))
             egender = i;
 
-    if(!egender)
+    if (!egender)
         ajDebug("ensGvindividualGenderFromStr encountered "
                 "unexpected string '%S'.\n", gender);
 
@@ -1133,11 +1146,11 @@ EnsEGvindividualGender ensGvindividualGenderFromStr(const AjPStr gender)
 **                       enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To gvig [EnsEGvindividualGender] Ensembl Genetic Variation
-**                                           Individual Gender enumeration
+** @argrule To gvig [EnsEGvindividualGender]
+** Ensembl Genetic Variation Individual Gender enumeration
 **
-** @valrule Char [const char*] Ensembl Genetic Variation Individual Gender
-**                             C-type (char*) string
+** @valrule Char [const char*]
+** Ensembl Genetic Variation Individual Gender C-type (char *) string
 **
 ** @fcategory cast
 ******************************************************************************/
@@ -1148,13 +1161,15 @@ EnsEGvindividualGender ensGvindividualGenderFromStr(const AjPStr gender)
 /* @func ensGvindividualGenderToChar ******************************************
 **
 ** Convert an Ensembl Genetic Variation Individual Gender enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
-** @param [u] gvig [EnsEGvindividualGender] Ensembl Genetic Variation
-**                                          Individual Gender enumeration
+** @param [u] gvig [EnsEGvindividualGender]
+** Ensembl Genetic Variation Individual Gender enumeration
 **
-** @return [const char*] Ensembl Genetic Variation Individual Gender
-**                       C-type (char*) string
+** @return [const char*]
+** Ensembl Genetic Variation Individual Gender C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1162,17 +1177,17 @@ const char* ensGvindividualGenderToChar(EnsEGvindividualGender gvig)
 {
     register EnsEGvindividualGender i = ensEGvindividualGenderNULL;
 
-    for(i = ensEGvindividualGenderNULL;
-        gvindividualGender[i] && (i < gvig);
-        i++);
+    for (i = ensEGvindividualGenderNULL;
+         gvindividualKGender[i] && (i < gvig);
+         i++);
 
-    if(!gvindividualGender[i])
+    if (!gvindividualKGender[i])
         ajDebug("ensGvindividualGenderToChar encountered an "
                 "out of boundary error on Ensembl "
                 "Genetic Variation Individual Gender enumeration %d.\n",
                 gvig);
 
-    return gvindividualGender[i];
+    return gvindividualKGender[i];
 }
 
 
@@ -1203,9 +1218,9 @@ const char* ensGvindividualGenderToChar(EnsEGvindividualGender gvig)
 **
 ** @argrule  Str  type  [const AjPStr] Type string
 **
-** @valrule * [EnsEGvindividualType] Ensembl Genetic Variation Individual
-**                                   Type enumeration or
-**                                   ensEGvindividualTypeNULL
+** @valrule * [EnsEGvindividualType]
+** Ensembl Genetic Variation Individual Type enumeration or
+** ensEGvindividualTypeNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1220,8 +1235,11 @@ const char* ensGvindividualGenderToChar(EnsEGvindividualGender gvig)
 **
 ** @param [r] type [const AjPStr] Type string
 **
-** @return [EnsEGvindividualType] Ensembl Genetic Variation Individual Type
-**                                enumeration or ensEGvindividualTypeNULL
+** @return [EnsEGvindividualType]
+** Ensembl Genetic Variation Individual Type enumeration or
+** ensEGvindividualTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1231,13 +1249,13 @@ EnsEGvindividualType ensGvindividualTypeFromStr(const AjPStr type)
 
     EnsEGvindividualType etype = ensEGvindividualTypeNULL;
 
-    for(i = ensEGvindividualTypeNULL;
-        gvindividualType[i];
-        i++)
-        if(ajStrMatchC(type, gvindividualType[i]))
+    for (i = ensEGvindividualTypeNULL;
+         gvindividualKType[i];
+         i++)
+        if (ajStrMatchC(type, gvindividualKType[i]))
             etype = i;
 
-    if(!etype)
+    if (!etype)
         ajDebug("ensGvindividualTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1257,11 +1275,11 @@ EnsEGvindividualType ensGvindividualTypeFromStr(const AjPStr type)
 ** @nam4rule To   Return Ensembl Genetic Variation Individual Type enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To gvit [EnsEGvindividualType] Ensembl Genetic Variation
-**                                         Individual Type enumeration
+** @argrule To gvit [EnsEGvindividualType]
+** Ensembl Genetic Variation Individual Type enumeration
 **
-** @valrule Char [const char*] Ensembl Genetic Variation Individual Type
-**                             C-type (char*) string
+** @valrule Char [const char*]
+** Ensembl Genetic Variation Individual Type C-type (char *) string
 **
 ** @fcategory cast
 ******************************************************************************/
@@ -1272,13 +1290,15 @@ EnsEGvindividualType ensGvindividualTypeFromStr(const AjPStr type)
 /* @func ensGvindividualTypeToChar ********************************************
 **
 ** Convert an Ensembl Genetic Variation Individual Type enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
-** @param [u] gvit [EnsEGvindividualType] Ensembl Genetic Variation
-**                                        Individual Type enumeration
+** @param [u] gvit [EnsEGvindividualType]
+** Ensembl Genetic Variation Individual Type enumeration
 **
-** @return [const char*] Ensembl Genetic Variation Individual Type
-**                       C-type (char*) string
+** @return [const char*]
+** Ensembl Genetic Variation Individual Type C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1286,17 +1306,17 @@ const char* ensGvindividualTypeToChar(EnsEGvindividualType gvit)
 {
     register EnsEGvindividualType i = ensEGvindividualTypeNULL;
 
-    for(i = ensEGvindividualTypeNULL;
-        gvindividualType[i] && (i < gvit);
-        i++);
+    for (i = ensEGvindividualTypeNULL;
+         gvindividualKType[i] && (i < gvit);
+         i++);
 
-    if(!gvindividualType[i])
+    if (!gvindividualKType[i])
         ajDebug("ensGvindividualTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Genetic Variation Individual Type enumeration %d.\n",
                 gvit);
 
-    return gvindividualType[i];
+    return gvindividualKType[i];
 }
 
 
@@ -1309,8 +1329,8 @@ const char* ensGvindividualTypeToChar(EnsEGvindividualType gvit)
 ** Ensembl Genetic Variation Individual Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor
-** @cc CVS Revision: 1.16
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.17
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1321,7 +1341,7 @@ const char* ensGvindividualTypeToChar(EnsEGvindividualType gvit)
 **
 ** Fetch all Ensembl Genetic Variation Individual objects via an SQL statement.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
@@ -1329,20 +1349,22 @@ const char* ensGvindividualTypeToChar(EnsEGvindividualType gvit)
 ** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool gvindividualadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList gvis)
 {
-    ajuint sidentifier = 0;
-    ajuint fatherid    = 0;
-    ajuint motherid    = 0;
-    ajuint ssize       = 0;
+    ajuint sidentifier = 0U;
+    ajuint fatherid    = 0U;
+    ajuint motherid    = 0U;
+    ajuint ssize       = 0U;
 
     EnsEGvsampleDisplay esdisplay  = ensEGvsampleDisplayNULL;
     EnsEGvindividualGender egender = ensEGvindividualGenderNULL;
@@ -1359,6 +1381,8 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
     AjPStr tname        = NULL;
     AjPStr tdescription = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPGvindividual gvi         = NULL;
     EnsPGvindividual father      = NULL;
     EnsPGvindividual mother      = NULL;
@@ -1367,37 +1391,38 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
     EnsPGvsample gvs         = NULL;
     EnsPGvsampleadaptor gvsa = NULL;
 
-    if(ajDebugTest("gvindividualadaptorFetchAllbyStatement"))
+    if (ajDebugTest("gvindividualadaptorFetchAllbyStatement"))
         ajDebug("gvindividualadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  gvis %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 gvis);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
+
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     gvia = ensRegistryGetGvindividualadaptor(dba);
-
     gvsa = ensRegistryGetGvsampleadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         sidentifier  = 0;
         sname        = ajStrNew();
@@ -1452,7 +1477,7 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
         ** a separate object.
         */
 
-        ajListPushAppend(gvis, (void*) gvi);
+        ajListPushAppend(gvis, (void *) gvi);
 
         ensGvsampleDel(&gvs);
 
@@ -1521,23 +1546,25 @@ static AjBool gvindividualadaptorFetchAllbyStatement(
 **
 ** @return [EnsPGvindividualadaptor]
 ** Ensembl Genetic Variation Individual Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPGvindividualadaptor ensGvindividualadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensBaseadaptorNew(
         dba,
-        gvindividualadaptorTables,
-        gvindividualadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        gvindividualadaptorDefaultcondition,
-        (const char*) NULL,
-        gvindividualadaptorFetchAllbyStatement);
+        gvindividualadaptorKTables,
+        gvindividualadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        gvindividualadaptorKDefaultcondition,
+        (const char *) NULL,
+        &gvindividualadaptorFetchAllbyStatement);
 }
 
 
@@ -1545,16 +1572,16 @@ EnsPGvindividualadaptor ensGvindividualadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Individual Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Individual Adaptor object.
 **
 ** @fdata [EnsPGvindividualadaptor]
 **
 ** @nam3rule Del Destroy (free) an
-** Ensembl Genetic Variation Individual Adaptor object
+** Ensembl Genetic Variation Individual Adaptor
 **
 ** @argrule * Pgvia [EnsPGvindividualadaptor*]
-** Ensembl Genetic Variation Individual Adaptor object address
+** Ensembl Genetic Variation Individual Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1575,30 +1602,27 @@ EnsPGvindividualadaptor ensGvindividualadaptorNew(
 ** if required.
 **
 ** @param [d] Pgvia [EnsPGvindividualadaptor*]
-** Ensembl Genetic Variation Individual Adaptor object address
+** Ensembl Genetic Variation Individual Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensGvindividualadaptorDel(EnsPGvindividualadaptor* Pgvia)
+void ensGvindividualadaptorDel(EnsPGvindividualadaptor *Pgvia)
 {
-    if(!Pgvia)
-        return;
-
     ensGvsampleadaptorDel(Pgvia);
 
-    *Pgvia = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Individual Adaptor object.
 **
 ** @fdata [EnsPGvindividualadaptor]
@@ -1622,22 +1646,21 @@ void ensGvindividualadaptorDel(EnsPGvindividualadaptor* Pgvia)
 
 /* @func ensGvindividualadaptorGetBaseadaptor *********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Individual Adaptor.
 **
 ** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
 **                                           Individual Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvindividualadaptorGetBaseadaptor(
     EnsPGvindividualadaptor gvia)
 {
-    if(!gvia)
-        return NULL;
-
     return gvia;
 }
 
@@ -1646,22 +1669,21 @@ EnsPBaseadaptor ensGvindividualadaptorGetBaseadaptor(
 
 /* @func ensGvindividualadaptorGetDatabaseadaptor *****************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Individual Adaptor.
 **
 ** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
 **                                           Individual Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvindividualadaptorGetDatabaseadaptor(
     EnsPGvindividualadaptor gvia)
 {
-    if(!gvia)
-        return NULL;
-
     return ensBaseadaptorGetDatabaseadaptor(gvia);
 }
 
@@ -1694,36 +1716,37 @@ EnsPDatabaseadaptor ensGvindividualadaptorGetDatabaseadaptor(
 ** @nam5rule Identifier Fetch by a SQL database-internal identifier
 ** @nam4rule Reference Fetch all reference
 **
-** @argrule * gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-** Individual Adaptor
-** @argrule All gvis [AjPList] AJAX List of Ensembl Genetic Variation
-** Individual objects
-** @argrule AllbyDisplay display [EnsEGvsampleDisplay] Ensembl Genetic
-** Variation Sample Display enumeration
-** @argrule AllbyDisplay gvis [AjPList] AJAX List of Ensembl Genetic Variation
-** Individual objects
-** @argrule AllbyGvpopulation gvp [const EnsPGvpopulation] Ensembl Genetic
-** Variation Population
-** @argrule AllbyGvpopulation gvis [AjPList] AJAX List of Ensembl Genetic
-** Variation Individual objects
-** @argrule AllbyName name [const AjPStr] Ensembl Genetic Variation Sample
-** name
-** @argrule AllbyName gvis [AjPList] AJAX List of Ensembl Genetic Variation
-** Individual objects
-** @argrule AllbyParent parent [const EnsPGvindividual] Ensembl Genetic
-** Variation
-** @argrule AllbyParent gvis [AjPList] AJAX List of Ensembl Genetic Variation
-** Individual
-** @argrule AllbySynonym synonym [const AjPStr] Ensembl Genetic Variation
-** Sample synonym
+** @argrule * gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @argrule All gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
+** @argrule AllbyDisplay display [EnsEGvsampleDisplay]
+** Ensembl Genetic Variation Sample Display enumeration
+** @argrule AllbyDisplay gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
+** @argrule AllbyGvpopulation gvp [const EnsPGvpopulation]
+** Ensembl Genetic Variation Population
+** @argrule AllbyGvpopulation gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
+** @argrule AllbyName name [const AjPStr]
+** Ensembl Genetic Variation Sample name
+** @argrule AllbyName gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
+** @argrule AllbyParent parent [const EnsPGvindividual]
+** Ensembl Genetic Variation
+** @argrule AllbyParent gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual
+** @argrule AllbySynonym synonym [const AjPStr]
+** Ensembl Genetic Variation Sample synonym
 ** @argrule AllbySynonym source [const AjPStr] Source
-** @argrule AllbySynonym gvis [AjPList] AJAX List of Ensembl Genetic Variation
-** Individual objects
-** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Pgvi [EnsPGvindividual*] Ensembl Genetic Variation
-** Individual object address
-** @argrule Reference Pgvi [EnsPGvindividual*] Ensembl Genetic Variation
-** Individual object address
+** @argrule AllbySynonym gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
+** @argrule ByIdentifier identifier [ajuint]
+** SQL database-internal identifier
+** @argrule ByIdentifier Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual object address
+** @argrule Reference Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual object address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1740,12 +1763,14 @@ EnsPDatabaseadaptor ensGvindividualadaptorGetDatabaseadaptor(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     fetch_all_strains_with_coverage
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1753,7 +1778,7 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
     EnsPGvindividualadaptor gvia,
     AjPList gvis)
 {
-    ajuint identifier = 0;
+    ajuint identifier = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1765,10 +1790,10 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
 
     EnsPGvindividual gvi = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(gvia);
@@ -1784,7 +1809,7 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
 
@@ -1794,8 +1819,8 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
 
         ensGvindividualadaptorFetchByIdentifier(gvia, identifier, &gvi);
 
-        if(gvi)
-            ajListPushAppend(gvis, (void*) gvi);
+        if (gvi)
+            ajListPushAppend(gvis, (void *) gvi);
     }
 
     ajSqlrowiterDel(&sqli);
@@ -1810,7 +1835,7 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
 
 
 
-/* @func ensGvindividualadaptorFetchAllDefault ******************************
+/* @func ensGvindividualadaptorFetchAllDefault ********************************
 **
 ** Fetch all Ensembl Genetic Variation Individual objects that should be
 ** displayed by default i.e. that are associated with an Ensembl Genetic
@@ -1818,12 +1843,14 @@ AjBool ensGvindividualadaptorFetchAllCoverage(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     get_default_strains
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1831,10 +1858,10 @@ AjBool ensGvindividualadaptorFetchAllDefault(
     EnsPGvindividualadaptor gvia,
     AjPList gvis)
 {
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     return ensGvindividualadaptorFetchAllbyDisplay(
@@ -1852,12 +1879,14 @@ AjBool ensGvindividualadaptorFetchAllDefault(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     get_display_strains
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1867,17 +1896,17 @@ AjBool ensGvindividualadaptorFetchAllDisplayable(
 {
     EnsPGvindividual gvi = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     /* Fetch the reference Ensembl Genetic Variation Individual. */
 
     ensGvindividualadaptorFetchReference(gvia, &gvi);
 
-    ajListPushAppend(gvis, (void*) gvi);
+    ajListPushAppend(gvis, (void *) gvi);
 
     /* Fetch all default Ensembl Genetic Variation Individual objects. */
 
@@ -1901,12 +1930,14 @@ AjBool ensGvindividualadaptorFetchAllDisplayable(
 ** (i.e. individual_type.name = 'fully_inbred').
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::fetch_all_strains
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1916,10 +1947,10 @@ AjBool ensGvindividualadaptorFetchAllStrains(
 {
     AjPStr constraint = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     constraint = ajStrNewC("individual_type.name = 'fully_inbred'");
@@ -1943,14 +1974,16 @@ AjBool ensGvindividualadaptorFetchAllStrains(
 ** Fetch all Ensembl Genetic Variation Individual objects by an
 ** Ensembl Genetic Variation Sample Display enumeration.
 **
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-** Individual Adaptor
-** @param [u] display [EnsEGvsampleDisplay] Ensembl Genetic Variation Sample
-** Display enumeration
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-** objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [u] display [EnsEGvsampleDisplay]
+** Ensembl Genetic Variation Sample Display enumeration
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1963,10 +1996,10 @@ AjBool ensGvindividualadaptorFetchAllbyDisplay(
 
     AjPStr constraint = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     constraint = ajFmtStr(
@@ -1995,13 +2028,16 @@ AjBool ensGvindividualadaptorFetchAllbyDisplay(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     fetch_all_by_Population
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [r] gvp [const EnsPGvpopulation] Ensembl Genetic Variation Population
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [r] gvp [const EnsPGvpopulation]
+** Ensembl Genetic Variation Population
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2012,18 +2048,16 @@ AjBool ensGvindividualadaptorFetchAllbyGvpopulation(
 {
     AjPStr statement = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!gvp)
+    if (!gvp)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
-    if(!gvp->Identifier)
+    if (!gvp->Identifier)
     {
         ajDebug("ensGvindividualadaptorFetchAllbyGvpopulation "
                 "cannot fetch Population for Individual "
@@ -2067,9 +2101,7 @@ AjBool ensGvindividualadaptorFetchAllbyGvpopulation(
         "individual_population.population_sample_id = %u",
         gvp->Identifier);
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvia);
-
-    gvindividualadaptorFetchAllbyStatement(dba,
+    gvindividualadaptorFetchAllbyStatement(gvia,
                                            statement,
                                            (EnsPAssemblymapper) NULL,
                                            (EnsPSlice) NULL,
@@ -2092,13 +2124,16 @@ AjBool ensGvindividualadaptorFetchAllbyGvpopulation(
 ** AJAX List of Ensembl Genetic Variation Individual objects.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::fetch_all_by_name
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [r] name [const AjPStr] Ensembl Genetic Variation Sample name
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [r] name [const AjPStr]
+** Ensembl Genetic Variation Sample name
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2107,17 +2142,17 @@ AjBool ensGvindividualadaptorFetchAllbyName(
     const AjPStr name,
     AjPList gvis)
 {
-    char* txtname = NULL;
+    char *txtname = NULL;
 
     AjPStr constraint = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!name)
+    if (!name)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     ensBaseadaptorEscapeC(gvia, &txtname, name);
@@ -2147,14 +2182,16 @@ AjBool ensGvindividualadaptorFetchAllbyName(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     fetch_all_by_parent_Individual
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [r] parent [const EnsPGvindividual] Ensembl Genetic Variation
-**                                            Individual
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [r] parent [const EnsPGvindividual]
+** Ensembl Genetic Variation Individual
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2165,16 +2202,16 @@ AjBool ensGvindividualadaptorFetchAllbyParent(
 {
     AjPStr constraint = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!parent)
+    if (!parent)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
-    if(!parent->Identifier)
+    if (!parent->Identifier)
     {
         ajDebug("ensGvindividualadaptorFetchAllbyParent cannot get Ensembl "
                 "Genetic Variation Individual objects for parent Individual "
@@ -2183,7 +2220,7 @@ AjBool ensGvindividualadaptorFetchAllbyParent(
         return ajFalse;
     }
 
-    switch(parent->Gender)
+    switch (parent->Gender)
     {
         case ensEGvindividualGenderMale:
 
@@ -2237,7 +2274,7 @@ AjBool ensGvindividualadaptorFetchAllbyParent(
 
             ajStrDel(&constraint);
 
-            if(ajListGetLength(gvis))
+            if (ajListGetLength(gvis))
                 return ajTrue;
 
             /* No result for the father, so assume it is the mother. */
@@ -2254,7 +2291,7 @@ AjBool ensGvindividualadaptorFetchAllbyParent(
 
             ajStrDel(&constraint);
 
-            if(ajListGetLength(gvis))
+            if (ajListGetLength(gvis))
                 return ajTrue;
     }
 
@@ -2273,14 +2310,18 @@ AjBool ensGvindividualadaptorFetchAllbyParent(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     fetch_individual_by_synonym
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [r] synonym [const AjPStr] Ensembl Genetic Variation Sample synonym
-** @param [rN] source [const AjPStr] Source
-** @param [u] gvis [AjPList] AJAX List of Ensembl Genetic Variation Individual
-**                           objects
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [r] synonym [const AjPStr]
+** Ensembl Genetic Variation Sample synonym
+** @param [rN] source [const AjPStr]
+** Source
+** @param [u] gvis [AjPList]
+** AJAX List of Ensembl Genetic Variation Individual objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2290,20 +2331,18 @@ AjBool ensGvindividualadaptorFetchAllbySynonym(
     const AjPStr source,
     AjPList gvis)
 {
-    char* txtsource  = NULL;
-    char* txtsynonym = NULL;
+    char *txtsource  = NULL;
+    char *txtsynonym = NULL;
 
     AjPStr statement = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!synonym)
+    if (!synonym)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     /*
@@ -2312,13 +2351,11 @@ AjBool ensGvindividualadaptorFetchAllbySynonym(
     ** required.
     */
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvia);
+    ensBaseadaptorEscapeC(gvia, &txtsynonym, synonym);
 
-    ensDatabaseadaptorEscapeC(dba, &txtsynonym, synonym);
-
-    if(source && ajStrGetLen(source))
+    if (source && ajStrGetLen(source))
     {
-        ensDatabaseadaptorEscapeC(dba, &txtsource, source);
+        ensBaseadaptorEscapeC(gvia, &txtsource, source);
 
         statement = ajFmtStr(
             "SELECT "
@@ -2389,7 +2426,7 @@ AjBool ensGvindividualadaptorFetchAllbySynonym(
 
     ajCharDel(&txtsynonym);
 
-    gvindividualadaptorFetchAllbyStatement(dba,
+    gvindividualadaptorFetchAllbyStatement(gvia,
                                            statement,
                                            (EnsPAssemblymapper) NULL,
                                            (EnsPSlice) NULL,
@@ -2407,7 +2444,7 @@ AjBool ensGvindividualadaptorFetchAllbySynonymOld(
     const AjPStr source,
     AjPList gvis)
 {
-    ajuint* Pidentifier = 0;
+    ajuint *Pidentifier = 0U;
 
     AjPList idlist = NULL;
 
@@ -2417,13 +2454,13 @@ AjBool ensGvindividualadaptorFetchAllbySynonymOld(
 
     EnsPGvsampleadaptor gvsa = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!synonym)
+    if (!synonym)
         return ajFalse;
 
-    if(!gvis)
+    if (!gvis)
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(gvia);
@@ -2445,13 +2482,13 @@ AjBool ensGvindividualadaptorFetchAllbySynonymOld(
                                                       source,
                                                       idlist);
 
-    while(ajListPop(idlist, (void**) &Pidentifier))
+    while (ajListPop(idlist, (void **) &Pidentifier))
     {
         ensGvindividualadaptorFetchByIdentifier(gvia,
                                                 *Pidentifier,
                                                 &gvi);
 
-        ajListPushAppend(gvis, (void*) gvi);
+        ajListPushAppend(gvis, (void *) gvi);
 
         AJFREE(Pidentifier);
     }
@@ -2460,7 +2497,7 @@ AjBool ensGvindividualadaptorFetchAllbySynonymOld(
 
     return ajTrue;
 }
-#endif
+#endif /* AJFALSE */
 
 
 
@@ -2473,31 +2510,34 @@ AjBool ensGvindividualadaptorFetchAllbySynonymOld(
 ** Ensembl Genetic Variation Individual.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::fetch_by_dbID
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [r] identifier [ajuint] SQL database-internal identifier
-** @param [wP] Pgvi [EnsPGvindividual*] Ensembl Genetic Variation
-**                                      Individual address
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [r] identifier [ajuint]
+** SQL database-internal identifier
+** @param [wP] Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualadaptorFetchByIdentifier(
     EnsPGvindividualadaptor gvia,
     ajuint identifier,
-    EnsPGvindividual* Pgvi)
+    EnsPGvindividual *Pgvi)
 {
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pgvi)
+    if (!Pgvi)
         return ajFalse;
 
-    return ensBaseadaptorFetchByIdentifier(gvia, identifier, (void**) Pgvi);
+    return ensBaseadaptorFetchByIdentifier(gvia, identifier, (void **) Pgvi);
 }
 
 
@@ -2509,27 +2549,29 @@ AjBool ensGvindividualadaptorFetchByIdentifier(
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::IndividualAdaptor::
 **     get_reference_strain_name
-** @param [u] gvia [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                           Individual Adaptor
-** @param [wP] Pgvi [EnsPGvindividual*] Ensembl Genetic Variation Individual
-**                                      object address
+** @param [u] gvia [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
+** @param [wP] Pgvi [EnsPGvindividual*]
+** Ensembl Genetic Variation Individual object address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvindividualadaptorFetchReference(
     EnsPGvindividualadaptor gvia,
-    EnsPGvindividual* Pgvi)
+    EnsPGvindividual *Pgvi)
 {
     AjPList gvis = NULL;
 
     EnsPGvindividual gvi = NULL;
 
-    if(!gvia)
+    if (!gvia)
         return ajFalse;
 
-    if(!Pgvi)
+    if (!Pgvi)
         return ajFalse;
 
     gvis = ajListNew();
@@ -2540,9 +2582,9 @@ AjBool ensGvindividualadaptorFetchReference(
 
     /* There should be only one reference. */
 
-    ajListPop(gvis, (void**) Pgvi);
+    ajListPop(gvis, (void **) Pgvi);
 
-    while(ajListPop(gvis, (void**) &gvi))
+    while (ajListPop(gvis, (void **) &gvi))
         ensGvindividualDel(&gvi);
 
     ajListFree(&gvis);

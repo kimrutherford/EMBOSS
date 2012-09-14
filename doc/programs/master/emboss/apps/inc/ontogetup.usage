@@ -4,9 +4,9 @@ Here is a sample session with <b>ontogetup</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontogetup edam:0001234 </b>
+% <b>ontogetup edam:1234 </b>
 Get ontology term(s) by id of child
-Obo output file [0001234.obo]: <b></b>
+Obo output file [1234.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds inverted repeats in nucleotide sequence(s)
+   Find inverted repeats in nucleotide sequence(s)
 
 Description
 
@@ -28,7 +28,7 @@ Usage
 
 
 % palindrome
-Finds inverted repeats in nucleotide sequence(s)
+Find inverted repeats in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:d00596
 Enter minimum length of palindrome [10]: 15
 Enter maximum length of palindrome [100]:
@@ -43,8 +43,8 @@ Report overlapping matches [Y]:
 
 Command line arguments
 
-Finds inverted repeats in nucleotide sequence(s)
-Version: EMBOSS:6.4.0.0
+Find inverted repeats in nucleotide sequence(s)
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -73,7 +73,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -152,8 +155,10 @@ RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
 RT   gene";
-RL   J. Biol. Chem. 265(33):20277-20284(1990).
+RL   J Biol Chem 265(33):20277-20284(1990).
 XX
+DR   Ensembl-Gn; ENSG00000176890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000323274; Homo_sapiens.
 DR   GDB; 163670.
 DR   GDB; 182340.
 XX
@@ -177,8 +182,6 @@ FT   repeat_region   1..148
 FT                   /rpt_family="Alu"
 FT   repeat_region   202..477
 FT                   /rpt_family="Alu"
-FT   prim_transcript 822..16246
-FT                   /note="thymidylate synthase mRNA and introns"
 
 
   [Part of this file has been deleted for brevity]
@@ -367,9 +370,9 @@ Known bugs
 See also
 
                     Program name                  Description
-                    einverted    Finds inverted repeats in nucleotide sequences
-   equicktandem     Finds tandem repeats in nucleotide sequences
-                    etandem      Finds tandem repeats in a nucleotide sequence
+                    einverted    Find inverted repeats in nucleotide sequences
+   equicktandem     Find tandem repeats in nucleotide sequences
+                    etandem      Find tandem repeats in a nucleotide sequence
 
                     einverted also looks for inverted repeats but is much slower and more
                     sensitive, as it finds low-quality (very mismatched) repeats and

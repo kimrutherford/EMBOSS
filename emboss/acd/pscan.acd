@@ -1,12 +1,12 @@
 application: pscan [
-  documentation: "Scans protein sequence(s) with fingerprints from
+  documentation: "Scan protein sequence(s) with fingerprints from
                   the PRINTS database"
   groups: "Protein:Motifs"
-    relations: "EDAM:0000158 topic Sequence motifs"
-    relations: "EDAM:0000382 operation Sequence motif recognition (protein)"
-    relations: "EDAM:0000347 operation Sequence database search
+    relations: "EDAM_topic:0158 Sequence motifs"
+    relations: "EDAM_operation:3087 Protein site detection"
+    relations: "EDAM_operation:0347 Sequence database search
                 (by motif or pattern)"
-    relations: "EDAM:0000340 operation Protein secondary database search"
+    relations: "EDAM_operation:0340 Protein secondary database search"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "Protein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
 endsection: input
@@ -33,7 +33,7 @@ section: required [
     maximum: "20"
     default: "2"
     information: "Minimum number of elements per fingerprint"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: emax [
@@ -44,7 +44,7 @@ section: required [
     trueminimum: "N"
     default: "20"
     information: "Maximum number of elements per fingerprint"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -57,7 +57,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "pscan output"
-    relations: "EDAM:0001420 data Sequence-profile alignment (fingerprint)"
+    relations: "EDAM_data:1420 Sequence-profile alignment (fingerprint)"
   ]
 
 endsection: output

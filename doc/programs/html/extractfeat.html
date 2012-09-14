@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -105,7 +105,7 @@ To write out the 10 bases around the start of all 'exon' features in the tembl d
 
 % <b>extractfeat "tembl:*"  -type exon -before 5 -after -5 </b>
 Extract features from sequence(s)
-output sequence [h45989.fasta]: <b></b>
+output sequence [em498477.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -137,8 +137,7 @@ To write out the 7 residues around all phosphorylated serine residues
 
 % <b>extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4 </b>
 Extract features from sequence(s)
-output sequence [12s1_arath.fasta]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+output sequence [cru4_arath.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -150,7 +149,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract features from sequence(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -337,7 +336,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -538,7 +540,7 @@ gene | label</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -607,11 +609,35 @@ gene | label</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -655,7 +681,7 @@ gene | label</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 
@@ -881,7 +907,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -894,6 +920,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -902,15 +937,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1026,7 +1052,7 @@ caatgccaactcttaagtcttttgta
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: h45989.fasta</h3>
+<p><h3>File: em498477.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;X65921_408_504 [exon] H.sapiens fau 1 gene
@@ -1155,42 +1181,94 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
 
 <a name="output.5"></a>
 <h3>Output files for usage example 5</h3>
-<p><h3>File: 12s1_arath.fasta</h3>
+<p><h3>File: cru4_arath.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+&gt;CRU4_ARATH_52_52 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+VLKSEAG
+&gt;CRU4_ARATH_96_96 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+AKLSFVA
+&gt;CRU4_ARATH_314_314 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+GYISTLN
+&gt;AQP1_HUMAN_247_247 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells and kidney proximal tubule)
 VWTSGQV
-&gt;AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+&gt;AQP1_HUMAN_262_262 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells and kidney proximal tubule)
 DINSRVE
-&gt;GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+&gt;GCN4_YEAST_17_17 [post_translationally_modified_region] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
 MGFSPLD
-&gt;GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+&gt;GCN4_YEAST_218_218 [post_translationally_modified_region] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
 IPLSPIV
-&gt;OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_334_334 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 DEASATV
-&gt;OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_338_338 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 ATVSKTE
-&gt;OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_343_343 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 TETSQVA
-&gt;PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAX3_HUMAN_201_201 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+APQSDEG
+&gt;PAX3_HUMAN_205_205 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+DEGSDID
+&gt;PAX3_HUMAN_209_209 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+DIDSEPD
+&gt;PAXI_HUMAN_83_83 [post_translationally_modified_region] Paxillin
 QPQSSSP
-&gt;PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_84_84 [post_translationally_modified_region] Paxillin
+PQSSSPV
+&gt;PAXI_HUMAN_85_85 [post_translationally_modified_region] Paxillin
 QSSSPVY
-&gt;PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_106_106 [post_translationally_modified_region] Paxillin
 SVGSPCS
-&gt;PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_109_109 [post_translationally_modified_region] Paxillin
 SPCSRVG
-&gt;PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_126_126 [post_translationally_modified_region] Paxillin
 KQKSAEP
-&gt;PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_130_130 [post_translationally_modified_region] Paxillin
 AEPSPTV
-&gt;PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_137_137 [post_translationally_modified_region] Paxillin
 MSTSLGS
-&gt;PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_244_244 [post_translationally_modified_region] Paxillin
+EMSSPQR
+&gt;PAXI_HUMAN_303_303 [post_translationally_modified_region] Paxillin
 GRSSPGG
-&gt;UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+&gt;UBR5_RAT_100_100 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+TSDSPWF
+&gt;UBR5_RAT_342_342 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+PVQSPVS
+&gt;UBR5_RAT_567_567 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+QLRSPES
+&gt;UBR5_RAT_601_601 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+PPPSPAS
+&gt;UBR5_RAT_797_797 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GQESPII
+&gt;UBR5_RAT_917_917 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+ACVSVCF
+&gt;UBR5_RAT_1007_1007 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+DPVSPPI
+&gt;UBR5_RAT_1216_1216 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+KRTSPTA
+&gt;UBR5_RAT_1344_1344 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+DPLSASS
+&gt;UBR5_RAT_1364_1364 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+NQQSGTI
+&gt;UBR5_RAT_1470_1470 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+VAESLIV
+&gt;UBR5_RAT_1730_1730 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+AASSAGL
+&gt;UBR5_RAT_1769_1769 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+YLTSASS
+&gt;UBR5_RAT_2016_2016 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+FRRSDSM
+&gt;UBR5_RAT_2018_2018 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+RSDSMTF
+&gt;UBR5_RAT_2061_2061 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
 GRPSQGL
-&gt;UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+&gt;UBR5_RAT_2066_2066 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GLYSSSA
+&gt;UBR5_RAT_2279_2279 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GEGSGVA
+&gt;UBR5_RAT_2473_2473 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+HGSSRSV
+&gt;UBR5_RAT_2475_2475 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
 SSRSVVD
 </pre>
 </td></tr></table><p>
@@ -1350,12 +1428,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
-<td>Reads and writes alignments</td>
+<td>Read and write alignments</td>
 </tr>
 
 <tr>
 <td><a href="aligncopypair.html">aligncopypair</a></td>
-<td>Reads and writes pairs from alignments</td>
+<td>Read and write pairs from alignments</td>
 </tr>
 
 <tr>
@@ -1370,12 +1448,12 @@ None.
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a section from a sequence</td>
+<td>Remove a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+<td>Remove non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -1385,7 +1463,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -1400,12 +1478,17 @@ None.
 
 <tr>
 <td><a href="featcopy.html">featcopy</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featmerge.html">featmerge</a></td>
+<td>Merge two overlapping feature tables</td>
 </tr>
 
 <tr>
 <td><a href="featreport.html">featreport</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
 </tr>
 
 <tr>
@@ -1430,12 +1513,12 @@ None.
 
 <tr>
 <td><a href="maskambignuc.html">maskambignuc</a></td>
-<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+<td>Mask all ambiguity characters in nucleotide sequences with N</td>
 </tr>
 
 <tr>
 <td><a href="maskambigprot.html">maskambigprot</a></td>
-<td>Masks all ambiguity characters in protein sequences with X</td>
+<td>Mask all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
@@ -1485,7 +1568,7 @@ None.
 
 <tr>
 <td><a href="nthseqset.html">nthseqset</a></td>
-<td>Reads and writes (returns) one set of sequences from many</td>
+<td>Read and write (return) one set of sequences from many</td>
 </tr>
 
 <tr>
@@ -1500,22 +1583,22 @@ None.
 
 <tr>
 <td><a href="seqcount.html">seqcount</a></td>
-<td>Reads and counts sequences</td>
+<td>Read and count sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
-<td>Reads and writes (returns) sequences</td>
+<td>Read and write (return) sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsetall.html">seqretsetall</a></td>
-<td>Reads and writes (returns) many sets of sequences</td>
+<td>Read and write (return) many sets of sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads sequences and writes them to individual files</td>
+<td>Read sequences and write them to individual files</td>
 </tr>
 
 <tr>
@@ -1535,7 +1618,7 @@ None.
 
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
-<td>Reads and writes (returns) sequences, skipping first few</td>
+<td>Read and write (return) sequences, skipping first few</td>
 </tr>
 
 <tr>
@@ -1565,7 +1648,7 @@ None.
 
 <tr>
 <td><a href="twofeat.html">twofeat</a></td>
-<td>Finds neighbouring pairs of features in sequence(s)</td>
+<td>Find neighbouring pairs of features in sequence(s)</td>
 </tr>
 
 <tr>
@@ -1575,7 +1658,7 @@ None.
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+<td>Remove vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>

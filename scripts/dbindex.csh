@@ -4,7 +4,7 @@ foreach embossinst (`embossversion -full -auto| grep '^InstallDirectory'`)
 #  echo "$embossinst"
 end
 
-setenv EMBOSS_TIMETODAY "2010-07-15 12:00:00"
+setenv EMBOSS_TIMETODAY "2012-07-15 12:00:00"
 set top = ~/devemboss/test
 set itop = $embossinst/share/EMBOSS/test
 

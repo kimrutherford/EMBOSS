@@ -1,10 +1,37 @@
+/* @include ensqcvariation ****************************************************
+**
+** Ensembl Quality Check Variation functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.7 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSQCVARIATION_H
 #define ENSQCVARIATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensanalysis.h"
 #include "ensqcalignment.h"
@@ -15,9 +42,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPQcvariationadaptor **********************************************
 **
@@ -30,10 +57,16 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEQcvariationClass ************************************************
+/* @enum EnsEQcvariationClass ************************************************
 **
 ** Ensembl Quality Check Variation Class enumeration
 **
+** @value ensEQcvariationClassNULL Null
+** @value ensEQcvariationClassNone None
+** @value ensEQcvariationClassSimple Simple
+** @value ensEQcvariationClassSplice Splice
+** @value ensEQcvariationClassExon Exon
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcvariationClass
@@ -48,10 +81,19 @@ typedef enum EnsOQcvariationClass
 
 
 
-/* @const EnsEQcvariationState ************************************************
+/* @enum EnsEQcvariationState *************************************************
 **
 ** Ensembl Quality Check Variation State enumeration
 **
+** @value ensEQcvariationStateNULL Null
+** @value ensEQcvariationStateNone None
+** @value ensEQcvariationStateMatch Match
+** @value ensEQcvariationStateGap Gap
+** @value ensEQcvariationStateFrameshift Frameshift
+** @value ensEQcvariationState5ss 5-prime Splice Site
+** @value ensEQcvariationState3ss 3-prime Splice Site
+** @value EnsEQcvariationStateSplit Split
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcvariationState
@@ -69,10 +111,15 @@ typedef enum EnsOQcvariationState
 
 
 
-/* @const EnsEQcvariationType *************************************************
+/* @enum EnsEQcvariationType **************************************************
 **
 ** Ensembl Quality Check Variation Type enumeration
 **
+** @value ensEQcvariationTypeNULL Null
+** @value ensEQcvariationTypeNone None
+** @value ensEQcvariationTypeSingle Single
+** @value ensEQcvariationTypeMulti Multi
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcvariationType
@@ -86,9 +133,9 @@ typedef enum EnsOQcvariationType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPQcvariation ******************************************************
 **
@@ -147,9 +194,9 @@ typedef struct EnsSQcvariation
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -177,7 +224,7 @@ EnsPQcvariation ensQcvariationNewIni(EnsPQcvariationadaptor adaptor,
 
 EnsPQcvariation ensQcvariationNewRef(EnsPQcvariation qcv);
 
-void ensQcvariationDel(EnsPQcvariation* Pqcv);
+void ensQcvariationDel(EnsPQcvariation *Pqcv);
 
 EnsPQcvariationadaptor ensQcvariationGetAdaptor(const EnsPQcvariation qcv);
 
@@ -260,15 +307,15 @@ size_t ensQcvariationCalculateMemsize(const EnsPQcvariation qcv);
 
 EnsEQcvariationClass ensQcvariationClassFromStr(const AjPStr vclass);
 
-const char* ensQcvariationClassToChar(EnsEQcvariationClass qcvc);
+const char *ensQcvariationClassToChar(EnsEQcvariationClass qcvc);
 
 EnsEQcvariationState ensQcvariationStateFromStr(const AjPStr state);
 
-const char* ensQcvariationStateToChar(EnsEQcvariationState qcvs);
+const char *ensQcvariationStateToChar(EnsEQcvariationState qcvs);
 
 EnsEQcvariationType ensQcvariationTypeFromStr(const AjPStr type);
 
-const char* ensQcvariationTypeToChar(EnsEQcvariationType qcvt);
+const char *ensQcvariationTypeToChar(EnsEQcvariationType qcvt);
 
 /* Ensembl Quality Check Variation Adaptor */
 
@@ -278,7 +325,7 @@ EnsPQcvariationadaptor ensRegistryGetQcvariationadaptor(
 EnsPQcvariationadaptor ensQcvariationadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensQcvariationadaptorDel(EnsPQcvariationadaptor* Pqcva);
+void ensQcvariationadaptorDel(EnsPQcvariationadaptor *Pqcva);
 
 EnsPBaseadaptor ensQcvariationadaptorGetBaseadaptor(
     EnsPQcvariationadaptor qcva);
@@ -313,7 +360,7 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseTarget(
 AjBool ensQcvariationadaptorFetchByIdentifier(
     EnsPQcvariationadaptor adaptor,
     ajuint identifier,
-    EnsPQcvariation* Pqcvf);
+    EnsPQcvariation *Pqcvf);
 
 AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
                                    EnsPQcvariation qcv);

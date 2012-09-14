@@ -1,9 +1,9 @@
 application: palindrome [
-  documentation: "Finds inverted repeats in nucleotide sequence(s)"
+  documentation: "Find inverted repeats in nucleotide sequence(s)"
   groups: "Nucleic:Repeats"
-    relations: "EDAM:0000157 topic Sequence composition"
-    relations: "EDAM:0000379 operation Repeat sequence detection"
-    relations: "EDAM:0000278 operation RNA secondary structure prediction"
+    relations: "EDAM_topic:0157 Sequence composition analysis"
+    relations: "EDAM_operation:0379 Repeat sequence detection"
+    relations: "EDAM_operation:0278 RNA secondary structure prediction"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: required [
     failrange: "N"
     trueminimum: "Y"
     information: "Enter minimum length of palindrome"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   integer: maxpallen [
@@ -43,7 +43,7 @@ section: required [
     failrange: "N"
     trueminimum: "Y"
     information: "Enter maximum length of palindrome"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   integer: gaplimit [
@@ -54,7 +54,7 @@ section: required [
     failrange: "N"
     trueminimum: "Y"
     information: "Enter maximum gap between repeated regions"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   integer: nummismatches [
@@ -63,7 +63,7 @@ section: required [
     minimum: "0"
     information: "Number of mismatches allowed"
     valid: "Positive integer"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -77,14 +77,14 @@ section: output [
     parameter: "Y"
     extension: "pal"
     knowntype: "palindrome output"
-    relations: "EDAM:0001299 data Sequence features (repeats)"
+    relations: "EDAM_data:1299 Sequence features (repeats)"
   ]
 
   boolean: overlap [
     standard: "Y"
     information: "Report overlapping matches"
     default: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

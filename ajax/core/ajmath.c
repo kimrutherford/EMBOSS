@@ -1,28 +1,31 @@
-/******************************************************************************
-** @source AJAX maths functions
+/* @source ajmath *************************************************************
+**
+** AJAX maths functions
 **
 ** @author Copyright (C) 1998 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.35 $
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
-
+#include <limits.h>
+#include <ctype.h>
 #include <math.h>
 #include <time.h>
 #include <float.h>
@@ -30,6 +33,11 @@
 #ifndef WIN32
 #include <sys/time.h>
 #endif
+
+#include "ajmath.h"
+#include "ajmess.h"
+#include "ajstr.h"
+#include "ajnam.h"
 
 
 
@@ -61,6 +69,8 @@ static void spcrc64calctab(unsigned long long *crctab);
 ** @param [r] i [ajint] Integer to round.
 ** @param [r] vround [ajint] Rounding multiple.
 ** @return [ajint] Result.
+**
+** @release 1.0.0
 ******************************************************************************/
 
 ajint ajRound(ajint i, ajint vround)
@@ -78,6 +88,8 @@ ajint ajRound(ajint i, ajint vround)
 ** @param [r] a [float] Float to round.
 ** @param [r] nbits [ajint] Number of bits to free.
 ** @return [float] Result.
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajRoundFloat(float a, ajint nbits)
@@ -127,18 +139,6 @@ float ajRoundFloat(float a, ajint nbits)
 
 
 
-/* @obsolete ajRoundF
-** @rename ajRoundFloat
-*/
-
-__deprecated float ajRoundF(float a, ajint nbits)
-{
-    return ajRoundFloat(a, nbits);
-}
-
-
-
-
 /* @func ajCvtRecToPol ********************************************************
 **
 ** Converts Cartesian coordinates to polar
@@ -148,6 +148,8 @@ __deprecated float ajRoundF(float a, ajint nbits)
 ** @param [w] radius [float*] Radius
 ** @param [w] angle [float*] Angle
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajCvtRecToPol(float x, float y, float *radius, float *angle)
@@ -155,19 +157,6 @@ void ajCvtRecToPol(float x, float y, float *radius, float *angle)
     *radius = (float) sqrt((double)(x*x+y*y));
     *angle  = (float) ajCvtRadToDeg((float)atan2((double)y,(double)x));
 
-    return;
-}
-
-
-
-
-/* @obsolete ajRecToPol
-** @rename ajCvtRecToPol
-*/
-
-__deprecated void ajRecToPol(float x, float y, float *radius, float *angle)
-{
-    ajCvtRecToPol(x, y, radius, angle);
     return;
 }
 
@@ -183,6 +172,8 @@ __deprecated void ajRecToPol(float x, float y, float *radius, float *angle)
 ** @param [w] x [float*] X coordinate
 ** @param [w] y [float*] Y coordinate
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajCvtPolToRec(float radius, float angle, float *x, float *y)
@@ -196,19 +187,6 @@ void ajCvtPolToRec(float radius, float angle, float *x, float *y)
 
 
 
-/* @obsolete ajPolToRec
-** @rename ajCvtPolToRec
-*/
-
-__deprecated void ajPolToRec(float radius, float angle, float *x, float *y)
-{
-    ajCvtPolToRec(radius, angle, x, y);
-    return;
-}
-
-
-
-
 
 /* @func ajCvtDegToRad  *******************************************************
 **
@@ -216,21 +194,11 @@ __deprecated void ajPolToRec(float radius, float angle, float *x, float *y)
 **
 ** @param [r] degrees [float] Degrees
 ** @return [float] Radians
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajCvtDegToRad(float degrees)
-{
-    return degrees*(float)(AJM_PI/180.0);
-}
-
-
-
-
-/* @obsolete ajDegToRad
-** @rename ajCvtDegToRad
-*/
-
-__deprecated float ajDegToRad(float degrees)
 {
     return degrees*(float)(AJM_PI/180.0);
 }
@@ -244,21 +212,11 @@ __deprecated float ajDegToRad(float degrees)
 **
 ** @param [r] radians [float] Radians
 ** @return [float] Degrees
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajCvtRadToDeg(float radians)
-{
-    return radians*(float)(180.0/AJM_PI);
-}
-
-
-
-
-/* @obsolete ajRadToDeg
-** @rename ajCvtRadToDeg
-*/
-
-__deprecated float ajRadToDeg(float radians)
 {
     return radians*(float)(180.0/AJM_PI);
 }
@@ -274,22 +232,11 @@ __deprecated float ajRadToDeg(float radians)
 ** @param [r] sd [float] sd
 ** @param [r] score [float] score
 ** @return [double] probability
+**
+** @release 6.2.0
 ******************************************************************************/
 
 double ajCvtGaussToProb(float mean, float sd, float score)
-{
-    return pow(AJM_E,(double)(-0.5*((score-mean)/sd)*((score-mean)/sd)))
-	/ (sd * (float)2.0 * AJM_PI);
-}
-
-
-
-
-/* @obsolete ajGaussProb
-** @rename ajCvtGaussToProb
-*/
-
-__deprecated double ajGaussProb(float mean, float sd, float score)
 {
     return pow(AJM_E,(double)(-0.5*((score-mean)/sd)*((score-mean)/sd)))
 	/ (sd * (float)2.0 * AJM_PI);
@@ -305,6 +252,8 @@ __deprecated double ajGaussProb(float mean, float sd, float score)
 ** @param [r] s [const float*] array of values
 ** @param [r] n [ajint] number of values
 ** @return [float] geometric mean
+**
+** @release 6.2.0
 ******************************************************************************/
 
 float ajMathGmean(const float *s, ajint n)
@@ -320,18 +269,6 @@ float ajMathGmean(const float *s, ajint n)
 
 
 
-/* @obsolete ajGeoMean
-** @rename ajMathGmean
-*/
-
-__deprecated float ajGeoMean(const float *s, ajint n)
-{
-    return ajMathGmean(s, n);
-}
-
-
-
-
 /* @func ajMathModulo *********************************************************
 **
 ** Modulo always returning positive number
@@ -339,6 +276,8 @@ __deprecated float ajGeoMean(const float *s, ajint n)
 ** @param [r] a [ajint] value1
 ** @param [r] b [ajint] value2
 ** @return [ajint] value1 modulo value2
+**
+** @release 6.2.0
 ******************************************************************************/
 
 ajint ajMathModulo(ajint a, ajint b)
@@ -351,18 +290,6 @@ ajint ajMathModulo(ajint a, ajint b)
     t = a%b;
 
     return (t<0) ? t+b : t;
-}
-
-
-
-
-/* @obsolete ajPosMod
-** @rename ajMathModulo
-*/
-
-__deprecated ajint ajPosMod(ajint a, ajint b)
-{
-    return ajMathModulo(a, b);
 }
 
 
@@ -384,6 +311,8 @@ __deprecated ajint ajPosMod(ajint a, ajint b)
 **  modified or not.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void ajRandomSeed(void)
@@ -466,6 +395,8 @@ void ajRandomSeed(void)
 ** Generate a pseudo-random number between 0-32767
 **
 ** @return [ajint] Random number
+**
+** @release 1.0.0
 ******************************************************************************/
 
 ajint ajRandomNumber(void)
@@ -498,6 +429,8 @@ ajint ajRandomNumber(void)
 **  modified or not.
 **
 ** @return [double] Random number
+**
+** @release 6.2.0
 ******************************************************************************/
 
 double ajRandomDouble(void)
@@ -580,18 +513,6 @@ double ajRandomDouble(void)
 
 
 
-/* @obsolete ajRandomNumberD
-** @rename ajRandomDouble
-*/
-
-__deprecated double ajRandomNumberD(void)
-{
-    return ajRandomDouble();
-}
-
-
-
-
 /* @funcstatic spcrc64calctab *************************************************
 **
 ** Initialise the crc table.
@@ -600,6 +521,8 @@ __deprecated double ajRandomNumberD(void)
 ** @param [w] crctab [unsigned long long*] CRC lookup table
 **
 ** @return [void]
+**
+** @release 2.6.0
 ******************************************************************************/
 
 static void spcrc64calctab(unsigned long long *crctab)
@@ -634,6 +557,8 @@ static void spcrc64calctab(unsigned long long *crctab)
 **
 ** @param [r] seq [const AjPStr] Sequence as a string
 ** @return [ajuint] CRC32 checksum.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -667,12 +592,6 @@ ajuint ajMathCrc32(const AjPStr seq)
 }
 
 
-ajuint ajSp32Crc(const AjPStr seq)
-{
-    return ajMathCrc32(seq);
-}
-
-
 
 
 /* @funcstatic spcrc32gen *****************************************************
@@ -680,6 +599,8 @@ ajuint ajSp32Crc(const AjPStr seq)
 ** Generates data for a CRC32 calculation in a static data structure.
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -718,6 +639,8 @@ static void spcrc32gen(void)
 ** @param [r] thys [const AjPStr] sequence
 **
 ** @return [unsigned long long] 64-bit CRC
+**
+** @release 6.2.0
 ******************************************************************************/
 
 unsigned long long ajMathCrc64(const AjPStr thys)
@@ -750,11 +673,6 @@ unsigned long long ajMathCrc64(const AjPStr thys)
     return crc;
 }
 
-unsigned long long ajSp64Crc(const AjPStr thys)
-{
-    return ajMathCrc64(thys);
-}
-
 
 
 
@@ -766,24 +684,14 @@ unsigned long long ajSp64Crc(const AjPStr thys)
 ** @param [r] len [size_t] String length.
 ** @param [r] ipos [ajlong] Position (0 start, negative from the end).
 ** @return [size_t] string position between 0 and (length minus 1).
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 size_t ajCvtSposToPos(size_t len, ajlong ipos)
 {
     return ajCvtSposToPosStart(len, 0, ipos);
-}
-
-
-
-
-/* @obsolete ajMathPos
-** @rename ajCvtSposToPos
-*/
-
-__deprecated ajuint ajMathPos(ajuint len, ajint ipos)
-{
-    return (ajuint) ajCvtSposToPosStart(len, 0, ipos);
 }
 
 
@@ -802,6 +710,8 @@ __deprecated ajuint ajMathPos(ajuint len, ajint ipos)
 ** @param [r] imin [size_t] Start position (0 start, no negative values).
 ** @param [r] ipos [ajlong] Position (0 start, negative from the end).
 ** @return [size_t] string position between 0 and (length minus 1).
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -828,24 +738,14 @@ size_t ajCvtSposToPosStart(size_t len, size_t imin, ajlong ipos)
 
 
 
-/* @obsolete ajMathPosI
-** @rename ajCvtSposToPosStart
-*/
-
-__deprecated ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
-{
-    return ajCvtSposToPosStart(len, imin, ipos);
-}
-
-
-
-
 /* @func ajNumLengthDouble ****************************************************
 **
 ** Returns the length of a number written as an integer
 **
 ** @param [r] dnumber [double] Double precision value
 ** @return [ajuint] Number of digits
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -872,12 +772,14 @@ ajuint ajNumLengthDouble(double dnumber)
 
 
 
-/* @func ajNumLengthFloat ****************************************************
+/* @func ajNumLengthFloat *****************************************************
 **
 ** Returns the length of a number written as an integer
 **
 ** @param [r] fnumber [float] Single precision value
 ** @return [ajuint] Number of digits
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -905,12 +807,14 @@ ajuint ajNumLengthFloat(float fnumber)
 
 
 
-/* @func ajNumLengthInt ****************************************************
+/* @func ajNumLengthInt *******************************************************
 **
 ** Returns the length of a number written as an integer
 **
 ** @param [r] inumber [ajlong] Integer
 ** @return [ajuint] Number of digits
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -946,12 +850,14 @@ ajuint ajNumLengthInt(ajlong inumber)
 
 
 
-/* @func ajNumLengthUint ****************************************************
+/* @func ajNumLengthUint ******************************************************
 **
 ** Returns the length of a number written as an integer
 **
 ** @param [r] inumber [ajulong] Unsigned integer
 ** @return [ajuint] Number of digits
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -974,3 +880,170 @@ ajuint ajNumLengthUint(ajulong inumber)
 
     return ilen;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajRoundF
+** @rename ajRoundFloat
+*/
+
+__deprecated float ajRoundF(float a, ajint nbits)
+{
+    return ajRoundFloat(a, nbits);
+}
+
+
+
+
+/* @obsolete ajRecToPol
+** @rename ajCvtRecToPol
+*/
+
+__deprecated void ajRecToPol(float x, float y, float *radius, float *angle)
+{
+    ajCvtRecToPol(x, y, radius, angle);
+    return;
+}
+
+
+
+
+/* @obsolete ajPolToRec
+** @rename ajCvtPolToRec
+*/
+
+__deprecated void ajPolToRec(float radius, float angle, float *x, float *y)
+{
+    ajCvtPolToRec(radius, angle, x, y);
+    return;
+}
+
+
+
+
+/* @obsolete ajDegToRad
+** @rename ajCvtDegToRad
+*/
+
+__deprecated float ajDegToRad(float degrees)
+{
+    return degrees*(float)(AJM_PI/180.0);
+}
+
+
+
+
+/* @obsolete ajRadToDeg
+** @rename ajCvtRadToDeg
+*/
+
+__deprecated float ajRadToDeg(float radians)
+{
+    return radians*(float)(180.0/AJM_PI);
+}
+
+
+
+
+/* @obsolete ajGaussProb
+** @rename ajCvtGaussToProb
+*/
+
+__deprecated double ajGaussProb(float mean, float sd, float score)
+{
+    return pow(AJM_E,(double)(-0.5*((score-mean)/sd)*((score-mean)/sd)))
+	/ (sd * (float)2.0 * AJM_PI);
+}
+
+
+
+
+/* @obsolete ajGeoMean
+** @rename ajMathGmean
+*/
+
+__deprecated float ajGeoMean(const float *s, ajint n)
+{
+    return ajMathGmean(s, n);
+}
+
+
+
+
+/* @obsolete ajPosMod
+** @rename ajMathModulo
+*/
+
+__deprecated ajint ajPosMod(ajint a, ajint b)
+{
+    return ajMathModulo(a, b);
+}
+
+
+
+
+/* @obsolete ajRandomNumberD
+** @rename ajRandomDouble
+*/
+
+__deprecated double ajRandomNumberD(void)
+{
+    return ajRandomDouble();
+}
+
+
+
+
+/* @obsolete ajSp32Crc
+** @rename ajMathCrc32
+*/
+
+__deprecated ajuint ajSp32Crc(const AjPStr seq)
+{
+    return ajMathCrc32(seq);
+}
+
+
+
+
+/* @obsolete ajMathPos
+** @rename ajCvtSposToPos
+*/
+
+__deprecated ajuint ajMathPos(ajuint len, ajint ipos)
+{
+    return (ajuint) ajCvtSposToPosStart(len, 0, ipos);
+}
+
+
+
+
+/* @obsolete ajMathPosI
+** @rename ajCvtSposToPosStart
+*/
+
+__deprecated ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
+{
+    return ajCvtSposToPosStart(len, imin, ipos);
+}
+
+
+
+
+/* @obsolete ajSp64Crc
+** @rename ajMathCrc64
+*/
+
+__deprecated unsigned long long ajSp64Crc(const AjPStr thys)
+{
+    return ajMathCrc64(thys);
+}
+#endif

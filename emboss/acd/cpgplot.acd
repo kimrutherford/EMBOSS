@@ -1,8 +1,8 @@
 application: cpgplot [
   documentation: "Identify and plot CpG islands in nucleotide sequence(s)"
   groups: "Nucleic:CpG Islands"
-    relations: "EDAM:0000157 topic Sequence composition"
-    relations: "EDAM:0000430 operation CpG island and isochores detection"
+    relations: "EDAM_topic:0157 Sequence composition analysis"
+    relations: "EDAM_operation:0430 CpG island and isochore detection"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -35,7 +35,7 @@ section: required [
            is calculated within a window whose size is set by this parameter.
            The window is moved down the sequence and these statistics are
            calculated at each position that the window is moved to."
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
   integer: minlen [
@@ -48,7 +48,7 @@ section: required [
     information: "Minimum length of an island"
     help: "This sets the minimum length that a CpG island has to be
            before it is reported."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   float: minoe [
@@ -60,7 +60,7 @@ section: required [
     help: "This sets the minimum average observed to expected ratio of
            C plus G to CpG in a set of 10 windows that are required before a
            CpG island is reported."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   float: minpc [
@@ -71,7 +71,7 @@ section: required [
     information: "Minimum percentage"
     help: "This sets the minimum average percentage of G plus C a set
            of 10 windows that are required before a CpG island is reported."
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: required
@@ -87,20 +87,21 @@ section: output [
            input sequence name, CpG island parameters and the output details
            of any CpG islands that are found."
     knowntype: "cpgplot output"
-    relations: "EDAM:0001304 data Sequence composition
+    relations: "EDAM_data:1304 Nucleic acid features
                 (CpG island and isochore)"
   ]
 
   toggle: plot [
     default: "Y"
     information: "Plot CpG island score"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
     multiple: "3"
-    relations: "EDAM:0002968 data Image or plot"
+    relations: "EDAM_data:2968 Image"
+    sequence: "Y"
   ]
 
   boolean: obsexp [
@@ -108,7 +109,7 @@ section: output [
     information: "Show observed/expected threshold line"
     help: "If this is set to true then the graph of the observed to
            expected ratio of C plus G to CpG within a window is displayed."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: cg [
@@ -116,7 +117,7 @@ section: output [
     information: "Show CpG rich regions"
     help: "If this is set to true then the graph of the regions which
            have been determined to be CpG islands is displayed."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: pc [
@@ -124,14 +125,14 @@ section: output [
     information: "Show percentage line"
     help: "If this is set to true then the graph of the percentage C
            plus G within a window is displayed."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   featout: outfeat [
     parameter: "Y"
     help: "File for output features"
     type: "nucleotide"
-    relations: "EDAM:0001273 data Feature table (nucleic acid)"
+    relations: "EDAM_data:1276 Nucleic acid features"
   ]
 
 endsection: output

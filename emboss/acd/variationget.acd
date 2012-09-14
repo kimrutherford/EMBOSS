@@ -1,0 +1,58 @@
+application: variationget [
+  documentation: "Get sequence variations"
+  groups: "Data retrieval:Sequence data"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  variation: variation [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM_data:0849 Sequence record"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outvariation: outfile [
+    parameter: "Y"
+    relations: "EDAM_data:0849 Sequence record"
+  ]
+
+endsection: output
+
+

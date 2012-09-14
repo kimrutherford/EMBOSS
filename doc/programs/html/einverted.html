@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -36,7 +36,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Finds inverted repeats in nucleotide sequences
+Find inverted repeats in nucleotide sequences
 <H2>
     Description
 </H2>
@@ -61,7 +61,7 @@ Here is a sample session with <b>einverted</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>einverted tembl:d00596 </b>
-Finds inverted repeats in nucleotide sequences
+Find inverted repeats in nucleotide sequences
 Gap penalty [12]: <b></b>
 Minimum score threshold [50]: <b></b>
 Match score [3]: <b></b>
@@ -79,8 +79,8 @@ File for sequence of regions of inverted repeats. [d00596.fasta]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds inverted repeats in nucleotide sequences
-Version: EMBOSS:6.4.0.0
+Find inverted repeats in nucleotide sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -113,7 +113,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -249,7 +252,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -318,11 +321,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -366,7 +393,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -379,7 +406,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqout qualifiers
+<td align="left" colspan=5>"-outseq" associated seqout qualifiers
 </td>
 </tr>
 
@@ -605,8 +632,10 @@ RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
 RT   gene";
-RL   J. Biol. Chem. 265(33):20277-20284(1990).
+RL   J Biol Chem 265(33):20277-20284(1990).
 XX
+DR   Ensembl-Gn; ENSG00000176890; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000323274; Homo_sapiens.
 DR   GDB; 163670.
 DR   GDB; 182340.
 XX
@@ -630,8 +659,6 @@ FT   repeat_region   1..148
 FT                   /rpt_family="Alu"
 FT   repeat_region   202..477
 FT                   /rpt_family="Alu"
-FT   prim_transcript 822..16246
-FT                   /note="thymidylate synthase mRNA and introns"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -902,22 +929,22 @@ None.
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats in nucleotide sequences</td>
+<td>Find tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="etandem.html">etandem</a></td>
-<td>Finds tandem repeats in a nucleotide sequence</td>
+<td>Find tandem repeats in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Finds inverted repeats in nucleotide sequence(s)</td>
+<td>Find inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 </table>

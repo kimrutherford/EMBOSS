@@ -1,0 +1,195 @@
+EMBOSS B+tree database indexing
+===============================
+
+The EMBOSS B+tree database indexing is now the recommended method to
+index fields in flat file databases.
+
+For each flat file format a parser is needed to pick out tokens to be
+indexed.
+
+These can be identifiers, accession numbers, gi numbers or sequence
+versions which can be indexed directly as identifiers of an entry.
+
+They are stored with the file number and file position (if necessary,
+reference and sequence file positions).
+
+Alternatively, they can be tokens used for general searches:
+* taxons (species or any level in the taxonomic classification)
+* words from the description
+* keywords (words or phrases used to classify entries with a
+  controlled vocabulary)
+
+These are stored with the unique identifiers of all entries thay appear in.
+
+Advantages over EMBLCD indexing
+-------------------------------
+
+B+tree indexing can handle duplicate identifiers. Where an identifier
+appears in more than one entry, the index points to a list of file
+positions and offsets in a separate index page. However, there is an
+assumption that the 'id' field is a unique identifier that can be used
+to retrieve from secondary indexes.
+
+B+tree indexes allow rapid retrieval of entries by rapid lookup and
+retrieving all nodes in the tree below the match found. In EMBLCD
+indexing a binary search is required to find at least one matching
+entry, followed by a search down and perhaps more expensively up
+through the index to return alkl matching entries.
+
+B+tree indexes can be compressed as the pages are built from the
+beginning, allowing unused space to be removed and pages relocated
+simply by adjusting a table of old and new page positions. As all
+referebces are to the position in the index rather than page number we
+were able to compress indexes without any change to the retrieval
+code, allowing compressed indexes to be used by earlier EMBOSS
+versions.
+
+B+tree indexes are, in theory, updatable. We can add new entries to an
+existing index by extending the B+tree structure. EMBLCD indexing
+requires the index to be sorted and rebuilt from scratch. We can also
+modify existnig entries and delete old entries, and code does already
+exist to do this ut has not been implemented in any application to
+date.
+
+B+tree entry file
+-----------------
+
+The entry file <dbname>.ent is simply a list of the database flatfiles.
+
+Each file name is listed on a separate line. The line number (starting
+with 0 for the first file) becomes the file number in the index.
+
+When the database is defined for EMBOSS, attributes are available to
+include ore exclude files by name, allowing the index to be used to
+access only a subset of the files for a given database name. The
+intention is to provide definitions similar to the GCG package's "farm
+files" which were lists of databases to be combined. In EMBOSS this is
+restricted to farms where there is a single index covering all
+possible farms.
+
+B+ tree structure
+-----------------
+
+Index files are built as pages. When indexing, these pages are a fixed
+size, with the capacity of each page defined by the maximum length of
+the identifier or key.
+
+The first page is the "root" of the B+tree. It always has at least two
+child pages. The root page stores the first key (identifier or token)
+in each child page, with one left-most (first) child page added for
+any lower keys.
+
+The child pages may themselves also be the "internal" roots of
+subtrees with the same structure plus a pointer to their parent
+page. If one child page is a subtree, then all must be as the tree is
+always balanced.
+
+The lowest level in the child pages is populated by "leaf" nodes. Each
+leaf node has a simple unsorted list of all keys with references to
+the entry in a flat file. The data in the leaf node depends on the
+type of index.
+
+These flat file references are stored in "bucket" nodes. There are 1
+or more "bucket" nodes for each key. The details of what is stored in
+the buckets depends on the type of index.
+
+B+tree identifier index structure
+---------------------------------
+
+The identifier indexes are the simplest to understand. A B+tree is
+built of all identifiers in the flat files. For each identifier we
+store the file number and the offset in the input file. For GCG/PIR
+data files we can store both the reference and sequence file
+positions.  We also store a count of the number of times the
+identifier appears. If it is found more than once (a common issue in
+accession number indexing) we store a reference to a subpage which
+lists all file numbers and offsets. This is not necessarily only to
+one file as there are possibilities of multiple matches in cumlative
+updates to EMBL and in other situations. We make no assumptions in the
+index structure.
+
+The lowest level in the B+tree are "leaf" nodes. For a small index the
+root node may itself be the only "leaf" node. "Leaf" nodes have a
+sorted list of references to "bucket" nodes.
+
+The "bucket" node stores an unsorted list of flatfile references.
+These contain the file number, number of duplicates (zero for a unique
+entry), offset, reference offset (if needed) and key.
+
+For a unique entry (duplicates zero) the offset is to the data file at
+the start of the entry.
+
+For duplicates, the offset is instead the offset to a "numeric node"
+page which contains a list of buckets to "numeric bucket" pages
+containing the actual file number and offsets for each duplicate.
+
+... why not simply point to a single numbucket and only build a
+structure if the list is too long for a single bucket? This would
+mostly save 2 pages.
+
+B+ tree secondary index structure
+---------------------------------
+
+When indexing keys that are not themselves entry identifiers we store
+for each key a list of the identifiers in which they are found.
+
+The "leaf" node(s) have a sorted list of references to "primary
+bucket" nodes. Each "primary bucket" has a sorted list of keys with
+references to a subtree root node.
+
+The "leaf nodes" of the secondary subtree have a sorted list of
+references to "secondary buckets".
+
+Each "secondary bucket" stores a list of unique identifiers (the 'id'
+field)
+
+... like numbuckets, why not simply point to a single secbucket where
+it is sufficient
+
+
+Overflow
+--------
+
+The design of the index allows pages to overflow where space in the
+page is insufficient to store data. However, with the key length
+limits imposed these overflows are never required and warnings are
+included in the code should an overflow reference ever be detected in
+indexing or retrieval. The overflow code has not been tested for some
+time and should not be trusted.
+
+
+Extensions
+==========
+
+We can try to drop the subtrees for numbuckets (duplicate identifiers)
+and secbuckets (lists of identifiers for secondary keys). If the first
+reference is to a bucket we could simply use it. If the bucket is
+full, we could then build a tree (e.g. many duplicates or a key in
+many entries). This will save 2 pages for all simple cases.
+
+Probably simplest to keep the root node as is. We only need to adjust
+the numeric and secondary levels.
+
+We can indicate in the parameter files that there is only a single
+offset and drop the seqoffset throughout the index. This will
+certainly save space. We need to know when we set the fill and order
+values so we can use the extra space.
+
+For secondary indexes, we need the size of the unique id to calculate
+secondary offset and fill - the code is using the size of the key
+instead. This can be much longer.
+
+Secondary indexes and numeric indexes can use a smaller page size to
+save space as they are mostly sparsely populated with smalled keys. We
+need to ass secondary versions of various AjPBtcache attributes and
+duplicate many functions. First change all references to primary and
+secondary versions, then duplicate functions that use them explicitly
+(rename the primary function, copy to a new secondary function) These
+should all be internal btree* functions but watch for any that are for
+some reason defined non-static.
+
+dbxreport when given a database name needs to use the alias to look up
+index files. For example, it fails to find qaxtest.pxid which is
+called embl.pxid in the dbxflat-ex-keep directory. Also check the
+other applications for the same issue.
+

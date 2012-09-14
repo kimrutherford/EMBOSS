@@ -1,9 +1,9 @@
 application: featcopy [
-  documentation: "Reads and writes a feature table"
+  documentation: "Read and write a feature table"
   groups: "Data retrieval:Feature data, Edit"
-    relations: "EDAM:0000160 topic Sequence features"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0000254 operation Data retrieval (feature table)"
+    relations: "EDAM_topic:0160 Sequence sites and features"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   features: features [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: output [
   featout: outfeat [
     parameter: "Y"
     type: "$(features.type)"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: output

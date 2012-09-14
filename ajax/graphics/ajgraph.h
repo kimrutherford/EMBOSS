@@ -1,41 +1,56 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-
-
-
-/* @source ajgraph.h
+/* @include ajgraph ***********************************************************
 **
 ** General Plot/Printing routines.
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @version $Revision: 1.42 $
+** @modified $Date: 2011/10/18 14:23:41 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 
-#ifndef ajgraph_h
-#define ajgraph_h
+#ifndef AJGRAPH_H
+#define AJGRAPH_H
 
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
 #include "plplot.h"
 #include "ajgraphstruct.h"
 #include "ajdefine.h"
 #include "ajstr.h"
+#include "ajseqdata.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
 
 
 #define GRAPH_XGAP      60
@@ -72,6 +87,19 @@ extern "C"
 		       AJGRAPH_X_TOP + AJGRAPH_Y_TICK + AJGRAPH_X_LABEL + \
 		       AJGRAPH_Y_LABEL + AJGRAPH_JOINPOINTS + AJGRAPH_TITLE + \
 		       AJGRAPH_SUBTITLE + AJGRAPH_OVERLAP)
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -135,9 +163,9 @@ PLFLT         ajGraphicsCalcTextlengthS(const AjPStr str);
 PLFLT         ajGraphicsCalcTextheight(void);
 PLFLT         ajGraphicsCalcDistance(PLFLT xx1, PLFLT yy1,
                                      PLFLT xx2, PLFLT yy2);
-PLFLT         ajGraphicsCalcCharsize(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
+PLFLT         ajGraphicsCalcCharsize(PLFLT xx1, PLFLT yy1,
+                                     PLFLT xx2, PLFLT yy2,
                                      const char *text, PLFLT TextHeight);
-
 
 void          ajGraphicsDrawarcArc(PLFLT xcentre, PLFLT ycentre, PLFLT radius,
                                    PLFLT startangle, PLFLT endangle);
@@ -256,6 +284,8 @@ void          ajGraphxySetflagOverlay (AjPGraph thys, AjBool set);
 void          ajGraphShowSubtitle (AjPGraph thys, AjBool set);
 void          ajGraphShowTitle (AjPGraph thys, AjBool set);
 
+void          ajGraphSetDatanameC(AjPGraph thys, const char *name);
+void          ajGraphSetDatanameS(AjPGraph thys, const AjPStr name);
 void          ajGraphSetDescC(AjPGraph thys, const char* txt);
 void          ajGraphSetDescS(AjPGraph thys, const AjPStr str);
 
@@ -334,6 +364,10 @@ void          ajGraphdataCalcXY (AjPGraphdata graphdata,
 				    const float* y);
 void          ajGraphdataAddXY (AjPGraphdata graphdata,
                                 const float *x, const float *y);
+void          ajGraphdataSetDatanameC (AjPGraphdata graphdata,
+					  const char *title);
+void          ajGraphdataSetDatanameS (AjPGraphdata graphdata,
+					  const AjPStr title);
 void          ajGraphdataSetSubtitleC (AjPGraphdata graphdata,
 					  const char *title);
 void          ajGraphdataSetSubtitleS (AjPGraphdata graphdata,
@@ -364,6 +398,10 @@ void          ajGraphicsUnused(void);
 */
 
 
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+#ifdef AJ_COMPILE_DEPRECATED
+
 __deprecated void          ajGraphPlenv (float xmin, float xmax,
                                          float ymin, float ymax,
                                          ajint flags);
@@ -373,7 +411,7 @@ __deprecated void          ajGraphxyDumpDevices (void);
 __deprecated void          ajGraphListDevices (AjPList list);
 __deprecated void          ajGraphxyListDevices (AjPList list);
 
-__deprecated void ajGraphOpenPlot(AjPGraph thys, ajuint numofsets);
+__deprecated void          ajGraphOpenPlot(AjPGraph thys, ajuint numofsets);
 __deprecated void          ajGraphOpen (AjPGraph thys, PLFLT xmin, PLFLT xmax,
                                         PLFLT ymin, PLFLT ymax, ajint flags);
 __deprecated void          ajGraphClose (void);
@@ -469,7 +507,8 @@ __deprecated PLFLT         *ajComputeCoord(PLFLT xcentre, PLFLT ycentre,
 __deprecated ajint         ajGraphicsGetColourFore(void);
 __deprecated void          ajGraphicsDrawRlabelC(const char *text);
 __deprecated void          ajGraphicsDrawRlabelS(const AjPStr str);
-__deprecated void          ajGraphNewPage (AjPGraph thys, AjBool resetdefaults);
+__deprecated void          ajGraphNewPage (AjPGraph thys,
+                                           AjBool resetdefaults);
 __deprecated void          ajGraphSetTitlePlus(AjPGraph thys,
                                                const AjPStr title);
 __deprecated AjBool        ajGraphxySet (AjPGraph thys, const AjPStr type);
@@ -586,7 +625,8 @@ __deprecated void          ajGraphTri (PLFLT xx1, PLFLT yy1,
 __deprecated void          ajGraphTriFill (PLFLT xx1, PLFLT yy1,
                                            PLFLT xx2, PLFLT yy2,
                                            PLFLT x3, PLFLT y3);
-__deprecated void          ajGraphDots (PLFLT *xx1,PLFLT *yy1, ajuint numofdots);
+__deprecated void          ajGraphDots (PLFLT *xx1,PLFLT *yy1,
+                                        ajuint numofdots);
 __deprecated void          ajGraphSymbols( ajuint numofdots,
                                            PLFLT *xx1,PLFLT *yy1,
                                            ajuint symbol);
@@ -622,14 +662,8 @@ __deprecated void          ajGraphSetOri(ajint ori);
 
 __deprecated ajint         ajGraphCheckColour (const AjPStr colour);
 
-/* End of prototypes without C code */
-
-
-
-#endif /* ajgraph_h */
-
-
-
-#ifdef __cplusplus
-}
 #endif
+
+AJ_END_DECLS
+
+#endif  /* !AJGRAPH_H */

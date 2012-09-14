@@ -16,6 +16,7 @@
 
 
 
+pkgdatadir = $(datadir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 pkglibdir = $(libdir)/EMBOSS
 pkglibexecdir = $(libexecdir)/EMBOSS
@@ -36,19 +37,18 @@ host_triplet = x86_64-unknown-linux-gnu
 subdir = doc/programs/html
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -75,18 +75,20 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(pkgdata2dir)"
-DATA = $(pkgdata_DATA) $(pkgdata2_DATA)
+am__installdirs = "$(DESTDIR)$(egroupsdir)" "$(DESTDIR)$(eimagesdir)" \
+	"$(DESTDIR)$(eprograms1dir)" "$(DESTDIR)$(eprograms2dir)"
+DATA = $(egroups_DATA) $(eimages_DATA) $(eprograms1_DATA) \
+	$(eprograms2_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/html
-ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.11
-AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /home/pmr/embossdist/missing --run aclocal-1.11
+AJAX_FIXED_ROOT = \"/home/pmr/embossdist/emboss\"
 AJAX_SYSTEM = \"Linux\"
-AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /home/pmr/embossdist/missing --run tar
+ANT = 
 AR = ar
-AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/pmr/embossdist/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/pmr/embossdist/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/pmr/embossdist/missing --run automake-1.11
 AWK = gawk
 AXIS2C_CFLAGS = 
 AXIS2C_CPPFLAGS = 
@@ -94,9 +96,9 @@ AXIS2C_LDFLAGS =
 AXIS2C_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2  -DNO_AUTH -D__amd64__
+CFLAGS =   -O2 
 CPP = gcc -E
-CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+CPPFLAGS =  -DAJ_LinuxLF -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -112,9 +114,7 @@ ECHO_C =
 ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
-EHAVEANT = 
-EMBOSS_TOP = /m1/emboss/emboss
-ESYSTEMLIBS = 
+EMBOSS_TOP = /home/pmr/embossdist
 EXEEXT = 
 FGREP = /bin/grep -F
 GREP = /bin/grep
@@ -125,9 +125,12 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-ISAIXIA64 = 
-ISCYGWIN = 
-JAVA_OK = 
+JAR = 
+JAVA = 
+JAVAC = 
+JAVA_CFLAGS = 
+JAVA_CPPFLAGS =  -DNO_AUTH
+JAVA_LDFLAGS = 
 LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
 LIBOBJS = 
@@ -136,15 +139,14 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/pmr/embossdist/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
-MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
+MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4  -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
 MYSQL_CONFIG = /usr/bin/mysql_config
 MYSQL_CPPFLAGS = -I/usr/include/mysql
 MYSQL_LDFLAGS = -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
-MYSQL_VERSION = 5.5.13
-NEEDAJAX = 
+MYSQL_VERSION = 5.5.24
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -154,10 +156,10 @@ OTOOL64 =
 PACKAGE = EMBOSS
 PACKAGE_BUGREPORT = emboss-bug@emboss.open-bio.org
 PACKAGE_NAME = EMBOSS
-PACKAGE_STRING = EMBOSS 6.4.0
+PACKAGE_STRING = EMBOSS 6.5.0
 PACKAGE_TARNAME = EMBOSS
-PACKAGE_URL = http://emboss.sourceforge.net/
-PACKAGE_VERSION = 6.4.0
+PACKAGE_URL = http://emboss.open-bio.org/
+PACKAGE_VERSION = 6.5.0
 PATH_SEPARATOR = :
 PCRE_DATE = 11-Apr-2009
 PCRE_LIB_VERSION = 0:1:0
@@ -165,21 +167,21 @@ PCRE_MAJOR = 7
 PCRE_MINOR = 9
 PCRE_POSIXLIB_VERSION = 0:0:0
 PCRE_VERSION = 7.9
-PG_CONFIG = /usr/bin/pg_config
 PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
 PKG_CONFIG_PATH = 
 POSIX_MALLOC_THRESHOLD = -DPOSIX_MALLOC_THRESHOLD=10
 POSTGRESQL_CFLAGS = -I/usr/include
+POSTGRESQL_CONFIG = /usr/bin/pg_config
 POSTGRESQL_CPPFLAGS = -I/usr/include
 POSTGRESQL_LDFLAGS = -L/usr/lib64 -lpq
-POSTGRESQL_VERSION = 9.0.4
+POSTGRESQL_VERSION = 9.1.4
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 6.4.0
+VERSION = 6.5.0
 WARN_CFLAGS = 
 XLIB =  -lX11 
 XMKMF = 
@@ -187,10 +189,10 @@ X_CFLAGS =
 X_EXTRA_LIBS = 
 X_LIBS = 
 X_PRE_LIBS =  -lSM -lICE
-abs_builddir = /m1/emboss/emboss/doc/programs/html
-abs_srcdir = /m1/emboss/emboss/doc/programs/html
-abs_top_builddir = /m1/emboss/emboss
-abs_top_srcdir = /m1/emboss/emboss
+abs_builddir = /home/pmr/embossdist/doc/programs/html
+abs_srcdir = /home/pmr/embossdist/doc/programs/html
+abs_top_builddir = /home/pmr/embossdist
+abs_top_srcdir = /home/pmr/embossdist
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -200,7 +202,6 @@ am__leading_dot = .
 am__quote = 
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
-ant_in_path = true
 bindir = ${exec_prefix}/bin
 build = x86_64-unknown-linux-gnu
 build_alias = 
@@ -213,7 +214,6 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-havejavac = 
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -222,8 +222,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /m1/emboss/emboss/install-sh
-javac_in_path = true
+install_sh = ${SHELL} /home/pmr/embossdist/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -243,180 +242,388 @@ target_alias =
 top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
-pkgdata_DATA = abiview.1.abiview.gif \
-	banana.1.banana.gif \
-	chaos.1.chaos.gif cirdna.1.cirdna.gif cpgplot.1.cpgplot.gif \
-	dan.2.dan.gif density.1.density.gif density.2.density.gif \
-	density.3.density.gif dotmatcher.1.dotmatcher.gif \
-	dotpath.1.dotpath.gif dottup.1.dottup.gif \
-	emboss_icon.gif epestfind.1.epestfind.gif \
-	findkm.1.findkm.gif \
-	isochore.1.isochore.gif \
-	lindna.1.lindna.gif \
-	octanol.1.octanol.gif \
-	pepinfo.1.pepinfo.gif pepnet.1.pepnet.gif \
-	pepwheel.1.pepwheel.gif pepwindow.1.pepwindow.gif \
-	pepwindowall.1.pepwindowall.gif plotcon.1.plotcon.gif \
-	plotorf.1.plotorf.gif plotorf.2.plotorf.gif \
-	polydot.1.polydot.gif prettyplot.1.prettyplot.gif \
-	prettyplot.2.prettyplot.gif \
-	syco.1.syco.gif \
-	tcode.2.tcode.gif tmap.1.tmap.gif \
-	wobble.1.wobble.gif \
-	groups.html \
-	acd_group.html alignment_group.html alignment_consensus_group.html \
-	alignment_differences_group.html \
-	alignment_dot_plots_group.html alignment_global_group.html \
-	alignment_local_group.html alignment_multiple_group.html \
-	assembly_fragment_assembly_group.html \
-	data_resources_group.html  \
-	data_retrieval_chemistry_data_group.html \
-	data_retrieval_feature_data_group.html \
-	data_retrieval_group.html \
-	data_retrieval_ontology_data_group.html \
-	data_retrieval_resource_data_group.html \
-	data_retrieval_sequence_data_group.html \
-	data_retrieval_text_data_group.html \
-	data_retrieval_tool_data_group.html \
-	data_retrieval_url_data_group.html \
-	display_group.html \
-	documentation_group.html \
-	edit_group.html enzyme_kinetics_group.html \
-	feature_tables_group.html \
-	hmm_group.html \
-	information_group.html \
-	menus_group.html \
-	nucleic_2d_structure_group.html \
-	nucleic_codon_usage_group.html \
-	nucleic_codon_usage_nucleic_gene_finding_group.html \
-	nucleic_composition_group.html \
-	nucleic_cpg_islands_group.html \
-	nucleic_functional_sites_group.html \
-	nucleic_gene_finding_group.html nucleic_motifs_group.html \
-	nucleic_mutation_group.html nucleic_primers_group.html \
-	nucleic_profiles_group.html nucleic_repeats_group.html \
-	nucleic_properties_group.html \
-	nucleic_restriction_group.html \
-	nucleic_rna_folding_group.html \
-	nucleic_transcription_group.html \
-	nucleic_translation_group.html \
-	ontology_group.html \
-	ontology_go_group.html \
-	ontology_edam_group.html \
-	ontology_taxonomy_group.html \
-	phylogeny_consensus_group.html \
-	phylogeny_continuous_characters_group.html \
-	phylogeny_discrete_characters_group.html \
-	phylogeny_distance_matrix_group.html \
-	phylogeny_gene_frequencies_group.html phylogeny_group.html \
-	phylogeny_molecular_sequence_group.html \
-	phylogeny_tree_drawing_group.html \
-	protein_2d_structure_group.html \
-	protein_3d_structure_group.html \
-	protein_composition_group.html \
-	protein_domains_group.html \
-	protein_functional_sites_group.html \
-	protein_modifications_group.html \
-	protein_motifs_group.html \
-	protein_mutation_group.html \
-	protein_profiles_group.html \
-	protein_properties_group.html \
-	protein_sequence_alignment_group.html \
-	test_group.html \
-	utils_group.html \
-	utils_database_creation_group.html \
-	utils_database_indexing_group.html utils_misc_group.html \
-	aaindexextract.html abiview.html \
-	acdc.html acdlog.html acdpretty.html acdtable.html \
-	acdtrace.html acdvalid.html \
-	aligncopy.html aligncopypair.html antigenic.html \
-	backtranambig.html backtranseq.html banana.html \
-	biosed.html btwisted.html \
-	cai.html cachedas.html cachedbfetch.html \
-	cacheebeyesearch.html cacheensembl.html \
-	chaos.html charge.html checktrans.html chips.html \
-	cirdna.html codcmp.html codcopy.html coderet.html \
-	complex.html compseq.html cons.html consambig.html \
-	cpgplot.html cpgreport.html cusp.html \
-	cutgextract.html cutseq.html \
-	dan.html dbiblast.html dbifasta.html dbiflat.html dbigcg.html \
-	dbtell.html \
-	dbxcompress.html dbxedam.html dbxfasta.html dbxflat.html \
-	dbxgcg.html dbxobo.html dbxreport.html dbxresource.html \
-	dbxstat.html dbxtax.html dbxuncompress.html \
-	degapseq.html density.html descseq.html \
-	diffseq.html distmat.html \
-	dotmatcher.html dotpath.html dottup.html \
-	dreg.html \
-	drfinddata.html drfindformat.html drfindid.html drfindresource.html \
-	drget.html drtext.html \
-	edamdef.html edamhasinput.html edamhasoutput.html \
-	edamisformat.html edamisid.html edamname.html \
-	edialign.html einverted.html \
-	embossdata.html embossversion.html emma.html \
-	emowse.html entret.html epestfind.html \
-	eprimer3.html eprimer32.html equicktandem.html \
-	est2genome.html etandem.html extractalign.html \
-	extractfeat.html extractseq.html \
-	featcopy.html featreport.html feattext.html \
-	findkm.html freak.html \
-	fuzznuc.html fuzzpro.html fuzztran.html \
-	garnier.html geecee.html getorf.html godef.html goname.html \
-	helixturnhelix.html hmoment.html \
-	iep.html index.html infoalign.html infobase.html \
-	inforesidue.html infoseq.html \
-	isochore.html \
-	jaspextract.html jaspscan.html
+eimagesdir = $(pkgdatadir)/doc/programs/html
+egroupsdir = $(pkgdatadir)/doc/programs/html
+eprograms1dir = $(pkgdatadir)/doc/programs/html
+eprograms2dir = $(pkgdatadir)/doc/programs/html
+eimages_DATA = \
+emboss_icon.jpg \
+abiview.1.abiview.gif \
+banana.1.banana.gif \
+chaos.1.chaos.gif \
+cirdna.1.cirdna.gif \
+cpgplot.1.cpgplot.gif \
+dan.2.dan.gif \
+density.1.density.gif \
+density.2.density.gif \
+density.3.density.gif \
+dotmatcher.1.dotmatcher.gif \
+dotpath.1.dotpath.gif \
+dottup.1.dottup.gif \
+emboss_icon.gif \
+epestfind.1.epestfind.gif \
+findkm.1.findkm.gif \
+isochore.1.isochore.gif \
+lindna.1.lindna.gif \
+octanol.1.octanol.gif \
+pepinfo.1.pepinfo.gif \
+pepnet.1.pepnet.gif \
+pepwheel.1.pepwheel.gif \
+pepwindow.1.pepwindow.gif \
+pepwindowall.1.pepwindowall.gif \
+plotcon.1.plotcon.gif \
+plotorf.1.plotorf.gif \
+plotorf.2.plotorf.gif \
+polydot.1.polydot.gif \
+prettyplot.1.prettyplot.gif \
+prettyplot.2.prettyplot.gif \
+syco.1.syco.gif \
+tcode.2.tcode.gif \
+tmap.1.tmap.gif \
+wobble.1.wobble.gif
 
-pkgdata2_DATA = libscan.html lindna.html listor.html \
-	makenucseq.html makeprotseq.html marscan.html \
-	maskambignuc.html maskambigprot.html maskfeat.html maskseq.html \
-	matcher.html megamerger.html merger.html msbar.html \
-	mwcontam.html mwfilter.html \
-	needle.html needleall.html newcpgreport.html newcpgseek.html \
-	newseq.html nohtml.html noreturn.html nospace.html \
-	notab.html notseq.html nthseq.html nthseqset.html \
-	octanol.html oddcomp.html \
-	ontocount.html ontoget.html ontogetcommon.html \
-	ontogetdown.html ontogetobsolete.html \
-	ontogetroot.html ontogetsibs.html ontogetup.html \
-	ontoisobsolete.html ontotext.html \
-	palindrome.html pasteseq.html patmatdb.html patmatmotifs.html \
-	pepcoil.html pepdigest.html pepinfo.html pepnet.html \
-	pepstats.html pepwheel.html pepwindow.html pepwindowall.html \
-	plotcon.html plotorf.html \
-	polydot.html preg.html prettyplot.html prettyseq.html \
-	primersearch.html printsextract.html profit.html \
-	prophecy.html prophet.html prosextract.html \
-	pscan.html psiphi.html \
-	rebaseextract.html recoder.html redata.html remap.html \
-	restover.html restrict.html revseq.html \
-	seealso.html seqcount.html seqmatchall.html seqret.html \
-	seqretsetall.html seqretsplit.html \
-	seqxref.html seqxrefget.html \
-	servertell.html \
-	showalign.html showdb.html showfeat.html showorf.html \
-	showpep.html showseq.html showserver.html \
-	shuffleseq.html sigcleave.html silent.html \
-	sirna.html sixpack.html sizeseq.html skipredundant.html \
-	skipseq.html splitsource.html splitter.html stretcher.html \
-	stssearch.html supermatcher.html syco.html \
-	taxget.html taxgetdown.html taxgetrank.html \
-	taxgetspecies.html taxgetup.html \
-	tcode.html template.html \
-	textget.html textsearch.html tfextract.html \
-	tfm.html tfscan.html tmap.html tranalign.html transeq.html \
-	trimest.html trimseq.html trimspace.html twofeat.html \
-	union.html urlget.html \
-	vectorstrip.html \
-	water.html whichdb.html wobble.html wordcount.html \
-	wordfinder.html wordmatch.html \
-	wossdata.html wossinput.html wossname.html wossoperation.html \
-	wossoutput.html wossparam.html wosstopic.html \
-	yank.html \
-	emboss_icon.jpg
+egroups_DATA = \
+groups.html \
+acd_group.html \
+alignment_group.html \
+alignment_consensus_group.html \
+alignment_differences_group.html \
+alignment_dot_plots_group.html \
+alignment_global_group.html \
+alignment_local_group.html \
+alignment_multiple_group.html \
+assembly_fragment_assembly_group.html \
+data_resources_group.html \
+data_retrieval_group.html \
+data_retrieval_chemistry_data_group.html \
+data_retrieval_feature_data_group.html \
+data_retrieval_ontology_data_group.html \
+data_retrieval_resource_data_group.html \
+data_retrieval_sequence_data_group.html \
+data_retrieval_sequence_data_assembly_data_group.html \
+data_retrieval_text_data_group.html \
+data_retrieval_tool_data_group.html \
+data_retrieval_url_data_group.html \
+display_group.html \
+documentation_group.html \
+edit_group.html \
+enzyme_kinetics_group.html \
+feature_tables_group.html \
+hmm_group.html \
+information_group.html \
+menus_group.html \
+nucleic_2d_structure_group.html \
+nucleic_codon_usage_group.html \
+nucleic_codon_usage_nucleic_gene_finding_group.html \
+nucleic_composition_group.html \
+nucleic_cpg_islands_group.html \
+nucleic_functional_sites_group.html \
+nucleic_gene_finding_group.html \
+nucleic_motifs_group.html \
+nucleic_mutation_group.html \
+nucleic_primers_group.html \
+nucleic_profiles_group.html \
+nucleic_properties_group.html \
+nucleic_repeats_group.html \
+nucleic_restriction_group.html \
+nucleic_rna_folding_group.html \
+nucleic_transcription_group.html \
+nucleic_translation_group.html \
+ontology_group.html \
+ontology_edam_group.html \
+ontology_go_group.html \
+ontology_taxonomy_group.html \
+phylogeny_group.html \
+phylogeny_consensus_group.html \
+phylogeny_continuous_characters_group.html \
+phylogeny_discrete_characters_group.html \
+phylogeny_distance_matrix_group.html \
+phylogeny_gene_frequencies_group.html \
+phylogeny_molecular_sequence_group.html \
+phylogeny_tree_drawing_group.html \
+protein_2d_structure_group.html \
+protein_3d_structure_group.html \
+protein_composition_group.html \
+protein_domains_group.html \
+protein_functional_sites_group.html \
+protein_modifications_group.html \
+protein_motifs_group.html \
+protein_mutation_group.html \
+protein_profiles_group.html \
+protein_properties_group.html \
+protein_sequence_alignment_group.html \
+test_group.html \
+utils_group.html \
+utils_database_creation_group.html \
+utils_database_indexing_group.html \
+utils_misc_group.html
 
-pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/html
+eprograms1_DATA = \
+aaindexextract.html \
+abiview.html \
+acdc.html \
+acdlog.html \
+acdpretty.html \
+acdtable.html \
+acdtrace.html \
+acdvalid.html \
+aligncopy.html \
+aligncopypair.html \
+antigenic.html \
+assemblyget.html \
+backtranambig.html \
+backtranseq.html \
+banana.html \
+biosed.html \
+btwisted.html \
+cachedas.html \
+cachedbfetch.html \
+cacheebeyesearch.html \
+cacheensembl.html \
+cai.html \
+chaos.html \
+charge.html \
+checktrans.html \
+chips.html \
+cirdna.html \
+codcmp.html \
+codcopy.html \
+coderet.html \
+complex.html \
+compseq.html \
+cons.html \
+consambig.html \
+cpgplot.html \
+cpgreport.html \
+cusp.html \
+cutgextract.html \
+cutseq.html \
+dan.html \
+dbiblast.html \
+dbifasta.html \
+dbiflat.html \
+dbigcg.html \
+dbtell.html \
+dbxcompress.html \
+dbxedam.html \
+dbxfasta.html \
+dbxflat.html \
+dbxgcg.html \
+dbxobo.html \
+dbxreport.html \
+dbxresource.html \
+dbxstat.html \
+dbxtax.html \
+dbxuncompress.html \
+degapseq.html \
+density.html \
+descseq.html \
+diffseq.html \
+distmat.html \
+dotmatcher.html \
+dotpath.html \
+dottup.html \
+dreg.html \
+drfinddata.html \
+drfindformat.html \
+drfindid.html \
+drfindresource.html \
+drget.html \
+drtext.html \
+edamdef.html \
+edamhasinput.html \
+edamhasoutput.html \
+edamisformat.html \
+edamisid.html \
+edamname.html \
+edialign.html \
+einverted.html \
+embossdata.html \
+embossupdate.html \
+embossversion.html \
+emma.html \
+emowse.html \
+entret.html \
+epestfind.html \
+eprimer3.html \
+eprimer32.html \
+equicktandem.html \
+est2genome.html \
+etandem.html \
+extractalign.html \
+extractfeat.html \
+extractseq.html \
+featcopy.html \
+featmerge.html \
+featreport.html \
+feattext.html \
+findkm.html \
+freak.html \
+fuzznuc.html \
+fuzzpro.html \
+fuzztran.html \
+garnier.html \
+geecee.html \
+getorf.html \
+godef.html \
+goname.html \
+helixturnhelix.html \
+hmoment.html \
+iep.html \
+index.html \
+infoalign.html \
+infoassembly.html \
+infobase.html \
+inforesidue.html \
+infoseq.html \
+isochore.html \
+jaspextract.html \
+jaspscan.html \
+jembossctl.html
+
+eprograms2_DATA = \
+libscan.html \
+lindna.html \
+listor.html \
+makenucseq.html \
+makeprotseq.html \
+marscan.html \
+maskambignuc.html \
+maskambigprot.html \
+maskfeat.html \
+maskseq.html \
+matcher.html \
+megamerger.html \
+merger.html \
+msbar.html \
+mwcontam.html \
+mwfilter.html \
+needle.html \
+needleall.html \
+newcpgreport.html \
+newcpgseek.html \
+newseq.html \
+nohtml.html \
+noreturn.html \
+nospace.html \
+notab.html \
+notseq.html \
+nthseq.html \
+nthseqset.html \
+octanol.html \
+oddcomp.html \
+ontocount.html \
+ontoget.html \
+ontogetcommon.html \
+ontogetdown.html \
+ontogetobsolete.html \
+ontogetroot.html \
+ontogetsibs.html \
+ontogetup.html \
+ontoisobsolete.html \
+ontotext.html \
+palindrome.html \
+pasteseq.html \
+patmatdb.html \
+patmatmotifs.html \
+pepcoil.html \
+pepdigest.html \
+pepinfo.html \
+pepnet.html \
+pepstats.html \
+pepwheel.html \
+pepwindow.html \
+pepwindowall.html \
+plotcon.html \
+plotorf.html \
+polydot.html \
+preg.html \
+prettyplot.html \
+prettyseq.html \
+primersearch.html \
+printsextract.html \
+profit.html \
+prophecy.html \
+prophet.html \
+prosextract.html \
+pscan.html \
+psiphi.html \
+rebaseextract.html \
+recoder.html \
+redata.html \
+refseqget.html \
+remap.html \
+restover.html \
+restrict.html \
+revseq.html \
+seealso.html \
+seqcount.html \
+seqmatchall.html \
+seqret.html \
+seqretsetall.html \
+seqretsplit.html \
+seqxref.html \
+seqxrefget.html \
+servertell.html \
+showalign.html \
+showdb.html \
+showfeat.html \
+showorf.html \
+showpep.html \
+showseq.html \
+showserver.html \
+shuffleseq.html \
+sigcleave.html \
+silent.html \
+sirna.html \
+sixpack.html \
+sizeseq.html \
+skipredundant.html \
+skipseq.html \
+splitsource.html \
+splitter.html \
+stretcher.html \
+stssearch.html \
+supermatcher.html \
+syco.html \
+taxget.html \
+taxgetdown.html \
+taxgetrank.html \
+taxgetspecies.html \
+taxgetup.html \
+tcode.html \
+template.html \
+textget.html \
+textsearch.html \
+tfextract.html \
+tfm.html \
+tfscan.html \
+tmap.html \
+tranalign.html \
+transeq.html \
+trimest.html \
+trimseq.html \
+trimspace.html \
+twofeat.html \
+union.html \
+urlget.html \
+variationget.html \
+vectorstrip.html \
+water.html \
+whichdb.html \
+wobble.html \
+wordcount.html \
+wordfinder.html \
+wordmatch.html \
+wossdata.html \
+wossinput.html \
+wossname.html \
+wossoperation.html \
+wossoutput.html \
+wossparam.html \
+wosstopic.html \
+yank.html
+
 all: all-am
 
 .SUFFIXES:
@@ -456,46 +663,86 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgdataDATA: $(pkgdata_DATA)
+install-egroupsDATA: $(egroups_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	test -z "$(egroupsdir)" || $(MKDIR_P) "$(DESTDIR)$(egroupsdir)"
+	@list='$(egroups_DATA)'; test -n "$(egroupsdir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdatadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdatadir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(egroupsdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(egroupsdir)" || exit $$?; \
 	done
 
-uninstall-pkgdataDATA:
+uninstall-egroupsDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	@list='$(egroups_DATA)'; test -n "$(egroupsdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgdatadir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgdatadir)" && rm -f $$files
-install-pkgdata2DATA: $(pkgdata2_DATA)
+	echo " ( cd '$(DESTDIR)$(egroupsdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(egroupsdir)" && rm -f $$files
+install-eimagesDATA: $(eimages_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgdata2dir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdata2dir)"
-	@list='$(pkgdata2_DATA)'; test -n "$(pkgdata2dir)" || list=; \
+	test -z "$(eimagesdir)" || $(MKDIR_P) "$(DESTDIR)$(eimagesdir)"
+	@list='$(eimages_DATA)'; test -n "$(eimagesdir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdata2dir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdata2dir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(eimagesdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(eimagesdir)" || exit $$?; \
 	done
 
-uninstall-pkgdata2DATA:
+uninstall-eimagesDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata2_DATA)'; test -n "$(pkgdata2dir)" || list=; \
+	@list='$(eimages_DATA)'; test -n "$(eimagesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgdata2dir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgdata2dir)" && rm -f $$files
+	echo " ( cd '$(DESTDIR)$(eimagesdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(eimagesdir)" && rm -f $$files
+install-eprograms1DATA: $(eprograms1_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(eprograms1dir)" || $(MKDIR_P) "$(DESTDIR)$(eprograms1dir)"
+	@list='$(eprograms1_DATA)'; test -n "$(eprograms1dir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(eprograms1dir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(eprograms1dir)" || exit $$?; \
+	done
+
+uninstall-eprograms1DATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(eprograms1_DATA)'; test -n "$(eprograms1dir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(eprograms1dir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(eprograms1dir)" && rm -f $$files
+install-eprograms2DATA: $(eprograms2_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(eprograms2dir)" || $(MKDIR_P) "$(DESTDIR)$(eprograms2dir)"
+	@list='$(eprograms2_DATA)'; test -n "$(eprograms2dir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(eprograms2dir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(eprograms2dir)" || exit $$?; \
+	done
+
+uninstall-eprograms2DATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(eprograms2_DATA)'; test -n "$(eprograms2dir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(eprograms2dir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(eprograms2dir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -537,7 +784,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(pkgdata2dir)"; do \
+	for dir in "$(DESTDIR)$(egroupsdir)" "$(DESTDIR)$(eimagesdir)" "$(DESTDIR)$(eprograms1dir)" "$(DESTDIR)$(eprograms2dir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -585,7 +832,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgdata2DATA install-pkgdataDATA
+install-data-am: install-egroupsDATA install-eimagesDATA \
+	install-eprograms1DATA install-eprograms2DATA
 
 install-dvi: install-dvi-am
 
@@ -629,7 +877,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pkgdata2DATA uninstall-pkgdataDATA
+uninstall-am: uninstall-egroupsDATA uninstall-eimagesDATA \
+	uninstall-eprograms1DATA uninstall-eprograms2DATA
 
 .MAKE: install-am install-strip
 
@@ -637,14 +886,16 @@ uninstall-am: uninstall-pkgdata2DATA uninstall-pkgdataDATA
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkgdata2DATA install-pkgdataDATA \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-pkgdata2DATA uninstall-pkgdataDATA
+	install-egroupsDATA install-eimagesDATA install-eprograms1DATA \
+	install-eprograms2DATA install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am uninstall uninstall-am uninstall-egroupsDATA \
+	uninstall-eimagesDATA uninstall-eprograms1DATA \
+	uninstall-eprograms2DATA
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

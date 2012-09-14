@@ -32,7 +32,7 @@
 
 
 
-/* @datastatic JaspPrefix **************************************************
+/* @datastatic PJaspPrefix ****************************************************
 **
 ** JASPAR data directory structure
 **
@@ -49,6 +49,7 @@ typedef struct SJaspPrefix
     const char* Prefix;
     const char* Directory;
 } OJaspPrefix;
+#define PJaspPrefix OJaspPrefix*
 
 static OJaspPrefix Jprefix[] =
 {

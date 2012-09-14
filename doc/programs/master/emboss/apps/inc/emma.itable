@@ -48,7 +48,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-dend</td>
+<td>-dendreuse</td>
 <td>toggle</td>
 <td>Do alignment using an old dendrogram</td>
 <td>Toggle value Yes/No</td>
@@ -64,7 +64,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-[no]slow</td>
+<td>-[no]slowalign</td>
 <td>toggle</td>
 <td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
 The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. &gt;100) long (e.g. &gt;1000 residue) sequences.</td>
@@ -263,7 +263,7 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -332,11 +332,35 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -380,7 +404,7 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutset qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutset qualifiers
 </td>
 </tr>
 
@@ -465,7 +489,7 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-dendoutfile" associated outfile qualifiers
+<td align="left" colspan=5>"-dendoutfile" associated outfile qualifiers
 </td>
 </tr>
 

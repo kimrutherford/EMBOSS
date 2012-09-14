@@ -1,25 +1,33 @@
-/******************************************************************************
-** @source support for webservices access using Axis2C library
+/* @source ajsoap *************************************************************
 **
+** support for webservices access using Axis2C library
+**
+** @author Copyright (c) 2009 Mahmut Uludag
+** @version $Revision: 1.8 $
+** @modified $Date: 2011/10/18 14:23:39 $ by $Author: rice $
+** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
 #include "ajsoap.h"
+#include "ajlib.h"
+#include "ajnam.h"
+#include "ajutil.h"
 
 
 
@@ -41,6 +49,8 @@ static char axis2C_HOME[] = AXIS2C_LOC;
 ** @param [r] env [const axutil_env_t*] axis2 environment obj
 ** @param [u] payload [axiom_node_t*] webservices input
 ** @return [axiom_node_t*] axis2 OM object, webservices output
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -100,6 +110,8 @@ axiom_node_t* ajSoapAxis2Call(axis2_svc_client_t *client,
 ** @param [r] env [const axutil_env_t*] axis2 environment
 ** @param [r] address [const axis2_char_t*] webservices endpoint
 ** @return [axis2_svc_client_t*] axis2 service client
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -165,6 +177,8 @@ axis2_svc_client_t* ajSoapAxis2GetClient(const axutil_env_t *env,
 **                                  received after a webservices call
 ** @param [r] env [const axutil_env_t*] axis2 environment obj
 ** @return [AjBool] returns true if the fault object is recognised
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -234,6 +248,8 @@ AjBool ajSoapAxis2Error(axiom_node_t *fault, const axutil_env_t *env)
 ** Returns an axis2 environment object for webservices calls
 **
 ** @return [axutil_env_t*] axis2 environment object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

@@ -1,35 +1,37 @@
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: edam:0000181</h3>
+<p><h3>Database entry: edam:0195</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000181
-name: RNA structure prediction
+id: EDAM_topic:0195
+name: Virtual PCR
 namespace: topic
-def: Predict or design secondary or tertiary structure of RNA.
-subset: topic
-is_obsolete: true
-consider: EDAM:0000173 ! Nucleic acid structure prediction
+def: Topic concerning simulated polymerase chain reaction (PCR).
+subset: topics
+synonym: "PCR" EXACT [http://edamontology.org]
+synonym: "Polymerase chain reaction" EXACT [http://edamontology.org]
+is_obsolete: true ! {since=beta13}
+consider: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
 </td></tr></table><p>
 
 <a name="input.2"></a>
 <h3>Input files for usage example 2</h3>
-<p><h3>Database entry: edam:0000575</h3>
+<p><h3>Database entry: edam:0575</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000575
+id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
-subset: operation
-is_a: EDAM:0000573 ! DNA map rendering
-is_a: EDAM:0000431 ! Restriction site recognition
-relationship: has_output EDAM:0001289 ! Restriction map
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
+relationship: has_output EDAM_data:1289 ! Restriction map
 
 </pre>
 </td></tr></table><p>

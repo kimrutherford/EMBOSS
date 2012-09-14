@@ -7,13 +7,13 @@ KEYWORDS    G protein-coupled receptor; phototransduction protein; retinal
 SOURCE      Xenopus laevis (African clawed frog)
   ORGANISM  Xenopus laevis
             Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-            Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
-            Xenopodinae; Xenopus; Xenopus.
+            Amphibia; Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae;
+            Xenopus; Xenopus.
 REFERENCE   1  (bases 1 to 1684)
   AUTHORS   Knox,B.E., Scalzetti,L.C., Batni,S. and Wang,J.Q.
   TITLE     Molecular cloning of the abundant rhodopsin and transducin from
             Xenopus laevis
-  JOURNAL   Unpublished (1992)
+  JOURNAL   Unpublished
 REFERENCE   2  (bases 1 to 1684)
   AUTHORS   Batni,S., Scalzetti,L., Moody,S.A. and Knox,B.E.
   TITLE     Characterization of the Xenopus rhodopsin gene
@@ -85,8 +85,8 @@ KEYWORDS    .
 SOURCE      Xenopus laevis (African clawed frog)
   ORGANISM  Xenopus laevis
             Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-            Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
-            Xenopodinae; Xenopus; Xenopus.
+            Amphibia; Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae;
+            Xenopus; Xenopus.
 REFERENCE   1  (bases 1 to 8914)
   AUTHORS   Batni,S., Scalzetti,L., Moody,S.A. and Knox,B.E.
   TITLE     Characterization of the Xenopus rhodopsin gene

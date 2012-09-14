@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds programs by EDAM parameter
+   Find programs by EDAM parameter
 
 Description
 
@@ -41,7 +41,7 @@ Usage
 
 
 % wossparam codon
-Finds programs by EDAM parameter
+Find programs by EDAM parameter
 
 SEARCH FOR PARAM 'CODON'
 syco   Draw synonymous codon usage statistic plot for a nucleotide sequence
@@ -50,8 +50,8 @@ syco   Draw synonymous codon usage statistic plot for a nucleotide sequence
 
 Command line arguments
 
-Finds programs by EDAM parameter
-Version: EMBOSS:6.4.0.0
+Find programs by EDAM parameter
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any
@@ -208,7 +208,7 @@ Known bugs
 
 See also
 
-                     Program name                          Description
+                     Program name                         Description
                     drfinddata     Find public databases by data type
                     drfindformat   Find public databases by format
                     drfindid       Find public databases by identifier
@@ -219,14 +219,14 @@ See also
                     edamisformat   Find EDAM ontology terms by is_format_of relation
                     edamisid       Find EDAM ontology terms by is_identifier_of relation
                     edamname       Find EDAM ontology terms by name
-                    seealso        Finds programs with similar function to a specified program
-                    tfm            Displays full documentation for an application
-                    wossdata       Finds programs by EDAM data
-                    wossinput      Finds programs by EDAM input data
-                    wossname       Finds programs by keywords in their short description
-                    wossoperation  Finds programs by EDAM operation
-                    wossoutput     Finds programs by EDAM output data
-                    wosstopic      Finds programs by EDAM topic
+                    seealso        Find programs with similar function to a specified program
+                    tfm            Display full documentation for an application
+                    wossdata       Find programs by EDAM data
+                    wossinput      Find programs by EDAM input data
+                    wossname       Find programs by keywords in their short description
+                    wossoperation  Find programs by EDAM operation
+                    wossoutput     Find programs by EDAM output data
+                    wosstopic      Find programs by EDAM topic
 
 Author(s)
 

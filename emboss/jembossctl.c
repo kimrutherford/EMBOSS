@@ -1,5 +1,4 @@
-/******************************************************************************
-** @source jembossctl
+/* @source jembossctl
 **
 ** @author Copyright (C) 2002 Alan Bleasby
 ** @version 1.0
@@ -22,9 +21,10 @@
 ** Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
+#include "emboss.h"
+
 #ifdef HAVE_JAVA
 
-#include "emboss.h"
 #include <errno.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -43,23 +43,23 @@
 
 #ifdef __hpux
 #include <stropts.h>
-#endif
+#endif /* !__hpux */
 
 #ifdef HAVE_POLL
 #include <poll.h>
-#endif
+#endif /* !HAVE_POLL */
 
 #if defined (__SVR4) && defined (__sun)
 #include <sys/filio.h>
-#endif
+#endif /* !(__SVR4 && __sun) */
 
 #if defined(__CYGWIN__)
 #include <sys/termios.h>
-#endif
+#endif /* __CYGWIN__ */
 
 #ifndef TOMCAT_UID
 #define TOMCAT_UID 506	  /* Set this to be the UID of the tomcat process */
-#endif
+#endif /* !TOMCAT_UID */
 
 #define UIDLIMIT 0
 #define GIDLIMIT 0
@@ -113,37 +113,37 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq);
 #include <pwd.h>
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
-#endif
+#endif /* !_XOPEN_SOURCE */
 
 #if !defined(__ppc__) && !defined(__APPLE__) && !defined(__FreeBSD__)
 #include <crypt.h>
-#endif
+#endif /* !__ppc__ && !__APPLE__ && !__FreeBSD__ */
 
 #ifdef N_SHADOW
 #include <shadow.h>
-#endif
+#endif /* N_SHADOW */
 #ifdef R_SHADOW
 #include <shadow.h>
-#endif
+#endif /* R_SHADOW */
 #ifdef HPUX_SHADOW
 #include <shadow.h>
-#endif
+#endif /* HPUX_SHADOW */
 
 #ifdef PAM
 #if defined(__ppc__) || defined(__APPLE__)
 #include <pam/pam_appl.h>
-#else
+#else /* !(__ppc__ || __APPLE__)*/
 #include <security/pam_appl.h>
-#endif
-#endif
+#endif /* !(__ppc__ || __APPLE__)*/
+#endif /* PAM */
 
 #ifdef AIX_SHADOW
 #include <userpw.h>
-#endif
+#endif /* AIX_SHADOW */
 
 #ifdef HPUX_SHADOW
 #include <prot.h>
-#endif
+#endif /* HPUX_SHADOW */
 
 
 static void jembossctl_empty_core_dump(void);
@@ -151,12 +151,12 @@ static void jembossctl_empty_core_dump(void);
 static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 				    ajint *uid,
 				    ajint *gid, AjPStr *home);
-#endif
+#endif /* !NO_AUTH */
 
 #ifdef PAM
 static int jembossctl_pam_conv(int num_msg, struct pam_message **msg,
 			       struct pam_response **resp, void *appdata_ptr);
-#endif
+#endif /* PAM */
 
 #define JBUFFLEN 10000
 
@@ -172,11 +172,11 @@ static int jembossctl_java_block(int chan, unsigned long flag);
 
 #ifndef __ppc__
 extern char *strptime(const char *s, const char *format, struct tm *tm);
-#endif
+#endif /* !__ppc__ */
 
 #if defined (__SVR4) && defined (__sun)
 #define exit(a) _exit(a)
-#endif
+#endif /* __SRV4 && __sun */
 
 
 
@@ -461,7 +461,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* N_SHADOW */
 
 
 
@@ -498,7 +498,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* AIX_SHADOW */
 
 
 
@@ -570,7 +570,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* HPUX_SHADOW */
 
 
 
@@ -602,7 +602,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* NO_SHADOW */
 
 
 
@@ -624,7 +624,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
     char *buf  = NULL;
 #ifdef _POSIX_C_SOURCE
     int ret = 0;
-#endif
+#endif /* _POSIX_C_SOURCE */
 
     if(!(buf=(char*)malloc(R_BUFFER)) || !(sbuf=(char*)malloc(R_BUFFER)))
 	return ajFalse;
@@ -648,7 +648,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 	AJFREE(sbuf);
         return ajFalse;
     }
-#else
+#else /* !_POSIX_C_SOURCE */
     pwd = getpwnam_r(ajStrGetPtr(username),&presult,buf,R_BUFFER);
 
     if(!pwd)
@@ -657,7 +657,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 	AJFREE(sbuf);
         return ajFalse;
     }
-#endif
+#endif /* !_POSIX_C_SOURCE */
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -678,7 +678,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* R_SHADOW */
 
 
 
@@ -697,7 +697,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
     char *buf = NULL;
 #if defined(_OSF_SOURCE) || defined(__FreeBSD__)
     int  ret = 0;
-#endif
+#endif /* _OSF_SOURCE || __FreeBSD__ */
 
     if(!(buf=(char *)malloc(R_BUFFER)))
 	return ajFalse;
@@ -709,14 +709,14 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 	AJFREE(buf);
 	return ajFalse;
     }
-#else
+#else /* !(_OSF_SOURCE || __FreeBSD__) */
     pwd = getpwnam_r(ajStrGetPtr(username),&result,buf,R_BUFFER);
     if(!pwd)		 /* No such username */
     {
 	AJFREE(buf);
 	return ajFalse;
     }
-#endif
+#endif /* !(_OSF_SOURCE || __FreeBSD__) */
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -735,7 +735,7 @@ static AjBool jembossctl_check_pass(AjPStr username, AjPStr password,
 
     return ajFalse;
 }
-#endif
+#endif /* RNO_SHADOW */
 
 
 
@@ -846,10 +846,10 @@ static AjBool jembossctl_check_pass(AjPStr username,AjPStr password,ajint *uid,
 #ifndef DEBIAN
     retval = pam_start("login",ajStrGetPtr(username),
 		       (struct pam_conv*)&conv,&pamh);
-#else
+#else /* !DEBIAN */
     retval = pam_start("ssh",ajStrGetPtr(username),
 		       (struct pam_conv*)&conv,&pamh);
-#endif
+#endif /* !DEBIAN */
 
     if (retval == PAM_SUCCESS)
 	retval= pam_authenticate(pamh,PAM_SILENT);
@@ -868,7 +868,7 @@ static AjBool jembossctl_check_pass(AjPStr username,AjPStr password,ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* PAM */
 
 
 
@@ -926,9 +926,9 @@ static AjBool jembossctl_up(char *buf, int *uid, int *gid, AjPStr *home)
 
 #ifndef NO_AUTH
     ok = jembossctl_check_pass(username,password,uid,gid,home);
-#else
+#else /* NO_AUTH */
     (void) home;
-#endif
+#endif /* NO_AUTH */
 
 
     bzero((void*)username->Ptr,ajStrGetLen(username));
@@ -990,10 +990,10 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 #ifdef HAVE_POLL
     struct pollfd ufds[2];
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set rec;
     struct timeval t;
-#endif
+#endif /* !HAVE_POLL */
 
     int nread = 0;
 
@@ -1005,7 +1005,7 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
     FILE *fp;
 #if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
     struct tm tbuf;
-#endif
+#endif /* !(__SVR4 && __sun && !__GNUC__) */
     struct tm *tp = NULL;
     time_t tim;
     char timstr[TIMEBUFFER];
@@ -1071,9 +1071,9 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 
 #if defined (__SVR4) && defined (__sun)
     pid = fork1();
-#else
+#else /* !(__SVR4 && __sun) */
     pid = fork();
-#endif
+#endif /* !(__SVR4 && __sun) */
     if(pid == -1)
     {
 	close(errpipe[0]);
@@ -1197,7 +1197,7 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 	    buf[nread]='\0';
 	    ajStrAppendC(&errstd,buf);
 	}
-#else
+#else /* !HAVE_POLL */
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
 	if(retval==-1)
@@ -1260,7 +1260,7 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 	buf[nread] = '\0';
 	ajStrAppendC(&errstd,buf);
     }
-#endif
+#endif /* HAVE_POLL */
 
 
     block = 0;
@@ -1324,9 +1324,9 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 
 #if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
     tp = localtime_r(&tim,&tbuf);
-#else
+#else /* !(__SVR4 && __sun !__GNUC__) */
     tp = localtime(&tim);
-#endif
+#endif /* !(__SVR4 && __sun !__GNUC__) */
     strftime(timstr,TIMEBUFFER,"%a %b %d %H:%M:%S %Z %Y",tp);
 
 
@@ -1407,10 +1407,10 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
 #ifdef HAVE_POLL
     struct pollfd ufds[2];
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set rec;
     struct timeval t;
-#endif
+#endif /* !HAVE_POLL */
 
     int nread = 0;
 
@@ -1479,9 +1479,9 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
 
 #if defined (__SVR4) && defined (__sun)
     pid = fork1();
-#else
+#else /* !(__SVR4 && __sun) */
     pid = fork();
-#endif
+#endif /* !(__SVR4 && __sun) */
     if(pid == -1)
     {
 	close(errpipe[0]);
@@ -1602,7 +1602,7 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
 	    buf[nread] = '\0';
 	    ajStrAppendC(&errstd,buf);
 	}
-#else
+#else /* !HAVE_POLL */
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
 	if(retval==-1)
@@ -1663,7 +1663,7 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
 	buf[nread] = '\0';
 	ajStrAppendC(&errstd,buf);
     }
-#endif
+#endif /* !HAVE_POLL */
 
 
     block = 0;
@@ -2381,21 +2381,21 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
     DIR  *dirp;
 #if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     struct dirent64 *dp;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     struct dirent *dp;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 
 #if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     struct stat64 sbuf;
-#else
+#else  /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     struct stat sbuf;
-#endif
+#endif  /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 
     AjPList list = NULL;
     AjPStr  tstr = NULL;
 #if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
     int ret = 0;
-#endif
+#endif /* __SVR4 && __sun && _POSIX_C_SOURCE */
 #if defined (__SVR4) && defined (__sun)
     char *dbuf = NULL;
 
@@ -2404,7 +2404,7 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
 	fprintf(stderr,"Readdir buffer failure (do_listfiles)\n");
 	return ajFalse;
     }
-#endif
+#endif /* __SVR4 && __sun */
 
     dir  = ajStrNew();
     full = ajStrNew();
@@ -2469,42 +2469,44 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
     defined (_POSIX_C_SOURCE) && defined (HAVE64)
     for(ret=readdir64_r(dirp,(struct dirent64 *)dbuf,&dp);dp;
 	ret=readdir64_r(dirp,(struct dirent64 *)dbuf,&dp))
-#else
+#else /* !(__SVR4 && __sun && _POSIX_C_SOURCE && HAVE64) */
 #if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
     for(ret=readdir_r(dirp,(struct dirent *)dbuf,&dp);dp;
 	ret=readdir_r(dirp,(struct dirent *)dbuf,&dp))
-#else
+#else /* !(__SVR4 && __sun && _POSIX_C_SOURCE) */
 #if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
     for(dp=readdir_r(dirp,(struct dirent *)dbuf);dp;
 	dp=readdir_r(dirp,(struct dirent *)dbuf))
-#else
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#else /* !(__SVR4 && __sun && !__GNUC__) */
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     for(dp=readdir64(dirp);dp;dp=readdir64(dirp))
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     for(dp=readdir(dirp);dp;dp=readdir(dirp))
-#endif
-#endif
-#endif
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
+#endif /* !(__SVR4 && __sun && !__GNUC__) */
+#endif /* !(__SVR4 && __sun && _POSIX_C_SOURCE) */
+#endif /* !(__SVR4 && __sun && _POSIX_C_SOURCE && HAVE64) */
     {
 #if defined (__SVR4) && defined (__sun) && \
     defined (_POSIX_C_SOURCE) && defined (HAVE64)
 	if(ret)
 	    break;
-#endif
+#endif /* __SVR4 && __sun && _POSIX_C_SOURCE && HAVE64 */
 
 	if(*(dp->d_name)=='.')
 	    continue;
 	ajFmtPrintS(&full,"%S%s",dir,dp->d_name);
 
 
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
 	if(stat64(ajStrGetPtr(full),&sbuf)==-1)
 	    continue;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 	if(stat(ajStrGetPtr(full),&sbuf)==-1)
 	    continue;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 
 	if(sbuf.st_mode & S_IFREG)
 	{
@@ -2514,7 +2516,7 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
 	}
     }
 
-    ajListSort(list,ajStrVcmp);
+    ajListSort(list, &ajStrVcmp);
 
     while(ajListPop(list,(void **)&tstr))
     {
@@ -2532,7 +2534,7 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
 
 #if defined (__SVR4) && defined (__sun)
     AJFREE(dbuf);
-#endif
+#endif /* __SVR4 && __sun */
 
     return ajTrue;
 }
@@ -2562,24 +2564,26 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
     DIR  *dirp;
     time_t t;
 
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     struct dirent64 *dp;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     struct dirent *dp;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     struct stat64 sbuf;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     struct stat sbuf;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 
 
     AjPList list = NULL;
     AjPStr  tstr = NULL;
 #if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
     int ret = 0;
-#endif
+#endif /* __SVR4 && __sun && _POSIX_C_SOURCE */
 #if defined (__SVR4) && defined (__sun)
     char *dbuf = NULL;
 
@@ -2588,7 +2592,7 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
 	fprintf(stderr,"Readdir buffer failure (do_listdirs)\n");
 	return ajFalse;
     }
-#endif
+#endif /* __SVR4 && __sun */
 
 
     dir  = ajStrNew();
@@ -2663,42 +2667,44 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
     defined (_POSIX_C_SOURCE) && defined (HAVE64)
     for(ret=readdir64_r(dirp,(struct dirent64 *)dbuf,&dp);dp;
 	ret=readdir64_r(dirp,(struct dirent64 *)dbuf,&dp))
-#else
+#else /* !(__SVR4 && __sun && _POSIX_C_SOURCE && HAVE64) */
 #if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
     for(ret=readdir_r(dirp,(struct dirent *)dbuf,&dp);dp;
 	ret=readdir_r(dirp,(struct dirent *)dbuf,&dp))
-#else
+#else /* !(__SVR4 && __sun && _POSIX_C_SOURCE) */
 #if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
     for(dp=readdir_r(dirp,(struct dirent *)dbuf);dp;
 	dp=readdir_r(dirp,(struct dirent *)dbuf))
-#else
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#else /* !(__SVR4 && __sun && !__GNUC__) */
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     for(dp=readdir64(dirp);dp;dp=readdir64(dirp))
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     for(dp=readdir(dirp);dp;dp=readdir(dirp))
-#endif
-#endif
-#endif
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
+#endif /* !(__SVR4 && __sun && !__GNUC__) */
+#endif /* !(__SVR4 && __sun && _POSIX_C_SOURCE) */
+#endif /* !(__SVR4 && __sun && _POSIX_C_SOURCE && HAVE64) */
     {
 #if defined (__SVR4) && defined (__sun) && \
     defined (_POSIX_C_SOURCE) && defined (HAVE64)
 	if(ret)
 	    break;
-#endif
+#endif /* __SVR4 && __sun && _POSIX_C_SOURCE && HAVE64 */
 
 	if(*(dp->d_name)=='.')
 	    continue;
 
 	ajFmtPrintS(&full,"%S%s",dir,dp->d_name);
 
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
 	if(stat64(ajStrGetPtr(full),&sbuf)==-1)
 	    continue;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 	if(stat(ajStrGetPtr(full),&sbuf)==-1)
 	    continue;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
 	if(sbuf.st_mode & S_IFDIR)
 	{
 	    tstr = ajStrNew();
@@ -2714,9 +2720,9 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
 	ajListPush(list,(void *)tstr);
 	t = jembossctl_Datestr(tstr);
 	if(t)
-	    ajListSort(list,jembossctl_date);
+	    ajListSort(list, &jembossctl_date);
 	else
-	    ajListSort(list,ajStrVcmp);
+	    ajListSort(list, &ajStrVcmp);
     }
 
 
@@ -2735,7 +2741,7 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
 
 #if defined (__SVR4) && defined (__sun)
     AJFREE(dbuf);
-#endif
+#endif /* __SVR4 && __sun */
 
     return ajTrue;
 }
@@ -2764,11 +2770,12 @@ static AjBool jembossctl_do_getfile(char *buf, int uid, int gid,
 
     char *p = NULL;
     char *q = NULL;
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     struct stat64 sbuf;
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     struct stat sbuf;
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     int n = 0;
     int sofar = 0;
     int pos = 0;
@@ -2867,19 +2874,20 @@ static AjBool jembossctl_do_getfile(char *buf, int uid, int gid,
     }
 
 
-#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
+#if defined (HAVE64) && !defined(AJ_MACOSXLF) && !defined(AJ_HPUXLF) && \
+    !defined(AJ_FreeBSDLF) && !defined(AJ_AIXLF)
     if(stat64(ajStrGetPtr(file),&sbuf)==-1)
     {
 	fprintf(stderr,"stat error (get file)\n");
 	n = *size = 0;
     }
-#else
+#else /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     if(stat(ajStrGetPtr(file),&sbuf)==-1)
     {
 	fprintf(stderr,"stat error (get file)\n");
 	n = *size = 0;
     }
-#endif
+#endif /* !(HAVE64 && !AJ_MACOSXLF && !AJ_HPUXLF && !AJ_FreeBSDLF && !AJ_AIXLF) */
     else
 	n = *size = sbuf.st_size;
 
@@ -3557,11 +3565,11 @@ static int jembossctl_pipe_read(char *buf, int n, int seconds)
 #ifdef HAVE_POLL
     struct pollfd ufds;
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set fdr;
     fd_set fdw;
     struct timeval tfd;
-#endif
+#endif /* !HAVE_POLL */
 
     int  sum;
     int  got = 0;
@@ -3624,7 +3632,7 @@ static int jembossctl_pipe_read(char *buf, int n, int seconds)
 	    }
 	}
     }
-#else
+#else /* !HAVE_POLL */
     while(sum!=n)
     {
 	gettimeofday(&tv,NULL);
@@ -3658,7 +3666,7 @@ static int jembossctl_pipe_read(char *buf, int n, int seconds)
 	    then = tv.tv_sec;
 	}
     }
-#endif
+#endif /* !HAVE_POLL */
 
     block = 0;
     if(jembossctl_java_block(rchan,block)==-1)
@@ -3690,11 +3698,11 @@ static int jembossctl_pipe_write(const char *buf, int n, int seconds)
 #ifdef HAVE_POLL
     struct pollfd ufds;
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set fdr;
     fd_set fdw;
     struct timeval tfd;
-#endif
+#endif /* !HAVE_POLL */
 
     int  written;
     int  sent = 0;
@@ -3752,7 +3760,7 @@ static int jembossctl_pipe_write(const char *buf, int n, int seconds)
 	    then = tv.tv_sec;
 	}
     }
-#else
+#else /* !HAVE_POLL */
     while(written!=n)
     {
 	gettimeofday(&tv,NULL);
@@ -3786,7 +3794,7 @@ static int jembossctl_pipe_write(const char *buf, int n, int seconds)
 	    then = tv.tv_sec;
 	}
     }
-#endif
+#endif /* !HAVE_POLL */
 
     block = 0;
     if(jembossctl_java_block(tchan,block)==-1)
@@ -3884,11 +3892,11 @@ static int jembossctl_java_block(int chan, unsigned long flag)
 #ifdef __sgi
 	if(errno==ENOSYS)
 	    return 0;
-#endif
+#endif /* __sgi */
 #ifdef __hpux
 	if(errno==ENOTTY)
 	    return 0;
-#endif
+#endif /* __hpux */
 	return -1;
     }
 
@@ -3928,7 +3936,7 @@ static time_t jembossctl_Datestr(const AjPStr s)
 	"Nov","Dec"
     };
     static char *jtz="GMT";
-#endif
+#endif /* __ppc__ */
 
     tmp = ajStrNew();
     ajStrAssignS(&tmp,s);
@@ -3960,7 +3968,7 @@ static time_t jembossctl_Datestr(const AjPStr s)
 
     if(!p)
 	return 0;
-#else
+#else /* __ppc__ */
     i = 0;
     while(i<=11)
     {
@@ -3980,7 +3988,7 @@ static time_t jembossctl_Datestr(const AjPStr s)
     tm.tm_isdst  = 0;
     tm.tm_gmtoff = 0;
     tm.tm_zone = jtz;
-#endif
+#endif /* __ppc__ */
 
     return mktime(&tm);
 }
@@ -4079,7 +4087,8 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 
 
 
-#else
+#else /* !HAVE_JAVA */
+
 #include <stdio.h>
 
 
@@ -4092,4 +4101,5 @@ int main(void)
 {
     return 0;
 }
-#endif
+
+#endif /* !HAVE_JAVA */

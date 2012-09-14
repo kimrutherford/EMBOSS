@@ -1,31 +1,34 @@
-/* @source Ensembl Assembly Exception functions
+/* @source ensassemblyexception ***********************************************
+**
+** Ensembl Assembly Exception functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.50 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.35 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensassemblyexception.h"
 #include "enstable.h"
@@ -33,32 +36,32 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic assemblyexceptionType *****************************************
+/* @conststatic assemblyexceptionKType ****************************************
 **
 ** The Ensembl Assembly Exception type is enumerated in both, the SQL table
 ** definition and the data structure. The following strings are used for
@@ -72,7 +75,7 @@
 **
 ******************************************************************************/
 
-static const char* assemblyexceptionType[] =
+static const char *assemblyexceptionKType[] =
 {
     "",
     "HAP",
@@ -82,28 +85,30 @@ static const char* assemblyexceptionType[] =
     "HAP REF",
     "PATCH_FIX REF",
     "PATCH_NOVEL REF",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static int listAssemblyexceptionCompareReferenceEndAscending(const void* P1,
-                                                             const void* P2);
+static int listAssemblyexceptionCompareReferenceEndAscending(
+    const void *item1,
+    const void *item2);
 
-static int listAssemblyexceptionCompareReferenceEndDescending(const void* P1,
-                                                              const void* P2);
+static int listAssemblyexceptionCompareReferenceEndDescending(
+    const void *item1,
+    const void *item2);
 
 static AjBool assemblyexceptionadaptorFetchAllbyStatement(
     EnsPAssemblyexceptionadaptor aea,
@@ -113,23 +118,18 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 static AjBool assemblyexceptionadaptorCacheInit(
     EnsPAssemblyexceptionadaptor aea);
 
-static void assemblyexceptionadaptorClearIdentifierCache(void** key,
-                                                         void** value,
-                                                         void* cl);
+static void assemblyexceptionadaptorListAssemblyexceptionValdel(void **Pvalue);
 
-static AjBool assemblyexceptionadaptorCacheExit(
-    EnsPAssemblyexceptionadaptor aea);
-
-static void assemblyexceptionadaptorFetchAll(const void* key,
-                                             void** value,
-                                             void* cl);
+static void assemblyexceptionadaptorFetchAll(const void *key,
+                                             void **Pvalue,
+                                             void *cl);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -152,12 +152,12 @@ static void assemblyexceptionadaptorFetchAll(const void* key,
 ** it has been split out of the Bio::EnsEMBL::DBSQL::SliceAdaptor class.
 **
 ** @cc Bio::EnsEMBL::Slice
-** @cc CVS Revision: 1.273
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.292
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::DBSQL::SliceAdaptor
-** @cc CVS Revision: 1.121
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.126
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -188,10 +188,11 @@ static void assemblyexceptionadaptorFetchAll(const void* key,
 ** @argrule Ini erstart [ajuint] Exception Ensembl Sequence Region start
 ** @argrule Ini erend [ajuint] Exception Ensembl Sequence Region end
 ** @argrule Ini ori [ajint] Orientation
-** @argrule Ini aet [EnsEAssemblyexceptionType] Type
+** @argrule Ini aet [EnsEAssemblyexceptionType]
+** Ensembl Assembly Exception Type enumeration
 ** @argrule Ref ae [EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @valrule * [EnsPAssemblyexception] Ensembl Assembly Exception
+** @valrule * [EnsPAssemblyexception] Ensembl Assembly Exception or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -206,6 +207,8 @@ static void assemblyexceptionadaptorFetchAll(const void* key,
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
 ** @return [EnsPAssemblyexception] Ensembl Assembly Exception or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -214,12 +217,12 @@ EnsPAssemblyexception ensAssemblyexceptionNewCpy(
 {
     EnsPAssemblyexception pthis = NULL;
 
-    if(!ae)
+    if (!ae)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     pthis->Identifier         = ae->Identifier;
     pthis->Adaptor            = ae->Adaptor;
@@ -242,8 +245,8 @@ EnsPAssemblyexception ensAssemblyexceptionNewCpy(
 **
 ** Constructor for an Ensembl Assembly Exception with initial values.
 **
-** @param [u] aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                               Exception Adaptor
+** @param [u] aea [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [r] srid [ajuint] Reference Ensembl Sequence Region identifier
 ** @param [r] srstart [ajuint] Reference Ensembl Sequence Region start
@@ -252,9 +255,12 @@ EnsPAssemblyexception ensAssemblyexceptionNewCpy(
 ** @param [r] erstart [ajuint] Exception Ensembl Sequence Region start
 ** @param [r] erend [ajuint] Exception Ensembl Sequence Region end
 ** @param [r] ori [ajint] Orientation
-** @param [u] aet [EnsEAssemblyexceptionType] Type
+** @param [u] aet [EnsEAssemblyexceptionType]
+** Ensembl Assembly Exception Type enumeration
 **
 ** @return [EnsPAssemblyexception] Ensembl Assembl Exception or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -272,15 +278,15 @@ EnsPAssemblyexception ensAssemblyexceptionNewIni(
 {
     EnsPAssemblyexception ae = NULL;
 
-    if(!srid)
+    if (!srid)
         return NULL;
 
-    if(!erid)
+    if (!erid)
         return NULL;
 
     AJNEW0(ae);
 
-    ae->Use = 1;
+    ae->Use = 1U;
 
     ae->Identifier         = identifier;
     ae->Adaptor            = aea;
@@ -307,12 +313,14 @@ EnsPAssemblyexception ensAssemblyexceptionNewIni(
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 **
 ** @return [EnsPAssemblyexception] Ensembl Assembly Exception or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae)
 {
-    if(!ae)
+    if (!ae)
         return NULL;
 
     ae->Use++;
@@ -325,15 +333,15 @@ EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Assembly Exception object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Assembly Exception object.
 **
 ** @fdata [EnsPAssemblyexception]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Assembly Exception object
 **
-** @argrule * Pae [EnsPAssemblyexception*] Ensembl Assembly Exception object
-**                                         address
+** @argrule * Pae [EnsPAssemblyexception*]
+** Ensembl Assembly Exception object address
 **
 ** @valrule * [void]
 **
@@ -351,24 +359,37 @@ EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae)
 ** object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensAssemblyexceptionDel(EnsPAssemblyexception* Pae)
+void ensAssemblyexceptionDel(EnsPAssemblyexception *Pae)
 {
     EnsPAssemblyexception pthis = NULL;
 
-    if(!Pae)
+    if (!Pae)
         return;
 
-    if(!*Pae)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensAssemblyexceptionDel"))
+    {
+        ajDebug("ensAssemblyexceptionDel\n"
+                "  *Pae %p\n",
+                *Pae);
+
+        ensAssemblyexceptionTrace(*Pae, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pae)
         return;
 
     pthis = *Pae;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pae = NULL;
 
@@ -385,9 +406,9 @@ void ensAssemblyexceptionDel(EnsPAssemblyexception* Pae)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Assembly Exception object.
+** Functions for returning members of an Ensembl Assembly Exception object.
 **
 ** @fdata [EnsPAssemblyexception]
 **
@@ -407,12 +428,12 @@ void ensAssemblyexceptionDel(EnsPAssemblyexception* Pae)
 **
 ** @argrule * ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @valrule Adaptor [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                                 Exception Adaptor or NULL
-** @valrule End [ajuint] Ensembl Sequence Region end or 0
-** @valrule Seqregion [ajuint] Ensembl Sequence Region identifier or 0
-** @valrule Start [ajuint] Ensembl Sequence Region start or 0
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Adaptor [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor or NULL
+** @valrule End [ajuint] Ensembl Sequence Region end or 0U
+** @valrule Seqregion [ajuint] Ensembl Sequence Region identifier or 0U
+** @valrule Start [ajuint] Ensembl Sequence Region start or 0U
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Orientation [ajint] Orientation or 0
 ** @valrule Type [EnsEAssemblyexceptionType] Type or
 ** ensEAssemblyexceptionTypeNULL
@@ -425,23 +446,22 @@ void ensAssemblyexceptionDel(EnsPAssemblyexception* Pae)
 
 /* @func ensAssemblyexceptionGetAdaptor ***************************************
 **
-** Get the Ensembl Assembly Exception Adaptor element of an
+** Get the Ensembl Assembly Exception Adaptor member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [EnsPAssemblyexceptionadaptor] Ensembl Assembly Exception Adaptor
-**                                        or NULL
+** @return [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAssemblyexceptionadaptor ensAssemblyexceptionGetAdaptor(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->Adaptor;
+    return (ae) ? ae->Adaptor : NULL;
 }
 
 
@@ -449,22 +469,21 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionGetAdaptor(
 
 /* @func ensAssemblyexceptionGetExceptionEnd **********************************
 **
-** Get the exception Ensembl Sequence Region end element of an
+** Get the exception Ensembl Sequence Region end member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Exception Ensembl Sequence Region end or 0
+** @return [ajuint] Exception Ensembl Sequence Region end or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetExceptionEnd(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ExceptionEnd;
+    return (ae) ? ae->ExceptionEnd : 0U;
 }
 
 
@@ -472,22 +491,21 @@ ajuint ensAssemblyexceptionGetExceptionEnd(
 
 /* @func ensAssemblyexceptionGetExceptionSeqregion ****************************
 **
-** Get the exception Ensembl Sequence Region identifier element of an
+** Get the exception Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Exception Ensembl Sequence Region identifier or 0
+** @return [ajuint] Exception Ensembl Sequence Region identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetExceptionSeqregion(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ExceptionSeqregion;
+    return (ae) ? ae->ExceptionSeqregion : 0U;
 }
 
 
@@ -495,22 +513,21 @@ ajuint ensAssemblyexceptionGetExceptionSeqregion(
 
 /* @func ensAssemblyexceptionGetExceptionStart ********************************
 **
-** Get the exception Ensembl Sequence Region start element of an
+** Get the exception Ensembl Sequence Region start member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Exception Ensembl Sequence Region start or 0
+** @return [ajuint] Exception Ensembl Sequence Region start or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetExceptionStart(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ExceptionStart;
+    return (ae) ? ae->ExceptionStart : 0U;
 }
 
 
@@ -518,22 +535,21 @@ ajuint ensAssemblyexceptionGetExceptionStart(
 
 /* @func ensAssemblyexceptionGetIdentifier ************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetIdentifier(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->Identifier;
+    return (ae) ? ae->Identifier : 0U;
 }
 
 
@@ -541,21 +557,20 @@ ajuint ensAssemblyexceptionGetIdentifier(
 
 /* @func ensAssemblyexceptionGetOrientation ***********************************
 **
-** Get the orientation element of an Ensembl Assembly Exception.
+** Get the orientation member of an Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
 ** @return [ajint] Orientation or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensAssemblyexceptionGetOrientation(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->Orientation;
+    return (ae) ? ae->Orientation : 0;
 }
 
 
@@ -563,22 +578,21 @@ ajint ensAssemblyexceptionGetOrientation(
 
 /* @func ensAssemblyexceptionGetReferenceEnd **********************************
 **
-** Get the reference Ensembl Sequence Region end element of an
+** Get the reference Ensembl Sequence Region end member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Reference Ensembl Sequence Region end or 0
+** @return [ajuint] Reference Ensembl Sequence Region end or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetReferenceEnd(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ReferenceEnd;
+    return (ae) ? ae->ReferenceEnd : 0U;
 }
 
 
@@ -586,22 +600,21 @@ ajuint ensAssemblyexceptionGetReferenceEnd(
 
 /* @func ensAssemblyexceptionGetReferenceSeqregion ****************************
 **
-** Get the reference Ensembl Sequence Region identifier element of an
+** Get the reference Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Reference Ensembl Sequence Region identifier or 0
+** @return [ajuint] Reference Ensembl Sequence Region identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetReferenceSeqregion(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ReferenceSeqregion;
+    return (ae) ? ae->ReferenceSeqregion : 0U;
 }
 
 
@@ -609,22 +622,21 @@ ajuint ensAssemblyexceptionGetReferenceSeqregion(
 
 /* @func ensAssemblyexceptionGetReferenceStart ********************************
 **
-** Get the reference Ensembl Sequence Region start element of an
+** Get the reference Ensembl Sequence Region start member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Reference Ensembl Sequence Region start or 0
+** @return [ajuint] Reference Ensembl Sequence Region start or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionGetReferenceStart(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
-
-    return ae->ReferenceStart;
+    return (ae) ? ae->ReferenceStart : 0U;
 }
 
 
@@ -632,33 +644,32 @@ ajuint ensAssemblyexceptionGetReferenceStart(
 
 /* @func ensAssemblyexceptionGetType ******************************************
 **
-** Get the type element of an Ensembl Assembly Exception.
+** Get the type member of an Ensembl Assembly Exception.
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
 ** @return [EnsEAssemblyexceptionType] Type or ensEAssemblyexceptionTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEAssemblyexceptionType ensAssemblyexceptionGetType(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return ensEAssemblyexceptionTypeNULL;
-
-    return ae->Type;
+    return (ae) ? ae->Type : ensEAssemblyexceptionTypeNULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Assembly Exception object.
+** Functions for assigning members of an Ensembl Assembly Exception object.
 **
 ** @fdata [EnsPAssemblyexception]
 **
-** @nam3rule Set Set one element of an Assembly Exception
+** @nam3rule Set Set one member of an Assembly Exception
 ** @nam4rule Adaptor Set the Ensembl Assembly Excepton Adaptor
 ** @nam4rule Identifier Set the SQL database-internal identifier
 ** @nam4rule Reference Set reference Ensembl Sequence Region attribute(s)
@@ -673,8 +684,8 @@ EnsEAssemblyexceptionType ensAssemblyexceptionGetType(
 ** @nam4rule Type Set the type
 **
 ** @argrule * ae [EnsPAssemblyexception] Assembly Exception
-** @argrule Adaptor aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                                     Exception Adaptor
+** @argrule Adaptor aea [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 ** @argrule ExceptionEnd erend [ajuint] Ensembl Sequence Region end
 ** @argrule ExceptionSeqregion erid [ajuint] Ensembl Sequence Region identifier
 ** @argrule ExceptionStart erstart [ajuint] Ensembl Sequence Region start
@@ -696,21 +707,23 @@ EnsEAssemblyexceptionType ensAssemblyexceptionGetType(
 
 /* @func ensAssemblyexceptionSetAdaptor ***************************************
 **
-** Set the Ensembl Assembly Exception Adaptor element of an
+** Set the Ensembl Assembly Exception Adaptor member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
-** @param [u] aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                               Exception Adaptor
+** @param [u] aea [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetAdaptor(EnsPAssemblyexception ae,
                                       EnsPAssemblyexceptionadaptor aea)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->Adaptor = aea;
@@ -723,20 +736,22 @@ AjBool ensAssemblyexceptionSetAdaptor(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetExceptionEnd **********************************
 **
-** Set the exception Ensembl Sequence Region end element of an
+** Set the exception Ensembl Sequence Region end member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] erend [ajuint] Exception Ensembl Sequence Region end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetExceptionEnd(EnsPAssemblyexception ae,
                                            ajuint erend)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ExceptionEnd = erend;
@@ -749,20 +764,22 @@ AjBool ensAssemblyexceptionSetExceptionEnd(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetExceptionSeqregion ****************************
 **
-** Set the exception Ensembl Sequence Region identifier element of an
+** Set the exception Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] erid [ajuint] Exception Ensembl Sequence Region identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetExceptionSeqregion(EnsPAssemblyexception ae,
                                                  ajuint erid)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ExceptionSeqregion = erid;
@@ -775,20 +792,22 @@ AjBool ensAssemblyexceptionSetExceptionSeqregion(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetExceptionStart ********************************
 **
-** Set the exception Ensembl Sequence Region start element of an
+** Set the exception Ensembl Sequence Region start member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] erstart [ajuint] Exception Ensembl Sequence Region start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetExceptionStart(EnsPAssemblyexception ae,
                                              ajuint erstart)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ExceptionStart = erstart;
@@ -801,19 +820,21 @@ AjBool ensAssemblyexceptionSetExceptionStart(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetIdentifier ************************************
 **
-** Set the SQL database identifier element of an Ensembl Assembly Exception.
+** Set the SQL database identifier member of an Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetIdentifier(EnsPAssemblyexception ae,
                                          ajuint identifier)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->Identifier = identifier;
@@ -826,19 +847,21 @@ AjBool ensAssemblyexceptionSetIdentifier(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetOrientation ***********************************
 **
-** Set the orientation element of an Ensembl Assembly Exception.
+** Set the orientation member of an Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] orientation [ajint] Orientation
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetOrientation(EnsPAssemblyexception ae,
                                           ajint orientation)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->Orientation = orientation;
@@ -851,20 +874,22 @@ AjBool ensAssemblyexceptionSetOrientation(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetReferenceEnd **********************************
 **
-** Set the reference Ensembl Sequence Region end element of an
+** Set the reference Ensembl Sequence Region end member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] srend [ajuint] Reference Ensembl Sequence Region end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetReferenceEnd(EnsPAssemblyexception ae,
                                            ajuint srend)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ReferenceEnd = srend;
@@ -877,20 +902,22 @@ AjBool ensAssemblyexceptionSetReferenceEnd(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetReferenceSeqregion ****************************
 **
-** Set the reference Ensembl Sequence Region identifier element of an
+** Set the reference Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] srid [ajuint] Reference Ensembl Sequence Region identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetReferenceSeqregion(EnsPAssemblyexception ae,
                                                  ajuint srid)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ReferenceSeqregion = srid;
@@ -903,20 +930,22 @@ AjBool ensAssemblyexceptionSetReferenceSeqregion(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetReferenceStart ********************************
 **
-** Set the reference Ensembl Sequence Region start element of an
+** Set the reference Ensembl Sequence Region start member of an
 ** Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [r] srstart [ajuint] Reference Ensembl Sequence Region start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetReferenceStart(EnsPAssemblyexception ae,
                                              ajuint srstart)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->ReferenceStart = srstart;
@@ -929,20 +958,22 @@ AjBool ensAssemblyexceptionSetReferenceStart(EnsPAssemblyexception ae,
 
 /* @func ensAssemblyexceptionSetType ******************************************
 **
-** Set the type element of an Ensembl Assembly Exception.
+** Set the type member of an Ensembl Assembly Exception.
 **
 ** @param [u] ae [EnsPAssemblyexception] Ensembl Assembly Exception
 ** @param [u] aet [EnsEAssemblyexceptionType]
 ** Ensembl Assembly Exception Type enumeration
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
                                    EnsEAssemblyexceptionType aet)
 {
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     ae->Type = aet;
@@ -959,7 +990,7 @@ AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
 **
 ** @fdata [EnsPAssemblyexception]
 **
-** @nam3rule Trace Report Ensembl Assembly Exception elements to debug file
+** @nam3rule Trace Report Ensembl Assembly Exception members to debug file
 **
 ** @argrule Trace ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 ** @argrule Trace level [ajuint] Indentation level
@@ -980,6 +1011,8 @@ AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -987,7 +1020,7 @@ AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!ae)
+    if (!ae)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1039,7 +1072,7 @@ AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
 **
 ** @argrule * ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @valrule Length [ajuint] Length or 0
+** @valrule Length [ajuint] Length or 0U
 ** @valrule Memsize [size_t] Memory size in bytes or 0
 **
 ** @fcategory misc
@@ -1054,17 +1087,19 @@ AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Exception length or 0
+** @return [ajuint] Exception length or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionCalculateExceptionLength(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
+    if (!ae)
+        return 0U;
 
-    return ae->ExceptionEnd - ae->ExceptionStart + 1;
+    return ae->ExceptionEnd - ae->ExceptionStart + 1U;
 }
 
 
@@ -1077,6 +1112,8 @@ ajuint ensAssemblyexceptionCalculateExceptionLength(
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1084,7 +1121,7 @@ size_t ensAssemblyexceptionCalculateMemsize(const EnsPAssemblyexception ae)
 {
     size_t size = 0;
 
-    if(!ae)
+    if (!ae)
         return 0;
 
     size += sizeof (EnsOAssemblyexception);
@@ -1101,17 +1138,19 @@ size_t ensAssemblyexceptionCalculateMemsize(const EnsPAssemblyexception ae)
 **
 ** @param [r] ae [const EnsPAssemblyexception] Ensembl Assembly Exception
 **
-** @return [ajuint] Reference length or 0
+** @return [ajuint] Reference length or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyexceptionCalculateReferenceLength(
     const EnsPAssemblyexception ae)
 {
-    if(!ae)
-        return 0;
+    if (!ae)
+        return 0U;
 
-    return ae->ReferenceEnd - ae->ReferenceStart + 1;
+    return ae->ReferenceEnd - ae->ReferenceStart + 1U;
 }
 
 
@@ -1137,7 +1176,7 @@ ajuint ensAssemblyexceptionCalculateReferenceLength(
 ** @fdata [EnsEAssemblyexceptionType]
 **
 ** @nam4rule From Ensembl Assembly Exception Type query
-** @nam5rule Str  AJAX String object query
+** @nam5rule Str AJAX String object query
 **
 ** @argrule FromStr type [const AjPStr] Type string
 **
@@ -1159,6 +1198,8 @@ ajuint ensAssemblyexceptionCalculateReferenceLength(
 **
 ** @return [EnsEAssemblyexceptionType]
 ** Ensembl Assembly Exception Type enumeration or ensEAssemblyexceptionTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1168,13 +1209,13 @@ EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(const AjPStr type)
 
     EnsEAssemblyexceptionType aet = ensEAssemblyexceptionTypeNULL;
 
-    for(i = ensEAssemblyexceptionTypeNULL;
-        assemblyexceptionType[i];
-        i++)
-        if(ajStrMatchC(type, assemblyexceptionType[i]))
+    for (i = ensEAssemblyexceptionTypeNULL;
+         assemblyexceptionKType[i];
+         i++)
+        if (ajStrMatchC(type, assemblyexceptionKType[i]))
             aet = i;
 
-    if(!aet)
+    if (!aet)
         ajDebug("ensAssemblyexceptionTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1209,12 +1250,14 @@ EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(const AjPStr type)
 /* @func ensAssemblyexceptionTypeToChar ***************************************
 **
 ** Cast an Ensembl Assembly Exception Type enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
 ** @param [u] aet [EnsEAssemblyexceptionType]
 ** Ensembl Assembly Exception Type enumeration
 **
-** @return [const char*] Status C-type (char*) string or NULL
+** @return [const char*] Status C-type (char *) string or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1222,17 +1265,17 @@ const char* ensAssemblyexceptionTypeToChar(EnsEAssemblyexceptionType aet)
 {
     register EnsEAssemblyexceptionType i = ensEAssemblyexceptionTypeNULL;
 
-    for(i = ensEAssemblyexceptionTypeNULL;
-        assemblyexceptionType[i] && (i < aet);
-        i++);
+    for (i = ensEAssemblyexceptionTypeNULL;
+         assemblyexceptionKType[i] && (i < aet);
+         i++);
 
-    if(!assemblyexceptionType[i])
+    if (!assemblyexceptionKType[i])
         ajDebug("ensAssemblyexceptionTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Assembly Exception Type enumeration %d.\n",
                 aet);
 
-    return assemblyexceptionType[i];
+    return assemblyexceptionKType[i];
 }
 
 
@@ -1243,29 +1286,30 @@ const char* ensAssemblyexceptionTypeToChar(EnsEAssemblyexceptionType aet)
 ** AJAX List of Ensembl Assembly Exception objects comparison function to sort
 ** by reference end coordinate in ascending order.
 **
-** @param [r] P1 [const void*] Ensembl Assembly Exception address 1
-** @param [r] P2 [const void*] Ensembl Assembly Exception address 2
+** @param [r] item1 [const void*] Ensembl Assembly Exception address 1
+** @param [r] item2 [const void*] Ensembl Assembly Exception address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listAssemblyexceptionCompareReferenceEndAscending(const void* P1,
-                                                             const void* P2)
+static int listAssemblyexceptionCompareReferenceEndAscending(
+    const void *item1,
+    const void *item2)
 {
     int result = 0;
 
-    EnsPAssemblyexception ae1 = NULL;
-    EnsPAssemblyexception ae2 = NULL;
+    EnsPAssemblyexception ae1 = *(EnsOAssemblyexception *const *) item1;
+    EnsPAssemblyexception ae2 = *(EnsOAssemblyexception *const *) item2;
 
-    ae1 = *(EnsPAssemblyexception const*) P1;
-    ae2 = *(EnsPAssemblyexception const*) P2;
-
-    if(ajDebugTest("listAssemblyexceptionCompareReferenceEndAscending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listAssemblyexceptionCompareReferenceEndAscending"))
     {
         ajDebug("listAssemblyexceptionCompareReferenceEndAscending\n"
                 "  ae1 %p\n"
@@ -1276,22 +1320,23 @@ static int listAssemblyexceptionCompareReferenceEndAscending(const void* P1,
         ensAssemblyexceptionTrace(ae1, 1);
         ensAssemblyexceptionTrace(ae2, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(ae1 && (!ae2))
+    if (ae1 && (!ae2))
         return -1;
 
-    if((!ae1) && (!ae2))
+    if ((!ae1) && (!ae2))
         return 0;
 
-    if((!ae1) && ae2)
+    if ((!ae1) && ae2)
         return +1;
 
-    if(ae1->ReferenceEnd < ae2->ReferenceEnd)
+    if (ae1->ReferenceEnd < ae2->ReferenceEnd)
         result = -1;
 
-    if(ae1->ReferenceEnd > ae2->ReferenceEnd)
+    if (ae1->ReferenceEnd > ae2->ReferenceEnd)
         result = +1;
 
     return result;
@@ -1305,29 +1350,30 @@ static int listAssemblyexceptionCompareReferenceEndAscending(const void* P1,
 ** AJAX List of Ensembl Assembly Exception objects comparison function to sort
 ** by reference end coordinate in descending order.
 **
-** @param [r] P1 [const void*] Ensembl Assembly Exception address 1
-** @param [r] P2 [const void*] Ensembl Assembly Exception address 2
+** @param [r] item1 [const void*] Ensembl Assembly Exception address 1
+** @param [r] item2 [const void*] Ensembl Assembly Exception address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listAssemblyexceptionCompareReferenceEndDescending(const void* P1,
-                                                              const void* P2)
+static int listAssemblyexceptionCompareReferenceEndDescending(
+    const void *item1,
+    const void *item2)
 {
     int result = 0;
 
-    EnsPAssemblyexception ae1 = NULL;
-    EnsPAssemblyexception ae2 = NULL;
+    EnsPAssemblyexception ae1 = *(EnsOAssemblyexception *const *) item1;
+    EnsPAssemblyexception ae2 = *(EnsOAssemblyexception *const *) item2;
 
-    ae1 = *(EnsPAssemblyexception const*) P1;
-    ae2 = *(EnsPAssemblyexception const*) P2;
-
-    if(ajDebugTest("listAssemblyexceptionCompareReferenceEndDescending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listAssemblyexceptionCompareReferenceEndDescending"))
     {
         ajDebug("listAssemblyexceptionCompareReferenceEndDescending\n"
                 "  ae1 %p\n"
@@ -1338,22 +1384,23 @@ static int listAssemblyexceptionCompareReferenceEndDescending(const void* P1,
         ensAssemblyexceptionTrace(ae1, 1);
         ensAssemblyexceptionTrace(ae2, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(ae1 && (!ae2))
+    if (ae1 && (!ae2))
         return -1;
 
-    if((!ae1) && (!ae2))
+    if ((!ae1) && (!ae2))
         return 0;
 
-    if((!ae1) && ae2)
+    if ((!ae1) && ae2)
         return +1;
 
-    if(ae1->ReferenceEnd < ae2->ReferenceEnd)
+    if (ae1->ReferenceEnd < ae2->ReferenceEnd)
         result = +1;
 
-    if(ae1->ReferenceEnd > ae2->ReferenceEnd)
+    if (ae1->ReferenceEnd > ae2->ReferenceEnd)
         result = -1;
 
     return result;
@@ -1384,10 +1431,10 @@ static int listAssemblyexceptionCompareReferenceEndDescending(const void* P1,
 ** @nam5rule Reference Sort by reference
 ** @nam6rule End Sort by end coordinate
 ** @nam6rule Start Sort by start coordinate
-** @nam7rule Ascending  Sort in ascending order
+** @nam7rule Ascending Sort in ascending order
 ** @nam7rule Descending Sort in descending order
 **
-** @argrule Ascending aes [AjPList]  AJAX List of
+** @argrule Ascending aes [AjPList] AJAX List of
 ** Ensembl Assembly Exception objects
 ** @argrule Descending aes [AjPList] AJAX List of
 ** Ensembl Assembly Exception objects
@@ -1403,20 +1450,22 @@ static int listAssemblyexceptionCompareReferenceEndDescending(const void* P1,
 /* @func ensListAssemblyexceptionSortReferenceEndAscending ********************
 **
 ** Sort an AJAX List of Ensembl Assembly Exception objects by their
-** reference end element in ascending order.
+** reference end member in ascending order.
 **
 ** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exception objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListAssemblyexceptionSortReferenceEndAscending(AjPList aes)
 {
-    if(!aes)
+    if (!aes)
         return ajFalse;
 
-    ajListSort(aes, listAssemblyexceptionCompareReferenceEndAscending);
+    ajListSort(aes, &listAssemblyexceptionCompareReferenceEndAscending);
 
     return ajTrue;
 }
@@ -1427,20 +1476,22 @@ AjBool ensListAssemblyexceptionSortReferenceEndAscending(AjPList aes)
 /* @func ensListAssemblyexceptionSortReferenceEndDescending *******************
 **
 ** Sort an AJAX List of Ensembl Assembly Exception objects by their
-** reference end element in descending order.
+** reference end member in descending order.
 **
 ** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exception objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListAssemblyexceptionSortReferenceEndDescending(AjPList aes)
 {
-    if(!aes)
+    if (!aes)
         return ajFalse;
 
-    ajListSort(aes, listAssemblyexceptionCompareReferenceEndDescending);
+    ajListSort(aes, &listAssemblyexceptionCompareReferenceEndDescending);
 
     return ajTrue;
 }
@@ -1475,7 +1526,8 @@ AjBool ensListAssemblyexceptionSortReferenceEndDescending(AjPList aes)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPAssemblyexceptionadaptor] Ensembl Assembly Exception Adaptor
+** @valrule * [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1489,12 +1541,14 @@ AjBool ensListAssemblyexceptionSortReferenceEndDescending(AjPList aes)
 ** consolidate the results into an AJAX List of Ensembl Assembly Exception
 ** objects.
 **
-** @param [u] aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                               Exception Adaptor
+** @param [u] aea [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exceptions
+** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exception objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1505,13 +1559,13 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 {
     ajint ori = 0;
 
-    ajuint identifier = 0;
-    ajuint erid       = 0;
-    ajuint srid       = 0;
-    ajuint erstart    = 0;
-    ajuint srstart    = 0;
-    ajuint erend      = 0;
-    ajuint srend      = 0;
+    ajuint identifier = 0U;
+    ajuint erid       = 0U;
+    ajuint srid       = 0U;
+    ajuint erstart    = 0U;
+    ajuint srstart    = 0U;
+    ajuint erend      = 0U;
+    ajuint srend      = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1523,20 +1577,20 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 
     EnsPAssemblyexception ae = NULL;
 
-    if(!aea)
+    if (!aea)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!aes)
+    if (!aes)
         return ajFalse;
 
     sqls = ensDatabaseadaptorSqlstatementNew(aea->Adaptor, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         srid       = 0;
@@ -1566,7 +1620,7 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 
         aet = ensAssemblyexceptionTypeFromStr(typestr);
 
-        if(!aet)
+        if (!aet)
             ajFatal("assemblyexceptionadaptorFetchAllbyStatement "
                     "got unexpected Assembly Exception type '%S' "
                     "from database.\n",
@@ -1583,7 +1637,7 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
                                         ori,
                                         aet);
 
-        ajListPushAppend(aes, (void*) ae);
+        ajListPushAppend(aes, (void *) ae);
 
         ajStrDel(&typestr);
     }
@@ -1603,17 +1657,19 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 ** Initialise the Ensembl Assembly Exception cache in the
 ** Assembly Exception Adaptor.
 **
-** @param [u] aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                               Exception Adaptor
+** @param [u] aea [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 static AjBool assemblyexceptionadaptorCacheInit(
     EnsPAssemblyexceptionadaptor aea)
 {
-    ajuint* Pidentifier = NULL;
+    ajuint *Pidentifier = NULL;
 
     AjPList list = NULL;
     AjPList aes  = NULL;
@@ -1622,13 +1678,20 @@ static AjBool assemblyexceptionadaptorCacheInit(
 
     EnsPAssemblyexception ae = NULL;
 
-    if(!aea)
+    if (!aea)
         return ajFalse;
 
-    if(aea->CacheByReferenceSeqregion)
+    if (aea->CacheByReferenceSeqregion)
         return ajTrue;
     else
-        aea->CacheByReferenceSeqregion = ensTableuintNewLen(0);
+    {
+        aea->CacheByReferenceSeqregion = ajTableuintNew(0);
+
+        ajTableSetDestroyvalue(
+            aea->CacheByReferenceSeqregion,
+            (void (*)(void **))
+            &assemblyexceptionadaptorListAssemblyexceptionValdel);
+    }
 
     statement = ajFmtStr(
         "SELECT "
@@ -1661,12 +1724,13 @@ static AjBool assemblyexceptionadaptorCacheInit(
 
     ajStrDel(&statement);
 
-    while(ajListPop(aes, (void**) &ae))
+    while (ajListPop(aes, (void **) &ae))
     {
-        list = (AjPList) ajTableFetchmodV(aea->CacheByReferenceSeqregion,
-                                          (const void*) &ae->ReferenceSeqregion);
+        list = (AjPList) ajTableFetchmodV(
+            aea->CacheByReferenceSeqregion,
+            (const void *) &ae->ReferenceSeqregion);
 
-        if(!list)
+        if (!list)
         {
             AJNEW0(Pidentifier);
 
@@ -1675,11 +1739,11 @@ static AjBool assemblyexceptionadaptorCacheInit(
             list = ajListNew();
 
             ajTablePut(aea->CacheByReferenceSeqregion,
-                       (void*) Pidentifier,
-                       (void*) list);
+                       (void *) Pidentifier,
+                       (void *) list);
         }
 
-        ajListPushAppend(list, (void*) ae);
+        ajListPushAppend(list, (void *) ae);
     }
 
     ajListFree(&aes);
@@ -1707,8 +1771,10 @@ static AjBool assemblyexceptionadaptorCacheInit(
 **
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPAssemblyexceptionadaptor] Ensembl Assembly Exception Adaptor
-**                                        or NULL
+** @return [EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1717,7 +1783,7 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionadaptorNew(
 {
     EnsPAssemblyexceptionadaptor aea = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     AJNEW0(aea);
@@ -1734,15 +1800,15 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Assembly Exception Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Assembly Exception Adaptor object.
 **
 ** @fdata [EnsPAssemblyexceptionadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Assembly Exception Adaptor object
 **
-** @argrule * Paea [EnsPAssemblyexceptionadaptor*] Assembly Exception Adaptor
-**                                                 object address
+** @argrule * Paea [EnsPAssemblyexceptionadaptor*]
+** Ensembl Assembly Exception Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -1752,86 +1818,37 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionadaptorNew(
 
 
 
-/* @funcstatic assemblyexceptionadaptorClearIdentifierCache *******************
+/* @funcstatic assemblyexceptionadaptorListAssemblyexceptionValdel ************
 **
-** An ajTableMapDel "apply" function to clear the Ensembl Assembly Exception
-** Adaptor-internal Ensembl Assembly Exception cache. This function clears the
-** unsigned integer key data and the AJAX List value data, as well as the
-** Ensembl Assembly Exceptions from the AJAX List.
+** An ajTableSetDestroyvalue "valdel" function to clear AJAX Table value data.
+** This function removes and deletes Ensembl Assembly Exception objects
+** from an AJAX List object, before deleting the AJAX List object.
 **
-** @param [u] key [void**] AJAX unsigned integer key data address
-** @param [u] value [void**] AJAX List value data address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
+** @param [d] Pvalue [void**] AJAX List address
+** @see ajTableSetDestroyvalue
 **
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static void assemblyexceptionadaptorClearIdentifierCache(void** key,
-                                                         void** value,
-                                                         void* cl)
+static void assemblyexceptionadaptorListAssemblyexceptionValdel(void **Pvalue)
 {
     EnsPAssemblyexception ae = NULL;
 
-    if(!key)
+    if (!Pvalue)
         return;
 
-    if(!*key)
+    if (!*Pvalue)
         return;
 
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    AJFREE(*key);
-
-    while(ajListPop(*((AjPList*) value), (void**) &ae))
+    while (ajListPop(*((AjPList *) Pvalue), (void **) &ae))
         ensAssemblyexceptionDel(&ae);
 
-    ajListFree((AjPList*) value);
-
-    *key   = NULL;
-    *value = NULL;
+    ajListFree((AjPList *) Pvalue);
 
     return;
-}
-
-
-
-
-/* @funcstatic assemblyexceptionadaptorCacheExit ******************************
-**
-** Clears the Ensembl Assembly Exception cache in the
-** Ensembl Assembly Exception Adaptor.
-**
-** @param [u] aea [EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                               Exception Adaptor
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool assemblyexceptionadaptorCacheExit(
-    EnsPAssemblyexceptionadaptor aea)
-{
-    if(!aea)
-        return ajFalse;
-
-    if(!aea->CacheByReferenceSeqregion)
-        return ajTrue;
-
-    ajTableMapDel(aea->CacheByReferenceSeqregion,
-                  assemblyexceptionadaptorClearIdentifierCache,
-                  NULL);
-
-    ajTableFree(&aea->CacheByReferenceSeqregion);
-
-    return ajTrue;
 }
 
 
@@ -1853,22 +1870,31 @@ static AjBool assemblyexceptionadaptorCacheExit(
 ** Ensembl Assembly Exception Adaptor object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor* Paea)
+void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor *Paea)
 {
     EnsPAssemblyexceptionadaptor pthis = NULL;
 
-    if(!Paea)
+    if (!Paea)
         return;
 
-    if(!*Paea)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensAssemblyexceptionadaptorDel"))
+        ajDebug("ensAssemblyexceptionadaptorDel\n"
+                "  *Paea %p\n",
+                *Paea);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Paea)
         return;
 
     pthis = *Paea;
 
-    assemblyexceptionadaptorCacheExit(pthis);
+    ajTableDel(&pthis->CacheByReferenceSeqregion);
 
     AJFREE(pthis);
 
@@ -1880,9 +1906,9 @@ void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor* Paea)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Assembly Exception Adaptor object.
 **
 ** @fdata [EnsPAssemblyexceptionadaptor]
@@ -1904,23 +1930,22 @@ void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor* Paea)
 
 /* @func ensAssemblyexceptionadaptorGetDatabaseadaptor ************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Assembly Exception Adaptor.
 **
 ** @param [u] aea [EnsPAssemblyexceptionadaptor]
 ** Ensembl Assembly Exception Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensAssemblyexceptionadaptorGetDatabaseadaptor(
     EnsPAssemblyexceptionadaptor aea)
 {
-    if(!aea)
-        return NULL;
-
-    return aea->Adaptor;
+    return (aea) ? aea->Adaptor : NULL;
 }
 
 
@@ -1942,14 +1967,14 @@ EnsPDatabaseadaptor ensAssemblyexceptionadaptorGetDatabaseadaptor(
 ** @nam4rule By        Fetch one Ensembl Assembly Exception object
 **                     matching a criterion
 **
-** @argrule * aea [const EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                                     Exception Adaptor
-** @argrule FetchAll aes [AjPList] AJAX List of Ensembl Assembly Exception
-**                                 objects
-** @argrule FetchAllbyReferenceSeqregion srid [ajuint] Reference Ensembl
-**                                                     Sequence Region
-** @argrule FetchAllby aes [AjPList] AJAX List of Ensembl Assembly Exception
-**                                   objects
+** @argrule * aea [const EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
+** @argrule FetchAll aes [AjPList]
+** AJAX List of Ensembl Assembly Exception objects
+** @argrule FetchAllbyReferenceSeqregion srid [ajuint]
+** Reference Ensembl Sequence Region
+** @argrule FetchAllby aes [AjPList]
+** AJAX List of Ensembl Assembly Exception objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1961,47 +1986,49 @@ EnsPDatabaseadaptor ensAssemblyexceptionadaptorGetDatabaseadaptor(
 
 /* @funcstatic assemblyexceptionadaptorFetchAll *******************************
 **
-** An ajTableMap "apply" function to return all Ensembl Assembly Exceptions
-** from the Ensembl Assembly Exception Adaptor-internal cache.
+** An ajTableMap "apply" function to return all Ensembl Assembly Exception
+** objects from the Ensembl Assembly Exception Adaptor-internal cache.
 **
 ** @param [u] key [const void*] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl Assembly Exception value data address
-** @param [u] cl [void*] AJAX List of Ensembl Assembly Exception objects,
-**                        passed in via ajTableMap
+** @param [u] Pvalue [void**] Ensembl Assembly Exception value data address
+** @param [u] cl [void*]
+** AJAX List of Ensembl Assembly Exception objects, passed in via ajTableMap
 ** @see ajTableMap
 **
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static void assemblyexceptionadaptorFetchAll(const void* key,
-                                             void** value,
-                                             void* cl)
+static void assemblyexceptionadaptorFetchAll(const void *key,
+                                             void **Pvalue,
+                                             void *cl)
 {
     AjIList iter = NULL;
 
     EnsPAssemblyexception ae = NULL;
 
-    if(!key)
+    if (!key)
         return;
 
-    if(!value)
+    if (!Pvalue)
         return;
 
-    if(!*value)
+    if (!*Pvalue)
         return;
 
-    if(!cl)
+    if (!cl)
         return;
 
-    iter = ajListIterNew(*((AjPList*) value));
+    iter = ajListIterNew(*((AjPList *) Pvalue));
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         ae = (EnsPAssemblyexception) ajListIterGet(iter);
 
         ajListPushAppend((AjPList) cl,
-                         (void*) ensAssemblyexceptionNewRef(ae));
+                         (void *) ensAssemblyexceptionNewRef(ae));
     }
 
     ajListIterDel(&iter);
@@ -2014,16 +2041,18 @@ static void assemblyexceptionadaptorFetchAll(const void* key,
 
 /* @func ensAssemblyexceptionadaptorFetchAll **********************************
 **
-** Fetch all Ensembl Assembly Exceptions.
+** Fetch all Ensembl Assembly Exception objects.
 **
 ** The caller is responsible for deleting the Ensembl Assembly Exception
 ** objects before deleting the AJAX List.
 **
-** @param [r] aea [const EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                                     Exception Adaptor
-** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exceptions
+** @param [r] aea [const EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
+** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exception objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2031,15 +2060,15 @@ AjBool ensAssemblyexceptionadaptorFetchAll(
     const EnsPAssemblyexceptionadaptor aea,
     AjPList aes)
 {
-    if(!aea)
+    if (!aea)
         return ajFalse;
 
-    if(!aes)
+    if (!aes)
         return ajFalse;
 
     ajTableMap(aea->CacheByReferenceSeqregion,
-               assemblyexceptionadaptorFetchAll,
-               (void*) aes);
+               &assemblyexceptionadaptorFetchAll,
+               (void *) aes);
 
     return ajTrue;
 }
@@ -2049,18 +2078,20 @@ AjBool ensAssemblyexceptionadaptorFetchAll(
 
 /* @func ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion **************
 **
-** Fetch all Ensembl Assembly Exceptions by a reference
+** Fetch all Ensembl Assembly Exception objects by a reference
 ** Ensembl Sequence Region identifier.
 **
 ** The caller is responsible for deleting the Ensembl Assembly Exception
 ** objects before deleting the AJAX List.
 **
-** @param [r] aea [const EnsPAssemblyexceptionadaptor] Ensembl Assembly
-**                                                     Exception Adaptor
+** @param [r] aea [const EnsPAssemblyexceptionadaptor]
+** Ensembl Assembly Exception Adaptor
 ** @param [r] srid [ajuint] Reference Ensembl Sequence Region identifier
-** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exceptions
+** @param [u] aes [AjPList] AJAX List of Ensembl Assembly Exception objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2074,7 +2105,7 @@ AjBool ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion(
 
     EnsPAssemblyexception ae = NULL;
 
-    if(ajDebugTest("ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion"))
+    if (ajDebugTest("ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion"))
         ajDebug("ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion\n"
                 "  aea %p\n"
                 "  srid %u\n"
@@ -2083,22 +2114,22 @@ AjBool ensAssemblyexceptionadaptorFetchAllbyReferenceSeqregion(
                 srid,
                 aes);
 
-    if(!aea)
+    if (!aea)
         return ajFalse;
 
-    if(!aes)
+    if (!aes)
         return ajFalse;
 
     list = (AjPList) ajTableFetchmodV(aea->CacheByReferenceSeqregion,
-                                      (const void*) &srid);
+                                      (const void *) &srid);
 
     iter = ajListIterNew(list);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         ae = (EnsPAssemblyexception) ajListIterGet(iter);
 
-        ajListPushAppend(aes, (void*) ensAssemblyexceptionNewRef(ae));
+        ajListPushAppend(aes, (void *) ensAssemblyexceptionNewRef(ae));
     }
 
     ajListIterDel(&iter);

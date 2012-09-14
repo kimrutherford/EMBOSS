@@ -5,7 +5,7 @@ Here is a sample session with <b>getorf</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>getorf -minsize 300 </b>
-Finds and extracts open reading frames (ORFs)
+Find and extract open reading frames (ORFs)
 Input nucleotide sequence(s): <b>tembl:v00294</b>
 protein output sequence(s) [v00294.orf]: <b></b>
 

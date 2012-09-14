@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 
     embInit("showserver", argc, argv);
 
-    onesvrname  = ajAcdGetString("server");
+    onesvrname  = ajAcdGetString("servername");
     outfile = ajAcdGetOutfile("outfile");
 
     html      = ajAcdGetBoolean("html");
@@ -170,9 +170,9 @@ int main(int argc, char **argv)
     svrnames  = ajListstrNew();
     
     if(ajStrMatchC(sortby, "defined"))
-        sortfunc = showserverSortDefined;
+        sortfunc = &showserverSortDefined;
     else if(ajStrMatchC(sortby, "type"))
-        sortfunc = showserverSortType;
+        sortfunc = &showserverSortType;
     else
         sortfunc = NULL;
 
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
 	ajNamListListServers(svrnames);
 
 	/* sort it */
-	/*ajListSort(svrnames, ajStrCmp);*/
+	/*ajListSort(svrnames, &ajStrCmp);*/
         if(sortfunc)
             ajListSort(svrnames, sortfunc);
 

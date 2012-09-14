@@ -1,9 +1,9 @@
 application: preg [
   documentation: "Regular expression search of protein sequence(s)"
   groups: "Protein:Motifs"
-    relations: "EDAM:0000158 topic Sequence motifs"
-    relations: "EDAM:0000382 operation Sequence motif recognition (protein)"
-    relations: "EDAM:0000347 operation Sequence database search
+    relations: "EDAM_topic:0158 Sequence motifs"
+    relations: "EDAM_operation:3087 Protein site detection"
+    relations: "EDAM_operation:0347 Sequence database search
                 (by motif or pattern)"
 ]
 
@@ -15,14 +15,14 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   regexp: pattern [
     parameter: "Y"
     upper: "Y"
     information: "Regular expression pattern"
-    relations: "EDAM:0001352 data Regular expression"
+    relations: "EDAM_data:1352 Regular expression"
   ]
 
 endsection: input
@@ -36,7 +36,7 @@ section: output [
     parameter: "Y"
     taglist: "str:pat=Pattern"
     rformat: "seqtable"
-    relations: "EDAM:0001298 data Sequence features (motifs)"
+    relations: "EDAM_data:1298 Sequence features (motifs)"
   ]
 
 endsection: output

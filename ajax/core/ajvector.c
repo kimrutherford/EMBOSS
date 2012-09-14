@@ -1,5 +1,6 @@
-/******************************************************************************
-** @source AJAX 3D vector functions
+/* @source ajvector ***********************************************************
+**
+** AJAX 3D vector functions
 **
 ** AjP3dVector objects are structures each of three floats specifying the
 **  components of vectors in Cartesian three-space.
@@ -12,24 +13,25 @@
 **  i, j, and k unit vectors in the x y and z directions respectively
 **
 ** @author Copyright (C) 2003 Damian Counsell
-** @version $Revision: 1.16 $
-** @modified $Date: 2010/04/14 08:08:50 $
+** @version $Revision: 1.21 $
+** @modified $Date: 2011/11/08 15:07:46 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 
@@ -39,7 +41,12 @@
 /* ========================== include files =========================== */
 /* ==================================================================== */
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajvector.h"
+#include "ajmath.h"
+
 #include <math.h>
 
 
@@ -70,12 +77,14 @@
 
 
 
-/* @func aj3dVectorNew *******************************************************
+/* @func aj3dVectorNew ********************************************************
 **
 ** Default constructor for zeroed AJAX 3D vectors.
 **
 ** @return [AjP3dVector] Pointer to a zeroed 3D vector
 ** @category new [AjP3dVector] default constructor
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -91,7 +100,7 @@ AjP3dVector aj3dVectorNew(void)
 
 
 
-/* @func aj3dVectorCreate ****************************************************
+/* @func aj3dVectorCreate *****************************************************
 **
 ** Constructor for initialised AJAX 3D vectors.
 ** @param [r] fX [float] x component of 3D vector
@@ -101,6 +110,8 @@ AjP3dVector aj3dVectorNew(void)
 ** @return [AjP3dVector] Pointer to an initialised 3D vector
 ** @category new [AjP3dVector] constructor initialising values of
 **                vector components
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -136,7 +147,7 @@ AjP3dVector aj3dVectorCreate(float fX, float fY, float fZ)
 
 
 
-/* @func aj3dVectorDel *******************************************************
+/* @func aj3dVectorDel ********************************************************
 **
 ** Default destructor for Ajax 3-D Vectors.
 **
@@ -146,6 +157,8 @@ AjP3dVector aj3dVectorCreate(float fX, float fY, float fZ)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjP3dVector] default destructor
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -182,7 +195,7 @@ void aj3dVectorDel(AjP3dVector* pthis)
 
 
 
-/* @func aj3dVectorCrossProduct **********************************************
+/* @func aj3dVectorCrossProduct ***********************************************
 **
 ** calculates the cross product of two 3D vectors, that is their "torque"
 **
@@ -193,6 +206,8 @@ void aj3dVectorDel(AjP3dVector* pthis)
 ** @return [void]
 ** @category use [AjP3dVector] return cross product of two
 **                vectors
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -226,7 +241,7 @@ void aj3dVectorCrossProduct(const AjP3dVector first,
 
 
 
-/* @func aj3dVectorBetweenPoints *********************************************
+/* @func aj3dVectorBetweenPoints **********************************************
 **
 ** Calculates the vector from one point in space (start) to another (end)
 **
@@ -241,6 +256,8 @@ void aj3dVectorCrossProduct(const AjP3dVector first,
 ** @return [void]
 ** @category modify [AjP3dVector] return vector between two
 **                points
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -259,7 +276,7 @@ void aj3dVectorBetweenPoints(AjP3dVector betweenPoints,
 
 
 
-/* @func aj3dVectorLength ****************************************************
+/* @func aj3dVectorLength *****************************************************
 **
 ** calculates the magnitude of a vector
 **
@@ -267,6 +284,8 @@ void aj3dVectorBetweenPoints(AjP3dVector betweenPoints,
 **
 ** @return [float] length of vector to be sized
 ** @category cast [AjP3dVector] return length of vector
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -302,6 +321,8 @@ float aj3dVectorLength(const AjP3dVector thys)
 ** @return [float] angle between vectors in degrees
 ** @category use [AjP3dVector] return angle between two
 **                vectors
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -343,7 +364,7 @@ float aj3dVectorAngle(const AjP3dVector first,
 
 
 
-/* @func aj3dVectorDihedralAngle ********************************************
+/* @func aj3dVectorDihedralAngle **********************************************
 **
 ** calculates the angle from the plane perpendicular to A x B to the plane
 **  perpendicular to B x C (where A, B and C are vectors)
@@ -355,6 +376,8 @@ float aj3dVectorAngle(const AjP3dVector first,
 ** @return [float] dihedral angle
 ** @category use [AjP3dVector] return angle between two
 **                planes
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -401,7 +424,7 @@ float aj3dVectorDihedralAngle(const AjP3dVector veca,
 
 
 
-/* @func aj3dVectorDotProduct ***********************************************
+/* @func aj3dVectorDotProduct *************************************************
 **
 ** calculates the dot product of two 3D vectors, that is their summed common
 **  scalar magnitude
@@ -412,6 +435,8 @@ float aj3dVectorDihedralAngle(const AjP3dVector veca,
 ** @return [float] dot product of first and second vectors
 ** @category use [AjP3dVector] return dot product of two
 **                vectors
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -441,6 +466,8 @@ float aj3dVectorDotProduct(const AjP3dVector first,
 ** @param [w] sum [AjP3dVector] sum of first and second vectors
 ** @return [void]
 ** @category use [AjP3dVector] return sum of two vectors
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 

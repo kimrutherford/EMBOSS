@@ -5,57 +5,51 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0001064
-name: Sequence set ID
-namespace: identifier
-def: An identifier of a set of molecular sequence(s).
-subset: identifier
-is_a: EDAM:0000976 ! Identifier (typed)
-is_a: EDAM:0002091 ! Accession
-relationship: is_identifier_of EDAM:0000850 ! Sequence set
-
-[Term]
-id: EDAM:0001234
-name: Sequence set (nucleic acid)
-namespace: data
-def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
-
-[Term]
-id: EDAM:0001233
+id: EDAM_data:1233
 name: Sequence set (protein)
 namespace: data
 def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM:0002245
+id: EDAM_data:1234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM_data:2245
 name: Sequence set (bootstrapped)
 namespace: data
 def: A collection of sequences output from a bootstrapping (resampling) procedure.
 comment: Bootstrapping is often performed in phylogenetic analysis.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM:0002874
-name: Sequence set (polymorphic)
-namespace: data
-def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
+id: EDAM_data:1064
+name: Sequence set ID
+namespace: identifier
+def: An identifier of a set of molecular sequence(s).
+subset: identifiers
 subset: data
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:0976 ! Identifier (typed)
+is_a: EDAM_data:2091 ! Accession
+relationship: is_identifier_of EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 </pre>
 </td></tr></table><p>
@@ -66,109 +60,109 @@ is_a: EDAM:0002955 ! Sequence report
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0001064
-name: Sequence set ID
-namespace: identifier
-def: An identifier of a set of molecular sequence(s).
-subset: identifier
-is_a: EDAM:0000976 ! Identifier (typed)
-is_a: EDAM:0002091 ! Accession
-relationship: is_identifier_of EDAM:0000850 ! Sequence set
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM:0001112
-name: Sequence cluster ID
-namespace: identifier
-def: An identifier of a cluster of molecular sequence(s).
-subset: identifier
-is_a: EDAM:0001064 ! Sequence set ID
-relationship: is_identifier_of EDAM:0001235 ! Sequence cluster
-
-[Term]
-id: EDAM:0002612
-name: Sequence cluster ID (CluSTr)
-namespace: identifier
-def: Unique identifier of a sequence cluster from the CluSTr database.
-subset: identifier
-synonym: "CluSTr cluster ID" EXACT []
-synonym: "CluSTr ID" EXACT []
-regex: "[0-9A-Za-z]+:[0-9]+:[0-9]{1,5}(.[0-9])?"
-is_a: EDAM:0001112 ! Sequence cluster ID
-
-[Term]
-id: EDAM:0002220
-name: Sequence cluster ID (SYSTERS)
-namespace: identifier
-def: Unique identifier of a sequence cluster from the SYSTERS database.
-subset: identifier
-synonym: "SYSTERS cluster ID" EXACT []
-is_a: EDAM:0001112 ! Sequence cluster ID
-
-[Term]
-id: EDAM:0002346
-name: Sequence cluster ID (UniRef)
-namespace: identifier
-def: Unique identifier of an entry from the UniRef database.
-subset: identifier
-synonym: "UniRef entry accession" EXACT []
-synonym: "UniRef cluster id" EXACT []
-is_a: EDAM:0001112 ! Sequence cluster ID
-
-[Term]
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
+id: EDAM_data:1245
+name: Sequence cluster (protein)
+namespace: data
+def: A cluster of protein sequences.
 comment: The sequences are typically related, for example a family of sequences.
 subset: data
-synonym: "Protein sequence cluster" EXACT []
-is_a: EDAM:0001233 ! Sequence set (protein)
-is_a: EDAM:0001235 ! Sequence cluster
+synonym: "Protein sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1233 ! Sequence set (protein)
+is_a: EDAM_data:1235 ! Sequence cluster
 
 [Term]
-id: EDAM:0001238
+id: EDAM_data:1238
 name: Proteolytic digest
 namespace: data
 def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses.
 subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
+is_a: EDAM_data:1233 ! Sequence set (protein)
+relationship: has_topic EDAM_topic:0767 ! Protein and peptide identification
 
 [Term]
-id: EDAM:0001262
+id: EDAM_data:1262
 name: Peptide molecular weight hits
 namespace: data
 def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
 subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
+is_a: EDAM_data:1233 ! Sequence set (protein)
 
 [Term]
-id: EDAM:0002245
-name: Sequence set (bootstrapped)
+id: EDAM_data:1234
+name: Sequence set (nucleic acid)
 namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedure.
-comment: Bootstrapping is often performed in phylogenetic analysis.
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 [Term]
-id: EDAM:0000850
+id: EDAM_data:1239
+name: Restriction digest
+namespace: data
+def: Restriction digest fragments from digesting a nucleotide sequence with restriction sites using a restriction endonuclease.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+subset: identifiers
+subset: data
+synonym: "UniGene ID" EXACT [http://edamontology.org]
+synonym: "UniGene identifier" EXACT [http://edamontology.org]
+synonym: "UniGene cluster ID" EXACT [http://edamontology.org]
+synonym: "UniGene cluster id" EXACT [http://edamontology.org]
+is_a: EDAM_data:1112 ! Sequence cluster ID
+
+[Term]
+id: EDAM_data:2220
+name: Sequence cluster ID (SYSTERS)
+namespace: identifier
+def: Unique identifier of a sequence cluster from the SYSTERS database.
+subset: identifiers
+subset: data
+synonym: "SYSTERS cluster ID" EXACT [http://edamontology.org]
+is_a: EDAM_data:1112 ! Sequence cluster ID
+
+[Term]
+id: EDAM_data:2612
+name: Sequence cluster ID (CluSTr)
+namespace: identifier
+def: Unique identifier of a sequence cluster from the CluSTr database.
+subset: identifiers
+subset: data
+synonym: "CluSTr cluster ID" EXACT [http://edamontology.org]
+synonym: "CluSTr ID" EXACT [http://edamontology.org]
+regex: "[0-9A-Za-z]+:[0-9]+:[0-9]{1,5}(.[0-9])?"
+is_a: EDAM_data:1112 ! Sequence cluster ID
+
+[Term]
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM:0001235
+id: EDAM_data:1235
 name: Sequence cluster
 namespace: data
 def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
 comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-relationship: in_topic EDAM:0000164 ! Sequence clustering
-relationship: in_topic EDAM:0000724 ! Protein families
+is_a: EDAM_data:0850 ! Sequence set
+relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
 
 </pre>
 </td></tr></table><p>

@@ -1,31 +1,40 @@
-/******************************************************************************
-** @source AJAX url functions
+/* @source ajurl **************************************************************
+**
+** AJAX url functions
 **
 ** These functions control all aspects of AJAX url
 ** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.6 $
 ** @modified Oct 5 pmr First version
+** @modified $Date: 2011/10/18 14:23:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajurl.h"
+#include "ajlist.h"
+#include "ajurlread.h"
+#include "ajurlwrite.h"
+#include "ajresource.h"
 
 static AjPStr urlTempQry = NULL;
 
@@ -72,11 +81,13 @@ static void urlMakeQry(const AjPUrl thys, AjPStr* qry);
 
 
 
-/* @func ajUrlNew ************************************************************
+/* @func ajUrlNew *************************************************************
 **
 ** Url data constructor
 **
 ** @return [AjPUrl] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -112,12 +123,14 @@ AjPUrl ajUrlNew(void)
 
 
 
-/* @func ajUrlDel ************************************************************
+/* @func ajUrlDel *************************************************************
 **
 ** Url data destructor
 **
 ** @param [d] Purl       [AjPUrl*] Url data object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -186,6 +199,8 @@ void ajUrlDel(AjPUrl *Purl)
 **
 ** @return [const AjPStr] Database name
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajUrlGetDb(const AjPUrl url)
@@ -204,6 +219,8 @@ const AjPStr ajUrlGetDb(const AjPUrl url)
 **
 ** @return [const AjPStr] Returned id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajUrlGetId(const AjPUrl url)
@@ -214,7 +231,7 @@ const AjPStr ajUrlGetId(const AjPUrl url)
 
 
 
-/* @func ajUrlGetQryC ********************************************************
+/* @func ajUrlGetQryC *********************************************************
 **
 ** Returns the query string of an url data object.
 ** Because this is a pointer to the real internal string
@@ -224,6 +241,8 @@ const AjPStr ajUrlGetId(const AjPUrl url)
 **
 ** @param [r] url [const AjPUrl] Url data object.
 ** @return [const char*] Query as a character string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -235,7 +254,7 @@ const char* ajUrlGetQryC(const AjPUrl url)
 
 
 
-/* @func ajUrlGetQryS ********************************************************
+/* @func ajUrlGetQryS *********************************************************
 **
 ** Returns the query string of an url data object.
 ** Because this is a pointer to the real internal string
@@ -245,6 +264,8 @@ const char* ajUrlGetQryC(const AjPUrl url)
 **
 ** @param [r] url [const AjPUrl] Url data object.
 ** @return [const AjPStr] Query as a string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -263,13 +284,15 @@ const AjPStr ajUrlGetQryS(const AjPUrl url)
 
 
 
-/* @funcstatic urlMakeQry ***************************************************
+/* @funcstatic urlMakeQry *****************************************************
 **
 ** Sets the query for an url data object.
 **
 ** @param [r] thys [const AjPUrl] Url data object
 ** @param [w] qry [AjPStr*] Query string in full
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -318,12 +341,14 @@ static void urlMakeQry(const AjPUrl thys, AjPStr* qry)
 
 
 
-/* @func ajUrlClear **********************************************************
+/* @func ajUrlClear ***********************************************************
 **
 ** Resets all data for an url data object so that it can be reused.
 **
 ** @param [u] url [AjPUrl] Url data object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -393,11 +418,13 @@ void ajUrlClear(AjPUrl url)
 
 
 
-/* @func ajUrlExit ***********************************************************
+/* @func ajUrlExit ************************************************************
 **
 ** Cleans up url processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

@@ -1,5 +1,4 @@
-/********************************************************************
-** @source epestfind application
+/* @source epestfind application
 ** Finds PEST motifs as potential proteolytic cleavage sites.
 ** @author Copyright (C) Michael K. Schuster
 ** Department of Medical Biochemistry University Vienna
@@ -555,13 +554,13 @@ int main(int argc, char **argv)
 
     /* Sort list according to qualifier "order". */
     if(ajStrMatchC(sorder, "length"))
-	ajListSort(reslst, pestfind_compare_length);
+	ajListSort(reslst, &pestfind_compare_length);
     
     if(ajStrMatchC(sorder, "position"))
-	ajListSort(reslst, pestfind_compare_position);
+	ajListSort(reslst, &pestfind_compare_position);
     
     if(ajStrMatchC(sorder, "score"))
-	ajListSort(reslst, pestfind_compare_score);
+	ajListSort(reslst, &pestfind_compare_score);
     
     /* Formatted list of results. */
     ajFmtPrintF(outf, "PEST-find: Finds PEST motifs as potential "
@@ -581,7 +580,7 @@ int main(int argc, char **argv)
     
     if(ajListGetLength(reslst) > 1)
     {
-	ajFmtPrintF(outf, "%6d PEST motifs were identified in %s\n",
+	ajFmtPrintF(outf, "%6u PEST motifs were identified in %s\n",
 		    ajListGetLength(reslst), ajSeqGetNameC(seq));
 	ajFmtPrintF(outf, "       from positions %d to %d and sorted by "
 		    "%S.\n\n", begin, end, sorder);
@@ -640,7 +639,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf, "---------+---------+");
 	ajFmtPrintF(outf, "---------+---------+");
 	ajFmtPrintF(outf, "\n\n");
-	ajListSort(reslst, pestfind_compare_position);
+	ajListSort(reslst, &pestfind_compare_position);
 	itrlst = ajListIterNewread(reslst);
 	i = 0;
 	while(i <= seqlen)
@@ -722,7 +721,7 @@ int main(int argc, char **argv)
     ajFmtPrintS(&map, "threshold %+.2f", trshld);
     ajGraphdataAddposTextC(plot, (float) 0 + 2, (float) trshld + 2,
 			  AQUAMARINE, ajStrGetPtr(map));
-    ajListSort(reslst, pestfind_compare_position);
+    ajListSort(reslst, &pestfind_compare_position);
     itrlst = ajListIterNewread(reslst);
     while(!ajListIterDone(itrlst))
     {

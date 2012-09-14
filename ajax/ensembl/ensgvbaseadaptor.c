@@ -1,83 +1,87 @@
-/* @source Ensembl Genetic Variation Base Adaptor functions
+/* @source ensgvbaseadaptor ***************************************************
+**
+** Ensembl Genetic Variation Base Adaptor functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:55:02 $ by $Author: mks $
-** @version $Revision: 1.3 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvbaseadaptor.h"
 #include "ensgvdatabaseadaptor.h"
+#include "ensmetainformation.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -97,8 +101,8 @@
 ** Ensembl Genetic Variation Base Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor
-** @cc CVS Revision: 1.3
-** @cc CVS Tag: branch-ensembl-61
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -149,6 +153,8 @@
 ** @param [f] Fstatement [AjBool function] Statement function address
 **
 ** @return [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -157,13 +163,13 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
     const char* const* Ptables,
     const char* const* Pcolumns,
     const EnsPBaseadaptorLeftjoin leftjoin,
-    const char* condition,
-    const char* final,
-    AjBool Fstatement(EnsPDatabaseadaptor dba,
-                      const AjPStr statement,
-                      EnsPAssemblymapper am,
-                      EnsPSlice slice,
-                      AjPList objects))
+    const char *condition,
+    const char *final,
+    AjBool (*Fstatement) (EnsPBaseadaptor ba,
+                          const AjPStr statement,
+                          EnsPAssemblymapper am,
+                          EnsPSlice slice,
+                          AjPList objects))
 {
     EnsPBaseadaptor ba = NULL;
 
@@ -171,18 +177,21 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
 
     EnsPGvbaseadaptor gvba = NULL;
 
-    if(!gvdba)
+    if (!gvdba)
         return NULL;
 
-    if(!Pcolumns)
+    if (!Ptables)
         return NULL;
 
-    if(!Ptables)
+    if (!Pcolumns)
+        return NULL;
+
+    if (!Fstatement)
         return NULL;
 
     dba = ensGvdatabaseadaptorGetDatabaseadaptor(gvdba);
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     ba = ensBaseadaptorNew(dba,
@@ -193,7 +202,7 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
                            final,
                            Fstatement);
 
-    if(!ba)
+    if (!ba)
         return NULL;
 
     AJNEW0(gvba);
@@ -209,16 +218,16 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Genetic Variation Base Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Genetic Variation Base Adaptor object.
 **
 ** @fdata [EnsPGvbaseadaptor]
 **
 ** @nam3rule Del Destroy (free) an
-** Ensembl Genetic Variation Base Adaptor object
+** Ensembl Genetic Variation Base Adaptor
 **
-** @argrule * Pgvba [EnsPGvbaseadaptor*] Ensembl Genetic Variation Base Adaptor
-** object address
+** @argrule * Pgvba [EnsPGvbaseadaptor*]
+** Ensembl Genetic Variation Base Adaptor address
 **
 ** @valrule * [void]
 **
@@ -232,21 +241,30 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
 **
 ** Default destructor for an Ensembl Genetic Variation Base Adaptor.
 **
-** @param [d] Pgvba [EnsPGvbaseadaptor*] Ensembl Genetic Variation Base Adaptor
-** object address
+** @param [d] Pgvba [EnsPGvbaseadaptor*]
+** Ensembl Genetic Variation Base Adaptor address
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ensGvbaseadaptorDel(EnsPGvbaseadaptor* Pgvba)
+void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba)
 {
     EnsPGvbaseadaptor pthis = NULL;
 
-    if(!Pgvba)
+    if (!Pgvba)
         return;
 
-    if(!*Pgvba)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGvbaseadaptorDel"))
+        ajDebug("ensGvbaseadaptorDel\n"
+                "  *Pgvba %p\n",
+                *Pgvba);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pgvba)
         return;
 
     pthis = *Pgvba;
@@ -263,9 +281,9 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor* Pgvba)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Genetic Variation Base Adaptor object.
 **
 ** @fdata [EnsPGvbaseadaptor]
@@ -295,23 +313,22 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor* Pgvba)
 
 /* @func ensGvbaseadaptorGetBaseadaptor ***************************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
 ** @param [r] gvba [const EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
     const EnsPGvbaseadaptor gvba)
 {
-    if(!gvba)
-        return NULL;
-
-    return gvba->Baseadaptor;
+    return (gvba) ? gvba->Baseadaptor : NULL;
 }
 
 
@@ -319,23 +336,23 @@ EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
 
 /* @func ensGvbaseadaptorGetDatabaseadaptor ***********************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
 ** @param [r] gvba [const EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
     const EnsPGvbaseadaptor gvba)
 {
-    if(!gvba)
-        return NULL;
-
-    return ensGvdatabaseadaptorGetDatabaseadaptor(gvba->Adaptor);
+    return (gvba) ?
+        ensGvdatabaseadaptorGetDatabaseadaptor(gvba->Adaptor) : NULL;
 }
 
 
@@ -343,24 +360,24 @@ EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
 
 /* @func ensGvbaseadaptorGetFailedvariations **********************************
 **
-** Get the failed variations element of the
-** Ensembl Genetic Variation Database Adaptor element of an
+** Get the failed variations member of the
+** Ensembl Genetic Variation Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
 ** @param [r] gvba [const EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [AjBool] Failed variations attribute or ajFalse
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensGvbaseadaptorGetFailedvariations(
     const EnsPGvbaseadaptor gvba)
 {
-    if(!gvba)
-        return ajFalse;
-
-    return ensGvdatabaseadaptorGetFailedvariations(gvba->Adaptor);
+    return (gvba) ?
+        ensGvdatabaseadaptorGetFailedvariations(gvba->Adaptor) : ajFalse;
 }
 
 
@@ -368,7 +385,7 @@ AjBool ensGvbaseadaptorGetFailedvariations(
 
 /* @func ensGvbaseadaptorGetGvdatabaseadaptor *********************************
 **
-** Get the Ensembl Genetic Variation Database Adaptor element of an
+** Get the Ensembl Genetic Variation Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
 ** @param [r] gvba [const EnsPGvbaseadaptor]
@@ -376,46 +393,35 @@ AjBool ensGvbaseadaptorGetFailedvariations(
 **
 ** @return [EnsPGvdatabaseadaptor] Ensembl Genetic Variation Database Adaptor
 ** or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPGvdatabaseadaptor ensGvbaseadaptorGetGvdatabaseadaptor(
     const EnsPGvbaseadaptor gvba)
 {
-    if(!gvba)
-        return NULL;
-
-    return gvba->Adaptor;
+    return (gvba) ? gvba->Adaptor : NULL;
 }
 
 
 
 
-/* @section object retrieval **************************************************
+/* @section load on demand ****************************************************
 **
-** Functions for fetching Ensembl Genetic Variation Objects from an
-** Ensembl database.
+** Functions for returning members of an
+** Ensembl Genetic Variation Base Adaptor object,
+** which may need loading from an Ensembl SQL database on demand.
 **
 ** @fdata [EnsPGvbaseadaptor]
 **
-** @nam3rule Fetch       Fetch Ensembl Genetic Variation Object(s)
-** @nam4rule All         Fetch all Ensembl Genetic Variation Objects
-** @nam4rule Allby       Fetch all Ensembl Genetic Variation Objects
-** matching a criterion
-** @nam4rule Allsomatic  Fetch all somatic Ensembl Genetic Variation Objects
-** @nam4rule By          Fetch one Ensembl Genetic Variation Object
-** matching a criterion
+** @nam3rule Load Return Ensembl Genetic Variation Base Adaptor attribute(s)
+** loaded on demand
+** @nam4rule Ploidy Return the ploidy
 **
 ** @argrule * gvba [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor
-** @argrule All objects [AjPList]
-** AJAX List of Ensembl Genetic Variation Objects
-** @argrule Allby objects [AjPList]
-** AJAX List of Ensembl Genetic Variation Objects
-** @argrule Allsomatic objects [AjPList]
-** AJAX List of Ensembl Genetic Variation Objects
-** @argrule By Pobject [void**] Ensembl Genetic Variation Object address
 **
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+** @valrule Ploidy [ajuint] Ploidy or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -423,89 +429,59 @@ EnsPGvdatabaseadaptor ensGvbaseadaptorGetGvdatabaseadaptor(
 
 
 
-/* @func ensGvbaseadaptorFetchAll *********************************************
+/* @func ensGvbaseadaptorLoadPloidy *******************************************
 **
-** Generic function to fetch all Ensembl Genetic Variation Objects via
-** an Ensembl Genetic Variation Base Adaptor.
+** Load the ploidy member via an Ensembl Genetic Variation Base Adaptor.
 **
-** Please note that it is probably not a good idea to use this function on
-** *very* large tables quite common in the Ensembl genome annotation system.
+** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor::ploidy
+** @param [u] gvba [EnsPGvbaseadaptor]
+** Ensembl Genetic Variation Base Adaptor
 **
-** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor::fetch_all
-** @param [u] gvba [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor
-** @param [u] objects [AjPList] AJAX List of Ensembl Genetic Variation Objects
+** @return [ajuint] Ploidy or 0U
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensGvbaseadaptorFetchAll(EnsPGvbaseadaptor gvba,
-                                AjPList objects)
+ajuint ensGvbaseadaptorLoadPloidy(
+    EnsPGvbaseadaptor gvba)
 {
     AjBool result = AJFALSE;
 
-    AjPStr constraint = NULL;
+    AjPStr key   = NULL;
+    AjPStr value = NULL;
 
-    if(!gvba)
-        return ajFalse;
+    EnsPDatabaseadaptor dba = NULL;
 
-    if(!objects)
-        return ajFalse;
+    EnsPMetainformationadaptor mia = NULL;
 
-    constraint = ajStrNewC("sample.somatic = 0");
+    if (!gvba)
+        return 0U;
 
-    result = ensBaseadaptorFetchAllbyConstraint(gvba->Baseadaptor,
-                                                constraint,
-                                                (EnsPAssemblymapper) NULL,
-                                                (EnsPSlice) NULL,
-                                                objects);
+    if (gvba->Ploidy)
+        return gvba->Ploidy;
 
-    ajStrDel(&constraint);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvba);
 
-    return result;
-}
+    mia = ensRegistryGetMetainformationadaptor(dba);
 
+    key   = ajStrNewC("ploidy");
+    value = ajStrNew();
 
+    ensMetainformationadaptorRetrieveValue(mia, key, &value);
 
+    result = ajStrToUint(value, &gvba->Ploidy);
 
-/* @func ensGvbaseadaptorFetchAllsomatic **************************************
-**
-** Generic function to fetch all somatic Ensembl Genetic Variation Objects via
-** an Ensembl Genetic Variation Base Adaptor.
-**
-** Please note that it is probably not a good idea to use this function on
-** *very* large tables quite common in the Ensembl genome annotation system.
-**
-** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor::fetch_all_somatic
-** @param [u] gvba [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor
-** @param [u] objects [AjPList] AJAX List of Ensembl Genetic Variation Objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
+    if (!result)
+        ajWarn("ensGvbaseadaptorFetchPloidy could not parse value '%S' for "
+               "for meta key \"ploidy\" as AJAX unsigned integer.\n", value);
 
-AjBool ensGvbaseadaptorFetchAllsomatic(EnsPGvbaseadaptor gvba,
-                                       AjPList objects)
-{
-    AjBool result = AJFALSE;
+    ajStrDel(&key);
+    ajStrDel(&value);
 
-    AjPStr constraint = NULL;
+    if (!result)
+        return 0U;
 
-    if(!gvba)
-        return ajFalse;
+    return gvba->Ploidy;
 
-    if(!objects)
-        return ajFalse;
-
-    constraint = ajStrNewC("sample.somatic = 1");
-
-    result = ensBaseadaptorFetchAllbyConstraint(gvba->Baseadaptor,
-                                                constraint,
-                                                (EnsPAssemblymapper) NULL,
-                                                (EnsPSlice) NULL,
-                                                objects);
-
-    ajStrDel(&constraint);
-
-    return result;
 }

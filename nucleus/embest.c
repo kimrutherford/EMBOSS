@@ -1,38 +1,43 @@
-/******************************************************************************
-** @source NUCLEUS EST alignment functions
+/* @source embest *************************************************************
+**
+** NUCLEUS EST alignment functions
 **
 ** @author Copyright (C) 1996 Richard Mott
 ** @author Copyright (C) 1998 Peter Rice revised for EMBOSS
-** @version 4.0
+** @version $Revision: 1.32 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 /* ==================================================================== */
 /* ========================== include files =========================== */
 /* ==================================================================== */
 
-#include "emboss.h"
+#include "ajlib.h"
+
 #include "embest.h"
+#include "ajsys.h"
+#include "ajseq.h"
+
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
-
-
+#include <ctype.h>
 
 
 /* @datastatic EstPKeyValue ***************************************************
@@ -144,6 +149,8 @@ static const char* estShuffleSeq(char *s, ajint *seed);
 ** Sets debugging calls on
 **
 ** @return [void]
+**
+** @release 1.13.0
 ******************************************************************************/
 
 void embEstSetDebug(void)
@@ -161,6 +168,8 @@ void embEstSetDebug(void)
 ** Sets verbose debugging calls on
 **
 ** @return [void]
+**
+** @release 1.13.0
 ******************************************************************************/
 
 void embEstSetVerbose(void)
@@ -178,6 +187,8 @@ void embEstSetVerbose(void)
 ** Returns a seed for the random number generator, using the system clock.
 **
 ** @return [ajint] seed.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -209,6 +220,8 @@ ajint embEstGetSeed(void)
 ** @param [r] pad_char [char] Pad character for gaps in input sequences
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -271,6 +284,8 @@ void embEstMatInit(ajint match, ajint mismatch, ajint gap,
 ** @param [r] forward [ajint] Boolean. 1 = forward direction
 **
 ** @return [AjPSeq] Sequence of bitmask codes for splice sites.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -350,6 +365,8 @@ AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 ** @param [u] seed [ajint*] Random number seed.
 **
 ** @return [AjPSeq] shuffled sequence.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -382,6 +399,8 @@ AjPSeq embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed )
 ** @param [u] seed [ajint*] Seed
 **
 ** @return [const char*] shuffled string.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -419,6 +438,8 @@ static const char* estShuffleSeq( char *s, ajint *seed )
 ** @param [w] idum [ajint*] Seed
 **
 ** @return [float] Random flaoting point number.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -505,6 +526,8 @@ static float estRand3(ajint *idum)
 ** @param [d] ge [EmbPEstAlign*] Genomic EST alignment data structure
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -535,6 +558,8 @@ void embEstFreeAlign(EmbPEstAlign *ge)
 ** @param [r] width [ajint] Output width (in bases)
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -791,6 +816,8 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 **     it enters from the left (ie as a deletion in the EST)
 **
 ** @return [EmbPEstAlign] Resulting genomic EST alignment
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1358,6 +1385,8 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 **        alignment by standard methods.
 **
 ** @return [EmbPEstAlign] Genomic EST alignment
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1495,6 +1524,8 @@ EmbPEstAlign embEstAlignLinearSpace( const AjPSeq est, const AjPSeq genome,
 **            Otherwise sequences are split and aligned recursively.
 **
 ** @return [EmbPEstAlign] Resulting genomic EST alignment
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1739,6 +1770,8 @@ static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
 **              gleft+1 == gright
 **
 ** @return [ajint] alignment score
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -1952,6 +1985,8 @@ static ajint estAlignMidpt( const AjPSeq est, const AjPSeq genome,
 ** @param [r] row [ajint] Current row
 **
 ** @return [ajint] Row number
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2060,6 +2095,8 @@ static ajint estPairRemember( ajint col, ajint row )
 ** @param [r] b [const void*] Second value
 **
 ** @return [ajint] difference.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2089,6 +2126,8 @@ static ajint estSavePairCmp( const void *a, const void *b )
 ** @param [r] max_bytes [ajint] Maximum memory size (bytes)
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2112,6 +2151,8 @@ static void estPairInit(ajint max_bytes)
 ** Free the rpairs data structure
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2142,6 +2183,8 @@ static void estPairFree(void)
 ** @param [r] row [ajint] Current row
 **
 ** @return [ajint] o upon error.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2203,6 +2246,8 @@ static ajint estDoNotForget( ajint col, ajint row )
 ** @param [r] reverse [ajint] Boolean. 1 = reverse alignment
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -2401,6 +2446,8 @@ void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
 **                         0=display ungapped segment
 **
 ** @return [void]
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 

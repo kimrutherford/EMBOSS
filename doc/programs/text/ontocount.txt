@@ -23,7 +23,7 @@ Usage
    Here is a sample session with ontocount
 
 
-% ontocount edam:0001234
+% ontocount edam:1234
 Count ontology term(s)
 Output file [stdout]:
 
@@ -35,17 +35,17 @@ Output file [stdout]:
    Example 2
 
 
-% ontocount edam:0001234 -subclasses
+% ontocount edam:1234 -subclasses
 Count ontology term(s)
 Output file [stdout]:
 
-7
+5
 
 
 Command line arguments
 
 Count ontology term(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -65,6 +65,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -100,18 +102,18 @@ Input file format
 
   Input files for usage example
 
-  Database entry: edam:0001234
+  Database entry: edam:1234
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 
 Output file format

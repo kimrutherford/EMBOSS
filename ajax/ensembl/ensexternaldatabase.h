@@ -1,10 +1,37 @@
+/* @include ensexternaldatabase ***********************************************
+**
+** Ensembl External Database functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.19 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/26 06:38:02 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSEXTERNALDATABASE_H
 #define ENSEXTERNALDATABASE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdata.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -55,7 +82,7 @@ EnsPExternaldatabase ensExternaldatabaseNewIni(
 
 EnsPExternaldatabase ensExternaldatabaseNewRef(EnsPExternaldatabase edb);
 
-void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb);
+void ensExternaldatabaseDel(EnsPExternaldatabase *Pedb);
 
 EnsPExternaldatabaseadaptor ensExternaldatabaseGetAdaptor(
     const EnsPExternaldatabase edb);
@@ -130,12 +157,12 @@ size_t ensExternaldatabaseCalculateMemsize(const EnsPExternaldatabase edb);
 EnsEExternaldatabaseStatus ensExternaldatabaseStatusFromStr(
     const AjPStr status);
 
-const char* ensExternaldatabaseStatusToChar(EnsEExternaldatabaseStatus edbs);
+const char *ensExternaldatabaseStatusToChar(EnsEExternaldatabaseStatus edbs);
 
 EnsEExternaldatabaseType ensExternaldatabaseTypeFromStr(
     const AjPStr type);
 
-const char* ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt);
+const char *ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt);
 
 /* Ensembl External Database Adaptor */
 
@@ -146,7 +173,7 @@ EnsPExternaldatabaseadaptor ensExternaldatabaseadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensExternaldatabaseadaptorDel(
-    EnsPExternaldatabaseadaptor* Pedba);
+    EnsPExternaldatabaseadaptor *Pedba);
 
 EnsPBaseadaptor ensExternaldatabaseadaptorGetBaseadaptor(
     const EnsPExternaldatabaseadaptor edba);
@@ -161,12 +188,13 @@ AjBool ensExternaldatabaseadaptorFetchAll(
 AjBool ensExternaldatabaseadaptorFetchByIdentifier(
     EnsPExternaldatabaseadaptor edba,
     ajuint identifier,
-    EnsPExternaldatabase* Pedb);
+    EnsPExternaldatabase *Pedb);
 
 AjBool ensExternaldatabaseadaptorFetchByName(
     EnsPExternaldatabaseadaptor edba,
     const AjPStr name,
-    EnsPExternaldatabase* Pedb);
+    const AjPStr release,
+    EnsPExternaldatabase *Pedb);
 
 /*
 ** End of prototype definitions

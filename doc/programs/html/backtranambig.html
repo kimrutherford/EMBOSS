@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -76,7 +76,7 @@ Input (gapped) protein sequence(s): <b>tsw:opsd_human</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Back-translate a protein sequence to ambiguous nucleotide sequence
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -115,7 +115,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -208,7 +211,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -277,11 +280,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -325,7 +352,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outfile" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -561,7 +588,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   15-JUN-2010, entry version 128.
+DT   13-JUN-2012, entry version 145.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
@@ -831,7 +858,7 @@ None.
 
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
@@ -871,7 +898,7 @@ None.
 
 <tr>
 <td><a href="pepdigest.html">pepdigest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
+<td>Report on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -881,7 +908,7 @@ None.
 
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
-<td>Calculates statistics of protein properties</td>
+<td>Calculate statistics of protein properties</td>
 </tr>
 
 <tr>
@@ -906,7 +933,7 @@ None.
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>

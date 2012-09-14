@@ -1,8 +1,9 @@
 application: edialign [
   documentation: "Local multiple alignment of sequences"
   groups: "Alignment:Multiple"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000495 operation Multiple sequence alignment (local)"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0495 Multiple sequence alignment construction
+    	       (local)"
 ]
 
 section: input [
@@ -14,7 +15,7 @@ section: input [
     parameter: "Y"
     type: "any"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -31,14 +32,14 @@ section: additional [
            mixed)"
     values: "n: simple; nt: translation; ma: mixed alignments"
     default: "n"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: revcomp [
     additional: "@($(sequences.nucleic) & @($(nucmode) != n))"
     information: "Also consider the reverse complement"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   selection: overlapw [
@@ -48,7 +49,7 @@ section: additional [
            can set this to 'yes' or 'no'"
     values: "default (when Nseq =< 35);yes;no"
     default: "default (when Nseq =< 35)"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: linkage [
@@ -59,7 +60,7 @@ section: additional [
     values: "UPGMA: UPGMA; max: maximum linkage; min: minimum
              linkage"
     default: "UPGMA"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: maxfragl [
@@ -67,7 +68,7 @@ section: additional [
     information: "Maximum fragment length"
     minimum: "0"
     default: "40"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   boolean: fragmat [
@@ -75,7 +76,7 @@ section: additional [
     information: "Consider only N-fragment pairs that start
                   with two matches"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: fragsim [
@@ -84,14 +85,14 @@ section: additional [
                   acid or codon pair has similarity score of at least n"
     minimum: "0"
     default: "4"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: itscore [
     additional: "Y"
     information: "Use iterative score"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   float: threshold [
@@ -100,7 +101,7 @@ section: additional [
                   alignment"
     minimum: "0.0"
     default: "0.0"
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: additional
@@ -114,13 +115,13 @@ section: output [
     information: "Replace unaligned characters by stars '*'
                   rather then putting them in lowercase"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: dostars [
     information: "Activate writing of stars instead of numbers"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: starnum [
@@ -128,20 +129,20 @@ section: output [
                   to indicate level of conservation"
     minimum: "0"
     default: "4"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "edialign output"
-    relations: "EDAM:0000863 data Sequence alignment"
+    relations: "EDAM_data:0863 Sequence alignment"
   ]
 
   seqoutall: outseq [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: output

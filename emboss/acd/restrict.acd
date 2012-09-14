@@ -2,8 +2,8 @@ application: restrict [
   documentation: "Report restriction enzyme cleavage sites in
                   a nucleotide sequence"
   groups: "Nucleic:Restriction"
-    relations: "EDAM:0000100 topic Nucleic acid restriction"
-    relations: "EDAM:0000431 operation Restriction site recognition"
+    relations: "EDAM_topic:0100 Nucleic acid restriction"
+    relations: "EDAM_operation:0431 Restriction site recognition"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   datafile: datafile [
@@ -22,7 +22,7 @@ section: input [
     information: "Restriction enzyme data file (optional)"
     knowntype: "restriction enzyme data"
     nullok: "Y"
-    relations: "EDAM:0001518 data Restriction enzyme pattern data"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
   datafile: mfile [
@@ -30,7 +30,7 @@ section: input [
     information: "Restriction enzyme methylation data file"
     knowntype: "restriction enzyme methylation data"
     nullok: "Y"
-    relations: "EDAM:0001517 data Protein report (restriction enzyme)"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
 endsection: input
@@ -49,7 +49,7 @@ section: required [
     help: "This sets the minimum length of the restriction enzyme
            recognition site. Any enzymes with sites shorter than this will be
            ignored."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   string: enzymes [
@@ -75,7 +75,7 @@ section: required [
            HinfI \
            PpiI"
     knowntype: "enzyme list"
-    relations: "EDAM:0001013 identifier Restriction enzyme name"
+    relations: "EDAM_identifier:1013 Restriction enzyme name"
   ]
 
 endsection: required
@@ -93,7 +93,7 @@ section: advanced [
     help: "This sets the minimum number of cuts for any restriction
            enzyme that will be considered. Any enzymes that cut fewer times
            than this will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: max [
@@ -103,7 +103,7 @@ section: advanced [
     help: "This sets the maximum number of cuts for any restriction
            enzyme that will be considered. Any enzymes that cut more times
            than this will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: solofragment [
@@ -112,7 +112,7 @@ section: advanced [
     help: "This gives the fragment lengths of the forward sense strand
            produced by complete restriction by each restriction enzyme on
            its own. Results are added to the tail section of the report."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: single [
@@ -121,7 +121,7 @@ section: advanced [
     help: "If this is set then this forces the values of the mincuts
            and maxcuts qualifiers to both be 1. Any other value you may have
            set them to will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: blunt [
@@ -129,7 +129,7 @@ section: advanced [
     information: "Allow blunt end cutters"
     help: "This allows those enzymes which cut at the same position on
            the forward and reverse strands to be considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: sticky [
@@ -138,7 +138,7 @@ section: advanced [
     help: "This allows those enzymes which cut at different positions
            on the forward and reverse strands, leaving an overhang, to be
            considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: ambiguity [
@@ -146,7 +146,7 @@ section: advanced [
     information: "Allow ambiguous matches"
     help: "This allows those enzymes which have one or more 'N'
            ambiguity codes in their pattern to be considered"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: plasmid [
@@ -155,7 +155,7 @@ section: advanced [
     help: "If this is set then this allows searches for restriction
            enzyme recognition site and cut positions that span the end of the
            sequence to be considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: methylation [
@@ -163,7 +163,7 @@ section: advanced [
     information: "Use methylation data"
     help: "If this is set then RE recognition sites will not match
            methylated bases."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: commercial [
@@ -177,7 +177,7 @@ section: advanced [
            you probably know where to get it from and so all enzymes names
            that you have asked to be searched for, and which cut, will be
            reported whether or not they have a commercial supplier."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -199,13 +199,13 @@ section: output [
            set to be false then all of the input enzymes will be reported.
            You might like to set this to false if you are supplying an
            explicit set of enzymes rather than searching 'all' of them."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: fragments [
@@ -214,13 +214,13 @@ section: output [
     help: "This gives the fragment lengths of the forward sense strand
            produced by complete restriction using all of the input enzymes
            together. Results are added to the tail section of the report."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: name [
     default: "N"
     information: "Show sequence name"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   report: outfile [
@@ -231,7 +231,7 @@ section: output [
     taglist: "str:enzyme=Enzyme_name str:site=Restriction_site
               int:5prime int:3prime int:5primerev int:3primerev"
     precision: "0"
-    relations: "EDAM:0001305 data Nucleic acid features (restriction sites)"
+    relations: "EDAM_data:1305 Nucleic acid features (restriction sites)"
   ]
 
 endsection: output

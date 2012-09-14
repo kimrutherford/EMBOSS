@@ -1,12 +1,12 @@
 ########################################
 # Program: dbigcg
-# Rundate: Thu 15 Jul 2010 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Dbname: PIR
 # Release: 0.0
-# Date: 15/07/10
-# CurrentDirectory: /homes/pmr/devemboss/test/pir/
+# Date: 15/07/12
+# CurrentDirectory: /home/emboss/devemboss/test/pir/
 # IndexDirectory: ./
-# IndexDirectoryPath: /homes/pmr/devemboss/test/pir/
+# IndexDirectoryPath: /home/emboss/devemboss/test/pir/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /homes/pmr/devemboss/test/pir/
+# DirectoryPath: /home/emboss/devemboss/test/pir/
 # Filenames: *.seq
 # Exclude: 
 # Files: 4

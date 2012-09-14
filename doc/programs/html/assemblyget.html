@@ -1,0 +1,646 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: assemblyget
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+assemblyget
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get assembly of sequence reads
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Searches for a sequence assembly and returns the data in one of the
+EBOSS assembly formats.
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>assemblyget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>assemblyget bam::samspec1.4example.bam -oformat sam -auto </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get assembly of sequence reads
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-assembly]          assembly   (no help text) assembly value
+  [-outassembly]       outassembly (no help text) outassembly value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-assembly" associated qualifiers
+   -cbegin1            integer    Start of the contig/consensus sequences
+   -cend1              integer    End of the contig/consensus sequences
+   -iformat1           string     Input assembly format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outassembly" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Assembly output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-assembly]<br>(Parameter 1)</td>
+<td>assembly</td>
+<td>(no help text) assembly value</td>
+<td>Assembly of sequence reads</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outassembly]<br>(Parameter 2)</td>
+<td>outassembly</td>
+<td>(no help text) outassembly value</td>
+<td>Assembly of sequence reads</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-assembly" associated assembly qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -cbegin1<br>-cbegin_assembly</td>
+<td>integer</td>
+<td>Start of the contig/consensus sequences</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -cend1<br>-cend_assembly</td>
+<td>integer</td>
+<td>End of the contig/consensus sequences</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_assembly</td>
+<td>string</td>
+<td>Input assembly format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_assembly</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_assembly</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_assembly</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outassembly" associated outassembly qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outassembly</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outassembly</td>
+<td>string</td>
+<td>Assembly output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>assemblyget</b> reads a sequence assembly.
+
+<p>
+
+The input is a standard EMBOSS assembly query.
+
+<p> The major assembly sources are files in SAM and BAM format.
+
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: samspec1.4example.bam</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>assemblyget</b> writes a sequence assembly.
+<p>
+
+The output is a standard EMBOSS assembly query.
+
+<p> The major assembly formats are files in SAM and BAM format.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 4example.sam</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+@HD	VN:1.3	SO:coordinate
+@PG	ID:assemblyget	VN:6.5.0.0	CL:[-assembly] bam::../../data/samspec1.4example.bam -oformat sam -auto
+@SQ	SN:ref	LN:45
+r001	163	ref	7	30	8M2I4M1D3M	=	37	39	TTAGATAAAGGATACTG	*
+r002	0	ref	9	30	3S6M1P1I4M	*	0	0	AAAAGATAAGGATA	*
+r003	0	ref	9	30	5H6M	*	0	0	AGCTAA	*	NM:i:1
+r004	0	ref	16	30	6M14N5M	*	0	0	ATAGCTTCAGC	*
+r003	16	ref	29	30	6H5M	*	0	0	TAGGC	*	NM:i:0
+r001	83	ref	37	30	9M	=	7	-39	CAGCGCCAT	*
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="infoassembly.html">infoassembly</a></td>
+<td>Display information about assemblies</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Mahmut Uludag
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

@@ -1,17 +1,17 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 12s1_arath.fuzzpro</h3>
+<p><h3>File: cru4_arath.fuzzpro</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
-# Report_file: 12s1_arath.fuzzpro
+# Report_file: cru4_arath.fuzzpro
 ########################################
 
 #=======================================
@@ -24,8 +24,8 @@
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -39,8 +39,8 @@
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -67,8 +67,8 @@
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -82,8 +82,8 @@
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -97,15 +97,15 @@
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35357
+# Total_length: 37225
 # Reported_sequences: 8
 # Reported_hitcount: 8
 #---------------------------------------

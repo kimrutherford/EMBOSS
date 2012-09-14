@@ -266,9 +266,9 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
 
     ajFeatTagAddCC(gf, "rpt_type", "TANDEM");
     ajFmtPrintS(&s, "*rpt_size %d", gap);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
     ajFmtPrintS(&s, "*rpt_count %d", (maxfront-maxback+1) / gap);
-    ajFeatTagAdd(gf, NULL, s);
+    ajFeatTagAddSS(gf, NULL, s);
 
     for(cp = maxback; cp <= maxfront; ++cp)
 	*cp = 'Z';

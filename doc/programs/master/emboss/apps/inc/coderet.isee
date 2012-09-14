@@ -19,12 +19,12 @@
 
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -50,6 +50,11 @@
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
 <td>Write a nucleotide sequence and its translation to file</td>
+</tr>
+
+<tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
 </tr>
 
 <tr>
@@ -79,7 +84,7 @@
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -90,6 +95,11 @@
 <tr>
 <td><a href="transeq.html">transeq</a></td>
 <td>Translate nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
 </tr>
 
 <tr>

@@ -2,8 +2,8 @@ application: silent [
   documentation: "Find restriction sites to insert (mutate)
                   with no translation change"
   groups: "Nucleic:Restriction"
-    relations: "EDAM:0000100 topic Nucleic acid restriction"
-    relations: "EDAM:0000431 operation Restriction site recognition"
+    relations: "EDAM_topic:0100 Nucleic acid restriction"
+    relations: "EDAM_operation:0431 Restriction site recognition"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -29,7 +29,7 @@ section: required [
     default: "all"
     information: "Comma separated enzyme list"
     knowntype: "enzyme list"
-    relations: "EDAM:0001013 identifier Restriction enzyme name"
+    relations: "EDAM_identifier:1013 Restriction enzyme name"
   ]
 
 endsection: required
@@ -42,19 +42,19 @@ section: output [
   boolean: sshow [
     default: "N"
     information: "Display untranslated sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: tshow [
     default: "N"
     information: "Display translated sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: allmut [
     default: "N"
     information: "Display all mutations"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   report: outfile [
@@ -64,7 +64,7 @@ section: output [
     	      int:baseposn=Base-Posn rstr:aa=AAs
               rstr:silent=Silent rstr:mutation=Mutation"
     rscoreshow: "N"
-    relations: "EDAM:0001305 data Nucleic acid features (restriction sites)"
+    relations: "EDAM_data:1305 Nucleic acid features (restriction sites)"
   ]
 
 endsection: output

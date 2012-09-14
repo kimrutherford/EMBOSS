@@ -169,7 +169,7 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-estsequence" associated seqall qualifiers
+<td align="left" colspan=5>"-estsequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -238,11 +238,35 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_estsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_estsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_estsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_estsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -286,7 +310,7 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-genomesequence" associated sequence qualifiers
+<td align="left" colspan=5>"-genomesequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -355,11 +379,35 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_genomesequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_genomesequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_genomesequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_genomesequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -403,7 +451,7 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

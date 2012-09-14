@@ -189,7 +189,7 @@ Output file [globins.showalign]:
 Command line arguments
 
 Display a multiple sequence alignment in pretty format
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -327,7 +327,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -971,3 +974,46 @@ Exit status
 Known bugs
 
    None.
+
+See also
+
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   coderet          Extract CDS, mRNA and translations from feature tables
+   edialign         Local multiple alignment of sequences
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   entret           Retrieve sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   infoalign        Display basic information about a multiple sequence alignment
+   infoseq          Display basic information about sequences
+   plotcon          Plot conservation of a sequence alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   refseqget        Get reference sequence
+   seqxref          Retrieve all database cross-references for a sequence entry
+   seqxrefget       Retrieve all cross-referenced data for a sequence entry
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
+   variationget     Get sequence variations
+   whichdb          Search all sequence databases for an entry and retrieve it
+
+Author(s)
+
+   Gary Williams formerly at:
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+   Written (23 May 2001) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

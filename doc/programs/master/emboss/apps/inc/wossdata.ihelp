@@ -1,5 +1,5 @@
-Finds programs by EDAM data
-Version: EMBOSS:6.4.0.0
+Find programs by EDAM data
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any

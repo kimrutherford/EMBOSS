@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds PEST motifs as potential proteolytic cleavage sites
+   Find PEST motifs as potential proteolytic cleavage sites
 
 Description
 
@@ -114,7 +114,7 @@ Usage
 
 
 % epestfind -graph cps -invalid
-Finds PEST motifs as potential proteolytic cleavage sites
+Find PEST motifs as potential proteolytic cleavage sites
 Input protein sequence: exu2_drops.embl
 Window length [10]:
 Sort order of results
@@ -132,8 +132,8 @@ Created epestfind.ps
 
 Command line arguments
 
-Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.4.0.0
+Find PEST motifs as potential proteolytic cleavage sites
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -183,7 +183,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -543,16 +546,16 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
+   antigenic        Find antigenic sites in proteins
    fuzzpro          Search for patterns in protein sequences
    fuzztran         Search for patterns in protein sequences (translated)
-   patmatdb         Searches protein sequences with a sequence motif
+   patmatdb         Search protein sequences with a sequence motif
    patmatmotifs     Scan a protein sequence with motifs from the PROSITE
                     database
    preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+   pscan            Scan protein sequence(s) with fingerprints from the PRINTS
                     database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
+   sigcleave        Report on signal cleavage sites in a protein sequence
 
 Author(s)
 

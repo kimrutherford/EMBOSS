@@ -2,24 +2,33 @@
 
 lib_LTLIBRARIES = libensembl.la
 
-AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
+libensembl_la_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS) $(JAVA_CFLAGS)
 
-if ISCYGWIN
-CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
-CYGWIN_LDENSEMBL = -L../../plplot -L../expat -L../pcre -L../core -lajax -leplplot -leexpat -lepcre
-endif
-
+libensembl_la_CPPFLAGS  = -I$(top_srcdir)/ajax/pcre
 if !ESYSTEMLIBS
-EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
+libensembl_la_CPPFLAGS += -I$(top_srcdir)/ajax/expat
+libensembl_la_CPPFLAGS += -I$(top_srcdir)/ajax/zlib
+endif
+libensembl_la_CPPFLAGS += -I$(top_srcdir)/plplot
+libensembl_la_CPPFLAGS += $(JAVA_CPPFLAGS)
+
+libensembl_la_LDFLAGS  = -version-info 6:4:0
+if ISCYGWIN
+libensembl_la_LDFLAGS += -no-undefined
+libensembl_la_LDFLAGS += -Wl,--add-stdcall-alias
+libensembl_la_LDFLAGS += -Wl,--export-all-symbols
+libensembl_la_LDFLAGS += -Wl,--enable-auto-import
+libensembl_la_LDFLAGS += -L../../plplot
+libensembl_la_LDFLAGS += -L../core
+libensembl_la_LDFLAGS += -L../expat
+libensembl_la_LDFLAGS += -L../pcre
+libensembl_la_LDFLAGS += -lajax
+libensembl_la_LDFLAGS += -leplplot
+libensembl_la_LDFLAGS += -leexpat
+libensembl_la_LDFLAGS += -lepcre
 endif
 
-
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
--I$(top_srcdir)/plplot \
-$(EXTRA_INCLUDES) \
--I$(top_srcdir)/ajax/pcre
-
-ENSEMBLSRC = \
+libensembl_la_SOURCES = \
 ensalign.c \
 ensanalysis.c \
 ensassembly.c \
@@ -56,6 +65,7 @@ ensmarker.c \
 ensmetacoordinate.c \
 ensmetainformation.c \
 ensmiscellaneous.c \
+ensontology.c \
 ensprediction.c \
 ensprojectionsegment.c \
 ensprotein.c \
@@ -121,6 +131,7 @@ ensmarker.h \
 ensmetacoordinate.h \
 ensmetainformation.h \
 ensmiscellaneous.h \
+ensontology.h \
 ensprediction.h \
 ensprojectionsegment.h \
 ensprotein.h \
@@ -145,15 +156,3 @@ enstranscript.h \
 enstranslation.h \
 ensutility.h \
 ensvariation.h
-
-libensembl_la_SOURCES = $(ENSEMBLSRC)
-
-VERS_INF = -version-info 6:4:0
-
-if ISCYGWIN
-LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDENSEMBL)
-else
-LINKFLAGS = $(VERS_INF)
-endif
-
-libensembl_la_LDFLAGS = $(LINKFLAGS)

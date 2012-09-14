@@ -149,7 +149,7 @@ int main(int argc, char **argv)
                 if(subclasses)
                     ajOboGetTree(obo, obolist);
 
-                ajDebug("%S '%S' %u\n",
+                ajDebug("%S '%S' %Lu\n",
                        qrystr, obo->Id, ajListGetLength(obolist));
                 while(ajListGetLength(obolist))
                 {

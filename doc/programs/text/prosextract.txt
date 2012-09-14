@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Processes the PROSITE motif database for use by patmatmotifs
+   Process the PROSITE motif database for use by patmatmotifs
 
 Description
 
@@ -31,7 +31,7 @@ Usage
 
 
 % prosextract
-Processes the PROSITE motif database for use by patmatmotifs
+Process the PROSITE motif database for use by patmatmotifs
 PROSITE database directory [.]:
 
 
@@ -43,8 +43,8 @@ PROSITE database directory [.]:
 
 Command line arguments
 
-Processes the PROSITE motif database for use by patmatmotifs
-Version: EMBOSS:6.4.0.0
+Process the PROSITE motif database for use by patmatmotifs
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-prositedir]        directory  PROSITE database directory

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds tandem repeats in a nucleotide sequence
+   Find tandem repeats in a nucleotide sequence
 
 Description
 
@@ -62,7 +62,7 @@ Usage
 
 
 % etandem -noorigfile
-Finds tandem repeats in a nucleotide sequence
+Find tandem repeats in a nucleotide sequence
 Input nucleotide sequence: tembl:L46634
 Minimum repeat size [10]: 6
 Maximum repeat size [6]:
@@ -74,8 +74,8 @@ Output report [l46634.tan]:
 
 Command line arguments
 
-Finds tandem repeats in a nucleotide sequence
-Version: EMBOSS:6.4.0.0
+Find tandem repeats in a nucleotide sequence
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -106,7 +106,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -263,7 +266,7 @@ Output file format
 
 ########################################
 # Program: etandem
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -328,9 +331,9 @@ Known bugs
 See also
 
                     Program name                   Description
-                    einverted    Finds inverted repeats in nucleotide sequences
-   equicktandem     Finds tandem repeats in nucleotide sequences
-                    palindrome   Finds inverted repeats in nucleotide sequence(s)
+                    einverted    Find inverted repeats in nucleotide sequences
+   equicktandem     Find tandem repeats in nucleotide sequences
+                    palindrome   Find inverted repeats in nucleotide sequence(s)
 
                     Running with a wide range of repeat sizes is inefficient. That is why
                     equicktandem was written - to give a rapid estimate of the major repeat

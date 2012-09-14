@@ -16,6 +16,7 @@
 @SET_MAKE@
 
 VPATH = @srcdir@
+pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkglibexecdir = $(libexecdir)/@PACKAGE@
@@ -34,21 +35,21 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = emboss/index
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(dist_embossindex_DATA) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -75,14 +76,14 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(pkgdatadir)"
-DATA = $(pkgdata_DATA)
+am__installdirs = "$(DESTDIR)$(embossindexdir)"
+DATA = $(dist_embossindex_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgdatadir = $(prefix)/share/$(PACKAGE)/index
 ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AJAX_SYSTEM = @AJAX_SYSTEM@
 AMTAR = @AMTAR@
+ANT = @ANT@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -112,9 +113,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
-EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
-ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -125,9 +124,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISAIXIA64 = @ISAIXIA64@
-ISCYGWIN = @ISCYGWIN@
-JAVA_OK = @JAVA_OK@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVA_CFLAGS = @JAVA_CFLAGS@
+JAVA_CPPFLAGS = @JAVA_CPPFLAGS@
+JAVA_LDFLAGS = @JAVA_LDFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -144,7 +146,6 @@ MYSQL_CONFIG = @MYSQL_CONFIG@
 MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
-NEEDAJAX = @NEEDAJAX@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -165,12 +166,12 @@ PCRE_MAJOR = @PCRE_MAJOR@
 PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
-PG_CONFIG = @PG_CONFIG@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CONFIG = @POSTGRESQL_CONFIG@
 POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
@@ -200,7 +201,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ant_in_path = @ant_in_path@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -213,7 +213,6 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-havejavac = @havejavac@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -223,7 +222,6 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-javac_in_path = @javac_in_path@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -243,50 +241,137 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-EXTRA_DIST = drcat.ent \
-	drcat.pxac drcat.pxcat drcat.pxde \
-	drcat.pxedat drcat.pxefmt drcat.pxeid drcat.pxetpc \
-	drcat.pxid \
-	drcat.pxqfmt drcat.pxqin drcat.pxqout drcat.pxqurl \
-	drcat.pxrest drcat.pxrf drcat.pxsoap \
-	drcat.pxtaxid drcat.pxurl \
-	drcat.xac drcat.xcat drcat.xde \
-	drcat.xedat drcat.xefmt drcat.xeid drcat.xetpc \
-	drcat.xid \
-	drcat.xqfmt drcat.xqin drcat.xqout drcat.xqurl \
-	drcat.xrest drcat.xrf drcat.xsoap \
-	drcat.xtaxid drcat.xurl \
-	eco.ent \
-	eco.pxde  eco.pxis  eco.xde  eco.xis \
-	eco.pxac  eco.pxid  eco.pxnm  eco.xac   eco.xid  eco.xnm \
-	edam.ent \
-	edam.pxac edam.pxde \
-	edam.pxhasin edam.pxhasout \
-	edam.pxid edam.pxis edam.pxisfmt edam.pxisid \
-	edam.pxnm edam.pxns \
-	edam.xac edam.xde \
-	edam.xhasin edam.xhasout \
-	edam.xid edam.xis edam.xisfmt edam.xisid \
-	edam.xnm edam.xns \
-	go.ent \
-	go.pxde  go.pxis  go.pxns  go.xde  go.xis  go.xns \
-	go.pxac  go.pxid  go.pxnm  go.xac   go.xid  go.xnm \
-	pw.ent \
-	pw.pxde  pw.pxis  pw.xde  pw.xis \
-	pw.pxac  pw.pxid  pw.pxnm  pw.xac   pw.xid  pw.xnm \
-	ro.ent \
-	ro.pxde  ro.pxis  ro.xde  ro.xis \
-	ro.pxac  ro.pxid  ro.pxnm  ro.xac   ro.xid  ro.xnm \
-	so.ent \
-	so.pxde  so.pxis  so.xde  so.xis \
-	so.pxac  so.pxid  so.pxnm  so.xac   so.xid  so.xnm \
-	taxon.ent \
-	taxon.pxac taxon.pxgc taxon.pxid taxon.pxmgc \
-	taxon.pxrnk taxon.pxtax taxon.pxup \
-	taxon.xac taxon.xgc taxon.xid taxon.xmgc \
-	taxon.xrnk taxon.xtax taxon.xup
+embossindexdir = $(pkgdatadir)/index
+dist_embossindex_DATA = \
+drcat.ent \
+drcat.pxac \
+drcat.pxcat \
+drcat.pxde \
+drcat.pxedat \
+drcat.pxefmt \
+drcat.pxeid \
+drcat.pxetpc \
+drcat.pxid \
+drcat.pxqfmt \
+drcat.pxqin \
+drcat.pxqout \
+drcat.pxqurl \
+drcat.pxrest \
+drcat.pxrf \
+drcat.pxsoap \
+drcat.pxtaxid \
+drcat.pxurl \
+drcat.xac \
+drcat.xcat \
+drcat.xde \
+drcat.xedat \
+drcat.xefmt \
+drcat.xeid \
+drcat.xetpc \
+drcat.xid \
+drcat.xqfmt \
+drcat.xqin \
+drcat.xqout \
+drcat.xqurl \
+drcat.xrest \
+drcat.xrf \
+drcat.xsoap \
+drcat.xtaxid \
+drcat.xurl \
+eco.ent \
+eco.pxde \
+eco.pxis \
+eco.xde \
+eco.xis \
+eco.pxac \
+eco.pxid \
+eco.pxnm \
+eco.xac \
+eco.xid \
+eco.xnm \
+edam.ent \
+edam.pxac \
+edam.pxde \
+edam.pxhasin \
+edam.pxhasout \
+edam.pxid \
+edam.pxis \
+edam.pxisfmt \
+edam.pxisid \
+edam.pxnm \
+edam.pxns \
+edam.xac \
+edam.xde \
+edam.xhasin \
+edam.xhasout \
+edam.xid \
+edam.xis \
+edam.xisfmt \
+edam.xisid \
+edam.xnm \
+edam.xns \
+go.ent \
+go.pxde \
+go.pxis \
+go.pxns \
+go.xde \
+go.xis \
+go.xns \
+go.pxac \
+go.pxid \
+go.pxnm \
+go.xac \
+go.xid \
+go.xnm \
+pw.ent \
+pw.pxde \
+pw.pxis \
+pw.xde \
+pw.xis \
+pw.pxac \
+pw.pxid \
+pw.pxnm \
+pw.xac \
+pw.xid \
+pw.xnm \
+ro.ent \
+ro.pxde \
+ro.pxis \
+ro.xde \
+ro.xis \
+ro.pxac \
+ro.pxid \
+ro.pxnm \
+ro.xac \
+ro.xid \
+ro.xnm \
+so.ent \
+so.pxde \
+so.pxis \
+so.xde \
+so.xis \
+so.pxac \
+so.pxid \
+so.pxnm \
+so.xac \
+so.xid \
+so.xnm \
+taxon.ent \
+taxon.pxac \
+taxon.pxgc \
+taxon.pxid \
+taxon.pxmgc \
+taxon.pxrnk \
+taxon.pxtax \
+taxon.pxup \
+taxon.xac \
+taxon.xgc \
+taxon.xid \
+taxon.xmgc \
+taxon.xrnk \
+taxon.xtax \
+taxon.xup
 
-pkgdata_DATA = $(EXTRA_DIST)
 all: all-am
 
 .SUFFIXES:
@@ -326,26 +411,26 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgdataDATA: $(pkgdata_DATA)
+install-dist_embossindexDATA: $(dist_embossindex_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	test -z "$(embossindexdir)" || $(MKDIR_P) "$(DESTDIR)$(embossindexdir)"
+	@list='$(dist_embossindex_DATA)'; test -n "$(embossindexdir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdatadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdatadir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(embossindexdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(embossindexdir)" || exit $$?; \
 	done
 
-uninstall-pkgdataDATA:
+uninstall-dist_embossindexDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	@list='$(dist_embossindex_DATA)'; test -n "$(embossindexdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgdatadir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgdatadir)" && rm -f $$files
+	echo " ( cd '$(DESTDIR)$(embossindexdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(embossindexdir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -387,7 +472,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(pkgdatadir)"; do \
+	for dir in "$(DESTDIR)$(embossindexdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -435,7 +520,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgdataDATA
+install-data-am: install-dist_embossindexDATA
 
 install-dvi: install-dvi-am
 
@@ -479,21 +564,21 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pkgdataDATA
+uninstall-am: uninstall-dist_embossindexDATA
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkgdataDATA install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-pkgdataDATA
+	install-data install-data-am install-dist_embossindexDATA \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am uninstall uninstall-am uninstall-dist_embossindexDATA
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

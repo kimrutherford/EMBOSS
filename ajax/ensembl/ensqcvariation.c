@@ -1,115 +1,118 @@
-/* @source Ensembl Quality Check Variation functions
+/* @source ensqcvariation *****************************************************
+**
+** Ensembl Quality Check Variation functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/05/25 19:55:04 $ by $Author: mks $
-** @version $Revision: 1.3 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensqcvariation.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic qcvariationClass **********************************************
+/* @conststatic qcvariationKClass *********************************************
 **
-** The Ensembl Quality Check Variation class element is enumerated in
+** The Ensembl Quality Check Variation class member is enumerated in
 ** both, the SQL table definition and the data structure. The following strings
 ** are used for conversion in database operations and correspond to
 ** EnsEQcvariationClass.
 **
 ******************************************************************************/
 
-static const char* qcvariationClass[] =
+static const char *qcvariationKClass[] =
 {
     "",
     "none",
     "simple",
     "splice",
     "exon",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcvariationType ***********************************************
+/* @conststatic qcvariationKType **********************************************
 **
-** The Ensembl Quality Check Variation type element is enumerated in
+** The Ensembl Quality Check Variation type member is enumerated in
 ** both, the SQL table definition and the data structure. The following strings
 ** are used for conversion in database operations and correspond to
 ** EnsEQcvariationType.
 **
 ******************************************************************************/
 
-static const char* qcvariationType[] =
+static const char *qcvariationKType[] =
 {
     "",
     "none",
     "single",
     "multi",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcvariationState **********************************************
+/* @conststatic qcvariationKState *********************************************
 **
-** The Ensembl Quality Check Variation state element is enumerated in
+** The Ensembl Quality Check Variation state member is enumerated in
 ** both, the SQL table definition and the data structure. The following strings
 ** are used for conversion in database operations and correspond to
 ** EnsEQcvariationState.
 **
 ******************************************************************************/
 
-static const char* qcvariationState[] =
+static const char *qcvariationKState[] =
 {
     "",
     "none",
@@ -119,34 +122,34 @@ static const char* qcvariationState[] =
     "5'ss",
     "3'ss",
     "split",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcvariationadaptorTables **************************************
+/* @conststatic qcvariationadaptorKTables *************************************
 **
 ** Array of Ensembl Quality Check Variation Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* qcvariationadaptorTables[] =
+static const char *qcvariationadaptorKTables[] =
 {
     "variation",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcvariationadaptorColumns *************************************
+/* @conststatic qcvariationadaptorKColumns ************************************
 **
 ** Array of Ensembl Quality Check Variation Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* qcvariationadaptorColumns[] =
+static const char *qcvariationadaptorKColumns[] =
 {
     "variation.variation_id",
     "variation.analysis_id",
@@ -164,25 +167,25 @@ static const char* qcvariationadaptorColumns[] =
     "variation.class",
     "variation.type",
     "variation.state",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool qcvariationadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -191,9 +194,9 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -271,6 +274,8 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPQcvariation] Ensembl Quality Check Variation or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -278,12 +283,12 @@ EnsPQcvariation ensQcvariationNewCpy(const EnsPQcvariation qcv)
 {
     EnsPQcvariation pthis = NULL;
 
-    if(!qcv)
+    if (!qcv)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     pthis->Identifier = qcv->Identifier;
 
@@ -297,14 +302,14 @@ EnsPQcvariation ensQcvariationNewCpy(const EnsPQcvariation qcv)
     pthis->QueryStart    = qcv->QueryStart;
     pthis->QueryEnd      = qcv->QueryEnd;
 
-    if(qcv->QueryString)
+    if (qcv->QueryString)
         pthis->QueryString = ajStrNewRef(qcv->QueryString);
 
     pthis->TargetSequence = ensQcsequenceNewRef(qcv->TargetSequence);
     pthis->TargetStart    = qcv->TargetStart;
     pthis->TargetEnd      = qcv->TargetEnd;
 
-    if(qcv->TargetString)
+    if (qcv->TargetString)
         pthis->TargetString = ajStrNewRef(qcv->TargetString);
 
     pthis->Class = qcv->Class;
@@ -341,6 +346,8 @@ EnsPQcvariation ensQcvariationNewCpy(const EnsPQcvariation qcv)
 ** @param [u] state [EnsEQcvariationState] State
 **
 ** @return [EnsPQcvariation] Ensembl Quality Check Variation or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -362,21 +369,21 @@ EnsPQcvariation ensQcvariationNewIni(EnsPQcvariationadaptor qcva,
 {
     EnsPQcvariation qcv = NULL;
 
-    if(!qca)
+    if (!qca)
         return NULL;
 
-    if(!analysis)
+    if (!analysis)
         return NULL;
 
-    if(!qsequence)
+    if (!qsequence)
         return NULL;
 
-    if(!tsequence)
+    if (!tsequence)
         return NULL;
 
     AJNEW0(qcv);
 
-    qcv->Use = 1;
+    qcv->Use = 1U;
 
     qcv->Identifier = identifier;
 
@@ -390,14 +397,14 @@ EnsPQcvariation ensQcvariationNewIni(EnsPQcvariationadaptor qcva,
     qcv->QueryStart    = qstart;
     qcv->QueryEnd      = qend;
 
-    if(qstring)
+    if (qstring)
         qcv->QueryString = ajStrNewRef(qstring);
 
     qcv->TargetSequence = ensQcsequenceNewRef(tsequence);
     qcv->TargetStart    = tstart;
     qcv->TargetEnd      = tend;
 
-    if(tstring)
+    if (tstring)
         qcv->TargetString = ajStrNewRef(tstring);
 
     qcv->Class = class;
@@ -418,12 +425,14 @@ EnsPQcvariation ensQcvariationNewIni(EnsPQcvariationadaptor qcva,
 ** @param [u] qcv [EnsPQcvariation] Ensembl Variation
 **
 ** @return [EnsPQcvariation] Ensembl Quality Check Variation or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcvariation ensQcvariationNewRef(EnsPQcvariation qcv)
 {
-    if(!qcv)
+    if (!qcv)
         return NULL;
 
     qcv->Use++;
@@ -436,15 +445,14 @@ EnsPQcvariation ensQcvariationNewRef(EnsPQcvariation qcv)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Variation object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Variation object.
 **
 ** @fdata [EnsPQcvariation]
 **
-** @nam3rule Del Destroy (free) an Ensembl Quality Check Variation object
+** @nam3rule Del Destroy (free) an Ensembl Quality Check Variation
 **
-** @argrule * Pqcv [EnsPQcvariation*] Ensembl Quality Check Variation
-** object address
+** @argrule * Pqcv [EnsPQcvariation*] Ensembl Quality Check Variation address
 **
 ** @valrule * [void]
 **
@@ -458,24 +466,23 @@ EnsPQcvariation ensQcvariationNewRef(EnsPQcvariation qcv)
 **
 ** Default destructor for an Ensembl Quality Check Variation.
 **
-** @param [d] Pqcv [EnsPQcvariation*] Ensembl Quality Check Variation
-** object address
+** @param [d] Pqcv [EnsPQcvariation*] Ensembl Quality Check Variation address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcvariationDel(EnsPQcvariation* Pqcv)
+void ensQcvariationDel(EnsPQcvariation *Pqcv)
 {
     EnsPQcvariation pthis = NULL;
 
-    if(!Pqcv)
+    if (!Pqcv)
         return;
 
-    if(!*Pqcv)
-        return;
-
-    if(ajDebugTest("ensQcvariationDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcvariationDel"))
     {
         ajDebug("ensQcvariationDel\n"
                 "  *Pqcv %p\n",
@@ -483,12 +490,16 @@ void ensQcvariationDel(EnsPQcvariation* Pqcv)
 
         ensQcvariationTrace(*Pqcv, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pqcv)
+        return;
 
     pthis = *Pqcv;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pqcv = NULL;
 
@@ -515,9 +526,9 @@ void ensQcvariationDel(EnsPQcvariation* Pqcv)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Variation object.
 **
 ** @fdata [EnsPQcvariation]
@@ -528,13 +539,13 @@ void ensQcvariationDel(EnsPQcvariation* Pqcv)
 ** @nam4rule Class Return the class
 ** @nam4rule Identifier Return the SQL database-internal identifier
 ** @nam4rule Qcalignment Return the Ensembl Quality Check Alignment
-** @nam4rule Query Return query elements
+** @nam4rule Query Return query members
 ** @nam5rule End Return the query end
 ** @nam5rule Sequence Return the query Ensembl Quality Check Sequence
 ** @nam5rule Start Return the query start
 ** @nam5rule String Return the query string
 ** @nam4rule State Return the state
-** @nam4rule Target Return target elements
+** @nam4rule Target Return target members
 ** @nam5rule Sequence Return the target Ensembl Quality Check Sequence
 ** @nam5rule Start Return the target start
 ** @nam5rule End Return the target end
@@ -547,19 +558,19 @@ void ensQcvariationDel(EnsPQcvariation* Pqcv)
 ** Ensembl Quality Check Variation Adaptor or NULL
 ** @valrule Analysis [EnsPAnalysis] Ensembl Analysis or NULL
 ** @valrule Class [EnsEQcvariationClass] Class or ensEQcvariationClassNULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Qcalignment [EnsPQcalignment]
 ** Ensembl Quality Check Alignment or NULL
-** @valrule QueryEnd [ajuint] Query end or 0
+** @valrule QueryEnd [ajuint] Query end or 0U
 ** @valrule QuerySequence [EnsPQcsequence]
 ** Query Ensembl Quality Check Sequence or NULL
-** @valrule QueryStart [ajuint] Query start or 0
+** @valrule QueryStart [ajuint] Query start or 0U
 ** @valrule QueryString [AjPStr] Query string or NULL
 ** @valrule State [EnsEQcvariationState] State or ensEQcvariationStateNULL
 ** @valrule TargetSequence [EnsPQcsequence]
 ** Target Ensembl Quality Check Sequence or NULL
-** @valrule TargetStart [ajuint] Target start or 0
-** @valrule TargetEnd [ajuint] Target end or 0
+** @valrule TargetStart [ajuint] Target start or 0U
+** @valrule TargetEnd [ajuint] Target end or 0U
 ** @valrule TargetString [AjPStr] Target string or NULL
 ** @valrule Type [EnsEQcvariationType] Type or ensEQcvariationTypeNULL
 **
@@ -571,22 +582,21 @@ void ensQcvariationDel(EnsPQcvariation* Pqcv)
 
 /* @func ensQcvariationGetAdaptor *********************************************
 **
-** Get the Ensembl Quality Check Variation Adaptor element of an
+** Get the Ensembl Quality Check Variation Adaptor member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPQcvariationadaptor] Ensembl Quality Check Variation Adaptor
 ** or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcvariationadaptor ensQcvariationGetAdaptor(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->Adaptor;
+    return (qcv) ? qcv->Adaptor : NULL;
 }
 
 
@@ -594,20 +604,19 @@ EnsPQcvariationadaptor ensQcvariationGetAdaptor(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetAnalysis ********************************************
 **
-** Get the Ensembl Analysis element of an Ensembl Quality Check Variation.
+** Get the Ensembl Analysis member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPAnalysis] Ensembl Analysis or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAnalysis ensQcvariationGetAnalysis(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->Analysis;
+    return (qcv) ? qcv->Analysis : NULL;
 }
 
 
@@ -615,20 +624,19 @@ EnsPAnalysis ensQcvariationGetAnalysis(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetClass ***********************************************
 **
-** Get the class element of an Ensembl Quality Check Variation.
+** Get the class member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsEQcvariationClass] Class or ensEQcvariationClassNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEQcvariationClass ensQcvariationGetClass(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return ensEQcvariationClassNULL;
-
-    return qcv->Class;
+    return (qcv) ? qcv->Class : ensEQcvariationClassNULL;
 }
 
 
@@ -636,21 +644,20 @@ EnsEQcvariationClass ensQcvariationGetClass(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetIdentifier ******************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcvariationGetIdentifier(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return 0;
-
-    return qcv->Identifier;
+    return (qcv) ? qcv->Identifier : 0U;
 }
 
 
@@ -658,21 +665,20 @@ ajuint ensQcvariationGetIdentifier(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetQcalignment *****************************************
 **
-** Get the Ensembl Quality Check Alignment element of an
+** Get the Ensembl Quality Check Alignment member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPQcalignment] Ensembl Quality Check Alignment or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcalignment ensQcvariationGetQcalignment(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->Qcalignment;
+    return (qcv) ? qcv->Qcalignment : NULL;
 }
 
 
@@ -680,20 +686,19 @@ EnsPQcalignment ensQcvariationGetQcalignment(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetQueryEnd ********************************************
 **
-** Get the query end element of an Ensembl Quality Check Variation.
+** Get the query end member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
-** @return [ajuint] Query end or 0
+** @return [ajuint] Query end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcvariationGetQueryEnd(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return 0;
-
-    return qcv->QueryEnd;
+    return (qcv) ? qcv->QueryEnd : 0U;
 }
 
 
@@ -701,21 +706,20 @@ ajuint ensQcvariationGetQueryEnd(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetQuerySequence ***************************************
 **
-** Get the query Ensembl Quality Check Sequence element of an
+** Get the query Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPQcsequence] Query Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcvariationGetQuerySequence(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->QuerySequence;
+    return (qcv) ? qcv->QuerySequence : NULL;
 }
 
 
@@ -723,20 +727,19 @@ EnsPQcsequence ensQcvariationGetQuerySequence(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetQueryStart ******************************************
 **
-** Get the query start element of an Ensembl Quality Check Variation.
+** Get the query start member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
-** @return [ajuint] Query start or 0
+** @return [ajuint] Query start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcvariationGetQueryStart(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return 0;
-
-    return qcv->QueryStart;
+    return (qcv) ? qcv->QueryStart : 0U;
 }
 
 
@@ -744,20 +747,19 @@ ajuint ensQcvariationGetQueryStart(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetQueryString *****************************************
 **
-** Get the query string element of an Ensembl Quality Check Variation.
+** Get the query string member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [AjPStr] Query string or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcvariationGetQueryString(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->QueryString;
+    return (qcv) ? qcv->QueryString : NULL;
 }
 
 
@@ -765,20 +767,19 @@ AjPStr ensQcvariationGetQueryString(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetState ***********************************************
 **
-** Get the state element of an Ensembl Quality Check Variation.
+** Get the state member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsEQcvariationState] State or ensEQcvariationStateNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEQcvariationState ensQcvariationGetState(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return ensEQcvariationStateNULL;
-
-    return qcv->State;
+    return (qcv) ? qcv->State : ensEQcvariationStateNULL;
 }
 
 
@@ -786,20 +787,19 @@ EnsEQcvariationState ensQcvariationGetState(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetTargetEnd *******************************************
 **
-** Get the target end element of an Ensembl Quality Check Variation.
+** Get the target end member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
-** @return [ajuint] Target end or 0
+** @return [ajuint] Target end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcvariationGetTargetEnd(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return 0;
-
-    return qcv->TargetEnd;
+    return (qcv) ? qcv->TargetEnd : 0U;
 }
 
 
@@ -807,21 +807,20 @@ ajuint ensQcvariationGetTargetEnd(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetTargetSequence **************************************
 **
-** Get the target Ensembl Quality Check Sequence element of an
+** Get the target Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsPQcsequence] Target Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcvariationGetTargetSequence(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->TargetSequence;
+    return (qcv) ? qcv->TargetSequence : NULL;
 }
 
 
@@ -829,20 +828,19 @@ EnsPQcsequence ensQcvariationGetTargetSequence(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetTargetStart *****************************************
 **
-** Get the target start element of an Ensembl Quality Check Variation.
+** Get the target start member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
-** @return [ajuint] Target start or 0
+** @return [ajuint] Target start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcvariationGetTargetStart(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return 0;
-
-    return qcv->TargetStart;
+    return (qcv) ? qcv->TargetStart : 0U;
 }
 
 
@@ -850,20 +848,19 @@ ajuint ensQcvariationGetTargetStart(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetTargetString ****************************************
 **
-** Get the target string element of an Ensembl Quality Check Variation.
+** Get the target string member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [AjPStr] Target string or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcvariationGetTargetString(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return NULL;
-
-    return qcv->TargetString;
+    return (qcv) ? qcv->TargetString : NULL;
 }
 
 
@@ -871,20 +868,19 @@ AjPStr ensQcvariationGetTargetString(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationGetType ************************************************
 **
-** Get the type element of an Ensembl Quality Check Variation.
+** Get the type member of an Ensembl Quality Check Variation.
 **
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [EnsEQcvariationType] Type or ensEQcvariationTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEQcvariationType ensQcvariationGetType(const EnsPQcvariation qcv)
 {
-    if(!qcv)
-        return ensEQcvariationTypeNULL;
-
-    return qcv->Type;
+    return (qcv) ? qcv->Type : ensEQcvariationTypeNULL;
 }
 
 
@@ -892,24 +888,24 @@ EnsEQcvariationType ensQcvariationGetType(const EnsPQcvariation qcv)
 
 /* @section modifiers *********************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Quality Check Variation object.
 **
 ** @fdata [EnsPQcvariation]
 **
-** @nam3rule Set Set one element of a Quality Check Variation
+** @nam3rule Set Set one member of a Quality Check Variation
 ** @nam4rule Adaptor Set the Ensembl Quality Check Variation Adaptor
 ** @nam4rule Analysis Set the Ensembl Analysis
 ** @nam4rule Class Set the class
 ** @nam4rule Identifier Set the SQL database-internal identifier
 ** @nam4rule Qcalignment Set the Ensembl Quality Check Alignment
-** @nam4rule Query Set query elements
+** @nam4rule Query Set query members
 ** @nam5rule End Set the query end
 ** @nam5rule Sequence Set the query Ensembl Quality Check Sequence
 ** @nam5rule Start Set the query start
 ** @nam5rule String Set the query string
 ** @nam4rule State Set the state
-** @nam4rule Target Set target elements
+** @nam4rule Target Set target members
 ** @nam5rule End Set the target end
 ** @nam5rule Sequence Set the target Ensembl Quality Check Sequence
 ** @nam5rule Start Set the target start
@@ -946,7 +942,7 @@ EnsEQcvariationType ensQcvariationGetType(const EnsPQcvariation qcv)
 
 /* @func ensQcvariationSetAdaptor *********************************************
 **
-** Set the Ensembl Database Adaptor element of an
+** Set the Ensembl Database Adaptor member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
@@ -954,13 +950,15 @@ EnsEQcvariationType ensQcvariationGetType(const EnsPQcvariation qcv)
 ** Ensembl Quality Check Variation Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetAdaptor(EnsPQcvariation qcv,
                                 EnsPQcvariationadaptor qcva)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->Adaptor = qcva;
@@ -973,19 +971,21 @@ AjBool ensQcvariationSetAdaptor(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetAnalysis ********************************************
 **
-** Set the Ensembl Analysis element of an Ensembl Quality Check Variation.
+** Set the Ensembl Analysis member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetAnalysis(EnsPQcvariation qcv,
                                  EnsPAnalysis analysis)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ensAnalysisDel(&qcv->Analysis);
@@ -1000,19 +1000,21 @@ AjBool ensQcvariationSetAnalysis(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetClass ***********************************************
 **
-** Set the class element of an Ensembl Quality Check Variation.
+** Set the class member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] class [EnsEQcvariationClass] Class
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetClass(EnsPQcvariation qcv,
                               EnsEQcvariationClass class)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->Class = class;
@@ -1025,20 +1027,22 @@ AjBool ensQcvariationSetClass(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetIdentifier ******************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetIdentifier(EnsPQcvariation qcv,
                                    ajuint identifier)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->Identifier = identifier;
@@ -1051,20 +1055,22 @@ AjBool ensQcvariationSetIdentifier(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetQcalignment *****************************************
 **
-** Set the Ensembl Quality Check Alignment element of an
+** Set the Ensembl Quality Check Alignment member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] qca [EnsPQcalignment] Ensembl Quality Check Alignment
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetQcalignment(EnsPQcvariation qcv,
                                     EnsPQcalignment qca)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ensQcalignmentDel(&qcv->Qcalignment);
@@ -1079,19 +1085,21 @@ AjBool ensQcvariationSetQcalignment(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetQueryEnd ********************************************
 **
-** Set the query end element of an Ensembl Quality Check Variation.
+** Set the query end member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [r] qend [ajuint] Query end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetQueryEnd(EnsPQcvariation qcv,
                                  ajuint qend)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->QueryEnd = qend;
@@ -1104,20 +1112,22 @@ AjBool ensQcvariationSetQueryEnd(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetQuerySequence ***************************************
 **
-** Set the query Ensembl Quality Check Sequence element of an
+** Set the query Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] qsequence [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetQuerySequence(EnsPQcvariation qcv,
                                       EnsPQcsequence qsequence)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ensQcsequenceDel(&qcv->QuerySequence);
@@ -1132,19 +1142,21 @@ AjBool ensQcvariationSetQuerySequence(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetQueryStart ******************************************
 **
-** Set the query start element of an Ensembl Quality Check Variation.
+** Set the query start member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [r] qstart [ajuint] Query start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetQueryStart(EnsPQcvariation qcv,
                                    ajuint qstart)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->QueryStart = qstart;
@@ -1157,24 +1169,26 @@ AjBool ensQcvariationSetQueryStart(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetQueryString *****************************************
 **
-** Set the query string element of an Ensembl Quality Check Variation.
+** Set the query string member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] qstring [AjPStr] Query string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetQueryString(EnsPQcvariation qcv,
                                     AjPStr qstring)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ajStrDel(&qcv->QueryString);
 
-    if(qcv->QueryString)
+    if (qcv->QueryString)
         qcv->QueryString = ajStrNewRef(qstring);
 
     return ajTrue;
@@ -1185,19 +1199,21 @@ AjBool ensQcvariationSetQueryString(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetState ***********************************************
 **
-** Set the state element of an Ensembl Quality Check Variation.
+** Set the state member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] state [EnsEQcvariationState] State
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetState(EnsPQcvariation qcv,
                               EnsEQcvariationState state)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->State = state;
@@ -1210,19 +1226,21 @@ AjBool ensQcvariationSetState(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetTargetEnd *******************************************
 **
-** Set the target end element of an Ensembl Quality Check Variation.
+** Set the target end member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [r] tend [ajuint] Target end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetTargetEnd(EnsPQcvariation qcv,
                                   ajuint tend)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->TargetEnd = tend;
@@ -1235,20 +1253,22 @@ AjBool ensQcvariationSetTargetEnd(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetTargetSequence **************************************
 **
-** Set the target Ensembl Quality Check Sequence element of an
+** Set the target Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] tsequence [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetTargetSequence(EnsPQcvariation qcv,
                                        EnsPQcsequence tsequence)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ensQcsequenceDel(&qcv->TargetSequence);
@@ -1263,19 +1283,21 @@ AjBool ensQcvariationSetTargetSequence(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetTargetStart *****************************************
 **
-** Set the target start element of an Ensembl Quality Check Variation.
+** Set the target start member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [r] tstart [ajuint] Target start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetTargetStart(EnsPQcvariation qcv,
                                     ajuint tstart)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->TargetStart = tstart;
@@ -1288,24 +1310,26 @@ AjBool ensQcvariationSetTargetStart(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetTargetString ****************************************
 **
-** Set the target string element of an Ensembl Quality Check Variation.
+** Set the target string member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] tstring [AjPStr] Target string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetTargetString(EnsPQcvariation qcv,
                                      AjPStr tstring)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     ajStrDel(&qcv->TargetString);
 
-    if(tstring)
+    if (tstring)
         qcv->TargetString = ajStrNewRef(tstring);
 
     return ajTrue;
@@ -1316,19 +1340,21 @@ AjBool ensQcvariationSetTargetString(EnsPQcvariation qcv,
 
 /* @func ensQcvariationSetType ************************************************
 **
-** Set the type element of an Ensembl Quality Check Variation.
+** Set the type member of an Ensembl Quality Check Variation.
 **
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 ** @param [u] type [EnsEQcvariationType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationSetType(EnsPQcvariation qcv,
                              EnsEQcvariationType type)
 {
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     qcv->Type = type;
@@ -1345,7 +1371,7 @@ AjBool ensQcvariationSetType(EnsPQcvariation qcv,
 **
 ** @fdata [EnsPQcvariation]
 **
-** @nam3rule Trace Report Quality Check Variation elements to debug file
+** @nam3rule Trace Report Quality Check Variation members to debug file
 **
 ** @argrule Trace qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 ** @argrule Trace level [ajuint] Indentation level
@@ -1366,6 +1392,8 @@ AjBool ensQcvariationSetType(EnsPQcvariation qcv,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1373,7 +1401,7 @@ AjBool ensQcvariationTrace(const EnsPQcvariation qcv, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1457,6 +1485,8 @@ AjBool ensQcvariationTrace(const EnsPQcvariation qcv, ajuint level)
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1464,7 +1494,7 @@ size_t ensQcvariationCalculateMemsize(const EnsPQcvariation qcv)
 {
     size_t size = 0;
 
-    if(!qcv)
+    if (!qcv)
         return 0;
 
     size += sizeof (EnsOQcvariation);
@@ -1476,14 +1506,14 @@ size_t ensQcvariationCalculateMemsize(const EnsPQcvariation qcv)
     size += ensQcsequenceCalculateMemsize(qcv->QuerySequence);
     size += ensQcsequenceCalculateMemsize(qcv->TargetSequence);
 
-    if(qcv->QueryString)
+    if (qcv->QueryString)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(qcv->QueryString);
     }
 
-    if(qcv->TargetString)
+    if (qcv->TargetString)
     {
         size += sizeof (AjOStr);
 
@@ -1521,8 +1551,9 @@ size_t ensQcvariationCalculateMemsize(const EnsPQcvariation qcv)
 **
 ** @argrule  Str  vclass  [const AjPStr] Class string
 **
-** @valrule * [EnsEQcvariationClass] Ensembl Quality Check Variation Class
-** enumeration or ensEQcvariationClassNULL
+** @valrule * [EnsEQcvariationClass]
+** Ensembl Quality Check Variation Class enumeration or
+** ensEQcvariationClassNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1537,8 +1568,11 @@ size_t ensQcvariationCalculateMemsize(const EnsPQcvariation qcv)
 **
 ** @param [r] vclass [const AjPStr] Class string
 **
-** @return [EnsEQcvariationClass] Ensembl Quality Check Variation Class
-**                                enumeration or ensEQcvariationClassNULL
+** @return [EnsEQcvariationClass]
+** Ensembl Quality Check Variation Class enumeration or
+** ensEQcvariationClassNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1548,13 +1582,13 @@ EnsEQcvariationClass ensQcvariationClassFromStr(const AjPStr vclass)
 
     EnsEQcvariationClass eclass = ensEQcvariationClassNULL;
 
-    for(i = ensEQcvariationClassNULL;
-        qcvariationClass[i];
-        i++)
-        if(ajStrMatchCaseC(vclass, qcvariationClass[i]))
+    for (i = ensEQcvariationClassNULL;
+         qcvariationKClass[i];
+         i++)
+        if (ajStrMatchCaseC(vclass, qcvariationKClass[i]))
             eclass = i;
 
-    if(!eclass)
+    if (!eclass)
         ajDebug("ensQcvariationClassFromStr encountered "
                 "unexpected string '%S'.\n", vclass);
 
@@ -1574,8 +1608,8 @@ EnsEQcvariationClass ensQcvariationClassFromStr(const AjPStr vclass)
 ** @nam4rule To   Return Ensembl Quality Check Variation Class enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To qcvc [EnsEQcvariationClass] Ensembl Quality Check Variation
-**                                         Class enumeration
+** @argrule To qcvc [EnsEQcvariationClass]
+** Ensembl Quality Check Variation Class enumeration
 **
 ** @valrule Char [const char*] Class or NULL
 **
@@ -1588,13 +1622,15 @@ EnsEQcvariationClass ensQcvariationClassFromStr(const AjPStr vclass)
 /* @func ensQcvariationClassToChar ********************************************
 **
 ** Convert an Ensembl Quality Check Variation Class enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
-** @param [u] qcvc [EnsEQcvariationClass] Ensembl Quality Check Variation Class
-**                                        enumeration
+** @param [u] qcvc [EnsEQcvariationClass]
+** Ensembl Quality Check Variation Class enumeration
 **
-** @return [const char*] Ensembl Quality Check Variation Class C-type (char*)
-** string
+** @return [const char*]
+** Ensembl Quality Check Variation Class C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1602,17 +1638,17 @@ const char* ensQcvariationClassToChar(EnsEQcvariationClass qcvc)
 {
     register EnsEQcvariationClass i = ensEQcvariationClassNULL;
 
-    for(i = ensEQcvariationClassNULL;
-        qcvariationClass[i] && (i < qcvc);
-        i++);
+    for (i = ensEQcvariationClassNULL;
+         qcvariationKClass[i] && (i < qcvc);
+         i++);
 
-    if(!qcvariationClass[i])
+    if (!qcvariationKClass[i])
         ajDebug("ensQcvariationClassToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Quality Check Variation Class enumeration %d.\n",
                 qcvc);
 
-    return qcvariationClass[i];
+    return qcvariationKClass[i];
 }
 
 
@@ -1643,8 +1679,9 @@ const char* ensQcvariationClassToChar(EnsEQcvariationClass qcvc)
 **
 ** @argrule  Str  state  [const AjPStr] State string
 **
-** @valrule * [EnsEQcvariationState] Ensembl Quality Check Variation State
-**                                   enumeration or ensEQcvariationStateNULL
+** @valrule * [EnsEQcvariationState]
+** Ensembl Quality Check Variation State enumeration or
+** ensEQcvariationStateNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1659,8 +1696,10 @@ const char* ensQcvariationClassToChar(EnsEQcvariationClass qcvc)
 **
 ** @param [r] state [const AjPStr] State string
 **
-** @return [EnsEQcvariationState] Ensembl Quality Check Variation State or
-**                                ensEQcvariationStateNULL
+** @return [EnsEQcvariationState]
+** Ensembl Quality Check Variation State or ensEQcvariationStateNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1670,13 +1709,13 @@ EnsEQcvariationState ensQcvariationStateFromStr(const AjPStr state)
 
     EnsEQcvariationState estate = ensEQcvariationStateNULL;
 
-    for(i = ensEQcvariationStateNULL;
-        qcvariationState[i];
-        i++)
-        if(ajStrMatchCaseC(state, qcvariationState[i]))
+    for (i = ensEQcvariationStateNULL;
+         qcvariationKState[i];
+         i++)
+        if (ajStrMatchCaseC(state, qcvariationKState[i]))
             estate = i;
 
-    if(!estate)
+    if (!estate)
         ajDebug("ensQcvariationStateFromStr encountered "
                 "unexpected string '%S'.\n", state);
 
@@ -1710,12 +1749,14 @@ EnsEQcvariationState ensQcvariationStateFromStr(const AjPStr state)
 /* @func ensQcvariationStateToChar ********************************************
 **
 ** Convert an Ensembl Quality Check Variation State enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
 ** @param [u] qcvs [EnsEQcvariationState] Ensembl Quality Check Variation State
 **
-** @return [const char*] Ensembl Quality Check Variation State C-type (char*)
-** string
+** @return [const char*]
+** Ensembl Quality Check Variation State C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1723,17 +1764,17 @@ const char* ensQcvariationStateToChar(EnsEQcvariationState qcvs)
 {
     register EnsEQcvariationState i = ensEQcvariationStateNULL;
 
-    for(i = ensEQcvariationStateNULL;
-        qcvariationState[i] && (i < qcvs);
-        i++);
+    for (i = ensEQcvariationStateNULL;
+         qcvariationKState[i] && (i < qcvs);
+         i++);
 
-    if(!qcvariationState[i])
+    if (!qcvariationKState[i])
         ajDebug("ensQcvariationStateToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Quality Check Variation State enumeration %d.\n",
                 qcvs);
 
-    return qcvariationState[i];
+    return qcvariationKState[i];
 }
 
 
@@ -1763,8 +1804,8 @@ const char* ensQcvariationStateToChar(EnsEQcvariationState qcvs)
 **
 ** @argrule  Str  type  [const AjPStr] Type string
 **
-** @valrule * [EnsEQcvariationType] Ensembl Quality Check Variation Type
-** enumeration or ensEQcvariationTypeNULL
+** @valrule * [EnsEQcvariationType]
+** Ensembl Quality Check Variation Type enumeration or ensEQcvariationTypeNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1779,8 +1820,10 @@ const char* ensQcvariationStateToChar(EnsEQcvariationState qcvs)
 **
 ** @param [r] type [const AjPStr] Type string
 **
-** @return [EnsEQcvariationType] Ensembl Quality Check Variation type or
-**                               ensEQcvariationTypeNULL
+** @return [EnsEQcvariationType]
+** Ensembl Quality Check Variation type or ensEQcvariationTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1790,13 +1833,13 @@ EnsEQcvariationType ensQcvariationTypeFromStr(const AjPStr type)
 
     EnsEQcvariationType etype = ensEQcvariationTypeNULL;
 
-    for(i = ensEQcvariationTypeNULL;
-        qcvariationType[i];
-        i++)
-        if(ajStrMatchCaseC(type, qcvariationType[i]))
+    for (i = ensEQcvariationTypeNULL;
+         qcvariationKType[i];
+         i++)
+        if (ajStrMatchCaseC(type, qcvariationKType[i]))
             etype = i;
 
-    if(!etype)
+    if (!etype)
         ajDebug("ensQcvariationTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1816,8 +1859,8 @@ EnsEQcvariationType ensQcvariationTypeFromStr(const AjPStr type)
 ** @nam4rule To   Return Ensembl Quality Check Variation Type enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To qcvt [EnsEQcvariationType] Ensembl Quality Check Variation Type
-**                                        enumeration
+** @argrule To qcvt [EnsEQcvariationType]
+** Ensembl Quality Check Variation Type enumeration
 **
 ** @valrule Char [const char*] Type or NULL
 **
@@ -1830,13 +1873,15 @@ EnsEQcvariationType ensQcvariationTypeFromStr(const AjPStr type)
 /* @func ensQcvariationTypeToChar *********************************************
 **
 ** Convert an Ensembl Quality Check Variation Type enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
 ** @param [u] qcvt [EnsEQcvariationType]
 ** Ensembl Quality Check Variation Type enumeration
 **
-** @return [const char*] Ensembl Quality Check Variation type C-type (char*)
-** string
+** @return [const char*]
+** Ensembl Quality Check Variation type C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1844,17 +1889,17 @@ const char* ensQcvariationTypeToChar(EnsEQcvariationType qcvt)
 {
     register EnsEQcvariationType i = ensEQcvariationTypeNULL;
 
-    for(i = ensEQcvariationTypeNULL;
-        qcvariationType[i] && (i < qcvt);
-        i++);
+    for (i = ensEQcvariationTypeNULL;
+         qcvariationKType[i] && (i < qcvt);
+         i++);
 
-    if(!qcvariationType[i])
+    if (!qcvariationKType[i])
         ajDebug("ensQcvariationTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Quality Check Variation Type enumeration %d.\n",
                 qcvt);
 
-    return qcvariationType[i];
+    return qcvariationKType[i];
 }
 
 
@@ -1880,35 +1925,37 @@ const char* ensQcvariationTypeToChar(EnsEQcvariationType qcvt)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Quality Check Variation objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] qcvs [AjPList] AJAX List of Ensembl Quality Check Variations
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool qcvariationadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList qcvs)
 {
-    ajuint identifier  = 0;
-    ajuint analysisid  = 0;
-    ajuint alignmentid = 0;
+    ajuint identifier  = 0U;
+    ajuint analysisid  = 0U;
+    ajuint alignmentid = 0U;
 
-    ajuint qdbid  = 0;
-    ajuint qsid   = 0;
-    ajuint qstart = 0;
-    ajuint qend   = 0;
-    ajuint tdbid  = 0;
-    ajuint tsid   = 0;
-    ajuint tstart = 0;
-    ajuint tend   = 0;
+    ajuint qdbid  = 0U;
+    ajuint qsid   = 0U;
+    ajuint qstart = 0U;
+    ajuint qend   = 0U;
+    ajuint tdbid  = 0U;
+    ajuint tsid   = 0U;
+    ajuint tstart = 0U;
+    ajuint tend   = 0U;
 
     EnsEQcvariationClass eclass = ensEQcvariationClassNULL;
     EnsEQcvariationType etype   = ensEQcvariationTypeNULL;
@@ -1927,6 +1974,8 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPQcalignment qca         = NULL;
     EnsPQcalignmentadaptor qcaa = NULL;
 
@@ -1937,41 +1986,40 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
     EnsPQcvariation qcv         = NULL;
     EnsPQcvariationadaptor qcva = NULL;
 
-    if(ajDebugTest("qcvariationadaptorFetchAllbyStatement"))
+    if (ajDebugTest("qcvariationadaptorFetchAllbyStatement"))
         ajDebug("qcvariationadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  qcvs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 qcvs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!qcvs)
+    if (!qcvs)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
+    aa   = ensRegistryGetAnalysisadaptor(dba);
     qcaa = ensRegistryGetQcalignmentadaptor(dba);
-
     qcva = ensRegistryGetQcvariationadaptor(dba);
-
     qcsa = ensRegistryGetQcsequenceadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier  = 0;
         analysisid  = 0;
@@ -2038,7 +2086,7 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
                                    etype,
                                    estate);
 
-        ajListPushAppend(qcvs, (void*) qcv);
+        ajListPushAppend(qcvs, (void *) qcv);
 
         ensQcsequenceDel(&qsequence);
         ensQcsequenceDel(&tsequence);
@@ -2077,8 +2125,8 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPQcvariationadaptor] Ensembl Quality Check Variation Adaptor
-** or NULL
+** @valrule * [EnsPQcvariationadaptor]
+** Ensembl Quality Check Variation Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -2103,25 +2151,27 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
 **
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPQcvariationadaptor] Ensembl Quality Check Variation Adaptor
-** or NULL
+** @return [EnsPQcvariationadaptor]
+** Ensembl Quality Check Variation Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcvariationadaptor ensQcvariationadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensBaseadaptorNew(
         dba,
-        qcvariationadaptorTables,
-        qcvariationadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        qcvariationadaptorFetchAllbyStatement);
+        qcvariationadaptorKTables,
+        qcvariationadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &qcvariationadaptorFetchAllbyStatement);
 }
 
 
@@ -2129,16 +2179,15 @@ EnsPQcvariationadaptor ensQcvariationadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Variation Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Variation Adaptor object.
 **
 ** @fdata [EnsPQcvariationadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Quality Check Variation Adaptor
-** object
 **
-** @argrule * Pqcva [EnsPQcvariationadaptor*] Ensembl Quality Check Variation
-**                                            Adaptor object address
+** @argrule * Pqcva [EnsPQcvariationadaptor*]
+** Ensembl Quality Check Variation Adaptor address
 **
 ** @valrule * [void]
 **
@@ -2158,39 +2207,35 @@ EnsPQcvariationadaptor ensQcvariationadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pqcva [EnsPQcvariationadaptor*] Ensembl Quality Check Variation
-**                                            Adaptor object address
+** @param [d] Pqcva [EnsPQcvariationadaptor*]
+** Ensembl Quality Check Variation Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcvariationadaptorDel(EnsPQcvariationadaptor* Pqcva)
+void ensQcvariationadaptorDel(EnsPQcvariationadaptor *Pqcva)
 {
-    if(!Pqcva)
-        return;
-
-    if(!*Pqcva)
-        return;
-
-    if(ajDebugTest("ensQcvariationadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcvariationadaptorDel"))
         ajDebug("ensQcvariationadaptorDel\n"
                 "  *Pqcva %p\n",
                 *Pqcva);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
     ensBaseadaptorDel(Pqcva);
 
-    *Pqcva = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Variation Adaptor object.
 **
 ** @fdata [EnsPQcvariationadaptor]
@@ -2214,22 +2259,21 @@ void ensQcvariationadaptorDel(EnsPQcvariationadaptor* Pqcva)
 
 /* @func ensQcvariationadaptorGetBaseadaptor **********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Quality Check Variation Adaptor.
 **
 ** @param [u] qcva [EnsPQcvariationadaptor]
 ** Ensembl Quality Check Variation Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensQcvariationadaptorGetBaseadaptor(
     EnsPQcvariationadaptor qcva)
 {
-    if(!qcva)
-        return NULL;
-
     return qcva;
 }
 
@@ -2238,22 +2282,21 @@ EnsPBaseadaptor ensQcvariationadaptorGetBaseadaptor(
 
 /* @func ensQcvariationadaptorGetDatabaseadaptor ******************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Quality Check Variation Adaptor.
 **
 ** @param [u] qcva [EnsPQcvariationadaptor]
 ** Ensembl Quality Check Variation Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensQcvariationadaptorGetDatabaseadaptor(
     EnsPQcvariationadaptor qcva)
 {
-    if(!qcva)
-        return NULL;
-
     return ensBaseadaptorGetDatabaseadaptor(qcva);
 }
 
@@ -2334,6 +2377,8 @@ EnsPDatabaseadaptor ensQcvariationadaptorGetDatabaseadaptor(
 ** @param [u] qcvs [AjPList] AJAX List of Ensembl Quality Check Variation objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2344,13 +2389,13 @@ AjBool ensQcvariationadaptorFetchAllbyQcalignment(
 {
     AjPStr constraint = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!qca)
+    if (!qca)
         return ajFalse;
 
-    if(!qcvs)
+    if (!qcvs)
         return ajFalse;
 
     constraint = ajFmtStr("variation.alignment_id = %u",
@@ -2388,6 +2433,8 @@ AjBool ensQcvariationadaptorFetchAllbyQcalignment(
 ** Ensembl Quality Check Variation objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2400,19 +2447,19 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabasePair(
 {
     AjPStr constraint = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!analysis)
+    if (!analysis)
         return ajFalse;
 
-    if(!qdb)
+    if (!qdb)
         return ajFalse;
 
-    if(!tdb)
+    if (!tdb)
         return ajFalse;
 
-    if(!qcvs)
+    if (!qcvs)
         return ajFalse;
 
     constraint = ajFmtStr("variation.analysis_id = %u "
@@ -2454,6 +2501,8 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabasePair(
 ** Ensembl Quality Check Variation objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2465,19 +2514,19 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseQuery(
 {
     AjPStr constraint = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!qdb)
+    if (!qdb)
         return ajFalse;
 
-    if(!qcvs)
+    if (!qcvs)
         return ajFalse;
 
     constraint = ajFmtStr("variation.query_db_id = %u",
                           ensQcdatabaseGetIdentifier(qdb));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND variation.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -2512,6 +2561,8 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseQuery(
 ** Ensembl Quality Check Variation objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2523,19 +2574,19 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseTarget(
 {
     AjPStr constraint = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!tdb)
+    if (!tdb)
         return ajFalse;
 
-    if(!qcvs)
+    if (!qcvs)
         return ajFalse;
 
     constraint = ajFmtStr("variation.target_db_id = %u",
                           ensQcdatabaseGetIdentifier(tdb));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND variation.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -2567,24 +2618,26 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseTarget(
 ** @param [wP] Pqcv [EnsPQcvariation*] Ensembl Quality Check Variation address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationadaptorFetchByIdentifier(
     EnsPQcvariationadaptor qcva,
     ajuint identifier,
-    EnsPQcvariation* Pqcv)
+    EnsPQcvariation *Pqcv)
 {
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pqcv)
+    if (!Pqcv)
         return ajFalse;
 
-    return ensBaseadaptorFetchByIdentifier(qcva, identifier, (void**) Pqcv);
+    return ensBaseadaptorFetchByIdentifier(qcva, identifier, (void **) Pqcv);
 }
 
 
@@ -2624,6 +2677,8 @@ AjBool ensQcvariationadaptorFetchByIdentifier(
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2638,13 +2693,13 @@ AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
-    if(!ensQcvariationGetIdentifier(qcv))
+    if (!ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcva);
@@ -2658,7 +2713,7 @@ AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         qcv->Adaptor    = (EnsPQcvariationadaptor) NULL;
         qcv->Identifier = 0;
@@ -2685,14 +2740,16 @@ AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
 ** @param [u] qcv [EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationadaptorStore(EnsPQcvariationadaptor qcva,
                                   EnsPQcvariation qcv)
 {
-    char* txtqstr = NULL;
-    char* txttstr = NULL;
+    char *txtqstr = NULL;
+    char *txttstr = NULL;
 
     AjBool result = AJFALSE;
 
@@ -2702,13 +2759,13 @@ AjBool ensQcvariationadaptorStore(EnsPQcvariationadaptor qcva,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
-    if(ensQcvariationGetAdaptor(qcv) && ensQcvariationGetIdentifier(qcv))
+    if (ensQcvariationGetAdaptor(qcv) && ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcva);
@@ -2757,7 +2814,7 @@ AjBool ensQcvariationadaptorStore(EnsPQcvariationadaptor qcva,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         ensQcvariationSetIdentifier(qcv, ajSqlstatementGetIdentifier(sqls));
 
@@ -2785,14 +2842,16 @@ AjBool ensQcvariationadaptorStore(EnsPQcvariationadaptor qcva,
 ** @param [r] qcv [const EnsPQcvariation] Ensembl Quality Check Variation
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcvariationadaptorUpdate(EnsPQcvariationadaptor qcva,
                                    const EnsPQcvariation qcv)
 {
-    char* txtqstr = NULL;
-    char* txttstr = NULL;
+    char *txtqstr = NULL;
+    char *txttstr = NULL;
 
     AjBool result = AJFALSE;
 
@@ -2802,13 +2861,13 @@ AjBool ensQcvariationadaptorUpdate(EnsPQcvariationadaptor qcva,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcva)
+    if (!qcva)
         return ajFalse;
 
-    if(!qcv)
+    if (!qcv)
         return ajFalse;
 
-    if(!ensQcvariationGetIdentifier(qcv))
+    if (!ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcva);
@@ -2860,7 +2919,7 @@ AjBool ensQcvariationadaptorUpdate(EnsPQcvariationadaptor qcva,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
         result = ajTrue;
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);

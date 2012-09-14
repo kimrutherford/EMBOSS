@@ -71,9 +71,36 @@ static void psiphi_shift_residues(AjPAtom* atoms,
 			   AjBool* known);
 
 
-/* constant window size and enumerated indexes to atoms in window */
-const ajint windowsize = 9;
-enum enumAtomWindowPoint
+
+
+/* @conststatic windowsize ****************************************************
+**
+** @value windowsize constant window size
+**
+******************************************************************************/
+
+static const ajint windowsize = 9;
+
+
+
+
+/* @enumstatic psiphiEAtomWindowPoint *****************************************
+**
+** enumerated indexes to atoms in window
+**
+** @value ENPrev      Previous N
+** @value ECAlphaPrev Previous C-alpha
+** @value ECPrimePrev Previous C'
+** @value ENCurr      Current N
+** @value ECAlphaCurr Current C-alpha
+** @value ECPrimeCurr Current C'
+** @value ENNext      Next N
+** @value ECAlphaNext Next C-alpha
+** @value ECPrimeNext Next C'
+**
+******************************************************************************/
+
+typedef enum
 {
     ENPrev,
     ECAlphaPrev,
@@ -84,10 +111,18 @@ enum enumAtomWindowPoint
     ENNext,
     ECAlphaNext,
     ECPrimeNext
-};
+} psiphiEAtomWindowPoint;
 
-/* for unavailable angles (360 deg is an impossible torsion angle) */
-const float FUnavailableAngle = 360.0;
+
+
+
+/* @conststatic FUnavailableAngle *********************************************
+**
+** @value FUnavailableAngle for unavailable angles (360 deg is an
+**                          impossible torsion angle)
+**
+******************************************************************************/
+static const float FUnavailableAngle = 360.0;
 
 
 
@@ -875,9 +910,9 @@ static AjPFeature psiphi_write_psi_phi (AjPFeattable angletab,
 			  resnum,
 			  resnum);
     ajFmtPrintS(&feattmp, "*phi %7.2f", phi);
-    ajFeatTagAdd(angleft, NULL, feattmp);
+    ajFeatTagAddSS(angleft, NULL, feattmp);
     ajFmtPrintS(&feattmp, "*psi %7.2f", psi);
-    ajFeatTagAdd(angleft, NULL, feattmp);
+    ajFeatTagAddSS(angleft, NULL, feattmp);
 
     ajStrDel(&feattmp);
     

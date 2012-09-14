@@ -1,10 +1,36 @@
+/* @include ensdatabaseconnection *********************************************
+**
+** Ensembl Database Connection functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSDATABASECONNECTION_H
 #define ENSDATABASECONNECTION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ajax.h"
 
@@ -13,16 +39,16 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPDatabaseconnection ***********************************************
 **
@@ -71,9 +97,9 @@ typedef struct EnsSDatabaseconnection
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -97,7 +123,7 @@ EnsPDatabaseconnection ensDatabaseconnectionNewRef(EnsPDatabaseconnection dbc);
 
 EnsPDatabaseconnection ensDatabaseconnectionNewUrl(const AjPStr url);
 
-void ensDatabaseconnectionDel(EnsPDatabaseconnection* Pdbc);
+void ensDatabaseconnectionDel(EnsPDatabaseconnection *Pdbc);
 
 AjBool ensDatabaseconnectionGetAutodisconnect(
     const EnsPDatabaseconnection dbc);
@@ -146,23 +172,23 @@ AjBool ensDatabaseconnectionConnect(EnsPDatabaseconnection dbc);
 AjBool ensDatabaseconnectionDisconnect(EnsPDatabaseconnection dbc);
 
 AjBool ensDatabaseconnectionEscapeC(EnsPDatabaseconnection dbc,
-                                    char** Ptxt,
+                                    char **Ptxt,
                                     const AjPStr str);
 
 AjBool ensDatabaseconnectionEscapeS(EnsPDatabaseconnection dbc,
-                                    AjPStr* Pstr,
+                                    AjPStr *Pstr,
                                     const AjPStr str);
 
 AjBool ensDatabaseconnectionSqlstatementDel(
     EnsPDatabaseconnection dbc,
-    AjPSqlstatement* Psqls);
+    AjPSqlstatement *Psqls);
 
 AjPSqlstatement ensDatabaseconnectionSqlstatementNew(
     EnsPDatabaseconnection dbc,
     const AjPStr statement);
 
 AjBool ensDatabaseconnectionFetchUrl(const EnsPDatabaseconnection dbc,
-                                     AjPStr* Purl);
+                                     AjPStr *Purl);
 
 /*
 ** End of prototype definitions
