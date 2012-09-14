@@ -1,3 +1,10 @@
+emboss (6.5.7-1) UNRELEASED; urgency=low
+
+  ec024a3 Imported Upstream version 6.5.7
+  78ef855 Removed upstream patch (for version 6.4.0).
+
+ -- Charles Plessy <plessy@debian.org>  Fri, 14 Sep 2012 14:01:42 +0900
+
 emboss (6.4.0-4) unstable; urgency=low
 
   * use autoreconf to enable latest changes
