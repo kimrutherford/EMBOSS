@@ -251,6 +251,11 @@ Copyright: Probably public domain (under investigation).
 Files: emboss/data/OBO/*.obo
 Comment: see http://www.obofoundry.org to find home pages.
 
+Files: emboss/data/OBO/chebi.obo
+Homepage: http://www.ebi.ac.uk/chebi/
+Copyright: Public domain according to answer or authors available at
+           https://lists.debian.org/debian-med/2013/01/msg00012.html
+
 
 Files: debian/*
 Copyright: the developers
