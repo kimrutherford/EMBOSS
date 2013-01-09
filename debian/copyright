@@ -263,6 +263,15 @@ Homepage: http://www.ebi.ac.uk/chebi/
 Copyright: Public domain according to answer or authors available at
            https://lists.debian.org/debian-med/2013/01/msg00012.html
 
+Files: emboss/data/OBO/software.obo
+Homepage: http://theswo.sourceforge.net/
+Copyright: 2011-2012 James Malone
+Comment: The statement of the author can be seen at
+         http://bugs.debian.org/694908#92
+         as long as the license is not yet published on its homepage
+License: Apache-2.0
+ On Debian systems you can find the complete text of the Apache License
+ Version 2.0 at /usr/share/common-licenses/Apache-2.0.
 
 Files: debian/*
 Copyright: the developers
