@@ -249,7 +249,10 @@ Homepage: http://www.ncbi.nlm.nih.gov/taxonomy
 Copyright: Probably public domain (under investigation).
 
 Files: emboss/data/OBO/*.obo
-Comment: see http://www.obofoundry.org to find home pages.
+Homepage: http://code.google.com/p/obo-relations/
+Copyright: 2008-2013 Chris Mungall <cjmungall@lbl.gov> et all
+License: CC-BY-3.0
+Comment: see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=694908
 
 Files: emboss/data/OBO/gene_ontology*.obo
 Homepage: http://www.geneontology.org/GO.cite.shtml
