@@ -276,6 +276,23 @@ License: Apache-2.0
  On Debian systems you can find the complete text of the Apache License
  Version 2.0 at /usr/share/common-licenses/Apache-2.0.
 
+Files: emboss/data/OBO/pathway.obo 
+Homepage: http://www.obofoundry.org/cgi-bin/detail.cgi?id=pathway
+Copyright: 2009-2012 Victoria Petri <vpetri@mcw.edu>
+License: CC_need_to_specify_version
+Comment: Date: Thu, 24 Jan 2013 15:43:52 +0000
+         From: "Petri, Victoria" <vpetri@mcw.edu>
+         To: Andreas Tille <tille@debian.org>
+         Subject: RE: Redistribution of Pathway ontology inside EMBOSS suite
+                  packaged for Debian
+         .
+ "When I created the project in SourceForge I remember using Creative Commons,
+  like GO.
+  These days I update the file at NCBO's Bioportal where the ontology is listed
+  as public."
+ .
+ Asked in mail for more clear specification of CC license version.
+
 Files: debian/*
 Copyright: the developers
 License: unclear
