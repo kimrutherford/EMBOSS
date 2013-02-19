@@ -299,6 +299,11 @@ Copyright: 2009-2013 Marcus Chibucos <mchibucos@gmail.com>,
                      Michelle Giglio <mgiglio@som.umaryland.edu>
 License: GPL-3+
 
+Files: emboss/data/OBO/ro.obo
+Homepage: http://code.google.com/p/obo-relations/
+Copyright: 2009-2013 Chris Mungall <cjmungall@lbl.gov> and others
+License: CC-BY-3.0
+
 Files: debian/*
 Copyright: the developers
 License: unclear
