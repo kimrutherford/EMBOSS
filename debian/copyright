@@ -304,6 +304,18 @@ Homepage: http://code.google.com/p/obo-relations/
 Copyright: 2009-2013 Chris Mungall <cjmungall@lbl.gov> and others
 License: CC-BY-3.0
 
+Files:  emboss/data/OBO/so.obo
+Homepage: http://www.sequenceontology.org/
+Copyright: 2009-2013 Sequence Ontology
+                     Karen Eilbeck <keilbeck@genetics.utah.edu>
+License: PD
+ The Sequence Ontology is in the public domain. It is available to
+ public and private sector users with no licensing requirements. We ask
+ that you cite SO and do not make changes to SO then redistribute under
+ the same name. 
+ .
+ See http://www.sequenceontology.org/resources/faq.html#lic
+
 Files: debian/*
 Copyright: the developers
 License: unclear
