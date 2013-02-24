@@ -317,15 +317,21 @@ License: PD
  See http://www.sequenceontology.org/resources/faq.html#lic
 
 Files: debian/*
-Copyright: the developers
-License: unclear
+Copyright: 2002-2004 Matt Hope <dopey@debian.org>
+           2007-2013 Charles Plessy <plessy@debian.org>
+           2012-2013 Andreas Tille <tille@debian.org>
+License: LGPL-2.1+
+Comment:
  The EMBOSS package for Debian was initially prepared by Matt Hope
  (dopey@debian.org) in 2002-2004 and released on
  (http://debian.bioinformatics.unsw.edu.au/). The package distributed in Debian
  was prepared by the "pkg-emboss" project in 2006, using the work of Matt Hope
- as a starting point. The packaging work of the pkg-emboss project is in the
- public domain unless stated otherwise.
-
+ as a starting point. Feel free to use the work of the pkg-emboss project as if
+ it were in the public domain.  The license of the packaging (LGPL-2.1+) was
+ chosen in 2013 to be as close as possible to upstream's licenses (LGPL-2.1+
+ for the libraries, GPL-2+ for the applications, and GFDL-NIV-1.1 for some of
+ the documentation).  After applyint patches, please be kind to submit them to
+ Upstream under terms that are convenient for them.
 
 License: CC-BY-3.0
  Attribution 3.0 Unported
