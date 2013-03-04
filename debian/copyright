@@ -278,20 +278,10 @@ License: Apache-2.0
 
 Files: emboss/data/OBO/pathway.obo 
 Homepage: http://www.obofoundry.org/cgi-bin/detail.cgi?id=pathway
+Source: ftp://rgd.mcw.edu/pub/data_release/
 Copyright: 2009-2012 Victoria Petri <vpetri@mcw.edu>
-License: CC_need_to_specify_version
-Comment: Date: Thu, 24 Jan 2013 15:43:52 +0000
-         From: "Petri, Victoria" <vpetri@mcw.edu>
-         To: Andreas Tille <tille@debian.org>
-         Subject: RE: Redistribution of Pathway ontology inside EMBOSS suite
-                  packaged for Debian
-         .
- "When I created the project in SourceForge I remember using Creative Commons,
-  like GO.
-  These days I update the file at NCBO's Bioportal where the ontology is listed
-  as public."
- .
- Asked in mail for more clear specification of CC license version.
+License: CC-BY-3.0
+Comment: See ftp://rgd.mcw.edu/pub/data_release/PathwayOntology_introduction.doc
 
 Files: emboss/data/OBO/eco.obo
 Homepage: https://code.google.com/p/evidenceontology/
