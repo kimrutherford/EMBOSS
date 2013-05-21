@@ -1,7 +1,19 @@
 emboss (6.5.7-1) UNRELEASED; urgency=low
 
+  [ Charles Plessy ]
   ec024a3 Imported Upstream version 6.5.7
   78ef855 Removed upstream patch (for version 6.4.0).
+  2f66060 Clarified the license of the packaging.
+
+  [ Andreas Tille ]
+  * Clarified copyright and licenses for:
+    - emboss/data/OBO/chebi.obo [b60238c]
+    - emboss/data/OBO/gene_ontology*.obo [dc91819]
+    - emboss/data/OBO/software.obo [3c8b4bf]
+    - emboss/data/OBO/*.obo [8c34d40]
+    - emboss/data/OBO/pathway.obo [1b3bbcf][1ff8ab9]
+    - emboss/data/OBO/eco.obo [95aa795]
+    - emboss/data/OBO/ro.obo [2865596]
 
  -- Charles Plessy <plessy@debian.org>  Fri, 14 Sep 2012 14:01:42 +0900
 
