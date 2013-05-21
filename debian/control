@@ -27,7 +27,6 @@ Build-Depends: debhelper (>= 9),
 Standards-Version: 3.9.3
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
 Vcs-Git: git://git.debian.org/debian-med/emboss.git
-DM-Upload-Allowed: yes
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
