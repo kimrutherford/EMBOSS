@@ -1,28 +1,47 @@
 Source: emboss
+Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+Uploaders: Charles Plessy <plessy@debian.org>,
+           Nelson A. de Oliveira <naoliv@debian.org>,
+           Andreas Tille <tille@debian.org>
 Section: science
 Priority: optional
-Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-DM-Upload-Allowed: yes
-Uploaders: Charles Plessy <plessy@debian.org>,
- Nelson A. de Oliveira <naoliv@debian.org>,
- Andreas Tille <tille@debian.org>
-Build-Depends: debhelper (>= 9), quilt, libx11-dev, x11proto-core-dev,
- libgdchart-gd2-xpm-dev, zlib1g-dev, libpng-dev, libexpat1-dev, libhpdf-dev,
- libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev,
- tcsh | csh | c-shell, dh-autoreconf,
+Build-Depends: debhelper (>= 9),
+               quilt,
+               libx11-dev,
+               x11proto-core-dev,
+               libgdchart-gd2-xpm-dev,
+               zlib1g-dev,
+               libpng-dev,
+               libexpat1-dev,
+               libhpdf-dev,
+               libmysqlclient-dev,
+               libpq-dev,
+               antiword,
+               sharutils,
+               autotools-dev,
+               tcsh | csh | c-shell,
+               dh-autoreconf,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
- default-jdk
+               default-jdk
 #Build-Depends-Indep: default-jdk
+Standards-Version: 3.9.3
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
 Vcs-Git: git://git.debian.org/debian-med/emboss.git
-Standards-Version: 3.9.3
+DM-Upload-Allowed: yes
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-lib (= ${binary:Version}), emboss-data (= ${source:Version})
-Recommends: primer3, dialign
-Suggests: emboss-doc, emboss-test, embassy, clustalw
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         emboss-lib (= ${binary:Version}),
+         emboss-data (= ${source:Version})
+Recommends: primer3,
+            dialign
+Suggests: emboss-doc,
+          emboss-test,
+          embassy,
+          clustalw
 Description: european molecular biology open software suite
  EMBOSS is a free Open Source software analysis package specially developed for
  the needs of the molecular biology (e.g. EMBnet) user community. The software
@@ -42,8 +61,8 @@ Description: data files for the EMBOSS package
  Biology Open Software Suite.
 
 Package: emboss-doc
-Section: doc
 Architecture: all
+Section: doc
 Depends: ${misc:Depends}
 Suggests: pdf-viewer | postscript-viewer
 Description: documentation for EMBOSS
@@ -51,8 +70,8 @@ Description: documentation for EMBOSS
  European Molecular Biology Open Software Suite.
 
 Package: emboss-test
-Section: misc
 Architecture: all
+Section: misc
 Depends: ${misc:Depends}
 Recommends: tcsh | csh | c-shell
 Suggests: valgrind
@@ -65,9 +84,24 @@ Description: test files for the EMBOSS package
 
 Package: emboss-lib
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Conflicts: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
-Replaces: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Conflicts: libajax5,
+           libajax6,
+           libajax5-dev,
+           libajax6-dev,
+           libnucleus5,
+           libnucleus6,
+           libnucleus5-dev,
+           libnucleus6-dev
+Replaces: libajax5,
+          libajax6,
+          libajax5-dev,
+          libajax6-dev,
+          libnucleus5,
+          libnucleus6,
+          libnucleus5-dev,
+          libnucleus6-dev
 Description: EMBOSS Libraries
  This package contains the core libraries of the European Molecular Biology
  Open Software Suite, EMBOSS.
@@ -88,7 +122,12 @@ Description: EMBOSS Libraries
 
 Package: jemboss
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, emboss, default-jre, tcsh | csh | c-shell
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         emboss,
+         default-jre,
+         tcsh | csh | c-shell
 Description: graphical user interface to EMBOSS
  Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
  Biology Open Software Suite. It is part of the EMBOSS distribution.
+
