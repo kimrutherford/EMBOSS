@@ -2,7 +2,7 @@
 Version=1.0
 Terminal=false
 Icon=jemboss
-Exec=runJemboss.csh
+Exec=runJemboss.sh
 Name=Jemboss
 GenericName=GUI for EMBOSS
 Comment=Graphical user interface for the European Molecular Biology Open Software Suite.
