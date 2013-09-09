@@ -83,7 +83,7 @@ override_dh_auto_install-indep:
 	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
 	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/data -executable -type f -exec chmod a-x \{\} \;
-	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test -type d -name CVS -exec rm -rf \{\} \;
+	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test -type d -name CVS | xargs rm -rf
 	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test -type f -name .cvsignore -delete
 
 override_dh_auto_test:
