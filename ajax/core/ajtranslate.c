@@ -18,12 +18,12 @@
 ** This should be attended to at some time.
 **
 ** @author Copyright (C) 1999 Gary Williams
-** @version $Revision: 1.47 $
+** @version $Revision: 1.49 $
 ** @modified Feb 15 1999 GWW First version
 ** @modified April 19 1999 GWW Second version using NCBI's GC tables
 ** @modified April 18 2000 GWW Reorganised many of the routines
 ** @modified 2001-2011 Peter Rice
-** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
+** @modified $Date: 2013/02/07 10:32:50 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -459,49 +459,49 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     /* data */
     tokenhandle = ajStrTokenNewC(trnText, white);
 
-    ajStrTokenNextParse(&tokenhandle, &tmpstr);
+    ajStrTokenNextParse(tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "AAs") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'AAs' line was not found.", trnObj->FileName);
 
-    ajStrTokenNextParse(&tokenhandle, &aaline);
+    ajStrTokenNextParse(tokenhandle, &aaline);
     aa = ajStrGetPtr(aaline);
 
-    ajStrTokenNextParse(&tokenhandle, &tmpstr);
+    ajStrTokenNextParse(tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "Starts") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Starts' line was not found.", trnObj->FileName);
 
-    ajStrTokenNextParse(&tokenhandle, &startsline);
+    ajStrTokenNextParse(tokenhandle, &startsline);
     starts = ajStrGetPtr(startsline);
 
-    ajStrTokenNextParse(&tokenhandle, &tmpstr);
+    ajStrTokenNextParse(tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "Base1") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base1' line was not found.", trnObj->FileName);
 
-    ajStrTokenNextParse(&tokenhandle, &base1line);
+    ajStrTokenNextParse(tokenhandle, &base1line);
     base1 = ajStrGetPtr(base1line);
 
-    ajStrTokenNextParse(&tokenhandle, &tmpstr);
+    ajStrTokenNextParse(tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "Base2") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base2' line was not found.", trnObj->FileName);
 
-    ajStrTokenNextParse(&tokenhandle, &base2line);
+    ajStrTokenNextParse(tokenhandle, &base2line);
     base2 = ajStrGetPtr(base2line);
 
-    ajStrTokenNextParse(&tokenhandle, &tmpstr);
+    ajStrTokenNextParse(tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "Base3") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base3' line was not found.", trnObj->FileName);
 
-    ajStrTokenNextParse(&tokenhandle, &base3line);
+    ajStrTokenNextParse(tokenhandle, &base3line);
     base3 = ajStrGetPtr(base3line);
 
 
@@ -532,8 +532,8 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
 	** put the residue in the table using the unambiguous codon
 	*/
 	trnObj->GC[trnconv[(ajint)base1[i]]]
-	    [trnconv[(ajint)base2[i]]]
-		[trnconv[(ajint)base3[i]]]
+	          [trnconv[(ajint)base2[i]]]
+                  [trnconv[(ajint)base3[i]]]
 		    = aa[i];
     }
 
@@ -871,8 +871,75 @@ void ajTrnSeqC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
     for(i=0; i < lenmod3; i+=3)
     {
         *cq++ =  trnObj->GC[trnconv[(ajint)*cp]]
-	  [trnconv[(ajint)*(cp+1)]]
-	  [trnconv[(ajint)*(cp+2)]];
+	                   [trnconv[(ajint)*(cp+1)]]
+	                   [trnconv[(ajint)*(cp+2)]];
+	cp+=3;
+    }
+    ajStrSetValidLen(&transtr, trnlen);
+    ajStrAppendS(pep, transtr);
+    ajStrDel(&transtr);
+
+    return;
+}
+
+
+
+
+
+/* @func ajTrnSeqInitC ********************************************************
+**
+** Translates a sequence in a char *
+**
+** This routine translates in frame 1 (from the first base) to the last full
+** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
+** ignored)
+**
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] str [const char *] sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] Translating a sequence from a char* text
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqInitC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
+{
+    ajint i;
+    ajint lenmod3;
+    const char *cp = str;
+    AjPStr transtr = NULL;
+    char *cq;
+    ajint trnlen;
+    ajuint istart = 0;
+
+    lenmod3 = len - (len % 3);
+    trnlen = lenmod3/3;
+
+    transtr = ajStrNewRes(trnlen+1);
+    cq = ajStrGetuniquePtr(&transtr);
+
+    if(lenmod3 > 2)
+    {
+        if('M' == trnObj->Starts[trnconv[(ajint)*cp]]
+                                [trnconv[(ajint)*(cp+1)]]
+                                [trnconv[(ajint)*(cp+2)]])
+        {
+            cp += 3;
+            istart += 3;
+            *cq++ = 'M';
+        }
+    }
+
+    for(i=istart; i < lenmod3; i+=3)
+    {
+        *cq++ =  trnObj->GC[trnconv[(ajint)*cp]]
+	                   [trnconv[(ajint)*(cp+1)]]
+	                   [trnconv[(ajint)*(cp+2)]];
 	cp+=3;
     }
     ajStrSetValidLen(&transtr, trnlen);
@@ -926,8 +993,82 @@ void ajTrnSeqRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
     for(i=end; i>1; i-=3)
     {
 	*cq++ = trnObj->GC[trncomp[(ajint)*cp]]
-	  [trncomp[(ajint)*(cp-1)]]
-	  [trncomp[(ajint)*(cp-2)]];
+	                  [trncomp[(ajint)*(cp-1)]]
+	                  [trncomp[(ajint)*(cp-2)]];
+	cp-=3;
+    }
+
+    ajStrSetValidLen(&transtr, trnlen);
+    ajStrAppendS(pep, transtr);
+    ajStrDel(&transtr);
+
+    return;
+}
+
+
+
+
+
+/* @func ajTrnSeqRevinitC *****************************************************
+**
+** Translates the reverse complement of a sequence in a char *.
+** If the sequence begins with a defined alternative start codon,
+** the residue is replaced with Methionine.
+**
+** This routine translates in frame -1 (using the frame '1' codons)
+** to the first full triplet codon,
+** (i.e. if there are 1 or 2 bases extra at the start, they are ignored)
+**
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] str [const char *] sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] Reverse complement translating a sequence
+**                from a char* text
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqRevinitC(const AjPTrn trnObj, const char *str, ajint len,
+                      AjPStr *pep)
+{
+    ajint i;
+    ajint end;
+    const char *cp;
+    AjPStr transtr = NULL;
+    char *cq;
+    ajint trnlen;
+    ajuint iend;
+
+    end = (len/3)*3-1;
+    trnlen = (end+1)/3;
+    cp = &str[end];
+    transtr = ajStrNewRes(trnlen+1);
+    cq = ajStrGetuniquePtr(&transtr);
+
+    iend = end;
+
+    if(iend > 2)
+    {
+        if('M' == trnObj->Starts[trncomp[(ajint)*cp]]
+                                [trncomp[(ajint)*(cp-1)]]
+                                [trncomp[(ajint)*(cp-2)]])
+        {
+            cp -= 3;
+            iend -= 3;
+            *cq++ = 'M';
+        }
+    }
+
+    for(i=iend; i>1; i-=3)
+    {
+	*cq++ = trnObj->GC[trncomp[(ajint)*cp]]
+	                  [trncomp[(ajint)*(cp-1)]]
+	                  [trncomp[(ajint)*(cp-2)]];
 	cp-=3;
     }
 
@@ -973,8 +1114,65 @@ void ajTrnSeqAltRevC(const AjPTrn trnObj, const char *str, ajint len,
 
     for(i=len-1; i>1; i-=3)
 	ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
-		                 [trncomp[(ajint)str[i-1]]]
-		                 [trncomp[(ajint)str[i-2]]]);
+		                    [trncomp[(ajint)str[i-1]]]
+		                    [trncomp[(ajint)str[i-2]]]);
+
+    return;
+}
+
+
+
+
+/* @func ajTrnSeqAltRevinitC **************************************************
+**
+** Translates the reverse complement of a sequence in a char *.
+** If the sequence begins with a defined alternative start codon,
+** the residue is replaced with Methionine.
+**
+** This routine translates in frame -4 (from the last base) to the first full
+** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
+** ignored).
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+**
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] str [const char *] sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] (Alt) Reverse complement translating a
+**                sequence from a char* text
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqAltRevinitC(const AjPTrn trnObj, const char *str, ajint len,
+                         AjPStr *pep)
+{
+    ajint i;
+    ajint iend;
+
+    iend = len-1;
+
+    if(iend > 1)
+    {
+        if('M' == trnObj->Starts[trncomp[(ajint)str[iend]]]
+                                [trncomp[(ajint)str[iend-1]]]
+                                [trncomp[(ajint)str[iend-2]]])
+        {
+            iend -= 3;
+            ajStrAppendK(pep, 'M');
+        }
+    }
+
+
+    for(i=iend; i>1; i-=3)
+	ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
+		                    [trncomp[(ajint)str[i-1]]]
+		                    [trncomp[(ajint)str[i-2]]]);
 
     return;
 }
@@ -1290,9 +1488,128 @@ void ajTrnSeqFrameS(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 
 
 
+/* @func ajTrnSeqFrameInitC ***************************************************
+**
+** Translates a sequence in a char * in the specified frame.
+** The translation is APPENDED to the input peptide.
+** If the sequence begins with a defined alternative start codon,
+** the residue is replaced with Methionine.
+**
+** This routine translates in the specified frame (one of:
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored).
+**
+** Frame -1 is defined as the translation of the reverse complement
+** sequence which matches the codons used in frame 1.  i.e.  in the sequence
+** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
+** is the reverse complement of ACG (i.e.  CGT).
+**
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
+** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] seq [const char *] sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
+** @param [r] frame [ajint] frame to translate in
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] Translating a sequence from a char* in a
+**                frame
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqFrameInitC(const AjPTrn trnObj,
+                        const char *seq, ajint len,
+                        ajint frame, AjPStr *pep)
+{
+
+    if(frame > 3)
+        frame = -frame + 3;
+
+    if(frame >= 1 && frame <= 3)
+    {
+	/* len = REAL length passed over */
+	ajTrnSeqInitC(trnObj, &seq[frame-1], len-frame+1, pep);
+    }
+    else if(frame >= -3 && frame <= -1)
+    {
+	/* len = REAL length passed over */
+	ajTrnSeqRevinitC(trnObj, &seq[-frame-1], len+frame+1, pep);
+    }
+    else if(frame >= -6 && frame <= -4)
+	ajTrnSeqAltRevinitC(trnObj, seq, len+frame+4 , pep);
+    else
+	ajFatal("Invalid frame '%d' in ajTrnSeqFrameC()\n", frame);
+
+    return;
+}
+
+
+
+
+/* @func ajTrnSeqFrameInitS ***************************************************
+**
+** Translates a sequence in a AjStr in the specified frame.
+** The translation is APPENDED to the input peptide.
+** If the sequence begins with a defined alternative start codon,
+** the residue is replaced with Methionine.
+**
+** This routine translates in the specified frame (one of:
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored).
+**
+** Frame -1 is defined as the translation of the reverse complement
+** sequence which matches the codons used in frame 1.  i.e.  in the sequence
+** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
+** is the reverse complement of ACG (i.e.  CGT).
+**
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
+** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] seq [const AjPStr] sequence string to translate
+** @param [r] frame [ajint] frame to translate in
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] Translating a sequence from a AjPStr in a
+**                frame
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqFrameInitS(const AjPTrn trnObj, const AjPStr seq, ajint frame,
+                        AjPStr *pep)
+{
+    ajTrnSeqFrameInitC(trnObj, ajStrGetPtr(seq), ajStrGetLen(seq), frame, pep);
+
+    return;
+}
+
+
+
+
 /* @func ajTrnSeqFrameSeq *****************************************************
 **
-** Translates a sequence in a AjSeq in the specified frame.
+** Translates a sequence in an AjPSeq in the specified frame.
 ** The translation is APPENDED to the input peptide.
 **
 ** This routine translates in the specified frame (one of:
@@ -1332,6 +1649,58 @@ void ajTrnSeqFrameSeq(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
                       AjPStr *pep)
 {
     ajTrnSeqFrameC(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq), frame, pep);
+
+    return;
+}
+
+
+
+
+/* @func ajTrnSeqFrameSeqInit *************************************************
+**
+** Translates a sequence in an AjPSeq in the specified frame.
+** The translation is APPENDED to the input peptide.
+** If the sequence begins with a defined alternative start codon,
+** the residue is replaced with Methionine.
+**
+** This routine translates in the specified frame (one of:
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored).
+**
+** Frame -1 is defined as the translation of the reverse complement
+** sequence which matches the codons used in frame 1.  i.e.  in the sequence
+** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
+** is the reverse complement of ACG (i.e.  CGT).
+**
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
+** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
+**
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] seq [const AjPSeq] sequence string to translate
+** @param [r] frame [ajint] frame to translate in
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @category use [AjPTrn] Translating a sequence from a AjPSeq in a
+**                frame
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ajTrnSeqFrameSeqInit(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
+                          AjPStr *pep)
+{
+    ajTrnSeqFrameInitC(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq),
+                       frame, pep);
 
     return;
 }
@@ -1446,12 +1815,12 @@ ajint ajTrnSeqDangleC(const AjPTrn trnObj, const char *seq,
     {
 	if(frame >= 1 && frame <= 3)
 	    ajStrAppendK(pep, trnObj->GC[trnconv[(ajint)seq[end]]]
-		                     [trnconv[(ajint)seq[end+1]]]
-		                     [trnconv[0]]);
+		                        [trnconv[(ajint)seq[end+1]]]
+		                        [trnconv[0]]);
 	else	/* reverse sense */
 	    ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)seq[1]]]
-		                     [trncomp[(ajint)seq[0]]]
-		                     [trncomp[0]]);
+		                        [trncomp[(ajint)seq[0]]]
+		                        [trncomp[0]]);
     }
     else if(dangle == 1) /* Make up single base translation */
 	ajStrAppendK(pep, 'X');
@@ -1510,17 +1879,96 @@ ajint ajTrnSeqDangleS(const AjPTrn trnObj, const AjPStr seq, ajint frame,
     {
 	if(frame >= 1 && frame <= 3)
 	    ajStrAppendK(pep, trnObj->GC[trnconv[(ajint)cp[end]]]
-		                     [trnconv[(ajint)cp[end+1]]]
-		                     [trnconv[0]]);
+		                        [trnconv[(ajint)cp[end+1]]]
+		                        [trnconv[0]]);
 	else	/* reverse sense */
 	    ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)cp[1]]]
-		                     [trncomp[(ajint)cp[0]]]
-		                     [trncomp[0]]);
+		                        [trncomp[(ajint)cp[0]]]
+		                        [trncomp[0]]);
     }
     else if(dangle == 1) /* Make up single base translation */
 	ajStrAppendK(pep, 'X');
 
     return dangle;
+}
+
+
+
+
+/* @func ajTrnSeqInit *********************************************************
+**
+** Translates a sequence, correcting first residue to methionine if it is a
+** defined start codon in the translation table.
+**
+** The frame to translate is in the range -3 to 6.
+** Frames 1 to 3 give normal forward translations.
+**
+** Frames -3 to -1 give translations in the reverse sense.
+** Frame -1 is defined as the translation of the reverse complement
+** sequence which matches the codons used in frame 1.  i.e.  in the sequence
+** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
+** is the reverse complement of ACG (i.e.  CGT).
+**
+** Frames -4 to -6 give translations in the reverse sense.
+** Frame -4 is defined as the translation of the reverse complement,
+** starting the translation in the first codon of the reversed sequence.
+** i.e.  in the sequence ACGT, the last codon is CGT and so frame -4
+** translates from the reverse complement of CGT (i.e.  ACG) - this is
+** for those people who define frame -1 as using the first codon when the
+** sequence is reverse-complemented.
+**
+** Frames 4 to 6 rev-comp the DNA sequence then reverse the peptide sequence
+**
+** Frames 4 to 6 are therefore a reversed protein sequence useful mainly for
+**  displaying beneath the original DNA sequence.
+**
+** NB.  that the naming of the output sequence is always to take
+** the name of the input sequence (e.g.  ECARGS) and to append an underscore
+** character and the frame number 1 to 3 for forward frames and 4 to 6 for
+** reverse frames regardless of the final orientation of the reverse
+** frames.  (i.e.  frame -1 = ECARGS_4, frame -2 = ECARGS_5, -3 = ECARGS_6, 4 =
+** ECARGS_4, 5 = ECARGS_5 6 = ECARGS_6)
+**
+** @param [r] trnObj [const AjPTrn] Translation tables
+** @param [r] seq [const AjPSeq] sequence to translate
+** @param [r] frame [ajint] frame to translate in (-6 to 6)
+**
+** @return [AjPSeq] Peptide translation
+** @category use [AjPTrn] Translating a sequence
+** @category new [AjPSeq] Translating a sequence
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+AjPSeq ajTrnSeqInit(const AjPTrn trnObj, const AjPSeq seq, ajint frame)
+{
+    AjPSeq pep = NULL;
+    AjPStr trn = NULL;
+
+    pep = ajTrnNewPep(seq, frame);
+    trn = ajStrNew();
+
+    ajTrnSeqFrameSeqInit(trnObj, seq, frame, &trn);
+
+    /*
+    ** if there are any dangling bases, then attempt to
+    ** translate them
+    */
+    ajTrnSeqDangleS(trnObj, ajSeqGetSeqS(seq), frame, &trn);
+
+    /*
+    ** if frame is 4, 5 or 6 then reverse the peptide for displaying beneath
+    ** the original DNA sequence
+    */
+    if(frame > 3)
+	ajStrReverse(&trn);
+
+    ajSeqAssignSeqS(pep, trn);
+
+    ajStrDel(&trn);
+
+    return pep;
 }
 
 
@@ -1786,8 +2234,8 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
 		continue;
 
 	    ajStrTokenAssignC(&handle, line, " ");
-	    ajStrTokenNextParse(&handle, &tok1);
-	    ajStrTokenRestParse(&handle, &tok2);
+	    ajStrTokenNextParse(handle, &tok1);
+	    ajStrTokenRestParse(handle, &tok2);
 	    ajTablePut(trnCodes, tok1, tok2);
 	    tok1 = NULL;
 	    tok2 = NULL;

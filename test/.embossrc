@@ -7,7 +7,7 @@ SET emboss_tempdata  $emboss_standard/test
 # Used to make the output consistent where an application reports
 # today's date
 
-SET emboss_timetoday "2012-07-15 12:00:00"
+SET emboss_timetoday "2013-07-15 12:00:00"
 
 #######################################
 # Standard test databases
@@ -28,7 +28,7 @@ SET emboss_timetoday "2012-07-15 12:00:00"
 # =========
 
 DB tsw [
-   type: "Protein protfeatures"
+   type: "Protein protfeatures text"
    directory: "$emboss_tempdata/swiss"
    method: "emblcd"
    format: "swiss"
@@ -42,14 +42,15 @@ DB tsw [
    comment: "Swissprot native format with EMBL CD-ROM index"
    taxon: "1 all"
    edamdat: "1230 UniProt protein sequence record"
+   example: "hba_human"
 ]
 
 # trembl
 # ======
 
 DB tswnew [ type: "Protein protfeatures"
-   dir: $emboss_tempdata/swnew
-   method: emblcd format: swiss release: 37 
+   directory: "$emboss_tempdata/swnew"
+   method: "emblcd" format: "swiss" release: "37" 
    fields: "sv des org key"
    comment: "SpTrEmbl as 3 files in native format with EMBL CD-ROM index"
    taxon: "1 all"
@@ -60,26 +61,27 @@ DB tswnew [ type: "Protein protfeatures"
 # ====
 
 DB tembl [ type: "Nucleotide refseq nucfeatures"
-   dir: $emboss_tempdata/embl
-   method: emblcd format: "embl emblcon" release: 57 
+   directory: "$emboss_tempdata/embl"
+   method: "emblcd" format: "embl emblcon" release: "57" 
    fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index"
    taxon: "1 all"
    edamdat: "1226 EMBL nucleotide sequence record"
    special: "ConDatabase=TEMBL"
    special: "ConField=acc"
+   example: "x13776"
 ]
 
 # pir
 # ===
 
 DB tpir [ type: "protein"
-   dir: $emboss_tempdata/pir
-   method: gcg
-   file: pir*.seq
-   format: nbrf
+   directory: "$emboss_tempdata/pir"
+   method: "gcg"
+   file: "pir*.seq"
+   format: "nbrf"
    fields: "des org key"
-   comment: "PIR using NBRF access for 4 files"
+   comment: "Test PIR using NBRF access for 4 files"
    taxon: "1 all"
    edamdat: "1232 PIR protein sequence record"
 ]
@@ -88,11 +90,11 @@ DB tpir [ type: "protein"
 # =======
 
 DB tgb [ type: "nucleotide nucfeatures"
-    method: srswww format: genbank
+    method: "srswww" format: "genbank"
    url: "http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz"
-   dbalias: genbank
+   dbalias: "genbank"
    fields: "sv des org key"
-   comment: "Genbank IDs"
+   comment: "Genbank by SRS at DKFZ"
    taxon: "1 all"
 ]
 
@@ -100,10 +102,10 @@ DB tgb [ type: "nucleotide nucfeatures"
 # =======
 
 DB tgenbank [ type: "nucleotide nucfeatures"
-   dir: $emboss_tempdata/genbank
-   method: emblcd format: genbank release: 01 
+   directory: "$emboss_tempdata/genbank"
+   method: "emblcd" format: "genbank" release: "01"
    fields: "sv des org key"
-   comment: "GenBank in native format with EMBL CD-ROM index"
+   comment: "Test GenBank in native format with EMBL CD-ROM index"
    taxon: "1 all"
 ]
 
@@ -111,10 +113,11 @@ DB tgenbank [ type: "nucleotide nucfeatures"
 # =======
 
 DB testdb [ type: "nucleotide"
-   dir: $emboss_tempdata/testdb
-   method: emblcd format: fasta release: 01
+   directory: "$emboss_tempdata/testdb"
+   method: "emblcd" format: "fasta" release: "01"
    fields: "des"
-   comment: "test sequence data" ]
+   comment: "test sequence data"
+]
 
 #######################################
 ### Access method EMBLCD, flatfile data
@@ -124,48 +127,48 @@ DB testdb [ type: "nucleotide"
 # ===============
 
 DB qanflat  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emblcd
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbiflat-ex-keep
+  format: "embl" method: "emblcd"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbiflat-ex-keep"
   comment: "EMBL flatfiles"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanflatall  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emblcd
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  format: "embl" method: "emblcd"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbiflat-embl-allsys-keep"
   comment: "EMBL flatfiles"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanflatexc  [ type: "nucleotide nucfeatures"
-  format: embl method: emblcd
-  dir: $emboss_qadata/embl
-  exclude: rod.dat
-  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  format: "embl" method: "emblcd"
+  directory: "$emboss_qadata/embl"
+  exclude: "rod.dat"
+  indexdir: "$emboss_qadata/qa/dbiflat-embl-allsys-keep"
   comment: "EMBL flatfiles, no rodent file"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanflatinc  [ type: "nucleotide nucfeatures"
-  format: embl method: emblcd
-  dir: $emboss_qadata/embl
-  file: rod.dat
-  exclude: *.dat
-  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  format: "embl" method: "emblcd"
+  directory: "$emboss_qadata/embl"
+  file: "rod.dat"
+  exclude: "*.dat"
+  indexdir: "$emboss_qadata/qa/dbiflat-embl-allsys-keep"
   comment: "EMBL flatfiles, only rodent file"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanxflat  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emboss
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbxflat-ex-keep
-  dbalias: embl
+  format: "embl" method: "emboss"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbxflat-ex-keep"
+  dbalias: "embl"
   comment: "EMBL flatfiles"
   taxon: "1 all"
   fields: "id,acc"
@@ -173,43 +176,44 @@ DB qanxflat  [ type: "nucleotide nucfeatures refseq"
 ]
 
 DB qanxflatall  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emboss
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  format: "embl" method: "emboss"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbxflat-all-keep"
   fields: "des org key sv"
-  dbalias: embl
+  dbalias: "embl"
   comment: "EMBL flatfiles, all fields indexed"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qaxembl  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emboss
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbxflat-all-keep
-  dbalias: embl
+  format: "embl" method: "emboss"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbxflat-all-keep"
+  dbalias: "embl"
   comment: "EMBL flatfiles"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanxflatexc  [ type: "nucleotide nucfeatures refseq"
-  format: embl method: emboss
-  dir: $emboss_qadata/embl
-  exclude: rod.dat
-  indexdir: $emboss_qadata/qa/dbxflat-all-keep
-  dbalias: embl
+  format: "embl" method: "emboss"
+  directory: "$emboss_qadata/embl"
+  exclude: "rod.dat"
+  indexdir: "$emboss_qadata/qa/dbxflat-all-keep"
+  dbalias: "embl"
   comment: "EMBL flatfiles, no rodent file"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
-DB qanxflatinc  [ type: "nucleotide nucfeatures" format: embl method: emboss
-  dir: $emboss_qadata/embl
-  file: rod.dat
-  exclude: *.dat
-  indexdir: $emboss_qadata/qa/dbxflat-all-keep
-  dbalias: embl
+DB qanxflatinc  [ type: "nucleotide nucfeatures"
+  format: "embl" method: "emboss"
+  directory: "$emboss_qadata/embl"
+  file: "rod.dat"
+  exclude: "*.dat"
+  indexdir: "$emboss_qadata/qa/dbxflat-all-keep"
+  dbalias: "embl"
   comment: "EMBL flatfiles, only rodent file"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
@@ -219,28 +223,28 @@ DB qanxflatinc  [ type: "nucleotide nucfeatures" format: embl method: emboss
 # ============
 
 DB qapflat  [ type: "protein protfeatures"
-  format: swiss method: emblcd
-  dir: $emboss_qadata/swnew
-  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  format: "swiss" method: "emblcd"
+  directory: "$emboss_qadata/swnew"
+  indexdir: "$emboss_qadata/qa/dbiflat-swiss-keep"
   comment: "SpTrEmbl flatfile"
   taxon: "1 all"
   edamdat: "1230 UniProt protein sequence record"
 ]
 
 DB qapflatall  [ type: "protein protfeatures"
-  format: swiss method: emblcd
-  dir: $emboss_qadata/swnew
-  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  format: "swiss" method: "emblcd"
+  directory: "$emboss_qadata/swnew"
+  indexdir: "$emboss_qadata/qa/dbiflat-swiss-keep"
   comment: "SpTrEmbl flatfiles, all fields indexed"
   fields: "sv des org key"
   taxon: "1 all"
   edamdat: "1230 UniProt protein sequence record"
 ]
 
-DB qapxflat  [ type: P format: swiss method: emboss
-  dir: $emboss_qadata/swnew
-  indexdir: $emboss_qadata/qa/dbxflat-swiss-keep
-  dbalias: swnew
+DB qapxflat  [ type: "Protein" format: "swiss" method: "emboss"
+  directory: "$emboss_qadata/swnew"
+  indexdir: "$emboss_qadata/qa/dbxflat-swiss-keep"
+  dbalias: "swnew"
   comment: "Swissnew flatfiles"
   taxon: "1 all"
   edamdat: "1230 UniProt protein sequence record"
@@ -251,32 +255,32 @@ DB qapxflat  [ type: P format: swiss method: emboss
 ###########################################
 
 DB qanfasta  [ type: "nucleotide"
-  format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-ex-keep
+  format: "fasta" method: "emblcd"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbifasta-ex-keep"
   comment: "FASTA file EMBL rodents"
   taxon: "9989 rodentia"
 ]
 
 DB qapfasta  [ type: "protein"
-  format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-swiss-keep
+  format: "fasta" method: "emblcd"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbifasta-swiss-keep"
   comment: "FASTA file swissnew entries"
   taxon: "1 all"
 ]
 
-DB qawfasta  [ type: N format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-worm-keep
+DB qawfasta  [ type: "Nucleotide" format: "fasta" method: "emblcd"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbifasta-worm-keep"
   comment: "FASTA file wormpep entries"
   taxon: "6239 caenorhabditis elegans"
 ]
 
 DB qanfastaall  [ type: "nucleotide"
-  format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-allsys-keep
+  format: "fasta" method: "emblcd"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbifasta-allsys-keep"
   comment: "FASTA file EMBL rodents, all fields indexed"
   fields: "sv des"
   taxon: "9989 rodentia"
@@ -287,39 +291,39 @@ DB qanfastaall  [ type: "nucleotide"
 ###########################################
 
 DB qanxfasta  [ type: "nucleotide"
-  format: fasta method: emboss
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbxfasta-ex-keep
-  dbalias: emrod
+  format: "fasta" method: "emboss"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbxfasta-ex-keep"
+  dbalias: "emrod"
   comment: "FASTA file EMBL rodents"
   taxon: "9989 rodentia"
 ]
 
 DB qapxfasta  [ type: "protein"
-  format: fasta method: emboss
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbxfasta-swiss-keep
-  dbalias: swnew
+  format: "fasta" method: "emboss"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbxfasta-swiss-keep"
+  dbalias: "swnew"
   comment: "FASTA file swissnew entries"
   taxon: "1 all"
 ]
 
 DB qawxfasta  [ type: "nucleotide"
-  format: fasta method: emboss
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbxfasta-worm-keep
-  dbalias: worm
+  format: "fasta" method: "emboss"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbxfasta-worm-keep"
+  dbalias: "worm"
   comment: "FASTA file wormpep entries"
   taxon: "6239 caenorhabditis elegans"
 ]
 
 DB qanxfastaall  [ type: "nucleotide"
-  format: fasta method: emboss
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbxfasta-allsys-keep
+  format: "fasta" method: "emboss"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbxfasta-allsys-keep"
   fields: "sv des"
   comment: "FASTA file EMBL rodents, all fields indexed"
-  dbalias: emrod
+  dbalias: "emrod"
   taxon: "9989 rodentia"
 ]
 
@@ -328,44 +332,44 @@ DB qanxfastaall  [ type: "nucleotide"
 #######################
 
 DB qapblast  [ type: "protein"
-  format: ncbi method: blast
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-ex-keep
+  format: "ncbi" method: "blast"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbiblast-ex-keep"
   comment: "BLAST swissnew"
   taxon: "1 all"
 ]
 
 DB qapblastsplit  [ type: "protein"
-  format: ncbi method: blast
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  format: "ncbi" method: "blast"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbiblast-split-keep"
   comment: "BLAST swissnew split in 5 files"
   taxon: "1 all"
 ]
 
 DB qapblastsplitexc  [ type: "protein"
-  format: ncbi method: blast
-  dir: $emboss_qadata/data
-  exclude: swsplit.02.*
-  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  format: "ncbi" method: "blast"
+  directory: "$emboss_qadata/data"
+  exclude: "swsplit.02.*"
+  indexdir: "$emboss_qadata/qa/dbiblast-split-keep"
   comment: "BLAST swissnew split in 5 files, not file 02"
   taxon: "1 all"
 ]
 
 DB qapblastsplitinc  [ type: "protein"
-  format: ncbi method: blast
-  dir: $emboss_qadata/data
-  file: swsplit.02.*
-  exclude: *
-  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  format: "ncbi" method: "blast"
+  directory: "$emboss_qadata/data"
+  file: "swsplit.02.*"
+  exclude: "*"
+  indexdir: "$emboss_qadata/qa/dbiblast-split-keep"
   comment: "BLAST swissnew split in 5 files, only file 02"
   taxon: "1 all"
 ]
 
 DB qapblastall  [ type: "protein"
-  format: ncbi method: blast
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-allsys-keep
+  format: "ncbi" method: "blast"
+  directory: "$emboss_qadata/data"
+  indexdir: "$emboss_qadata/qa/dbiblast-allsys-keep"
   comment: "BLAST swissnew, all fields indexed"
   fields: "sv des"
   taxon: "1 all"
@@ -376,81 +380,81 @@ DB qapblastall  [ type: "protein"
 #####################
 
 DB qangcg  [ type: "nucleotide nucfeatures"
-  format: embl method: gcg
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
-  comment: "GCG format EMBL"
+  format: "embl" method: "gcg"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbigcg-ex-keep"
+  comment: "GCG format test EMBL"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qangcgexc  [ type: "nucleotide nucfeatures"
-  format: embl method: gcg
-  dir: $emboss_qadata/embl
-  exclude: eem_ba1.*
-  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
-  comment: "GCG format EMBL without prokaryotes"
+  format: "embl" method: "gcg"
+  directory: "$emboss_qadata/embl"
+  exclude: "eem_ba1.*"
+  indexdir: "$emboss_qadata/qa/dbigcg-ex-keep"
+  comment: "GCG format test EMBL without prokaryotes"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qangcginc  [ type: "nucleotide nucfeatures"
-  format: embl method: gcg
-  dir: $emboss_qadata/embl
-  file: eem_ba1.*
-  exclude: *
-  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
-  comment: "GCG format EMBL only prokaryotes"
+  format: "embl" method: "gcg"
+  directory: "$emboss_qadata/embl"
+  file: "eem_ba1.*"
+  exclude: "*"
+  indexdir: "$emboss_qadata/qa/dbigcg-ex-keep"
+  comment: "GCG format test EMBL only prokaryotes"
   taxon: "1 all"
 # need multiple taxon attributes as bacteria and archaea are in embl PRO
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qangcgall  [ type: "nucleotide nucfeatures"
-  format: embl method: gcg
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbigcg-allsys-keep
-  comment: "GCG format EMBL"
+  format: "embl" method: "gcg"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbigcg-allsys-keep"
+  comment: "GCG format test EMBL"
   fields: "sv des org key"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qapir  [ type: "protein protfeatures"
-  format: nbrf method: gcg
-  dir: $emboss_qadata/pir
-  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
-  comment: "PIR"
+  format: "nbrf" method: "gcg"
+  directory: "$emboss_qadata/pir"
+  indexdir: "$emboss_qadata/qa/dbigcg-pir-keep"
+  comment: "Test PIR indexed by dbigcg"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qapirexc  [ type: "protein protfeatures"
-  format: nbrf method: gcg
-  dir: $emboss_qadata/pir
-  exclude: pir1.*
-  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
-  comment: "PIR"
+  format: "nbrf" method: "gcg"
+  directory: "$emboss_qadata/pir"
+  exclude: "pir1.*"
+  indexdir: "$emboss_qadata/qa/dbigcg-pir-keep"
+  comment: "Test PIR indexed by dbigcg except file pir1"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qapirinc  [ type: "protein protfeatures"
-  format: nbrf method: gcg
-  dir: $emboss_qadata/pir
-  file: pir1.*
-  exclude: *
-  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
-  comment: "PIR"
+  format: "nbrf" method: "gcg"
+  directory: "$emboss_qadata/pir"
+  file: "pir1.*"
+  exclude: "*"
+  indexdir: "$emboss_qadata/qa/dbigcg-pir-keep"
+  comment: "Test PIR indexed by dbigcg file pir1"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qapirall  [ type: "protein protfeatures"
-  format: nbrf method: gcg
-  dir: $emboss_qadata/pir
-  indexdir: $emboss_qadata/qa/dbigcg-pirall-keep
-  comment: "PIR"
+  format: "nbrf" method: "gcg"
+  directory: "$emboss_qadata/pir"
+  indexdir: "$emboss_qadata/qa/dbigcg-pirall-keep"
+  comment: "Test PIR indexed by dbigcg with fields"
   fields: "des org key"
   taxon: "1 all"
 ]
@@ -460,89 +464,89 @@ DB qapirall  [ type: "protein protfeatures"
 ###########################
 
 DB qanxgcg  [ type: "nucleotide nucfeatures"
-  format: embl method: embossgcg
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
-  dbalias: embl
+  format: "embl" method: "embossgcg"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbxgcg-ex-keep"
+  dbalias: "embl"
   comment: "GCG format EMBL"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanxgcgexc  [ type: "nucleotide nucfeatures"
-  format: embl method: embossgcg
-  dir: $emboss_qadata/embl
-  exclude: eem_ba1.*
-  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
-  dbalias: embl
+  format: "embl" method: "embossgcg"
+  directory: "$emboss_qadata/embl"
+  exclude: "eem_ba1.*"
+  indexdir: "$emboss_qadata/qa/dbxgcg-ex-keep"
+  dbalias: "embl"
   comment: "GCG format EMBL without prokaryotes"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanxgcginc  [ type: "nucleotide nucfeatures"
-  format: embl method: embossgcg
-  dir: $emboss_qadata/embl
-  file: eem_ba1.*
-  exclude: *
-  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
-  dbalias: embl
+  format: "embl" method: "embossgcg"
+  directory: "$emboss_qadata/embl"
+  file: "eem_ba1.*"
+  exclude: "*"
+  indexdir: "$emboss_qadata/qa/dbxgcg-ex-keep"
+  dbalias: "embl"
   comment: "GCG format EMBL only prokaryotes"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qanxgcgall  [ type: "nucleotide nucfeatures"
-  format: embl method: embossgcg
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbxgcg-allsys-keep
+  format: "embl" method: "embossgcg"
+  directory: "$emboss_qadata/embl"
+  indexdir: "$emboss_qadata/qa/dbxgcg-allsys-keep"
   fields: "sv des org key"
-  dbalias: embl
-  comment: "GCG format EMBL"
+  dbalias: "embl"
+  comment: "GCG format EMBL indexed by dbxgcg with query fields"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
 
 DB qaxpir  [ type: "protein protfeatures"
-  format: nbrf method: embossgcg
-  dir: $emboss_qadata/pir
-  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
-  dbalias: pir
-  comment: "PIR"
+  format: "nbrf" method: "embossgcg"
+  directory: "$emboss_qadata/pir"
+  indexdir: "$emboss_qadata/qa/dbxgcg-pir-keep"
+  dbalias: "pir"
+  comment: "PIR indexed by dbxgcg"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qaxpirexc  [ type: "protein protfeatures"
-  format: nbrf method: embossgcg
-  dir: $emboss_qadata/pir
-  exclude: pir1.*
-  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
-  dbalias: pir
-  comment: "PIR"
+  format: "nbrf" method: "embossgcg"
+  directory: "$emboss_qadata/pir"
+  exclude: "pir1.*"
+  indexdir: "$emboss_qadata/qa/dbxgcg-pir-keep"
+  dbalias: "pir"
+  comment: "Test PIR indexed by dbxgcg except pir1"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qaxpirinc  [ type: "protein protfeatures"
-  format: nbrf method: embossgcg
-  dir: $emboss_qadata/pir
-  file: pir1.*
-  exclude: *
-  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
-  dbalias: pir
-  comment: "PIR"
+  format: "nbrf" method: "embossgcg"
+  directory: "$emboss_qadata/pir"
+  file: "pir1.*"
+  exclude: "*"
+  indexdir: "$emboss_qadata/qa/dbxgcg-pir-keep"
+  dbalias: "pir"
+  comment: "Test PIR indexed by dbxgcg file pir1"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
 
 DB qaxpirall  [ type: "protein protfeatures"
-  format: nbrf method: embossgcg
-  dir: $emboss_qadata/pir
-  indexdir: $emboss_qadata/qa/dbxgcg-pirall-keep
+  format: "nbrf" method: "embossgcg"
+  directory: "$emboss_qadata/pir"
+  indexdir: "$emboss_qadata/qa/dbxgcg-pirall-keep"
   fields: "des org key"
-  dbalias: pir
-  comment: "PIR"
+  dbalias: "pir"
+  comment: "Test PIR indexed by dbxgcg with fields"
   taxon: "1 all"
   edamdat: "1232 PIR protein sequence record"
 ]
@@ -552,8 +556,8 @@ DB qaxpirall  [ type: "protein protfeatures"
 #####################
 
 #DB qasrs [ type: "nucleotide nucfeatures refseq"
-#  format: embl method: srs
-#  dbalias: embl
+#  format: "embl" method: "srs"
+#  dbalias: "embl"
 #  fields: "sv des org"     # key omitted to test error messages
 #  comment: "EMBL in local srs installation"
 #  taxon: "1 all"
@@ -565,8 +569,8 @@ DB qaxpirall  [ type: "protein protfeatures"
 ##########################
 
 #DB qasrsfasta [ type: "nucleotide"
-#  format: fasta method: srsfasta
-#  dbalias: embl
+#  format: "fasta" method: "srsfasta"
+#  dbalias: "embl"
 #  fields: "sv des org key"
 #  comment: "EMBL in local srs installation, fasta format"
 #  taxon: "1 all"
@@ -576,12 +580,24 @@ DB qaxpirall  [ type: "protein protfeatures"
 ### access method SRSWWW
 ########################
 
-DB qasrswww [ type: "nucleotide nucfeatures refseq"
-  format: embl method: srswww
-  dbalias: embl
+DB qasrswww [ type: "protein protfeatures"
+  format: "swissprot" method: "srswww"
+  dbalias: "uniprot"
   fields: "sv des org key"
-  url: http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz
+  url: "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz"
   comment: "Remote SRS web server"
+  taxon: "1 all"
+  edamdat: "1230 UniProt protein sequence record"
+]
+
+##########################################
+# ENA entries no longer on qasrswww as EMBL
+###########################################
+
+DB ena [ type: "nucleotide nucfeatures"
+  format: "embl" method: "url"
+  url: "http://www.ebi.ac.uk/ena/data/view/%s&display=text"
+  comment: "ENA via URL"
   taxon: "1 all"
   edamdat: "1226 EMBL nucleotide sequence record"
 ]
@@ -601,6 +617,7 @@ DB tgenedb [
     hasacc: "N"
     identifier: "uniquename"
     taxon: "1 all"
+    comment: "GeneDb CHADO server"
 ]
 
 DB tflybase [
@@ -612,6 +629,7 @@ DB tflybase [
     hasacc: "N"
     identifier: "uniquename"
     taxon: "1 all"
+    comment: "Flybase CHADO server"
 ]
 
 ENDIF
@@ -695,11 +713,12 @@ SERVER tebeye [
 # ====
 
 DB temblall [ type: "nucleotide nucfeatures refseq"
-   dir: "$emboss_tempdata/embl"
+   directory: "$emboss_tempdata/embl"
    method: direct format: embl release: 57 
    fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index"
    filename: "*.dat"
+   exclude: "condiv.dat"
    taxon: "1 all"
    edamdat: "1226 EMBL nucleotide sequence record"
 ]
@@ -708,8 +727,8 @@ DB temblall [ type: "nucleotide nucfeatures refseq"
 # ====
 
 DB temblvrt [ type: "nucleotide nucfeatures"
-   dir: "$emboss_tempdata/embl"
-   method: direct format: embl release: 57 
+   directory: "$emboss_tempdata/embl"
+   method: "direct" format: "embl" release: "57" 
    fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index"
    filename: "hum*.dat rod*.dat vrt*.dat"
@@ -721,12 +740,12 @@ DB temblvrt [ type: "nucleotide nucfeatures"
 # ====
 
 DB temblrest [ type: "nucleotide nucfeatures refseq"
-   dir: "$emboss_tempdata/embl"
-   method: direct format: embl release: 57 
+   directory: "$emboss_tempdata/embl"
+   method: "direct" format: "embl" release: "57" 
    fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index"
    filename: "*.dat"
-   exclude: "hum*.dat rod*.dat vrt*.dat"
+   exclude: "condiv.dat hum*.dat rod*.dat vrt*.dat"
    taxon: "1 all"
    edamdat: "1226 EMBL nucleotide sequence record"
 ]
@@ -741,13 +760,13 @@ DB tedam [
   dbalias: "edam"
   type: "obo"
   indexdirectory: "$emboss_qadata/qa/dbxedam-keep"
-  dir: "$emboss_qadata/data"
+  directory: "$emboss_qadata/data"
   method: "emboss"
   format: "obo"
   release: "beta11"
   fields: "id acc nam isa des ns hasattr hasin hasout
            isid isfmt issrc"
-  comment: "EDAM using dbxedam test indexes"
+  comment: "Test EDAM using dbxedam test indexes"
 ]
 
 
@@ -758,13 +777,13 @@ DB tobo [
   dbalias: "edam"
   type: "obo"
   indexdirectory: "$emboss_qadata/qa/dbxobo-keep"
-  dir: "$emboss_qadata/data"
+  directory: "$emboss_qadata/data"
   method: "emboss"
   format: "obo"
   release: "beta11"
   fields: "id acc nam isa des ns hasattr hasin hasout
            isid isfmt issrc"
-  comment: "EDAM using dbxobo test indexes"
+  comment: "Test EDAM using dbxobo test indexes"
 ]
 
 
@@ -776,6 +795,7 @@ DB ttax [
   indexdirectory: "$emboss_qadata/qa/dbxtax-keep"
   directory:      "$emboss_qadata/data/taxonomy"
   fields: "id acc nam rnk up gc mgc"
+  comment: "NCBI taxonomy test data"
 ]
 
 
@@ -787,6 +807,7 @@ DB bpsw [
   indexdirectory: "$emboss_qadata/swiss/swissprot"
   directory:      "$emboss_qadata/swiss"
   fields: "id acc"
+  comment: "BioPerl OBDA index of test SwissProt"
 ]
 
 
@@ -798,6 +819,7 @@ DB bpembl [
   indexdirectory: "$emboss_qadata/embl/embl"
   directory:      "$emboss_qadata/embl"
   fields: "id acc"
+  comment: "BioPerl OBDA index of test EMBL"
 ]
 
 DB bpgb [
@@ -808,6 +830,7 @@ DB bpgb [
   indexdirectory: "$emboss_qadata/genbank/genbank"
   directory:      "$emboss_qadata/genbank"
   fields: "id acc"
+  comment: "BioPerl OBDA index of test GenBank"
 ]
 
 DB bpworm [
@@ -819,4 +842,5 @@ DB bpworm [
   directory:      "$emboss_qadata/wormpep"
   fields: "id"
   hasacc: "N"
+  comment: "BioPerl OBDA index of test wormpep fasta file"
 ]

@@ -38,7 +38,7 @@ Output report [arf3_rat.preg]:
 Command line arguments
 
 Regular expression search of protein sequence(s)
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -61,6 +61,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -152,7 +153,7 @@ Output file format
 
 ########################################
 # Program: preg
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
@@ -160,19 +161,6 @@ Output file format
 # Report_file: arf3_rat.preg
 ########################################
 
-#=======================================
-#
-# Sequence: ARF3_RAT     from: 1   to: 181
-# HitCount: 0
-#
-# Pattern: IA[QWF]A
-#
-#=======================================
-
-  Start     End Pattern Sequence
-
-#---------------------------------------
-#---------------------------------------
 #=======================================
 #
 # Sequence: UBR5_RAT     from: 1   to: 2788
@@ -191,7 +179,7 @@ Output file format
 #---------------------------------------
 # Total_sequences: 2
 # Total_length: 2969
-# Reported_sequences: 2
+# Reported_sequences: 1
 # Reported_hitcount: 1
 #---------------------------------------
 

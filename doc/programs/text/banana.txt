@@ -143,7 +143,7 @@ Created banana9.dat
 Command line arguments
 
 Plot bending and curvature data for B-DNA
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -173,6 +173,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -470,7 +471,7 @@ a       0.0      0.0
   File: banana1.dat
 
 ##Maintitle Bending and curvature plot of tembl-id:U68037
-##Subtitle Sun 15 Jul 2012 12:00:00
+##Subtitle Mon 15 Jul 2013 12:00:00
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 a

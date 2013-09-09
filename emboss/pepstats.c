@@ -68,9 +68,11 @@ int main(int argc, char **argv)
     double charge;
     double iep;
     double molpc;
-    double *pK = NULL;
+    double **pK = NULL;
     
-    ajint *c;
+    ajuint *c;
+    ajuint resn;
+    ajuint resc;
     ajint i;
     ajint j;
     ajint len;
@@ -87,6 +89,7 @@ int main(int argc, char **argv)
     float *dhstat = NULL;
     AjPFile mfptr = NULL;
     AjPFile wfptr = NULL;
+    AjPFile pkptr = NULL;
     AjPSeq  seq = NULL;
 
     EmbPPropMolwt *mwdata;
@@ -101,11 +104,12 @@ int main(int argc, char **argv)
     outf    = ajAcdGetOutfile("outfile");
     mfptr   = ajAcdGetDatafile("aadata");
     wfptr   = ajAcdGetDatafile("mwdata");
+    pkptr   = ajAcdGetDatafile("pkdata");
     mono    = ajAcdGetBoolean("mono");
     
     substr  = ajStrNew();
 
-    pK = embIeppKNew();
+    embIepPkNewFile(pkptr, &pK);
 
     aadata = embPropEaminoRead(mfptr);
     mwdata = embPropEmolwtRead(wfptr);
@@ -122,7 +126,8 @@ int main(int argc, char **argv)
 	ajStrAssignSubC(&substr,ajSeqGetSeqC(seq),be-1,en-1);
 	len = en-be+1;
 
-	embIepCompS(substr,1,1,0,0,c);
+	embIepCompS(substr,1,1,0,0,c, &resn, &resc);
+
 	if(!termini)
 	    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
 
@@ -207,7 +212,7 @@ int main(int argc, char **argv)
 
     embPropAminoDel(&aadata);
     embPropMolwtDel(&mwdata);
-    embIeppKDel(pK);
+    embIepPkDel(&pK);
     
     AJFREE(dhstat);
     AJFREE(c);
@@ -216,6 +221,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
     ajFileClose(&mfptr);
     ajFileClose(&wfptr);
+    ajFileClose(&pkptr);
 
     ajSeqallDel(&a);
     ajSeqDel(&seq);

@@ -11,10 +11,10 @@
 ** the ACD internal structures in a number of other interface formats.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.16 $
+** @version $Revision: 1.17 $
 ** @modified Jun 25 pmr First version
 ** @modified May 06 2004 Jon Ison Minor mods.
-** @modified $Date: 2011/12/19 16:30:31 $ by $Author: rice $
+** @modified $Date: 2012/09/03 14:15:18 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -68,6 +68,7 @@
 #include "ajtextdata.h"
 #include "ajurldata.h"
 #include "ajvardata.h"
+#include "ajxmldata.h"
 
 AJ_BEGIN_DECLS
 
@@ -154,6 +155,7 @@ AjPOutfile    ajAcdGetOuttext(const char *token);
 AjPOutfile    ajAcdGetOuttree(const char *token);
 AjPOutfile    ajAcdGetOuturl(const char *token);
 AjPOutfile    ajAcdGetOutvariation(const char *token);
+AjPOutfile    ajAcdGetOutxml(const char *token);
 AjPPatlistSeq ajAcdGetPattern (const char *token);
 AjPPhyloProp  ajAcdGetProperties (const char *token);
 AjPRange      ajAcdGetRange (const char *token);
@@ -185,6 +187,8 @@ AjPPhyloTree  ajAcdGetTreeSingle (const char *token);
 AjPUrl        ajAcdGetUrl(const char *token);
 AjPUrlall     ajAcdGetUrlall(const char *token);
 AjPVarload    ajAcdGetVariation(const char *token);
+AjPXml        ajAcdGetXml(const char *token);
+AjPXmlall     ajAcdGetXmlall(const char *token);
 
 const AjPStr  ajAcdGetValue (const char* token);
 const AjPStr  ajAcdGetValueDefault (const char* token);

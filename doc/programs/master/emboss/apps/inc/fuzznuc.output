@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -49,7 +49,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -92,7 +92,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -148,7 +148,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat

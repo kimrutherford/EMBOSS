@@ -458,7 +458,7 @@ static void showseq_FormatShow(EmbPShow ss,
 
     /* start token to parse format */
     tok = ajStrTokenNewC(format,  white);
-    while(ajStrTokenNextParseC(&tok, whiteplus, &code))
+    while(ajStrTokenNextParseC(tok, whiteplus, &code))
     {
 	ajStrFmtUpper(&code);
 
@@ -739,7 +739,7 @@ static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
         val = ajFalse;
         tokens = ajStrTokenNewC(type, " \t\n\r,;|");
 
-        while (ajStrTokenNextParse( &tokens, &key))
+        while (ajStrTokenNextParse(tokens, &key))
         {
             if (ajFeatTypeMatchWildS(gf, key))
             {

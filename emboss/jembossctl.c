@@ -193,8 +193,8 @@ int main(void)
     char *cbuf = NULL;
     int mlen;
     int command = 0;
-    int uid;
-    int gid;
+    int uid = 0;
+    int gid = 0;
     AjPStr home = NULL;
     AjBool ok = ajFalse;
     char c = '\0';

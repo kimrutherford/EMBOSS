@@ -34,7 +34,7 @@ Text output file [outfile.text]:
 Command line arguments
 
 Get text data entries
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-text]              text       Text filename and optional format, or
@@ -229,6 +229,7 @@ See also
                     entret       Retrieve sequence entries from flatfile databases and files
                     ontotext     Get ontology term(s) original full text
                     textsearch   Search the textual description of sequence(s)
+                    xmltext      Get XML document original full text
 
 Author(s)
 

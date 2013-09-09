@@ -62,12 +62,12 @@ int main(int argc, char **argv)
     ajuint midpoint,llen, maxlen, maxsize;
     float total;
     float matrix[AZ];
-    float min = 555.5;
-    float max = -555.5;
-    float v   = 0.;
-    float v1  = 0.;
-    float ymin = 64000.;
-    float ymax = -64000.;
+    float totalmin = FLT_MAX;
+    float totalmax = -FLT_MAX;
+    float v   = 0.0F;
+    float v1  = 0.0F;
+    float ymin = FLT_MAX;
+    float ymax = -FLT_MAX;
     ajint beg;
     ajint end;
     float fstart;
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 	ymax = -64000.;
 
 
-	for(k=0;k<iend ;k++)
+	for(k = 0; k < iend ; k++)
 	    graphdata->x[k] = FLT_MIN;
 
 	s1 = seq + istart;
@@ -133,10 +133,10 @@ int main(int argc, char **argv)
 	}
 
 	s1 = ajStrGetPtr(aa0str);
-	for(j=0;j<=k-llen;j++)
+	for(j = 0; k >= llen && j <= (k - llen); j++)
 	{
 	    total = 0;
-	    for(w=0;w<llen;w++)
+	    for(w = 0; w < llen; w++)
 		total = total + matrix[(ajint)s1[w]];
 
 	    total = total/(float)llen;
@@ -146,10 +146,9 @@ int main(int argc, char **argv)
 	    ymin = (ymin<v) ? ymin : v;
 	    ymax = (ymax>v) ? ymax : v;
 
-	    if(total > max)
-		max = total;
-	    if(total < min)
-		min = total;
+            totalmax = AJMAX(total, totalmax);
+            totalmin = AJMIN(total, totalmin);
+
 	    s1++;
 	}
 
@@ -183,19 +182,26 @@ int main(int argc, char **argv)
 	ajGraphDataAdd(mult,graphdata);
     }
 
-    min = min * (float) 1.1;
-    max = max * (float) 1.1;
+    if(totalmin <0)
+        totalmin = totalmin*(float)1.1;
+    else
+        totalmin = totalmin/(float)1.1;
+
+    if(totalmax > 0)
+        totalmax = totalmax*(float)1.1;
+    else
+        totalmax = totalmax/(float)1.1;
 
     ajGraphxySetflagGaps(mult,AJTRUE);
     ajGraphxySetflagOverlay(mult,AJTRUE);
 
-    if(min == max)
+    if(totalmin == totalmax)
     {
-        min--;
-        max++;
+        totalmin--;
+        totalmax++;
     }
 
-    ajGraphxySetMinmax(mult,fstart,fend,min,max);
+    ajGraphxySetMinmax(mult,fstart,fend,totalmin,totalmax);
     ajGraphSetTitleC(mult,"Pepwindowall");
 
 
@@ -248,7 +254,7 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[],
     buf2   = ajStrNew();
 
 
-    for (i=0;i<26;i++) {
+    for (i = 0; i < 26; i++) {
 	matrix[i] = FLT_MIN;
     }
 
@@ -267,34 +273,34 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[],
 	    cols = ajStrParseCountS(buffer,delim);
 	    ajDebug("num of cols = %d\n",cols);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[0]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[17]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[13]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[3]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[2]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[16]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[4]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[6]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[7]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[8]);
 
 	    ajStrTokenDel(&token);
@@ -305,34 +311,34 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[],
 	    ajStrRemoveWhiteExcess(&buffer);
 	    token = ajStrTokenNewS(buffer,delim);
 	    cols  = ajStrParseCountS(buffer,delim);
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[11]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[10]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[12]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[5]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[15]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[18]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[19]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[22]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[24]);
 
-	    ajStrTokenNextParseS(&token,delim,&buf2);
+	    ajStrTokenNextParseS(token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[21]);
 
 	    ajStrTokenDel(&token);

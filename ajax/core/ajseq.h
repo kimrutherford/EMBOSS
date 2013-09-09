@@ -6,9 +6,9 @@
 ** reading and writing and include simple utilities.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.82 $
+** @version $Revision: 1.85 $
 ** @modified Jun 25 pmr First version
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @modified $Date: 2013/06/29 22:32:55 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -138,6 +138,7 @@ void         ajSeqallSetRange(AjPSeqall seq, ajint ibegin, ajint iend);
 void         ajSeqallSetRangeRev(AjPSeqall seq, ajint ibegin, ajint iend);
 void         ajSeqAddCmt(AjPSeq thys, AjPStr str);
 void         ajSeqAddGene(AjPSeq thys, AjPSeqGene gene);
+void         ajSeqAddHost(AjPSeq thys, AjPStr str);
 void         ajSeqAddKey(AjPSeq thys, AjPStr str);
 void         ajSeqAddRef(AjPSeq thys, AjPSeqRef ref);
 void         ajSeqAddXref(AjPSeq thys, AjPSeqXref xref);
@@ -201,6 +202,7 @@ AjBool       ajSeqdateSetModifyS(AjPSeqDate date, const AjPStr datestr);
 AjBool       ajSeqdateSetModseqS(AjPSeqDate date, const AjPStr datestr);
 void         ajSeqdateClear(AjPSeqDate date);
 void         ajSeqdateDel(AjPSeqDate*);
+AjBool       ajSeqdateExists(const AjPSeqDate thys);
 AjPSeqDesc   ajSeqdescNew(void);
 AjPSeqDesc   ajSeqdescNewDesc(const AjPSeqDesc);
 void         ajSeqdescClear(AjPSeqDesc desc);
@@ -310,6 +312,7 @@ ajuint       ajSeqGetLen(const AjPSeq seq);
 ajuint       ajSeqGetLenTrimmed(const AjPSeq seq);
 ajuint       ajSeqGetLenUngapped(const AjPSeq seq);
 const char*  ajSeqclsGetEmbl(const AjPStr cls);
+const char*  ajSeqclsGetGb(const AjPStr cls);
 AjBool       ajSeqclsSetEmbl(AjPStr *cls, const AjPStr clsembl);
 AjBool       ajSeqclsSetGb(AjPStr *cls, const AjPStr clsembl);
 const char*  ajSeqdivGetEmbl(const AjPStr divi);

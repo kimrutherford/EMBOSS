@@ -57,11 +57,11 @@ Order        71
 Fill         46
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        24
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        48
 Fullcount    48
 Kwlimit      15
@@ -79,11 +79,11 @@ Order        71
 Fill         46
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        24
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        40
 Fullcount    40
 Kwlimit      15

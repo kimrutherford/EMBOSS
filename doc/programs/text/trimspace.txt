@@ -35,7 +35,7 @@ ASCII text output file [seqspace2.trimspace]:
 Command line arguments
 
 Remove extra whitespace from an ASCII text file
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file

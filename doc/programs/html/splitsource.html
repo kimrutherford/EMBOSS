@@ -79,7 +79,7 @@ Split a sequence into original subsequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>splitsource qasrswww:A01139 </b>
+% <b>splitsource ena:A01139 </b>
 Split sequence(s) into original source sequences
 output sequence(s) [a01139.fasta]: <b></b>
 
@@ -96,7 +96,7 @@ output sequence(s) [a01139.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Split sequence(s) into original source sequences
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -120,6 +120,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -287,6 +288,14 @@ Version: EMBOSS:6.5.6.0
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -590,7 +599,7 @@ for further information on sequence formats.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: qasrswww:A01139</h3>
+<p><h3>Database entry: ena:A01139</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   A01139; SV 1; linear; unassigned DNA; PAT; PRO; 279 BP.
@@ -606,11 +615,12 @@ XX
 KW   .
 XX
 OS   Lactococcus lactis
-OC   Bacteria; Firmicutes; Lactobacillales; Streptococcaceae; Lactococcus.
+OC   Bacteria; Firmicutes; Bacilli; Lactobacillales; Streptococcaceae;
+OC   Lactococcus.
 XX
 OS   Hirudo medicinalis (medicinal leech)
-OC   Eukaryota; Metazoa; Annelida; Clitellata; Hirudinida; Hirudinea;
-OC   Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
+OC   Eukaryota; Metazoa; Lophotrochozoa; Annelida; Clitellata; Hirudinida;
+OC   Hirudinea; Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
 XX
 RN   [1]
 RP   1-279
@@ -637,10 +647,10 @@ FT                   /note="fusion of MSP signal peptide and hirudin"
 FT                   /protein_id="CAA00134.1"
 FT                   /translation="MKKKIISAILMSTVILSAAAPLSGVYAVVYTDCTESGQNLCLCEG
 FT                   SNVCGQGNKCILGSDGEKNQCVTGEGTPKPQSHNDGDFEEIPEEYLQ"
-FT   mat_peptide     82..279
-FT                   /product="desulfatohirudin"
 FT   sig_peptide     1..81
 FT                   /product="MSP signal peptide"
+FT   mat_peptide     82..279
+FT                   /product="desulfatohirudin"
 XX
 SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
      atgaaaaaaa agattatctc agctatttta atgtctacag tgatactttc tgctgcagcc        60

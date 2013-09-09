@@ -26,13 +26,13 @@ Usage
 % embossversion
 Report the current EMBOSS version number
 
-6.5.6.0
+6.6.0.0
 
 
 Command line arguments
 
 Report the current EMBOSS version number
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -118,7 +118,7 @@ See also
 
                     Program name               Description
                     embossdata   Find and retrieve EMBOSS data files
-   embossupdate     Checks for more recent updates to EMBOSS
+   embossupdate     Check for more recent updates to EMBOSS
 
 Author(s)
 

@@ -69,7 +69,7 @@ Output alignment [j01636.supermatcher]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -112,6 +112,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -131,6 +132,7 @@ Version: EMBOSS:6.5.6.0
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
    -scircular2         boolean    Sequence is circular
+   -squick2            boolean    Read id and sequence only
    -sformat2           string     Input sequence format
    -iquery2            string     Input query fields or ID list
    -ioffset2           integer    Input start position offset
@@ -362,6 +364,14 @@ Version: EMBOSS:6.5.6.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_asequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
@@ -498,6 +508,14 @@ Version: EMBOSS:6.5.6.0
 <td> -scircular2<br>-scircular_bsequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick2<br>-squick_bsequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -986,7 +1004,7 @@ By default the output is in 'simple' format.
 <pre>
 ########################################
 # Program: supermatcher
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: supermatcher
 #    [-asequence] @../../data/eclac.list
 #    [-bsequence] tembl:j01636

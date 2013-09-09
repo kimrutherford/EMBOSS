@@ -22,4 +22,9 @@
 <td>Get text data entries</td>
 </tr>
 
+<tr>
+<td><a href="xmltext.html">xmltext</a></td>
+<td>Get XML document original full text</td>
+</tr>
+
 </table>

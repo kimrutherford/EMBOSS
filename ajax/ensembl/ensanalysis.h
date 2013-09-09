@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.18 $
+** @version $Revision: 1.19 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/20 22:04:34 $ by $Author: mks $
+** @modified $Date: 2012/08/05 10:24:06 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -215,25 +215,29 @@ AjBool ensAnalysisadaptorCacheClear(EnsPAnalysisadaptor aa);
 void ensAnalysisadaptorDel(EnsPAnalysisadaptor *Paa);
 
 EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
-    const EnsPAnalysisadaptor aa);
+    EnsPAnalysisadaptor aa);
 
 EnsPDatabaseadaptor ensAnalysisadaptorGetDatabaseadaptor(
-    const EnsPAnalysisadaptor aa);
+    EnsPAnalysisadaptor aa);
 
-AjBool ensAnalysisadaptorFetchAll(EnsPAnalysisadaptor aa,
-                                  AjPList analyses);
+AjBool ensAnalysisadaptorFetchAll(
+    EnsPAnalysisadaptor aa,
+    AjPList analyses);
 
-AjBool ensAnalysisadaptorFetchAllbyFeatureclass(EnsPAnalysisadaptor aa,
-                                                const AjPStr class,
-                                                AjPList analyses);
+AjBool ensAnalysisadaptorFetchAllbyFeatureclass(
+    EnsPAnalysisadaptor aa,
+    const AjPStr class,
+    AjPList analyses);
 
-AjBool ensAnalysisadaptorFetchByIdentifier(EnsPAnalysisadaptor aa,
-                                           ajuint identifier,
-                                           EnsPAnalysis *Panalysis);
+AjBool ensAnalysisadaptorFetchByIdentifier(
+    EnsPAnalysisadaptor aa,
+    ajuint identifier,
+    EnsPAnalysis *Panalysis);
 
-AjBool ensAnalysisadaptorFetchByName(EnsPAnalysisadaptor aa,
-                                     const AjPStr name,
-                                     EnsPAnalysis *Panalysis);
+AjBool ensAnalysisadaptorFetchByName(
+    EnsPAnalysisadaptor aa,
+    const AjPStr name,
+    EnsPAnalysis *Panalysis);
 
 /*
 ** End of prototype definitions

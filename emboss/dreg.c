@@ -73,7 +73,8 @@ int main(int argc, char **argv)
 		patexp);
 	feat = ajFeattableNewSeq(seq);
 	embPatlistRegexSearchAll(feat, seq, plist, ajFalse);
-	(void) ajReportWrite (report,feat,seq);
+	if(ajFeattableGetSize(feat))
+	    (void) ajReportWrite (report,feat,seq);
 
         ajFeattableDel(&feat);
     }

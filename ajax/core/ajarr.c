@@ -5,10 +5,10 @@
 ** These functions control all aspects of AJAX array utilities
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version $Revision: 1.37 $
+** @version $Revision: 1.38 $
 ** @modified Mar 12 1999 ajb First version
 ** @modified May 10 2000 ajb added dynamically allocated numeric arrays
-** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:12:42 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2263,7 +2263,7 @@ ajuint ajArrCommaList(const AjPStr s, AjPStr **a)
 
     for(i=0;i<n;++i)
     {
-	ajStrTokenNextParseC(&t,",\n", &x);
+	ajStrTokenNextParseC(t,",\n", &x);
         ajStrTrimWhite(&x);
 	(*a)[i] = ajStrNewS(x);
     }
@@ -2307,13 +2307,13 @@ double* ajArrDoubleLine(const AjPStr line, const char *delim,
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u at start of line:\n%S",
 		    (i+1), (startcol-1), line);
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u expected in line:\n%S",
 		    (startcol+i), endcol, line);
 
@@ -2362,13 +2362,13 @@ ajint* ajArrIntLine(const AjPStr line, const char *delim,
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u at start of line:\n%S",
 		    (i+1), (startcol-1), line);
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u expected in line:\n%S",
 		    (startcol+i), endcol, line);
 
@@ -2422,13 +2422,13 @@ float* ajArrFloatLine(const AjPStr line, const char *delim,
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u at start of line:\n%S",
 		    (i+1), (startcol-1), line);
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrTokenNextParseC(&t,delim,&tmp))
+	if(!ajStrTokenNextParseC(t,delim,&tmp))
 	    ajFatal("Token missing %u of %u expected in line:\n%S",
 		    (startcol+i), endcol, line);
 

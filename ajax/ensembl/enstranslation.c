@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.65 $
+** @version $Revision: 1.67 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:10:14 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -92,10 +92,10 @@ static const char *translationKProteinfeatureDomainName[] =
 /* @conststatic translationKSequenceeditCode **********************************
 **
 ** Ensembl Sequence Edit objects for Ensembl Translation objects are a sub-set
-** of Ensembl Attributes that provide information about post-translational
-** modifications of the Translation sequence. Ensembl Attribute objects with
-** the following codes are Ensembl Sequence Edit objects on the
-** Translation-level.
+** of Ensembl Attribute objects that provide information about
+** post-translational modifications of the Ensembl Translation sequence.
+** Ensembl Attribute objects with the following codes are
+** Ensembl Sequence Edit objects on the translational-level.
 **
 ** initial_met:     Set the first amino acid to methionine
 ** _selenocysteine: Start and end position of a selenocysteine
@@ -114,13 +114,13 @@ static const char *translationKSequenceeditCode[] =
 
 
 
-/* @conststatic translationadaptorKTables *************************************
+/* @conststatic translationadaptorKTablenames *********************************
 **
 ** Array of Ensembl Translation Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *translationadaptorKTables[] =
+static const char *translationadaptorKTablenames[] =
 {
     "translation",
     (const char *) NULL
@@ -129,13 +129,13 @@ static const char *translationadaptorKTables[] =
 
 
 
-/* @conststatic translationadaptorKColumns ************************************
+/* @conststatic translationadaptorKColumnnames ********************************
 **
 ** Array of Ensembl Translation Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *translationadaptorKColumns[] =
+static const char *translationadaptorKColumnnames[] =
 {
     "translation.translation_id",
     "translation.transcript_id",
@@ -252,7 +252,7 @@ static AjBool translationadaptorRetrieveAllCanonicalidentifiers(
 
 void ensTranslationInit(void)
 {
-    translationGCache = ajTableuintNew(0);
+    translationGCache = ajTableuintNew(0U);
 
     ajTableSetDestroyvalue(translationGCache, (void (*)(void **)) &ajTrnDel);
 
@@ -374,7 +374,7 @@ const AjPTrn ensTranslationCacheGet(ajint codontable)
 **
 ** @cc Bio::EnsEMBL::Translation
 ** @cc CVS Revision: 1.94
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -465,7 +465,7 @@ EnsPTranslation ensTranslationNewCpy(const EnsPTranslation translation)
 
     pthis->Version = translation->Version;
 
-    /* Copy the List of Ensembl Attributes. */
+    /* Copy the List of Ensembl Attribute objects. */
 
     if (translation->Attributes && ajListGetLength(translation->Attributes))
     {
@@ -721,14 +721,7 @@ void ensTranslationDel(EnsPTranslation *Ptranslation)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Ptranslation)
-        return;
-
-    pthis = *Ptranslation;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Ptranslation) || --pthis->Use)
     {
         *Ptranslation = NULL;
 
@@ -765,9 +758,7 @@ void ensTranslationDel(EnsPTranslation *Ptranslation)
 
     ajStrDel(&pthis->Sequence);
 
-    AJFREE(pthis);
-
-    *Ptranslation = NULL;
+    ajMemFree((void **) Ptranslation);
 
     return;
 }
@@ -1081,8 +1072,6 @@ ajuint ensTranslationGetVersion(const EnsPTranslation translation)
 
 const AjPList ensTranslationLoadAttributes(EnsPTranslation translation)
 {
-    EnsPAttributeadaptor ata = NULL;
-
     EnsPDatabaseadaptor dba = NULL;
 
     if (ajDebugTest("ensTranslationLoadAttributes"))
@@ -1101,8 +1090,9 @@ const AjPList ensTranslationLoadAttributes(EnsPTranslation translation)
     if (!translation->Adaptor)
     {
         ajDebug("ensTranslationLoadAttributes cannot fetch "
-                "Ensembl Attribute objects for an Ensembl Translation "
-                "without an Ensembl Translation Adaptor.\n");
+                "Ensembl Attribute objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
@@ -1112,19 +1102,19 @@ const AjPList ensTranslationLoadAttributes(EnsPTranslation translation)
     if (!dba)
     {
         ajDebug("ensTranslationLoadAttributes cannot fetch "
-                "Ensembl Attribute objects for an Ensembl Translation "
-                "without an Ensembl Database Adaptor set in the "
+                "Ensembl Attribute objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Database Adaptor set in the "
                 "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
 
-    ata = ensRegistryGetAttributeadaptor(dba);
-
-    ensAttributeadaptorFetchAllbyTranslation(ata,
-                                             translation,
-                                             (const AjPStr) NULL,
-                                             translation->Attributes);
+    ensAttributeadaptorFetchAllbyTranslation(
+        ensRegistryGetAttributeadaptor(dba),
+        translation,
+        (const AjPStr) NULL,
+        translation->Attributes);
 
     return translation->Attributes;
 }
@@ -1155,8 +1145,6 @@ const AjPList ensTranslationLoadDatabaseentries(EnsPTranslation translation)
 
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPDatabaseentryadaptor dbea = NULL;
-
     if (!translation)
         return NULL;
 
@@ -1168,8 +1156,9 @@ const AjPList ensTranslationLoadDatabaseentries(EnsPTranslation translation)
     if (!translation->Adaptor)
     {
         ajDebug("ensTranslationLoadDatabaseentries cannot fetch "
-                "Ensembl Database Entry objects for an Ensembl Translation "
-                "without an Ensembl Translation Adaptor.\n");
+                "Ensembl Database Entry objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
@@ -1179,23 +1168,23 @@ const AjPList ensTranslationLoadDatabaseentries(EnsPTranslation translation)
     if (!dba)
     {
         ajDebug("ensTranslationLoadDatabaseentries cannot fetch "
-                "Ensembl Database Entry objects for an Ensembl Translation "
-                "without an Ensembl Database Adaptor set in the "
+                "Ensembl Database Entry objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Database Adaptor set in the "
                 "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
 
-    dbea = ensRegistryGetDatabaseentryadaptor(dba);
-
     objtype = ajStrNewC("Translation");
 
-    ensDatabaseentryadaptorFetchAllbyObject(dbea,
-                                            translation->Identifier,
-                                            objtype,
-                                            (AjPStr) NULL,
-                                            ensEExternaldatabaseTypeNULL,
-                                            translation->Databaseentries);
+    ensDatabaseentryadaptorFetchAllbyObject(
+        ensRegistryGetDatabaseentryadaptor(dba),
+        translation->Identifier,
+        objtype,
+        (AjPStr) NULL,
+        ensEExternaldatabaseTypeNULL,
+        translation->Databaseentries);
 
     ajStrDel(&objtype);
 
@@ -1226,8 +1215,6 @@ const AjPList ensTranslationLoadProteinfeatures(EnsPTranslation translation)
 {
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPProteinfeatureadaptor pfa = NULL;
-
     if (!translation)
         return NULL;
 
@@ -1239,8 +1226,9 @@ const AjPList ensTranslationLoadProteinfeatures(EnsPTranslation translation)
     if (!translation->Adaptor)
     {
         ajDebug("ensTranslationLoadDatabaseentries cannot fetch "
-                "Ensembl Database Entry objects for an Ensembl Translation "
-                "without an Ensembl Translation Adaptor.\n");
+                "Ensembl Database Entry objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
@@ -1250,17 +1238,16 @@ const AjPList ensTranslationLoadProteinfeatures(EnsPTranslation translation)
     if (!dba)
     {
         ajDebug("ensTranslationLoadDatabaseentries cannot fetch "
-                "Ensembl Database Entry objects for an Ensembl Translation "
-                "without an Ensembl Database Adaptor set in the "
+                "Ensembl Database Entry objects for an "
+                "Ensembl Translation without an "
+                "Ensembl Database Adaptor set in the "
                 "Ensembl Translation Adaptor.\n");
 
         return NULL;
     }
 
-    pfa = ensRegistryGetProteinfeatureadaptor(dba);
-
     ensProteinfeatureadaptorFetchAllbyTranslationidentifier(
-        pfa,
+        ensRegistryGetProteinfeatureadaptor(dba),
         translation->Identifier,
         translation->Proteinfeatures);
 
@@ -2032,11 +2019,11 @@ AjBool ensTranslationTrace(const EnsPTranslation translation, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Translation object.
+** Functions for calculating information from an Ensembl Translation object.
 **
 ** @fdata [EnsPTranslation]
 **
-** @nam3rule Calculate Calculate Ensembl Translation values
+** @nam3rule Calculate Calculate Ensembl Translation information
 ** @nam4rule Length  Calculate the length
 ** @nam4rule Memsize Calculate the memory size in bytes
 ** @nam4rule Slice   Calculate Ensembl Translation coordinates relative to
@@ -2299,10 +2286,7 @@ ajint ensTranslationCalculateSliceStart(EnsPTranslation translation)
 
 ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation)
 {
-    EnsPDatabaseadaptor dba = NULL;
-
     EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
 
     if (!translation)
         return 0U;
@@ -2310,16 +2294,11 @@ ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation)
     if (translation->TranscriptEnd)
         return translation->TranscriptEnd;
 
-    if (!translation->Adaptor)
-        return 0U;
-
-    dba = ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor);
-
-    tca = ensRegistryGetTranscriptadaptor(dba);
-
-    ensTranscriptadaptorFetchByTranslationidentifier(tca,
-                                                     translation->Identifier,
-                                                     &transcript);
+    ensTranscriptadaptorFetchByTranslationidentifier(
+        ensRegistryGetTranscriptadaptor(
+            ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor)),
+        translation->Identifier,
+        &transcript);
 
     if (!transcript)
     {
@@ -2333,14 +2312,16 @@ ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation)
     }
 
     translation->TranscriptStart =
-        ensExonCalculateTranscriptCodingStart(translation->Startexon,
-                                              transcript,
-                                              translation);
+        ensExonCalculateTranscriptCodingStart(
+            translation->Startexon,
+            transcript,
+            translation);
 
     translation->TranscriptEnd =
-        ensExonCalculateTranscriptCodingEnd(translation->Endexon,
-                                            transcript,
-                                            translation);
+        ensExonCalculateTranscriptCodingEnd(
+            translation->Endexon,
+            transcript,
+            translation);
 
     ensTranscriptDel(&transcript);
 
@@ -2367,10 +2348,7 @@ ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation)
 
 ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation)
 {
-    EnsPDatabaseadaptor dba = NULL;
-
     EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
 
     if (!translation)
         return 0U;
@@ -2378,16 +2356,11 @@ ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation)
     if (translation->TranscriptStart)
         return translation->TranscriptStart;
 
-    if (!translation->Adaptor)
-        return 0U;
-
-    dba = ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor);
-
-    tca = ensRegistryGetTranscriptadaptor(dba);
-
-    ensTranscriptadaptorFetchByTranslationidentifier(tca,
-                                                     translation->Identifier,
-                                                     &transcript);
+    ensTranscriptadaptorFetchByTranslationidentifier(
+        ensRegistryGetTranscriptadaptor(
+            ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor)),
+        translation->Identifier,
+        &transcript);
 
     if (!transcript)
     {
@@ -2401,14 +2374,16 @@ ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation)
     }
 
     translation->TranscriptStart =
-        ensExonCalculateTranscriptCodingStart(translation->Startexon,
-                                              transcript,
-                                              translation);
+        ensExonCalculateTranscriptCodingStart(
+            translation->Startexon,
+            transcript,
+            translation);
 
     translation->TranscriptEnd =
-        ensExonCalculateTranscriptCodingEnd(translation->Endexon,
-                                            transcript,
-                                            translation);
+        ensExonCalculateTranscriptCodingEnd(
+            translation->Endexon,
+            transcript,
+            translation);
 
     ensTranscriptDel(&transcript);
 
@@ -2420,15 +2395,15 @@ ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation)
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching values of an Ensembl Translation object.
+** Functions for fetching information from an Ensembl Translation object.
 **
 ** @fdata [EnsPTranslation]
 **
-** @nam3rule Fetch Fetch Ensembl Translation values
+** @nam3rule Fetch Fetch Ensembl Translation information
 ** @nam4rule All Fetch all objects
 ** @nam5rule Attributes Fetch all Ensembl Attribute objects
 ** @nam5rule Databaseentries Fetch all Ensembl Database Entry objects
-** @nam5rule Domains Fetch all Ensembl Protein Feature objectss from the
+** @nam5rule Domains Fetch all Ensembl Protein Feature objects from the
 ** EBI InterPro conserved protein domain database
 ** @nam5rule Proteinfeatures Fetch all Ensembl Protein Feature objects
 ** @nam5rule Sequenceedits Fetch all Ensembl Sequence Edit objects
@@ -2485,7 +2460,7 @@ ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation)
 **
 ** @cc Bio::EnsEMBL::Translation::get_all_Attributes
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
-** @param [r] code [const AjPStr] Ensembl Attribute code
+** @param [rN] code [const AjPStr] Ensembl Attribute code
 ** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2560,8 +2535,8 @@ AjBool ensTranslationFetchAllAttributes(EnsPTranslation translation,
 **
 ** @cc Bio::EnsEMBL::Translation::get_all_DBEntries
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
-** @param [r] name [const AjPStr] Ensembl External Database name
-** @param [u] type [EnsEExternaldatabaseType] Ensembl External Database type
+** @param [rN] name [const AjPStr] Ensembl External Database name
+** @param [uN] type [EnsEExternaldatabaseType] Ensembl External Database type
 ** @param [u] dbes [AjPList] AJAX List of Ensembl Database Entry objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2690,7 +2665,7 @@ AjBool ensTranslationFetchAllDomains(EnsPTranslation translation,
 **
 ** @cc Bio::EnsEMBL::Translation::get_all_Proteinfeatures
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
-** @param [r] name [const AjPStr] Ensembl Analysis name
+** @param [rN] name [const AjPStr] Ensembl Analysis name
 ** @param [u] pfs [AjPList] AJAX List of Ensembl Protein Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2970,17 +2945,14 @@ AjBool ensTranslationFetchSequenceSeq(EnsPTranslation translation,
 ** @@
 ** NOTE: In this implementation, the Ensembl Translation object does not cache
 ** the translated sequence. Ensembl Exon sequences are cached, as are
-** Transcript and Translation Attributes so that the sequence can be
-** recalculated quickly.
+** Ensembl Attribute objects linked to Ensembl Transcript and Translation
+** objects so that the sequence can be recalculated quickly.
 ******************************************************************************/
 
 AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
                                       AjPStr *Psequence)
 {
-    EnsPDatabaseadaptor dba = NULL;
-
     EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
 
     if (!translation)
         return ajFalse;
@@ -2996,13 +2968,11 @@ AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
     if (translation->Sequence)
         ajStrAssignS(Psequence, translation->Sequence);
 
-    dba = ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor);
-
-    tca = ensRegistryGetTranscriptadaptor(dba);
-
-    ensTranscriptadaptorFetchByTranslationidentifier(tca,
-                                                     translation->Identifier,
-                                                     &transcript);
+    ensTranscriptadaptorFetchByTranslationidentifier(
+        ensRegistryGetTranscriptadaptor(
+            ensTranslationadaptorGetDatabaseadaptor(translation->Adaptor)),
+        translation->Identifier,
+        &transcript);
 
     if (!transcript)
     {
@@ -3031,8 +3001,8 @@ AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
 ** Ensembl Translation Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranslationAdaptor
-** @cc CVS Revision: 1.64
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3262,13 +3232,10 @@ static AjBool translationadaptorFetchAllbyStatement(
 EnsPTranslationadaptor ensTranslationadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
     return ensBaseadaptorNew(
         dba,
-        translationadaptorKTables,
-        translationadaptorKColumns,
+        translationadaptorKTablenames,
+        translationadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -3321,7 +3288,7 @@ void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla)
 {
     ensBaseadaptorDel(Ptla);
 
-	return;
+    return;
 }
 
 
@@ -3334,14 +3301,39 @@ void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla)
 ** @fdata [EnsPTranslationadaptor]
 **
 ** @nam3rule Get Return Ensembl Translation Adaptor attribute(s)
-** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
 **
-** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
+
+
+
+
+/* @func ensTranslationadaptorGetBaseadaptor **********************************
+**
+** Get the Ensembl Base Adaptor member of an Ensembl Translation Adaptor.
+**
+** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensTranslationadaptorGetBaseadaptor(
+    EnsPTranslationadaptor tla)
+{
+    return tla;
+}
 
 
 
@@ -3361,7 +3353,8 @@ void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla)
 EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
     EnsPTranslationadaptor tla)
 {
-    return ensBaseadaptorGetDatabaseadaptor(tla);
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensTranslationadaptorGetBaseadaptor(tla));
 }
 
 
@@ -3374,28 +3367,42 @@ EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
 **
 ** @fdata [EnsPTranslationadaptor]
 **
-** @nam3rule Fetch Retrieve Ensembl Translation object(s)
-** @nam4rule All Retrieve all Ensembl Translation objects
-** @nam4rule Allby Retrieve all Ensembl Translation objects matching a
-** criterion
-** @nam5rule Externalname  Fetch all by an external name
+** @nam3rule Fetch Fetch Ensembl Translation object(s)
+** @nam4rule All Fetch all Ensembl Translation objects
+** @nam4rule Allby Fetch all Ensembl Translation objects
+**                 matching a criterion
+** @nam5rule Externaldatabasename
+** Fetch all by an Ensembl External Database name
+** @nam5rule Externalname
+** Fetch all by an Ensembl Database Entry name
+** @nam5rule Identifiers Fetch all by an AJAX Table
 ** @nam5rule Transcript Fetch all by an Ensembl Transcript
 ** @nam5rule Transcripts Fetch all by Ensembl Transcript objects
 ** @nam6rule List Fetch all by an AJAX List of Ensembl Transcript objects
 ** @nam6rule Table Fetch all by an AJAX Table of Ensembl Transcript objects
-** @nam5rule Stableidentifier Fetch all by a stable Ensembl Exon identifier
+** @nam5rule Stableidentifier Fetch all by a stable identifier
 ** @nam4rule By Fetch one Ensembl Exon object matching a criterion
 ** @nam5rule Displaylabel Fetch by display label
 ** @nam5rule Identifier Fetch by SQL database-internal identifier
-** @nam5rule Stableidentifier Fetch by stable Ensembl Exon identifier
+** @nam5rule Stableidentifier Fetch by a stable identifier
 **
 ** @argrule * tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
 ** @argrule All translations [AjPList] AJAX List of Ensembl Translation objects
-** @argrule AllbyExternalname name [const AjPStr] Ensembl Database Entry name
+** @argrule AllbyExternaldatabasename dbname [const AjPStr]
+** Ensembl External Database name
+** @argrule AllbyExternaldatabasename translations [AjPList]
+** AJAX List of Ensembl Translation objects
+** @argrule AllbyExternalname name [const AjPStr]
+** Ensembl Database Entry name
 ** @argrule AllbyExternalname dbname [const AjPStr]
 ** Ensembl External Database name
+** @argrule AllbyExternalname override [AjBool]
+** Override optimisation of '_' SQL any
 ** @argrule AllbyExternalname translations [AjPList]
 ** AJAX List of Ensembl Translation objects
+** @argrule AllbyIdentifiers translations [AjPTable]
+** AJAX Table of AJAX unsigned integer (identifier) key data and
+** Ensembl Translation value data
 ** @argrule AllbyTranscript transcript [EnsPTranscript] Ensembl Transcript
 ** @argrule AllbyTranscriptsList transcripts [AjPList]
 ** AJAX List of Ensembl Transcript objects
@@ -3424,18 +3431,79 @@ EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
 
 
 
+/* @func ensTranslationadaptorFetchAllbyExternaldatabasename ******************
+**
+** Fetch all Ensembl Translation objects via an
+** Ensembl External Database name.
+**
+** The caller is responsible for deleting the Ensembl Translation objects
+** before deleting the AJAX List.
+**
+** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
+** @param [r] dbname [const AjPStr] Ensembl External Database name
+** @param [u] translations [AjPList] AJAX List of Ensembl Translation objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+** NOTE: This has not been implemented in teh Ensembl Core API.
+******************************************************************************/
+
+AjBool ensTranslationadaptorFetchAllbyExternaldatabasename(
+    EnsPTranslationadaptor tla,
+    const AjPStr dbname,
+    AjPList translations)
+{
+    AjBool result = AJFALSE;
+
+    AjPTable table = NULL;
+
+    if (!tla)
+        return ajFalse;
+
+    if (!dbname)
+        return ajFalse;
+
+    if (!translations)
+        return ajFalse;
+
+    table = ajTableuintNew(0U);
+
+    ajTableSetDestroyvalue(table, (void (*)(void **)) &ensTranslationDel);
+
+    result = ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabasename(
+        ensRegistryGetDatabaseentryadaptor(
+            ensTranslationadaptorGetDatabaseadaptor(tla)),
+        dbname,
+        table);
+
+    result = ensTranslationadaptorFetchAllbyIdentifiers(tla, table);
+
+    ensTableuintToList(table, translations);
+
+    ajTableFree(&table);
+
+    return result;
+}
+
+
+
+
 /* @func ensTranslationadaptorFetchAllbyExternalname **************************
 **
 ** Fetch all Ensembl Translation objects via an Ensembl Database Entry name and
 ** Ensembl External Database name.
+**
 ** The caller is responsible for deleting the Ensembl Translation objects
 ** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranslationAdaptor::fetch_all_by_external_name
 ** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
 ** @param [r] name [const AjPStr] Ensembl Database Entry name
-** @param [r] dbname [const AjPStr] Ensembl External Database name
-** @param [u] translations [AjPList] AJAX List of Ensembl Translations
+** @param [rN] dbname [const AjPStr] Ensembl External Database name
+** @param [r] override [AjBool] Override optimisation of '_' SQL any
+** @param [u] translations [AjPList] AJAX List of Ensembl Translation objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3447,17 +3515,12 @@ AjBool ensTranslationadaptorFetchAllbyExternalname(
     EnsPTranslationadaptor tla,
     const AjPStr name,
     const AjPStr dbname,
+    AjBool override,
     AjPList translations)
 {
-    ajuint *Pidentifier = NULL;
+    AjBool result = AJFALSE;
 
-    AjPList idlist = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPDatabaseentryadaptor dbea = NULL;
-
-    EnsPTranslation translation = NULL;
+    AjPTable table = NULL;
 
     if (!tla)
         return ajFalse;
@@ -3471,32 +3534,60 @@ AjBool ensTranslationadaptorFetchAllbyExternalname(
     if (!translations)
         return ajFalse;
 
-    dba = ensTranslationadaptorGetDatabaseadaptor(tla);
+    table = ajTableuintNew(0U);
 
-    dbea = ensRegistryGetDatabaseentryadaptor(dba);
+    ajTableSetDestroyvalue(table, (void (*)(void **)) &ensTranslationDel);
 
-    idlist = ajListNew();
-
-    ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
-        dbea,
+    result = ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
+        ensRegistryGetDatabaseentryadaptor(
+            ensTranslationadaptorGetDatabaseadaptor(tla)),
         name,
         dbname,
-        idlist);
+        override,
+        table);
 
-    while (ajListPop(idlist, (void **) &Pidentifier))
-    {
-        ensTranslationadaptorFetchByIdentifier(tla,
-                                               *Pidentifier,
-                                               &translation);
+    result = ensTranslationadaptorFetchAllbyIdentifiers(tla, table);
 
-        ajListPushAppend(translations, (void *) translation);
+    ensTableuintToList(table, translations);
 
-        AJFREE(Pidentifier);
-    }
+    ajTableFree(&table);
 
-    ajListFree(&idlist);
+    return result;
+}
 
-    return ajTrue;
+
+
+
+/* @func ensTranslationadaptorFetchAllbyIdentifiers ***************************
+**
+** Fetch all Ensembl Translation objects by an AJAX Table of
+** AJAX unsigned integer key data and assign them as value data.
+**
+** The caller is responsible for deleting the AJAX unsigned integer key and
+** Ensembl Translation value data before deleting the AJAX Table.
+**
+** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::fetch_all_by_dbID_list
+** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
+** @param [u] translations [AjPTable]
+** AJAX Table of
+** AJAX unsigned integer key data and
+** Ensembl Translation value data
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+AjBool ensTranslationadaptorFetchAllbyIdentifiers(
+    EnsPTranslationadaptor tla,
+    AjPTable translations)
+{
+    return ensBaseadaptorFetchAllbyIdentifiers(
+        ensTranslationadaptorGetBaseadaptor(tla),
+        (EnsPSlice) NULL,
+        (ajuint (*)(const void *)) &ensTranslationGetIdentifier,
+        translations);
 }
 
 
@@ -3521,8 +3612,9 @@ AjBool ensTranslationadaptorFetchAllbyExternalname(
 ** @@
 ******************************************************************************/
 
-AjBool ensTranslationadaptorFetchAllbyTranscript(EnsPTranslationadaptor tla,
-                                                 EnsPTranscript transcript)
+AjBool ensTranslationadaptorFetchAllbyTranscript(
+    EnsPTranslationadaptor tla,
+    EnsPTranscript transcript)
 {
     ajuint identifier  = 0U;
     ajuint startexonid = 0U;
@@ -3568,7 +3660,7 @@ AjBool ensTranslationadaptorFetchAllbyTranscript(EnsPTranslationadaptor tla,
     if (!transcript)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(tla);
+    dba = ensTranslationadaptorGetDatabaseadaptor(tla);
 
     statement = ajFmtStr(
         "SELECT "
@@ -3753,7 +3845,7 @@ static AjBool translationadaptorFetchAllbyIdentifiers(
     if (!transcripts)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(tla);
+    dba = ensTranslationadaptorGetDatabaseadaptor(tla);
 
     statement = ajFmtStr(
         "SELECT "
@@ -3897,7 +3989,7 @@ static AjBool translationadaptorFetchAllbyIdentifiers(
 **                               in a SQL SELECT statement
 ** @param [u] canonicalmap [AjPTable] AJAX Table of
 ** AJAX unsigned integer (Ensembl Transcript identifier) key data and
-** AJAX unsigned integer (Ensembl Translation) value data
+** AJAX unsigned integer (Ensembl Translation identifier) value data
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4090,7 +4182,9 @@ AjBool ensTranslationadaptorFetchAllbyTranscriptsList(
 ** ensTranscriptLoadTranslation.
 **
 ** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
-** @param [u] transcripts [AjPTable] AJAX Table of Ensembl Transcript objects
+** @param [u] transcripts [AjPTable]
+** AJAX Table of AJAX unsigned integer (Ensembl Transcript identifier) key data
+** and Ensembl Transcript value data
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4120,11 +4214,12 @@ AjBool ensTranslationadaptorFetchAllbyTranscriptsTable(
 
     canonicalmap = ajTableuintNew(ajTableGetSize(transcripts));
 
-    ajTableSetDestroyvalue(canonicalmap, (void (*)(void **)) ajMemFree);
+    ajTableSetDestroyvalue(canonicalmap, &ajMemFree);
 
     /*
     ** Large queries are split into smaller ones on the basis of the maximum
-    ** number of identifiers configured in the Ensembl Base Adaptor module.
+    ** number of identifier instances configured in the
+    ** Ensembl Base Adaptor module.
     ** This ensures that MySQL is faster and the maximum query size is not
     ** exceeded.
     */
@@ -4197,18 +4292,10 @@ AjBool ensTranslationadaptorFetchByIdentifier(EnsPTranslationadaptor tla,
                                               ajuint identifier,
                                               EnsPTranslation *Ptranslation)
 {
-    if (!tla)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Ptranslation)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(tla,
-                                           identifier,
-                                           (void **) Ptranslation);
+    return ensBaseadaptorFetchByIdentifier(
+        ensTranslationadaptorGetBaseadaptor(tla),
+        identifier,
+        (void **) Ptranslation);
 }
 
 
@@ -4247,6 +4334,8 @@ AjBool ensTranslationadaptorFetchByStableidentifier(
 
     AjPStr constraint = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPTranslation translation = NULL;
 
     if (!tla)
@@ -4258,7 +4347,11 @@ AjBool ensTranslationadaptorFetchByStableidentifier(
     if (!Ptranslation)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(tla, &txtstableid, stableid);
+    *Ptranslation = NULL;
+
+    ba = ensTranslationadaptorGetBaseadaptor(tla);
+
+    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
     if (version)
         constraint = ajFmtStr(
@@ -4276,15 +4369,17 @@ AjBool ensTranslationadaptorFetchByStableidentifier(
 
     translations = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(tla,
-                                                constraint,
-                                                (EnsPAssemblymapper) NULL,
-                                                (EnsPSlice) NULL,
-                                                translations);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        translations);
 
     if (ajListGetLength(translations) > 1)
         ajDebug("ensTranslationadaptorFetchByStableidentifier got more than "
-                "one Translation for stable identifier '%S' and version %u.\n",
+                "one Ensembl Translation objects for "
+                "stable identifier '%S' and version %u.\n",
                 stableid, version);
 
     ajListPop(translations, (void **) Ptranslation);
@@ -4368,7 +4463,7 @@ AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
     if (!transcript)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(tla);
+    dba = ensTranslationadaptorGetDatabaseadaptor(tla);
 
     statement = ajFmtStr(
         "SELECT "
@@ -4514,22 +4609,21 @@ AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for fetching objects releated to Ensembl Translation objects
+** Functions for retrieving objects releated to Ensembl Translation objects
 ** from an Ensembl SQL database.
 **
 ** @fdata [EnsPTranslationadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Translation-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Translation-releated objects
-** @nam5rule Identifiers Fetch all SQL database-internal identifiers
-** @nam5rule Stableidentifiers Fetch all stable Ensembl Translation identifiers
+** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Stableidentifiers Retrieve all stable identifier objects
 **
 ** @argrule * tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
-** @argrule AllIdentifiers identifiers [AjPList] AJAX List of AJAX unsigned
-**                                               integer identifiers
-** @argrule AllStableidentifiers identifiers [AjPList] AJAX List of AJAX String
-**                                              stable Ensembl Translation
-**                                              identifiers
+** @argrule AllIdentifiers identifiers [AjPList]
+** AJAX List of AJAX unsigned integer (Ensembl Translation identifier) objects
+** @argrule AllStableidentifiers stableids [AjPList]
+** AJAX List of AJAX String (Ensembl Translation stable identifier) objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4541,7 +4635,7 @@ AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
 
 /* @func ensTranslationadaptorRetrieveAllIdentifiers **************************
 **
-** Retrieve all SQL database-internal identifiers of
+** Retrieve all SQL database-internal identifier objects of
 ** Ensembl Translation objects.
 **
 ** The caller is responsible for deleting the AJAX unsigned integers before
@@ -4549,7 +4643,8 @@ AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranslationAdaptor::list_dbIDs
 ** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
-** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
+** @param [u] identifiers [AjPList]
+** AJAX List of AJAX unsigned integer (Ensembl Translation identifier) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4573,10 +4668,11 @@ AjBool ensTranslationadaptorRetrieveAllIdentifiers(
 
     table = ajStrNewC("translation");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(tla,
-                                                  table,
-                                                  (AjPStr) NULL,
-                                                  identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(
+        ensTranslationadaptorGetBaseadaptor(tla),
+        table,
+        (AjPStr) NULL,
+        identifiers);
 
     ajStrDel(&table);
 
@@ -4588,14 +4684,15 @@ AjBool ensTranslationadaptorRetrieveAllIdentifiers(
 
 /* @func ensTranslationadaptorRetrieveAllStableidentifiers ********************
 **
-** Retrieve all stable identifiers of Ensembl Translation objects.
+** Retrieve all stable identifier objects of Ensembl Translation objects.
 **
 ** The caller is responsible for deleting the AJAX String objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranslationAdaptor::list_stable_ids
 ** @param [u] tla [EnsPTranslationadaptor] Ensembl Translation Adaptor
-** @param [u] identifiers [AjPList] AJAX List of AJAX String objects
+** @param [u] stableids [AjPList]
+** AJAX List of AJAX String (Ensembl Translation stable identifier) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4605,7 +4702,7 @@ AjBool ensTranslationadaptorRetrieveAllIdentifiers(
 
 AjBool ensTranslationadaptorRetrieveAllStableidentifiers(
     EnsPTranslationadaptor tla,
-    AjPList identifiers)
+    AjPList stableids)
 {
     AjBool result = AJFALSE;
 
@@ -4615,16 +4712,17 @@ AjBool ensTranslationadaptorRetrieveAllStableidentifiers(
     if (!tla)
         return ajFalse;
 
-    if (!identifiers)
+    if (!stableids)
         return ajFalse;
 
     table   = ajStrNewC("translation");
     primary = ajStrNewC("stable_id");
 
-    result = ensBaseadaptorRetrieveAllStrings(tla,
-                                              table,
-                                              primary,
-                                              identifiers);
+    result = ensBaseadaptorRetrieveAllStrings(
+        ensTranslationadaptorGetBaseadaptor(tla),
+        table,
+        primary,
+        stableids);
 
     ajStrDel(&table);
     ajStrDel(&primary);

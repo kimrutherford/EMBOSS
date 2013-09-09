@@ -90,9 +90,9 @@ int main(int argc, char **argv)
 			   &meth, &defnam))
 	    continue;
 
-        if(!ajStrMatchC(type, "Nucleotide") &&
-           !ajStrMatchC(type, "Protein") &&
-           !ajStrMatchWildCaseC(type, "*Sequence*"))
+        if(!ajStrMatchWildC(type, "*Nucleotide*") &&
+           !ajStrMatchWildC(type, "*Protein*") &&
+           !ajStrMatchWildC(type, "*Sequence*"))
             continue;
            
 	if(!id)
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
 	ajFmtPrintS(&idqry,"%S:%S",name,entry);
 
-	if(ajStrPrefixC(type,"P"))
+	if(ajStrMatchWildC(type,"*Protein*"))
 	    pro = ajTrue;
 	else
 	    pro = ajFalse;

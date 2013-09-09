@@ -59,7 +59,8 @@ int main(int argc, char **argv)
 		ajSeqGetNameC(seq), ajSeqGetLen(seq), ajStrGetLen(str));
         feat = ajFeattableNewProt(ajSeqGetNameS(seq));
 	embPatlistRegexSearchAll(feat, seq, plist, AJFALSE);
-	(void) ajReportWrite (report,feat,seq);
+	if(ajFeattableGetSize(feat))
+	    (void) ajReportWrite (report,feat,seq);
 	ajFeattableDel(&feat);
     }
     ajReportSetSeqstats(report, seqall);

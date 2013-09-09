@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX text data reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.13 $
+** @version $Revision: 1.14 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2011/11/08 15:04:33 $ by $Author: rice $
+** @modified $Date: 2013/07/15 20:55:34 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -74,10 +74,22 @@ AjPTextin    ajTextinNewDatatype(const AjEDataType datatype);
 void         ajTextinDel(AjPTextin* pthis);
 void         ajTextinDelNofile(AjPTextin* pthis);
 void         ajTextinClear(AjPTextin thys);
+void         ajTextinClearNewfile(AjPTextin thys);
+void         ajTextinClearNewinput(AjPTextin thys);
 void         ajTextinClearNofile(AjPTextin thys);
+ajuint       ajTextinGetCount(const AjPTextin thys);
+ajlong       ajTextinGetFpos(const AjPTextin thys);
 const AjPStr ajTextinGetQryS(const AjPTextin thys);
+ajuint       ajTextinGetRecords(const AjPTextin thys);
+ajuint       ajTextinGetTotrecords(const AjPTextin thys);
 void         ajTextinQryC(AjPTextin thys, const char* txt);
 void         ajTextinQryS(AjPTextin thys, const AjPStr str);
+void         ajTextinStoreClear(AjPTextin thys,
+                           ajint lines, const AjPStr rdline,
+                           AjPStr *astr);
+AjBool       ajTextinStoreReadline(AjPTextin thys,
+                                   AjPStr* pdest, AjPStr *astr);
+void         ajTextinStoreReset(AjPTextin thys, AjPStr *astr);
 void         ajTextinTrace(const AjPTextin thys);
 const char*  ajTextinTypeGetFields(void);
 const char*  ajTextinTypeGetQlinks(void);

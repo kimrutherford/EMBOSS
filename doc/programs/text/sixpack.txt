@@ -58,7 +58,7 @@ protein output sequence(s) [x13776.fasta]:
 Command line arguments
 
 Display a DNA sequence with 6-frame translation and ORFs
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -155,6 +155,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -438,7 +439,7 @@ regulation
             S  X                                                         F3
      2161 cctcgag 2167
           ----:--
-     2161 ggagctc 2220
+     2161 ggagctc 2167
            G  R                                                          F6
           E  E  L                                                        F5
             R  S                                                         F4

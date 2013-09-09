@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.30 $
+** @version $Revision: 1.32 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:06:15 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -222,9 +222,14 @@ EnsPGeneadaptor ensGeneadaptorNew(
 
 void ensGeneadaptorDel(EnsPGeneadaptor *Pga);
 
-EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(const EnsPGeneadaptor ga);
+EnsPBaseadaptor ensGeneadaptorGetBaseadaptor(
+    EnsPGeneadaptor ga);
 
-EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(const EnsPGeneadaptor ga);
+EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(
+    EnsPGeneadaptor ga);
+
+EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
+    EnsPGeneadaptor ga);
 
 AjBool ensGeneadaptorFetchAll(
     EnsPGeneadaptor ga,
@@ -234,6 +239,27 @@ AjBool ensGeneadaptorFetchAllbyBiotype(
     EnsPGeneadaptor ga,
     const AjPStr biotype,
     AjPList genes);
+
+AjBool ensGeneadaptorFetchAllbyDisplaylabel(
+    EnsPGeneadaptor ga,
+    const AjPStr label,
+    AjPList genes);
+
+AjBool ensGeneadaptorFetchAllbyExternaldatabasename(
+    EnsPGeneadaptor ga,
+    const AjPStr dbname,
+    AjPList genes);
+
+AjBool ensGeneadaptorFetchAllbyExternalname(
+    EnsPGeneadaptor ga,
+    const AjPStr name,
+    const AjPStr dbname,
+    AjBool override,
+    AjPList genes);
+
+AjBool ensGeneadaptorFetchAllbyIdentifiers(
+    EnsPGeneadaptor ga,
+    AjPTable genes);
 
 AjBool ensGeneadaptorFetchAllbySlice(
     EnsPGeneadaptor ga,
@@ -296,7 +322,7 @@ AjBool ensGeneadaptorRetrieveAllIdentifiers(
 
 AjBool ensGeneadaptorRetrieveAllStableidentifiers(
     EnsPGeneadaptor ga,
-    AjPList identifiers);
+    AjPList stableids);
 
 AjBool ensGeneadaptorCheckReference(
     EnsPGeneadaptor ga,

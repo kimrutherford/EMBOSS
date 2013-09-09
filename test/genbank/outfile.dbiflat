@@ -4,9 +4,9 @@
 # Dbname: GENBANK
 # Release: 0.0
 # Date: 15/07/12
-# CurrentDirectory: /home/emboss/devemboss/test/genbank/
+# CurrentDirectory: /home/pmr/devemboss/test/genbank/
 # IndexDirectory: ./
-# IndexDirectoryPath: /home/emboss/devemboss/test/genbank/
+# IndexDirectoryPath: /home/pmr/devemboss/test/genbank/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /home/emboss/devemboss/test/genbank/
+# DirectoryPath: /home/pmr/devemboss/test/genbank/
 # Filenames: *.seq
 # Exclude: 
 # Files: 10

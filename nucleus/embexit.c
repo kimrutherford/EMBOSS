@@ -3,8 +3,8 @@
 ** General routines for exiting on success or failure
 **
 ** @author Copyright (c) 1999 Peter Rice
-** @version $Revision: 1.25 $
-** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @version $Revision: 1.26 $
+** @modified $Date: 2012/09/03 14:44:01 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -45,6 +45,7 @@
 #include "ajtaxdb.h"
 #include "ajurldb.h"
 #include "ajvardb.h"
+#include "ajxmldb.h"
 #include "ajresourcedb.h"
 
 #include "ajgraph.h"
@@ -73,16 +74,17 @@ __noreturn void embExit (void)
     embWordExit();
     embPatlistExit();
 
-    ajTextdbExit();
-    ajSeqDbExit();
+    ajAssemdbExit();
     ajFeatdbExit();
     ajObodbExit();
-    ajAssemdbExit();
     ajRefseqdbExit();
+    ajResourcedbExit();
+    ajSeqDbExit();
     ajTaxdbExit();
+    ajTextdbExit();
     ajUrldbExit();
     ajVardbExit();
-    ajResourcedbExit();
+    ajXmldbExit();
 
     ajGraphicsExit();
     ajAcdExit(ajFalse);

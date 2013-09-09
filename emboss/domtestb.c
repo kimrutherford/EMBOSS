@@ -173,12 +173,12 @@ int main(int argc, char **argv)
 
     /* Create and destroy an attribute just because it's possible */
     attr = ajDomDocumentCreateAttributeC(doc, "myatt");
-    ajDomDocumentDestroyNode(doc, attr);
+    ajDomDocumentDestroyNode(doc, &attr);
 
     ajDomWrite(doc,outf);
 
     /* Delete the entire document */
-    ajDomDocumentDestroyNode(doc,doc);
+    ajDomDocumentDestroyNode(doc, &doc);
 
     ajFileClose(&outf);
 

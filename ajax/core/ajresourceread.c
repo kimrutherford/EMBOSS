@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX data resource reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.35 $
+** @version $Revision: 1.37 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:10:35 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1263,7 +1263,7 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
             if(!ajStrMatchC(rest, "None"))
             {
                 ajStrTokenAssignC(&handle, rest, ";");
-                while(ajStrTokenNextParse(&handle, &token))
+                while(ajStrTokenNextParse(handle, &token))
                 {
                     ajStrRemoveWhiteExcess(&token);
                     ajListstrPushAppend(resource->Cat, ajStrNewS(token));
@@ -1278,11 +1278,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Id, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Name, token);
 
@@ -1298,11 +1298,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Id, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Name, token);
 
@@ -1318,11 +1318,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Id, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Name, token);
 
@@ -1338,11 +1338,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Id, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Name, token);
 
@@ -1358,11 +1358,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&reslink->Source, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&reslink->Term, token);
                 reslink->Nterms = (ajint) ajStrCalcCountK(token, ';');
@@ -1378,11 +1378,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
                 resqry = ajResqueryNew();
 
                 ajStrTokenAssignC(&handle, rest, "|");
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resqry->Datatype, token);
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resqry->Format, token);
 
@@ -1395,12 +1395,12 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
                 }
                 ajListIterDel(&iter);
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resqry->Term, token);
                 resqry->Nterms = (ajint) ajStrCalcCountK(token, ';');
     
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resqry->Url, token);
 
@@ -1421,11 +1421,11 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 
                 ajStrTokenAssignC(&handle, rest, "|");
 
-                ajStrTokenNextParse(&handle, &token);
+                ajStrTokenNextParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Id, token);
 
-                ajStrTokenRestParse(&handle, &token);
+                ajStrTokenRestParse(handle, &token);
                 ajStrRemoveWhiteExcess(&token);
                 ajStrAssignS(&resterm->Name, token);
 
@@ -2181,10 +2181,11 @@ static AjBool resourceinListProcess(AjPResourcein resourcein,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStrTok handle = NULL;
+    AjPStr rest  = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
+    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -2212,31 +2213,30 @@ static AjBool resourceinListProcess(AjPResourcein resourcein,
 
     while(ajReadlineTrim(file, &resourceinReadLine))
     {
+        ++recnum;
 	resourceinListNoComment(&resourceinReadLine);
 
-	if(ajStrGetLen(resourceinReadLine))
-	{
-	    ajStrTokenAssignC(&handle, resourceinReadLine, " \t\n\r");
-	    ajStrTokenNextParse(&handle, &token);
-	    /* ajDebug("Line  '%S'\n");*/
-	    /* ajDebug("token '%S'\n", resourceinReadLine, token); */
-
-	    if(ajStrGetLen(token))
-	    {
-	        ajDebug("++Add to list: '%S'\n", token);
-	        AJNEW0(node);
-	        ajStrAssignS(&node->Qry, token);
-	        resourceinQrySave(node, resourcein);
-	        ajListPushAppend(list, node);
-	    }
-
-	    ajStrDel(&token);
-	    token = NULL;
-	}
+        if(ajStrExtractWord(resourceinReadLine, &rest, &token))
+        {
+            if(ajStrGetLen(rest)) 
+            {
+                ajErr("Bad record %u in list file '%S'\n'%S'",
+                      recnum, listfile, resourceinReadLine);
+            }
+            else if(ajStrGetLen(token))
+            {
+                ajDebug("++Add to list: '%S'\n", token);
+                AJNEW0(node);
+                ajStrAssignS(&node->Qry, token);
+                resourceinQrySave(node, resourcein);
+                ajListPushAppend(list, node);
+            }
+        }
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
+    ajStrDel(&rest);
 
     ajDebug("Trace resourcein->Input->List\n");
     ajQuerylistTrace(resourcein->Input->List);
@@ -2265,7 +2265,6 @@ static AjBool resourceinListProcess(AjPResourcein resourcein,
 	ret = resourceinQryProcess(resourcein, resource);
     }
 
-    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++resourceinListProcess depth: %d returns: %B\n", depth, ret);
 

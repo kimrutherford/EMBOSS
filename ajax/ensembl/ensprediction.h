@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.24 $
+** @version $Revision: 1.25 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:19:28 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -245,6 +245,9 @@ EnsPPredictionexonadaptor ensPredictionexonadaptorNew(
 
 void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea);
 
+EnsPBaseadaptor ensPredictionexonadaptorGetBaseadaptor(
+    EnsPPredictionexonadaptor pea);
+
 EnsPDatabaseadaptor ensPredictionexonadaptorGetDatabaseadaptor(
     EnsPPredictionexonadaptor pea);
 
@@ -255,6 +258,11 @@ AjBool ensPredictionexonadaptorFetchAllbyPredictiontranscript(
     EnsPPredictionexonadaptor pea,
     const EnsPPredictiontranscript pt,
     AjPList pes);
+
+AjBool ensPredictionexonadaptorFetchByIdentifier(
+    EnsPPredictionexonadaptor pea,
+    ajuint identifier,
+    EnsPPredictionexon *Ppe);
 
 /* Ensembl Prediction Transcript */
 
@@ -370,6 +378,9 @@ EnsPPredictiontranscriptadaptor ensPredictiontranscriptadaptorNew(
 
 void ensPredictiontranscriptadaptorDel(
     EnsPPredictiontranscriptadaptor *Ppta);
+
+EnsPBaseadaptor ensPredictiontranscriptadaptorGetBaseadaptor(
+    EnsPPredictiontranscriptadaptor pta);
 
 EnsPDatabaseadaptor ensPredictiontranscriptadaptorGetDatabaseadaptor(
     EnsPPredictiontranscriptadaptor pta);

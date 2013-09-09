@@ -3,8 +3,8 @@
 ** General routines for initialisation
 **
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version $Revision: 1.21 $
-** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @version $Revision: 1.22 $
+** @modified $Date: 2012/09/03 14:44:01 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -34,6 +34,7 @@
 #include "ajtextdb.h"
 #include "ajurldb.h"
 #include "ajvardb.h"
+#include "ajxmldb.h"
 #include "ajacd.h"
 #include "ajnam.h"
 
@@ -54,16 +55,17 @@ static void initDball(void);
 
 static void initDball (void)
 {
-    ajTextdbInit();
-    ajSeqdbInit();
+    ajAssemdbInit();
     ajFeatdbInit();
     ajObodbInit();
-    ajAssemdbInit();
     ajRefseqdbInit();
+    ajResourcedbInit();
+    ajSeqdbInit();
     ajTaxdbInit();
+    ajTextdbInit();
     ajUrldbInit();
     ajVardbInit();
-    ajResourcedbInit();
+    ajXmldbInit();
 
     return;
 }

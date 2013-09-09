@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.25 $
+** @version $Revision: 1.27 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:04:02 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -124,7 +124,7 @@ typedef struct EnsSMapperunit
 **
 ** Ensembl Mapper Pair.
 **
-** An Ensembl Mapper Pair consists of two Ensembl Mapper Units.
+** An Ensembl Mapper Pair consists of two Ensembl Mapper Unit objects.
 **
 ** @alias EnsSMapperpair
 ** @alias EnsOMapperpair
@@ -132,7 +132,8 @@ typedef struct EnsSMapperunit
 ** @cc Bio::EnsEMBL::Mapper::Pair
 ** @attr Source [EnsPMapperunit] Source Ensembl Mapper Unit
 ** @attr Target [EnsPMapperunit] Target Ensembl Mapper Unit
-** @attr Orientation [ajint] Relative orientation of the Ensembl Mapper Units
+** @attr Orientation [ajint]
+** Relative orientation of the Ensembl Mapper Unit objects
 ** @cc Bio::EnsEMBL::Mapper::IndelPair
 ** @attr Indel [AjBool] Insertion or deletion attribute
 ** @attr Use [ajuint] Use counter
@@ -160,7 +161,8 @@ typedef struct EnsSMapperpair
 ** Ensembl Mapper Result.
 **
 ** Representation of a mapped Ensembl Object returned by an Ensembl Mapper when
-** the source region maps to valid sequence. Depending on the type element
+** the source region maps to valid sequence.
+** Depending on the Ensembl Mapper Result type member,
 ** this can also represent a gap.
 **
 ** @alias EnsSMapperresult
@@ -190,7 +192,7 @@ typedef struct EnsSMapperpair
 ** Bio::EnsEMBL::Mapper::Gap
 ** Bio::EnsEMBL::Mapper::IndelCoordinate
 **
-** The objects can be distinguished by their type element.
+** The objects can be distinguished by their Ensembl Mapper Result type member.
 ******************************************************************************/
 
 typedef struct EnsSMapperresult
@@ -251,15 +253,16 @@ typedef struct EnsSMapperrange
 ** @alias EnsSMapperrangeregistry
 ** @alias EnsOMapperrangeregistry
 **
-** @attr Registry [AjPTable] Registry Table
+** @attr Registry [AjPTable]
+** First-level AJAX Table of AJAX unsigned integer
+** (Ensembl Object identifier) key data and
+** second-level AJAX List value data of Ensembl Mapper Range objects.
 ** @attr Use [ajuint] Use counter
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ** The Ensembl Mapper Range Registry maintains an internal list of registered
 ** regions and is used to quickly ascertain if and what regions of a provided
-** range need registration. It is implemented as a first-level AJAX table with
-** Ensembl Object identifers as keys and second-level AJAX Lists of
-** Ensembl Mapper Ranges as values.
+** range need registration.
 ******************************************************************************/
 
 typedef struct EnsSMapperrangeregistry
@@ -279,7 +282,7 @@ typedef struct EnsSMapperrangeregistry
 ** Ensembl Mapper.
 **
 ** Generic mapper to provide coordinate transforms between two
-** disjoint Ensembl Coordinate Systems.
+** disjoint Ensembl Coordinate System objects.
 **
 ** @alias EnsSMapper
 ** @alias EnsOMapper
@@ -299,9 +302,9 @@ typedef struct EnsSMapperrangeregistry
 ** The AJAX Table Mapperpairs forms the top hierarchy of an Ensembl Mapper Pair
 ** cache. The AJAX Table uses the contents of the TypeSource and TypeTarget
 ** strings as index and holds a second hierarchy of AJAX Table objects, which
-** use Ensembl Object identifiers as index. Those second-level AJAX Table
-** objects then hold a third-level of AJAX List objects of
-** Ensembl Mapper Pair objects.
+** use AJAX unsigned inetger (Ensembl Object identifier) objects as index.
+** Those second-level AJAX Table objects then hold a
+** third-level of AJAX List objects of Ensembl Mapper Pair objects.
 ******************************************************************************/
 
 typedef struct EnsSMapper

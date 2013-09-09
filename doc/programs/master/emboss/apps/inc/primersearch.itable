@@ -141,6 +141,14 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_seqall</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_seqall</td>
 <td>string</td>
 <td>Input sequence format</td>

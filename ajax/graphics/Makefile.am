@@ -11,7 +11,7 @@ endif
 libajaxg_la_CPPFLAGS += -I$(top_srcdir)/plplot
 libajaxg_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-libajaxg_la_LDFLAGS  = -version-info 6:4:0
+libajaxg_la_LDFLAGS  = -version-info 6:5:0
 if ISCYGWIN
 libajaxg_la_LDFLAGS += -no-undefined
 libajaxg_la_LDFLAGS += -Wl,--add-stdcall-alias

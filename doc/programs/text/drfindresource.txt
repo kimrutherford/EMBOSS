@@ -35,7 +35,7 @@ Usage
    Here is a sample session with drfindresource
 
 
-% drfindresource pathogen
+% drfindresource pathogens
 Find public databases by resource
 Data resource output file [drfindresource.drcat]:
 
@@ -45,7 +45,7 @@ Data resource output file [drfindresource.drcat]:
 Command line arguments
 
 Find public databases by resource
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-query]             string     List of EDAM data keywords (Any string)

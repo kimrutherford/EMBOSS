@@ -316,7 +316,7 @@ int main(int argc, char **argv)
 	0,  0
     };
     
-    ajint *aac;	  /* array of pointers to amino acid counts (aac) from
+    ajuint *aac;	  /* array of pointers to amino acid counts (aac) from
 		     function embIepComp() */
     ajint i     = 0;			/* general iterator i */
     ajint begin = 0;			/* sequence begin */
@@ -344,6 +344,8 @@ int main(int argc, char **argv)
     EmbPPropMolwt *mwdata = NULL;
     AjBool mono;
     double dtmp = 0.;
+    ajuint resn = 0;
+    ajuint resc = 0;
     
     embInit("epestfind", argc, argv);
 
@@ -430,7 +432,7 @@ int main(int argc, char **argv)
 					(posbeg + 1), (posend - 1));
 
 		    sublen = ajStrGetLen(substr);
-		    embIepCompS(substr, 1, 1, 0, 0, aac);
+		    embIepCompS(substr, 1, 1, 0, 0, aac, &resn, &resc);
 		    /* Valid PEST motifs must contain D or E, P and S or T. */
 		    if(
                         (aac[ajBasecodeToInt ('D')] +

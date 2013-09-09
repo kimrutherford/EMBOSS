@@ -6,9 +6,9 @@
 ** via the routines ajNamDatabase and ajNamGetValueS.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version $Revision: 1.185 $
+** @version $Revision: 1.190 $
 ** @modified 2000-2011 Peter Rice
-** @modified $Date: 2012/07/22 10:58:42 $ by $Author: rice $
+** @modified $Date: 2013/01/24 15:31:46 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -46,6 +46,7 @@
 #include "ajtextread.h"
 #include "ajurlread.h"
 #include "ajvarread.h"
+#include "ajxmlread.h"
 
 #ifndef WIN32
 #include <dirent.h>
@@ -399,7 +400,7 @@ NamOAttr namDbAttrs[] =
      "database name(s) to be used by access method if different"},
     {"directory", ATTR_STR, "",
      "data directory"},
-    {"example", ATTR_STR, "",
+    {"example", ATTR_LIST, "",
      "example identifier"},
     {"exclude", ATTR_STR, "",
      "wildcard filenames to exclude from 'filename'"},
@@ -545,9 +546,6 @@ NamOType namDbTypes[] =
     {"Html",         "text",
      "HTML data",
      AJDATATYPE_TEXT},
-    {"Xml",          "text",
-     "XML data",
-     AJDATATYPE_TEXT},
     {"Text",         "text",
      "Text data",
      AJDATATYPE_TEXT},
@@ -556,7 +554,10 @@ NamOType namDbTypes[] =
      AJDATATYPE_URL},
     {"Variation",    "variation",
      "Variation",
-     AJDATATYPE_URL},
+     AJDATATYPE_VARIATION},
+    {"Xml",          "xml",
+     "XML data",
+     AJDATATYPE_XML},
     {"Unknown",      "text",
      "Unknown type",
      AJDATATYPE_UNKNOWN},
@@ -1791,18 +1792,18 @@ AjBool ajNamSvrDetails(const AjPStr name, AjPStr* type, AjPStr *scope,
                     ajStrAssignC(scope, "");
                     AJCNEW0(datatype, AJDATATYPE_MAX);
 
-                    while(ajStrTokenNextParse(&handle, &nexttype))
+                    while(ajStrTokenNextParse(handle, &nexttype))
                     {
                         if(ajStrGetLen(*type))
                             ajStrAppendK(type, ' ');
 
-                        if(ajStrPrefixCaseC(attrval, "N"))
+                        if(ajStrMatchCaseC(attrval, "N"))
                             ajStrAppendC(type, "Nucleotide");
-                        else if(ajStrPrefixCaseC(attrval, "P"))
+                        else if(ajStrMatchCaseC(attrval, "P"))
                             ajStrAppendC(type, "Protein");
                         else 
                         {
-                            ajStrFmtTitle(&nexttype);
+                            ajStrFmtCapital(&nexttype);
                             ajStrAppendS(type, nexttype);
                         }
 
@@ -2203,6 +2204,90 @@ AjPList ajNamDbGetAttrlist(const AjPStr name)
 
 
 
+/* @func ajNamDbGetAttrlistSvr ************************************************
+**
+** Return a list of names and values for all of a database defined attributes
+** where the database is defined for a server
+**
+** @param [r] name [const AjPStr] database name
+** @param [r] svrname [const AjPStr] server name
+**
+** @return [AjPList] Tag-value list
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPList ajNamDbGetAttrlistSvr(const AjPStr name, const AjPStr svrname)
+{
+    AjPList ret = NULL;
+    AjPTagval tagval = NULL;
+    NamPEntry svdata = NULL;
+    NamPEntry fnew = NULL;
+    const AjPTable dbtable = NULL;
+    const AjPTable svtable = NULL;
+    const char* dbattr = NULL;
+    NamOAttr attr;
+    void* dbvalue;
+    const AjPStr tmpstr;
+    ajuint i;
+    AjIList iter;
+
+    svdata = ajTableFetchmodS(namSvrDatabaseTable, svrname);
+    if(!svdata)
+        return NULL;
+
+    fnew = ajTableFetchmodS(svdata->data, name);
+
+    if(!fnew)
+	return NULL;
+
+    ret = ajListNew();
+    dbtable = (const AjPTable) fnew->data;
+
+    svdata = ajTableFetchmodS(namSvrMasterTable, svrname);
+    svtable = svdata->data;
+
+    for(i=0; namDbAttrs[i].Name; i++)
+    {
+        attr = namDbAttrs[i];
+        dbattr = attr.Name;
+
+        dbvalue = ajTableFetchmodC(dbtable, dbattr);
+        if(!dbvalue)
+            dbvalue = ajTableFetchmodC(svtable, dbattr);
+
+        if(dbvalue)
+        {
+            switch(attr.Type)
+            {
+                case ATTR_LIST:
+                    iter = ajListIterNewread(dbvalue);
+
+                    while(!ajListIterDone(iter))
+                    {
+                        tmpstr = ajListIterGet(iter);
+                        tagval = ajTagvalNewC(dbattr, MAJSTRGETPTR(tmpstr));
+                        ajListPushAppend(ret, tagval);
+                    }
+
+                    ajListIterDel(&iter);
+                    break;
+                default:
+                    tagval = ajTagvalNewC(dbattr, ajStrGetPtr(dbvalue));
+                    ajListPushAppend(ret, tagval);
+                   break;
+            }
+        }
+    }
+
+    return ret;
+  
+}
+
+
+
+
 /* @funcstatic namDbtablePutAttrS *********************************************
 **
 ** Store the value for a database attribute
@@ -2394,7 +2479,7 @@ static AjBool namSvrtablePutAttrS(AjPTable svrtable, AjPStr *Pattribute,
 ** Returns database access method information
 **
 ** @param [r] name [const AjPStr] Database name
-** @param [w] type [AjPStr*] sequence type - 'P' or 'N'
+** @param [w] type [AjPStr*] sequence type
 ** @param [w] id [AjBool*] ajTrue = can access single entries
 ** @param [w] qry [AjBool*] ajTrue = can access wild/query entries
 ** @param [w] all [AjBool*] ajTrue = can access all entries
@@ -2456,14 +2541,322 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 	    {
 		if(ajStrMatchC(attrname, "type"))
                 {
-                    if(ajStrPrefixCaseC(attrval, "N"))
+                    if(ajStrMatchCaseC(attrval, "N"))
                         ajStrAssignC(type, "Nucleotide");
-                    else if(ajStrPrefixCaseC(attrval, "P"))
+                    else if(ajStrMatchCaseC(attrval, "P"))
                         ajStrAssignC(type, "Protein");
                     else 
                     {
                         ajStrAssignS(type, attrval);
-                        ajStrFmtTitle(type);
+                        ajStrFmtCapital(type);
+                    }
+
+                    typetested = ajTrue;
+                }
+
+		if(ajStrMatchC(attrname, "method"))
+		{
+		    scope = namMethod2Scope(attrval, dbtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(scope & AJMETHOD_QUERY)
+                        *qry = ajTrue;
+
+		    if(scope & AJMETHOD_ALL)
+                        *all = ajTrue;
+
+		    ajStrAppendS(methods, attrval);
+		}
+
+		if(ajStrMatchC(attrname, "methodentry"))
+		{
+                    scope = namMethod2Scope(attrval, dbtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(id)");
+		}
+
+		if(ajStrMatchC(attrname, "methodquery"))
+		{
+		    scope = namMethod2Scope(attrval, dbtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(scope & AJMETHOD_QUERY)
+                        *qry = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(qry)");
+		}
+
+		if(ajStrMatchC(attrname, "methodall"))
+		{
+		    scope = namMethod2Scope(attrval, dbtype);
+
+		    if(scope & AJMETHOD_ALL)
+                        *all = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(all)");
+		}
+
+                if(ajStrMatchC(attrname, "comment"))
+		    ajStrAssignS(comment, attrval);
+
+		if(ajStrMatchC(attrname, "release"))
+		    ajStrAssignS(release, attrval);
+	    }
+	}
+	
+	if(!typetested)
+	{
+	    ajDebug("Bad database definition for %S: No type. 'P' assumed\n",
+		   name);
+	    ajWarn("Bad database definition for %S: No type. 'P' assumed",
+		   name);
+	    ajStrAssignC(type, "P");
+	}
+
+	if(!*id && !*qry && !*all)
+        {
+	    ajDebug("Bad database definition for %S: No method(s) for access\n",
+		   name);
+	    ajWarn("Bad database definition for %S: No method(s) for access",
+		   name);
+	}
+
+        ajStrDel(&attrname);
+
+	return ajTrue;
+    }
+    
+    ajDebug("ajNamDbDetails: FAILED '%S' not found\n", name);
+
+    ajStrDel(&attrname);
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajNamDbDetailsSvr ***************************************************
+**
+** Returns database access method information for a database on a server
+**
+** @param [r] name [const AjPStr] Database name
+** @param [r] svrname [const AjPStr] Server name
+** @param [w] type [AjPStr*] sequence type
+** @param [w] id [AjBool*] ajTrue = can access single entries
+** @param [w] qry [AjBool*] ajTrue = can access wild/query entries
+** @param [w] all [AjBool*] ajTrue = can access all entries
+** @param [w] comment [AjPStr*] comment about database
+** @param [w] release [AjPStr*] database release date
+** @param [w] methods [AjPStr*] database access methods formatted
+** @param [w] defined [AjPStr*] database definition file short name
+** @return [AjBool] ajTrue if database details were found
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ajNamDbDetailsSvr(const AjPStr name, const AjPStr svrname,
+                         AjPStr* type, AjBool* id,
+                         AjBool* qry, AjBool* all,
+                         AjPStr* comment, AjPStr* release,
+                         AjPStr* methods, AjPStr* defined)
+{
+    const NamPEntry svdata = NULL;
+    const NamPEntry dbdata = NULL;
+    const AjPTable svrtable = NULL;
+    const AjPTable dbtable = NULL;
+    ajint i;
+    ajint scope;
+    AjPStr attrname  = NULL;
+    const AjPStr attrval  = NULL;
+    const AjPStr dbtype  = NULL;
+    const AjPStr svrtype  = NULL;
+    AjBool typetested = ajFalse;
+
+    *id = *qry = *all = ajFalse;
+    
+    ajStrDelStatic(type);
+    ajStrDelStatic(comment);
+    ajStrDelStatic(release);
+    ajStrDelStatic(methods);
+    ajStrDelStatic(defined);
+
+    /* make sure we have read the server cache file */
+     
+    if(!ajStrGetLen(svrname))
+    {
+        dbdata = ajTableFetchmodS(namDbMasterTable, name);
+    }
+    else
+    {
+        if(!ajNamDatabaseServer(name, svrname))
+            return ajFalse;
+
+        svdata = ajTableFetchS(namSvrDatabaseTable, svrname);
+        svrtable = (const AjPTable) svdata->data;
+
+        dbdata = ajTableFetchS(svrtable, name);
+
+        svdata = ajTableFetchS(namSvrMasterTable, svrname);
+        svrtable = (const AjPTable) svdata->data;
+
+        svrtype = ajTableFetchmodC(svrtable, "type");
+
+	for(i=0; namSvrAttrs[i].Name; i++)
+	{
+            if(namSvrAttrs[i].Type != ATTR_STR)
+                continue;
+
+            ajStrAssignC(&attrname, namSvrAttrs[i].Name);
+
+            attrval = ajTableFetchmodS(svrtable, attrname);
+	    ajDebug("Attribute name = %S, value = %S\n",
+                    attrname, attrval);
+
+	    if(ajStrGetLen(attrval))
+	    {
+		if(ajStrMatchC(attrname, "type"))
+                {
+                    if(ajStrMatchCaseC(attrval, "N"))
+                        ajStrAssignC(type, "Nucleotide");
+                    else if(ajStrMatchCaseC(attrval, "P"))
+                        ajStrAssignC(type, "Protein");
+                    else 
+                    {
+                        ajStrAssignS(type, attrval);
+                        ajStrFmtCapital(type);
+                    }
+
+                    typetested = ajTrue;
+                }
+
+		if(ajStrMatchC(attrname, "method"))
+		{
+		    scope = namMethod2Scope(attrval, svrtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(scope & AJMETHOD_QUERY)
+                        *qry = ajTrue;
+
+		    if(scope & AJMETHOD_ALL)
+                        *all = ajTrue;
+
+		    ajStrAppendS(methods, attrval);
+		}
+
+		if(ajStrMatchC(attrname, "methodentry"))
+		{
+                    scope = namMethod2Scope(attrval, svrtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(id)");
+		}
+
+		if(ajStrMatchC(attrname, "methodquery"))
+		{
+		    scope = namMethod2Scope(attrval, svrtype);
+
+		    if(scope & AJMETHOD_ENTRY)
+                        *id = ajTrue;
+
+		    if(scope & AJMETHOD_QUERY)
+                        *qry = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(qry)");
+		}
+
+		if(ajStrMatchC(attrname, "methodall"))
+		{
+		    scope = namMethod2Scope(attrval, svrtype);
+
+		    if(scope & AJMETHOD_ALL)
+                        *all = ajTrue;
+
+		    if(ajStrGetLen(*methods))
+			ajStrAppendC(methods, ",");
+
+		    ajStrAppendS(methods, attrval);
+		    ajStrAppendC(methods, "(all)");
+		}
+
+                if(ajStrMatchC(attrname, "comment"))
+		    ajStrAssignS(comment, attrval);
+
+		if(ajStrMatchC(attrname, "release"))
+		    ajStrAssignS(release, attrval);
+	    }
+	}
+	
+        ajStrDel(&attrname);
+    }
+    
+       
+    if(dbdata)
+    {
+	ajDebug("ajNamDbDetails: '%S' found\n", name);
+
+	ajStrAssignS(defined, dbdata->file);
+
+	dbtable = (const AjPTable) dbdata->data;
+        dbtype = ajTableFetchmodC(dbtable, "type");
+        if(!dbtype)
+            dbtype = svrtype;
+
+	for(i=0; namDbAttrs[i].Name; i++)
+	{
+            if(namDbAttrs[i].Type != ATTR_STR)
+                continue;
+
+            ajStrAssignC(&attrname, namDbAttrs[i].Name);
+
+            attrval = ajTableFetchmodS(dbtable, attrname);
+	    ajDebug("Attribute name = %S, value = %S\n",
+                    attrname, attrval);
+
+	    if(ajStrGetLen(attrval))
+	    {
+		if(ajStrMatchC(attrname, "type"))
+                {
+                    if(ajStrMatchCaseC(attrval, "N"))
+                        ajStrAssignC(type, "Nucleotide");
+                    else if(ajStrMatchC(attrval, "P"))
+                        ajStrAssignC(type, "Protein");
+                    else 
+                    {
+                        ajStrAssignS(type, attrval);
+                        ajStrFmtCapital(type);
                     }
 
                     typetested = ajTrue;
@@ -2602,6 +2995,8 @@ static AjBool namAccessTest(const AjPStr method, const AjPStr dbtype)
             result = ajFeattabaccessMethodTest(method);
         else if(namtype->DataType == AJDATATYPE_OBO)
             result = ajOboaccessMethodTest(method);
+        else if(namtype->DataType == AJDATATYPE_REFSEQ)
+            result = ajRefseqaccessMethodTest(method);
         else if(namtype->DataType == AJDATATYPE_RESOURCE)
             result = ajResourceaccessMethodTest(method);
         else if(namtype->DataType == AJDATATYPE_SEQUENCE)
@@ -2612,8 +3007,8 @@ static AjBool namAccessTest(const AjPStr method, const AjPStr dbtype)
             result = ajUrlaccessMethodTest(method);
         else if(namtype->DataType == AJDATATYPE_VARIATION)
             result = ajVaraccessMethodTest(method);
-        else if(namtype->DataType == AJDATATYPE_REFSEQ)
-            result = ajRefseqaccessMethodTest(method);
+        else if(namtype->DataType == AJDATATYPE_XML)
+            result = ajXmlaccessMethodTest(method);
     }
 
     return result;
@@ -2653,20 +3048,22 @@ static AjBool namInformatTest(const AjPStr format, const AjPStr dbtype)
         result = ajFeattabinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_OBO)
         result = ajOboinformatTest(format);
+    else if(namtype->DataType == AJDATATYPE_REFSEQ)
+        result = ajRefseqinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_RESOURCE)
         result = ajResourceinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_SEQUENCE)
         result = ajSeqinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_TAXON)
         result = ajTaxinformatTest(format);
+    else if(namtype->DataType == AJDATATYPE_TEXT)
+        result = ajTextinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_URL)
         result = ajUrlinformatTest(format);
     else if(namtype->DataType == AJDATATYPE_VARIATION)
         result = ajVarinformatTest(format);
-    else if(namtype->DataType == AJDATATYPE_TEXT)
-        result = ajTextinformatTest(format);
-    else if(namtype->DataType == AJDATATYPE_REFSEQ)
-        result = ajRefseqinformatTest(format);
+    else if(namtype->DataType == AJDATATYPE_XML)
+        result = ajXmlinformatTest(format);
 
     return result;
 }
@@ -2720,6 +3117,8 @@ static const char* namMethod2Qlinks(const AjPStr method, ajint datatype)
             result = ajUrlaccessMethodGetQlinks(method);
         else if(datatype == AJDATATYPE_VARIATION)
             result = ajVaraccessMethodGetQlinks(method);
+        else if(datatype == AJDATATYPE_XML)
+            result = ajXmlaccessMethodGetQlinks(method);
     }
 
     return result;
@@ -2754,7 +3153,7 @@ static ajuint namMethod2Scope(const AjPStr method, const AjPStr dbtype)
     {
         ajStrTokenAssignC(&handle, dbtype, " ,;");
 
-        while(ajStrTokenNextParse(&handle, &nexttype))
+        while(ajStrTokenNextParse(handle, &nexttype))
         {
             namtype = ajTableFetchmodS(namDbTypeTable, nexttype);
 
@@ -2762,23 +3161,25 @@ static ajuint namMethod2Scope(const AjPStr method, const AjPStr dbtype)
                 return result;
 
             if(namtype->DataType == AJDATATYPE_ASSEMBLY)
-                result = ajAssemaccessMethodGetScope(method);
+                result |= ajAssemaccessMethodGetScope(method);
             else if(namtype->DataType == AJDATATYPE_FEATURES)
-                result = ajFeattabaccessMethodGetScope(method);
+                result |= ajFeattabaccessMethodGetScope(method);
             else if(namtype->DataType == AJDATATYPE_OBO)
-                result = ajOboaccessMethodGetScope(method);
+                result |= ajOboaccessMethodGetScope(method);
+            else if(namtype->DataType == AJDATATYPE_REFSEQ)
+                result |= ajRefseqaccessMethodGetScope(method);
             else if(namtype->DataType == AJDATATYPE_RESOURCE)
-                result = ajResourceaccessMethodGetScope(method);
+                result |= ajResourceaccessMethodGetScope(method);
             else if(namtype->DataType == AJDATATYPE_SEQUENCE)
-                result = ajSeqaccessMethodGetScope(method);
+                result |= ajSeqaccessMethodGetScope(method);
             else if(namtype->DataType == AJDATATYPE_TAXON)
-                result = ajTaxaccessMethodGetScope(method);
-             else if(namtype->DataType == AJDATATYPE_URL)
-                result = ajUrlaccessMethodGetScope(method);
-             else if(namtype->DataType == AJDATATYPE_VARIATION)
-                result = ajVaraccessMethodGetScope(method);
-             else if(namtype->DataType == AJDATATYPE_REFSEQ)
-                result = ajRefseqaccessMethodGetScope(method);
+                result |= ajTaxaccessMethodGetScope(method);
+            else if(namtype->DataType == AJDATATYPE_URL)
+                result |= ajUrlaccessMethodGetScope(method);
+            else if(namtype->DataType == AJDATATYPE_VARIATION)
+                result |= ajVaraccessMethodGetScope(method);
+            else if(namtype->DataType == AJDATATYPE_XML)
+                result |= ajXmlaccessMethodGetScope(method);
         }
     }
 
@@ -2823,6 +3224,8 @@ static const char* namDatatype2Fields(ajint datatype)
         result = ajUrlinTypeGetFields();
     else if(datatype == AJDATATYPE_VARIATION)
         result = ajVarinTypeGetFields();
+    else if(datatype == AJDATATYPE_XML)
+        result = ajXmlinTypeGetFields();
 
     if(!result)
         result = ajTextinTypeGetFields();
@@ -2865,6 +3268,8 @@ static const char* namDatatype2Qlinks(ajint datatype)
         result = ajUrlinTypeGetQlinks();
     else if(datatype == AJDATATYPE_VARIATION)
         result = ajVarinTypeGetQlinks();
+    else if(datatype == AJDATATYPE_XML)
+        result = ajXmlinTypeGetQlinks();
 
     if(!result)
         result = ajTextinTypeGetQlinks();
@@ -3047,6 +3452,89 @@ void ajNamListListServers(AjPList svrnames)
 
 
 
+/* @func ajNamListFindAliases *************************************************
+**
+** Creates a list of alias for a named database in the internal table.
+**
+** @param [r] dbname [const AjPStr] Database name
+** @param [w] dbnames [AjPList] Str List of names to be populated
+** @return [void]
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajNamListFindAliases(const AjPStr dbname, AjPList dbnames)
+{
+    ajint i;
+    NamPEntry fnew;
+    AjPStr testname = ajStrNewS(dbname);
+    void **valarray =  NULL;
+
+    ajStrFmtLower(&testname);
+
+    ajTableToarrayValues(namAliasMasterTable, &valarray);
+    ajDebug("ajNamListFindAliases '%S'\n", dbname);
+
+    for(i = 0; valarray[i]; i++)
+    {
+	fnew = (NamPEntry) valarray[i];
+
+        if(!ajStrMatchS(testname, fnew->value))
+            continue;
+
+	ajDebug("ALIAS: %S %S\n", fnew->name, fnew->value);
+	ajListstrPushAppend(dbnames, fnew->name);
+    }
+
+    ajListSort(dbnames, ajStrVcmp);
+
+    ajStrDel(&testname);
+    AJFREE(valarray);
+
+    return;
+}
+
+
+
+
+/* @func ajNamListListAliases *************************************************
+**
+** Creates a AjPList list of all databases in the internal table.
+**
+** @param [w] dbnames [AjPList] Str List of names to be populated
+** @return [void]
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajNamListListAliases(AjPList dbnames)
+{
+    ajint i;
+    NamPEntry fnew;
+    void **valarray =  NULL;
+
+    ajTableToarrayValues(namAliasMasterTable, &valarray);
+    ajDebug("ajNamListListAliases\n");
+
+    for(i = 0; valarray[i]; i++)
+    {
+	fnew = (NamPEntry) valarray[i];
+	ajDebug("ALIAS: %S %S\n", fnew->name, fnew->value);
+	ajListstrPushAppend(dbnames, fnew->name);
+    }
+
+    ajListSort(dbnames, ajStrVcmp);
+
+    AJFREE(valarray);
+
+    return;
+}
+
+
+
+
 /* @func ajNamListListDatabases ***********************************************
 **
 ** Creates a AjPList list of all databases in the internal table.
@@ -3073,6 +3561,8 @@ void ajNamListListDatabases(AjPList dbnames)
 	ajDebug("DB: %S\n", fnew->name);
 	ajListstrPushAppend(dbnames, fnew->name);
     }
+
+    ajListSort(dbnames, ajStrVcmp);
 
     AJFREE(valarray);
 
@@ -4486,9 +4976,9 @@ AjBool ajNamDatabase(const AjPStr name)
 
 /* @func ajNamAliasDatabase ***************************************************
 **
-** Looks for name in the database hash table and the database hash
+** Looks for name in the database hash table and the database alias hash
 ** table and if found returns the true name for this. If not found
-** returns NULL.
+** returns false and leaves the original name unchanged
 **
 ** @param [u] Pname [AjPStr*] character string to find in hash table.
 ** @return [AjBool] true if database name is valid.
@@ -5356,6 +5846,205 @@ ajuint ajNamSvrCount(const AjPStr server)
 
 
 
+/* @func ajNamSvrListFindAliases **********************************************
+**
+** Reads the cachefile for a server and lists the aliases for a database.
+**
+** Searches emboss_standard and the user directory ~/.embossdata/
+** testing the file data in each file found and parsing the most recent file.
+**
+** cache files should all start with a comment line
+** containing the file name and the creation date.
+**
+** @param [r] server [const AjPStr] Server name
+** @param [r] dbname [const AjPStr] Database name
+** @param [w] dbnames [AjPList] Str List of names to be populated
+** @return [void]
+**
+**
+** @release 6.6.0
+******************************************************************************/
+
+void ajNamSvrListFindAliases(const AjPStr server, const AjPStr dbname,
+                             AjPList dbnames)
+{
+    void **valarray =  NULL;
+    register ajint i = 0;
+    AjPStr testname = ajStrNewS(dbname);
+
+    const NamPEntry svdata = NULL;
+    const NamPEntry dbdata = NULL;
+    NamPEntry fnew   = NULL;
+    AjPTable svrtable;
+    AjPTable dbtable;
+    const AjPStr svrcache = NULL;
+    AjPStr cachefile = NULL;
+    
+    /*
+    ** TODO: Should server files be read by a separate function?
+    ** This function is largely a copy of ajNamSvrCount and
+    ** ajNamListListDatabases so that server files are read by both functions.
+    */
+
+    ajStrFmtLower(&testname);
+    dbdata = ajTableFetchS(namSvrAliasTable, server);
+    
+    if(!dbdata)
+    {
+        svdata = ajTableFetchS(namSvrMasterTable, server);
+        
+        if(!svdata)
+        {
+            ajErr("Server '%S' not found, unable to count databases",
+                  server);
+            return;
+        }
+        
+        svrtable = (AjPTable) svdata->data;
+        svrcache = ajTableFetchC(svrtable, "cachefile");
+        
+        if(ajStrGetLen(svrcache))
+            cachefile = ajStrNewS(svrcache);
+        else
+        {
+            cachefile = ajStrNewC("server.");
+            ajStrAppendS(&cachefile, server);
+        }
+        
+        namSvrCacheRead(server, cachefile);
+        dbdata = ajTableFetchS(namSvrAliasTable, server);
+        
+        ajStrDel(&cachefile);
+        
+        if(!dbdata)
+        {
+            ajWarn("Server '%S' has no databases", server);
+            return;
+        }
+    }
+    
+    dbtable = (AjPTable) dbdata->data;
+    
+    ajTableToarrayValues(dbtable, &valarray);
+    ajDebug("ajNamSvrListFindAliases\n");
+    
+    for(i = 0; valarray[i]; i++)
+    {
+	fnew = (NamPEntry) valarray[i];
+
+        if(!ajStrMatchS(testname, fnew->value))
+            continue;
+
+	ajDebug("ALIAS: %S\n", fnew->name);
+	ajListstrPushAppend(dbnames, fnew->name);
+    }
+
+    ajListSort(dbnames, ajStrVcmp);
+
+    ajStrDel(&testname);
+    AJFREE(valarray);
+    
+    return;
+}
+
+
+
+
+/* @func ajNamSvrListListAliases **********************************************
+**
+** Reads the database cachefile for a server and lists the aliases.
+**
+** Searches emboss_standard and the user directory ~/.embossdata/
+** testing the file data in each file found and parsing the most recent file.
+**
+** cache files should all start with a comment line
+** containing the file name and the creation date.
+**
+** @param [r] server [const AjPStr] Server name
+** @param [w] dbnames [AjPList] Str List of names to be populated
+** @return [void]
+**
+**
+** @release 6.6.0
+******************************************************************************/
+
+void ajNamSvrListListAliases(const AjPStr server, AjPList dbnames)
+{
+    void **valarray =  NULL;
+    register ajint i = 0;
+
+    const NamPEntry svdata = NULL;
+    const NamPEntry dbdata = NULL;
+    NamPEntry fnew   = NULL;
+    AjPTable svrtable;
+    AjPTable dbtable;
+    const AjPStr svrcache = NULL;
+    AjPStr cachefile = NULL;
+    
+    /*
+    ** TODO: Should server files be read by a separate function?
+    ** This function is largely a copy of ajNamSvrCount and
+    ** ajNamListListDatabases so that server files are read by both functions.
+    */
+    
+    dbdata = ajTableFetchS(namSvrAliasTable, server);
+    
+    if(!dbdata)
+    {
+        svdata = ajTableFetchS(namSvrMasterTable, server);
+        
+        if(!svdata)
+        {
+            ajErr("Server '%S' not found, unable to count databases",
+                  server);
+            return;
+        }
+        
+        svrtable = (AjPTable) svdata->data;
+        svrcache = ajTableFetchC(svrtable, "cachefile");
+        
+        if(ajStrGetLen(svrcache))
+            cachefile = ajStrNewS(svrcache);
+        else
+        {
+            cachefile = ajStrNewC("server.");
+            ajStrAppendS(&cachefile, server);
+        }
+        
+        namSvrCacheRead(server, cachefile);
+        dbdata = ajTableFetchS(namSvrAliasTable, server);
+        
+        ajStrDel(&cachefile);
+        
+        if(!dbdata)
+        {
+            ajWarn("Server '%S' has no databases", server);
+            return;
+        }
+    }
+    
+    dbtable = (AjPTable) dbdata->data;
+    
+    ajTableToarrayValues(dbtable, &valarray);
+    ajDebug("ajNamSvrListListAliases\n");
+    
+    for(i = 0; valarray[i]; i++)
+    {
+	fnew = (NamPEntry) valarray[i];
+	ajDebug("ALIAS: %S\n", fnew->name);
+	ajListstrPushAppend(dbnames, fnew->name);
+    }
+    
+    ajListSort(dbnames, ajStrVcmp);
+
+    AJFREE(valarray);
+    
+    return;
+}
+
+
+
+
 /* @func ajNamSvrListListDatabases ********************************************
 **
 ** Reads the database cachefile for a server and lists the databases.
@@ -5441,6 +6130,8 @@ void ajNamSvrListListDatabases(const AjPStr server, AjPList dbnames)
 	ajListstrPushAppend(dbnames, fnew->name);
     }
     
+    ajListSort(dbnames, ajStrVcmp);
+
     AJFREE(valarray);
     
     return;
@@ -5486,13 +6177,13 @@ static AjPFile namSvrCacheOpen(const AjPStr cachename)
     {
         ajReadlineTrim(systemfile, &readline);
         ajStrTokenAssignC(&handle, readline, "# \t");
-        ajStrTokenNextParse(&handle, &token);
+        ajStrTokenNextParse(handle, &token);
 
         if(!ajStrMatchS(token, cachename))
             ajWarn("%F: Cache file name '%S' expected, '%S' found",
                    systemfile, cachename, token);
 
-        ajStrTokenNextParseC(&handle, "", &token); /* time */
+        ajStrTokenNextParseC(handle, "", &token); /* time */
         systemtime = ajTimeNew();
         ajTimeSetS(systemtime, token);
     }
@@ -5505,13 +6196,13 @@ static AjPFile namSvrCacheOpen(const AjPStr cachename)
     {
         ajReadlineTrim(userfile, &readline);
         ajStrTokenAssignC(&handle, readline, "# \t");
-        ajStrTokenNextParse(&handle, &token);
+        ajStrTokenNextParse(handle, &token);
 
         if(!ajStrMatchS(token, cachename))
             ajWarn("%F: Cache file name '%S' expected, '%S' found",
                    userfile, cachename, token);
 
-        ajStrTokenNextParseC(&handle, "", &token); /* time */
+        ajStrTokenNextParseC(handle, "", &token); /* time */
         usertime = ajTimeNew();
         ajTimeSetS(usertime, token);
     }
@@ -6405,7 +7096,7 @@ static AjBool namRsAttrFieldC(const AjPTable rstable, const char* str)
         {
             handle = ajStrTokenNewC(fields, " ,;");
 
-            while(ajStrTokenNextParse(&handle, &field))
+            while(ajStrTokenNextParse(handle, &field))
                 if(ajStrMatchS(prefix, field))
                     ret = ajTrue;
         }
@@ -6422,7 +7113,7 @@ static AjBool namRsAttrFieldC(const AjPTable rstable, const char* str)
                     fields = ajListIterGet(iter);
                     ajStrTokenAssignC(&handle, fields, " ,;");
 
-                    while(ajStrTokenNextParse(&handle, &field))
+                    while(ajStrTokenNextParse(handle, &field))
                     {
                         if(ajStrMatchC(field, "!"))
                             break;
@@ -6439,7 +7130,7 @@ static AjBool namRsAttrFieldC(const AjPTable rstable, const char* str)
                 attr = ajTableFetchC(namResAttrTable, "fields");
                 handle = ajStrTokenNewcharC(attr->Defval, " ,;");
 
-                while(ajStrTokenNextParse(&handle, &field))
+                while(ajStrTokenNextParse(handle, &field))
                     if(ajStrMatchS(prefix, field))
                         ret = ajTrue;
             }
@@ -6507,7 +7198,7 @@ static AjBool namRsAttrFieldS(const AjPTable rstable, const AjPStr str)
         {
             handle = ajStrTokenNewC(fields, " ,;");
 
-            while(ajStrTokenNextParse(&handle, &field))
+            while(ajStrTokenNextParse(handle, &field))
                 if(ajStrMatchS(prefix, field))
                     ret = ajTrue;
         }
@@ -6524,7 +7215,7 @@ static AjBool namRsAttrFieldS(const AjPTable rstable, const AjPStr str)
                     fields = ajListIterGet(iter);
                     ajStrTokenAssignC(&handle, fields, " ,;");
 
-                    while(ajStrTokenNextParse(&handle, &field))
+                    while(ajStrTokenNextParse(handle, &field))
                     {
                         if(ajStrMatchC(field, "!"))
                             break;
@@ -6544,7 +7235,7 @@ static AjBool namRsAttrFieldS(const AjPTable rstable, const AjPStr str)
                 {
                     handle = ajStrTokenNewcharC(attr->Defval, " ,;");
 
-                    while(ajStrTokenNextParse(&handle, &field))
+                    while(ajStrTokenNextParse(handle, &field))
                         if(ajStrMatchS(prefix, field))
                             ret = ajTrue;
                 }
@@ -6941,7 +7632,7 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
 
     ajDebug("Server type: '%S'\n", liststr);
 
-    while(ajStrTokenNextParse(&handle, &token))
+    while(ajStrTokenNextParse(handle, &token))
     {
         if(!ajStrSuffixCaseC(token,"features"))
         {
@@ -7003,7 +7694,7 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
             ok = ajFalse;
             ajStrTokenAssignC(&handle, liststr, " ,;");
 
-            while(ajStrTokenNextParse(&handle, &token))
+            while(ajStrTokenNextParse(handle, &token))
             {
                 if(namInformatTest(token, qry->DbType))
                 {
@@ -7106,7 +7797,7 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
             ajStrTokenAssignC(&handle, liststr, " ,;");
             ajStrAssignC(&qry->DbType, "");
 
-            while(ajStrTokenNextParse(&handle, &token))
+            while(ajStrTokenNextParse(handle, &token))
             {
                 if(!ajStrSuffixCaseC(token,"features"))
                 {
@@ -7184,7 +7875,7 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...)
                 ok = ajFalse;
                 ajStrTokenAssignC(&handle, liststr, " ,;");
 
-                while(ajStrTokenNextParse(&handle, &token))
+                while(ajStrTokenNextParse(handle, &token))
                 {
                     if(namInformatTest(token, qry->DbType))
                     {
@@ -7398,7 +8089,7 @@ static AjBool namSvrSetAttrStrC(const AjPTable svrtable, const char* attrib,
                     strval = ajListIterGet(iter);
                     ajStrTokenAssignC(&handle, strval, " ");
 
-                    while(ajStrTokenNextParse(&handle, &word))
+                    while(ajStrTokenNextParse(handle, &word))
                     {
                         if(ajStrMatchC(word, "!"))
                             break;
@@ -7556,7 +8247,7 @@ AjBool ajNamDbGetType(const AjPStr dbname, ajuint *itype)
     dbval = ajTableFetchC(dbtable, "type");
     ajStrTokenAssignC(&handle, dbval, " ,;");
 
-    while(ajStrTokenNextParse(&handle, &token))
+    while(ajStrTokenNextParse(handle, &token))
     {
         if(!ajStrSuffixCaseC(token,"features"))
         {
@@ -7651,6 +8342,49 @@ AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias)
 
     if(!data)
 	ajFatal("%S is not a known database", dbname);
+
+    dbtable = (const AjPTable) data->data;
+
+    dbval = ajTableFetchC(dbtable, "dbalias");
+
+    if(ajStrGetLen(dbval))
+	ajStrAssignS(dbalias, dbval);
+    else
+    {
+        ajStrAssignS(dbalias, dbname);
+        ajStrFmtLower(dbalias);
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajNamDbGetDbaliasTest ***********************************************
+**
+** Gets an alias name for a database,
+** no fatal error if the database name is not found
+**
+** @param [r] dbname [const AjPStr] Database name.
+** @param [w] dbalias [AjPStr*] Alias returned.
+** @return [AjBool] ajTrue if success.
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+AjBool ajNamDbGetDbaliasTest(const AjPStr dbname, AjPStr* dbalias)
+{
+
+    const NamPEntry data;
+    const AjPTable dbtable;
+    const AjPStr dbval = NULL;
+
+    data = ajTableFetchS(namDbMasterTable, dbname);
+
+    if(!data)
+        return ajFalse;
 
     dbtable = (const AjPTable) data->data;
 
@@ -7834,7 +8568,7 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
         ajStrTokenAssignC(&handle, liststr, " ,;");
         ajStrAssignC(&qry->DbType, "");
 
-        while(ajStrTokenNextParse(&handle, &token))
+        while(ajStrTokenNextParse(handle, &token))
         {
             if(ajStrMatchCaseC(token, "n"))
                 ajStrAssignC(&token, "Nucleotide");
@@ -7885,7 +8619,7 @@ AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...)
             ok = ajFalse;
             ajStrTokenAssignC(&handle, liststr, " ,;");
 
-            while(ajStrTokenNextParse(&handle, &token))
+            while(ajStrTokenNextParse(handle, &token))
             {
                 if(namInformatTest(token, qry->DbType))
                 {
@@ -8188,6 +8922,7 @@ static AjBool namDbSetAttrStrC(const AjPTable dbtable, const char* attrib,
     AjIList iter = NULL;
     AjPStrTok handle = NULL;
     AjPStr word = NULL;
+    char delimchar = ' ';
 
     attr = ajTableFetchC(namDbAttrTable, attrib);
 
@@ -8210,16 +8945,21 @@ static AjBool namDbSetAttrStrC(const AjPTable dbtable, const char* attrib,
                     strval = ajListIterGet(iter);
                     ajStrTokenAssignC(&handle, strval, " ");
 
-                    while(ajStrTokenNextParse(&handle, &word))
+                    while(ajStrTokenNextParse(handle, &word))
                     {
                         if(ajStrMatchC(word, "!"))
                             break;
 
                         if(ajStrGetLen(*qrystr))
-                            ajStrAppendK(qrystr, ' ');
+                        {
+                            ajStrAppendK(qrystr, delimchar);
+                            delimchar = ' ';
+                        }
 
                         ajStrAppendS(qrystr, word);
                     }
+
+                    delimchar = ';';
                 }
 
                 ajStrTokenDel(&handle);
@@ -8713,7 +9453,7 @@ static AjBool namValidServer(const NamPEntry entry)
 
         	ajStrTokenAssignC(&handle, dbtype, " ,;");
 
-        	while(ajStrTokenNextParse(&handle, &token))
+        	while(ajStrTokenNextParse(handle, &token))
         	    if(!namAccessTest(value, token))
         		namError("Server '%S' %S: '%S' unknown",
         		         entry->name, name, value);
@@ -8826,11 +9566,11 @@ static AjBool namValidDatabase(const NamPEntry entry)
 
                 ajStrTokenAssignC(&typehandle, dbtype, " ,;");
 
-                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                while(ajStrTokenNextParse(typehandle, &typetoken))
                 {
                     ok = ajFalse;
                     ajStrTokenAssignC(&handle, value, " ,;");
-                    while(ajStrTokenNextParse(&handle, &token))
+                    while(ajStrTokenNextParse(handle, &token))
                     {
                         if(namInformatTest(token, typetoken))
                             ok = ajTrue;
@@ -8849,11 +9589,11 @@ static AjBool namValidDatabase(const NamPEntry entry)
 
                 ajStrTokenAssignC(&typehandle, dbtype, " ,;");
  
-                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                while(ajStrTokenNextParse(typehandle, &typetoken))
                 {
                     ok = ajFalse;
                     ajStrTokenAssignC(&handle, value, " ,;");
-                    while(ajStrTokenNextParse(&handle, &token))
+                    while(ajStrTokenNextParse(handle, &token))
                     {
                         if(namAccessTest(value, typetoken))
                             ok = ajTrue;
@@ -8871,7 +9611,7 @@ static AjBool namValidDatabase(const NamPEntry entry)
 		oktype = ajFalse;
 
                 ajStrTokenAssignC(&typehandle, value, " ,;");
-                while(ajStrTokenNextParse(&typehandle, &typetoken))
+                while(ajStrTokenNextParse(typehandle, &typetoken))
                 {
                     for(k=0; namDbTypes[k].Name; k++)
                         if(ajStrMatchCaseC(typetoken, namDbTypes[k].Name)) 

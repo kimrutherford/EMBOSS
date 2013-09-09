@@ -3,10 +3,10 @@
 ** AJAX feature data include file
 **
 ** @author Copyright (C) 1999 Richard Bruskiewich
-** @version $Revision: 1.34 $
+** @version $Revision: 1.35 $
 ** @modified 2000 Ian Longden.
 ** @modified 2001 Peter Rice.
-** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @modified $Date: 2013/06/29 22:31:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -98,12 +98,14 @@ AJ_BEGIN_DECLS
 ** @attr Seqid [AjPStr] Sequence name
 ** @attr Type [AjPStr] Sequence type: P or N
 ** @attr Features [AjPList] List of AjPFeatures...
+** @attr Groups [ajuint] Maximum group number
 ** @attr Start [ajuint] First position used (like sequence begin)
 ** @attr End [ajuint] Last position used (like sequence end)
 ** @attr Len [ajuint] Maximum length
 ** @attr Offset [ajuint] Offset when trimmed
-** @attr Groups [ajuint] Number of current group being added
-** @attr Padding [ajuint] Padding to alignment boundary
+** @attr Rev [AjBool] reversed if true
+** @attr Reversed  [AjBool] true: has been reverse-complemented
+** @attr Trimmed   [AjBool] true: has been trimmed
 ** @attr Db [AjPStr] Database name from input
 ** @attr Setdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
@@ -122,12 +124,14 @@ typedef struct AjSFeattable
     AjPStr  Seqid;
     AjPStr  Type;
     AjPList Features;
+    ajuint  Groups;
     ajuint  Start;
     ajuint  End;
     ajuint  Len;
     ajuint  Offset;
-    ajuint  Groups;
-    ajuint  Padding;
+    AjBool  Rev;
+    AjBool  Reversed;
+    AjBool  Trimmed;
     AjPStr  Db;
     AjPStr  Setdb;
     AjPStr  Full;

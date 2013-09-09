@@ -6,7 +6,7 @@ Here is a sample session with <b>epestfind</b>
 
 % <b>epestfind -graph cps -invalid </b>
 Find PEST motifs as potential proteolytic cleavage sites
-Input protein sequence: <b>exu2_drops.embl</b>
+Input protein sequence: <b>exu2_drops.sw</b>
 Window length [10]: <b></b>
 Sort order of results
       1 : length

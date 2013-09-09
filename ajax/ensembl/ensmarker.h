@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.24 $
+** @version $Revision: 1.25 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:10:42 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -72,6 +72,38 @@ AJ_BEGIN_DECLS
 ******************************************************************************/
 
 #define EnsPMarkerfeatureadaptor EnsPFeatureadaptor
+
+
+
+
+/* @const EnsPMarkermaplocationadaptor ****************************************
+**
+** Ensembl Marker Map Location Adaptor.
+** Defined as an alias in EnsPDatabaseadaptor.
+**
+** #alias EnsPDatabaseadaptor
+**
+** #cc Bio::EnsEMBL::Map::DBSQL::MarkerMapLocationAdaptor
+** ##
+******************************************************************************/
+
+#define EnsPMarkermaplocationadaptor EnsPDatabaseadaptor
+
+
+
+
+/* @const EnsPMarkersynonymadaptor ********************************************
+**
+** Ensembl Marker Synonym Adaptor.
+** Defined as an alias in EnsPDatabaseadaptor.
+**
+** #alias EnsPDatabaseadaptor
+**
+** #cc Bio::EnsEMBL::Map::DBSQL::MarkerSynonymAdaptor
+** ##
+******************************************************************************/
+
+#define EnsPMarkersynonymadaptor EnsPDatabaseadaptor
 
 
 
@@ -279,13 +311,19 @@ size_t ensMarkersynonymCalculateMemsize(const EnsPMarkersynonym ms);
 
 /* Ensembl Marker Synonym Adaptor */
 
+EnsPMarkersynonymadaptor ensRegistryGetMarkersynonymadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPDatabaseadaptor ensMarkersynonymadaptorGetDatabaseadaptor(
+    EnsPMarkersynonymadaptor msa);
+
 AjBool ensMarkersynonymadaptorFetchAllbyMarkeridentifier(
-    EnsPDatabaseadaptor dba,
+    EnsPMarkersynonymadaptor msa,
     ajuint markerid,
     AjPList mss);
 
 AjBool ensMarkersynonymadaptorFetchByIdentifier(
-    EnsPDatabaseadaptor dba,
+    EnsPMarkersynonymadaptor msa,
     ajuint identifier,
     EnsPMarkersynonym *Pms);
 
@@ -337,8 +375,14 @@ size_t ensMarkermaplocationCalculateMemsize(const EnsPMarkermaplocation mml);
 
 /* Ensembl Marker Map Location Adaptor */
 
+EnsPMarkermaplocationadaptor ensRegistryGetMarkermaplocationadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPDatabaseadaptor ensMarkermaplocationadaptorGetDatabaseadaptor(
+    EnsPMarkermaplocationadaptor mmla);
+
 AjBool ensMarkermaplocationadaptorFetchAllbyMarkeridentifier(
-    EnsPDatabaseadaptor dba,
+    EnsPMarkermaplocationadaptor mmla,
     ajuint markerid,
     AjPList mmls);
 
@@ -517,7 +561,13 @@ EnsPMarkerfeatureadaptor ensMarkerfeatureadaptorNew(
 
 void ensMarkerfeatureadaptorDel(EnsPMarkerfeatureadaptor *Pmfa);
 
+EnsPBaseadaptor ensMarkerfeatureadaptorGetBaseadaptor(
+    EnsPMarkerfeatureadaptor mfa);
+
 EnsPDatabaseadaptor ensMarkerfeatureadaptorGetDatabaseadaptor(
+    EnsPMarkerfeatureadaptor mfa);
+
+EnsPFeatureadaptor ensMarkerfeatureadaptorGetFeatureadaptor(
     EnsPMarkerfeatureadaptor mfa);
 
 AjBool ensMarkerfeatureadaptorFetchAllbyMarker(

@@ -37,7 +37,8 @@ section: input [
     standard: "y"
     information: "Entry format"
     values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
-             GB:Genbank, DDBJ; REFSEQ:Refseq; FASTQ:Fastq files"
+             GB:Genbank, DDBJ; REFSEQ:Refseq; FASTQ:Fastq files;
+             USPTO:Iguspto files"
     maximum: "1"
     minimum: "1"
     default: "SWISS"

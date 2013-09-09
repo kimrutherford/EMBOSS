@@ -1,5 +1,5 @@
 Get data resource entries complete text
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-resources]         resource   Data resource filename and optional format,

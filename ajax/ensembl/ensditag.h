@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.23 $
+** @version $Revision: 1.24 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/08/05 10:43:54 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -245,7 +245,11 @@ EnsPDitagadaptor ensDitagadaptorNew(EnsPDatabaseadaptor dba);
 
 void ensDitagadaptorDel(EnsPDitagadaptor *Pdta);
 
-EnsPDatabaseadaptor ensDitagadaptorGetDatabaseadaptor(EnsPDitagadaptor dta);
+EnsPBaseadaptor ensDitagadaptorGetBaseadaptor(
+    EnsPDitagadaptor dta);
+
+EnsPDatabaseadaptor ensDitagadaptorGetDatabaseadaptor(
+    EnsPDitagadaptor dta);
 
 AjBool ensDitagadaptorFetchAll(EnsPDitagadaptor dta,
                                const AjPStr name,
@@ -357,7 +361,13 @@ EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(
 
 void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor *Pdtfa);
 
+EnsPBaseadaptor ensDitagfeatureadaptorGetBaseadaptor(
+    EnsPDitagfeatureadaptor dtfa);
+
 EnsPDatabaseadaptor ensDitagfeatureadaptorGetDatabaseadaptor(
+    EnsPDitagfeatureadaptor dtfa);
+
+EnsPFeatureadaptor ensDitagfeatureadaptorGetFeatureadaptor(
     EnsPDitagfeatureadaptor dtfa);
 
 AjBool ensDitagfeatureadaptorFetchAllbyDitag(

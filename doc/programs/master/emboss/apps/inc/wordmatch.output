@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -34,9 +34,9 @@
 <pre>
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 HBA_HUMAN	wordmatch	polypeptide_region	15	18	1	.	.	ID=HBA_HUMAN.1;note=HBB_HUMAN
 HBA_HUMAN	wordmatch	polypeptide_region	59	63	1	.	.	ID=HBA_HUMAN.2;note=HBB_HUMAN
 HBA_HUMAN	wordmatch	polypeptide_region	117	120	1	.	.	ID=HBA_HUMAN.3;note=HBB_HUMAN
@@ -47,9 +47,9 @@ HBA_HUMAN	wordmatch	polypeptide_region	117	120	1	.	.	ID=HBA_HUMAN.3;note=HBB_HUM
 <pre>
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 HBB_HUMAN	wordmatch	polypeptide_region	16	19	1	.	.	ID=HBB_HUMAN.1;note=HBA_HUMAN
 HBB_HUMAN	wordmatch	polypeptide_region	64	68	1	.	.	ID=HBB_HUMAN.2;note=HBA_HUMAN
 HBB_HUMAN	wordmatch	polypeptide_region	122	125	1	.	.	ID=HBB_HUMAN.3;note=HBA_HUMAN

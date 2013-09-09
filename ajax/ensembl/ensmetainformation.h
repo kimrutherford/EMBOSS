@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.20 $
+** @version $Revision: 1.21 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/03/04 12:34:22 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:14:00 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -174,6 +174,9 @@ EnsPMetainformationadaptor ensMetainformationadaptorNew(
 
 void ensMetainformationadaptorDel(EnsPMetainformationadaptor *Pmia);
 
+EnsPDatabaseadaptor ensMetainformationadaptorGetDatabaseadaptor(
+    EnsPMetainformationadaptor mia);
+
 AjBool ensMetainformationadaptorFetchAllbyKey(
     EnsPMetainformationadaptor mia,
     const AjPStr key,
@@ -196,6 +199,10 @@ AjBool ensMetainformationadaptorRetrieveSchemaversion(
     AjPStr *Pvalue);
 
 AjBool ensMetainformationadaptorRetrieveSpeciesCommonname(
+    EnsPMetainformationadaptor mia,
+    AjPStr *Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSpeciesDivision(
     EnsPMetainformationadaptor mia,
     AjPStr *Pvalue);
 

@@ -3,8 +3,8 @@
 ** General routines for data files
 **
 ** @author Copyright (c) 1999 Mark Faller
-** @version $Revision: 1.21 $
-** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @version $Revision: 1.22 $
+** @modified $Date: 2012/12/07 10:23:28 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -168,7 +168,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 
 	/* the first token is the key for the row */
 	key = ajStrNew();
-	ajStrTokenNextParse(&tokens, &key);
+	ajStrTokenNextParse(tokens, &key);
 
 	if(!ajStrGetLen(key))
 	{
@@ -184,7 +184,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	     */
 	    value = NULL;
 
-	    if(ajStrTokenNextParse(&tokens, &value))
+	    if(ajStrTokenNextParse(tokens, &value))
 	    {
 		table = ajTablestrNewCase(350);
 		copyKey = ajStrNewRef(key);
@@ -204,7 +204,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	     */
 	    ajStrTokenDel(&tokens);
 	    tokens = ajStrTokenNewC(line, whiteSpace);
-	    ajStrTokenNextParse(&tokens, &key);
+	    ajStrTokenNextParse(tokens, &key);
 
 	    /* check for end of data block*/
 	    if(! ajStrCmpC(key, endOfData))
@@ -217,7 +217,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 		ptable = ajListIterGet(iter);
 		copyKey = ajStrNewRef(key);
 
-		if(!ajStrTokenNextParse(&tokens, &tmp))
+		if(!ajStrTokenNextParse(tokens, &tmp))
                     break;
 
 		value = ajStrNewRef(tmp);

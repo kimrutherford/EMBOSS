@@ -65,11 +65,14 @@ homo_sapiens_otherfeatures
 homo_sapiens_cdna
 homo_sapiens_variation
 homo_sapiens_funcgen
+ictidomys_tridecemlineatus
+ictidomys_tridecemlineatus_otherfeatures
 latimeria_chalumnae
 latimeria_chalumnae_otherfeatures
 loxodonta_africana
 macaca_mulatta
 macaca_mulatta_otherfeatures
+macaca_mulatta_variation
 macaca_mulatta_funcgen
 macropus_eugenii
 meleagris_gallopavo
@@ -88,6 +91,8 @@ myotis_lucifugus_otherfeatures
 nomascus_leucogenys
 nomascus_leucogenys_otherfeatures
 ochotona_princeps
+oreochromis_niloticus
+oreochromis_niloticus_otherfeatures
 ornithorhynchus_anatinus
 ornithorhynchus_anatinus_otherfeatures
 ornithorhynchus_anatinus_variation
@@ -102,6 +107,8 @@ pan_troglodytes
 pan_troglodytes_otherfeatures
 pan_troglodytes_variation
 pan_troglodytes_funcgen
+pelodiscus_sinensis
+pelodiscus_sinensis_otherfeatures
 petromyzon_marinus
 petromyzon_marinus_otherfeatures
 pongo_abelii
@@ -120,7 +127,6 @@ saccharomyces_cerevisiae_funcgen
 sarcophilus_harrisii
 sarcophilus_harrisii_otherfeatures
 sorex_araneus
-spermophilus_tridecemlineatus
 sus_scrofa
 sus_scrofa_otherfeatures
 sus_scrofa_variation

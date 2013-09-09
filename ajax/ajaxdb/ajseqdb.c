@@ -6,10 +6,10 @@
 **
 ** @author Copyright (C) 1998 Peter Rice
 ** @author Copyright (C) 2005 Alan Bleasby
-** @version $Revision: 1.87 $
+** @version $Revision: 1.90 $
 ** @modified Jun 25 pmr First version
 ** @modified Apr 2005 ajb B+tree code addition
-** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:21:19 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -607,7 +607,7 @@ static AjOSeqAccess seqAccess[] =
     {
       "biomart",  &seqAccessMart, NULL,
       "",      "retrieve a single entry from a BioMart server",
-      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJTRUE,   AJFALSE, AJFALSE, AJFALSE
     },
     {
       "sql",      &seqAccessSql, NULL,
@@ -617,17 +617,17 @@ static AjOSeqAccess seqAccess[] =
     {
       "ensembl",  &seqAccessEnsembl, NULL,
       "",      "retrieve a single entry from an Ensembl Database server",
-      AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
     {
       "ensemblgenomes", &seqAccessEnsembl, NULL,
       "",      "retrieve a single entry from an Ensemblgenomes Database server",
-      AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
     {
       "das",      &seqAccessDAS, NULL,
       "|",     "retrieve sequence entries from a DAS source",
-      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
     {
       NULL, NULL, NULL,
@@ -936,6 +936,7 @@ static AjBool seqCdIdxQuery(AjPQuery qry, const AjPStr idqry)
     char *name;
     ajint i;
     ajint ilen;
+    ajint idlen;
     ajint jlo;
     ajint jhi;
     ajint khi;
@@ -963,6 +964,12 @@ static AjBool seqCdIdxQuery(AjPQuery qry, const AjPStr idqry)
     khi = jhi = ihi = fil->NRecords-1;
 
     ilen = ajStrGetLen(idpref);
+
+    idlen = fil->RecSize-10;
+    if(idlen < ilen)
+        ilen = idlen;
+
+
     first = ajTrue;
 
     if(ilen)
@@ -1968,7 +1975,7 @@ static AjBool seqEmbossQryOrganisms(AjPQuery qry)
     seqEmbossOpenCache(qry, "org", &orgcache);
     orglist = ajListNew();
     orghandle = ajStrTokenNewC(qry->Organisms, "\t,;|");
-    while(ajStrTokenNextParse(&orghandle, &orgqry))
+    while(ajStrTokenNextParse(orghandle, &orgqry))
     {
         if(ajBtreeCacheIsSecondary(orgcache))
         {
@@ -7094,6 +7101,7 @@ static ajuint seqCdTrgFind(AjPQuery qry, const char* indexname,
     ajint t3;
     ajint pos = 0;
     ajint prefixlen;
+    ajint trglen;
     ajint start;
     ajint end;
     ajint i;
@@ -7138,6 +7146,11 @@ static ajuint seqCdTrgFind(AjPQuery qry, const char* indexname,
     t = t2 = t3 = trgfp->NRecords - 1;
 
     prefixlen = ajStrGetLen(fdprefix);
+
+    trglen = trgfp->RecSize-8;
+    if(trglen < prefixlen)
+        prefixlen = trglen;
+
     first = ajTrue;
 
     if(prefixlen)

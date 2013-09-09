@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.15 $
+** @version $Revision: 1.17 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic qcsubmissionadaptorKTables ************************************
+/* @conststatic qcsubmissionadaptorKTablenames ********************************
 **
 ** Array of Ensembl Quality Check Submission Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcsubmissionadaptorKTables[] =
+static const char *qcsubmissionadaptorKTablenames[] =
 {
     "submission",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *qcsubmissionadaptorKTables[] =
 
 
 
-/* @conststatic qcsubmissionadaptorKColumns ***********************************
+/* @conststatic qcsubmissionadaptorKColumnnames *******************************
 **
 ** Array of Ensembl Quality Check Submission Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcsubmissionadaptorKColumns[] =
+static const char *qcsubmissionadaptorKColumnnames[] =
 {
     "submission.submission_id",
     "submission.analysis_id",
@@ -377,14 +377,7 @@ void ensQcsubmissionDel(EnsPQcsubmission *Pqcsb)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pqcsb)
-        return;
-
-    pthis = *Pqcsb;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pqcsb) || --pthis->Use)
     {
         *Pqcsb = NULL;
 
@@ -396,9 +389,7 @@ void ensQcsubmissionDel(EnsPQcsubmission *Pqcsb)
     ensQcsequenceDel(&pthis->QuerySequence);
     ensQcsequenceDel(&pthis->TargetSequence);
 
-    AJFREE(pthis);
-
-    *Pqcsb = NULL;
+    ajMemFree((void **) Pqcsb);
 
     return;
 }
@@ -1175,12 +1166,12 @@ AjBool ensQcsubmissionTrace(const EnsPQcsubmission qcsb, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Quality Check Submission object.
 **
 ** @fdata [EnsPQcsubmission]
 **
-** @nam3rule Calculate Calculate Ensembl Quality Check Submission values
+** @nam3rule Calculate Calculate Ensembl Quality Check Submission information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * qcsb [const EnsPQcsubmission] Ensembl Quality Check Submission
@@ -1435,13 +1426,10 @@ static AjBool qcsubmissionadaptorFetchAllbyStatement(
 EnsPQcsubmissionadaptor ensQcsubmissionadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
     return ensBaseadaptorNew(
         dba,
-        qcsubmissionadaptorKTables,
-        qcsubmissionadaptorKColumns,
+        qcsubmissionadaptorKTablenames,
+        qcsubmissionadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1486,16 +1474,9 @@ EnsPQcsubmissionadaptor ensQcsubmissionadaptorNew(
 
 void ensQcsubmissionadaptorDel(EnsPQcsubmissionadaptor *Pqcsba)
 {
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
-    if (ajDebugTest("ensQcsubmissionadaptorDel"))
-        ajDebug("ensQcsubmissionadaptorDel\n"
-                "  *Pqcsba %p\n",
-                *Pqcsba);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
-
     ensBaseadaptorDel(Pqcsba);
 
-	return;
+    return;
 }
 
 
@@ -1565,7 +1546,8 @@ EnsPBaseadaptor ensQcsubmissionadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcsubmissionadaptorGetDatabaseadaptor(
     EnsPQcsubmissionadaptor qcsba)
 {
-    return ensBaseadaptorGetDatabaseadaptor(qcsba);
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba));
 }
 
 
@@ -1672,6 +1654,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabasePair(
     const EnsPQcdatabase tdb,
     AjPList qcsbs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcsba)
@@ -1698,15 +1682,16 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabasePair(
                           ensQcdatabaseGetIdentifier(qdb),
                           ensQcdatabaseGetIdentifier(tdb));
 
-    ensBaseadaptorFetchAllbyConstraint(qcsba,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcsbs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcsbs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1739,6 +1724,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseQuery(
     const EnsPQcdatabase qdb,
     AjPList qcsbs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcsba)
@@ -1758,15 +1745,16 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseQuery(
                        " AND submission.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    ensBaseadaptorFetchAllbyConstraint(qcsba,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcsbs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcsbs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1799,6 +1787,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseTarget(
     const EnsPQcdatabase tdb,
     AjPList qcsbs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcsba)
@@ -1818,15 +1808,16 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseTarget(
                        " AND submission.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    ensBaseadaptorFetchAllbyConstraint(qcsba,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcsbs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcsbs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1848,7 +1839,7 @@ AjBool ensQcsubmissionadaptorFetchAllbyQcdatabaseTarget(
 ** Query Ensembl Quality Check Sequence
 ** @param [r] tdb [const EnsPQcdatabase]
 ** Target Ensembl Quality Check Database
-** @param [r] tsequence [const EnsPQcsequence]
+** @param [rN] tsequence [const EnsPQcsequence]
 ** Target Ensembl Quality Check Sequence
 ** @param [rN] tstart [ajuint] Target start
 ** @param [rN] tend [ajuint] Target end
@@ -1873,6 +1864,8 @@ AjBool ensQcsubmissionadaptorFetchAllbyRegion(
     ajint tstrand,
     AjPList qcsbs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcsba)
@@ -1919,15 +1912,16 @@ AjBool ensQcsubmissionadaptorFetchAllbyRegion(
                        tend,
                        tstrand);
 
-    ensBaseadaptorFetchAllbyConstraint(qcsba,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcsbs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcsbs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1957,16 +1951,10 @@ AjBool ensQcsubmissionadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPQcsubmission *Pqcsb)
 {
-    if (!qcsba)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Pqcsb)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(qcsba, identifier, (void **) Pqcsb);
+    return ensBaseadaptorFetchByIdentifier(
+        ensQcsubmissionadaptorGetBaseadaptor(qcsba),
+        identifier,
+        (void **) Pqcsb);
 }
 
 
@@ -2034,7 +2022,7 @@ AjBool ensQcsubmissionadaptorDelete(EnsPQcsubmissionadaptor qcsba,
     if (!ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
+    dba = ensQcsubmissionadaptorGetDatabaseadaptor(qcsba);
 
     statement = ajFmtStr(
         "DELETE FROM "
@@ -2047,8 +2035,8 @@ AjBool ensQcsubmissionadaptorDelete(EnsPQcsubmissionadaptor qcsba,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qcsb->Adaptor    = (EnsPQcsubmissionadaptor) NULL;
-        qcsb->Identifier = 0;
+        qcsb->Adaptor    = NULL;
+        qcsb->Identifier = 0U;
 
         result = ajTrue;
     }
@@ -2097,7 +2085,7 @@ AjBool ensQcsubmissionadaptorStore(EnsPQcsubmissionadaptor qcsba,
     if (ensQcsubmissionGetAdaptor(qcsb) && ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
+    dba = ensQcsubmissionadaptorGetDatabaseadaptor(qcsba);
 
     statement = ajFmtStr(
         "INSERT IGNORE INTO "
@@ -2177,7 +2165,7 @@ AjBool ensQcsubmissionadaptorUpdate(EnsPQcsubmissionadaptor qcsba,
     if (!ensQcsubmissionGetIdentifier(qcsb))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsba);
+    dba = ensQcsubmissionadaptorGetDatabaseadaptor(qcsba);
 
     statement = ajFmtStr(
         "UPDATE IGNORE "

@@ -367,7 +367,7 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 
 	handle = ajStrTokenNewC(cutgextractLine,"\\\n\t\r");
 	for(i=0;i<7;++i) {
-	    ajStrTokenNextParseC(&handle,"\\\n\t\r",&token);
+	    ajStrTokenNextParseC(handle,"\\\n\t\r",&token);
 	    if(i==5)
 	    {
 		ajStrAssignC(&cutgextractOrg,"E");
@@ -505,7 +505,7 @@ static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
     token = ajStrTokenNewC(line," \n\t\r");
     for(i=0;i<CODONS;++i)
     {
-	ajStrTokenNextParseC(&token," \n\t\r",&value);
+	ajStrTokenNextParseC(token," \n\t\r",&value);
 	ajStrToInt(value,&n);
 	thiscount[cutidx[i]] = n;
 	if(i>60)

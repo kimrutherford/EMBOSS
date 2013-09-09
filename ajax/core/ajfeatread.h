@@ -5,10 +5,10 @@
 ** These functions control all aspects of AJAX feature reading
 **
 ** @author Copyright (C) 1999 Richard Bruskiewich
-** @version $Revision: 1.9 $
+** @version $Revision: 1.10 $
 ** @modified 2000 Ian Longden.
 ** @modified 2001 Peter Rice.
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @modified $Date: 2013/06/29 22:31:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@
 #include "ajstr.h"
 #include "ajtable.h"
 #include "ajfeatdata.h"
+#include "ajseqdata.h"
 
 AJ_BEGIN_DECLS
 
@@ -89,6 +90,11 @@ AjPFeattabin  ajFeattabinNewSS(const AjPStr fmt, const AjPStr name,
                                const char* type);
 AjPFeattabin  ajFeattabinNewSSF(const AjPStr fmt, const AjPStr name,
                                 const char* type, AjPFilebuff buff);
+AjPFeattabin  ajFeattabinNewSeqinSSF(const AjPSeqin seqin, const AjPStr fmt,
+                                     const AjPStr name, const char* type,
+                                     AjPFilebuff buff);
+AjPFeattabin  ajFeattabinNewSeqinSS(const AjPSeqin seqin, const AjPStr fmt,
+                                    const AjPStr name, const char* type);
 void          ajFeattabinSetRange(AjPFeattabin thys,
                                   ajint fbegin, ajint fend);
 AjBool        ajFeattabinSetTypeC(AjPFeattabin thys, const char* type);

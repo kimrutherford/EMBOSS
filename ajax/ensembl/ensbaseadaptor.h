@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.23 $
+** @version $Revision: 1.24 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/03/09 20:33:24 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:03:48 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -70,11 +70,11 @@ extern const ajuint ensKBaseadaptorMaximumIdentifiers;
 
 EnsPBaseadaptor ensBaseadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char *const *Ptables,
-    const char *const *Pcolumns,
-    const EnsPBaseadaptorLeftjoin leftjoin,
-    const char *condition,
-    const char *final,
+    const char *const *Ptablenames,
+    const char *const *Pcolumnnames,
+    const EnsPBaseadaptorLeftjoin leftjoins,
+    const char *defaultcondition,
+    const char *finalcondition,
     AjBool (*Fstatement) (EnsPBaseadaptor ba,
                           const AjPStr statement,
                           EnsPAssemblymapper am,
@@ -83,23 +83,23 @@ EnsPBaseadaptor ensBaseadaptorNew(
 
 void ensBaseadaptorDel(EnsPBaseadaptor *Pba);
 
-const char *const *ensBaseadaptorGetColumns(const EnsPBaseadaptor ba);
+const char *const *ensBaseadaptorGetColumnnames(const EnsPBaseadaptor ba);
 
 EnsPDatabaseadaptor ensBaseadaptorGetDatabaseadaptor(const EnsPBaseadaptor ba);
 
-const char *const *ensBaseadaptorGetTables(const EnsPBaseadaptor ba);
+const char *const *ensBaseadaptorGetTablenames(const EnsPBaseadaptor ba);
 
-AjBool ensBaseadaptorSetColumns(EnsPBaseadaptor ba,
-                                const char *const *Pcolumns);
+AjBool ensBaseadaptorSetColumnnames(EnsPBaseadaptor ba,
+                                    const char *const *Pcolumnnames);
 
 AjBool ensBaseadaptorSetDefaultcondition(EnsPBaseadaptor ba,
-                                         const char *condition);
+                                         const char *defaultcondition);
 
 AjBool ensBaseadaptorSetFinalcondition(EnsPBaseadaptor ba,
-                                       const char *final);
+                                       const char *finalcondition);
 
-AjBool ensBaseadaptorSetTables(EnsPBaseadaptor ba,
-                               const char *const *Ptables);
+AjBool ensBaseadaptorSetTablenames(EnsPBaseadaptor ba,
+                                   const char *const *Ptablenames);
 
 AjBool ensBaseadaptorEscapeC(EnsPBaseadaptor ba,
                              char **Ptxt,
@@ -114,6 +114,15 @@ AjBool ensBaseadaptorGetMultispecies(const EnsPBaseadaptor ba);
 const char *ensBaseadaptorGetPrimarytable(const EnsPBaseadaptor ba);
 
 ajuint ensBaseadaptorGetSpeciesidentifier(const EnsPBaseadaptor ba);
+
+AjBool ensBaseadaptorCountAll(
+    EnsPBaseadaptor ba,
+    ajuint *Pcount);
+
+AjBool ensBaseadaptorCountAllbyConstraint(
+    EnsPBaseadaptor ba,
+    const AjPStr constraint,
+    ajuint *Pcount);
 
 AjBool ensBaseadaptorFetchAll(
     EnsPBaseadaptor ba,
@@ -139,14 +148,14 @@ AjBool ensBaseadaptorFetchByIdentifier(
 
 AjBool ensBaseadaptorRetrieveAllIdentifiers(
     EnsPBaseadaptor ba,
-    const AjPStr table,
-    const AjPStr primary,
+    const AjPStr tablename,
+    const AjPStr columnname,
     AjPList identifiers);
 
 AjBool ensBaseadaptorRetrieveAllStrings(
     EnsPBaseadaptor ba,
-    const AjPStr table,
-    const AjPStr primary,
+    const AjPStr tablename,
+    const AjPStr columnname,
     AjPList strings);
 
 AjBool ensBaseadaptorRetrieveFeature(

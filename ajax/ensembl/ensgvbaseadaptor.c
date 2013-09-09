@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.16 $
+** @version $Revision: 1.18 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -101,8 +101,8 @@
 ** Ensembl Genetic Variation Base Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor
-** @cc CVS Revision: 1.13
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.14
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -123,11 +123,12 @@
 **
 ** @argrule New gvdba [EnsPGvdatabaseadaptor]
 ** Ensembl Genetic Variation Database Adaptor
-** @argrule New Ptables [const char* const*] Table names
-** @argrule New Pcolumns [const char* const*] Column names
-** @argrule New leftjoin [const EnsPBaseadaptorLeftjoin] LEFT JOIN statements
-** @argrule New condition [const char*] SQL SELECT default condition
-** @argrule New final [const char*] SQL SELECT final condition
+** @argrule New Ptablenames [const char* const*] SQL table name array
+** @argrule New Pcolumnnames [const char* const*] SQL column name array
+** @argrule New leftjoins [const EnsPBaseadaptorLeftjoin]
+** SQL LEFT JOIN conditions
+** @argrule New defaultcondition [const char*] SQL SELECT default condition
+** @argrule New finalcondition [const char*] SQL SELECT final condition
 ** @argrule New Fstatement [AjBool function] Statement function address
 **
 ** @valrule * [EnsPGvbaseadaptor] Ensembl Base Adaptor or NULL
@@ -145,11 +146,12 @@
 ** @cc Bio::EnsEMBL::Variation::DBSQL::BaseAdaptor::new
 ** @param [u] gvdba [EnsPGvdatabaseadaptor]
 ** Ensembl Genetic Variation Database Adaptor
-** @param [r] Ptables [const char* const*] Table names
-** @param [r] Pcolumns [const char* const*] Column names
-** @param [r] leftjoin [const EnsPBaseadaptorLeftjoin] LEFT JOIN conditions
-** @param [r] condition [const char*] SQL SELECT default condition
-** @param [r] final [const char*] SQL SELECT final condition
+** @param [r] Ptablenames [const char* const*] SQL table name array
+** @param [r] Pcolumnnames [const char* const*] SQL column name array
+** @param [r] leftjoins [const EnsPBaseadaptorLeftjoin]
+** SQL LEFT JOIN conditions
+** @param [r] defaultcondition [const char*] SQL SELECT default condition
+** @param [r] finalcondition [const char*] SQL SELECT final condition
 ** @param [f] Fstatement [AjBool function] Statement function address
 **
 ** @return [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor or NULL
@@ -160,11 +162,11 @@
 
 EnsPGvbaseadaptor ensGvbaseadaptorNew(
     EnsPGvdatabaseadaptor gvdba,
-    const char* const* Ptables,
-    const char* const* Pcolumns,
-    const EnsPBaseadaptorLeftjoin leftjoin,
-    const char *condition,
-    const char *final,
+    const char* const* Ptablenames,
+    const char* const* Pcolumnnames,
+    const EnsPBaseadaptorLeftjoin leftjoins,
+    const char *defaultcondition,
+    const char *finalcondition,
     AjBool (*Fstatement) (EnsPBaseadaptor ba,
                           const AjPStr statement,
                           EnsPAssemblymapper am,
@@ -180,10 +182,10 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
     if (!gvdba)
         return NULL;
 
-    if (!Ptables)
+    if (!Ptablenames)
         return NULL;
 
-    if (!Pcolumns)
+    if (!Pcolumnnames)
         return NULL;
 
     if (!Fstatement)
@@ -195,11 +197,11 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
         return NULL;
 
     ba = ensBaseadaptorNew(dba,
-                           Ptables,
-                           Pcolumns,
-                           leftjoin,
-                           condition,
-                           final,
+                           Ptablenames,
+                           Pcolumnnames,
+                           leftjoins,
+                           defaultcondition,
+                           finalcondition,
                            Fstatement);
 
     if (!ba)
@@ -264,16 +266,12 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba)
                 *Pgvba);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvba)
+    if (!(pthis = *Pgvba))
         return;
-
-    pthis = *Pgvba;
 
     ensBaseadaptorDel(&pthis->Baseadaptor);
 
-    AJFREE(pthis);
-
-    *Pgvba = NULL;
+    ajMemFree((void **) Pgvba);
 
     return;
 }
@@ -295,7 +293,7 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba)
 ** @nam4rule Gvdatabaseadaptor
 ** Return the Ensembl Genetic Variation Database Adaptor
 **
-** @argrule * gvba [const EnsPGvbaseadaptor]
+** @argrule * gvba [EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
@@ -316,7 +314,7 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba)
 ** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
-** @param [r] gvba [const EnsPGvbaseadaptor]
+** @param [u] gvba [EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
@@ -326,7 +324,7 @@ void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba)
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
-    const EnsPGvbaseadaptor gvba)
+    EnsPGvbaseadaptor gvba)
 {
     return (gvba) ? gvba->Baseadaptor : NULL;
 }
@@ -339,7 +337,7 @@ EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
-** @param [r] gvba [const EnsPGvbaseadaptor]
+** @param [u] gvba [EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
@@ -349,10 +347,10 @@ EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
-    const EnsPGvbaseadaptor gvba)
+    EnsPGvbaseadaptor gvba)
 {
-    return (gvba) ?
-        ensGvdatabaseadaptorGetDatabaseadaptor(gvba->Adaptor) : NULL;
+    return ensGvdatabaseadaptorGetDatabaseadaptor(
+        ensGvbaseadaptorGetGvdatabaseadaptor(gvba));
 }
 
 
@@ -364,7 +362,7 @@ EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
 ** Ensembl Genetic Variation Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
-** @param [r] gvba [const EnsPGvbaseadaptor]
+** @param [u] gvba [EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [AjBool] Failed variations attribute or ajFalse
@@ -374,10 +372,10 @@ EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
 ******************************************************************************/
 
 AjBool ensGvbaseadaptorGetFailedvariations(
-    const EnsPGvbaseadaptor gvba)
+    EnsPGvbaseadaptor gvba)
 {
-    return (gvba) ?
-        ensGvdatabaseadaptorGetFailedvariations(gvba->Adaptor) : ajFalse;
+    return ensGvdatabaseadaptorGetFailedvariations(
+        ensGvbaseadaptorGetGvdatabaseadaptor(gvba));
 }
 
 
@@ -388,7 +386,7 @@ AjBool ensGvbaseadaptorGetFailedvariations(
 ** Get the Ensembl Genetic Variation Database Adaptor member of an
 ** Ensembl Genetic Variation Base Adaptor.
 **
-** @param [r] gvba [const EnsPGvbaseadaptor]
+** @param [u] gvba [EnsPGvbaseadaptor]
 ** Ensembl Genetic Variation Base Adaptor
 **
 ** @return [EnsPGvdatabaseadaptor] Ensembl Genetic Variation Database Adaptor
@@ -399,7 +397,7 @@ AjBool ensGvbaseadaptorGetFailedvariations(
 ******************************************************************************/
 
 EnsPGvdatabaseadaptor ensGvbaseadaptorGetGvdatabaseadaptor(
-    const EnsPGvbaseadaptor gvba)
+    EnsPGvbaseadaptor gvba)
 {
     return (gvba) ? gvba->Adaptor : NULL;
 }
@@ -473,7 +471,7 @@ ajuint ensGvbaseadaptorLoadPloidy(
     result = ajStrToUint(value, &gvba->Ploidy);
 
     if (!result)
-        ajWarn("ensGvbaseadaptorFetchPloidy could not parse value '%S' for "
+        ajWarn("ensGvbaseadaptorLoadPloidy could not parse value '%S' for "
                "for meta key \"ploidy\" as AJAX unsigned integer.\n", value);
 
     ajStrDel(&key);

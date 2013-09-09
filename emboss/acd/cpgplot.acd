@@ -26,7 +26,6 @@ section: required [
   integer: window [
     standard: "Y"
     minimum: "1"
-    maximum: "$(sequence.end)"
     failrange: "N"
     trueminimum: "Y"
     default: "100"
@@ -41,7 +40,6 @@ section: required [
   integer: minlen [
     standard: "Y"
     minimum: "1"
-    maximum: "$(sequence.end)"
     failrange: "N"
     trueminimum: "N"
     default: "200"

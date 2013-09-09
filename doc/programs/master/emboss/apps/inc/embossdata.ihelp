@@ -1,5 +1,5 @@
 Find and retrieve EMBOSS data files
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that

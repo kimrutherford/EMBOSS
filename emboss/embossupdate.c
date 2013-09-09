@@ -1,8 +1,8 @@
 /* @source embossupdate application
 **
-** Writes the current EMBOSS version number
+** Checks for more recent updates to EMBOSS
 **
-** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Peter Rice (ricepeterm@yahoo.co.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -106,8 +106,9 @@ int main(int argc, char **argv)
     if(!updatefile)
     {
         ajFmtPrintF(outfile,
-                    "%S release %S: update information not available",
+                    "%S release %S: update information not available\n",
                     packagename, embossversion);
+        ajDie("Failed to read '%S'", updateurl);
     }
 
     ajFilebuffHtmlNoheader(updatefile);

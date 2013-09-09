@@ -10,10 +10,10 @@
 ** any arbitrary number of descriptor tags associated with it.
 **
 ** @author Copyright (C) 1999 Richard Bruskiewich
-** @version $Revision: 1.190 $
+** @version $Revision: 1.192 $
 ** @modified 2000 Ian Longden.
 ** @modified 2001 Peter Rice.
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2013/06/29 22:31:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1436,7 +1436,7 @@ AjPFeature ajFeatNewNucFlags(AjPFeattable thys,
 	       thys->Seqid, label);
     }
     
-    ajFeattableAdd(thys,ret) ;
+    ajFeattableAdd(thys,ret);
     
     return ret ;
 }
@@ -1857,18 +1857,56 @@ void ajFeattableAdd(AjPFeattable thys, AjPFeature feature)
 	thys->Len = AJMAX(thys->Len, feature->Start);
 	thys->Len = AJMAX(thys->Len, feature->End);
     }
+
     ajListPushAppend(thys->Features, feature);
 
-/*
-    if(feature->Type)
-	ajDebug("ajFeattableAdd list size %Lu '%S' %d %d\n",
-		ajListGetLength(thys->Features), feature->Type,
-		feature->Start, feature->End);
-    else
-	ajDebug("ajFeattableAdd list size %Lu '%S' %d %d\n",
-		ajListGetLength(thys->Features), NULL,
-		feature->Start, feature->End);
-*/
+    return;
+}
+
+
+
+
+/* @func ajFeattableAddNew ****************************************************
+**
+** Method to add a new AjPFeature to a AjPFeattable as a new feature,
+** updating the feature group.
+**
+** @param  [u] thys    [AjPFeattable] The feature table
+** @param  [u] feature [AjPFeature]        Feature to be added to the set
+** @return [void]
+** @category modify [AjPFeattable] Adds an AjPFeature to a set
+**
+** @release 2.1.0
+** @@
+******************************************************************************/
+
+void ajFeattableAddNew(AjPFeattable thys, AjPFeature feature)
+{
+    AjIList       iter = NULL;
+    AjPFeature subfeat = NULL;
+
+    if(!(feature->Flags & AJFEATFLAG_REMOTEID) &&
+       !(feature->Flags & AJFEATFLAG_LABEL))
+    {
+	thys->Len = AJMAX(thys->Len, feature->Start);
+	thys->Len = AJMAX(thys->Len, feature->End);
+    }
+
+    thys->Groups++;
+    feature->Group = thys->Groups;
+
+    if(feature->Subfeatures)
+    {
+        iter = ajListIterNew(feature->Subfeatures);
+        while(!ajListIterDone(iter))
+        {
+            subfeat = (AjPFeature)ajListIterGet(iter);
+            subfeat->Group = thys->Groups;
+        }
+        ajListIterDel(&iter);
+    }
+    
+    ajListPushAppend(thys->Features, feature);
 
     return;
 }
@@ -2012,6 +2050,19 @@ void ajFeattableClear(AjPFeattable thys)
 	}
 	ajListIterDel(&iter) ;
     }
+
+    thys->Format = 0;
+    thys->Start = 0;
+    thys->End = 0;
+    thys->Len = 0;
+    thys->Offset = 0;
+    thys->Rev = ajFalse;
+    thys->Reversed = ajFalse;
+    thys->Trimmed = ajFalse;
+
+    thys->Groups = 0;
+    thys->Fpos = 0L;
+    thys->Circular = AJFALSE;
 
     return;
 }
@@ -2217,7 +2268,7 @@ const AjPStr ajFeatTypeGetCategory(const AjPStr type)
             
             catsplit = ajStrTokenNewC(types,",");
 
-            while(ajStrTokenNextParse(&catsplit,&token))
+            while(ajStrTokenNextParse(catsplit,&token))
             {
                 refname = ajStrNewRef(name);
                 ajTablePut(FeatCategoryTable, token, refname);
@@ -2454,7 +2505,7 @@ AjBool ajFeattableGetXrefs(const AjPFeattable thys, AjPList *Pxreflist,
                     {
                         tagval = ajTagvalGetValue(item);
                         handle = ajStrTokenNewC(tagval, ",");
-                        while(ajStrTokenNextParse(&handle, &tmpstr))
+                        while(ajStrTokenNextParse(handle, &tmpstr))
                         {
                             ipos = ajStrFindAnyK(tmpstr, ':');
                             if(ipos > 0) 
@@ -3299,7 +3350,7 @@ AjBool ajFeatGetXrefs(const AjPFeature thys, AjPList *Pxreflist)
                 tagval = ajTagvalGetValue(item);
                 handle = ajStrTokenNewC(tagval, ",");
 
-                while(ajStrTokenNextParse(&handle, &tmpstr))
+                while(ajStrTokenNextParse(handle, &tmpstr))
                 {
                     ipos = ajStrFindAnyK(tmpstr, ':');
 
@@ -4218,7 +4269,7 @@ static AjBool featVocabReadTags(const AjPStr fname, AjPTable pTagsTable,
 		{
 		    ajStrTokenAssignC(&featVocabSplit, featTmpStr, "\", \t");
 
-		    while(ajStrTokenNextParse(&featVocabSplit, &token))
+		    while(ajStrTokenNextParse(featVocabSplit, &token))
 		    {
 			ajFmtPrintAppS(&tagstr, "%S;", token);
 		    }
@@ -7574,6 +7625,30 @@ AjPFeattable ajFeattableNew(const AjPStr name )
 
 
 
+/* @func ajFeattableReset *****************************************************
+**
+** Resets a feature table with a new name
+**
+** @param [u] thys [AjPFeattable] Feature table
+** @param [r] name [const AjPStr] Name for new feature table
+** @return [void]
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajFeattableReset(AjPFeattable thys, const AjPStr name)
+{
+    ajFeattableClear(thys);
+
+    ajStrAssignS(&thys->Seqid, name);
+
+    return;
+}
+
+
+
+
 /* @func ajFeattableSetCircular ***********************************************
 **
 ** Sets a feature table to be circular
@@ -7739,6 +7814,32 @@ void ajFeattableSetRange(AjPFeattable thys, ajint fbegin, ajint fend)
 
 
 
+/* @func ajFeattableSetReverse ************************************************
+**
+** Sets a feature table to be reversed
+**
+** @param [u] thys [AjPFeattable] Feature table
+** @return [void]
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajFeattableSetReverse(AjPFeattable thys)
+{
+    if(thys->Rev)
+        thys->Rev = ajFalse;
+    else
+        thys->Rev = ajTrue;
+
+    thys->Reversed = ajFalse;
+    
+    return;
+}
+
+
+
+
 /* @func ajFeattableReverse ***************************************************
 **
 ** Reverse the features in a feature table by iterating through and
@@ -7758,6 +7859,9 @@ void ajFeattableReverse(AjPFeattable  thys)
     if(ajFeattableIsProt(thys))
 	return;
 
+    if(!thys->Rev)			/* Not flagged for reversal */
+	return;
+
     iter = ajListIterNewread(thys->Features);
 
     while(!ajListIterDone(iter))
@@ -7772,6 +7876,13 @@ void ajFeattableReverse(AjPFeattable  thys)
     }
 
     ajListIterDel(&iter);
+
+    thys->Rev = ajFalse;
+
+    if(thys->Reversed)
+	thys->Reversed = ajFalse;
+    else
+	thys->Reversed = ajTrue;
 
     return;
 }
@@ -8078,7 +8189,7 @@ ajuint ajFeatGfftagAddSS(AjPFeature thys,
 
     handle = ajStrTokenNewC(value, ",");
 
-    while(ajStrTokenNextParse(&handle, &tmpstr))
+    while(ajStrTokenNextParse(handle, &tmpstr))
     {
         tagval = ajTagvalNewS(tag, tmpstr);
     
@@ -8259,12 +8370,28 @@ AjPFeattable ajFeattableNewFtable(const AjPFeattable orig)
 
     ajStrAssignS(&ret->Seqid, orig->Seqid);
     ajStrAssignS(&ret->Type, orig->Type);
+
     ajStrAssignS(&ret->Formatstr, orig->Formatstr);
     ret->Format    = orig->Format;
+
+    ret->Groups    = orig->Groups;
     ret->Start     = orig->Start;
     ret->End       = orig->End;
     ret->Len       = orig->Len;
-    ret->Groups    = orig->Groups;
+    ret->Offset    = orig->Offset;
+    ret->Rev       = orig->Rev;
+    ret->Reversed  = orig->Reversed;
+    ret->Trimmed   = orig->Trimmed;
+    ret->Circular  = orig->Circular;
+
+    ret->Fpos      = orig->Fpos;
+
+    ajStrAssignS(&ret->Db, orig->Db);
+    ajStrAssignS(&ret->Setdb, orig->Setdb);
+    ajStrAssignS(&ret->Full, orig->Full);
+    ajStrAssignS(&ret->Qry, orig->Qry);
+    ajStrAssignS(&ret->Filename, orig->Filename);
+    ajStrAssignS(&ret->TextPtr, orig->TextPtr);
 
     iter = ajListIterNewread(orig->Features);
 
@@ -10394,24 +10521,32 @@ AjBool ajFeattableTrimOff(AjPFeattable thys, ajuint ioffset, ajuint ilen)
     AjPFeature  ft   = NULL ;
     
     /*ajDebug("ajFeattableTrimOff offset %d len %d\n", ioffset, ilen);*/
-   /* ajDebug("ajFeattableTrimOff table Start %d End %d Len %d Features %Lu\n",
-	     thys->Start, thys->End, thys->Len,
-	     ajListGetLength(thys->Features));*/
+    /*ajDebug("ajFeattableTrimOff table Start %d End %d Len %d Features %Lu\n",
+            thys->Start, thys->End, thys->Len,
+            ajListGetLength(thys->Features));*/
+
+    if(thys->Trimmed)
+    {
+        ajWarn("ajFeattableTrimOff: Features '%S' already trimmed",
+               ajFeattableGetName(thys));
+
+        return ajFalse;
+    }
 
     iseqlen = ilen + ioffset;
     
     begin = ajFeattablePos(thys, thys->Start);
 
-    if(begin <= ioffset)
-	begin = ioffset + 1;
-
     if(thys->End)
-	end = ajFeattablePosI(thys, begin, thys->End);
+	end = ajFeattablePosI(thys, thys->End, iseqlen);
     else
 	end = thys->Len;
     if(end > iseqlen)
 	end = iseqlen;
     
+    if(begin <= ioffset)
+	begin = ajFeattablePosI(thys, (ioffset+1), end);
+
     if(begin > 1)
 	dobegin = ajTrue;
 
@@ -10421,7 +10556,7 @@ AjBool ajFeattableTrimOff(AjPFeattable thys, ajuint ioffset, ajuint ilen)
     /*ajDebug("  ready to trim dobegin %B doend %B begin %d end %d\n",
 	     dobegin, doend, begin, end);*/
     
-    iter = ajListIterNew(thys->Features) ;
+   iter = ajListIterNew(thys->Features) ;
 
     while(!ajListIterDone(iter))
     {
@@ -10436,6 +10571,11 @@ AjBool ajFeattableTrimOff(AjPFeattable thys, ajuint ioffset, ajuint ilen)
 
     ajListIterDel(&iter);
     thys->Offset = ioffset;
+
+    if(thys->Rev)
+        ajFeattableReverse(thys);
+
+    thys->Trimmed = ajTrue;
 
     return ok;
 }
@@ -10464,9 +10604,16 @@ AjBool ajFeattableTrim(AjPFeattable thys)
     AjIList     iter = NULL ;
     AjPFeature  ft   = NULL ;
     
-   /* ajDebug("ajFeattableTrim table Start %d End %d Len %d Features %Lu\n",
+    /*ajDebug("ajFeattableTrim table Start %d End %d Len %d Features %Lu\n",
 	     thys->Start, thys->End, thys->Len,
 	     ajListGetLength(thys->Features));*/
+
+    if(thys->Trimmed)
+    {
+        ajWarn("Features '%S' already trimmed", ajFeattableGetName(thys));
+
+        return ajFalse;
+    }
 
     begin = ajFeattablePos(thys, thys->Start);
 
@@ -10498,7 +10645,14 @@ AjBool ajFeattableTrim(AjPFeattable thys)
     }
 
     ajListIterDel(&iter);
+
     thys->Offset = 0;
+    thys->Len = 1 + thys->End - thys->Start;
+
+    if(thys->Rev)
+        ajFeattableReverse(thys);
+
+    thys->Trimmed = ajTrue;
 
     return ok;
 }
@@ -10519,7 +10673,9 @@ AjBool ajFeattableTrim(AjPFeattable thys)
 ** @param [r] end [ajuint] Range end of sequence
 ** @param [r] dobegin [AjBool] Reset begin
 ** @param [r] doend [AjBool] Reset end
+**
 ** @return [AjBool] AjTrue returned if successful.
+**                  ajFalse returned if feature could not be trimmed
 **
 ** @release 2.7.0
 ** @@
@@ -10530,9 +10686,16 @@ AjBool ajFeatTrimOffRange(AjPFeature ft, ajuint ioffset,
 			  AjBool dobegin, AjBool doend)
 {
     AjBool ok = ajTrue;
+    ajuint joffset;
+    AjIList       iter = NULL;
+    AjPFeature subfeat = NULL;
 
-    /* ajDebug("ft flags %x %d..%d %d..%d\n",
-	     ft->Flags, ft->Start, ft->End, ft->Start2, ft->End2); */
+    ajDebug("ajFeatTrimOffRange ft flags %x %d..%d %d..%d\n",
+	     ft->Flags, ft->Start, ft->End, ft->Start2, ft->End2);
+
+    joffset = ioffset;
+    if(dobegin && begin)
+        joffset += (begin - 1);
     
     if(ft->Flags & AJFEATFLAG_REMOTEID) /* feature in another sequence */
 	return ajTrue;
@@ -10564,7 +10727,7 @@ AjBool ajFeatTrimOffRange(AjPFeature ft, ajuint ioffset,
 	if(ft->End < begin)
 	    return ajFalse;
 
-	if(begin > (ioffset + 1) && ft->End2 < begin)
+	if(ft->End2 && begin > (ioffset + 1) && ft->End2 < begin)
 	    ft->End2 = begin;
 
 	if(ft->Start && ft->Start < begin)
@@ -10577,16 +10740,29 @@ AjBool ajFeatTrimOffRange(AjPFeature ft, ajuint ioffset,
 	    ft->Start2 = begin;
     }
 
-    if(ioffset)			/* shift to sequence offset */
+    if(joffset)			/* shift to sequence offset */
     {
 	if(ft->Start)
-	    ft->Start -= ioffset;
+	    ft->Start -= joffset;
 	if(ft->Start2)
-	    ft->Start2 -= ioffset;
+	    ft->Start2 -= joffset;
 	if(ft->End)
-	    ft->End -= ioffset;
+	    ft->End -= joffset;
 	if(ft->End2)
-	    ft->End2 -= ioffset;
+	    ft->End2 -= joffset;
+    }
+
+    if(ft->Subfeatures)
+    {
+        iter = ajListIterNew(ft->Subfeatures);
+	while(!ajListIterDone(iter))
+	{
+	    subfeat = (AjPFeature)ajListIterGet(iter);
+            if(!ajFeatTrimOffRange(subfeat, ioffset,
+                                   begin, end, dobegin, doend))
+                ok = ajFalse;
+        }
+	ajListIterDel(&iter);
     }
 
     return ok;

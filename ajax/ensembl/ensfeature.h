@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.42 $
+** @version $Revision: 1.44 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:05:44 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -302,11 +302,11 @@ AjBool ensListFeatureSortStartDescending(AjPList features);
 
 EnsPFeatureadaptor ensFeatureadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char *const *Ptables,
-    const char *const *Pcolumns,
-    const EnsPBaseadaptorLeftjoin leftjoin,
-    const char *condition,
-    const char *final,
+    const char *const *Ptablenames,
+    const char *const *Pcolumnnames,
+    const EnsPBaseadaptorLeftjoin leftjoins,
+    const char *defaultcondition,
+    const char *finalcondition,
     AjBool (*Fstatement) (EnsPBaseadaptor ba,
                           const AjPStr statement,
                           EnsPAssemblymapper am,
@@ -337,14 +337,14 @@ ajint ensFeatureadaptorGetMaximumlength(
 AjBool ensFeatureadaptorGetStartequalsend(
     const EnsPFeatureadaptor fa);
 
-AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
-                                   const char *const *Pcolumns);
+AjBool ensFeatureadaptorSetColumnnames(EnsPFeatureadaptor fa,
+                                       const char *const *Pcolumnnames);
 
 AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
-                                            const char *condition);
+                                            const char *defaultcondition);
 
 AjBool ensFeatureadaptorSetFinalcondition(EnsPFeatureadaptor fa,
-                                          const char *final);
+                                          const char *finalcondition);
 
 AjBool ensFeatureadaptorSetMaximumlength(EnsPFeatureadaptor fa,
                                          ajint length);
@@ -352,8 +352,8 @@ AjBool ensFeatureadaptorSetMaximumlength(EnsPFeatureadaptor fa,
 AjBool ensFeatureadaptorSetStartequalsend(EnsPFeatureadaptor fa,
                                           AjBool flag);
 
-AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
-                                  const char *const *Ptables);
+AjBool ensFeatureadaptorSetTablenames(EnsPFeatureadaptor fa,
+                                      const char *const *Ptablenames);
 
 AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
                                 char **Ptxt,
@@ -598,6 +598,9 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureadaptorNew(
 
 void ensAssemblyexceptionfeatureadaptorDel(
     EnsPAssemblyexceptionfeatureadaptor *Paefa);
+
+EnsPDatabaseadaptor ensAssemblyexceptionfeatureadaptorGetDatabaseadaptor(
+    EnsPAssemblyexceptionfeatureadaptor aefa);
 
 AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
     EnsPAssemblyexceptionfeatureadaptor aefa,

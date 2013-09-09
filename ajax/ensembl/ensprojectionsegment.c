@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.28 $
+** @version $Revision: 1.30 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@
 **
 ** @cc Bio::EnsEMBL::ProjectionSegment
 ** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -292,14 +292,7 @@ void ensProjectionsegmentDel(EnsPProjectionsegment *Pps)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pps)
-        return;
-
-    pthis = *Pps;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pps) || --pthis->Use)
     {
         *Pps = NULL;
 
@@ -308,9 +301,7 @@ void ensProjectionsegmentDel(EnsPProjectionsegment *Pps)
 
     ensSliceDel(&pthis->TargetSlice);
 
-    AJFREE(pthis);
-
-    *Pps = NULL;
+    ajMemFree((void **) Pps);
 
     return;
 }
@@ -470,11 +461,12 @@ AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Projection Segment object.
+** Functions for calculating information from an
+** Ensembl Projection Segment object.
 **
 ** @fdata [EnsPProjectionsegment]
 **
-** @nam3rule Calculate Calculate Ensembl Projection Segment values
+** @nam3rule Calculate Calculate Ensembl Projection Segment information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule Memsize ps [const EnsPProjectionsegment] Ensembl Projection Segment

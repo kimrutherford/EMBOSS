@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.56 $
+** @version $Revision: 1.58 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic predictionexonadaptorKTables **********************************
+/* @conststatic predictionexonadaptorKTablenames ******************************
 **
 ** Array of Ensembl Prediction Exon Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const predictionexonadaptorKTables[] =
+static const char *const predictionexonadaptorKTablenames[] =
 {
     "prediction_exon",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *const predictionexonadaptorKTables[] =
 
 
 
-/* @conststatic predictionexonadaptorKColumns *********************************
+/* @conststatic predictionexonadaptorKColumnnames *****************************
 **
 ** Array of Ensembl Prediction Exon Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const predictionexonadaptorKColumns[] =
+static const char *const predictionexonadaptorKColumnnames[] =
 {
     "prediction_exon.prediction_exon_id",
     "prediction_exon.seq_region_id",
@@ -99,7 +99,7 @@ static const char *const predictionexonadaptorKColumns[] =
 
 /* @conststatic predictionexonadaptorKFinalcondition **************************
 **
-** Ensembl Prediction Exon Adaptor SQL final condition
+** Ensembl Prediction Exon Adaptor SQL SELECT final condition
 **
 ******************************************************************************/
 
@@ -110,13 +110,13 @@ static const char *predictionexonadaptorKFinalcondition =
 
 
 
-/* @conststatic predictiontranscriptadaptorKTables ****************************
+/* @conststatic predictiontranscriptadaptorKTablenames ************************
 **
 ** Array of Ensembl Prediction Transcript Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const predictiontranscriptadaptorKTables[] =
+static const char *const predictiontranscriptadaptorKTablenames[] =
 {
     "prediction_transcript",
     (const char *) NULL
@@ -125,13 +125,13 @@ static const char *const predictiontranscriptadaptorKTables[] =
 
 
 
-/* @conststatic predictiontranscriptadaptorKColumns ***************************
+/* @conststatic predictiontranscriptadaptorKColumnnames ***********************
 **
 ** Array of Ensembl Prediction Transcript Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const predictiontranscriptadaptorKColumns[] =
+static const char *const predictiontranscriptadaptorKColumnnames[] =
 {
     "prediction_transcript.prediction_transcript_id",
     "prediction_transcript.seq_region_id",
@@ -240,7 +240,7 @@ static AjBool predictiontranscriptadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::PredictionExon
 ** @cc CVS Revision: 1.11
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -439,14 +439,7 @@ void ensPredictionexonDel(EnsPPredictionexon *Ppe)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Ppe)
-        return;
-
-    pthis = *Ppe;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Ppe) || --pthis->Use)
     {
         *Ppe = NULL;
 
@@ -457,9 +450,7 @@ void ensPredictionexonDel(EnsPPredictionexon *Ppe)
 
     ajStrDel(&pthis->SequenceCache);
 
-    AJFREE(pthis);
-
-    *Ppe = NULL;
+    ajMemFree((void **) Ppe);
 
     return;
 }
@@ -745,8 +736,7 @@ AjBool ensPredictionexonSetFeature(EnsPPredictionexon pe,
 
     /* Replace the current Feature. */
 
-    if (pe->Feature)
-        ensFeatureDel(&pe->Feature);
+    ensFeatureDel(&pe->Feature);
 
     pe->Feature = ensFeatureNewRef(feature);
 
@@ -945,11 +935,12 @@ AjBool ensPredictionexonTrace(const EnsPPredictionexon pe, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Prediction Exon object.
+** Functions for calculating information from an
+** Ensembl Prediction Exon object.
 **
 ** @fdata [EnsPPredictionexon]
 **
-** @nam3rule Calculate Calculate Ensembl Prediction Exon values
+** @nam3rule Calculate Calculate Ensembl Prediction Exon information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule Memsize pe [const EnsPPredictionexon] Ensembl Prediction Exon
@@ -1038,7 +1029,7 @@ ajint ensPredictionexonGetPhaseEnd(const EnsPPredictionexon pe)
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Prediction Exon objects between
-** Ensembl Coordinate Systems.
+** Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPPredictionexon]
 **
@@ -1159,11 +1150,11 @@ EnsPPredictionexon ensPredictionexonTransform(EnsPPredictionexon pe,
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching values of an Ensembl Prediction Exon object.
+** Functions for fetching information from an Ensembl Prediction Exon object.
 **
 ** @fdata [EnsPPredictionexon]
 **
-** @nam3rule Fetch Fetch Ensembl Prediction Exon values
+** @nam3rule Fetch Fetch Ensembl Prediction Exon information
 ** @nam4rule Displayidentifier Fetch the display identifier
 ** @nam4rule Sequence Fetch the sequence
 ** @nam5rule Seq Fetch the sequence as AJAX Sequence object
@@ -1269,6 +1260,11 @@ AjBool ensPredictionexonFetchSequenceStr(EnsPPredictionexon pe,
     if (!Psequence)
         return ajFalse;
 
+    if (*Psequence)
+        ajStrAssignClear(Psequence);
+    else
+        *Psequence = ajStrNew();
+
     feature = pe->Feature;
 
     if (!feature)
@@ -1306,10 +1302,7 @@ AjBool ensPredictionexonFetchSequenceStr(EnsPPredictionexon pe,
                                     feature->Strand,
                                     &pe->SequenceCache);
 
-    if (*Psequence)
-        ajStrAssignS(Psequence, pe->SequenceCache);
-    else
-        *Psequence = ajStrNewS(pe->SequenceCache);
+    ajStrAssignS(Psequence, pe->SequenceCache);
 
     return ajTrue;
 }
@@ -1761,8 +1754,8 @@ AjBool ensListPredictionexonSortStartDescending(AjPList pes)
 ** Ensembl Prediction Exon Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::PredictionExonAdaptor
-** @cc CVS Revision: 1.20
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.21
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1954,8 +1947,8 @@ EnsPPredictionexonadaptor ensPredictionexonadaptorNew(
 {
     return ensFeatureadaptorNew(
         dba,
-        predictionexonadaptorKTables,
-        predictionexonadaptorKColumns,
+        predictionexonadaptorKTablenames,
+        predictionexonadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         predictionexonadaptorKFinalcondition,
@@ -2015,7 +2008,7 @@ void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea)
 {
     ensFeatureadaptorDel(Ppea);
 
-	return;
+    return;
 }
 
 
@@ -2029,16 +2022,44 @@ void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea)
 ** @fdata [EnsPPredictionexonadaptor]
 **
 ** @nam3rule Get Return Ensembl Prediction Exon Adaptor attribute(s)
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 **
 ** @argrule * pea [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
 **
-** @valrule Featureadaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+** @valrule Featureadaptor [EnsPFeatureadaptor]
+** Ensembl Feature Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
+
+
+
+
+/* @func ensPredictionexonadaptorGetBaseadaptor *******************************
+**
+** Get the Ensembl Base Adaptor member of the
+** Ensembl Feature Adaptor member of an Ensembl Prediction Exon Adaptor.
+**
+** @param [u] pea [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensPredictionexonadaptorGetBaseadaptor(
+    EnsPPredictionexonadaptor pea)
+{
+    return ensFeatureadaptorGetBaseadaptor(
+        ensPredictionexonadaptorGetFeatureadaptor(pea));
+}
 
 
 
@@ -2050,7 +2071,7 @@ void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea)
 **
 ** @param [u] pea [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 **
 ** @release 6.4.0
 ** @@
@@ -2059,7 +2080,8 @@ void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea)
 EnsPDatabaseadaptor ensPredictionexonadaptorGetDatabaseadaptor(
     EnsPPredictionexonadaptor pea)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(pea);
+    return ensFeatureadaptorGetDatabaseadaptor(
+        ensPredictionexonadaptorGetFeatureadaptor(pea));
 }
 
 
@@ -2072,7 +2094,7 @@ EnsPDatabaseadaptor ensPredictionexonadaptorGetDatabaseadaptor(
 **
 ** @param [u] pea [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
 **
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
 **
 ** @release 6.4.0
 ** @@
@@ -2103,19 +2125,19 @@ EnsPFeatureadaptor ensPredictionexonadaptorGetFeatureadaptor(
 ** @nam4rule By Fetch one Ensembl Exon object matching a criterion
 ** @nam5rule Identifier Fetch by SQL database-internal identifier
 **
-** @argrule * pea [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
-** @argrule All pes [AjPList] AJAX List of Ensembl Prediction Exon objects
+** @argrule * pea [EnsPPredictionexonadaptor]
+** Ensembl Prediction Exon Adaptor
+** @argrule All pes [AjPList]
+** AJAX List of Ensembl Prediction Exon objects
 ** @argrule AllbyPredictiontranscript pt [const EnsPPredictiontranscript]
 ** Ensembl Prediction Transcript
-** @argrule AllbyPredictiontranscript pes [AjPList] AJAX List of
-** Ensembl Prediction Exon objects
 ** @argrule AllbySlice slice [EnsPSlice] Ensembl Slice
 ** @argrule AllbySlice constraint [const AjPStr] SQL constraint
-** @argrule AllbySlice pes [AjPList] AJAX List of
-** Ensembl Prediction Exon objects
+** @argrule Allby pes [AjPList]
+** AJAX List of Ensembl Prediction Exon objects
 ** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Ppe [EnsPPredictionexon*] Ensembl Prediction Exon
-** address
+** @argrule By Ppe [EnsPPredictionexon*]
+** Ensembl Prediction Exon address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2162,7 +2184,7 @@ AjBool ensPredictionexonadaptorFetchAllbyPredictiontranscript(
     EnsPSlice eslice = NULL;
     EnsPSlice tslice = NULL;
 
-    EnsPSliceadaptor sa = NULL;
+    EnsPSliceadaptor sla = NULL;
 
     if (ajDebugTest("ensPredictionexonadaptorFetchAllbyPredictiontranscript"))
     {
@@ -2199,16 +2221,16 @@ AjBool ensPredictionexonadaptorFetchAllbyPredictiontranscript(
         return ajFalse;
     }
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(pea);
+    dba = ensPredictionexonadaptorGetDatabaseadaptor(pea);
 
-    sa = ensRegistryGetSliceadaptor(dba);
+    sla = ensRegistryGetSliceadaptor(dba);
 
     /*
     ** Get a Slice that spans just this Prediction Transcript to place
     ** Ensembl Prediction Exon objects on.
     */
 
-    ensSliceadaptorFetchByFeature(sa, tfeature, 0, &eslice);
+    ensSliceadaptorFetchByFeature(sla, tfeature, 0, &eslice);
 
     constraint = ajFmtStr("prediction_exon.prediction_transcript_id = %u",
                           ensPredictiontranscriptGetIdentifier(pt));
@@ -2249,14 +2271,45 @@ AjBool ensPredictionexonadaptorFetchAllbyPredictiontranscript(
 
 
 
+/* @func ensPredictionexonadaptorFetchByIdentifier ****************************
+**
+** Fetch an Ensembl Prediction Exon via its SQL database-internal
+** identifier.
+** The caller is responsible for deleting the Ensembl Prediction Exon.
+**
+** @param [u] pea [EnsPPredictionexonadaptor]
+** Ensembl Prediction Exon Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [wP] Ppe [EnsPPredictionexon*] Ensembl Prediction Exon address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+AjBool ensPredictionexonadaptorFetchByIdentifier(
+    EnsPPredictionexonadaptor pea,
+    ajuint identifier,
+    EnsPPredictionexon *Ppe)
+{
+    return ensBaseadaptorFetchByIdentifier(
+        ensPredictionexonadaptorGetBaseadaptor(pea),
+        identifier,
+        (void **) Ppe);
+}
+
+
+
+
 /* @datasection [EnsPPredictiontranscript] Ensembl Prediction Transcript ******
 **
 ** @nam2rule Predictiontranscript Functions for manipulating
 ** Ensembl Prediction Transcript objects
 **
 ** @cc Bio::EnsEMBL::PredictionTranscript
-** @cc CVS Revision: 1.50
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.51
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -2551,14 +2604,7 @@ void ensPredictiontranscriptDel(
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Ppt)
-        return;
-
-    pthis = *Ppt;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Ppt) || --pthis->Use)
     {
         *Ppt = NULL;
 
@@ -2576,9 +2622,7 @@ void ensPredictiontranscriptDel(
 
     ajListFree(&pthis->Predictionexons);
 
-    AJFREE(pthis);
-
-    *Ppt = NULL;
+    ajMemFree((void **) Ppt);
 
     return;
 }
@@ -2765,7 +2809,7 @@ const AjPList ensPredictiontranscriptLoadPredictionexons(
         return NULL;
     }
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(pt->Adaptor);
+    dba = ensPredictiontranscriptadaptorGetDatabaseadaptor(pt->Adaptor);
 
     pea = ensRegistryGetPredictionexonadaptor(dba);
 
@@ -3073,11 +3117,12 @@ AjBool ensPredictiontranscriptTrace(
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Prediction Transcript object.
+** Functions for calculating information from an
+** Ensembl Prediction Transcript object.
 **
 ** @fdata [EnsPPredictiontranscript]
 **
-** @nam3rule Calculate Calculate Ensembl Prediction Transcript values
+** @nam3rule Calculate Calculate Ensembl Prediction Transcript information
 ** @nam4rule Length  Calculate the length
 ** @nam4rule Memsize Calculate the memory size in bytes
 ** @nam4rule Slice   Calculate Ensembl Transcript coordinates relative to
@@ -3326,11 +3371,12 @@ ajuint ensPredictiontranscriptCalculateTranscriptCodingStart(
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching values of an Ensembl Prediction Transcript object.
+** Functions for fetching information from an
+** Ensembl Prediction Transcript object.
 **
 ** @fdata [EnsPPredictiontranscript]
 **
-** @nam3rule Fetch Fetch Ensembl Prediction Transcript values
+** @nam3rule Fetch Fetch Ensembl Prediction Transcript information
 ** @nam4rule All Fetch all objects
 ** @nam4rule Sequence Fetch the sequence
 ** @nam5rule Coding      Fetch the coding sequence
@@ -3638,7 +3684,7 @@ AjBool ensPredictiontranscriptFetchSequenceTranslationStr(
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Prediction Transcript objects between
-** Ensembl Coordinate Systems.
+** Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPPredictiontranscript]
 **
@@ -4228,8 +4274,8 @@ AjBool ensListPredictiontranscriptSortStartDescending(AjPList pts)
 ** Ensembl Prediction Transcript Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::PredictionTranscriptAdaptor
-** @cc CVS Revision: 1.52
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.53
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -4421,13 +4467,10 @@ static AjBool predictiontranscriptadaptorFetchAllbyStatement(
 EnsPPredictiontranscriptadaptor ensPredictiontranscriptadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
     return ensFeatureadaptorNew(
         dba,
-        predictiontranscriptadaptorKTables,
-        predictiontranscriptadaptorKColumns,
+        predictiontranscriptadaptorKTablenames,
+        predictiontranscriptadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -4489,7 +4532,7 @@ void ensPredictiontranscriptadaptorDel(
 {
     ensFeatureadaptorDel(Ppta);
 
-	return;
+    return;
 }
 
 
@@ -4503,18 +4546,46 @@ void ensPredictiontranscriptadaptorDel(
 ** @fdata [EnsPPredictiontranscriptadaptor]
 **
 ** @nam3rule Get Return Ensembl Prediction Transcript Adaptor attribute(s)
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 **
 ** @argrule * pta [EnsPPredictiontranscriptadaptor]
 ** Ensembl Prediction Transcript Adaptor
 **
-** @valrule Featureadaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** or NULL
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+** @valrule Featureadaptor [EnsPFeatureadaptor]
+** Ensembl Feature Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
+
+
+
+
+/* @func ensPredictiontranscriptadaptorGetBaseadaptor *************************
+**
+** Get the Ensembl Base Adaptor member of an
+** Ensembl Prediction Transcript Adaptor.
+**
+** @param [u] pta [EnsPPredictiontranscriptadaptor]
+** Ensembl Prediction Transcript Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensPredictiontranscriptadaptorGetBaseadaptor(
+    EnsPPredictiontranscriptadaptor pta)
+{
+    return ensFeatureadaptorGetBaseadaptor(
+        ensPredictiontranscriptadaptorGetFeatureadaptor(pta));
+}
 
 
 
@@ -4536,7 +4607,8 @@ void ensPredictiontranscriptadaptorDel(
 EnsPDatabaseadaptor ensPredictiontranscriptadaptorGetDatabaseadaptor(
     EnsPPredictiontranscriptadaptor pta)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(pta);
+    return ensFeatureadaptorGetDatabaseadaptor(
+        ensPredictiontranscriptadaptorGetFeatureadaptor(pta));
 }
 
 
@@ -4577,41 +4649,30 @@ EnsPFeatureadaptor ensPredictiontranscriptadaptorGetFeatureadaptor(
 ** @nam4rule Allby Fetch all Ensembl Prediction Transcript objects
 **                 matching a criterion
 ** @nam5rule Slice Fetch all by an Ensembl Slice
-** @nam5rule Stableidentifier Fetch all by a stable Ensembl Exon identifier
-** @nam4rule By Fetch one Ensembl Exon object matching a criterion
+** @nam5rule Stableidentifier Fetch all by a stable identifier
+** @nam4rule By Fetch one Ensembl Prediction Transcript object
+**              matching a criterion
 ** @nam5rule Displaylabel Fetch by display label
 ** @nam5rule Identifier Fetch by SQL database-internal identifier
-** @nam5rule Stableidentifier Fetch by stable Ensembl Exon identifier
+** @nam5rule Stableidentifier Fetch by a stable identifier
 **
 ** @argrule * pta [EnsPPredictiontranscriptadaptor]
 ** Ensembl Prediction Transcript Adaptor
-** @argrule All pts [AjPList] AJAX List of
-** Ensembl Prediction Transcript objects
+** @argrule All pts [AjPList]
+** AJAX List of Ensembl Prediction Transcript objects
 ** @argrule AllbySlice slice [EnsPSlice] Ensembl Slice
 ** @argrule AllbySlice anname [const AjPStr] Ensembl Analysis name
 ** @argrule AllbySlice constraint [const AjPStr] SQL constraint
 ** @argrule AllbySlice loadexons [AjBool] Load Ensembl Prediction Exon objects
-** @argrule AllbySlice pts [AjPList] AJAX List of Ensembl Prediction Transcript
-** objects
 ** @argrule AllbyStableidentifier stableid [const AjPStr] Stable identifier
-** @argrule AllbyStableidentifier transcripts [AjPList] AJAX List of Ensembl
-**                                                      Transcript objects
+** @argrule Allby pts [AjPList]
+** AJAX List of Ensembl Prediction Transcript objects
 ** @argrule ByDisplaylabel label [const AjPStr] Display label
-** @argrule ByDisplaylabel Ppt [EnsPPredictiontranscript*]
-** Ensembl Prediction Transcript address
-** @argrule ByExonidentifier identifier [ajuint] Ensembl Exon identifier
-** @argrule ByExonidentifier Ppt [EnsPPredictiontranscript*]
-** Ensembl Pediction Transcript address
-** @argrule ByExonstableidentifier stableid [const AjPStr] Ensembl Exon
-**                                                         stable identifier
-** @argrule ByExonstableidentifier Ppt [EnsPPredictiontranscript*]
-** Ensembl Prediction Transcript address
+** @argrule ByExonidentifier identifier [ajuint]
+** Ensembl Prediction Exon identifier
 ** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Ppt [EnsPPredictiontranscript*]
-** Ensembl Prediction Transcript address
 ** @argrule ByStableidentifier stableid [const AjPStr] Stable identifier
-** Ensembl Prediction Transcript address
-** @argrule ByStableidentifier Ppt [EnsPPredictiontranscript*]
+** @argrule By Ppt [EnsPPredictiontranscript*]
 ** Ensembl Prediction Transcript address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4628,11 +4689,11 @@ EnsPFeatureadaptor ensPredictiontranscriptadaptorGetFeatureadaptor(
 ** identifier.
 ** The caller is responsible for deleting the Ensembl Prediction Transcript.
 **
-** @param [u] pta [EnsPPredictiontranscriptadaptor] Ensembl Prediction
-**                                                  Transcript Adaptor
+** @param [u] pta [EnsPPredictiontranscriptadaptor]
+** Ensembl Prediction Transcript Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
-** @param [wP] Ppt [EnsPPredictiontranscript*] Ensembl Prediction
-**                                             Transcript address
+** @param [wP] Ppt [EnsPPredictiontranscript*]
+** Ensembl Prediction Transcript address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4645,20 +4706,10 @@ AjBool ensPredictiontranscriptadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPPredictiontranscript *Ppt)
 {
-    EnsPBaseadaptor ba = NULL;
-
-    if (!pta)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Ppt)
-        return ajFalse;
-
-    ba = ensFeatureadaptorGetBaseadaptor(pta);
-
-    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Ppt);
+    return ensBaseadaptorFetchByIdentifier(
+        ensPredictiontranscriptadaptorGetBaseadaptor(pta),
+        identifier,
+        (void **) Ppt);
 }
 
 
@@ -4668,17 +4719,18 @@ AjBool ensPredictiontranscriptadaptorFetchByIdentifier(
 **
 ** Fetch an Ensembl Prediction Transcript via its stable identifier and
 ** version. This method is called FetchByStableidentifier for polymorphism with
-** the Ensembl Transcript Adaptor. Prediction Transcript display labels are
-** not necessarily stable in that the same identifier may be reused for a
-** completely different Prediction Transcript in a subsequent database release.
+** the Ensembl Transcript Adaptor. Prediction Transcript display
+** labels are not necessarily stable in that the same identifier may be reused
+** for a completely different Ensembl Prediction Transcript in a subsequent
+** database release.
 **
 ** The caller is responsible for deleting the Ensembl Prediction Transcript.
 **
-** @param [u] pta [EnsPPredictiontranscriptadaptor] Ensembl Prediction
-**                                                  Transcript Adaptor
+** @param [u] pta [EnsPPredictiontranscriptadaptor]
+** Ensembl Prediction Transcript Adaptor
 ** @param [r] stableid [const AjPStr] Stable identifier
-** @param [wP] Ppt [EnsPPredictiontranscript*] Ensembl Prediction
-**                                             Transcript address
+** @param [wP] Ppt [EnsPPredictiontranscript*]
+** Ensembl Prediction Transcript address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4692,6 +4744,8 @@ AjBool ensPredictiontranscriptadaptorFetchByStableidentifier(
     EnsPPredictiontranscript *Ppt)
 {
     char *txtstableid = NULL;
+
+    AjBool result = AJFALSE;
 
     AjPList pts = NULL;
 
@@ -4710,7 +4764,7 @@ AjBool ensPredictiontranscriptadaptorFetchByStableidentifier(
     if (!Ppt)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(pta);
+    ba = ensPredictiontranscriptadaptorGetBaseadaptor(pta);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -4721,16 +4775,17 @@ AjBool ensPredictiontranscriptadaptorFetchByStableidentifier(
 
     pts = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(ba,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       pts);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        pts);
 
     if (ajListGetLength(pts) > 1)
         ajDebug("ensPredictiontranscriptadaptorFetchByStableidentifier got "
-                "more than one Prediction Transcript for stable identifier "
-                "'%S'.\n",
+                "more than one Ensembl Prediction Transcript for "
+                "stable identifier '%S'.\n",
                 stableid);
 
     ajListPop(pts, (void **) Ppt);
@@ -4742,5 +4797,5 @@ AjBool ensPredictiontranscriptadaptorFetchByStableidentifier(
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }

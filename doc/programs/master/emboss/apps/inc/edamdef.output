@@ -5,109 +5,109 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM_data:1354
-name: Sequence profile
-namespace: data
-def: Some type of statistical model representing a (typically multiple) sequence alignment.
-subset: data
-synonym: "sequence profile" EXACT [http://semanticscience.org/resource/SIO_010531]
-is_a: EDAM_data:3031 ! Core data
-relationship: has_topic EDAM_topic:0188 ! Sequence profiles and HMMs
+id: EDAM_format:1391
+name: HMMER-aln
+namespace: format
+def: FASTA-style format for multiple sequences aligned by HMMER package to an HMM.
+subset: bioinformatics
+subset: edam
+subset: formats
+created_in: "beta12orEarlier"
+is_a: EDAM_format:2200 ! FASTA-like (text)
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2554 ! Alignment format (text)
 
 [Term]
-id: EDAM_operation:0467
-name: Protein secondary structure prediction (integrated)
-namespace: operation
-def: Predict secondary structure of protein sequence(s) using multiple methods to achieve better predictions.
-subset: operations
-is_a: EDAM_operation:0267 ! Protein secondary structure prediction
-
-[Term]
-id: EDAM_data:1385
-name: Sequence alignment (hybrid)
+id: EDAM_data:1383
+name: Sequence alignment (nucleic acid)
 namespace: data
-def: Alignment of multiple molecular sequences of different types.
-comment: Hybrid sequence alignments include for example genomic DNA to EST, cDNA or mRNA.
+def: Alignment of multiple nucleotide sequences.
+subset: bioinformatics
 subset: data
+subset: edam
+created_in: "beta12orEarlier"
 is_a: EDAM_data:0863 ! Sequence alignment
+is_a: EDAM_data:2084 ! Nucleic acid report
 
 [Term]
-id: EDAM_data:1384
-name: Sequence alignment (protein)
-namespace: data
-def: Alignment of multiple protein sequences.
-subset: data
-is_a: EDAM_data:0863 ! Sequence alignment
-is_a: EDAM_data:3154 ! Protein alignment
+id: EDAM_topic:0797
+name: Comparative genomics
+namespace: topic
+def: Topic concerning the study (typically comparison) of the sequence, structure or function of multiple genomes.
+subset: bioinformatics
+subset: edam
+subset: topics
+xref: BioCatalogue:Comparative Genomics
+created_in: "beta12orEarlier"
+is_a: EDAM_topic:0622 ! Genomics
 
 [Term]
-id: EDAM_data:0863
-name: Sequence alignment
-namespace: data
-def: Alignment of multiple molecular sequences.
-subset: data
-synonym: "Sequence alignment" EXACT [http://en.wikipedia.org/wiki/Sequence_alignment]
-synonym: "sequence alignment" EXACT [http://semanticscience.org/resource/SIO_010066]
-is_a: EDAM_data:1916 ! Alignment
-relationship: has_topic EDAM_topic:0182 ! Sequence alignment
+id: EDAM_format:2001
+name: EMBOSS simple format
+namespace: format
+def: EMBOSS simple multiple alignment format.
+subset: bioinformatics
+subset: edam
+subset: formats
+created_in: "beta12orEarlier"
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2554 ! Alignment format (text)
 
 [Term]
-id: EDAM_operation:0520
-name: PCR primer design (for conserved primers)
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-name: Comparative genomics
-namespace: topic
-def: Topic concerning the study (typically comparison) of the sequence, structure or function of multiple genomes.
-subset: topics
-xref: BioCatalogue:Comparative Genomics
-is_a: EDAM_topic:0622 ! Genomics
+subset: operations
+synonym: "Multiple sequence alignment (phylogenetic tree-based)" EXACT []
+synonym: "Phylogenetic tree-based multiple sequence alignment construction" EXACT []
+created_in: "beta12orEarlier"
+is_a: EDAM_operation:0492 ! Multiple sequence alignment construction
+relationship: has_topic EDAM_topic:0084 ! Phylogenetics
 
 [Term]
-id: EDAM_data:0850
-name: Sequence set
-namespace: data
-def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
-comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
+id: EDAM_operation:0498
+name: Multiple sequence alignment construction (consensus)
+namespace: operation
+def: Align two or more molecular sequences using multiple methods to achieve higher quality.
+subset: bioinformatics
+subset: edam
+subset: operations
+synonym: "Consensus multiple sequence alignment construction" EXACT []
+synonym: "Multiple sequence alignment (consensus)" EXACT []
+created_in: "beta12orEarlier"
+is_a: EDAM_operation:0492 ! Multiple sequence alignment construction
+
+[Term]
+id: EDAM_operation:0434
+name: Integrated gene prediction
+namespace: operation
+def: Predict whole gene structure using a combination of multiple methods to achieve better predictions.
+subset: bioinformatics
+subset: edam
+subset: operations
+created_in: "beta12orEarlier"
+is_a: EDAM_operation:0425 ! Whole gene prediction
+
+[Term]
+id: EDAM_data:0842
+name: Identifier
+namespace: identifier
+def: A text token, number or something else which identifies an entity, but which may not be persistent (stable) or unique (the same identifier may identify multiple things).
+subset: bioinformatics
 subset: data
-synonym: "sequence_collection" EXACT [SO:0001260]
-is_a: EDAM_data:2955 ! Sequence report
-
-[Term]
-id: EDAM_operation:0487
-name: Haplotype inference
-namespace: operation
-def: Infer haplotypes, either alleles at multiple loci that are transmitted together on the same chromosome, or a set of single nucleotide polymorphisms (SNPs) on a single chromatid that are statistically associated.
-comment: Haplotype inference can help in population genetic studies and the identification of complex disease genes, , and is typically based on aligned single nucleotide polymorphism (SNP) fragments. Haplotype comparison is a useful way to characterize the genetic variation between individuals. An individual's haplotype describes which nucleotide base occurs at each position for a set of common SNPs. Tools might use combinatorial functions (for example parsimony) or a likelihood function or model with optimization such as minimum error correction (MEC) model, expectation-maximization algorithm (EM), genetic algorithm or Markov chain Monte Carlo (MCMC).
-subset: operations
-synonym: "Haplotype mapping" EXACT [http://edamontology.org]
-synonym: "Haplotype reconstruction" EXACT [http://edamontology.org]
-is_a: EDAM_operation:0283 ! Linkage analysis
-relationship: has_output EDAM_data:1863 {min_cardinality=1} ! Haplotype map
-
-[Term]
-id: EDAM_format:2001
-name: simple
-namespace: format
-def: EMBOSS simple multiple alignment format.
-subset: formats
-is_a: EDAM_format:2554 ! Alignment format (text)
-is_a: EDAM_format:2330 ! Textual format
-
-[Term]
-id: EDAM_operation:2499
-name: Splicing analysis
-namespace: operation
-def: Analyse (e.g. characterize and model) alternative splicing events from comparing multiple nucleic acid sequences.
-subset: operations
-synonym: "Splicing modelling" EXACT [http://edamontology.org]
-is_a: EDAM_operation:2508 ! Nucleic acid sequence comparison
-is_a: EDAM_operation:2426 ! Modelling and simulation
-is_a: EDAM_operation:3024 ! Prediction, detection and recognition (nucleic acid)
-relationship: has_output EDAM_data:1307 {min_cardinality=1} ! Nucleic acid features (splice sites)
-relationship: has_topic EDAM_topic:0114 ! Gene structure and RNA splicing
+subset: edam
+subset: identifiers
+synonym: "WSIO_data:005" EXACT []
+synonym: "http://purl.org/dc/elements/1.1/identifier" NARROW []
+synonym: "ID" EXACT []
+synonym: "SIO:000115" EXACT []
+created_in: "beta12orEarlier"
+is_a: EDAM_data:0006 ! Data
+disjoint_from: EDAM_data:2048 ! Report
+disjoint_from: EDAM_data:2527 ! Parameter
+disjoint_from: EDAM_data:3031 ! Core data
+relationship: is_identifier_of EDAM_data:0006 ! Data
 
 </pre>
 </td></tr></table><p>
@@ -118,109 +118,109 @@ relationship: has_topic EDAM_topic:0114 ! Gene structure and RNA splicing
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM_data:1354
-name: Sequence profile
-namespace: data
-def: Some type of statistical model representing a (typically multiple) sequence alignment.
-subset: data
-synonym: "sequence profile" EXACT [http://semanticscience.org/resource/SIO_010531]
-is_a: EDAM_data:3031 ! Core data
-relationship: has_topic EDAM_topic:0188 ! Sequence profiles and HMMs
+id: EDAM_format:1391
+name: HMMER-aln
+namespace: format
+def: FASTA-style format for multiple sequences aligned by HMMER package to an HMM.
+subset: bioinformatics
+subset: edam
+subset: formats
+created_in: "beta12orEarlier"
+is_a: EDAM_format:2200 ! FASTA-like (text)
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2554 ! Alignment format (text)
 
 [Term]
-id: EDAM_data:1364
-name: Hidden Markov model
+id: EDAM_data:1383
+name: Sequence alignment (nucleic acid)
 namespace: data
-def: A hidden Markov model representation of a set or alignment of sequences.
+def: Alignment of multiple nucleotide sequences.
+subset: bioinformatics
 subset: data
-synonym: "HMM" EXACT [http://edamontology.org]
-is_a: EDAM_data:1354 ! Sequence profile
+subset: edam
+created_in: "beta12orEarlier"
+is_a: EDAM_data:0863 ! Sequence alignment
+is_a: EDAM_data:2084 ! Nucleic acid report
 
 [Term]
-id: EDAM_data:2854
-name: Position-specific scoring matrix
+id: EDAM_data:1386
+name: Sequence alignment (nucleic acid pair)
 namespace: data
-def: A simple matrix of numbers, where each value (or column of values) is derived derived from analysis of the corresponding position in a sequence alignment.
+def: Alignment of exactly two nucleotide sequences.
+subset: bioinformatics
 subset: data
-is_a: EDAM_data:1354 ! Sequence profile
-is_a: EDAM_data:2082 ! Matrix
+subset: edam
+created_in: "beta12orEarlier"
+is_a: EDAM_data:1381 ! Sequence alignment (pair)
+is_a: EDAM_data:1383 ! Sequence alignment (nucleic acid)
 
 [Term]
-id: EDAM_data:1361
-name: Position frequency matrix
-namespace: data
-def: A profile (typically representing a sequence alignment) that is a simple matrix of nucleotide (or amino acid) counts per position.
-subset: data
-synonym: "PFM" EXACT [http://edamontology.org]
-is_a: EDAM_data:2854 ! Position-specific scoring matrix
+id: EDAM_topic:0797
+name: Comparative genomics
+namespace: topic
+def: Topic concerning the study (typically comparison) of the sequence, structure or function of multiple genomes.
+subset: bioinformatics
+subset: edam
+subset: topics
+xref: BioCatalogue:Comparative Genomics
+created_in: "beta12orEarlier"
+is_a: EDAM_topic:0622 ! Genomics
 
 [Term]
-id: EDAM_data:1362
-name: Position weight matrix
-namespace: data
-def: A profile (typically representing a sequence alignment) that is weighted matrix of nucleotide (or amino acid) counts per position.
-comment: Contributions of individual sequences to the matrix might be uneven (weighted).
-subset: data
-synonym: "PWM" EXACT [http://edamontology.org]
-is_a: EDAM_data:2854 ! Position-specific scoring matrix
-
-[Term]
-id: EDAM_data:1363
-name: Information content matrix
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-id: EDAM_data:2245
-name: Sequence set (bootstrapped)
+regex: "[0-9]+"
+is_a: EDAM_data:2091 ! Accession
+
+[Term]
+id: EDAM_data:1047
+name: URI
 namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedure.
-comment: Bootstrapping is often performed in phylogenetic analysis.
+def: A string of characters that name or otherwise identify a resource on the Internet.
+subset: bioinformatics
 subset: data
-is_a: EDAM_data:0850 ! Sequence set
+subset: edam
+created_in: "beta12orEarlier"
+is_a: EDAM_data:0842 ! Identifier
 
 [Term]
-id: EDAM_operation:0487
-name: Haplotype inference
-namespace: operation
-def: Infer haplotypes, either alleles at multiple loci that are transmitted together on the same chromosome, or a set of single nucleotide polymorphisms (SNPs) on a single chromatid that are statistically associated.
-comment: Haplotype inference can help in population genetic studies and the identification of complex disease genes, , and is typically based on aligned single nucleotide polymorphism (SNP) fragments. Haplotype comparison is a useful way to characterize the genetic variation between individuals. An individual's haplotype describes which nucleotide base occurs at each position for a set of common SNPs. Tools might use combinatorial functions (for example parsimony) or a likelihood function or model with optimization such as minimum error correction (MEC) model, expectation-maximization algorithm (EM), genetic algorithm or Markov chain Monte Carlo (MCMC).
-subset: operations
-synonym: "Haplotype mapping" EXACT [http://edamontology.org]
-synonym: "Haplotype reconstruction" EXACT [http://edamontology.org]
-is_a: EDAM_operation:0283 ! Linkage analysis
-relationship: has_output EDAM_data:1863 {min_cardinality=1} ! Haplotype map
+id: EDAM_data:1052
+name: URL
+namespace: data
+def: A Uniform Resource Locator (URL).
+subset: bioinformatics
+subset: data
+subset: edam
+xref: Moby:Link
+xref: Moby:URL
+created_in: "beta12orEarlier"
+is_a: EDAM_data:1047 ! URI
 
 [Term]
-id: EDAM_format:2001
-name: simple
-namespace: format
-def: EMBOSS simple multiple alignment format.
-subset: formats
-is_a: EDAM_format:2554 ! Alignment format (text)
-is_a: EDAM_format:2330 ! Textual format
+id: EDAM_data:1053
+name: URN
+namespace: data
+def: A Uniform Resource Name (URN).
+subset: bioinformatics
+subset: data
+subset: edam
+created_in: "beta12orEarlier"
+is_a: EDAM_data:1047 ! URI
 
 [Term]
-id: EDAM_operation:2499
-name: Splicing analysis
-namespace: operation
-def: Analyse (e.g. characterize and model) alternative splicing events from comparing multiple nucleic acid sequences.
-subset: operations
-synonym: "Splicing modelling" EXACT [http://edamontology.org]
-is_a: EDAM_operation:2508 ! Nucleic acid sequence comparison
-is_a: EDAM_operation:2426 ! Modelling and simulation
-is_a: EDAM_operation:3024 ! Prediction, detection and recognition (nucleic acid)
-relationship: has_output EDAM_data:1307 {min_cardinality=1} ! Nucleic acid features (splice sites)
-relationship: has_topic EDAM_topic:0114 ! Gene structure and RNA splicing
-
-[Term]
-id: EDAM_operation:0264
-name: Splice transcript prediction
-namespace: operation
-def: Predict splicing alternatives or transcript isoforms from analysis of sequence data.
-subset: operations
-is_a: EDAM_operation:2499 ! Splicing analysis
-relationship: has_topic EDAM_topic:0114 ! Gene structure and RNA splicing
+id: EDAM_data:1055
+name: LSID
+namespace: data
+def: A Life Science Identifier (LSID) - a unique identifier of some data.
+comment: LSIDs provide a standard way to locate and describe data. An LSID is represented as a Uniform Resource Name (URN) with the following EDAM_format: URN:LSID:&lt;Authority&gt;:&lt;Namespace&gt;:&lt;ObjectID&gt;[:&lt;Version&gt;]
+subset: bioinformatics
+subset: data
+subset: edam
+synonym: "Life Science Identifier" EXACT []
+created_in: "beta12orEarlier"
+is_a: EDAM_data:1053 ! URN
 
 </pre>
 </td></tr></table><p>

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.15 $
+** @version $Revision: 1.17 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -61,13 +61,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic ontologyadaptorKTables ****************************************
+/* @conststatic ontologyadaptorKTablenames ************************************
 **
 ** Array of Ensembl Ontology Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const ontologyadaptorKTables[] =
+static const char *const ontologyadaptorKTablenames[] =
 {
     "ontology",
     (const char *) NULL
@@ -76,13 +76,13 @@ static const char *const ontologyadaptorKTables[] =
 
 
 
-/* @conststatic ontologyadaptorKColumns ***************************************
+/* @conststatic ontologyadaptorKColumnnames ***********************************
 **
 ** Array of Ensembl Ontology Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const ontologyadaptorKColumns[] =
+static const char *const ontologyadaptorKColumnnames[] =
 {
     "ontology.ontology_id",
     "ontology.name",
@@ -93,13 +93,13 @@ static const char *const ontologyadaptorKColumns[] =
 
 
 
-/* @conststatic ontologytermadaptorKTables ************************************
+/* @conststatic ontologytermadaptorKTablenames ********************************
 **
 ** Array of Ensembl Ontology Term Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const ontologytermadaptorKTables[] =
+static const char *const ontologytermadaptorKTablenames[] =
 {
     "term",
     (const char *) NULL
@@ -108,13 +108,13 @@ static const char *const ontologytermadaptorKTables[] =
 
 
 
-/* @conststatic ontologytermadaptorKColumns ***********************************
+/* @conststatic ontologytermadaptorKColumnnames *******************************
 **
 ** Array of Ensembl Ontology Term Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const ontologytermadaptorKColumns[] =
+static const char *const ontologytermadaptorKColumnnames[] =
 {
     "term.term_id",
     "term.ontology_id",
@@ -380,14 +380,7 @@ void ensOntologyDel(EnsPOntology *Pontology)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pontology)
-        return;
-
-    pthis = *Pontology;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pontology) || --pthis->Use)
     {
         *Pontology = NULL;
 
@@ -397,9 +390,7 @@ void ensOntologyDel(EnsPOntology *Pontology)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Space);
 
-    AJFREE(pthis);
-
-    *Pontology = NULL;
+    ajMemFree((void **) Pontology);
 
     return;
 }
@@ -726,11 +717,11 @@ AjBool ensOntologyTrace(const EnsPOntology ontology, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Ontology object.
+** Functions for calculating information from an Ensembl Ontology object.
 **
 ** @fdata [EnsPOntology]
 **
-** @nam3rule Calculate Calculate Ensembl Ontology values
+** @nam3rule Calculate Calculate Ensembl Ontology information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * ontology [const EnsPOntology] Ensembl Ontology
@@ -956,8 +947,8 @@ EnsPOntologyadaptor ensOntologyadaptorNew(
 
     oa->Adaptor = ensBaseadaptorNew(
         dba,
-        ontologyadaptorKTables,
-        ontologyadaptorKColumns,
+        ontologyadaptorKTablenames,
+        ontologyadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1034,7 +1025,7 @@ static AjBool ontologyadaptorCacheInit(EnsPOntologyadaptor oa)
         return ajFalse;
     else
     {
-        oa->CacheByIdentifier = ajTableuintNew(0);
+        oa->CacheByIdentifier = ajTableuintNew(0U);
 
         ajTableSetDestroyvalue(
             oa->CacheByIdentifier,
@@ -1045,7 +1036,7 @@ static AjBool ontologyadaptorCacheInit(EnsPOntologyadaptor oa)
         return ajFalse;
     else
     {
-        oa->CacheByNamespace = ajTablestrNew(0);
+        oa->CacheByNamespace = ajTablestrNew(0U);
 
         ajTableSetDestroyvalue(
             oa->CacheByNamespace,
@@ -1054,11 +1045,12 @@ static AjBool ontologyadaptorCacheInit(EnsPOntologyadaptor oa)
 
     ontologies = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(oa->Adaptor,
-                                       (const AjPStr) NULL,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       ontologies);
+    ensBaseadaptorFetchAllbyConstraint(
+        ensOntologyadaptorGetBaseadaptor(oa),
+        (const AjPStr) NULL,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        ontologies);
 
     while (ajListPop(ontologies, (void **) &ontology))
     {
@@ -1305,19 +1297,15 @@ void ensOntologyadaptorDel(EnsPOntologyadaptor *Poa)
                 *Poa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Poa)
+    if (!(pthis = *Poa))
         return;
-
-    pthis = *Poa;
 
     ajTableDel(&pthis->CacheByIdentifier);
     ajTableDel(&pthis->CacheByNamespace);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    AJFREE(pthis);
-
-    *Poa = NULL;
+    ajMemFree((void **) Poa);
 
     return;
 }
@@ -1335,11 +1323,12 @@ void ensOntologyadaptorDel(EnsPOntologyadaptor *Poa)
 ** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * oa [const EnsPOntologyadaptor] Ensembl Ontology Adaptor
+** @argrule * oa [EnsPOntologyadaptor] Ensembl Ontology Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** or NULL
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1351,7 +1340,7 @@ void ensOntologyadaptorDel(EnsPOntologyadaptor *Poa)
 **
 ** Get the Ensembl Base Adaptor member of an Ensembl Ontology Adaptor.
 **
-** @param [r] oa [const EnsPOntologyadaptor] Ensembl Ontology Adaptor
+** @param [u] oa [EnsPOntologyadaptor] Ensembl Ontology Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 **
@@ -1360,7 +1349,7 @@ void ensOntologyadaptorDel(EnsPOntologyadaptor *Poa)
 ******************************************************************************/
 
 EnsPBaseadaptor ensOntologyadaptorGetBaseadaptor(
-    const EnsPOntologyadaptor oa)
+    EnsPOntologyadaptor oa)
 {
     if (!oa)
         return NULL;
@@ -1375,7 +1364,7 @@ EnsPBaseadaptor ensOntologyadaptorGetBaseadaptor(
 **
 ** Get the Ensembl Database Adaptor member of an Ensembl Ontology Adaptor.
 **
-** @param [r] oa [const EnsPOntologyadaptor] Ensembl Ontology Adaptor
+** @param [u] oa [EnsPOntologyadaptor] Ensembl Ontology Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 **
@@ -1384,12 +1373,13 @@ EnsPBaseadaptor ensOntologyadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensOntologyadaptorGetDatabaseadaptor(
-    const EnsPOntologyadaptor oa)
+    EnsPOntologyadaptor oa)
 {
     if (!oa)
         return NULL;
 
-    return (oa) ? ensBaseadaptorGetDatabaseadaptor(oa->Adaptor) : NULL;
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensOntologyadaptorGetBaseadaptor(oa));
 }
 
 
@@ -1581,11 +1571,7 @@ AjBool ensOntologyadaptorFetchByIdentifier(EnsPOntologyadaptor oa,
                                            ajuint identifier,
                                            EnsPOntology *Pontology)
 {
-    AjPList ontologies = NULL;
-
-    AjPStr constraint = NULL;
-
-    EnsPOntology ontology = NULL;
+    AjBool result = AJFALSE;
 
     if (!oa)
         return ajFalse;
@@ -1617,37 +1603,14 @@ AjBool ensOntologyadaptorFetchByIdentifier(EnsPOntologyadaptor oa,
 
     /* For a cache miss re-query the database. */
 
-    constraint = ajFmtStr("ontology.ontology_id = %u", identifier);
-
-    ontologies = ajListNew();
-
-    ensBaseadaptorFetchAllbyConstraint(oa->Adaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       ontologies);
-
-    if (ajListGetLength(ontologies) > 1)
-        ajWarn("ensOntologyadaptorFetchByIdentifier got more than one "
-               "Ensembl Ontology for (PRIMARY KEY) identifier %u.\n",
-               identifier);
-
-    ajListPop(ontologies, (void **) Pontology);
+    result = ensBaseadaptorFetchByIdentifier(
+        ensOntologyadaptorGetBaseadaptor(oa),
+        identifier,
+        (void **) Pontology);
 
     ontologyadaptorCacheInsert(oa, Pontology);
 
-    while (ajListPop(ontologies, (void **) &ontology))
-    {
-        ontologyadaptorCacheInsert(oa, &ontology);
-
-        ensOntologyDel(&ontology);
-    }
-
-    ajListFree(&ontologies);
-
-    ajStrDel(&constraint);
-
-    return ajTrue;
+    return result;
 }
 
 
@@ -1678,10 +1641,14 @@ AjBool ensOntologyadaptorFetchByName(EnsPOntologyadaptor oa,
     char *txtname  = NULL;
     char *txtspace = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPList ontologies = NULL;
 
     AjPStr constraint = NULL;
     AjPStr key        = NULL;
+
+    EnsPBaseadaptor ba = NULL;
 
     EnsPOntology ontology = NULL;
 
@@ -1720,8 +1687,10 @@ AjBool ensOntologyadaptorFetchByName(EnsPOntologyadaptor oa,
 
     /* In case of a cache miss, re-query the database. */
 
-    ensBaseadaptorEscapeC(oa->Adaptor, &txtname, name);
-    ensBaseadaptorEscapeC(oa->Adaptor, &txtspace, space);
+    ba = ensOntologyadaptorGetBaseadaptor(oa);
+
+    ensBaseadaptorEscapeC(ba, &txtname, name);
+    ensBaseadaptorEscapeC(ba, &txtspace, space);
 
     constraint = ajFmtStr("ontology.name = '%s' AND ontology.namespace = '%s'",
                           txtname, txtspace);
@@ -1731,11 +1700,12 @@ AjBool ensOntologyadaptorFetchByName(EnsPOntologyadaptor oa,
 
     ontologies = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(oa->Adaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       ontologies);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        ontologies);
 
     if (ajListGetLength(ontologies) > 1)
         ajWarn("ensOntologyadaptorFetchByName got more than one "
@@ -1757,7 +1727,7 @@ AjBool ensOntologyadaptorFetchByName(EnsPOntologyadaptor oa,
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1951,14 +1921,7 @@ void ensOntologysynonymDel(EnsPOntologysynonym *Pos)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pos)
-        return;
-
-    pthis = *Pos;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pos) || --pthis->Use)
     {
         *Pos = NULL;
 
@@ -1967,9 +1930,7 @@ void ensOntologysynonymDel(EnsPOntologysynonym *Pos)
 
     ajStrDel(&pthis->Name);
 
-    AJFREE(pthis);
-
-    *Pos = NULL;
+    ajMemFree((void **) Pos);
 
     return;
 }
@@ -2244,11 +2205,12 @@ AjBool ensOntologysynonymTrace(const EnsPOntologysynonym os, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Ontology Synonym object.
+** Functions for calculating information from an
+** Ensembl Ontology Synonym object.
 **
 ** @fdata [EnsPOntologysynonym]
 **
-** @nam3rule Calculate Calculate Ensembl Ontology Synonym values
+** @nam3rule Calculate Calculate Ensembl Ontology Synonym information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * os [const EnsPOntologysynonym] Ensembl Ontology Synonym
@@ -2302,7 +2264,7 @@ size_t ensOntologysynonymCalculateMemsize(const EnsPOntologysynonym os)
 **
 ** @cc Bio::EnsEMBL::OntologyTerm
 ** @cc CVS Revision: 1.18
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -2547,14 +2509,7 @@ void ensOntologytermDel(EnsPOntologyterm *Pot)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pot)
-        return;
-
-    pthis = *Pot;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pot) || --pthis->Use)
     {
         *Pot = NULL;
 
@@ -2576,9 +2531,7 @@ void ensOntologytermDel(EnsPOntologyterm *Pot)
 
     ajListFree(&pthis->Ontologysynonyms);
 
-    AJFREE(pthis);
-
-    *Pot = NULL;
+    ajMemFree((void **) Pot);
 
     return;
 }
@@ -3155,11 +3108,11 @@ AjBool ensOntologytermTrace(const EnsPOntologyterm ot, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Ontology Term object.
+** Functions for calculating information from an Ensembl Ontology Term object.
 **
 ** @fdata [EnsPOntologyterm]
 **
-** @nam3rule Calculate Calculate Ensembl Ontology Term values
+** @nam3rule Calculate Calculate Ensembl Ontology Term information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * ot [const EnsPOntologyterm] Ensembl Ontology Term
@@ -3235,8 +3188,8 @@ size_t ensOntologytermCalculateMemsize(const EnsPOntologyterm ot)
 ** Ensembl Ontology Term Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::OntologyTermAdaptor
-** @cc CVS Revision: 1.44
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.45
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3415,18 +3368,10 @@ static AjBool ontologytermadaptorFetchAllbyStatement(
 EnsPOntologytermadaptor ensOntologytermadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
-    if (ajDebugTest("ensOntologytermadaptorNew"))
-        ajDebug("ensOntologytermadaptorNew\n"
-                "  dba %p\n",
-                dba);
-
     return ensBaseadaptorNew(
         dba,
-        ontologytermadaptorKTables,
-        ontologytermadaptorKColumns,
+        ontologytermadaptorKTablenames,
+        ontologytermadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -3481,7 +3426,79 @@ void ensOntologytermadaptorDel(EnsPOntologytermadaptor *Pota)
 {
     ensBaseadaptorDel(Pota);
 
-	return;
+    return;
+}
+
+
+
+
+/* @section member retrieval **************************************************
+**
+** Functions for returning members of an
+** Ensembl Ontology Term Adaptor object.
+**
+** @fdata [EnsPOntologytermadaptor]
+**
+** @nam3rule Get Return Ensembl Ontology Term Adaptor attribute(s)
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+**
+** @argrule * ota [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor
+**
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensOntologytermadaptorGetBaseadaptor *********************************
+**
+** Get the Ensembl Base Adaptor member of an
+** Ensembl Ontology Term Adaptor.
+**
+** @param [u] ota [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensOntologytermadaptorGetBaseadaptor(
+    EnsPOntologytermadaptor ota)
+{
+    return ota;
+}
+
+
+
+
+/* @func ensOntologytermadaptorGetDatabaseadaptor *****************************
+**
+** Get the Ensembl Database Adaptor member of an
+** Ensembl Ontology Term Adaptor.
+**
+** @param [u] ota [EnsPOntologytermadaptor]
+** Ensembl Ontology Term Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensOntologytermadaptorGetDatabaseadaptor(
+    EnsPOntologytermadaptor ota)
+{
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensOntologytermadaptorGetBaseadaptor(ota));
 }
 
 
@@ -3518,6 +3535,9 @@ void ensOntologytermadaptorDel(EnsPOntologytermadaptor *Pota)
 ** @argrule AllbyDescendant ot [EnsPOntologyterm] Ensembl Ontology Term
 ** @argrule AllbyDescendant subset [const AjPStr] Ontology subset
 ** @argrule AllbyDescendant closest [AjBool] Closest only
+** @argrule AllbyDescendant zerodistance [AjBool]
+** Return Ensembl Ontology Term objects with zero distance or
+** only above the current level
 ** @argrule AllbyName termname [const AjPStr] Term name
 ** @argrule AllbyName ontologyname [const AjPStr] Ontology name
 ** @argrule AllbyParent ot [EnsPOntologyterm] Ensembl Ontology Term
@@ -3556,13 +3576,9 @@ AjBool ensOntologytermadaptorFetchAll(
     EnsPOntologytermadaptor ota,
     AjPList ots)
 {
-    if (!ota)
-        return ajFalse;
-
-    if (!ots)
-        return ajFalse;
-
-    return ensBaseadaptorFetchAll(ota, ots);
+    return ensBaseadaptorFetchAll(
+        ensOntologytermadaptorGetBaseadaptor(ota),
+        ots);
 }
 
 
@@ -3621,7 +3637,7 @@ AjBool ensOntologytermadaptorFetchAllbyAncestor(
     if (!ots)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(ota);
+    dba = ensOntologytermadaptorGetDatabaseadaptor(ota);
 
     oa = ensRegistryGetOntologyadaptor(dba);
 
@@ -3801,13 +3817,13 @@ AjBool ensOntologytermadaptorFetchAllbyChild(
 
     if (!ot->Parents)
     {
-        ot->Parents = ajTablestrNew(0);
+        ot->Parents = ajTablestrNew(0U);
 
         ajTableSetDestroyvalue(
             ot->Parents,
             &ontologytermListOntologytermValdel);
 
-        dba = ensBaseadaptorGetDatabaseadaptor(ota);
+        dba = ensOntologytermadaptorGetDatabaseadaptor(ota);
 
         oa  = ensRegistryGetOntologyadaptor(dba);
 
@@ -3937,6 +3953,9 @@ AjBool ensOntologytermadaptorFetchAllbyChild(
 ** pattern, e.g., "%goslim%" (but "goslim%" might not do what you expect),
 ** or as a specific subset name, e.g., "goslim_generic".
 ** @param [r] closest [AjBool] Closest only
+** @param [r] zerodistance [AjBool]
+** Return Ensembl Ontology Term objects with zero distance or
+** only above the current level
 ** @param [u] ots [AjPList] AJAX List of Ensembl Ontology Term objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3950,9 +3969,12 @@ AjBool ensOntologytermadaptorFetchAllbyDescendant(
     EnsPOntologyterm ot,
     const AjPStr subset,
     AjBool closest,
+    AjBool zerodistance,
     AjPList ots)
 {
     char *txtsubset = NULL;
+
+    ajint  qrydistance = 0;
 
     ajuint identifier  = 0U;
     ajuint distance    = 0U;
@@ -3987,9 +4009,11 @@ AjBool ensOntologytermadaptorFetchAllbyDescendant(
     if (!ots)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(ota);
+    dba = ensOntologytermadaptorGetDatabaseadaptor(ota);
 
-    oa  = ensRegistryGetOntologyadaptor(dba);
+    oa = ensRegistryGetOntologyadaptor(dba);
+
+    qrydistance = (zerodistance) ? -1 : 0;
 
     statement = ajFmtStr(
         "SELECT DISTINCT "
@@ -4009,12 +4033,13 @@ AjBool ensOntologytermadaptorFetchAllbyDescendant(
         "WHERE "
         "closure.child_term_id = %u "
         "AND "
-        "closure.distance > 0",
-        ot->Identifier);
+        "closure.distance > %d",
+        ot->Identifier,
+        qrydistance);
 
     if (subset && ajStrGetLen(subset))
     {
-        ensBaseadaptorEscapeC(ot->Adaptor, &txtsubset, subset);
+        ensDatabaseadaptorEscapeC(dba, &txtsubset, subset);
 
         if (ajStrFindC(subset, "%") != -1)
             ajFmtPrintAppS(&statement,
@@ -4128,6 +4153,8 @@ AjBool ensOntologytermadaptorFetchAllbyName(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!ota)
         return ajFalse;
 
@@ -4137,7 +4164,9 @@ AjBool ensOntologytermadaptorFetchAllbyName(
     if (!ots)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(ota, &txtname, termname);
+    ba = ensOntologytermadaptorGetBaseadaptor(ota);
+
+    ensBaseadaptorEscapeC(ba, &txtname, termname);
 
     statement = ajStrNewC(
         "SELECT "
@@ -4177,7 +4206,7 @@ AjBool ensOntologytermadaptorFetchAllbyName(
 
     if ((ontologyname != NULL) && (ajStrGetLen(ontologyname) > 0))
     {
-        ensBaseadaptorEscapeC(ota, &txtname, ontologyname);
+        ensBaseadaptorEscapeC(ba, &txtname, ontologyname);
         ajFmtPrintAppS(&statement, " AND ontology.name = '%s'", txtname);
         ajCharDel(&txtname);
     }
@@ -4260,15 +4289,15 @@ AjBool ensOntologytermadaptorFetchAllbyParent(
 
     if (!ot->Children)
     {
-        ot->Children = ajTablestrNew(0);
+        ot->Children = ajTablestrNew(0U);
 
         ajTableSetDestroyvalue(
             ot->Children,
             &ontologytermListOntologytermValdel);
 
-        dba = ensBaseadaptorGetDatabaseadaptor(ota);
+        dba = ensOntologytermadaptorGetDatabaseadaptor(ota);
 
-        oa  = ensRegistryGetOntologyadaptor(dba);
+        oa = ensRegistryGetOntologyadaptor(dba);
 
         statement = ajFmtStr(
             "SELECT "
@@ -4420,7 +4449,10 @@ AjBool ensOntologytermadaptorFetchByAccession(
     if (!Pot)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(ota, &txtaccession, accession);
+    ensBaseadaptorEscapeC(
+        ensOntologytermadaptorGetBaseadaptor(ota),
+        &txtaccession,
+        accession);
 
     statement = ajFmtStr(
         "SELECT "
@@ -4488,16 +4520,10 @@ AjBool ensOntologytermadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPOntologyterm *Pot)
 {
-    if (!ota)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Pot)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(ota, identifier, (void **) Pot);
+    return ensBaseadaptorFetchByIdentifier(
+        ensOntologytermadaptorGetBaseadaptor(ota),
+        identifier,
+        (void **) Pot);
 }
 
 
@@ -4505,14 +4531,14 @@ AjBool ensOntologytermadaptorFetchByIdentifier(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for fetching objects releated to Ensembl Ontology Term objects
+** Functions for retrieving objects releated to Ensembl Ontology Term objects
 ** from an Ensembl SQL database.
 **
 ** @fdata [EnsPOntologytermadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Ontology Term-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Ontology Term-releated objects
-** @nam5rule Ontologysynonyms Fetch all Ensembl Ontology Synonym objects
+** @nam5rule Ontologysynonyms Retrieve all Ensembl Ontology Synonym objects
 **
 ** @argrule * ota [EnsPOntologytermadaptor] Ensembl Ontology Term Adaptor
 ** @argrule Ontologysynonyms ot [const EnsPOntologyterm] Ensembl Ontology Term
@@ -4572,7 +4598,7 @@ AjBool ensOntologytermadaptorRetrieveAllOntologysynonyms(
     if (!oss)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(ota);
+    dba = ensOntologytermadaptorGetDatabaseadaptor(ota);
 
     statement = ajFmtStr(
         "SELECT "

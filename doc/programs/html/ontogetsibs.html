@@ -84,7 +84,7 @@ Obo output file [0575.obo]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Get ontology term(s) by id with common parent
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -384,9 +384,12 @@ id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
+subset: bioinformatics
+subset: edam
 subset: operations
-is_a: EDAM_operation:0573 ! Map rendering
+created_in: "beta12orEarlier"
 is_a: EDAM_operation:0431 ! Restriction site recognition
+is_a: EDAM_operation:0573 ! Map rendering
 relationship: has_output EDAM_data:1289 ! Restriction map
 
 </pre>
@@ -429,27 +432,36 @@ id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
+subset: bioinformatics
+subset: edam
 subset: operations
-is_a: EDAM_operation:0573 ! Map rendering
+created_in: "beta12orEarlier"
 is_a: EDAM_operation:0431 ! Restriction site recognition
-relationship: has_output EDAM_data:1289 ! Restriction map
-
-[Term]
-id: EDAM_operation:0578
-name: DNA circular map rendering
-namespace: operation
-def: Draw a circular maps of DNA, for example a plasmid map.
-subset: operations
 is_a: EDAM_operation:0573 ! Map rendering
+relationship: has_output EDAM_data:1289 ! Restriction map
 
 [Term]
 id: EDAM_operation:0579
 name: Operon rendering
 namespace: operation
 def: Visualise operon structure etc.
+subset: bioinformatics
+subset: edam
 subset: operations
+created_in: "beta12orEarlier"
 is_a: EDAM_operation:0573 ! Map rendering
 relationship: has_topic EDAM_topic:0109 ! Gene finding
+
+[Term]
+id: EDAM_operation:0578
+name: DNA circular map rendering
+namespace: operation
+def: Draw a circular maps of DNA, for example a plasmid map.
+subset: bioinformatics
+subset: edam
+subset: operations
+created_in: "beta12orEarlier"
+is_a: EDAM_operation:0573 ! Map rendering
 
 </pre>
 </td></tr></table><p>

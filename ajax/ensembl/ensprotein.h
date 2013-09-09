@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.6 $
+** @version $Revision: 1.7 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:22:27 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -164,6 +164,9 @@ EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa);
+
+EnsPBaseadaptor ensProteinfeatureadaptorGetBaseadaptor(
+    EnsPProteinfeatureadaptor pfa);
 
 EnsPDatabaseadaptor ensProteinfeatureadaptorGetDatabaseadaptor(
     EnsPProteinfeatureadaptor pfa);

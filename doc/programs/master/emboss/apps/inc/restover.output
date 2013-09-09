@@ -4,17 +4,21 @@
 <p><h3>File: x65923.restover</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# Restrict of X65923 from 1 to 518
+# Restover of X65923 from 1 to 518
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
 # Minimum length of recognition site: 2
 # Number of hits with any overlap: 54
 # Base Number	Enzyme		Site		5'	3'	[5'	3']
-	11	TaqI            TCGA            11	13	
 	28	AciI            CCGC            25	27	
-	38	AciI            CCGC            38	40	
+	229	AciI            CCGC            226	228	
+	380	AciI            CCGC            377	379	
+	383	AciI            CCGC            380	382	
 	44	BceAI           ACGGC           25	27	
+	225	BsrI            ACTGG           221	219	
+	11	TaqI            TCGA            11	13	
+	38	AciI            CCGC            38	40	
 	71	AciI            CCGC            71	73	
 	73	Hin6I           GCGC            73	75	
 	94	TaqI            TCGA            94	96	
@@ -22,11 +26,7 @@
 	162	HpaII           CCGG            162	164	
 	190	Hin6I           GCGC            190	192	
 	192	Hin6I           GCGC            192	194	
-	225	BsrI            ACTGG           221	219	
-	229	AciI            CCGC            226	228	
 	263	AciI            CCGC            263	265	
-	380	AciI            CCGC            377	379	
-	383	AciI            CCGC            380	382	
 	395	HpaII           CCGG            395	397	
 	398	Hin6I           GCGC            398	400	
 	408	AclI            AACGTT          409	411	

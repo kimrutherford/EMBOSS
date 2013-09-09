@@ -3,10 +3,10 @@
 ** AJAX OBO writing functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.14 $
+** @version $Revision: 1.15 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added output formats
-** @modified $Date: 2012/03/12 17:39:15 $ by $Author: rice $
+** @modified $Date: 2012/08/21 10:54:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -53,6 +53,7 @@ static AjBool oboWriteXml(AjPFile outf, const AjPObo obo);
 ** @alias OboOOutFormat
 **
 ** @attr Name [const char*] Format name
+** @attr Obo  [const char*] Ontology term id from EDAM
 ** @attr Desc [const char*] Format description
 ** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
@@ -61,6 +62,7 @@ static AjBool oboWriteXml(AjPFile outf, const AjPObo obo);
 typedef struct OboSOutFormat
 {
     const char *Name;
+    const char *Obo;
     const char *Desc;
     AjBool (*Write) (AjPFile outf, const AjPObo obo);
 } OboOOutFormat;
@@ -70,23 +72,23 @@ typedef struct OboSOutFormat
 
 static OboOOutFormat obooutFormatDef[] =
 {
-/* "Name",        "Description" */
+/*   "Name",        OBO     "Description" */
 /*     WriteFunction */
-  {"obo",         "OBO format",
+    {"obo",         "2196", "OBO format",
        &oboWriteObo},
-  {"brief",       "OBO format id, name and namespace only",
+    {"brief",       "0000", "OBO format id, name and namespace only",
        &oboWriteObobrief},
-  {"list",        "Identifier only",
+    {"list",        "0000", "Identifier only",
        &oboWriteList},
-  {"html",        "HTML with markup",
+    {"html",        "2331", "HTML with markup",
        &oboWriteHtml},
-  {"xml",         "XML format",
-       &oboWriteXml},
-  {"json",        "JSON format",
+    {"xml",         "2332", "XML format",
+     &oboWriteXml},
+    {"json",        "0000", "JSON format",
        &oboWriteJson},
-  {"excel",       "Tab-delimited file for import to Microsoft Excel",
+    {"excel",       "0000", "Tab-delimited file for import to Microsoft Excel",
        &oboWriteExcel},
-  {NULL, NULL, NULL}
+    {NULL, NULL, NULL, NULL}
 };
 
 
