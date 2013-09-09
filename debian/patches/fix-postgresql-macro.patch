@@ -11,7 +11,7 @@ LastChanged: Mon, 09 Sep 2013 14:48:22 +0200 (Andreas Tille, adapt to 6.6.0)
  
        EMBCPPFLAGS="${CPPFLAGS}"
 -      EMBLDFLAGS="${LDFLAGS}"
-+      EMBLIBS="{$LIBS}"
++      EMBLIBS="${LIBS}"
  
        CPPFLAGS="${POSTGRESQL_CPPFLAGS} ${EMBCPPFLAGS}"
 -      LDFLAGS="${POSTGRESQL_LDFLAGS} ${EMBLDFLAGS}"
