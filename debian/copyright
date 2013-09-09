@@ -247,6 +247,7 @@ License: LGPL-2.1+ and MIT
 Files: emboss/data/TAXONOMY/*.dmp
 Homepage: http://www.ncbi.nlm.nih.gov/taxonomy
 Copyright: Probably public domain (under investigation).
+License: CC-BY-3.0
 
 Files: emboss/data/OBO/*.obo
 Homepage: http://code.google.com/p/obo-relations/
