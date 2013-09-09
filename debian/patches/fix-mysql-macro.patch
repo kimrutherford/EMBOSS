@@ -2,28 +2,29 @@ Description: Enable linking mysqlclient with linker set for --as-needed
 Author: Felix Geyer <fgeyer@debian.org>
 Date: Sun, 29 Jul 2012 22:07:33 +0200
 Bugs-Debian: http://bugs.debian.org/650237
+LastChanged: Mon, 09 Sep 2013 14:48:22 +0200 (Andreas Tille, adapt to 6.6.0)
 
 --- a/m4/mysql.m4
 +++ b/m4/mysql.m4
-@@ -100,10 +100,10 @@ dnl provides it in the mysql RPM even th
- dnl not be installed
+@@ -101,10 +101,10 @@ AC_DEFUN([AX_LIB_MYSQL],
+       dnl not be installed
  
-             EMBCPPFLAGS=$CPPFLAGS
--	    EMBLDFLAGS=$LDFLAGS
-+	    EMBLIBS=$LIBS
-             
-             CPPFLAGS="$MYSQL_CPPFLAGS $EMBCPPFLAGS"
--	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
-+	    LIBS="$MYSQL_LDFLAGS $EMBLIBS"
+       EMBCPPFLAGS="${CPPFLAGS}"
+-      EMBLDFLAGS="${LDFLAGS}"
++      EMBLIBS="${LIBS}"
  
-             AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
-                                               #include "mysql.h"]],
-@@ -112,7 +112,7 @@ dnl not be installed
- 			   [havemysql=no])
+       CPPFLAGS="${MYSQL_CPPFLAGS} ${EMBCPPFLAGS}"
+-      LDFLAGS="${MYSQL_LDFLAGS} ${EMBLDFLAGS}"
++      LIBS="${MYSQL_LDFLAGS} ${EMBLIBS}"
  
- 	    CPPFLAGS=$EMBCPPFLAGS
--	    LDFLAGS=$EMBLDFLAGS
-+	    LIBS=$EMBLIBS
+       AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                         #include "mysql.h"]],
+@@ -113,7 +113,7 @@ AC_DEFUN([AX_LIB_MYSQL],
+         [havemysql="no"])
  
-             if test "$havemysql" = yes; then
-                 AC_DEFINE([HAVE_MYSQL], [1],
+       CPPFLAGS="${EMBCPPFLAGS}"
+-      LDFLAGS="${EMBLDFLAGS}"
++      LIBS="${EMBLIBS}"
+ 
+       AS_IF([test "x${havemysql}" = "xyes"],
+       [
