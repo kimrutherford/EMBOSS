@@ -17,6 +17,7 @@ emboss (6.6.0-1) UNRELEASED; urgency=low
     - emboss/data/OBO/ro.obo [2865596]
   * debian/control:
     - Standards-Version: 3.9.4 (no changes needed)
+    - Provide real package evince in addition to virtual package pdf-viewer
   * debian/rules:
     - Remove some remainings from CVS from emboss-test package
   * debian/{jemboss.desktop,jemboss.menu}:

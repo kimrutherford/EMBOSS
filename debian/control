@@ -63,7 +63,7 @@ Package: emboss-doc
 Architecture: all
 Section: doc
 Depends: ${misc:Depends}
-Suggests: pdf-viewer | postscript-viewer
+Suggests: evince | pdf-viewer | postscript-viewer
 Description: documentation for EMBOSS
  This package includes non-essential user documentation for EMBOSS, the
  European Molecular Biology Open Software Suite.
