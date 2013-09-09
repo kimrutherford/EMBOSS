@@ -22,6 +22,7 @@ emboss (6.6.0-1) UNRELEASED; urgency=low
     - Remove some remainings from CVS from emboss-test package
   * debian/{jemboss.desktop,jemboss.menu}:
     - runJemboss.sh is now POSIX shell instead of csh
+  * debian/source/format: 3.0 (quilt)
 
  -- Andreas Tille <tille@debian.org>  Mon, 09 Sep 2013 14:48:22 +0200
 
