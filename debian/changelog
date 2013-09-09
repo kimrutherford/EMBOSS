@@ -17,6 +17,8 @@ emboss (6.6.0-1) UNRELEASED; urgency=low
     - emboss/data/OBO/ro.obo [2865596]
   * debian/control:
     - Standards-Version: 3.9.4 (no changes needed)
+  * debian/rules:
+    - Remove some remainings from CVS from emboss-test package
 
  -- Andreas Tille <tille@debian.org>  Mon, 09 Sep 2013 14:48:22 +0200
 
