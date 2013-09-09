@@ -265,6 +265,7 @@ Files: emboss/data/OBO/chebi.obo
 Homepage: http://www.ebi.ac.uk/chebi/
 Copyright: Public domain according to answer or authors available at
            https://lists.debian.org/debian-med/2013/01/msg00012.html
+License: CC-BY-3.0
 
 Files: emboss/data/OBO/software.obo
 Homepage: http://theswo.sourceforge.net/
