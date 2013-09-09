@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.25 $
+** @version $Revision: 1.26 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/08/05 10:45:57 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -51,6 +51,42 @@ AJ_BEGIN_DECLS
 /* ============================== public data ============================== */
 /* ========================================================================= */
 
+/* @data EnsPExoncoordinates **************************************************
+**
+** Ensembl Exon Coordinates.
+**
+** Holds Ensembl Exon coordinates relative to a particular associated
+** Ensembl Transcript, as well as coding region coordinates relative to an
+** Ensembl Slice and a particular associated Translation.
+**
+** @alias EnsSExoncoordinates
+** @alias EnsOExoncoordinates
+**
+** @attr TranscriptStart [ajuint] Exon start on Transcript
+** @attr TranscriptEnd [ajuint] Exon end on Transcript
+** @attr TranscriptCodingStart [ajuint] Coding region start on Transcript
+** @attr TranscriptCodingEnd [ajuint] Coding region end on Transcript
+** @attr SliceCodingStart [ajint] Coding region start on Slice
+** @attr SliceCodingEnd [ajint] Coding region end on Slice
+** @attr Use [ajuint] Use counter
+** @attr Padding [ajuint] Padding to alignment boundary
+** @@
+******************************************************************************/
+
+typedef struct EnsSExoncoordinates
+{
+    ajuint TranscriptStart;
+    ajuint TranscriptEnd;
+    ajuint TranscriptCodingStart;
+    ajuint TranscriptCodingEnd;
+    ajint SliceCodingStart;
+    ajint SliceCodingEnd;
+    ajuint Use;
+    ajuint Padding;
+} EnsOExoncoordinates;
+
+#define EnsPExoncoordinates EnsOExoncoordinates*
+
 
 
 
@@ -61,6 +97,40 @@ AJ_BEGIN_DECLS
 /*
 ** Prototype definitions
 */
+
+/* Ensembl Excon Coordinates */
+
+EnsPExoncoordinates ensExoncoordinatesNewCpy(const EnsPExoncoordinates ec);
+
+EnsPExoncoordinates ensExoncoordinatesNewIni(EnsPExon exon,
+                                             EnsPTranscript transcript,
+                                             EnsPTranslation translation);
+
+EnsPExoncoordinates ensExoncoordinatesNewRef(EnsPExoncoordinates ec);
+
+void ensExoncoordinatesDel(EnsPExoncoordinates *Pec);
+
+ajint ensExoncoordinatesGetSliceCodingEnd(
+    const EnsPExoncoordinates ec);
+
+ajint ensExoncoordinatesGetSliceCodingStart(
+    const EnsPExoncoordinates ec);
+
+ajuint ensExoncoordinatesGetTranscriptCodingEnd(
+    const EnsPExoncoordinates ec);
+
+ajuint ensExoncoordinatesGetTranscriptCodingStart(
+    const EnsPExoncoordinates ec);
+
+ajuint ensExoncoordinatesGetTranscriptEnd(
+    const EnsPExoncoordinates ec);
+
+ajuint ensExoncoordinatesGetTranscriptStart(
+    const EnsPExoncoordinates ec);
+
+AjBool ensExoncoordinatesTrace(const EnsPExoncoordinates ec, ajuint level);
+
+size_t ensExoncoordinatesCalculateMemsize(const EnsPExoncoordinates ec);
 
 /* Ensembl Exon */
 
@@ -209,6 +279,8 @@ EnsPExonadaptor ensExonadaptorNew(
 
 void ensExonadaptorDel(EnsPExonadaptor *Pea);
 
+EnsPBaseadaptor ensExonadaptorGetBaseadaptor(EnsPExonadaptor ea);
+
 EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(EnsPExonadaptor ea);
 
 EnsPFeatureadaptor ensExonadaptorGetFeatureadaptor(EnsPExonadaptor ea);
@@ -242,13 +314,7 @@ AjBool ensExonadaptorRetrieveAllIdentifiers(EnsPExonadaptor ea,
                                             AjPList identifiers);
 
 AjBool ensExonadaptorRetrieveAllStableidentifiers(EnsPExonadaptor ea,
-                                                  AjPList identifiers);
-
-/* Ensembl Supporting Feature Adaptor */
-
-AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
-                                                 EnsPExon exon,
-                                                 AjPList bafs);
+                                                  AjPList stableids);
 
 /*
 ** End of prototype definitions

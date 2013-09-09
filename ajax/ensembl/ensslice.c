@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.64 $
+** @version $Revision: 1.68 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/26 06:40:02 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -185,11 +185,7 @@ static int listSliceCompareNameDescending(
     const void *item1,
     const void *item2);
 
-static void* sliceadaptorCacheReference(void *value);
-
 static void sliceadaptorCacheDelete(void **Pvalue);
-
-static size_t sliceadaptorCacheSize(const void *value);
 
 
 
@@ -215,12 +211,12 @@ static size_t sliceadaptorCacheSize(const void *value);
 ** @nam2rule Slice Functions for manipulating Ensembl Slice objects
 **
 ** @cc Bio::EnsEMBL::Slice
-** @cc CVS Revision: 1.292
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.301
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::CircularSlice
-** @cc CVS Revision: 1.9
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.12
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -356,7 +352,7 @@ EnsPSlice ensSliceNewIni(EnsPSliceadaptor sla,
 
     slice->Adaptor   = sla;
     slice->Seqregion = ensSeqregionNewRef(sr);
-    slice->Sequence  = (AjPStr) NULL;
+    slice->Sequence  = NULL;
     slice->Topology  = ensESliceTopologyNULL;
     slice->Type      = ensSliceTypeFromSeqregion(sr);
     slice->Start     = start;
@@ -545,14 +541,7 @@ void ensSliceDel(EnsPSlice *Pslice)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pslice)
-        return;
-
-    pthis = *Pslice;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pslice) || --pthis->Use)
     {
         *Pslice = NULL;
 
@@ -563,9 +552,7 @@ void ensSliceDel(EnsPSlice *Pslice)
 
     ajStrDel(&pthis->Sequence);
 
-    AJFREE(pthis);
-
-    *Pslice = NULL;
+    ajMemFree((void **) Pslice);
 
     return;
 }
@@ -670,8 +657,8 @@ EnsPSeqregion ensSliceGetSeqregion(const EnsPSlice slice)
 **
 ** NOTE: This function returns only the sequence member that has been set for
 ** an Ensembl Slice object that is not based on an Ensembl Sequence Region.
-** For Ensembl Slice objects based on Ensembl Sequence Regions the sequence is
-** fetched dynamically via ensSliceFetchSequence functions.
+** For Ensembl Slice objects based on Ensembl Sequence Region objects the
+** sequence is fetched dynamically via ensSliceFetchSequence functions.
 **
 ** @param [r] slice [const EnsPSlice] Ensembl Slice
 **
@@ -1237,11 +1224,11 @@ const AjPTrn ensSliceGetTranslation(EnsPSlice slice)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Slice object.
+** Functions for calculating information from an Ensembl Slice object.
 **
 ** @fdata [EnsPSlice]
 **
-** @nam3rule Calculate   Calculate Ensembl Slice values
+** @nam3rule Calculate   Calculate Ensembl Slice information
 ** @nam4rule Centrepoint Calculate the centre point
 ** @nam4rule Length      Calculate the length
 ** @nam4rule Memsize     Calculate the memory size in bytes
@@ -1521,8 +1508,9 @@ AjBool ensSliceFetchAllAttributes(EnsPSlice slice,
 
     if (!slice->Seqregion)
     {
-        ajDebug("ensSliceFetchAllAttributes cannot fetch Ensembl Attribute "
-                "objects for an Ensembl Slice without an "
+        ajDebug("ensSliceFetchAllAttributes cannot fetch "
+                "Ensembl Attribute objects for an "
+                "Ensembl Slice without an "
                 "Ensembl Sequence Region.\n");
 
         return ajFalse;
@@ -1563,8 +1551,6 @@ AjBool ensSliceFetchAllRepeatfeatures(EnsPSlice slice,
                                       const AjPStr rcname,
                                       AjPList rfs)
 {
-    EnsPRepeatfeatureadaptor rfa = NULL;
-
     if (ajDebugTest("ensSliceFetchAllRepeatfeatures"))
         ajDebug("ensSliceFetchAllRepeatfeatures\n"
                 "  slice %p\n"
@@ -1591,10 +1577,9 @@ AjBool ensSliceFetchAllRepeatfeatures(EnsPSlice slice,
         return ajFalse;
     }
 
-    rfa = ensRegistryGetRepeatfeatureadaptor(slice->Adaptor->Adaptor);
-
     return ensRepeatfeatureadaptorFetchAllbySlice(
-        rfa,
+        ensRegistryGetRepeatfeatureadaptor(
+            ensSliceadaptorGetDatabaseadaptor(slice->Adaptor)),
         slice,
         anname,
         rctype,
@@ -1701,21 +1686,24 @@ AjBool ensSliceFetchName(const EnsPSlice slice, AjPStr *Pname)
     cs = ensSeqregionGetCoordsystem(slice->Seqregion);
 
     if (*Pname)
-        *Pname = ajFmtPrintS(Pname, "%S:%S:%S:%d:%d:%d",
-                             ensCoordsystemGetName(cs),
-                             ensCoordsystemGetVersion(cs),
-                             ensSeqregionGetName(slice->Seqregion),
-                             slice->Start,
-                             slice->End,
-                             slice->Strand);
+        *Pname = ajFmtPrintS(
+            Pname,
+            "%S:%S:%S:%d:%d:%d",
+            ensCoordsystemGetName(cs),
+            ensCoordsystemGetVersion(cs),
+            ensSeqregionGetName(slice->Seqregion),
+            slice->Start,
+            slice->End,
+            slice->Strand);
     else
-        *Pname = ajFmtStr("%S:%S:%S:%d:%d:%d",
-                          ensCoordsystemGetName(cs),
-                          ensCoordsystemGetVersion(cs),
-                          ensSeqregionGetName(slice->Seqregion),
-                          slice->Start,
-                          slice->End,
-                          slice->Strand);
+        *Pname = ajFmtStr(
+            "%S:%S:%S:%d:%d:%d",
+            ensCoordsystemGetName(cs),
+            ensCoordsystemGetVersion(cs),
+            ensSeqregionGetName(slice->Seqregion),
+            slice->Start,
+            slice->End,
+            slice->Strand);
 
     return ajTrue;
 }
@@ -1800,7 +1788,7 @@ AjBool ensSliceFetchSequenceAllStr(EnsPSlice slice, AjPStr *Psequence)
 
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPSequenceadaptor sa = NULL;
+    EnsPSequenceadaptor sqa = NULL;
 
     EnsPSlice slice1 = NULL;
     EnsPSlice slice2 = NULL;
@@ -1845,7 +1833,7 @@ AjBool ensSliceFetchSequenceAllStr(EnsPSlice slice, AjPStr *Psequence)
 
         dba = ensSliceadaptorGetDatabaseadaptor(slice->Adaptor);
 
-        sa = ensRegistryGetSequenceadaptor(dba);
+        sqa = ensRegistryGetSequenceadaptor(dba);
 
         ensSliceIsCircular(slice, &circular);
 
@@ -1869,8 +1857,8 @@ AjBool ensSliceFetchSequenceAllStr(EnsPSlice slice, AjPStr *Psequence)
             ** final size.
             */
 
-            ensSequenceadaptorFetchSliceAllStr(sa, slice1, &sequence1);
-            ensSequenceadaptorFetchSliceAllStr(sa, slice2, &sequence2);
+            ensSequenceadaptorFetchSliceAllStr(sqa, slice1, &sequence1);
+            ensSequenceadaptorFetchSliceAllStr(sqa, slice2, &sequence2);
 
             ajStrAssignS(Psequence, sequence1);
             ajStrAppendS(Psequence, sequence2);
@@ -1882,7 +1870,7 @@ AjBool ensSliceFetchSequenceAllStr(EnsPSlice slice, AjPStr *Psequence)
             ensSliceDel(&slice2);
         }
         else
-            ensSequenceadaptorFetchSliceAllStr(sa, slice, Psequence);
+            ensSequenceadaptorFetchSliceAllStr(sqa, slice, Psequence);
     }
     else
     {
@@ -2038,7 +2026,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPSequenceadaptor sa = NULL;
+    EnsPSequenceadaptor sqa = NULL;
 
     if (ajDebugTest("ensSliceFetchSequenceSubStr"))
         ajDebug("ensSliceFetchSequenceSubStr\n"
@@ -2108,6 +2096,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
                     "length (%u).\n",
                     ajStrGetLen(slice->Sequence),
                     ensSliceCalculateLength(slice));
+        /* FIXME: size_t can be shorter than ajulong */
 
         /* Relative Slice coordinates range from 1 to length. */
 
@@ -2152,7 +2141,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
 
         dba = ensSliceadaptorGetDatabaseadaptor(slice->Adaptor);
 
-        sa = ensRegistryGetSequenceadaptor(dba);
+        sqa = ensRegistryGetSequenceadaptor(dba);
 
         if ((circular == ajTrue) && (start > end))
         {
@@ -2160,7 +2149,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
             sequence2 = ajStrNewRes(rlength);
 
             ensSequenceadaptorFetchSliceSubStr(
-                sa,
+                sqa,
                 slice,
                 start,
                 ensSeqregionGetLength(slice->Seqregion),
@@ -2168,7 +2157,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
                 &sequence1);
 
             ensSequenceadaptorFetchSliceSubStr(
-                sa,
+                sqa,
                 slice,
                 1,
                 end,
@@ -2182,7 +2171,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
             ajStrDel(&sequence2);
         }
         else
-            ensSequenceadaptorFetchSliceSubStr(sa,
+            ensSequenceadaptorFetchSliceSubStr(sqa,
                                                slice,
                                                start,
                                                end,
@@ -2204,6 +2193,7 @@ AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
                "for region of length %u.\n",
                ajStrGetLen(*Psequence),
                rlength);
+    /* FIXME: size_t can be shorter than ajulong */
 
     return ajTrue;
 }
@@ -2293,7 +2283,7 @@ AjBool ensSliceFetchSliceexpanded(EnsPSlice slice,
     if (!Pslice)
         return ajFalse;
 
-    *Pslice = (EnsPSlice) NULL;
+    *Pslice = NULL;
 
     if (slice->Sequence)
     {
@@ -2449,6 +2439,8 @@ AjBool ensSliceFetchSliceinverted(EnsPSlice slice, EnsPSlice *Pslice)
     if (!Pslice)
         return ajFalse;
 
+    *Pslice = NULL;
+
     /*
     ** Retrieve the inverted Slice via the Slice Adaptor if one is attached.
     ** This will automatically register the new Slice in the
@@ -2548,6 +2540,11 @@ AjBool ensSliceFetchSlicesub(EnsPSlice slice,
 
         return ajFalse;
     }
+
+    if (!Pslice)
+        return ajFalse;
+
+    *Pslice = NULL;
 
     if ((start < 1) || (start > slice->End))
     {
@@ -2896,6 +2893,14 @@ AjBool ensSliceSimilarity(const EnsPSlice slice1, const EnsPSlice slice2)
 **
 ** @release 6.4.0
 ** @@
+** NOTE: In this implementation, the "circular" property relies on
+** Ensembl Attribute objects are linked to Ensembl Sequence Region objects
+** that are at the base of Ensembl Slice objects. Although Ensembl Sequence
+** Region objects cache all Ensembl Attribute objects, one SQL query is still
+** needed for each new Ensembl Sequence Region object.
+** The Perl API caches the information for all Ensembl Sequence Region objects
+** at once, but does not formalise the information within
+** Ensembl Attribute objects.
 ******************************************************************************/
 
 AjBool ensSliceIsCircular(EnsPSlice slice, AjBool *Presult)
@@ -3262,12 +3267,13 @@ static AjBool sliceProject(EnsPSlice slice,
         mrs = ajListNew();
 
         if (am)
-            ensAssemblymapperMapSlice(am, nrmslice, mrs);
+            ensAssemblymapperMapSlice(am, nrmslice, ajFalse, mrs);
         else
         {
             if (debug)
-                ajDebug("sliceProject could not fetch an Ensembl Assembly "
-                        "Mapper between Ensembl Coordinate System objects "
+                ajDebug("sliceProject could not fetch an "
+                        "Ensembl Assembly Mapper between "
+                        "Ensembl Coordinate System objects "
                         "'%S:%S' and '%S:%S', which implies an "
                         "Ensembl Mapper Result of type "
                         "ensEMapperresultTypeGap.\n",
@@ -3665,7 +3671,7 @@ AjBool ensSliceProjectslice(EnsPSlice srcslice,
     ama = ensRegistryGetAssemblymapperadaptor(dba);
 
     /*
-    ** Get the source Coordinate System, which is the
+    ** Get the source Ensembl Coordinate System, which is the
     ** Ensembl Coordinate System member of the
     ** Ensembl Sequence Region member of this Ensembl Slice.
     */
@@ -3722,10 +3728,11 @@ AjBool ensSliceProjectslice(EnsPSlice srcslice,
         mrs = ajListNew();
 
         if (am)
-            ensAssemblymapperMapToSlice(am, nrmslice, trgslice, mrs);
+            ensAssemblymapperMapToSlice(am, nrmslice, trgslice, ajFalse, mrs);
         else
         {
-            ajDebug("ensSliceProjectslice got no Assemblymapper -> gap\n");
+            ajDebug("ensSliceProjectslice got no Ensembl Assemblymapper -> "
+                    "Ensembl Mapper Result of type gap\n");
 
             mr = ensMapperresultNewGap(nrmslice->Start, nrmslice->End, 0);
 
@@ -3943,9 +3950,10 @@ const char* ensSliceTypeToChar(EnsESliceType ste)
          i++);
 
     if (!sliceKType[i])
-        ajDebug("ensSliceTypeToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Slice Type enumeration %d.\n",
+        ajDebug("ensSliceTypeToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Slice Type "
+                "enumeration %d.\n",
                 ste);
 
     return sliceKType[i];
@@ -4056,12 +4064,12 @@ AjBool ensListSliceRemoveDuplications(AjPList slices)
         if (ajListGetLength(aes))
         {
             /*
-            ** This Slice may have duplicate regions, so de-reference
-            ** symlinked assembly regions and remove any Slice objects,
+            ** This Ensembl Slice may have duplicate regions, so de-reference
+            ** symlinked assembly regions and remove any Ensembl Slice objects,
             ** which have a symlink, because these are duplicates.
-            ** Replace them with any symlinked Slice objects based on
-            ** the same Sequence Region and Coordinate System as the
-            ** original Slice.
+            ** Replace them with any symlinked Ensembl Slice objects based on
+            ** the same Ensembl Sequence Region and Ensembl Coordinate System
+            ** as the original Ensembl Slice.
             */
 
             ajListIterRemove(iter);
@@ -4491,34 +4499,10 @@ AjBool ensListSliceSortNameDescending(AjPList slices)
 ** Ensembl Slice Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::SliceAdaptor
-** @cc CVS Revision: 1.126
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.134
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
-
-
-
-
-/* @funcstatic sliceadaptorCacheReference *************************************
-**
-** Wrapper function to reference an Ensembl Slice
-** from an Ensembl Cache.
-**
-** @param [u] value [void*] Ensembl Slice
-**
-** @return [void*] Ensembl Slice or NULL
-**
-** @release 6.3.0
-** @@
-******************************************************************************/
-
-static void* sliceadaptorCacheReference(void *value)
-{
-    if (!value)
-        return NULL;
-
-    return (void *) ensSliceNewRef((EnsPSlice) value);
-}
 
 
 
@@ -4609,30 +4593,6 @@ static void sliceadaptorCacheDelete(void **Pvalue)
 
 
 
-/* @funcstatic sliceadaptorCacheSize ******************************************
-**
-** Wrapper function to determine the memory size of an Ensembl Slice
-** from an Ensembl Cache.
-**
-** @param [r] value [const void*] Ensembl Slice
-**
-** @return [size_t] Memory size in bytes or 0
-**
-** @release 6.3.0
-** @@
-******************************************************************************/
-
-static size_t sliceadaptorCacheSize(const void *value)
-{
-    if (!value)
-        return 0;
-
-    return ensSliceCalculateMemsize((const EnsPSlice) value);
-}
-
-
-
-
 /* @section constructors ******************************************************
 **
 ** All constructors return a new Ensembl Slice Adaptor by pointer.
@@ -4694,15 +4654,15 @@ EnsPSliceadaptor ensSliceadaptorNew(
         sliceadaptorKCacheMaxBytes,
         sliceadaptorKCacheMaxCount,
         sliceadaptorKCacheMaxSize,
-        &sliceadaptorCacheReference,
+        (void *(*)(void *)) &ensSliceNewRef,
         &sliceadaptorCacheDelete,
-        &sliceadaptorCacheSize,
+        (size_t (*)(const void *)) &ensSliceCalculateMemsize,
         (void *(*)(const void *key)) NULL,
         (AjBool (*)(const void *value)) NULL,
         ajFalse,
         "Slice");
 
-    sla->CacheByName = ajTablestrNew(0);
+    sla->CacheByName = ajTablestrNew(0U);
 
     ajTableSetDestroyvalue(sla->CacheByName, (void (*)(void **)) &ensSliceDel);
 
@@ -4765,10 +4725,8 @@ void ensSliceadaptorDel(EnsPSliceadaptor *Psla)
                 *Psla);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Psla)
+    if (!(pthis = *Psla))
         return;
-
-    pthis = *Psla;
 
     /*
     ** Clear the identifier cache, which is based on an Ensembl LRU Cache.
@@ -4780,9 +4738,7 @@ void ensSliceadaptorDel(EnsPSliceadaptor *Psla)
 
     ajTableDel(&pthis->CacheByName);
 
-    AJFREE(pthis);
-
-    *Psla = NULL;
+    ajMemFree((void **) Psla);
 
     return;
 }
@@ -5020,8 +4976,10 @@ AjBool ensSliceadaptorCacheInsert(EnsPSliceadaptor sla, EnsPSlice *Pslice)
 ** @argrule * sla [EnsPSliceadaptor] Ensembl Slice Adaptor
 ** @argrule All csname [const AjPStr] Ensembl Coordinate System name
 ** @argrule All csversion [const AjPStr] Ensembl Coordinate System version
-** @argrule All nonreference [AjBool] Include non-reference Sequence Regions
-** @argrule All duplicates [AjBool] Include duplicate Sequence Regions
+** @argrule All nonreference [AjBool]
+** Include non-reference Ensembl Sequence Region objects
+** @argrule All duplicates [AjBool]
+** Include duplicate Ensembl Sequence Region objects
 ** @argrule All lrg [AjBool] Include Locus Reference Genomic
 ** @argrule All slices [AjPList] AJAX List of Ensembl Slice objects
 ** @argrule AllbyRegionunique csname [const AjPStr]
@@ -5071,14 +5029,16 @@ AjBool ensSliceadaptorCacheInsert(EnsPSliceadaptor sla, EnsPSlice *Pslice)
 
 /* @func ensSliceadaptorFetchAll **********************************************
 **
-** Fetch all Ensembl Slice objects representing Sequence Regions of a given
-** Coordinate System.
+** Fetch all Ensembl Slice objects representing Ensembl Sequence Region objects
+** of a given Ensembl Coordinate System.
 **
 ** @param [u] sla [EnsPSliceadaptor] Ensembl Slice Adaptor
 ** @param [r] csname [const AjPStr] Ensembl Coordinate System name
 ** @param [rN] csversion [const AjPStr] Ensembl Coordinate System version
-** @param [r] nonreference [AjBool] Include non-reference Sequence Regions
-** @param [r] duplicates [AjBool] Include duplicate Sequence Regions
+** @param [r] nonreference [AjBool]
+** Include non-reference Ensembl Sequence Region objects
+** @param [r] duplicates [AjBool]
+** Include duplicate Ensembl Sequence Region objects
 ** @param [r] lrg [AjBool] Include Locus Reference Genomic
 ** @param [u] slices [AjPList] An AJAX List of Ensembl Slice objects
 **
@@ -5115,6 +5075,8 @@ AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
     EnsPCoordsystem        cs  = NULL;
     EnsPCoordsystemadaptor csa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPSeqregion        sr  = NULL;
     EnsPSeqregionadaptor sra = NULL;
 
@@ -5148,9 +5110,10 @@ AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
     if (!slices)
         return ajFalse;
 
-    csa = ensRegistryGetCoordsystemadaptor(sla->Adaptor);
+    dba = ensSliceadaptorGetDatabaseadaptor(sla);
 
-    sra = ensRegistryGetSeqregionadaptor(sla->Adaptor);
+    csa = ensRegistryGetCoordsystemadaptor(dba);
+    sra = ensRegistryGetSeqregionadaptor(dba);
 
     ensCoordsystemadaptorFetchByName(csa, csname, csversion, &cs);
 
@@ -5162,7 +5125,7 @@ AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
         return ajTrue;
     }
 
-    /* Retrieve the Sequence Regions from the database. */
+    /* Fetch the Ensembl Sequence Region objects from the database. */
 
     srs = ajListNew();
 
@@ -5170,7 +5133,7 @@ AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
 
     while (ajListPop(srs, (void **) &sr))
     {
-        /* Check for non-reference Ensembl Sequence Regions */
+        /* Check for non-reference Ensembl Sequence Region objects. */
 
         if (nonreference == ajFalse)
         {
@@ -5202,7 +5165,10 @@ AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
             }
         }
 
-        /* Check for Locus Reference Genomic Ensembl Sequence Regions */
+        /*
+        ** Check for Locus Reference Genomic (LRG)
+        ** Ensembl Sequence Region objects.
+        */
 
         if (lrg == ajFalse)
         {
@@ -5302,6 +5268,8 @@ AjBool ensSliceadaptorFetchAllbyRegionunique(EnsPSliceadaptor sla,
                                              ajint srstrand,
                                              AjPList slices)
 {
+    AjBool result = AJFALSE;
+
     EnsPSlice slice = NULL;
 
     if (!sla)
@@ -5313,20 +5281,21 @@ AjBool ensSliceadaptorFetchAllbyRegionunique(EnsPSliceadaptor sla,
     if (!slices)
         return ajFalse;
 
-    ensSliceadaptorFetchByRegion(sla,
-                                 csname,
-                                 csversion,
-                                 srname,
-                                 srstart,
-                                 srend,
-                                 srstrand,
-                                 &slice);
+    result = ensSliceadaptorFetchByRegion(
+        sla,
+        csname,
+        csversion,
+        srname,
+        srstart,
+        srend,
+        srstrand,
+        &slice);
 
     ajListPushAppend(slices, (void *) slice);
 
     ensListSliceRemoveDuplications(slices);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -5334,7 +5303,7 @@ AjBool ensSliceadaptorFetchAllbyRegionunique(EnsPSliceadaptor sla,
 
 /* @func ensSliceadaptorFetchByFeature ****************************************
 **
-** Retrieve an Ensembl Slice around an Ensembl Feature.
+** Fetch an Ensembl Slice around an Ensembl Feature.
 **
 ** @param [u] sla [EnsPSliceadaptor] Ensembl Slice Adaptor
 ** @param [r] feature [const EnsPFeature] Ensembl Feature
@@ -5359,6 +5328,8 @@ AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor sla,
     ajuint srid   = 0U;
     ajint srstart = 0;
     ajint srend   = 0;
+
+    AjBool result = AJFALSE;
 
     EnsPSlice slice = NULL;
 
@@ -5396,6 +5367,8 @@ AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor sla,
     if (!Pslice)
         return ajFalse;
 
+    *Pslice = NULL;
+
     slice = ensFeatureGetSlice(feature);
 
     if (!slice)
@@ -5421,14 +5394,15 @@ AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor sla,
         srend   = slice->End - ensFeatureGetStart(feature) + 1;
     }
 
-    ensSliceadaptorFetchBySeqregionIdentifier(sla,
-                                              srid,
-                                              srstart - flank,
-                                              srend   + flank,
-                                              1,
-                                              Pslice);
+    result = ensSliceadaptorFetchBySeqregionIdentifier(
+        sla,
+        srid,
+        srstart - flank,
+        srend   + flank,
+        1,
+        Pslice);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -5436,7 +5410,7 @@ AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor sla,
 
 /* @func ensSliceadaptorFetchByLocation ***************************************
 **
-** Retrieve an Ensembl Slice based on a top-level location.
+** Fetch an Ensembl Slice based on a top-level location.
 **
 ** @param [u] sla [EnsPSliceadaptor] Ensembl Slice Adaptor
 ** @param [r] location [const AjPStr] Top-leve location
@@ -5454,6 +5428,8 @@ AjBool ensSliceadaptorFetchByLocation(EnsPSliceadaptor sla,
 {
     ajint srstart = 0;
     ajint srend   = 0;
+
+    AjBool result = AJFALSE;
 
     AjPRegexp re = NULL;
 
@@ -5477,6 +5453,8 @@ AjBool ensSliceadaptorFetchByLocation(EnsPSliceadaptor sla,
     /* Cleanup any nomenclature like 1_000 or 1 000 or 1,000 */
 
     ajStrRemoveSetC(&localstr, " _,");
+
+    /* NOTE: This needs adjusting to more complex patterns. */
 
     re = ajRegCompC("^(\\w+):?(\\d+)?(?:-|[.]{2})?(\\d+)?$");
 
@@ -5505,14 +5483,15 @@ AjBool ensSliceadaptorFetchByLocation(EnsPSliceadaptor sla,
         csname    = ajStrNewC("toplevel");
         csversion = ajStrNew();
 
-        ensSliceadaptorFetchByRegion(sla,
-                                     csname,
-                                     csversion,
-                                     srname,
-                                     srstart,
-                                     srend,
-                                     1,
-                                     Pslice);
+        result = ensSliceadaptorFetchByRegion(
+            sla,
+            csname,
+            csversion,
+            srname,
+            srstart,
+            srend,
+            1,
+            Pslice);
 
         ajStrDel(&csname);
         ajStrDel(&csversion);
@@ -5523,7 +5502,7 @@ AjBool ensSliceadaptorFetchByLocation(EnsPSliceadaptor sla,
 
     ajStrDel(&localstr);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -5531,7 +5510,7 @@ AjBool ensSliceadaptorFetchByLocation(EnsPSliceadaptor sla,
 
 /* @func ensSliceadaptorFetchByMapperresult ***********************************
 **
-** Retrieve an Ensembl Slice based on an Ensembl Mapper Result.
+** Fetch an Ensembl Slice based on an Ensembl Mapper Result.
 **
 ** @param [u] sla [EnsPSliceadaptor] Ensembl Slice Adaptor
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
@@ -5600,8 +5579,9 @@ AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor sla,
     ajint end    = 0;
     ajint strand = 0;
 
-    AjBool debug = AJFALSE;
-    AjBool error = AJFALSE;
+    AjBool debug  = AJFALSE;
+    AjBool error  = AJFALSE;
+    AjBool result = AJFALSE;
 
     AjPStr csname    = NULL;
     AjPStr csversion = NULL;
@@ -5657,12 +5637,12 @@ AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor sla,
     srend     = ajStrNew();
     srstrand  = ajStrNew();
 
-    if (ajStrTokenNextParseNoskip(&token, &csname) &&
-        ajStrTokenNextParseNoskip(&token, &csversion) &&
-        ajStrTokenNextParseNoskip(&token, &srname) &&
-        ajStrTokenNextParseNoskip(&token, &srstart) &&
-        ajStrTokenNextParseNoskip(&token, &srend) &&
-        ajStrTokenNextParseNoskip(&token, &srstrand))
+    if (ajStrTokenNextParseNoskip(token, &csname) &&
+        ajStrTokenNextParseNoskip(token, &csversion) &&
+        ajStrTokenNextParseNoskip(token, &srname) &&
+        ajStrTokenNextParseNoskip(token, &srstart) &&
+        ajStrTokenNextParseNoskip(token, &srend) &&
+        ajStrTokenNextParseNoskip(token, &srstrand))
     {
         /*
         ** Convert AJAX String objects into AJAX integers.
@@ -5720,20 +5700,22 @@ AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor sla,
         if (error == ajFalse)
         {
             if (start == 0 && end == 0)
-                ensSliceadaptorFetchBySeqregionName(sla,
-                                                    csname,
-                                                    csversion,
-                                                    srname,
-                                                    Pslice);
+                result = ensSliceadaptorFetchBySeqregionName(
+                    sla,
+                    csname,
+                    csversion,
+                    srname,
+                    Pslice);
             else
-                ensSliceadaptorFetchByRegion(sla,
-                                             csname,
-                                             csversion,
-                                             srname,
-                                             start,
-                                             end,
-                                             strand,
-                                             Pslice);
+                result = ensSliceadaptorFetchByRegion(
+                    sla,
+                    csname,
+                    csversion,
+                    srname,
+                    start,
+                    end,
+                    strand,
+                    Pslice);
         }
     }
     else
@@ -5763,7 +5745,7 @@ AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor sla,
 
     ajStrTokenDel(&token);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -5818,6 +5800,8 @@ AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor sla,
     EnsPCoordsystem        cs  = NULL;
     EnsPCoordsystemadaptor csa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPSeqregion        sr  = NULL;
     EnsPSeqregionadaptor sra = NULL;
 
@@ -5859,6 +5843,8 @@ AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor sla,
     if (!Pslice)
         return ajFalse;
 
+    *Pslice = NULL;
+
     /*
     ** Initially, search the cache, which can only return an Ensembl Slice,
     ** which is associated with a name and version of a regular Ensembl
@@ -5894,11 +5880,13 @@ AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor sla,
         return ajTrue;
     }
 
+    dba = ensSliceadaptorGetDatabaseadaptor(sla);
+
     /* Load the Ensembl Coordinate System if a name has been provided. */
 
     if (csname && ajStrGetLen(csname))
     {
-        csa = ensRegistryGetCoordsystemadaptor(sla->Adaptor);
+        csa = ensRegistryGetCoordsystemadaptor(dba);
 
         ensCoordsystemadaptorFetchByName(csa, csname, csversion, &cs);
 
@@ -5914,7 +5902,7 @@ AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor sla,
 
     /* Load the Ensembl Sequence Region by name. */
 
-    sra = ensRegistryGetSeqregionadaptor(sla->Adaptor);
+    sra = ensRegistryGetSeqregionadaptor(dba);
 
     ensSeqregionadaptorFetchByName(sra, cs, srname, &sr);
 
@@ -6000,8 +5988,7 @@ AjBool ensSliceadaptorFetchBySeqregionIdentifier(EnsPSliceadaptor sla,
 {
     AjPStr key = NULL;
 
-    EnsPSeqregion sr         = NULL;
-    EnsPSeqregionadaptor sra = NULL;
+    EnsPSeqregion sr = NULL;
 
     if (ajDebugTest("ensSliceadaptorFetchBySeqregionIdentifier"))
         ajDebug("ensSliceadaptorFetchBySeqregionIdentifier\n"
@@ -6037,6 +6024,8 @@ AjBool ensSliceadaptorFetchBySeqregionIdentifier(EnsPSliceadaptor sla,
     if (!Pslice)
         return ajFalse;
 
+    *Pslice = NULL;
+
     /* Check the cache first. */
 
     key = ajFmtStr("%u:%d:%d:%d", srid, srstart, srend, srstrand);
@@ -6048,9 +6037,11 @@ AjBool ensSliceadaptorFetchBySeqregionIdentifier(EnsPSliceadaptor sla,
     if (*Pslice)
         return ajTrue;
 
-    sra = ensRegistryGetSeqregionadaptor(sla->Adaptor);
-
-    ensSeqregionadaptorFetchByIdentifier(sra, srid, &sr);
+    ensSeqregionadaptorFetchByIdentifier(
+        ensRegistryGetSeqregionadaptor(
+            ensSliceadaptorGetDatabaseadaptor(sla)),
+        srid,
+        &sr);
 
     if (!sr)
     {
@@ -6127,11 +6118,11 @@ AjBool ensSliceadaptorFetchBySeqregionName(EnsPSliceadaptor sla,
 {
     AjPStr key = NULL;
 
-    EnsPCoordsystem        cs  = NULL;
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPCoordsystem cs = NULL;
 
-    EnsPSeqregion        sr  = NULL;
-    EnsPSeqregionadaptor sra = NULL;
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPSeqregion sr = NULL;
 
     if (ajDebugTest("ensSliceadaptorFetchBySeqregionName"))
         ajDebug("ensSliceadaptorFetchBySeqregionName\n"
@@ -6154,6 +6145,8 @@ AjBool ensSliceadaptorFetchBySeqregionName(EnsPSliceadaptor sla,
 
     if (!Pslice)
         return ajFalse;
+
+    *Pslice = NULL;
 
     /*
     ** Initially, search the cache, which can only return an Ensembl Slice,
@@ -6187,13 +6180,17 @@ AjBool ensSliceadaptorFetchBySeqregionName(EnsPSliceadaptor sla,
         return ajTrue;
     }
 
+    dba = ensSliceadaptorGetDatabaseadaptor(sla);
+
     /* Load the Ensembl Coordinate System if a name has been provided. */
 
     if (csname && ajStrGetLen(csname))
     {
-        csa = ensRegistryGetCoordsystemadaptor(sla->Adaptor);
-
-        ensCoordsystemadaptorFetchByName(csa, csname, csversion, &cs);
+        ensCoordsystemadaptorFetchByName(
+            ensRegistryGetCoordsystemadaptor(dba),
+            csname,
+            csversion,
+            &cs);
 
         if (!cs)
         {
@@ -6208,9 +6205,11 @@ AjBool ensSliceadaptorFetchBySeqregionName(EnsPSliceadaptor sla,
 
     /* Load the Ensembl Sequence Region. */
 
-    sra = ensRegistryGetSeqregionadaptor(sla->Adaptor);
-
-    ensSeqregionadaptorFetchByName(sra, cs, srname, &sr);
+    ensSeqregionadaptorFetchByName(
+        ensRegistryGetSeqregionadaptor(dba),
+        cs,
+        srname,
+        &sr);
 
     if (!sr)
     {
@@ -6301,6 +6300,8 @@ AjBool ensSliceadaptorFetchBySlice(EnsPSliceadaptor sla,
     if (!Pslice)
         return ajFalse;
 
+    *Pslice = NULL;
+
     /* Transform relative into absolute Sequence Region coordinates. */
 
     /*
@@ -6359,7 +6360,7 @@ AjBool ensSliceadaptorFetchBySlice(EnsPSliceadaptor sla,
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for fetching objects releated to Ensembl Slice objects
+** Functions for retrieving objects releated to Ensembl Slice objects
 ** from an Ensembl SQL database.
 **
 ** @fdata [EnsPSliceadaptor]
@@ -6482,7 +6483,8 @@ AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
         return ajFalse;
     }
 
-    aea = ensRegistryGetAssemblyexceptionadaptor(sla->Adaptor);
+    aea = ensRegistryGetAssemblyexceptionadaptor(
+        ensSliceadaptorGetDatabaseadaptor(sla));
 
     refsrid = ensSliceGetSeqregionIdentifier(slice);
 
@@ -6531,7 +6533,7 @@ AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
         if (debug)
             ajDebug("ensSliceadaptorRetrieveNormalisedprojection "
                     "found no Ensembl Assembly Exception objects overlapping "
-                    "this Slice.\n");
+                    "this Ensembl Slice.\n");
 
         ajListFree(&haps);
         ajListFree(&pars);
@@ -6632,7 +6634,7 @@ AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
 
         /*
         ** For the last segment from the end of the
-        ** Assembly Exception to the end of the Slice objects.
+        ** Ensembl Assembly Exception to the end of the Ensembl Slice objects.
         */
 
         excend = reflength;
@@ -6810,8 +6812,8 @@ AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
 ** Ensembl Repeat-Masked Slice objects
 **
 ** @cc Bio::EnsEMBL::RepeatMaskedSlice
-** @cc CVS Revision: 1.16
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.21
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -6835,8 +6837,12 @@ AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
 ** @argrule Cpy rmslice [const EnsPRepeatmaskedslice] Ensembl Repeat-Masked
 ** Slice
 ** @argrule Ini slice [EnsPSlice] Ensembl Slice
-** @argrule Ini annames [AjPList] AJAX List of Ensembl Analysis name
-** @argrule Ini masking [AjPTable] AJAX Table to override masking types
+** @argrule Ini annames [AjPList]
+** AJAX List of AJAX String (Ensembl Analysis name) objects
+** @argrule Ini masking [AjPTable]
+** AJAX Table of AJAX String key data and
+** Ensembl Repeat Mask Type enumeration value data
+** to override masking types
 ** @argrule Ref rmslice [EnsPRepeatmaskedslice] Ensembl Repeat-Masked Slice
 **
 ** @valrule * [EnsPRepeatmaskedslice] Ensembl Repeat-Masked Slice or NULL
@@ -6906,7 +6912,7 @@ EnsPRepeatmaskedslice ensRepeatmaskedsliceNewCpy(
 
     if (rmslice->Masking)
     {
-        pthis->Masking = ajTablestrNew(0);
+        pthis->Masking = ajTablestrNew(0U);
 
         ajTableSetDestroyvalue(pthis->Masking, &ajMemFree);
 
@@ -6940,9 +6946,12 @@ EnsPRepeatmaskedslice ensRepeatmaskedsliceNewCpy(
 ** Constructor for an Ensembl Repeat-Masked Slice with initial values.
 **
 ** @param [u] slice [EnsPSlice] Ensembl Slice
-** @param [uN] annames [AjPList] AJAX List of Ensembl Analysis name
-**                               AJAX String objects
-** @param [uN] masking [AjPTable] AJAX Table to override masking types
+** @param [uN] annames [AjPList]
+** AJAX List of AJAX String (Ensembl Analysis name) objects
+** @param [uN] masking [AjPTable]
+** AJAX Table of AJAX String key data and
+** Ensembl Repeat Mask Type enumeration value data
+** to override masking types
 **
 ** @return [EnsPRepeatmaskedslice] Ensembl Repeat-Masked Slice or NULL
 **
@@ -7011,7 +7020,7 @@ EnsPRepeatmaskedslice ensRepeatmaskedsliceNewIni(EnsPSlice slice,
 
     if (masking)
     {
-        rmslice->Masking = ajTablestrNew(0);
+        rmslice->Masking = ajTablestrNew(0U);
 
         ajTableSetDestroyvalue(rmslice->Masking, &ajMemFree);
 
@@ -7118,14 +7127,7 @@ void ensRepeatmaskedsliceDel(EnsPRepeatmaskedslice *Prmslice)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Prmslice)
-        return;
-
-    pthis = *Prmslice;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Prmslice) || --pthis->Use)
     {
         *Prmslice = NULL;
 
@@ -7143,9 +7145,7 @@ void ensRepeatmaskedsliceDel(EnsPRepeatmaskedslice *Prmslice)
 
     ajTableDel(&pthis->Masking);
 
-    AJFREE(pthis);
-
-    *Prmslice = NULL;
+    ajMemFree((void **) Prmslice);
 
     return;
 }
@@ -7282,7 +7282,15 @@ AjBool ensRepeatmaskedsliceFetchSequenceSeq(EnsPRepeatmaskedslice rmslice,
 
     ensRepeatmaskedsliceFetchSequenceStr(rmslice, mtype, &sequence);
 
-    *Psequence = ajSeqNewNameS(sequence, name);
+    if (*Psequence)
+    {
+        ajSeqClear(*Psequence);
+
+        ajSeqAssignSeqS(*Psequence, sequence);
+        ajSeqAssignNameS(*Psequence, name);
+    }
+    else
+        *Psequence = ajSeqNewNameS(sequence, name);
 
     ajSeqSetNuc(*Psequence);
 
@@ -7352,22 +7360,27 @@ AjBool ensRepeatmaskedsliceFetchSequenceStr(EnsPRepeatmaskedslice rmslice,
     EnsPRepeatfeature rf         = NULL;
     EnsPRepeatfeatureadaptor rfa = NULL;
 
-    EnsPSliceadaptor sa = NULL;
+    EnsPSliceadaptor sla = NULL;
 
     if (ajDebugTest("ensRepeatmaskedsliceFetchSequenceStr"))
         ajDebug("ensRepeatmaskedsliceFetchSequenceStr\n"
                 "  rmslice %p\n"
-                "  *Psequence %p\n"
-                "  mtype %d\n",
+                "  mtype %d\n"
+                "  *Psequence %p\n",
                 rmslice,
-                *Psequence,
-                mtype);
+                mtype,
+                *Psequence);
 
     if (!rmslice)
         return ajFalse;
 
     if (!Psequence)
         return ajFalse;
+
+    if (*Psequence)
+        ajStrAssignClear(Psequence);
+    else
+        *Psequence = ajStrNew();
 
     if ((mtype <= ensERepeatMaskTypeNULL) || (mtype > ensERepeatMaskTypeHard))
     {
@@ -7396,9 +7409,9 @@ AjBool ensRepeatmaskedsliceFetchSequenceStr(EnsPRepeatmaskedslice rmslice,
                ensSliceCalculateLength(rmslice->Slice),
                ajStrGetLen(*Psequence));
 
-    sa = ensSliceGetAdaptor(rmslice->Slice);
+    sla = ensSliceGetAdaptor(rmslice->Slice);
 
-    dba = ensSliceadaptorGetDatabaseadaptor(sa);
+    dba = ensSliceadaptorGetDatabaseadaptor(sla);
 
     rfa = ensRegistryGetRepeatfeatureadaptor(dba);
 
@@ -7530,7 +7543,7 @@ AjBool ensRepeatmaskedsliceFetchSequenceStr(EnsPRepeatmaskedslice rmslice,
             default:
 
                 ajDebug("ensRepeatmaskedsliceFetchSequenceStr got unsupported "
-                        "masking type %d\n", msktyp);
+                        "Ensembl Repeat Mask Type enumeration %d\n", msktyp);
         }
 
         ensRepeatfeatureDel(&rf);

@@ -10,10 +10,10 @@
 ** any arbitrary number of descriptor tags associated with it.
 **
 ** @author Copyright (C) 1999 Richard Bruskiewich
-** @version $Revision: 1.78 $
+** @version $Revision: 1.80 $
 ** @modified 2000 Ian Longden.
 ** @modified 2001 Peter Rice.
-** @modified $Date: 2012/07/03 16:19:36 $ by $Author: rice $
+** @modified $Date: 2013/06/29 22:31:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -219,6 +219,7 @@ void          ajFeatSortByEnd(AjPFeattable Feattab);
 void          ajFeatSortByStart(AjPFeattable Feattab);
 void          ajFeatSortByType(AjPFeattable Feattab);
 void          ajFeattableAdd(AjPFeattable thys, AjPFeature feature);
+void          ajFeattableAddNew(AjPFeattable thys, AjPFeature feature);
 void          ajFeattableClear(AjPFeattable thys);
 void          ajFeattableDel(AjPFeattable *pthis);
 ajint         ajFeattableGetBegin(const AjPFeattable thys);
@@ -249,6 +250,7 @@ ajuint        ajFeattablePos(const AjPFeattable thys, ajint ipos);
 ajuint        ajFeattablePosI(const AjPFeattable thys,
                               ajuint imin, ajint ipos);
 ajuint        ajFeattablePosII(ajuint ilen, ajuint imin, ajint ipos);
+void          ajFeattableReset(AjPFeattable thys, const AjPStr name);
 void          ajFeattableReverse(AjPFeattable  thys);
 void          ajFeattableSetCircular(AjPFeattable thys);
 void          ajFeattableSetDefname(AjPFeattable thys, const AjPStr setname);
@@ -258,6 +260,7 @@ void          ajFeattableSetNuc(AjPFeattable thys);
 void          ajFeattableSetProt(AjPFeattable thys);
 void          ajFeattableSetRange(AjPFeattable thys,
                                   ajint fbegin, ajint fend);
+void          ajFeattableSetReverse(AjPFeattable thys);
 void          ajFeattableTrace(const AjPFeattable thys);
 AjBool        ajFeattableTrim(AjPFeattable thys);
 AjBool        ajFeattableTrimOff(AjPFeattable thys,

@@ -13,9 +13,10 @@ Display information about a public database
 DBNAME tsw [
    format:         "swiss"
    method:         "emblcd"
-   type:           "Protein protfeatures"
+   type:           "Protein protfeatures text"
    comment:        "Swissprot native format with EMBL CD-ROM index"
    directory:      "/homes/user/local/share/EMBOSS/test/swiss"
+   example:        "hba_human"
    field:          "id"
    field:          "acc"
    field:          "sv"

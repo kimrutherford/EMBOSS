@@ -14,7 +14,7 @@ libajaxdb_la_CPPFLAGS += -I$(top_srcdir)/plplot
 libajaxdb_la_CPPFLAGS += $(AXIS2C_CPPFLAGS)
 libajaxdb_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-libajaxdb_la_LDFLAGS  = -version-info 6:4:0
+libajaxdb_la_LDFLAGS  = -version-info 6:5:0
 if ISCYGWIN
 libajaxdb_la_LDFLAGS += -no-undefined
 libajaxdb_la_LDFLAGS += -Wl,--add-stdcall-alias
@@ -48,7 +48,8 @@ ajsoap.c \
 ajtaxdb.c \
 ajtextdb.c \
 ajurldb.c \
-ajvardb.c
+ajvardb.c \
+ajxmldb.c
 
 include_HEADERS = \
 ajassemdb.h \
@@ -63,4 +64,5 @@ ajsoap.h \
 ajtaxdb.h \
 ajtextdb.h \
 ajurldb.h \
-ajvardb.h
+ajvardb.h \
+ajxmldb.h

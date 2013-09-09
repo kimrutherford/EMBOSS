@@ -1,0 +1,27 @@
+Making a distribution
+
+Need to start with a fresh checkout. In particular, the jemboss/build
+directory otherwise contains full path names to olong to save in the
+standard tar format (99 characters starting with EMBOSS-6.5.0/)
+
+
+Then in the top level:
+
+# rsync to pick up the data and index files
+
+rsync -ac rsync://emboss.open-bio.org/EMBOSS/ .
+
+# autoreconf to create the configure file
+
+autoreconf -fi
+
+# configure with default options to create a make file
+
+./configure
+
+# Add a line to NEWS to describe the new release
+15/07/2012	Version 6.5.0  See ChangeLog
+
+# Create the distribution file
+
+make dist

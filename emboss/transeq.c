@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPSeq seq;
     AjPTrn trnTable;
-    AjPSeq pep;
+    AjPSeq pep = NULL;
     AjPStr *framelist;
     AjBool frames[6];	/* frames to be translated 1 to 3, -1 to -3 */
     AjPStr tablename;
@@ -56,8 +56,9 @@ int main(int argc, char **argv)
     AjPRange seqregions;
     AjBool trim;
     AjBool clean;
-    AjBool defr  = ajFalse; /* true if the range covers the whole sequence */
+    AjBool wholeseq = ajFalse; /* true if the range covers the whole sequence */
     AjBool alternate;
+    AjBool methionine;
 
     int i;
 
@@ -71,6 +72,7 @@ int main(int argc, char **argv)
     trim      = ajAcdGetBoolean("trim");
     clean     = ajAcdGetBoolean("clean");
     alternate = ajAcdGetBoolean("alternative");
+    methionine = ajAcdGetBoolean("methionine");
 
     /* get the frames to be translated */
     transeq_GetFrames(framelist, frames);
@@ -88,10 +90,10 @@ int main(int argc, char **argv)
 	ajSeqTrim(seq);
 
 	seqregions = ajRangeNewRange(regions);
-        defr = ajRangeIsWhole(seqregions, seq);
+        wholeseq = ajRangeIsWhole(seqregions, seq);
 
 	/* get regions to translate */
-	if(!defr)
+	if(!wholeseq)
 	    ajRangeSeqExtract(seqregions, seq);
 
         for(i=0; i<6; i++)
@@ -99,14 +101,27 @@ int main(int argc, char **argv)
             ajDebug("try frame: %d\n", i);
             if(frames[i])
 	    {
-                if(i<3)
-	            pep = ajTrnSeqOrig(trnTable, seq, i+1);
-	        else
-		    if(alternate) /* frame -1 uses codons starting at end */
-			pep = ajTrnSeqOrig(trnTable, seq, -i-1);
-		    else	/* frame -1 uses frame 1 codons */
-	              pep = ajTrnSeqOrig(trnTable, seq, 2-i);
-
+                if(methionine && !wholeseq)
+                {
+                    if(i<3)
+                        pep = ajTrnSeqInit(trnTable, seq, i+1);
+                    else
+                        if(alternate) /* frame -1 uses codons starting at end */
+                            pep = ajTrnSeqInit(trnTable, seq, -i-1);
+                        else	/* frame -1 uses frame 1 codons */
+                            pep = ajTrnSeqInit(trnTable, seq, 2-i);
+                }
+                else 
+                {
+                    if(i<3)
+                        pep = ajTrnSeqOrig(trnTable, seq, i+1);
+                    else
+                        if(alternate) /* frame -1 uses codons starting at end */
+                            pep = ajTrnSeqOrig(trnTable, seq, -i-1);
+                        else	/* frame -1 uses frame 1 codons */
+                            pep = ajTrnSeqOrig(trnTable, seq, 2-i);
+                }
+                
 	        if(trim)
 	            transeq_Trim(pep);
 

@@ -3,9 +3,9 @@
 ** AJAX Query parsing functions
 **
 ** @author Copyright (C) 2011 Peter Rice
-** @version $Revision: 1.46 $
+** @version $Revision: 1.50 $
 ** @modified Jul 15 pmr First version with code from all datatypes merged
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2013/01/31 13:25:27 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -485,9 +485,11 @@ static const AjPStr queryGetFieldC(const AjPQuery query,
 ** @fdata [AjPQuery]
 **
 ** @nam3rule Is Test for a property
-** @nam3rule Known Test a property matches known options
+** @nam3rule Defined Test a property matches defined options
+** @nam3rule Known Test a property matches defined or implicit options
 ** @nam4rule Set Query has some query field(s) defined
-** @nam4rule KnownField Test field name is defined for the data source
+** @nam4rule DefinedField Test field name is explicitly defined
+** @nam4rule KnownField Test field name is available for the data source
 ** @suffix C Character string input
 ** @suffix S String input
 **
@@ -500,6 +502,70 @@ static const AjPStr queryGetFieldC(const AjPQuery query,
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
+
+/* @func ajQueryDefinedFieldC *************************************************
+**
+** Checks whether a query field is explicitly defined for a database
+** as a "fields:" string in the database definition.
+**
+** @param [r] thys [const AjPQuery] Query object
+** @param [r] fieldtxt [const char*] field name
+** @return [AjBool] ajTrue if the field is defined
+**
+** @release 6.6.0
+******************************************************************************/
+
+AjBool ajQueryDefinedFieldC(const AjPQuery thys, const char* fieldtxt)
+{
+
+    AjPStrTok handle = NULL;
+    AjPStr token     = NULL;
+
+    ajDebug("ajQueryDefinedFieldC qry '%s' fields '%S'\n",
+            fieldtxt, thys->DbFields);
+
+    ajStrTokenAssignC(&handle, thys->DbFields, "\t ,;\n\r");
+
+    while(ajStrTokenNextParse(handle, &token))
+    {
+	if(ajStrMatchCaseC(token, fieldtxt))
+	{
+	    ajDebug("ajQueryDefinedFieldC match '%S'\n", token);
+	    ajStrTokenDel(&handle);
+	    ajStrDel(&token);
+
+	    return ajTrue;
+	}
+    }
+
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajQueryDefinedFieldS *************************************************
+**
+** Checks whether a query field is defined for a database as a "fields:"
+** string in the database definition.
+**
+** @param [r] thys [const AjPQuery] Query object
+** @param [r] field [const AjPStr] field name
+** @return [AjBool] ajTrue if the field is defined
+**
+** @release 6.4.0
+******************************************************************************/
+
+AjBool ajQueryDefinedFieldS(const AjPQuery thys, const AjPStr field)
+{
+    return ajQueryDefinedFieldC(thys, MAJSTRGETPTR(field));
+}
 
 
 
@@ -553,7 +619,7 @@ AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
 
     ajStrTokenAssignC(&handle, thys->DbFields, "\t ,;\n\r");
 
-    while(ajStrTokenNextParse(&handle, &token))
+    while(ajStrTokenNextParse(handle, &token))
     {
 	if(ajStrMatchCaseC(token, fieldtxt))
 	{
@@ -570,6 +636,8 @@ AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
 
     if(ajCharMatchCaseC(fieldtxt, "id"))
         return ajTrue;
+
+/* check explicitly for an acc field */
 
     if(thys->HasAcc && ajCharMatchCaseC(fieldtxt, "acc"))
         return ajTrue;
@@ -594,7 +662,7 @@ AjBool ajQueryKnownFieldC(const AjPQuery thys, const char* fieldtxt)
 
 AjBool ajQueryKnownFieldS(const AjPQuery thys, const AjPStr field)
 {
-    return ajQueryKnownFieldC(thys, ajStrGetPtr(field));
+    return ajQueryKnownFieldC(thys, MAJSTRGETPTR(field));
 }
 
 
@@ -1032,6 +1100,9 @@ void ajQueryClear(AjPQuery thys)
     thys->Wild = ajFalse;
     thys->CaseId = ajFalse;
     thys->HasAcc = ajTrue;      /* default true in ajQueryNew */
+
+    thys->CountEntries = 0;
+    thys->TotalEntries = 0;
 
     return;
 }
@@ -2086,6 +2157,7 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
     }
 
     regstat = ajFalse;
+    ajStrAssignS(&queryDb, *Pqry);
 
     if(!isspecialfile)
     {
@@ -2136,11 +2208,12 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
             }
         }
 
+        /*
         if(!regstat)
         {
             ajStrAssignS(&queryDb, *Pqry);
         }
-
+        */
     }
 
     if(svrstat && !dbstat)
@@ -2361,7 +2434,7 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
                 else
                     ajStrTokenAssignC(&handle, qry->QryFields, "|&!^\t\n\r");
 
-                while(ajStrTokenNextParseDelimiters(&handle, &idstr,
+                while(ajStrTokenNextParseDelimiters(handle, &idstr,
                                                     &operstr))
                 {
                     if(iquery && (!ajStrGetLen(qry->Qlinks) ||
@@ -2440,7 +2513,7 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
                 ajStrTokenAssignC(&handle, qry->QryFields, "|&^!");
 
-                while(ajStrTokenNextParseDelimiters(&handle, &qrystr,
+                while(ajStrTokenNextParseDelimiters(handle, &qrystr,
                                                     &operstr))
                 {
                     if(ajStrGetLen(operstr))
@@ -2567,7 +2640,7 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
                 ajStrTokenAssignC(&handle, qry->QryFields, " \t\n\r,;|");
 
-                while(ajStrTokenNextParse(&handle, &idstr))
+                while(ajStrTokenNextParse(handle, &idstr))
                 {
                     ajQueryAddFieldOrC(qry, "id",
                                        MAJSTRGETPTR(idstr));
@@ -2731,38 +2804,41 @@ AjBool ajQuerystrParseRead(AjPStr *Pqry, AjPTextin textin,
 
         return ajFalse;
     }
-
-    else if(ajFilenameExists(queryDb))
+    else
     {
-        ajDebug("found filename %S\n", queryDb);
-        ajStrAssignS(&qry->Filename, queryDb);
-
-        if(qry->Fpos)
+        /* try filename with possible query */
+        if(ajFilewildnameExists(queryDb))
         {
-            accstat = ajTextinAccessOffset(textin);
+            ajDebug("found filename %S\n", queryDb);
+            ajStrAssignS(&qry->Filename, queryDb);
 
-            ajQueryTrace(qry);
+            if(qry->Fpos)
+            {
+                accstat = ajTextinAccessOffset(textin);
+
+                ajQueryTrace(qry);
+
+                if(accstat)
+                {
+                    ajStrDel(&qry->QryFields);
+
+                    return ajTrue;
+                }
+            }
+            accstat = ajTextinAccessFile(textin);
 
             if(accstat)
-            {
-                ajStrDel(&qry->QryFields);
-
                 return ajTrue;
-            }
+
+            ajErr("Failed to open filename '%S'", queryDb);
+
+            return ajFalse;
+
         }
-        accstat = ajTextinAccessFile(textin);
-
-        if(accstat)
-            return ajTrue;
-
-        ajErr("Failed to open filename '%S'", qry->Filename);
-
-        return ajFalse;
-
-    }
-    else 
-    {
-        ajErr("Failed to open filename '%S'", queryDb);
+        else 
+        {
+            ajErr("Failed to open filename '%S'", queryDb);
+        }
     }
 
     ajDebug("no valid filename specified\n");
@@ -2861,7 +2937,7 @@ static AjBool queryDbfind(AjPStr *Pdb, const AjPStr svr,
     if(*dbstat || ret)
         return ajTrue;
 
-    if(ajFilenameExists(*Pdb)) /* existing filename */
+    if(ajFilewildnameExists(*Pdb)) /* existing filename */
     {
         ajDebug("not a dbname but is a file '%S'\n", *Pdb);
         ret = ajTrue;

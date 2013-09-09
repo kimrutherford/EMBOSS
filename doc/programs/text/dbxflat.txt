@@ -34,6 +34,7 @@ Resource name: emblresource
         GB : Genbank, DDBJ
     REFSEQ : Refseq
      FASTQ : Fastq files
+     USPTO : Iguspto files
 Entry format [SWISS]: embl
 Wildcard database filename [*.dat]: rod.dat
 Database directory [.]: embl
@@ -53,7 +54,7 @@ General log output file [outfile.dbxflat]:
 Command line arguments
 
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -65,7 +66,7 @@ Version: EMBOSS:6.5.6.0
    -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
                                   (Genbank, DDBJ); REFSEQ (Refseq); FASTQ
-                                  (Fastq files))
+                                  (Fastq files); USPTO (Iguspto files))
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string)
    -directory          directory  [.] Database directory
@@ -162,11 +163,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        7
 Fullcount    9
 Kwlimit      15
@@ -182,11 +183,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        6
 Fullcount    6
 Kwlimit      15

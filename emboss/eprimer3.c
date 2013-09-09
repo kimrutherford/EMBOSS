@@ -929,7 +929,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
     linetokenhandle = ajStrTokenNewC(output, eol);
 
     /* get next line of relevant results */
-    while(ajStrTokenNextParseC(&linetokenhandle, eol, &line))
+    while(ajStrTokenNextParseC(linetokenhandle, eol, &line))
     {
         if(!gotsequenceid)
         {
@@ -973,10 +973,10 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
         keytokenhandle = ajStrTokenNewC(line, equals);
 
         key = ajStrNew();
-        ajStrTokenNextParse(&keytokenhandle, &key);
+        ajStrTokenNextParse(keytokenhandle, &key);
 
         value = ajStrNew();
-        ajStrTokenNextParse(&keytokenhandle, &value);
+        ajStrTokenNextParse(keytokenhandle, &value);
 
         ajDebug("key=%S\tvalue=%S\n", key, value);
 

@@ -3,8 +3,8 @@
 ** General match routines
 **
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version $Revision: 1.16 $
-** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @version $Revision: 1.17 $
+** @modified $Date: 2013/03/05 23:08:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -121,10 +121,14 @@ typedef struct EmbSMatPrints
 ** @attr ordered [AjBool] Can be set if "all" and in order
 ** @attr forward [AjBool] on forward strand
 ** @attr mm [ajuint] Number of mismatches
-** @attr cut1 [ajint] Undocumented
-** @attr cut2 [ajint] Undocumented
-** @attr cut3 [ajint] Undocumented
-** @attr cut4 [ajint] Undocumented
+** @attr cut1 [ajint] First 5' cut
+** @attr cut2 [ajint] First 3' cut
+** @attr cut3 [ajint] Reverse 5' cut
+** @attr cut4 [ajint] Reverse 3' cut
+** @attr len1 [ajuint] Fragment length 5'
+** @attr len2 [ajuint] Fragment length 3'
+** @attr len3 [ajuint] Fragment length reverse 5'
+** @attr len4 [ajuint] Fragment length reverse 3'
 ** @attr circ12 [AjBool] Circular for cut1 and/or cut2
 ** @attr circ34 [AjBool] Circular for cut3 and/or cut4
 ** @attr iso [AjPStr] Holds names of isoschizomers
@@ -156,6 +160,10 @@ typedef struct EmbSMatMatch
     ajint  cut2;
     ajint  cut3;
     ajint  cut4;
+    ajuint len1;
+    ajuint len2;
+    ajuint len3;
+    ajuint len4;
     AjBool circ12;
     AjBool circ34;
     AjPStr iso;

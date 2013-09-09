@@ -57,8 +57,13 @@ public class FileEditorDisplay extends JTextPane
      {
        BufferedReader in = new BufferedReader(new FileReader(filename));
        String line;
-       while((line = in.readLine()) != null)
-         text = text.concat(line + "\n");
+       try {
+    	   while((line = in.readLine()) != null)
+    		   text = text.concat(line + "\n");
+       }
+       finally {
+    	   in.close();
+       }
      }
      catch (IOException ioe)
      {

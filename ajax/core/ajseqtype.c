@@ -3,9 +3,9 @@
 ** AJAX seqtype functions
 **
 ** @author Copyright (C) 2002 Peter Rice
-** @version $Revision: 1.82 $
+** @version $Revision: 1.84 $
 ** @modified 2002-2011 Peter Rice
-** @modified $Date: 2011/10/19 14:52:21 $ by $Author: rice $
+** @modified $Date: 2013/06/29 22:30:31 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -55,6 +55,7 @@
 **                         ConvertFrom
 ** @attr Badchars [AjPRegexp function] Test function
 ** @attr Goodchars [AjPStr function] Test function
+** @attr Filter [char*] Filter for character testing
 ** @attr Desc [const char*] Description for documentation purposes
 ** @@
 ******************************************************************************/
@@ -70,6 +71,7 @@ typedef struct SeqSType
     const char *ConvertTo;
     AjPRegexp (*Badchars) (void);
     AjPStr (*Goodchars) (void);
+    char *Filter;
     const char *Desc;
 } SeqOType;
 
@@ -82,7 +84,7 @@ enum ProtNuc {ISANY=0, ISNUC=1, ISPROT=2};
 
 static char* seqNewGapChars = NULL;
 
-
+static AjPStr seqtypeTmpstr = NULL;
 
 /*
 ** gaps only allowed if it says so
@@ -210,108 +212,134 @@ static SeqOType seqType[] =
     {"any",            AJFALSE, AJTRUE,  ISANY,  0, "?",    "X",
 	 seqTypeCharAny,
 	 seqTypeStrAny,
-	 "any valid sequence"},		/* reset type */
+         NULL,
+         "any valid sequence"},		/* reset type */
     {"gapany",         AJTRUE,  AJTRUE,  ISANY,  0, "?",    "X",
 	 seqTypeCharAnyGap,
 	 seqTypeStrAnyGap,
+         NULL,
 	 "any valid sequence with gaps"}, /* reset type */
     {"dna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxUu", "NNnTt",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
+         NULL,
 	 "DNA sequence"},
     {"puredna",        AJFALSE, AJFALSE, ISNUC,  0, "Uu", "Tt",
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
+         NULL,
 	 "DNA sequence, bases ACGT only"},
     {"gapdna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxUu", "NNnTt",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
+         NULL,
 	 "DNA sequence with gaps"},
     {"gapdnaphylo",    AJTRUE,  AJTRUE,  ISNUC,  0, "Uu",  "Tt",
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
+         NULL,
 	 "DNA sequence with gaps and queries"},
     {"rna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxTt", "NNnUu",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
+         NULL,
 	 "RNA sequence"},
     {"purerna",        AJFALSE, AJFALSE, ISNUC,  0, "Tt", "Uu",
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
+         NULL,
 	 "RNA sequence, bases ACGU only"},
     {"gaprna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxTt", "NNnUu",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
+         NULL,
 	 "RNA sequence with gaps"},
     {"gaprnaphylo",     AJTRUE,  AJTRUE,  ISNUC, 0, "Tt",  "Uu",
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
+         NULL,
 	 "RNA sequence with gaps and queries"},
     {"nucleotide",     AJFALSE, AJTRUE,  ISNUC,  0, "?Xx",   "NNn",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
+         NULL,
 	 "nucleotide sequence"},
     {"purenucleotide", AJFALSE, AJFALSE, ISNUC,  0, NULL,  NULL,
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
+         NULL,
 	 "nucleotide sequence, bases ACGTU only"},
     {"gapnucleotide",  AJTRUE,  AJTRUE,  ISNUC,  0, "?Xx",   "NNn",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
+         NULL,
 	 "nucleotide sequence with gaps"},
     {"gapnucleotidephylo",  AJTRUE,  AJTRUE,  ISNUC,  0, NULL,  NULL,
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
+         NULL,
 	 "nucleotide sequence with gaps and queries"},
     {"gapnucleotidesimple",AJTRUE, AJTRUE , ISNUC,  0,
                      "BbDdHhKkMmRrSsVvWwXxYy?", "NnNnNnNnNnNnNnNnNnNnNnN",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
+         NULL,
 	 "nucleotide sequence with gaps but only N for ambiguity"},
     {"protein",        AJFALSE, AJTRUE,  ISPROT, 0, "?*",  "XX",
 	 seqTypeCharProt,
 	 seqTypeStrProt,
+         NULL,
 	 "protein sequence"},
     {"pureprotein",    AJFALSE, AJFALSE, ISPROT, 0, NULL,  NULL,
 	 seqTypeCharProtPure,
 	 seqTypeStrProtPure,
+         NULL,
 	 "protein sequence without BZ U X or *"},
     {"stopprotein",    AJFALSE, AJTRUE,  ISPROT, 0, "?",   "X",
 	 seqTypeCharProtStop,
 	 seqTypeStrProtStop,
+         NULL,
 	 "protein sequence with possible stops"},
     {"gapprotein",     AJTRUE,  AJTRUE,  ISPROT, 0, "?*",  "XX",
 	 seqTypeCharProtGap,
 	 seqTypeStrProtGap,
+         NULL,
 	 "protein sequence with gaps"},
     {"gapstopprotein", AJTRUE,  AJTRUE,  ISPROT, 0, "?",  "X",
 	 seqTypeCharProtStopGap,
 	 seqTypeStrProtStopGap,
+         NULL,
 	 "protein sequence with gaps and possible stops"},
     {"gapproteinphylo", AJTRUE,  AJTRUE,  ISPROT, 0, NULL,  NULL,
 	 seqTypeCharProtGapPhylo,
 	 seqTypeStrProtGapPhylo,
+         NULL,
 	 "protein sequence with gaps, stops and queries"},
     {"proteinstandard",AJFALSE, AJTRUE,  ISPROT, 0, "?*UuJjOo", "XXXxXxXx",
 	 seqTypeCharProt,
 	 seqTypeStrProt,
+         NULL,
 	 "protein sequence with no selenocysteine"},
     {"stopproteinstandard",AJFALSE, AJTRUE, ISPROT, 0, "?UuJjOo", "XXxXxXx",
 	 seqTypeCharProtStop,
 	 seqTypeStrProtStop,
+         NULL,
 	 "protein sequence with a possible stop but no selenocysteine"},
     {"gapproteinstandard", AJTRUE,  AJTRUE, ISPROT, 0, "?*UuJjOo", "XXXxXxXx",
 	 seqTypeCharProtGap,
 	 seqTypeStrProtGap,
+         NULL,
 	 "protein sequence with gaps but no selenocysteine"},
     {"gapproteinsimple", AJTRUE,  AJTRUE, ISPROT, 0,
                                               "?*BbZzUuJjOo", "XXXxXxXxXxXx",
 	 seqTypeCharProtGap,
 	 seqTypeStrProtGap,
+         NULL,
 	 "protein sequence with gaps but no selenocysteine"},
     {NULL,             AJFALSE, AJTRUE,  ISANY,  0, NULL,  NULL,
 	 NULL,
 	 NULL,
+         NULL,
 	 NULL}
 };
 
@@ -721,7 +749,10 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 	}
     }
 
-    if(ajStrIsCharsetCaseS(thys->Seq, (*seqType[itype].Goodchars)()))
+    if(!seqType[itype].Filter)
+        seqType[itype].Filter =
+            ajStrGetfilterCase((*seqType[itype].Goodchars)());
+    if(ajStrIsFilter(thys->Seq, seqType[itype].Filter))
     {
 	ajDebug("ajSeqTypeCheckIn: bad characters test passed, convert\n");
 
@@ -1121,10 +1152,8 @@ static void seqGapSL(AjPStr* seq, char gapc, char padc, ajuint ilen)
     }
     
     
-    if(ilen)
+    if(ilen >= MAJSTRGETRES(*seq))
 	ajStrSetRes(seq, ilen+1);
-    else
-	ajStrGetuniqueStr(seq);
     
     ajStrExchangeSetCC(seq, seqCharGapTest, seqNewGapChars);
     
@@ -1132,14 +1161,20 @@ static void seqGapSL(AjPStr* seq, char gapc, char padc, ajuint ilen)
     {				/* start and end characters updated */
 	endc = padc;
 
-	/* pad start */
-	for(cp = ajStrGetuniquePtr(seq); strchr(seqCharGapTest, *cp); cp++)
-	    *cp = padc;
+        if(strchr(seqCharGapTest, ajStrGetCharFirst(*seq)))
+        {
+            /* pad start */
+            for(cp = ajStrGetuniquePtr(seq); strchr(seqCharGapTest, *cp); cp++)
+                *cp = padc;
+        }
 
-	cp = ajStrGetuniquePtr(seq);
+        if(strchr(seqCharGapTest, ajStrGetCharLast(*seq)))
+        {
+            cp = ajStrGetuniquePtr(seq);
 
-	for(i=ajStrGetLen(*seq) - 1; i && strchr(seqCharGapTest, cp[i]);  i--)
-	    cp[i] = padc;
+            for(i=ajStrGetLen(*seq) - 1; i && strchr(seqCharGapTest, cp[i]); i--)
+                cp[i] = padc;
+        }
     }
     
     if(ajStrGetLen(*seq) < ilen)	   /* ilen can be zero to skip this */
@@ -2363,14 +2398,17 @@ static AjBool seqFindType(const AjPStr type_name, ajint* typenum)
     ajint i;
     ajint itype = -1;
 
+    ajStrAssignS(&seqtypeTmpstr, type_name);
+    ajStrFmtLower(&seqtypeTmpstr);
+
     for(i = 0; seqType[i].Name; i++)
-	if(ajStrMatchCaseC(type_name, seqType[i].Name))
+	if(ajStrMatchC(seqtypeTmpstr, seqType[i].Name))
 	{
 	    itype = i;
 	    break;
 	}
 
-    if(itype <0)
+    if(itype < 0)
     {
 	*typenum = i;
 
@@ -2534,6 +2572,10 @@ AjBool ajSeqTypeSummary(const AjPStr type_name, AjPStr* Ptype, AjBool* gaps)
 
 void ajSeqTypeExit(void)
 {
+    ajuint i;
+
+    ajStrDel(&seqtypeTmpstr);
+
     ajRegFree(&seqtypeRegAny);
     ajRegFree(&seqtypeRegAnyGap);
     ajRegFree(&seqtypeRegDnaGap);
@@ -2563,6 +2605,12 @@ void ajSeqTypeExit(void)
     ajStrDel(&seqtypeCharsetRnaGap);
 
     ajCharDel(&seqNewGapChars);
+
+    for(i=0;seqType[i].Name;i++)
+    {
+        if(seqType[i].Filter)
+            AJFREE(seqType[i].Filter);
+    }
 
     return;
 }

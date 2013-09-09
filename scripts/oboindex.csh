@@ -1,4 +1,4 @@
-#!/bin/csh -fv
+#!/bin/csh -f
 
 set db = $argv[1]
 
@@ -17,11 +17,19 @@ else if($db == "eco") then
     -dbname $db -dbres oboresource -file eco.obo -auto
 else if($db == "go") then
  dbxobo -dir emboss/data/OBO -index emboss/index \
-    -dbname $db -dbres oboresource -file gene_ontology.1_2.obo -auto
+    -dbname $db -dbres oboresource -file go.obo -auto
 else if($db == "pw") then
  dbxobo -dir emboss/data/OBO -index emboss/index \
     -dbname $db -dbres oboresource -file pathway.obo -auto
 else
+#ro
+#so
   dbxobo -dir emboss/data/OBO -index emboss/index \
     -dbname $db -dbres oboresource -file $db.obo -auto
+endif
+
+if($db == "edam") then
+    cat outfile.dbxedam
+else
+    cat outfile.dbxobo
 endif

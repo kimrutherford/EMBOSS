@@ -168,6 +168,7 @@ EnsemblAliases.dat \
 EnsemblIdentifiers.dat \
 Epepcoil.dat \
 Epk.dat \
+Epkexpasy.dat \
 Epprofile \
 Eprior1.plib \
 Eprior30.plib \

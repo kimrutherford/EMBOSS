@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.53 $
+** @version $Revision: 1.55 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -68,13 +68,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic gvpopulationadaptorKTables ************************************
+/* @conststatic gvpopulationadaptorKTablenames ********************************
 **
 ** Array of Ensembl Genetic Variation Population Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *gvpopulationadaptorKTables[] =
+static const char *gvpopulationadaptorKTablenames[] =
 {
     "sample",
     "population",
@@ -84,13 +84,13 @@ static const char *gvpopulationadaptorKTables[] =
 
 
 
-/* @conststatic gvpopulationadaptorKColumns ***********************************
+/* @conststatic gvpopulationadaptorKColumnnames *******************************
 **
 ** Array of Ensembl Genetic Variation Population Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *gvpopulationadaptorKColumns[] =
+static const char *gvpopulationadaptorKColumnnames[] =
 {
     "sample.sample_id",
     "sample.name",
@@ -105,7 +105,7 @@ static const char *gvpopulationadaptorKColumns[] =
 
 /* @conststatic gvpopulationadaptorKDefaultcondition **************************
 **
-** Ensembl Genetic Variation Population Adaptor SQL default condition
+** Ensembl Genetic Variation Population Adaptor SQL SELECT default condition
 **
 ******************************************************************************/
 
@@ -115,14 +115,14 @@ static const char *gvpopulationadaptorKDefaultcondition =
 
 
 
-/* @conststatic gvpopulationgenotypeadaptorKTables ****************************
+/* @conststatic gvpopulationgenotypeadaptorKTablenames ************************
 **
 ** Array of Ensembl Genetic Variation Population Genotype Adaptor
 ** SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvpopulationgenotypeadaptorKTables[] =
+static const char *const gvpopulationgenotypeadaptorKTablenames[] =
 {
     "population_genotype",
     "failed_variation",
@@ -132,14 +132,14 @@ static const char *const gvpopulationgenotypeadaptorKTables[] =
 
 
 
-/* @conststatic gvpopulationgenotypeadaptorKColumns ***************************
+/* @conststatic gvpopulationgenotypeadaptorKColumnnames ***********************
 **
 ** Array of Ensembl Genetic Variation Population Genotype Adaptor
 ** SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvpopulationgenotypeadaptorKColumns[] =
+static const char *const gvpopulationgenotypeadaptorKColumnnames[] =
 {
     "population_genotype.population_genotype_id",
     "population_genotype.variation_id",
@@ -154,14 +154,14 @@ static const char *const gvpopulationgenotypeadaptorKColumns[] =
 
 
 
-/* @conststatic gvpopulationgenotypeadaptorKLeftjoin **************************
+/* @conststatic gvpopulationgenotypeadaptorKLeftjoins *************************
 **
 ** Array of Ensembl Genetic Variation Population Genotype Adaptor
-** SQL left join conditions
+** SQL LEFT JOIN conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin gvpopulationgenotypeadaptorKLeftjoin[] =
+static const EnsOBaseadaptorLeftjoin gvpopulationgenotypeadaptorKLeftjoins[] =
 {
     {
         "failed_variation",
@@ -239,7 +239,7 @@ static AjBool gvpopulationgenotypeadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::Variation::Population
 ** @cc CVS Revision: 1.13
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -481,14 +481,7 @@ void ensGvpopulationDel(EnsPGvpopulation *Pgvp)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvp)
-        return;
-
-    pthis = *Pgvp;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgvp) || --pthis->Use)
     {
         *Pgvp = NULL;
 
@@ -502,9 +495,7 @@ void ensGvpopulationDel(EnsPGvpopulation *Pgvp)
 
     ajListFree(&pthis->Subgvpopulations);
 
-    AJFREE(pthis);
-
-    *Pgvp = NULL;
+    ajMemFree((void **) Pgvp);
 
     return;
 }
@@ -903,12 +894,13 @@ AjBool ensGvpopulationTrace(const EnsPGvpopulation gvp, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Population object.
 **
 ** @fdata [EnsPGvpopulation]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Population values
+** @nam3rule Calculate
+** Calculate Ensembl Genetic Variation Population information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvp [const EnsPGvpopulation] Ensembl Genetic Variation Population
@@ -973,12 +965,12 @@ size_t ensGvpopulationCalculateMemsize(const EnsPGvpopulation gvp)
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching values of an
+** Functions for fetching information from an
 ** Ensembl Genetic Variation Population object.
 **
 ** @fdata [EnsPGvpopulation]
 **
-** @nam3rule Fetch Fetch Ensembl Genetic Variation Population values
+** @nam3rule Fetch Fetch Ensembl Genetic Variation Population information
 ** @nam4rule All Fetch all objects
 ** @nam5rule Gvindividuals Fetch all
 ** Ensembl Genetic Variation Individual objects
@@ -1005,7 +997,7 @@ size_t ensGvpopulationCalculateMemsize(const EnsPGvpopulation gvp)
 
 /* @func ensGvpopulationFetchAllGvindividuals *********************************
 **
-** Fetch all Ensembl Genetic Variation Individual objectss of an
+** Fetch all Ensembl Genetic Variation Individual objects of an
 ** Ensembl Genetic Variation Population.
 **
 ** The caller is responsible for deleting the
@@ -1025,26 +1017,17 @@ size_t ensGvpopulationCalculateMemsize(const EnsPGvpopulation gvp)
 AjBool ensGvpopulationFetchAllGvindividuals(EnsPGvpopulation gvp,
                                             AjPList gvis)
 {
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPGvindividualadaptor gvia = NULL;
-
     if (!gvp)
         return ajFalse;
 
     if (!gvis)
         return ajFalse;
 
-    if (!gvp->Adaptor)
-        return ajTrue;
-
-    dba = ensGvpopulationadaptorGetDatabaseadaptor(gvp->Adaptor);
-
-    gvia = ensRegistryGetGvindividualadaptor(dba);
-
-    return ensGvindividualadaptorFetchAllbyGvpopulation(gvia,
-                                                        gvp,
-                                                        gvis);
+    return ensGvindividualadaptorFetchAllbyGvpopulation(
+        ensRegistryGetGvindividualadaptor(
+            ensGvpopulationadaptorGetDatabaseadaptor(gvp->Adaptor)),
+        gvp,
+        gvis);
 }
 
 
@@ -1073,27 +1056,18 @@ AjBool ensGvpopulationFetchAllSynonyms(EnsPGvpopulation gvp,
                                        const AjPStr source,
                                        AjPList synonyms)
 {
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPGvsampleadaptor gvsa = NULL;
-
     if (!gvp)
         return ajFalse;
 
     if (!synonyms)
         return ajFalse;
 
-    if (!gvp->Adaptor)
-        return ajTrue;
-
-    dba = ensGvpopulationadaptorGetDatabaseadaptor(gvp->Adaptor);
-
-    gvsa = ensRegistryGetGvsampleadaptor(dba);
-
-    return ensGvsampleadaptorRetrieveAllSynonymsByIdentifier(gvsa,
-                                                             gvp->Identifier,
-                                                             source,
-                                                             synonyms);
+    return ensGvsampleadaptorRetrieveAllSynonymsByIdentifier(
+        ensRegistryGetGvsampleadaptor(
+            ensGvpopulationadaptorGetDatabaseadaptor(gvp->Adaptor)),
+        gvp->Identifier,
+        source,
+        synonyms);
 }
 
 
@@ -1106,8 +1080,8 @@ AjBool ensGvpopulationFetchAllSynonyms(EnsPGvpopulation gvp,
 ** Ensembl Genetic Variation Population Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::PopulationAdaptor
-** @cc CVS Revision: 1.33
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.35
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1184,8 +1158,7 @@ static AjBool gvpopulationadaptorFetchAllbyStatement(
     dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     gvpa = ensRegistryGetGvpopulationadaptor(dba);
-
-    gvsa = ensGvpopulationadaptorGetBaseadaptor(gvpa);
+    gvsa = ensRegistryGetGvpopulationadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
@@ -1289,13 +1262,10 @@ static AjBool gvpopulationadaptorFetchAllbyStatement(
 EnsPGvpopulationadaptor ensGvpopulationadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
     return ensBaseadaptorNew(
         dba,
-        gvpopulationadaptorKTables,
-        gvpopulationadaptorKColumns,
+        gvpopulationadaptorKTablenames,
+        gvpopulationadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         gvpopulationadaptorKDefaultcondition,
         (const char *) NULL,
@@ -1349,7 +1319,7 @@ void ensGvpopulationadaptorDel(EnsPGvpopulationadaptor *Pgvpa)
 {
     ensBaseadaptorDel(Pgvpa);
 
-	return;
+    return;
 }
 
 
@@ -1534,6 +1504,8 @@ AjBool ensGvpopulationadaptorFetchAllHapmap(
     EnsPGvpopulationadaptor gvpa,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!gvpa)
@@ -1544,15 +1516,16 @@ AjBool ensGvpopulationadaptorFetchAllHapmap(
 
     constraint = ajStrNewC("sample.name LIKE 'cshl-hapmap%'");
 
-    ensBaseadaptorFetchAllbyConstraint(gvpa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvps);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensGvpopulationadaptorGetBaseadaptor(gvpa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1580,7 +1553,17 @@ AjBool ensGvpopulationadaptorFetchAllLd(
     EnsPGvpopulationadaptor gvpa,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
+    AjIList iter = NULL;
+
+    AjPRegexp exp = NULL;
+
     AjPStr constraint = NULL;
+
+    EnsPGvpopulation gvp = NULL;
+
+    EnsPGvsample gvs = NULL;
 
     if (!gvpa)
         return ajFalse;
@@ -1590,15 +1573,43 @@ AjBool ensGvpopulationadaptorFetchAllLd(
 
     constraint = ajStrNewC("sample.display = 'LD'");
 
-    ensBaseadaptorFetchAllbyConstraint(gvpa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvps);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensGvpopulationadaptorGetBaseadaptor(gvpa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    /*
+    ** Post-process the AJAX List of Ensembl Genetic Variation Population
+    ** objects to exclude global 1000 Genomes poulations.
+    */
+
+    exp = ajRegCompC("ALL|AFR|AMR|ASN|EUR");
+
+    iter = ajListIterNew(gvps);
+
+    while (!ajListIterDone(iter))
+    {
+        gvp = (EnsPGvpopulation) ajListIterGet(iter);
+
+        gvs = ensGvpopulationGetGvsample(gvp);
+
+        if (ajRegExec(exp, ensGvsampleGetName(gvs)))
+        {
+            ajListIterRemove(iter);
+
+            ensGvpopulationDel(&gvp);
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    ajRegFree(&exp);
+
+    return result;
 }
 
 
@@ -1629,6 +1640,8 @@ AjBool ensGvpopulationadaptorFetchAllTagged(
     const EnsPGvvariationfeature gvvf,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
 
     if (!gvpa)
@@ -1668,15 +1681,16 @@ AjBool ensGvpopulationadaptorFetchAllTagged(
         "tagged_variation_feature.tagged_variation_feature_id = %u",
         ensGvvariationfeatureGetIdentifier(gvvf));
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1707,6 +1721,8 @@ AjBool ensGvpopulationadaptorFetchAllTags(
     const EnsPGvvariationfeature gvvf,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
 
     if (!gvpa)
@@ -1746,15 +1762,16 @@ AjBool ensGvpopulationadaptorFetchAllTags(
         "tagged_variation_feature.variation_feature_id = %u",
         ensGvvariationfeatureGetIdentifier(gvvf));
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1782,6 +1799,8 @@ AjBool ensGvpopulationadaptorFetchAllThousandgenomes(
     EnsPGvpopulationadaptor gvpa,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!gvpa)
@@ -1792,15 +1811,16 @@ AjBool ensGvpopulationadaptorFetchAllThousandgenomes(
 
     constraint = ajStrNewC("sample.name LIKE '1000GENOMES%'");
 
-    ensBaseadaptorFetchAllbyConstraint(gvpa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvps);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensGvpopulationadaptorGetBaseadaptor(gvpa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1831,6 +1851,8 @@ AjBool ensGvpopulationadaptorFetchAllbyGvindividual(
     const EnsPGvindividual gvi,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
 
     if (!gvpa)
@@ -1877,15 +1899,16 @@ AjBool ensGvpopulationadaptorFetchAllbyGvindividual(
         "individual_population.individual_sample_id = %u",
         gvi->Identifier);
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1937,7 +1960,7 @@ AjBool ensGvpopulationadaptorFetchAllbyGvindividuals(
         "AND "
         "sample.sample_id = population.sample_id "
         "AND "
-        "individual_population.individual_sample_id IN (%s)";
+        "individual_population.individual_sample_id IN (%S)";
 
     register ajuint i = 0U;
 
@@ -1983,11 +2006,12 @@ AjBool ensGvpopulationadaptorFetchAllbyGvindividuals(
             {
                 statement = ajFmtStr(template, csv);
 
-                gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                                       statement,
-                                                       (EnsPAssemblymapper) NULL,
-                                                       (EnsPSlice) NULL,
-                                                       gvps);
+                gvpopulationadaptorFetchAllbyStatement(
+                    gvpa,
+                    statement,
+                    (EnsPAssemblymapper) NULL,
+                    (EnsPSlice) NULL,
+                    gvps);
 
                 ajStrDel(&statement);
             }
@@ -2030,6 +2054,8 @@ AjBool ensGvpopulationadaptorFetchAllbyGvpopulationSub(
     const EnsPGvpopulation gvp,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
 
     if (!gvpa)
@@ -2076,15 +2102,16 @@ AjBool ensGvpopulationadaptorFetchAllbyGvpopulationSub(
         "population_structure.sub_population_sample_id = %u",
         gvp->Identifier);
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2114,6 +2141,8 @@ AjBool ensGvpopulationadaptorFetchAllbyGvpopulationSuper(
     const EnsPGvpopulation gvp,
     AjPList gvps)
 {
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
 
     if (!gvpa)
@@ -2160,15 +2189,16 @@ AjBool ensGvpopulationadaptorFetchAllbyGvpopulationSuper(
         "population_structure.super_population_sample_id = %u",
         gvp->Identifier);
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2200,7 +2230,7 @@ AjBool ensGvpopulationadaptorFetchAllbyIdentifiers(
     AjPTable gvps)
 {
     return ensBaseadaptorFetchAllbyIdentifiers(
-        gvpa,
+        ensGvpopulationadaptorGetBaseadaptor(gvpa),
         (EnsPSlice) NULL,
         (ajuint (*)(const void *)) &ensGvpopulationGetIdentifier,
         gvps);
@@ -2238,6 +2268,8 @@ AjBool ensGvpopulationadaptorFetchAllbyNamesearch(
 
     AjPStr constraint = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!gvpa)
         return ajFalse;
 
@@ -2247,14 +2279,16 @@ AjBool ensGvpopulationadaptorFetchAllbyNamesearch(
     if (!gvps)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(gvpa, &txtname, name);
+    ba = ensGvpopulationadaptorGetBaseadaptor(gvpa);
+
+    ensBaseadaptorEscapeC(ba, &txtname, name);
 
     constraint = ajFmtStr("sample.name LIKE CONCAT('%%','%s','%%')", txtname);
 
     ajCharDel(&txtname);
 
     result = ensBaseadaptorFetchAllbyConstraint(
-        gvpa,
+        ba,
         constraint,
         (EnsPAssemblymapper) NULL,
         (EnsPSlice) NULL,
@@ -2297,7 +2331,11 @@ AjBool ensGvpopulationadaptorFetchAllbySynonym(
     char *txtsource  = NULL;
     char *txtsynonym = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPStr statement = NULL;
+
+    EnsPBaseadaptor ba = NULL;
 
     if (!gvpa)
         return ajFalse;
@@ -2314,11 +2352,13 @@ AjBool ensGvpopulationadaptorFetchAllbySynonym(
     ** required.
     */
 
-    ensBaseadaptorEscapeC(gvpa, &txtsynonym, synonym);
+    ba = ensGvpopulationadaptorGetBaseadaptor(gvpa);
+
+    ensBaseadaptorEscapeC(ba, &txtsynonym, synonym);
 
     if (source && ajStrGetLen(source))
     {
-        ensBaseadaptorEscapeC(gvpa, &txtsource, source);
+        ensBaseadaptorEscapeC(ba, &txtsource, source);
 
         statement = ajFmtStr(
             "SELECT "
@@ -2369,15 +2409,16 @@ AjBool ensGvpopulationadaptorFetchAllbySynonym(
 
     ajCharDel(&txtsynonym);
 
-    gvpopulationadaptorFetchAllbyStatement(gvpa,
-                                           statement,
-                                           (EnsPAssemblymapper) NULL,
-                                           (EnsPSlice) NULL,
-                                           gvps);
+    result = gvpopulationadaptorFetchAllbyStatement(
+        gvpa,
+        statement,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     ajStrDel(&statement);
 
-    return ajTrue;
+    return result;
 }
 
 #if AJFALSE
@@ -2406,7 +2447,7 @@ AjBool ensGvpopulationadaptorFetchAllbySynonymOld(
     if (!gvps)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvpa);
+    dba = ensGvpopulationadaptorGetDatabaseadaptor(gvpa);
 
     gvsa = ensRegistryGetGvsampleadaptor(dba);
 
@@ -2419,9 +2460,7 @@ AjBool ensGvpopulationadaptorFetchAllbySynonymOld(
 
     while (ajListPop(idlist, (void **) &Pidentifier))
     {
-        ensGvpopulationadaptorFetchByIdentifier(gvpa,
-                                                *Pidentifier,
-                                                &gvp);
+        ensGvpopulationadaptorFetchByIdentifier(gvpa, *Pidentifier, &gvp);
 
         ajListPushAppend(gvps, (void *) gvp);
 
@@ -2462,16 +2501,10 @@ AjBool ensGvpopulationadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGvpopulation *Pgvp)
 {
-    if (!gvpa)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Pgvp)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(gvpa, identifier, (void **) Pgvp);
+    return ensBaseadaptorFetchByIdentifier(
+        ensGvpopulationadaptorGetBaseadaptor(gvpa),
+        identifier,
+        (void **) Pgvp);
 }
 
 
@@ -2501,9 +2534,13 @@ AjBool ensGvpopulationadaptorFetchByName(
 {
     char *txtname = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPList gvps = NULL;
 
     AjPStr constraint = NULL;
+
+    EnsPBaseadaptor ba = NULL;
 
     EnsPGvpopulation gvp = NULL;
 
@@ -2516,7 +2553,11 @@ AjBool ensGvpopulationadaptorFetchByName(
     if (!Pgvp)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(gvpa, &txtname, name);
+    *Pgvp = NULL;
+
+    ba = ensGvpopulationadaptorGetBaseadaptor(gvpa);
+
+    ensBaseadaptorEscapeC(ba, &txtname, name);
 
     constraint = ajFmtStr("sample.name = '%s'", txtname);
 
@@ -2524,11 +2565,12 @@ AjBool ensGvpopulationadaptorFetchByName(
 
     gvps = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(gvpa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvps);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvps);
 
     if (ajListGetLength(gvps) == 0)
         ajDebug("ensGvpopulationadaptorFetchByName could not get an "
@@ -2551,7 +2593,7 @@ AjBool ensGvpopulationadaptorFetchByName(
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2562,10 +2604,10 @@ AjBool ensGvpopulationadaptorFetchByName(
 ** Fetch the Ensembl Genetic Variation Population, which is used as a default
 ** in the LD display of the pairwise LD data.
 **
-** @param [u] gvpa [EnsPGvpopulationadaptor] Ensembl Genetic Variation
-**                                           Population Adaptor
-** @param [wP] Pgvp [EnsPGvpopulation*] Ensembl Genetic Variation Population
-**                                      address
+** @param [u] gvpa [EnsPGvpopulationadaptor]
+** Ensembl Genetic Variation Population Adaptor
+** @param [wP] Pgvp [EnsPGvpopulation*]
+** Ensembl Genetic Variation Population address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2583,10 +2625,7 @@ AjBool ensGvpopulationadaptorFetchDefaultld(
 
     AjPStr key = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPMetainformation mi         = NULL;
-    EnsPMetainformationadaptor mia = NULL;
+    EnsPMetainformation mi = NULL;
 
     if (!gvpa)
         return ajFalse;
@@ -2594,15 +2633,17 @@ AjBool ensGvpopulationadaptorFetchDefaultld(
     if (!Pgvp)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvpa);
-
-    mia = ensRegistryGetMetainformationadaptor(dba);
+    *Pgvp = NULL;
 
     key = ajStrNewC("pairwise_ld.default_population");
 
     mis = ajListNew();
 
-    ensMetainformationadaptorFetchAllbyKey(mia, key, mis);
+    ensMetainformationadaptorFetchAllbyKey(
+        ensRegistryGetMetainformationadaptor(
+            ensGvpopulationadaptorGetDatabaseadaptor(gvpa)),
+        key,
+        mis);
 
     ajListPop(mis, (void **) &mi);
 
@@ -2636,7 +2677,7 @@ AjBool ensGvpopulationadaptorFetchDefaultld(
 **
 ** @cc Bio::EnsEMBL::Variation::PopulationGenotype
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -2848,14 +2889,7 @@ void ensGvpopulationgenotypeDel(EnsPGvpopulationgenotype *Pgvpg)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvpg)
-        return;
-
-    pthis = *Pgvpg;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgvpg) || --pthis->Use)
     {
         *Pgvpg = NULL;
 
@@ -2866,9 +2900,7 @@ void ensGvpopulationgenotypeDel(EnsPGvpopulationgenotype *Pgvpg)
 
     ensGvgenotypeDel(&pthis->Gvgenotype);
 
-    AJFREE(pthis);
-
-    *Pgvpg = NULL;
+    ajMemFree((void **) Pgvpg);
 
     return;
 }
@@ -3331,8 +3363,6 @@ AjBool ensGvpopulationgenotypeTrace(const EnsPGvpopulationgenotype gvpg,
             "%S  Adaptor %p\n"
             "%S  Gvgenotype %p\n"
             "%S  Gvpopulation %p\n"
-            "%S  Allele1 '%S'\n"
-            "%S  Allele2 '%S'\n"
             "%S  Counter %u\n"
             "%S  Frequency %f\n",
             indent, gvpg,
@@ -3428,13 +3458,13 @@ ajuint ensGvpopulationgenotypeGetSubidentifier(
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Population Genotype object.
 **
 ** @fdata [EnsPGvpopulationgenotype]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Population Genotype
-** values
+** @nam3rule Calculate
+** Calculate Ensembl Genetic Variation Population Genotype information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvpg [const EnsPGvpopulationgenotype]
@@ -3489,8 +3519,8 @@ size_t ensGvpopulationgenotypeCalculateMemsize(
 ** Ensembl Genetic Variation Population Genotype Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::PopulationGenotypeAdaptor
-** @cc CVS Revision: 1.23.2.1
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.29
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3506,10 +3536,11 @@ size_t ensGvpopulationgenotypeCalculateMemsize(
 ** AJAX List objects of Ensembl Genetic Variation Population Genotype objects.
 **
 ** @param [d] Pkey [void**] AJAX unsigned integer key data address
-** @param [d] Pvalue [void**] AJAX Lists of Ensembl Genetic Variation
-**                           Population Genotype objects
-** @param [u] cl [void*] AJAX Table of Ensembl Genetic Variation Population
-**                       objects, passed in from ajTableMapDel
+** @param [d] Pvalue [void**]
+** AJAX List objects of Ensembl Genetic Variation Population Genotype objects
+** @param [u] cl [void*]
+** AJAX Table of Ensembl Genetic Variation Population objects,
+** passed in from ajTableMapDel
 ** @see ajTableMapDel
 **
 ** @return [void]
@@ -3580,10 +3611,11 @@ static void gvpopulationgenotypeadaptorLinkGvgenotypecode(
 ** AJAX List objects of Ensembl Genetic Variation Population Genotype objects.
 **
 ** @param [d] Pkey [void**] AJAX unsigned integer key data address
-** @param [d] Pvalue [void**] AJAX Lists of Ensembl Genetic Variation
-**                           Population Genotype objects
-** @param [u] cl [void*] AJAX Table of Ensembl Genetic Variation Population
-**                       objects, passed in from ajTableMapDel
+** @param [d] Pvalue [void**]
+** AJAX List objects of Ensembl Genetic Variation Population Genotype objects
+** @param [u] cl [void*]
+** AJAX Table of Ensembl Genetic Variation Population objects,
+** passed in from ajTableMapDel
 ** @see ajTableMapDel
 **
 ** @return [void]
@@ -3650,10 +3682,11 @@ static void gvpopulationgenotypeadaptorLinkGvpopulation(
 ** AJAX List objects of Ensembl Genetic Variation Population Genotype objects.
 **
 ** @param [d] Pkey [void**] AJAX unsigned integer key data address
-** @param [d] Pvalue [void**] AJAX Lists of Ensembl Genetic Variation
-**                           Population Genotype objects
-** @param [u] cl [void*] AJAX Table of Ensembl Genetic Variation Variation
-**                       objects, passed in from ajTableMapDel
+** @param [d] Pvalue [void**]
+** AJAX List objects of Ensembl Genetic Variation Population Genotype objects
+** @param [u] cl [void*]
+** AJAX Table of Ensembl Genetic Variation Variation objects,
+** passed in from ajTableMapDel
 ** @see ajTableMapDel
 **
 ** @return [void]
@@ -3879,15 +3912,17 @@ static AjBool gvpopulationgenotypeadaptorFetchAllbyStatement(
             ** Ensembl Genetic Variation Population Genotype objects.
             **
             ** gvps
-            **   key data:   Ensembl Genetic Variation Population (or Sample)
-            **               identifiers
+            **   key data:   AJAX unsigned integer
+            **               (Ensembl Genetic Variation Population (or Sample)
+            **               identifier) objects
             **   value data: Ensembl Genetic Variation Population objects
             **               fetched by
             **               ensGvpopulationadaptorFetchAllbyIdentifiers
             **
             ** gvpstogvpgs
-            **   key data:   Ensembl Genetic Variation Population (or Sample)
-            **               identifiers
+            **   key data:   AJAX unsigned integer
+            **               (Ensembl Genetic Variation Population (or Sample)
+            **               identifier) objects
             **   value data: AJAX List objects of Ensembl Genetic Variation
             **               Population Genotype objects that need associating
             **               with Ensembl Genetic Variation Population objects
@@ -3930,15 +3965,17 @@ static AjBool gvpopulationgenotypeadaptorFetchAllbyStatement(
             ** Ensembl Genetic Variation Population Genotype objects.
             **
             ** gvgcs
-            **   key data:   Ensembl Genetic Variation Genotype Code
-            **               identifiers
+            **   key data:   AJAX unsigned inetger
+            **               (Ensembl Genetic Variation Genotype Code
+            **               identifier) objects
             **   value data: Ensembl Genetic Variation Genotype Code objects
             **               fetched by
             **               ensGvgenotypecodeadaptorFetchAllbyIdentifiers FIXME!!!
             **
             ** gvgcstogvpgs
-            **   key data:   Ensembl Genetic Variation Genotype Code
-            **               identifiers
+            **   key data:   AJAX unsigned integer
+            **               (Ensembl Genetic Variation Genotype Code
+            **               identifier) objects
             **   value data: AJAX List objects of Ensembl Genetic Variation
             **               Population Genotype objects that need associating
             **               with Ensembl Genetic Variation Genotype Code
@@ -3977,13 +4014,17 @@ static AjBool gvpopulationgenotypeadaptorFetchAllbyStatement(
             ** Ensembl Genetic Variation Population Genotype objects.
             **
             ** gvvs
-            **   key data:   Ensembl Genetic Variation Variation identifiers
+            **   key data:   AJAX unsigned integer
+            **               (Ensembl Genetic Variation Variation identifier)
+            **               objects
             **   value data: Ensembl Genetic Variation Variation objects
             **               fetched by
             **               ensGvvariationadaptorFetchAllbyIdentifiers
             **
             ** gvvstogvpgs
-            **   key data:   Ensembl Genetic Variation Variation identifiers
+            **   key data:   AJAX unsigned integer
+            **               (Ensembl Genetic Variation Variation identifier)
+            **               objects
             **   value data: AJAX List objects of Ensembl Genetic Variation
             **               Population Genotype objects that need associating
             **               with Ensembl Genetic Variation Variation objects
@@ -4151,9 +4192,9 @@ EnsPGvpopulationgenotypeadaptor ensGvpopulationgenotypeadaptorNew(
 
     ba = ensBaseadaptorNew(
         dba,
-        gvpopulationgenotypeadaptorKTables,
-        gvpopulationgenotypeadaptorKColumns,
-        gvpopulationgenotypeadaptorKLeftjoin,
+        gvpopulationgenotypeadaptorKTablenames,
+        gvpopulationgenotypeadaptorKColumnnames,
+        gvpopulationgenotypeadaptorKLeftjoins,
         (const char *) NULL,
         (const char *) NULL,
         &gvpopulationgenotypeadaptorFetchAllbyStatement);
@@ -4229,18 +4270,144 @@ void ensGvpopulationgenotypeadaptorDel(
                 *Pgvpga);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvpga)
+    if (!(pthis = *Pgvpga))
         return;
-
-    pthis = *Pgvpga;
 
     ensBaseadaptorDel(&pthis->Baseadaptor);
 
-    AJFREE(pthis);
-
-    *Pgvpga = NULL;
+    ajMemFree((void **) Pgvpga);
 
     return;
+}
+
+
+
+
+/* @section member retrieval **************************************************
+**
+** Functions for returning members of an
+** Ensembl Genetic Variation Population Genotype Adaptor object.
+**
+** @fdata [EnsPGvpopulationgenotypeadaptor]
+**
+** @nam3rule Get
+** Return Genetic Variation Population Genotype Adaptor attribute(s)
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Databaseadaptor
+** @nam4rule Gvbaseadaptor Return the Ensembl Genetic Variation Base Adaptor
+** @nam4rule Gvdatabaseadaptor
+** Return the Ensembl Genetic Variation Database Adaptor
+**
+** @argrule * gvpga [EnsPGvpopulationgenotypeadaptor]
+** Ensembl Genetic Variation Population Genotype Adaptor
+**
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Databaseadaptor or NULL
+** @valrule Gvbaseadaptor [EnsPGvbaseadaptor]
+** Ensembl Genetic Variation Base Adaptor or NULL
+** @valrule Gvdatabaseadaptor [EnsPGvdatabaseadaptor]
+** Ensembl Genetic Variation Database Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensGvpopulationgenotypeadaptorGetBaseadaptor *************************
+**
+** Get the Ensembl Base Adaptor member of an
+** Ensembl Genetic Variation Population Genotype Adaptor.
+**
+** @param [u] gvpga [EnsPGvpopulationgenotypeadaptor]
+** Ensembl Genetic Variation Population Genotype Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensGvpopulationgenotypeadaptorGetBaseadaptor(
+    EnsPGvpopulationgenotypeadaptor gvpga)
+{
+    return ensGvbaseadaptorGetBaseadaptor(
+        ensGvpopulationgenotypeadaptorGetGvbaseadaptor(gvpga));
+}
+
+
+
+
+/* @func ensGvpopulationgenotypeadaptorGetDatabaseadaptor *********************
+**
+** Get the Ensembl Database Adaptor member of an
+** Ensembl Genetic Variation Population Genotype Adaptor.
+**
+** @param [u] gvpga [EnsPGvpopulationgenotypeadaptor]
+** Ensembl Genetic Variation Population Genotype Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensGvpopulationgenotypeadaptorGetDatabaseadaptor(
+    EnsPGvpopulationgenotypeadaptor gvpga)
+{
+    return ensGvbaseadaptorGetDatabaseadaptor(
+        ensGvpopulationgenotypeadaptorGetGvbaseadaptor(gvpga));
+}
+
+
+
+
+/* @func ensGvpopulationgenotypeadaptorGetGvbaseadaptor ***********************
+**
+** Get the Ensembl Genetic Variation Base Adaptor member of an
+** Ensembl Genetic Variation Population Genotype Adaptor.
+**
+** @param [u] gvpga [EnsPGvpopulationgenotypeadaptor]
+** Ensembl Genetic Variation Population Genotype Adaptor
+**
+** @return [EnsPGvbaseadaptor]
+** Ensembl Genetic Variation Base Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPGvbaseadaptor ensGvpopulationgenotypeadaptorGetGvbaseadaptor(
+    EnsPGvpopulationgenotypeadaptor gvpga)
+{
+    return gvpga;
+}
+
+
+
+
+/* @func ensGvpopulationgenotypeadaptorGetGvdatabaseadaptor *******************
+**
+** Get the Ensembl Genetic Variation Database Adaptor member of an
+** Ensembl Genetic Variation Population Genotype Adaptor.
+**
+** @param [u] gvpga [EnsPGvpopulationgenotypeadaptor]
+** Ensembl Genetic Variation Population Genotype Adaptor
+**
+** @return [EnsPGvdatabaseadaptor]
+** Ensembl Genetic Variation Database Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPGvdatabaseadaptor ensGvpopulationgenotypeadaptorGetGvdatabaseadaptor(
+    EnsPGvpopulationgenotypeadaptor gvpga)
+{
+    return ensGvbaseadaptorGetGvdatabaseadaptor(
+        ensGvpopulationgenotypeadaptorGetGvbaseadaptor(gvpga));
 }
 
 
@@ -4315,6 +4482,8 @@ AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvpopulation(
     const EnsPGvpopulation gvp,
     AjPList gvpgs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint    = NULL;
     AjPStr fvsconstraint = NULL;
 
@@ -4336,24 +4505,26 @@ AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvpopulation(
         return ajFalse;
     }
 
-    ensGvdatabaseadaptorFailedvariationsconstraint(gvpga->Adaptor,
-                                                   (const AjPStr) NULL,
-                                                   &fvsconstraint);
+    ensGvdatabaseadaptorFailedvariationsconstraint(
+        ensGvpopulationgenotypeadaptorGetGvdatabaseadaptor(gvpga),
+        (const AjPStr) NULL,
+        &fvsconstraint);
 
     constraint = ajFmtStr("population_genotype.sample_id = %u AND %S",
                           ensGvpopulationGetIdentifier(gvp),
                           fvsconstraint);
 
-    ensBaseadaptorFetchAllbyConstraint(gvpga->Baseadaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvpgs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensGvpopulationgenotypeadaptorGetBaseadaptor(gvpga),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvpgs);
 
     ajStrDel(&constraint);
     ajStrDel(&fvsconstraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -4387,6 +4558,8 @@ AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvvariation(
     const EnsPGvvariation gvv,
     AjPList gvpgs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!gvpga)
@@ -4410,13 +4583,14 @@ AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvvariation(
     constraint = ajFmtStr("population_genotype.variation_id = %u",
                           ensGvvariationGetIdentifier(gvv));
 
-    ensBaseadaptorFetchAllbyConstraint(gvpga->Baseadaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       gvpgs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensGvpopulationgenotypeadaptorGetBaseadaptor(gvpga),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        gvpgs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }

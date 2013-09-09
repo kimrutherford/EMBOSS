@@ -4,11 +4,11 @@
 
 AC_PREREQ([2.64])
 AC_INIT([EMBOSS],
-[6.5.7],
+[6.6.0],
 [emboss-bug@emboss.open-bio.org],
 [EMBOSS],
 [http://emboss.open-bio.org/])
-AC_REVISION([$Revision: 1.160 $])
+AC_REVISION([$Revision: 1.162 $])
 AC_CONFIG_SRCDIR([ajax/acd/ajacd.c])
 AC_CONFIG_HEADERS([ajax/core/config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -876,6 +876,15 @@ dnl fi
 if test "x${with_gccprofile}" = "xyes" ; then
   CFLAGS="${CFLAGS} -pg"
   LDFLAGS="${LDFLAGS} -pg"
+fi
+
+
+
+
+# Enable GCOV pcoverage analysis: --enable-gcov, appends CFLAGS
+
+if test "x${with_gcov}" = "xyes" ; then
+  CFLAGS="${CFLAGS} -fprofile-arcs -ftest-coverage"
 fi
 
 

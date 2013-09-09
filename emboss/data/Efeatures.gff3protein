@@ -19,7 +19,7 @@
 
 # SITE - Any other interesting site on the sequence.
 
-polypeptide_region SO:0000839 SO:0000839_site SO:0000839_region SO:0000839_inhibitory_site
+polypeptide_region SO:0000839 SO:0000839_region SO:0000839_inhibitory_site
 	/note
 	/comment
 
@@ -35,6 +35,12 @@ active_site_residue SO:0001104 SO:0001104_act_site
 binding_site SO:0000409 SO:0100018_np_bind SO:0100020_zn_fing
 	/note
 	/comment
+
+# SO:
+# A region of a peptide that is involved in a biochemical function
+# used as a general feature by EMBOSS
+
+biochemical_region_of_peptide SO:0100001
 
 # SO:
 # A region defined by its disposition to be involved in a biological process

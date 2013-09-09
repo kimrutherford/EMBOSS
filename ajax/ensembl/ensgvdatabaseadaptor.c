@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.12 $
+** @version $Revision: 1.14 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -100,8 +100,8 @@
 ** Ensembl Genetic Variation Database Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::DBAdaptor
-** @cc CVS Revision: 1.39
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.40
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -239,14 +239,10 @@ void ensGvdatabaseadaptorDel(EnsPGvdatabaseadaptor *Pgvdba)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvdba)
+    if (!(pthis = *Pgvdba))
         return;
 
-    pthis = *Pgvdba;
-
-    AJFREE(pthis);
-
-    *Pgvdba = NULL;
+    ajMemFree((void **) Pgvdba);
 
     return;
 }
@@ -479,7 +475,7 @@ AjBool ensGvdatabaseadaptorTrace(const EnsPGvdatabaseadaptor gvdba,
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for fetching objects releated to
+** Functions for retrieving objects releated to
 ** Ensembl Genetic Variation Database Adaptor objects.
 **
 ** @fdata [EnsPGvdatabaseadaptor]
@@ -551,9 +547,10 @@ AjBool ensGvdatabaseadaptorFailedallelesconstraint(
     {
         if ((tablename != NULL) && (ajStrGetLen(tablename)))
         {
-            ensDatabaseadaptorEscapeC(gvdba->Adaptor,
-                                      &txttablename,
-                                      tablename);
+            ensDatabaseadaptorEscapeC(
+                ensGvdatabaseadaptorGetDatabaseadaptor(gvdba),
+                &txttablename,
+                tablename);
 
             ajStrAssignC(Pconstraint, txttablename);
 
@@ -616,9 +613,10 @@ AjBool ensGvdatabaseadaptorFailedstructuralsconstraint(
     {
         if ((tablename != NULL) && (ajStrGetLen(tablename)))
         {
-            ensDatabaseadaptorEscapeC(gvdba->Adaptor,
-                                      &txttablename,
-                                      tablename);
+            ensDatabaseadaptorEscapeC(
+                ensGvdatabaseadaptorGetDatabaseadaptor(gvdba),
+                &txttablename,
+                tablename);
 
             ajStrAssignC(Pconstraint, txttablename);
 
@@ -681,9 +679,10 @@ AjBool ensGvdatabaseadaptorFailedvariationsconstraint(
     {
         if ((tablename != NULL) && (ajStrGetLen(tablename)))
         {
-            ensDatabaseadaptorEscapeC(gvdba->Adaptor,
-                                      &txttablename,
-                                      tablename);
+            ensDatabaseadaptorEscapeC(
+                ensGvdatabaseadaptorGetDatabaseadaptor(gvdba),
+                &txttablename,
+                tablename);
 
             ajStrAssignC(Pconstraint, txttablename);
 

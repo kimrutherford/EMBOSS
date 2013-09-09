@@ -4,12 +4,11 @@
 <p><h3>File: 9604.excel</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-9598	9596	species	Y	Pan troglodytes
-9597	9596	species	Y	Pan paniscus
-741158	9605	species	Y	Homo sp. Altai
 9606	9605	species	Y	Homo sapiens
-9593	9592	species	Y	Gorilla gorilla
+9597	9596	species	Y	Pan paniscus
+9598	9596	species	Y	Pan troglodytes
 499232	9592	species	Y	Gorilla beringei
+9593	9592	species	Y	Gorilla gorilla
 9603	9599	species	Y	Pongo sp.
 9600	9599	species	Y	Pongo pygmaeus
 9601	9599	species	Y	Pongo abelii

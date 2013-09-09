@@ -3,11 +3,11 @@
 ** AJAX range functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version $Revision: 1.43 $
+** @version $Revision: 1.46 $
 ** @modified Aug 21 ajb First version
 ** @modified 7 Sept 1999 GWW - String range edit functions added
 ** @modified 5 Nov 1999 GWW - store text after pairs of numbers
-** @modified $Date: 2012/07/17 12:45:26 $ by $Author: rice $
+** @modified $Date: 2013/02/07 10:24:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -234,12 +234,12 @@ AjPRange ajRangeNewFilenameLimits(const AjPStr name, ajuint imin, ajuint imax,
         tokens = ajStrTokenNewC(line, whiteSpace);
 
         one = ajStrNew();
-        ajStrTokenNextParse(&tokens, &one);
+        ajStrTokenNextParse(tokens, &one);
         ajListstrPushAppend(onelist, one);
         one = NULL;
 
         two = ajStrNew();
-        ajStrTokenNextParse(&tokens, &two);
+        ajStrTokenNextParse(tokens, &two);
 
         if(ajStrGetLen(two))
         {
@@ -255,7 +255,7 @@ AjPRange ajRangeNewFilenameLimits(const AjPStr name, ajuint imin, ajuint imax,
 
         /* get any remaining text and store in temporary list */
         text = ajStrNew();
-        ajStrTokenNextParseC(&tokens, notSpace, &text);
+        ajStrTokenNextParseC(tokens, notSpace, &text);
         ajStrTrimWhite(&text);
         ajListstrPushAppend(textlist, text);
         text = NULL;
@@ -460,8 +460,12 @@ AjPRange ajRangeNewStringLimits(const AjPStr str, ajuint imin, ajuint imax,
     ajuint i;
     AjBool doneone = ajFalse;
 
-    const char *nondigit="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        " \t\n\r!@#$%^&*()_-+=|\\~`{[}]:;\"'<,>.?/";
+    const char *nondigit="abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        " \t\n\r!@#$%^&*()_-=|\\~`{[}]:;\"'<,>.?/+";
+    const char *nondigitplus="abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        " \t\n\r!@#$%^&*()_-=|\\~`{[}]:;\"'<,>.?/";
     const char *digit="0123456789";
 
     ajStrAssignS(&s, str);
@@ -526,24 +530,42 @@ AjPRange ajRangeNewStringLimits(const AjPStr str, ajuint imin, ajuint imax,
 
             /* get the pairs of numbers and put them in the AjPRange object */
             cp = ajStrGetPtr(c2);
-            p = ajSysFuncStrtok(cp, nondigit);
+            p = ajSysFuncStrtok(cp, nondigitplus);
 
-            if(!sscanf(p,"%u",&f))
+            if(2 == sscanf(p,"%u+%u",&f, &t))
             {
-                ajWarn("Bad range value [%s]",p);
-                ajRangeDel(&ret);
+                if(t)
+                    t = (f + t - 1);
+                else
+                    t = f;
 
-                return NULL;
             }
-
-            p = ajSysFuncStrtok(NULL, nondigit);
-
-            if(!sscanf(p, "%u", &t))
+            else 
             {
-                ajWarn("Bad range value [%s]",p);
-                ajRangeDel(&ret);
+                if(!sscanf(p,"%u",&f))
+                {
+                    ajWarn("Bad range value [%s]",p);
+                    ajRangeDel(&ret);
 
-                return NULL;
+                    return NULL;
+                }
+
+                p = ajSysFuncStrtok(NULL, nondigitplus);
+
+                if(sscanf(p, "+%u", &t))
+                {
+                    if(t)
+                        t = (f + t - 1);
+                    else
+                        t = f;
+                }
+                else if(!sscanf(p, "%u", &t))
+                {
+                    ajWarn("Bad range value [%s]",p);
+                    ajRangeDel(&ret);
+                    
+                    return NULL;
+                }
             }
 
             if(f>t)
@@ -575,24 +597,41 @@ AjPRange ajRangeNewStringLimits(const AjPStr str, ajuint imin, ajuint imax,
 
             for(i = 1; i < e; ++i)
             {
-                p = ajSysFuncStrtok(NULL, nondigit);
+                p = ajSysFuncStrtok(NULL, nondigitplus);
 
-                if(!sscanf(p, "%u", &f))
+                if(2 == sscanf(p,"%u+%u",&f, &t))
                 {
-                    ajWarn("Bad range value [%s]", p);
-                    ajRangeDel(&ret);
-
-                    return NULL;
+                    if(t)
+                        t = (f + t - 1);
+                    else
+                        t = f;
                 }
-
-                p = ajSysFuncStrtok(NULL, nondigit);
-
-                if(!sscanf(p, "%u", &t))
+                else 
                 {
-                    ajWarn("Bad range value [%s]", p);
-                    ajRangeDel(&ret);
+                    if(!sscanf(p, "%u", &f))
+                    {
+                        ajWarn("Bad range value [%s]", p);
+                        ajRangeDel(&ret);
 
-                    return NULL;
+                        return NULL;
+                    }
+
+                    p = ajSysFuncStrtok(NULL, nondigitplus);
+
+                    if(sscanf(p, "+%u", &t))
+                    {
+                        if(t)
+                            t = (f + t - 1);
+                        else
+                            t = f;
+                    }
+                    else if(!sscanf(p, "%u", &t))
+                    {
+                        ajWarn("Bad range value [%s]", p);
+                        ajRangeDel(&ret);
+
+                        return NULL;
+                    }
                 }
 
                 if(f > t)
@@ -1871,8 +1910,8 @@ AjBool ajRangeIsOrdered(const AjPRange thys)
 **
 ** Test whether the default range is used for a sequence
 **
-** The test is whether the given range is a single range from the start to
-** the end of a sequence string.
+** The test is whether the given range is defined or left at the
+** default of zero to zero.
 **
 ** @param [r] thys [const AjPRange] range object
 ** @param [r] s [const AjPSeq] sequence
@@ -1901,11 +1940,17 @@ AjBool ajRangeIsWhole(const AjPRange thys, const AjPSeq s)
             thys->n, thys->start[0], thys->end[0],
             ajSeqGetBegin(s), ajSeqGetEnd(s));
 
-    if(thys->n == 1 &&
-       thys->start[0] == ajSeqGetBegin(s) &&
-       thys->end[0] == ajSeqGetEnd(s))
-        return ajTrue;
-
+/*
+** Changed to be true only if range is not set
+** transeq needs to distinguish undefed from specific 1..end
+*/
+    
+/*
+//    if(thys->n == 1 &&
+//       thys->start[0] == ajSeqGetBegin(s) &&
+//       thys->end[0] == ajSeqGetEnd(s))
+//        return ajTrue;
+*/
     return ajFalse;
 }
 

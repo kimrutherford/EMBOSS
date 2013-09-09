@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: restrict
 #    -sequence tembl:x65923
 # Report_format: table
@@ -28,61 +28,61 @@
 #
 #=======================================
 
-  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14       + TaqI        TCGA                 11     13         .         .
-     25      28       - AciI        CCGC                 25     27         .         .
-     31      36       - BseYI       CCCAGC               31     35         .         .
-     38      41       + AciI        CCGC                 38     40         .         .
-     40      44       - BceAI       ACGGC                25     27         .         .
-     71      81       + BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74       + AciI        CCGC                 71     73         .         .
-     73      76       + Hin6I       GCGC                 73     75         .         .
-     73      76       + HhaI        GCGC                 75     73         .         .
-     77      81       + EcoRII      CCWGG                76     81         .         .
-     77      81       + BssKI       CCNGG                76     81         .         .
-     94      97       + TaqI        TCGA                 94     96         .         .
-    103     106       + HpaII       CCGG                103    105         .         .
-    105     108       + HaeIII      GGCC                106    106         .         .
-    107     111       + EcoRII      CCWGG               106    111         .         .
-    107     111       + BssKI       CCNGG               106    111         .         .
-    107     117       + BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132       + BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135       + Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150       + BsrI        ACTGG               151    149         .         .
-    161     165       + BssKI       CCNGG               160    165         .         .
-    162     165       + HpaII       CCGG                162    164         .         .
-    182     186       + EcoRII      CCWGG               181    186         .         .
-    182     186       + BssKI       CCNGG               181    186         .         .
-    190     193       + Hin6I       GCGC                190    192         .         .
-    190     193       + HhaI        GCGC                192    190         .         .
-    192     195       + Hin6I       GCGC                192    194         .         .
-    192     195       + HhaI        GCGC                194    192         .         .
-    197     201       + EcoRII      CCWGG               196    201         .         .
-    197     201       + BssKI       CCNGG               196    201         .         .
-    209     212       + HaeIII      GGCC                210    210         .         .
-    219     222       + HaeIII      GGCC                220    220         .         .
-    221     231       + BsiYI       CCNNNNNNNGG         227    224         .         .
-    221     225       - BsrI        ACTGG               221    219         .         .
-    226     229       - AciI        CCGC                226    228         .         .
-    236     239       + HaeIII      GGCC                237    237         .         .
-    248     252       + EcoRII      CCWGG               247    252         .         .
-    248     252       + BssKI       CCNGG               247    252         .         .
-    261     264       + HaeIII      GGCC                262    262         .         .
-    263     266       + AciI        CCGC                263    265         .         .
-    293     297       + EcoRII      CCWGG               292    297         .         .
-    293     297       + BssKI       CCNGG               292    297         .         .
-    296     299       + HaeIII      GGCC                297    297         .         .
-    335     338       + HaeIII      GGCC                336    336         .         .
-    377     380       - AciI        CCGC                377    379         .         .
-    380     383       - AciI        CCGC                380    382         .         .
-    395     398       + HpaII       CCGG                395    397         .         .
-    398     401       + Hin6I       GCGC                398    400         .         .
-    398     401       + HhaI        GCGC                400    398         .         .
-    405     410       + HindII      GTYRAC              407    407         .         .
-    408     413       + AclI        AACGTT              409    411         .         .
-    409     412       + MaeII       ACGT                409    411         .         .
-    417     427       + BsiYI       CCNNNNNNNGG         423    420         .         .
-    438     441       + HaeIII      GGCC                439    439         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime  5frag  3frag 5primerev 3primerev 5fragrev 3fragrev
+     25      28       - AciI        CCGC                 25     27      .      .         .         .        .        .
+    226     229       - AciI        CCGC                226    228      .      .         .         .        .        .
+    377     380       - AciI        CCGC                377    379      .      .         .         .        .        .
+    380     383       - AciI        CCGC                380    382      .      .         .         .        .        .
+     40      44       - BceAI       ACGGC                25     27      .      .         .         .        .        .
+     31      36       - BseYI       CCCAGC               31     35      .      .         .         .        .        .
+    221     225       - BsrI        ACTGG               221    219      .      .         .         .        .        .
+     11      14       + TaqI        TCGA                 11     13      .      .         .         .        .        .
+     38      41       + AciI        CCGC                 38     40      .      .         .         .        .        .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74      .      .         .         .        .        .
+     71      74       + AciI        CCGC                 71     73      .      .         .         .        .        .
+     73      76       + Hin6I       GCGC                 73     75      .      .         .         .        .        .
+     73      76       + HhaI        GCGC                 75     73      .      .         .         .        .        .
+     77      81       + EcoRII      CCWGG                76     81      .      .         .         .        .        .
+     77      81       + BssKI       CCNGG                76     81      .      .         .         .        .        .
+     94      97       + TaqI        TCGA                 94     96      .      .         .         .        .        .
+    103     106       + HpaII       CCGG                103    105      .      .         .         .        .        .
+    105     108       + HaeIII      GGCC                106    106      .      .         .         .        .        .
+    107     111       + EcoRII      CCWGG               106    111      .      .         .         .        .        .
+    107     111       + BssKI       CCNGG               106    111      .      .         .         .        .        .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110      .      .         .         .        .        .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125      .      .         .         .        .        .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111      .      .       148       143        .        .
+    146     150       + BsrI        ACTGG               151    149      .      .         .         .        .        .
+    161     165       + BssKI       CCNGG               160    165      .      .         .         .        .        .
+    162     165       + HpaII       CCGG                162    164      .      .         .         .        .        .
+    182     186       + EcoRII      CCWGG               181    186      .      .         .         .        .        .
+    182     186       + BssKI       CCNGG               181    186      .      .         .         .        .        .
+    190     193       + Hin6I       GCGC                190    192      .      .         .         .        .        .
+    190     193       + HhaI        GCGC                192    190      .      .         .         .        .        .
+    192     195       + Hin6I       GCGC                192    194      .      .         .         .        .        .
+    192     195       + HhaI        GCGC                194    192      .      .         .         .        .        .
+    197     201       + EcoRII      CCWGG               196    201      .      .         .         .        .        .
+    197     201       + BssKI       CCNGG               196    201      .      .         .         .        .        .
+    209     212       + HaeIII      GGCC                210    210      .      .         .         .        .        .
+    219     222       + HaeIII      GGCC                220    220      .      .         .         .        .        .
+    221     231       + BsiYI       CCNNNNNNNGG         227    224      .      .         .         .        .        .
+    236     239       + HaeIII      GGCC                237    237      .      .         .         .        .        .
+    248     252       + EcoRII      CCWGG               247    252      .      .         .         .        .        .
+    248     252       + BssKI       CCNGG               247    252      .      .         .         .        .        .
+    261     264       + HaeIII      GGCC                262    262      .      .         .         .        .        .
+    263     266       + AciI        CCGC                263    265      .      .         .         .        .        .
+    293     297       + EcoRII      CCWGG               292    297      .      .         .         .        .        .
+    293     297       + BssKI       CCNGG               292    297      .      .         .         .        .        .
+    296     299       + HaeIII      GGCC                297    297      .      .         .         .        .        .
+    335     338       + HaeIII      GGCC                336    336      .      .         .         .        .        .
+    395     398       + HpaII       CCGG                395    397      .      .         .         .        .        .
+    398     401       + Hin6I       GCGC                398    400      .      .         .         .        .        .
+    398     401       + HhaI        GCGC                400    398      .      .         .         .        .        .
+    405     410       + HindII      GTYRAC              407    407      .      .         .         .        .        .
+    408     413       + AclI        AACGTT              409    411      .      .         .         .        .        .
+    409     412       + MaeII       ACGT                409    411      .      .         .         .        .        .
+    417     427       + BsiYI       CCNNNNNNNGG         423    420      .      .         .         .        .        .
+    438     441       + HaeIII      GGCC                439    439      .      .         .         .        .        .
 
 #---------------------------------------
 #---------------------------------------
@@ -103,7 +103,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: restrict
 #    -fragments
 #    -sequence tembl:x65923
@@ -126,31 +126,31 @@
 #
 #=======================================
 
-  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14       + TaqI        TCGA                 11     13         .         .
-     25      28       - AciI        CCGC                 25     27         .         .
-     31      36       - BseYI       CCCAGC               31     35         .         .
-     38      41       + AciI        CCGC                 38     40         .         .
-     40      44       - BceAI       ACGGC                25     27         .         .
-     71      81       + BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74       + AciI        CCGC                 71     73         .         .
-     73      76       + Hin6I       GCGC                 73     75         .         .
-     73      76       + HhaI        GCGC                 75     73         .         .
-     77      81       + EcoRII      CCWGG                76     81         .         .
-     77      81       + BssKI       CCNGG                76     81         .         .
-     94      97       + TaqI        TCGA                 94     96         .         .
-    103     106       + HpaII       CCGG                103    105         .         .
-    105     108       + HaeIII      GGCC                106    106         .         .
-    107     111       + EcoRII      CCWGG               106    111         .         .
-    107     111       + BssKI       CCNGG               106    111         .         .
-    107     117       + BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132       + BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135       + Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150       + BsrI        ACTGG               151    149         .         .
-    161     165       + BssKI       CCNGG               160    165         .         .
-    162     165       + HpaII       CCGG                162    164         .         .
-    182     186       + EcoRII      CCWGG               181    186         .         .
-    182     186       + BssKI       CCNGG               181    186         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime  5frag  3frag 5primerev 3primerev 5fragrev 3fragrev
+     25      28       - AciI        CCGC                 25     27      .      .         .         .        .        .
+    226     229       - AciI        CCGC                226    228      5      1         .         .        .        .
+    377     380       - AciI        CCGC                377    379     41      3         .         .        .        .
+    380     383       - AciI        CCGC                380    382      3     15         .         .        .        .
+     40      44       - BceAI       ACGGC                25     27     14      6         .         .        .        .
+     31      36       - BseYI       CCCAGC               31     35      6      7         .         .        .        .
+    221     225       - BsrI        ACTGG               221    219      1      5         .         .        .        .
+     11      14       + TaqI        TCGA                 11     13     11     14         .         .        .        .
+     38      41       + AciI        CCGC                 38     40      7     33         .         .        .        .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74      1     17         .         .        .        .
+     71      74       + AciI        CCGC                 71     73     33      2         .         .        .        .
+     73      76       + Hin6I       GCGC                 73     75      2      2         .         .        .        .
+     73      76       + HhaI        GCGC                 75     73      2      1         .         .        .        .
+     77      81       + EcoRII      CCWGG                76     81      1      1         .         .        .        .
+     77      81       + BssKI       CCNGG                76     81      .      .         .         .        .        .
+     94      97       + TaqI        TCGA                 94     96     17      9         .         .        .        .
+    103     106       + HpaII       CCGG                103    105      9      3         .         .        .        .
+    105     108       + HaeIII      GGCC                106    106      .      .         .         .        .        .
+    107     111       + EcoRII      CCWGG               106    111      3      7         .         .        .        .
+    107     111       + BssKI       CCNGG               106    111      .      .         .         .        .        .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110      7      3         .         .        .        .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125     12     20         .         .        .        .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111      3     12       148       143       20        3
+    146     150       + BsrI        ACTGG               151    149      3      9         .         .        .        .
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -216,7 +216,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: restrict
 #    -solofragment
 #    -sequence tembl:x65923
@@ -239,31 +239,31 @@
 #
 #=======================================
 
-  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14       + TaqI        TCGA                 11     13         .         .
-     25      28       - AciI        CCGC                 25     27         .         .
-     31      36       - BseYI       CCCAGC               31     35         .         .
-     38      41       + AciI        CCGC                 38     40         .         .
-     40      44       - BceAI       ACGGC                25     27         .         .
-     71      81       + BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74       + AciI        CCGC                 71     73         .         .
-     73      76       + Hin6I       GCGC                 73     75         .         .
-     73      76       + HhaI        GCGC                 75     73         .         .
-     77      81       + EcoRII      CCWGG                76     81         .         .
-     77      81       + BssKI       CCNGG                76     81         .         .
-     94      97       + TaqI        TCGA                 94     96         .         .
-    103     106       + HpaII       CCGG                103    105         .         .
-    105     108       + HaeIII      GGCC                106    106         .         .
-    107     111       + EcoRII      CCWGG               106    111         .         .
-    107     111       + BssKI       CCNGG               106    111         .         .
-    107     117       + BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132       + BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135       + Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150       + BsrI        ACTGG               151    149         .         .
-    161     165       + BssKI       CCNGG               160    165         .         .
-    162     165       + HpaII       CCGG                162    164         .         .
-    182     186       + EcoRII      CCWGG               181    186         .         .
-    182     186       + BssKI       CCNGG               181    186         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime  5frag  3frag 5primerev 3primerev 5fragrev 3fragrev
+     25      28       - AciI        CCGC                 25     27     25     13         .         .        .        .
+    226     229       - AciI        CCGC                226    228    155     37         .         .        .        .
+    377     380       - AciI        CCGC                377    379    114      3         .         .        .        .
+    380     383       - AciI        CCGC                380    382      3    138         .         .        .        .
+     40      44       - BceAI       ACGGC                25     27     25    493         .         .        .        .
+     31      36       - BseYI       CCCAGC               31     35     31    487         .         .        .        .
+    221     225       - BsrI        ACTGG               221    219     70    297         .         .        .        .
+     11      14       + TaqI        TCGA                 11     13     11     83         .         .        .        .
+     38      41       + AciI        CCGC                 38     40     13     33         .         .        .        .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74     77     36         .         .        .        .
+     71      74       + AciI        CCGC                 71     73     33    155         .         .        .        .
+     73      76       + Hin6I       GCGC                 73     75     73    117         .         .        .        .
+     73      76       + HhaI        GCGC                 75     73     75    117         .         .        .        .
+     77      81       + EcoRII      CCWGG                76     81     76     30         .         .        .        .
+     77      81       + BssKI       CCNGG                76     81     76     30         .         .        .        .
+     94      97       + TaqI        TCGA                 94     96     83    424         .         .        .        .
+    103     106       + HpaII       CCGG                103    105    103     59         .         .        .        .
+    105     108       + HaeIII      GGCC                106    106    106    104         .         .        .        .
+    107     111       + EcoRII      CCWGG               106    111     30     75         .         .        .        .
+    107     111       + BssKI       CCNGG               106    111     30     54         .         .        .        .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110     36     15         .         .        .        .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125     15     99         .         .        .        .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111    116     32       148       143       32      370
+    146     150       + BsrI        ACTGG               151    149    151     70         .         .        .        .
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

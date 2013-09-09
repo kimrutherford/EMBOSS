@@ -1,4 +1,210 @@
 Version 6.6.0 15-Jul-2013
+	Restrict and related applications now ignore matches where the
+	enzyme site is wider than the sequence length.
+
+	The SRS server at EMBL-EBI no longer serves the EMBL database!
+	EBI's SRS server databases in server.srs have been updated to
+	reflect their reduced service.
+
+	Reading large sequences is more efficient. Reference counted
+	strings are used for output. Where gaps do not need to be
+	replaced, a single copy of the sequence string is used for input,
+	processing and output.
+
+	New sequence format iguspto supports a variant of the
+	intelligenetics format with tolerance for format variants on
+	input.
+
+	Calculation of isoelectric point has been updated to use the same
+	data values as Expasy and the Open Bio packages. New data file
+	Epkexpasy.dat holds the values used by Expasy.
+
+	The final position of the reverse strand is now correctly numbered
+	in the output of sixpack and showseq.
+
+	Eukaryote join features in union were not correctly copied after
+	subfeatures were implemented to hold exons. The union code now
+	correctly relocates subfeatures.
+
+	Complex (join) feature positions were not relocated when the
+	parent sequence was trimmed by start and end position. This was
+	introduced when subfeatures were implemented, and is now
+	corrected.
+
+	New option -methionine for transeq translates any start codon as
+	methionine when a specific range is given (including 1 to end) and
+	an alternative genetic code is specified.
+
+	Wildcard filenames were broken by the query language rewrite. The
+	previous functionality is restored. Any query can use a wildcard
+	filename with '*' or '?' characters. The order in which files are
+	processed is determined by the operating system.
+
+	Dbxreport and dbxstat now support databases with a dbalias
+	(alternative base name for the database files).
+
+	Restriction digest applications occasionally reported more than
+	one identical match where several enzymes recognize the same
+	target site. The testing of isoschizomers has been improved to
+	catch these cases. In practice most runs are with only a few named
+	enzymes with different sites.
+
+	Fragment lengths in restrict are now included as extra columns in
+	the output, giving the fragments to the 5' and 3' side of each cut
+	in the forward strand. Note that the output includes all possible
+	cut sites, though it may be impossible for a double digest to
+	physically cut at each of two closely spaced sites.
+
+	The -name option of restrict had no effect on report output and
+	has been removed.
+
+	Cachedbfetch corrects bad EDAM references to EDAM_syntax: instead
+	of EDAM_format: in the definitions returned by EBI's dbfetch
+	and wsdbfetch servers.
+
+	Sequence identifiers now remove characters that may confuse output
+	file generation, changing to underscore any forward or backslash
+	(interpreted as host system paths), commas, semicolons and colons.
+
+	Sequence input now warns for bad sequence characters when the
+	format is known. When auto-detecting the format the warnings are
+	turned off so that failed formats can silently be ignored, but
+	when reading further sequences from the same input file warnings
+	are enabled. They can be disabled for individual format parsers by
+	passing zero as the format code to seqAppendWarn.
+
+	New nibble (nib) format stores sequence data in half-byte binary
+	compressed format. The format is available for input and output,
+	but as a binary format can only be read from a file, not from a pipe.
+
+	New GDE format for sequence input and output - a simple format
+	with a #id prefix.
+
+	Support added for SwissProt OH (viral host) records.
+
+	New sequence input associated qualifier (available for all
+	sequence inputs) -squick reads only the id, accession, description
+	and sequence, saving unnecessary parsing of more complex input
+	formats such as swissprot, embl and genbank.
+
+	String parsing objects are now reused rather than deleted to save
+	memory reallocation in parsing input streams with a large number
+	of entries.  Input source code now uses reusable token objects
+	cleared only when the program exits.
+
+	Acdpretty now correctly preserves in-line comments in ACD files.
+
+	Efficiency improvements in matching sets of characters in strings,
+	especially in functions used for each entry in a large set of
+	input sequences.
+
+	New applications xmlget and xmltext read XML data, for example
+	from dbfetch:embl which offers emblxml format. Output can be as
+	input or in reformatted versions.
+
+	QA tests of EMBASSY applications look in a test/data directory in
+	the EMBASSY package as an alternative place for data files
+	prefixed by TESTDATA:
+
+	Clustal omega data types added to knowntypes.standard file.
+
+	Ranges can use a syntax of start+len or start,+len to give the
+	length rather than the end position. The end is calculated from
+	the start and length and used internally. This syntax allows a
+	closer fit to the command line of primer3_core in eprimer32 where
+	ranges in the native application are always specified as start and
+	length.
+
+	List file inputs now report an error if any text follows the first
+	token on a line, unless it is a comment following a '#'
+	character. Previous versions treated any remaining text as a
+	comment and silently ignored it.
+
+	New sequence format iguspto supports a multi-line IG format used
+	by the US Patent Office. The multi-line descriptions are preserved
+	only if EMBOSS reads and writes in this format. We can add the
+	capability to any other multi-line input format where the original
+	description lines should be preserved. Other formats treat
+	descriptions as a single record to be wrapped where there is a
+	maximum record length (e.g. in EMBL format).
+
+	Programs dreg and preg now only report sequences where a pattern
+	match was found, which is the same behaviour as fuzznuc, fuzzpro
+	and fuzztran.
+
+	New code added to handle xml datatype. Supports multiple named XML
+	formats, using the DOM parsers to interpret data. Multiple XML
+	input formats are supported, but on output, in the absence of a
+	conversion method, the original XML is normally reported as plain
+	"xml" format.
+
+	In database definitions, "example" is now a list attribute which
+	can appear multiple times, allowing multiple example queries to be
+	defined as separate records, with possible documentation following
+	a '!' delimiter.
+
+	Showserver now scales the column headers better for long cache
+	file names.
+
+	Showdb now displays the taxons, examples, and aliases defined for
+	a database. Examples and aliases can be preceded by a count of the
+	number of each. All columns are displayed with -full, individual
+	elements are controlled by -numtaxons, -taxscope (-taxonomy is a
+	database type option) -examples -numexamples -aliases and
+	-numaliases.
+
+	Showdb now displays a count of the number of fields in addition to
+	the list of field names. New command line qualifier -numfields
+	controls the display of the field count.
+
+	Showdb now displays all types defined for a database, separated by
+	commas, but will only display a database once so that, for
+	example, a protein and protfeatures database will appear in the
+	protein database set first (if displayed). If only the features
+	databases are displayed then it will appear with them.
+
+	Showdb no longer shows the access levels (id, query and all) by
+	default for a database. New command line qualifier -access or the
+	existing -full qualifier will show these values.
+
+	Entrez access was specific to sequence data retrieval. Entrez
+	server retrievals can now automatically detect ID and accession
+	fields and read text entries with textget where a text format is
+	available.
+
+	Genbank-related protein formats Refseqp and Genpept are updated to
+	process all record types. Genpept feature handling is updated to
+	correct the handling of multiple locations by using subfeatures.
+
+	GenBank and Refseq formats now handle the full set of record types
+	including common species names, reference details and comments.
+
+	Dbtell -full reports any alias names for a database after the
+	definition.
+
+	Dbtell recognizes alias names for a database, reporting the master
+	database definition and a comment describing where the alias is
+	defined.
+
+	Dbtell -server reports the database definition for a server. All
+	attributes are reported in the database definition, whether
+	defined for the database or at the server level.
+
+	Servertell -full now reports the definitions of all databases for
+	the server, including all aliases defined in the server definition
+	file. Without -full an extra comment line in the output suggests
+	running with -full for more detailed information.
+
+	Restrict output now sorts by the position closest to the start for
+	matches on the reverse strand (for an asymmetric target
+	site). This sort change can produce additional matches in the
+	output of restover.
+
+	Embossversion is now set to fail with a message if the update
+	information URL is unreachable.
+
+	HTTP and FTP error messages were simplified and blank lines removed.
+
 	The valgrind.pl script has a new qualifier -debug which runs the
 	test with -debug on the command line.
 
@@ -19,14 +225,14 @@ Version 6.6.0 15-Jul-2013
 	use more complex queries if a format splits into a hierarchy
 	but this is unlikely in most cases.
 
-	On FreeBSD systems embossversion needs quotes corrected on the
-	line that reports FreeBSDLF is defined.
+	On FreeBSD systems embossversion source code has quotes corrected
+	on the line that reports FreeBSDLF is defined.
 
 Version 6.5.0 15-Jul-2012
 
-	On Windows (mEMBOSS) check the user home directory for .embossrc
-	file and .embossdata directory, using emboss.default for settings
-	defined for all users.
+	On Windows (mEMBOSS) the user home directory is checked for the
+	.embossrc file and .embossdata directory, using emboss.default for
+	settings defined for all users.
 
 	Database definitions with multiple types and formats now check
 	that there is at least one valid format defined for each type of
@@ -389,8 +595,8 @@ Version 6.5.0 15-Jul-2012
 	:r to reverse the sequence region.
 
 	Sequences and reference sequences can be read from EMBL CON
-	division entries by using the same database with an SV (sequence
-	version) index to read the sequence fragments from the CO
+	division entries by using the same database with an ACC (accession
+	number) index to read the sequence fragments defined in the CO
 	record(s).
 
 	New code added to handle reference sequences in ajrefseq* source
@@ -403,7 +609,7 @@ Version 6.5.0 15-Jul-2012
 	ensemblgenomes databases, and tags for processing assembled entries
 	in CON (constructed) entries in EMBL. ConDatabase is the database
 	name used, ConField is the index field. By default CON entries use
-	the SV field of the same database.
+	the ACC field of the same database.
 
 	Standardized all licensing references in the libraries to GNU Lesser
 	GPL version 2.1. Added CVS keywords to record the CVS file
@@ -3526,6 +3732,7 @@ Version 2.8.0 30-Nov-2003
 Version 2.7.1 03-jun-2003
 
 	Corrected Jemboss for displaying emma & prettyplot forms
+
 	Corrected display of recognition sequence for restrict -solofragment
 
 Version 2.7.0 01-jun-2003

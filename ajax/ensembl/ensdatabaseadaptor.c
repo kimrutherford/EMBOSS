@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.42 $
+** @version $Revision: 1.45 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/26 06:37:32 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -92,7 +92,8 @@ const char *ensKDatabaseadaptorRegMulti =
 
 const char *ensKDatabaseadaptorRegSpecies =
     "^"                     /* Start of string assertion */
-    "([a-z]+_[0-9a-z]+)"    /* Species name (1) */
+    "([a-z]+_[0-9a-z]+(?:_[a-z0-9]+)?)"    /* Species name (1) */
+    /* homo_sapiens or canis_lupus_familiaris */
     "_"                     /* Separator */
     "([a-z]+)"              /* Database group (2) */
     "(?:_\\d+)?"            /* Ensembl Genomes version */
@@ -192,8 +193,8 @@ static const char *databaseadaptorKGroup[] =
 ** Ensembl Database Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBAdaptor
-** @cc CVS Revision: 1.225
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.231.2.1
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -532,7 +533,7 @@ EnsPDatabaseadaptor ensDatabaseadaptorNewIni(
                 "  database '%S'\n"
                 "  species '%S'\n"
                 "  dbag %d\n"
-                "  multi %B\n"
+                "  multi '%B'\n"
                 "  identifier %u\n",
                 dbc,
                 database,
@@ -685,10 +686,8 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor *Pdba)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pdba)
+    if (!(pthis = *Pdba))
         return;
-
-    pthis = *Pdba;
 
     ensDatabaseconnectionDel(&pthis->Databaseconnection);
 
@@ -696,9 +695,7 @@ void ensDatabaseadaptorDel(EnsPDatabaseadaptor *Pdba)
 
     ajListstrFreeData(&pthis->SpeciesNames);
 
-    AJFREE(pthis);
-
-    *Pdba = NULL;
+    ajMemFree((void **) Pdba);
 
     return;
 }
@@ -793,15 +790,10 @@ EnsEDatabaseadaptorGroup ensDatabaseadaptorGetGroup(
 ** @@
 ******************************************************************************/
 
-ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba)
+ajuint ensDatabaseadaptorGetIdentifier(
+    const EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return 0U;
-
-    if (!dba->Identifier)
-        return 1U;
-
-    return dba->Identifier;
+    return (dba) ? ((dba->Identifier) ? dba->Identifier : 1U) : 0U;
 }
 
 
@@ -820,7 +812,8 @@ ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba)
 ** @@
 ******************************************************************************/
 
-AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba)
+AjBool ensDatabaseadaptorGetMultispecies(
+    const EnsPDatabaseadaptor dba)
 {
     return (dba) ? dba->Multispecies : ajFalse;
 }
@@ -841,9 +834,71 @@ AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba)
 ** @@
 ******************************************************************************/
 
-AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba)
+AjPStr ensDatabaseadaptorGetSpecies(
+    const EnsPDatabaseadaptor dba)
 {
     return (dba) ? dba->Species : NULL;
+}
+
+
+
+
+/* @section load on demand ****************************************************
+**
+** Functions for returning members of an Ensembl Database Adaptor object,
+** which may need loading from an Ensembl SQL database on demand.
+**
+** @fdata [EnsPDatabaseadaptor]
+**
+** @nam3rule Load Return Ensembl Database Adaptor attribute(s)
+**                       loaded on demand
+** @nam4rule Speciesnames Return all species names
+**
+** @argrule * dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule Speciesnames [const AjPList]
+** AJAX List of AJAX String (species name) objects or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensDatabaseadaptorLoadSpeciesnames ***********************************
+**
+** Load all species name objects of an Ensembl Database Adaptor.
+**
+** This is not a simple accessor function, it will fetch species name
+** objects from the Ensembl SQL database in case the AJAX List is not defined.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [const AjPList]
+** AJAX List of AJAX String (species name) objects or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+const AjPList ensDatabaseadaptorLoadSpeciesnames(EnsPDatabaseadaptor dba)
+{
+    if (!dba)
+        return NULL;
+
+    if (dba->SpeciesNames)
+        return dba->SpeciesNames;
+    else
+        dba->SpeciesNames = ajListstrNew();
+
+    if (dba->Multispecies)
+        ensMetainformationadaptorRetrieveAllSpeciesnames(
+            ensRegistryGetMetainformationadaptor(dba),
+            dba->SpeciesNames);
+    else
+        ajListPushAppend(dba->SpeciesNames, (void *) ajStrNewS(dba->Species));
+
+    return dba->SpeciesNames;
 }
 
 
@@ -1075,7 +1130,7 @@ AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level)
             "%S  Species '%S'\n"
             "%S  SpeciesNames %p\n"
             "%S  Group '%s'\n"
-            "%S  Multispecies %B\n"
+            "%S  Multispecies '%B'\n"
             "%S  Identifier %u\n",
             indent, dba,
             indent, dba->Databaseconnection,
@@ -1261,9 +1316,6 @@ AjBool ensDatabaseadaptorMatchcomponents(const EnsPDatabaseadaptor dba,
 ** @nam3rule Escape Escape a string
 ** @nam4rule C Escape to an AJAX String
 ** @nam4rule S Escape to a C-type character string
-** @nam3rule Get Get members(s)
-** @nam4rule All Get all members
-** @nam5rule Speciesnames Get all species names
 ** @nam3rule Sqlstatement AJAX SQL Statement
 ** @nam4rule Del Delete an AJAX SQL Statement
 ** @nam4rule New Run a new AJAX SQL statement
@@ -1414,46 +1466,6 @@ AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
 
 
 
-/* @func ensDatabaseadaptorGetAllSpeciesnames *********************************
-**
-** Get the name of all species contained in the database this
-** Ensembl Database Adaptor is connected to.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [const AjPList] AJAX List of AJAX String objects or NULL
-**
-** @release 6.4.0
-** FIXME: This should become ensDatabaseadaptorLoadAllSpeciesnames
-** @@
-******************************************************************************/
-
-const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba)
-{
-    EnsPMetainformationadaptor mia = NULL;
-
-    if (!dba)
-        return NULL;
-
-    if (dba->SpeciesNames)
-        return dba->SpeciesNames;
-    else
-        dba->SpeciesNames = ajListstrNew();
-
-    mia = ensRegistryGetMetainformationadaptor(dba);
-
-    if (dba->Multispecies)
-        ensMetainformationadaptorRetrieveAllSpeciesnames(mia,
-                                                         dba->SpeciesNames);
-    else
-        ajListPushAppend(dba->SpeciesNames, (void *) ajStrNewS(dba->Species));
-
-    return dba->SpeciesNames;
-}
-
-
-
-
 /* @func ensDatabaseadaptorSqlstatementDel ************************************
 **
 ** Delete an AJAX SQL Statement associated with an
@@ -1592,11 +1604,11 @@ AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
     temp = ajStrNew();
 
     for (i = 0U; i < (tokens - 2U); i++)
-        ajStrTokenNextParse(&token, &temp);
+        ajStrTokenNextParse(token, &temp);
 
     ajStrDel(&temp);
 
-    ajStrTokenRestParse(&token, Pbuild);
+    ajStrTokenRestParse(token, Pbuild);
 
     ajStrTokenDel(&token);
 
@@ -1718,9 +1730,10 @@ const char* ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup dbag)
          i++);
 
     if (!databaseadaptorKGroup[i])
-        ajDebug("ensDatabaseadaptorGroupToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Databaseadaptor Group enumeration %d.\n",
+        ajDebug("ensDatabaseadaptorGroupToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Databaseadaptor Group "
+                "enumeration %d.\n",
                 dbag);
 
     return databaseadaptorKGroup[i];

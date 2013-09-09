@@ -270,8 +270,9 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
     {
 	codon = ajTrnCodonstrTypeC(trnTable, &chrseq[pos], &aa);
 	frame = pos % 3;
-	ajDebug("len=%d, Pos=%d, Frame=%d start/stop=%d, aa=%c",
-		len, pos, frame, codon, aa);
+	ajDebug("len=%d, Pos=%d, Frame=%d start/stop=%d, aa=%c '%c%c%c'\n",
+		len, pos, frame, codon, aa,
+                chrseq[pos], chrseq[pos+1], chrseq[pos+2]);
 	
 	/* don't want to find extra ORFs when already been round circ */
 	if(LASTORF[frame])

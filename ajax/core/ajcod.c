@@ -3,9 +3,9 @@
 ** AJAX codon functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version $Revision: 1.59 $
+** @version $Revision: 1.60 $
 ** @modified Aug 07 ajb First version
-** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:12:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1050,14 +1050,14 @@ static AjBool codReadEmboss(AjPCod thys, AjPFilebuff inbuff)
 	    return ajFalse;
 
 	ajStrTokenAssignC(&handle, codReadLine, " \t\r\n");
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 
 	if(!codIsCodon(&tok))
 	    return ajFalse;
 
 	idx = ajCodIndex(tok);
 
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 
 	if(!codIsAa(&tok))
 	    return ajFalse;
@@ -1067,19 +1067,19 @@ static AjBool codReadEmboss(AjPCod thys, AjPFilebuff inbuff)
 	if(c>25)
 	    c=27;			/* stop */
 
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 
 	if(!codIsFraction(tok))
 	    return ajFalse;
 
 	ajStrToDouble(tok,&fraction);
 
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 	if(!codIsFreq(tok))
 	    return ajFalse;
 	ajStrToDouble(tok,&tcount);
 
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 
 	if(!codIsNumber(tok))
 	    return ajFalse;
@@ -1168,7 +1168,7 @@ static AjBool codReadStaden(AjPCod thys, AjPFilebuff inbuff)
 	ajStrTokenAssignC(&handle, codReadLine, " \t\r\n");
 	for(i=0;i<4;i++)
 	{
-	    ajStrTokenNextParse(&handle, &tok);
+	    ajStrTokenNextParse(handle, &tok);
 
 	    if(!codIsAa(&tok))
 		return ajFalse;
@@ -1178,14 +1178,14 @@ static AjBool codReadStaden(AjPCod thys, AjPFilebuff inbuff)
 	    if(c>25)
 		c=27;			/* stop */
 
-	    ajStrTokenNextParse(&handle, &tok);
+	    ajStrTokenNextParse(handle, &tok);
 
 	    if(!codIsCodon(&tok))
 		return ajFalse;
 
 	    idx = ajCodIndex(tok);
 
-	    ajStrTokenNextParse(&handle, &tok);
+	    ajStrTokenNextParse(handle, &tok);
 
 	    if(!codIsNumber(tok))
 		return ajFalse;
@@ -1245,11 +1245,11 @@ static AjBool codReadSpsum(AjPCod thys, AjPFilebuff inbuff)
 	return ajFalse;
 
     ajStrTokenAssignC(&handle, codReadLine, ":");
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
     ajStrTrimWhite(&tok);
     ajStrAssignS(&thys->Species, tok);
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
     ajStrTrimWhite(&tok);
 
     if(!ajStrToInt(tok, &thys->CdsCount))
@@ -1265,7 +1265,7 @@ static AjBool codReadSpsum(AjPCod thys, AjPFilebuff inbuff)
 
     for(i=0;i<64;i++)
     {
-	ajStrTokenNextParse(&handle, &tok);
+	ajStrTokenNextParse(handle, &tok);
 
 	if(!ajStrToInt(tok, &num))
 	    return ajFalse;
@@ -1332,7 +1332,7 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 
     ajStrTokenAssignC(&handle, codReadLine, "[");
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!ajStrGetLen(tok))
 	return ajFalse;
@@ -1340,21 +1340,21 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
     ajStrRemoveWhiteExcess(&tok);
     ajStrAssignS(&thys->Species, tok);
 
-    ajStrTokenNextParseC(&handle, "]: ", &tok);
+    ajStrTokenNextParseC(handle, "]: ", &tok);
 
     if(!ajStrGetLen(tok))
 	return ajFalse;
 
     ajStrAssignS(&thys->Division, tok);
 
-    ajStrTokenNextParseC(&handle, "CDS's (", &tok);
+    ajStrTokenNextParseC(handle, "CDS's (", &tok);
 
     if(!codIsNumber(tok))
 	return ajFalse;
 
     ajStrToInt(tok, &thys->CdsCount);
 
-    ajStrTokenNextParseC(&handle, " codons)", &tok);
+    ajStrTokenNextParseC(handle, " codons)", &tok);
 
     if(!codIsNumber(tok))
 	return ajFalse;
@@ -1372,7 +1372,7 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 	{
 	    ajStrCutStart(&codReadLine, 13);
 	    ajStrTokenAssignC(&handle, codReadLine, " :");
-	    ajStrTokenNextParse(&handle, &tok);
+	    ajStrTokenNextParse(handle, &tok);
 
 	    if(codIsNumber(tok))
 		ajStrToInt(tok, &thys->GeneticCode);
@@ -1394,7 +1394,7 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 
 	    for(j=0;j<4;j++)
 	    {
-		ajStrTokenNextParse(&handle, &tok);
+		ajStrTokenNextParse(handle, &tok);
 
 		if(!codIsCodon(&tok))
 		    return ajFalse;
@@ -1403,14 +1403,14 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 
 		if(hasaa)
 		{
-		    ajStrTokenNextParse(&handle, &tok);
+		    ajStrTokenNextParse(handle, &tok);
 
 		    if(!codIsAa(&tok))
 			return ajFalse;
 
 		    c = ajBasecodeToInt((ajint)ajStrGetCharFirst(tok));
 
-		    ajStrTokenNextParse(&handle, &tok);
+		    ajStrTokenNextParse(handle, &tok);
 
 		    if(!codIsFraction(tok))
 			return ajFalse;
@@ -1429,14 +1429,14 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 		if(c>25)
 		    c=27;		/* stop */
 
-		ajStrTokenNextParseC(&handle, " (", &tok);
+		ajStrTokenNextParseC(handle, " (", &tok);
 
 		if(!codIsFreq(tok))
 		    return ajFalse;
 
 		ajStrToDouble(tok,&tcount);
 
-		ajStrTokenNextParseC(&handle, " )", &tok);
+		ajStrTokenNextParseC(handle, " )", &tok);
 
 		if(!codIsNumber(tok))
 		    return ajFalse;
@@ -1510,10 +1510,10 @@ static AjBool codReadCodehop(AjPCod thys, AjPFilebuff inbuff)
 	    return ajFalse;
 
 	ajStrTokenAssignC(&handle, line, " \t\r\n[]");
-	ajStrTokenNextParse(&handle, &tok1);
-	ajStrTokenNextParse(&handle, &tok2);
-	ajStrTokenNextParse(&handle, &tok3);
-	ajStrTokenNextParse(&handle, &tok4);
+	ajStrTokenNextParse(handle, &tok1);
+	ajStrTokenNextParse(handle, &tok2);
+	ajStrTokenNextParse(handle, &tok3);
+	ajStrTokenNextParse(handle, &tok4);
 
 	if(!codIsFreq(tok1))
 	    return ajFalse;
@@ -1725,33 +1725,33 @@ static AjBool codGcgProcess(AjPCod thys, const AjPStr line)
 
     ajStrTokenAssignC(&handle, line, " \t\r\n");
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!codIsAa3(&tok, &c))
 	return ajFalse;
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!codIsCodon(&tok))
 	return ajFalse;
 
     idx = ajCodIndex(tok);
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!codIsNumberF(&tok))
 	return ajFalse;
 
     ajStrToInt(tok, &num);
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!codIsFreq(tok))
 	return ajFalse;
 
     ajStrToDouble(tok, &tcount);
 
-    ajStrTokenNextParse(&handle, &tok);
+    ajStrTokenNextParse(handle, &tok);
 
     if(!codIsFraction(tok))
 	return ajFalse;

@@ -119,7 +119,7 @@ Output report [x65923.twofeat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -357,6 +357,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -724,6 +725,14 @@ You can allow any or no overlaps, specify that they must or must not overlap, th
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -1176,7 +1185,7 @@ outputs a report format file. The default format is 'table'.
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -1215,9 +1224,9 @@ outputs a report format file. The default format is 'table'.
 <pre>
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 X65923	EMBL	polyA_signal_sequence	484	489	.	+	.	ID=X65923.6
 X65923	EMBL	polyA_site	509	509	.	+	.	ID=X65923.7
 </pre>

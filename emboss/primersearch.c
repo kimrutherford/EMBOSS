@@ -431,11 +431,11 @@ static void primersearch_read_primers(AjPList *primerList, AjPFile primerFile,
 	primdata->hitlist = ajListNew();
 
 	handle = ajStrTokenNewC(rdline, " \t");
-	ajStrTokenNextParse(&handle, &primdata->Name);
+	ajStrTokenNextParse(handle, &primdata->Name);
 
-	ajStrTokenNextParse(&handle, &primdata->forward->patstr);
+	ajStrTokenNextParse(handle, &primdata->forward->patstr);
 	ajStrFmtUpper(&primdata->forward->patstr);
-	ajStrTokenNextParse(&handle, &primdata->reverse->patstr);
+	ajStrTokenNextParse(handle, &primdata->reverse->patstr);
 	ajStrFmtUpper(&primdata->reverse->patstr);
 	ajStrTokenDel(&handle);
 

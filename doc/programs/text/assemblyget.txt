@@ -32,7 +32,7 @@ Usage
 Command line arguments
 
 Get assembly of sequence reads
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-assembly]          assembly   (no help text) assembly value
@@ -100,7 +100,7 @@ Output file format
   File: 4example.sam
 
 @HD     VN:1.3  SO:coordinate
-@PG     ID:assemblyget  VN:6.5.6.0      CL:[-assembly] bam::../../data/samspec1.
+@PG     ID:assemblyget  VN:6.6.0.0      CL:[-assembly] bam::../../data/samspec1.
 4example.bam -oformat sam -auto
 @SQ     SN:ref  LN:45
 r001    163     ref     7       30      8M2I4M1D3M      =       37      39

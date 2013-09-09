@@ -156,44 +156,14 @@ public class JembossFileServer
     String fullFileName = getRoot(options.substring(split),user) + "/" + filename;
     File file = new File(fullFileName);
 
-    String line = new String("");
-
-    if(fullFileName.toLowerCase().endsWith(".png") ||
-       fullFileName.toLowerCase().endsWith(".gif") ||
-       fullFileName.toLowerCase().endsWith(".jpeg") )
-    {
-      byte[] data = JembossServer.readByteFile(fullFileName);
-      vans.add("contents");
-      vans.add(data);
-    }
-    else
-    {
-
-      try
-      {
-        BufferedReader in = new BufferedReader(new FileReader(file));
-        StringBuffer buff = new StringBuffer(Long.valueOf(file.length()).intValue());
-
-        while((line = in.readLine()) != null)
-        {
-          buff.append(line);
-          buff.append('\n');
-        }
-        
-        vans.add("contents");
-        vans.add(buff.toString());
-      }
-      catch (IOException ioe)
-      {
-        vans.add("contents");
-        vans.add("Sorry cannot read this file");
-      }
-    }
+    byte[] data = JembossServer.readByteFile(fullFileName);
+    vans.add("contents");
+    vans.add(data);
 
     vans.add("status");
-    vans.add("0");
+    vans.add(data==null ? "1" : "0");
     vans.add("msg");
-    vans.add("");
+    vans.add("");//TODO: error message when data is null
 
     return vans;
   } 
@@ -217,11 +187,11 @@ public class JembossFileServer
     int split = options.indexOf("=")+1;
     File f = new File(getRoot(options.substring(split),user) + "/" + filename);
 
+    FileOutputStream out=null;
     try
     {
-      FileOutputStream out = new FileOutputStream(f);
+      out = new FileOutputStream(f);
       out.write(filedata);
-      out.close();
       vans.add("status");
       vans.add("0");
     }
@@ -229,6 +199,13 @@ public class JembossFileServer
     {
       vans.add("status");
       vans.add("1");
+    }
+    finally
+    {
+    	if(out!=null)
+			try {
+				out.close();
+			} catch (IOException e) {}
     }
 
     vans.add("msg");
@@ -309,17 +286,24 @@ public class JembossFileServer
                         String userName)
   {
     Vector vans = new Vector();
+    boolean success = true;
 
     int split = options.indexOf("=")+1;
     String fullname = getRoot(options.substring(split),userName)+
                              "/" + filename;
 
-    File fn = new File(fullname);
+    File dir = new File(fullname);
+    File files[] = dir.listFiles();
+    for(int i=0;i<files.length;i++)
+      success &= files[i].delete();
+    
+    success &= dir.delete();
+    
     vans.add("msg");
-    if(fn.delete())
-      vans.add("");
+    if(success)
+      vans.add("");//directory deleted successfully
     else
-      vans.add("NOT OK");
+      vans.add("NOT OK");//Problems while deleting the directory
 
     return vans;
   }

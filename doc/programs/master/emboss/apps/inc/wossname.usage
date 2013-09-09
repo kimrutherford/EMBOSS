@@ -88,6 +88,7 @@ edialign   Local multiple alignment of sequences
 emma       Multiple sequence alignment (ClustalW wrapper)
 eomega     Multiple sequence alignment (ClustalO wrapper)
 eomegapp   Profile with profile (ClustalO wrapper)
+eomegaps   Single sequence with profile (ClustalO wrapper)
 eomegash   Sequence with HMM (ClustalO wrapper)
 eomegasp   Sequence with profile (ClustalO wrapper)
 infoalign  Display basic information about a multiple sequence alignment
@@ -174,6 +175,7 @@ entret     Retrieve sequence entries from flatfile databases and files
 ontotext   Get ontology term(s) original full text
 textget    Get text data entries
 textsearch Search the textual description of sequence(s)
+xmltext    Get XML document original full text
 
 DATA RETRIEVAL TOOL DATA
 acdc      Test an application ACD file
@@ -184,6 +186,9 @@ acdvalid  Validate an application ACD file
 
 DATA RETRIEVAL URL DATA
 urlget Get URLs of data resources
+
+DATA RETRIEVAL XML DATA
+xmlget Get XML data
 
 DISPLAY
 abiview    Display the trace in an ABI sequencer file
@@ -714,7 +719,7 @@ crystalball Answer every drug discovery question about a sequence
 
 UTILS
 embossdata    Find and retrieve EMBOSS data files
-embossupdate  Checks for more recent updates to EMBOSS
+embossupdate  Check for more recent updates to EMBOSS
 embossversion Report the current EMBOSS version number
 
 UTILS DATABASE CREATION
@@ -893,7 +898,7 @@ ekitsch          Fitch-Margoliash method with contemporary tips
 elipop           Predict lipoproteins
 emast            Motif detection
 embossdata       Find and retrieve EMBOSS data files
-embossupdate     Checks for more recent updates to EMBOSS
+embossupdate     Check for more recent updates to EMBOSS
 embossversion    Report the current EMBOSS version number
 ememe            Multiple EM for motif elicitation
 ememetext        Multiple EM for motif elicitation, text file only
@@ -910,6 +915,7 @@ enetphos         Report Ser, Thr and Tyr phosphorylation sites in eukaryotic pro
 entret           Retrieve sequence entries from flatfile databases and files
 eomega           Multiple sequence alignment (ClustalO wrapper)
 eomegapp         Profile with profile (ClustalO wrapper)
+eomegaps         Single sequence with profile (ClustalO wrapper)
 eomegash         Sequence with HMM (ClustalO wrapper)
 eomegasp         Sequence with profile (ClustalO wrapper)
 epenny           Penny algorithm, branch-and-bound
@@ -1207,6 +1213,8 @@ wossoperation    Find programs by EDAM operation
 wossoutput       Find programs by EDAM output data
 wossparam        Find programs by EDAM parameter
 wosstopic        Find programs by EDAM topic
+xmlget           Get XML data
+xmltext          Get XML document original full text
 yank             Add a sequence reference (a full USA) to a list file
 
 
@@ -1245,6 +1253,7 @@ DATA RETRIEVAL SEQUENCE DATA ASSEMBLY DATA
 DATA RETRIEVAL TEXT DATA
 DATA RETRIEVAL TOOL DATA
 DATA RETRIEVAL URL DATA
+DATA RETRIEVAL XML DATA
 DISPLAY
 DOCUMENTATION
 EDIT

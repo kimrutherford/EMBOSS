@@ -99,7 +99,10 @@ public class ResultList
        } 
        catch (JembossSoapException e) 
        {
-         throw new JembossSoapException("Authentication Failed");
+    	   if(mysettings.getUseAuth())
+    		   throw new JembossSoapException("Authentication Failed");
+    	   else
+    		   throw e;
        }
 
        proganswer = eRun.getHash();

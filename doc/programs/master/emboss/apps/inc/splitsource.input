@@ -1,7 +1,7 @@
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>Database entry: qasrswww:A01139</h3>
+<p><h3>Database entry: ena:A01139</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   A01139; SV 1; linear; unassigned DNA; PAT; PRO; 279 BP.
@@ -17,11 +17,12 @@ XX
 KW   .
 XX
 OS   Lactococcus lactis
-OC   Bacteria; Firmicutes; Lactobacillales; Streptococcaceae; Lactococcus.
+OC   Bacteria; Firmicutes; Bacilli; Lactobacillales; Streptococcaceae;
+OC   Lactococcus.
 XX
 OS   Hirudo medicinalis (medicinal leech)
-OC   Eukaryota; Metazoa; Annelida; Clitellata; Hirudinida; Hirudinea;
-OC   Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
+OC   Eukaryota; Metazoa; Lophotrochozoa; Annelida; Clitellata; Hirudinida;
+OC   Hirudinea; Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
 XX
 RN   [1]
 RP   1-279
@@ -48,10 +49,10 @@ FT                   /note="fusion of MSP signal peptide and hirudin"
 FT                   /protein_id="CAA00134.1"
 FT                   /translation="MKKKIISAILMSTVILSAAAPLSGVYAVVYTDCTESGQNLCLCEG
 FT                   SNVCGQGNKCILGSDGEKNQCVTGEGTPKPQSHNDGDFEEIPEEYLQ"
-FT   mat_peptide     82..279
-FT                   /product="desulfatohirudin"
 FT   sig_peptide     1..81
 FT                   /product="MSP signal peptide"
+FT   mat_peptide     82..279
+FT                   /product="desulfatohirudin"
 XX
 SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
      atgaaaaaaa agattatctc agctatttta atgtctacag tgatactttc tgctgcagcc        60

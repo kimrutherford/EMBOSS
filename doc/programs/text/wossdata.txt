@@ -59,7 +59,7 @@ tcode       Identify protein-coding regions using Fickett TESTCODE statistic
 Command line arguments
 
 Find programs by EDAM data
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any

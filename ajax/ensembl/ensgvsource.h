@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.7 $
+** @version $Revision: 1.8 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:01:21 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -139,10 +139,10 @@ EnsPGvsourceadaptor ensGvsourceadaptorNew(EnsPDatabaseadaptor dba);
 void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa);
 
 EnsPBaseadaptor ensGvsourceadaptorGetBaseadaptor(
-    const EnsPGvsourceadaptor gvsa);
+    EnsPGvsourceadaptor gvsa);
 
 EnsPDatabaseadaptor ensGvsourceadaptorGetDatabaseadaptor(
-    const EnsPGvsourceadaptor gvsa);
+    EnsPGvsourceadaptor gvsa);
 
 AjBool ensGvsourceadaptorFetchAll(
     EnsPGvsourceadaptor gvsa,

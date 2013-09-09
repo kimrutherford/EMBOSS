@@ -47,7 +47,7 @@ Obo output file [ontogetcommon.obo]:
 Command line arguments
 
 Get common ancestor for terms
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -105,10 +105,13 @@ name: Nucleic acid sequence analysis
 namespace: topic
 def: Processing and analysis of nucleotide sequences and sequence-based entities
  such as alignments, motifs and profiles.
+subset: bioinformatics
+subset: edam
 subset: topics
 xref: BioCatalogue:Nucleotide Sequence Analysis
-is_a: EDAM_topic:0080 ! Sequence analysis
+created_in: "beta12orEarlier"
 is_a: EDAM_topic:0077 ! Nucleic acid analysis
+is_a: EDAM_topic:0080 ! Sequence analysis
 
 [Term]
 id: EDAM_topic:0097
@@ -116,9 +119,12 @@ name: Nucleic acid structure analysis
 namespace: topic
 def: The processing and analysis of nucleic acid (secondary or tertiary) structu
 ral data.
+subset: bioinformatics
+subset: edam
 subset: topics
-is_a: EDAM_topic:0081 ! Structure analysis
+created_in: "beta12orEarlier"
 is_a: EDAM_topic:0077 ! Nucleic acid analysis
+is_a: EDAM_topic:0081 ! Structure analysis
 
 
 Output file format
@@ -143,10 +149,15 @@ name: Nucleic acid analysis
 namespace: topic
 def: Processing and analysis of nucleic acid data, typically (but not exclusivel
 y) nucleic acid sequence analysis.
+subset: bioinformatics
+subset: edam
 subset: topics
-synonym: "Nucleic acids" EXACT [http://edamontology.org]
-synonym: "Nucleic acid informatics" EXACT [http://edamontology.org]
-synonym: "Nucleic acid bioinformatics" EXACT [http://edamontology.org]
+synonym: "http://purl.bioontology.org/ontology/MSH/D017422" NARROW []
+synonym: "http://purl.bioontology.org/ontology/MSH/D017423" NARROW []
+synonym: "Nucleic acid bioinformatics" EXACT []
+synonym: "Nucleic acid informatics" EXACT []
+synonym: "Nucleic acids" EXACT []
+created_in: "beta12orEarlier"
 is_a: EDAM_topic:0003 ! Topic
 
 

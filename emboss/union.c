@@ -66,8 +66,6 @@ int main(int argc, char **argv)
     float score = 0.0;
     ajulong overlap_base_count = 0;
 
-    int source_group = -1000000;
-
     embInit ("union", argc, argv);
 
     feature = ajAcdGetBoolean("feature");
@@ -124,8 +122,6 @@ int main(int argc, char **argv)
 					   score, strand, frame);
 		ajFeatTagAddCC(source_feature, "origid",
 			       ajStrGetPtr(seq->Name));
-		/* FIXME */
-		source_feature->Group = source_group++;
 	    }
 
 	    if(old_feattable)
@@ -151,10 +147,7 @@ int main(int argc, char **argv)
     }
 
     ajSeqAssignSeqS(uniseq, unistr);
-    /*
-       if(feature)
-       seqout->Features = AJTRUE;
-       */
+
     ajSeqoutWriteSeq(seqout, uniseq);
     ajSeqoutClose(seqout);
 
@@ -237,14 +230,12 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
     AjPFeature copy = NULL;
     const AjPStr source_feature_type = NULL;
 
-    ajulong new_length;
     AjIList iter;
 
     if(ajFeattableGetSize(old_feattable))
     {
         outseq_name = ajStrNew();
 
-        new_length = ajListGetLength(new_feattable->Features);
         iter = ajListIterNewread(old_feattable->Features);
 
         while(!ajListIterDone(iter))
@@ -255,11 +246,15 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
 	    copy = ajFeatNewFeat(gf);
     
 	    /* FIXME */
-	    copy->Start += (ajuint) offset;
-	    copy->End += (ajuint) offset;
-	    copy->Start2 += (ajuint) offset;
-	    copy->End2 += (ajuint) offset;
-    
+            if(copy->Start)
+                copy->Start += (ajuint) offset;
+            if(copy->End)
+                copy->End += (ajuint) offset;
+            if(copy->Start2)
+                copy->Start2 += (ajuint) offset;
+            if(copy->End2)
+                copy->End2 += (ajuint) offset;
+
 	    if (source_feature != NULL)
 	    {
 	        source_feature_type = ajFeatGetType(source_feature);
@@ -277,9 +272,7 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
 	        }
 	    }
     
-	    /* FIXME */
-	    copy->Group += (ajuint) new_length;
-	    ajFeattableAdd(new_feattable, copy);
+	    ajFeattableAddNew(new_feattable, copy);
 	}
     }
 

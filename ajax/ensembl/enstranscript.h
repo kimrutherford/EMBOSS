@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.36 $
+** @version $Revision: 1.38 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:09:28 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -82,6 +82,8 @@ EnsPTranscript ensTranscriptNewIni(EnsPTranscriptadaptor tca,
 
 EnsPTranscript ensTranscriptNewRef(EnsPTranscript transcript);
 
+AjBool ensTranscriptClearIntronsupportingevidences(EnsPTranscript transcript);
+
 void ensTranscriptDel(EnsPTranscript *Ptranscript);
 
 EnsPTranscriptadaptor ensTranscriptGetAdaptor(const EnsPTranscript transcript);
@@ -118,17 +120,26 @@ ajuint ensTranscriptGetVersion(const EnsPTranscript transcript);
 const AjPList ensTranscriptLoadAlternativetranslations(
     EnsPTranscript transcript);
 
-const AjPList ensTranscriptLoadAttributes(EnsPTranscript transcript);
+const AjPList ensTranscriptLoadAttributes(
+    EnsPTranscript transcript);
 
-const AjBool* ensTranscriptLoadCanonical(EnsPTranscript transcript);
+const AjBool* ensTranscriptLoadCanonical(
+    EnsPTranscript transcript);
 
-const AjPList ensTranscriptLoadDatabaseentries(EnsPTranscript transcript);
+const AjPList ensTranscriptLoadDatabaseentries(
+    EnsPTranscript transcript);
 
-const AjPList ensTranscriptLoadExons(EnsPTranscript transcript);
+const AjPList ensTranscriptLoadExons(
+    EnsPTranscript transcript);
 
-const AjPList ensTranscriptLoadSupportingfeatures(EnsPTranscript transcript);
+const AjPList ensTranscriptLoadIntronsupportingevidences(
+    EnsPTranscript transcript);
 
-EnsPTranslation ensTranscriptLoadTranslation(EnsPTranscript transcript);
+const AjPList ensTranscriptLoadSupportingfeatures(
+    EnsPTranscript transcript);
+
+EnsPTranslation ensTranscriptLoadTranslation(
+    EnsPTranscript transcript);
 
 AjBool ensTranscriptSetAdaptor(EnsPTranscript transcript,
                                EnsPTranscriptadaptor tca);
@@ -154,7 +165,8 @@ AjBool ensTranscriptSetDescription(EnsPTranscript transcript,
 AjBool ensTranscriptSetDisplayreference(EnsPTranscript transcript,
                                         EnsPDatabaseentry displaydbe);
 
-AjBool ensTranscriptSetFeature(EnsPTranscript transcript, EnsPFeature feature);
+AjBool ensTranscriptSetFeature(EnsPTranscript transcript,
+                               EnsPFeature feature);
 
 AjBool ensTranscriptSetGeneidentifier(EnsPTranscript transcript,
                                       ajuint geneid);
@@ -177,18 +189,26 @@ AjBool ensTranscriptSetTranslation(EnsPTranscript transcript,
 AjBool ensTranscriptSetVersion(EnsPTranscript transcript,
                                ajuint version);
 
-AjBool ensTranscriptAddAlternativetranslation(EnsPTranscript transcript,
-                                              EnsPTranslation translation);
+AjBool ensTranscriptAddAlternativetranslation(
+    EnsPTranscript transcript,
+    EnsPTranslation translation);
 
-AjBool ensTranscriptAddAttribute(EnsPTranscript transcript,
-                                 EnsPAttribute attribute);
+AjBool ensTranscriptAddAttribute(
+    EnsPTranscript transcript,
+    EnsPAttribute attribute);
 
-AjBool ensTranscriptAddDatabaseentry(EnsPTranscript transcript,
-                                     EnsPDatabaseentry dbe);
+AjBool ensTranscriptAddDatabaseentry(
+    EnsPTranscript transcript,
+    EnsPDatabaseentry dbe);
 
-AjBool ensTranscriptAddExon(EnsPTranscript transcript,
-                            EnsPExon exon,
-                            ajint rank);
+AjBool ensTranscriptAddExon(
+    EnsPTranscript transcript,
+    EnsPExon exon,
+    ajint rank);
+
+AjBool ensTranscriptAddIntronsupportingevidence(
+    EnsPTranscript transcript,
+    EnsPIntronsupportingevidence ise);
 
 AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level);
 
@@ -251,6 +271,14 @@ AjBool ensTranscriptFetchAllSequenceedits(EnsPTranscript transcript,
 AjBool ensTranscriptFetchDisplayidentifier(const EnsPTranscript transcript,
                                            AjPStr *Pidentifier);
 
+AjBool ensTranscriptFetchFeatureUtrfive(EnsPTranscript transcript,
+                                        EnsPTranslation translation,
+                                        EnsPFeature *Pfeature);
+
+AjBool ensTranscriptFetchFeatureUtrthree(EnsPTranscript transcript,
+                                         EnsPTranslation translation,
+                                         EnsPFeature *Pfeature);
+
 AjBool ensTranscriptFetchGene(const EnsPTranscript transcript,
                               EnsPGene *Pgene);
 
@@ -271,6 +299,14 @@ AjBool ensTranscriptFetchSequenceTranslationSeq(EnsPTranscript transcript,
 AjBool ensTranscriptFetchSequenceTranslationStr(EnsPTranscript transcript,
                                                 EnsPTranslation translation,
                                                 AjPStr *Psequence);
+
+AjBool ensTranscriptFetchSequenceUtrfiveStr(EnsPTranscript transcript,
+                                            EnsPTranslation translation,
+                                            AjPStr *Psequence);
+
+AjBool ensTranscriptFetchSequenceUtrthreeStr(EnsPTranscript transcript,
+                                             EnsPTranslation translation,
+                                             AjPStr *Psequence);
 
 AjBool ensTranscriptMapperInit(EnsPTranscript transcript, AjBool force);
 
@@ -327,13 +363,6 @@ AjBool ensSequenceAddFeatureTranscript(AjPSeq seq,
                                        EnsPTranscript transcript,
                                        AjPFeature *Pfeature);
 
-/* Ensembl Supporting Feature Adaptor */
-
-AjBool ensSupportingfeatureadaptorFetchAllbyTranscript(
-    EnsPDatabaseadaptor dba,
-    EnsPTranscript transcript,
-    AjPList bafs);
-
 /* Ensembl Transcript Adaptor */
 
 EnsPTranscriptadaptor ensRegistryGetTranscriptadaptor(
@@ -344,6 +373,9 @@ EnsPTranscriptadaptor ensTranscriptadaptorNew(
 
 void ensTranscriptadaptorDel(EnsPTranscriptadaptor *Ptca);
 
+EnsPBaseadaptor ensTranscriptadaptorGetBaseadaptor(
+    EnsPTranscriptadaptor tca);
+
 EnsPDatabaseadaptor ensTranscriptadaptorGetDatabaseadaptor(
     EnsPTranscriptadaptor tca);
 
@@ -352,6 +384,11 @@ EnsPFeatureadaptor ensTranscriptadaptorGetFeatureadaptor(
 
 AjBool ensTranscriptadaptorFetchAll(
     EnsPTranscriptadaptor tca,
+    AjPList transcripts);
+
+AjBool ensTranscriptadaptorFetchAllbyBiotype(
+    EnsPTranscriptadaptor tca,
+    const AjPStr biotype,
     AjPList transcripts);
 
 AjBool ensTranscriptadaptorFetchAllbyExonidentifier(
@@ -364,10 +401,26 @@ AjBool ensTranscriptadaptorFetchAllbyExonstableidentifier(
     const AjPStr stableid,
     AjPList transcripts);
 
+AjBool ensTranscriptadaptorFetchAllbyExternaldatabasename(
+    EnsPTranscriptadaptor tca,
+    const AjPStr dbname,
+    AjPList transcripts);
+
+AjBool ensTranscriptadaptorFetchAllbyExternalname(
+    EnsPTranscriptadaptor tca,
+    const AjPStr name,
+    const AjPStr dbname,
+    AjBool override,
+    AjPList transcripts);
+
 AjBool ensTranscriptadaptorFetchAllbyGene(
     EnsPTranscriptadaptor tca,
     EnsPGene gene,
     AjPList transcripts);
+
+AjBool ensTranscriptadaptorFetchAllbyIdentifiers(
+    EnsPTranscriptadaptor tca,
+    AjPTable transcripts);
 
 AjBool ensTranscriptadaptorFetchAllbySlice(
     EnsPTranscriptadaptor tca,
@@ -414,7 +467,7 @@ AjBool ensTranscriptadaptorRetrieveAllIdentifiers(
 
 AjBool ensTranscriptadaptorRetrieveAllStableidentifiers(
     EnsPTranscriptadaptor tca,
-    AjPList identifiers);
+    AjPList stableids);
 
 AjBool ensTranscriptadaptorRetrieveCanonical(
     EnsPTranscriptadaptor tca,

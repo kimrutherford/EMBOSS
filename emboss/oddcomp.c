@@ -427,14 +427,14 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 
 	/* get the word as the key */
 	key = ajStrNew();
-	ajStrTokenNextParse( &tokens, &key);
+	ajStrTokenNextParse(tokens, &key);
 
 	/*
 	**  get the observed count as the value - use this as the
 	**  expected frequency
 	*/
 	value = ajStrNew();
-	ajStrTokenNextParse( &tokens, &value);
+	ajStrTokenNextParse(tokens, &value);
 	ajTablePut( *exptable, key, value);
 	ajStrTokenDel( &tokens);
     }

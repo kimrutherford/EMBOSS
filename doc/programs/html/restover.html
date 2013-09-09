@@ -70,7 +70,7 @@ Output file [x65923.restover]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find restriction enzymes producing a specific overhang
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -115,6 +115,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -401,6 +402,14 @@ Version: EMBOSS:6.5.6.0
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -734,17 +743,21 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <p><h3>File: x65923.restover</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# Restrict of X65923 from 1 to 518
+# Restover of X65923 from 1 to 518
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
 # Minimum length of recognition site: 2
 # Number of hits with any overlap: 54
 # Base Number	Enzyme		Site		5'	3'	[5'	3']
-	11	TaqI            TCGA            11	13	
 	28	AciI            CCGC            25	27	
-	38	AciI            CCGC            38	40	
+	229	AciI            CCGC            226	228	
+	380	AciI            CCGC            377	379	
+	383	AciI            CCGC            380	382	
 	44	BceAI           ACGGC           25	27	
+	225	BsrI            ACTGG           221	219	
+	11	TaqI            TCGA            11	13	
+	38	AciI            CCGC            38	40	
 	71	AciI            CCGC            71	73	
 	73	Hin6I           GCGC            73	75	
 	94	TaqI            TCGA            94	96	
@@ -752,11 +765,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 	162	HpaII           CCGG            162	164	
 	190	Hin6I           GCGC            190	192	
 	192	Hin6I           GCGC            192	194	
-	225	BsrI            ACTGG           221	219	
-	229	AciI            CCGC            226	228	
 	263	AciI            CCGC            263	265	
-	380	AciI            CCGC            377	379	
-	383	AciI            CCGC            380	382	
 	395	HpaII           CCGG            395	397	
 	398	Hin6I           GCGC            398	400	
 	408	AclI            AACGTT          409	411	

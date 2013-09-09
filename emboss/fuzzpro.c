@@ -39,6 +39,7 @@ int main(int argc, char **argv)
     AjPStr tmpstr = NULL;
     AjPPatlistSeq plist = NULL;
     AjBool writeok = ajTrue;
+    ajuint nseq = 0;
 
     embInit("fuzzpro", argc, argv);
 
@@ -52,11 +53,14 @@ int main(int argc, char **argv)
     writeok=ajTrue;
     while(writeok && ajSeqallNext(seqall,&seq))
     {
-	tab = ajFeattableNewProt(ajSeqGetNameS(seq));
+        if(!nseq++)
+            tab = ajFeattableNewProt(ajSeqGetNameS(seq));
+        else
+            ajFeattableReset(tab, ajSeqGetNameS(seq));
+
         embPatlistSeqSearchAll(tab,seq,plist,ajFalse);
 	if(ajFeattableGetSize(tab))
 	    writeok = ajReportWrite(report,tab,seq);
-        ajFeattableDel(&tab);
     }
     ajReportSetSeqstats(report, seqall);
 
@@ -68,6 +72,7 @@ int main(int argc, char **argv)
     ajReportDel(&report);
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
+    ajFeattableDel(&tab);
 
     embExit();
 

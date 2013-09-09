@@ -302,8 +302,9 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     {
       {
         String inputValue = (String)JOptionPane.showInputDialog(null,
-                              "New "+(node.isLeaf()?"file":"folder")+" name","Rename "+fn,
-                              JOptionPane.QUESTION_MESSAGE,null,null,fn);
+                              "New "+(node.isLeaf()?"file":"folder")+" name",
+                              "Rename "+node.getFile(),
+                              JOptionPane.QUESTION_MESSAGE,null,null,node.getFile());
 
         pn = (RemoteFileNode)node.getParent();
 
@@ -376,13 +377,17 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
                  JOptionPane.ERROR_MESSAGE);
         else
         {
-          new PrivateRequest(mysettings,
+          PrivateRequest r = new PrivateRequest(mysettings,
                                "EmbreoFile","delDir",params);
-          Runnable deleteFileFromTree = new Runnable()
+          
+          if(!r.getVal("msg").equals("NOT OK"))
           {
-            public void run () { deleteObject(node); };
-          };
-          SwingUtilities.invokeLater(deleteFileFromTree);
+        	  Runnable deleteFileFromTree = new Runnable()
+        	  {
+        		  public void run () { deleteObject(node); };
+        	  };
+        	  SwingUtilities.invokeLater(deleteFileFromTree);
+          }
         }
       }
       catch (JembossSoapException jse)

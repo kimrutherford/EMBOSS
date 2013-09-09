@@ -23,6 +23,7 @@ EDAM_topic:0090 Data_Retrieval:Text_data Text data retrieval
 EDAM_topic:0091 Data_Retrieval:Tool_data Tool data retrieval
 EDAM_topic:0090 Data_Retrieval:URL_data URL data retrieval
 EDAM_topic:0090 Data_Retrieval:Variation_data Variation data retrieval
+EDAM_topic:0090 Data_Retrieval:XML_data XML data retrieval
 EDAM_topic:0092 Display Publication-quality display
 EDAM_topic:0088 Documentation Documentation
 EDAM_topic:0091 Edit Data file and content editing

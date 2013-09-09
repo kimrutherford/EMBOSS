@@ -1,5 +1,5 @@
 Retrieve information from REBASE restriction enzyme database
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-enzyme]            string     [BamHI] Enter the name of the restriction

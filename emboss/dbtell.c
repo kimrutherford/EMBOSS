@@ -76,6 +76,7 @@ int main(int argc, char **argv)
 {
     /* Variable declarations */
     AjPStr   dbname = NULL;
+    AjPStr   svrname = NULL;
     AjPFile  outfile = NULL;    
     AjPResource resource = NULL;
     AjPResourcein resourcein = NULL;
@@ -84,6 +85,7 @@ int main(int argc, char **argv)
     AjBool id;
     AjBool qry;
     AjBool all;
+    AjBool verbose;
     AjPStr methods = NULL;
     AjPStr release = NULL;
     AjPStr comment = NULL;
@@ -92,28 +94,51 @@ int main(int argc, char **argv)
     AjPTagval tagval = NULL;
     AjIList iter = NULL;
     ajuint space = 0;
+    AjPList aliaslist = NULL;
+    AjIList aliter = NULL;
+    const AjPStr alias = NULL;
+    ajuint maxlen;
+    AjPStr truedbname = NULL;
+    AjBool isalias = ajFalse;
 
     /* ACD processing */
     embInit("dbtell", argc, argv);
 
     dbname   = ajAcdGetString("database");
-/*    verbose  = ajAcdGetBoolean("full"); */
+    svrname   = ajAcdGetString("server");
+    verbose  = ajAcdGetBoolean("full");
     outfile  = ajAcdGetOutfile("outfile");
     
+    ajStrAssignS(&truedbname, dbname);
+    ajNamAliasDatabase(&truedbname);
+    ajStrFmtLower(&truedbname);
+
+    if(!ajStrMatchS(dbname, truedbname))
+        isalias = ajTrue;
 
     /* Application logic */
     /* Check EMBOSS database information.
        Write output file */
 
-    if(ajNamDbDetails(dbname, &type, &id, &qry, &all, &comment,
-                      &release, &methods, &defined))
+    if(ajNamDbDetailsSvr(truedbname, svrname, &type, &id, &qry, &all,
+                         &comment, &release, &methods, &defined))
     {
-        ajFmtPrintF(outfile, "# %S is defined in %S\n", dbname, defined);
+        if(isalias)
+            ajFmtPrintF(outfile, "# %S is an alias for %S defined in %S\n",
+                        dbname, truedbname, defined);
+        else
+            ajFmtPrintF(outfile, "# %S is defined in %S\n",
+                        truedbname, defined);
+
         ajFmtPrintF(outfile, "# access levels id: %B query: %B all: %B\n\n",
                     id, qry, all);
-        ajFmtPrintF(outfile, "DBNAME %S [\n", dbname);
+        ajFmtPrintF(outfile, "DBNAME %S [\n", truedbname);
 
-        list = ajNamDbGetAttrlist(dbname);
+        if(ajStrGetLen(svrname))
+            list = ajNamDbGetAttrlistSvr(truedbname, svrname);
+        else
+            list = ajNamDbGetAttrlist(truedbname);
+
         iter = ajListIterNewread(list);
         while(!ajListIterDone(iter))
         {
@@ -129,6 +154,43 @@ int main(int argc, char **argv)
         ajListFree(&list);
 
         ajFmtPrintF(outfile, "]\n");
+
+        if(verbose)
+        {
+            aliaslist = ajListNew();
+            ajNamListFindAliases(truedbname, aliaslist);
+
+            if(ajListGetLength(aliaslist))
+            {
+                ajFmtPrintF(outfile, "\n");
+                    
+                aliter = ajListIterNewread(aliaslist);
+
+                maxlen = 1;
+                while(!ajListIterDone(aliter))
+                {
+                    alias = ajListIterGet(aliter);
+                    if(MAJSTRGETLEN(alias) > maxlen)
+                        maxlen = MAJSTRGETLEN(alias);
+                }
+                
+                ajListIterDel(&aliter);
+                aliter = ajListIterNewread(aliaslist);
+
+                while(!ajListIterDone(aliter))
+                {
+                    alias = ajListIterGet(aliter);
+
+                    if(ajStrFindK(alias, ':') < 0)
+                        ajFmtPrintF(outfile, "ALIAS %-*S %S\n",
+                                    maxlen, alias, truedbname);
+                }
+
+                ajListIterDel(&aliter);
+            }
+
+            ajListstrFree(&aliaslist);
+        }
 
         ajStrDel(&type);
         ajStrDel(&methods);
@@ -158,7 +220,9 @@ int main(int argc, char **argv)
     /* Memory clean-up and exit */
 
     ajFileClose(&outfile);
+    ajStrDel(&truedbname);
     ajStrDel(&dbname);
+    ajStrDel(&svrname);
 
     embExit();
 

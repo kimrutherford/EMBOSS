@@ -105,7 +105,7 @@ Output file [j01636.remap]:
 Command line arguments
 
 Display restriction enzyme binding sites in a nucleotide sequence
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -305,6 +305,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -617,8 +618,8 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                                                       Hin6I
                  TaqI                                 HinP1I
                  |  BsiYI                             | HhaI
-                 |  Bsc4I                             | Bsu6I
-                 |  |   HspAI                         | BssKI
+                 |  Bsc4I                             | BssKI
+                 |  |   HspAI                         | Bsu6I
                  |  |   Hin6I                         | Ksp632I
                  |  |   HinP1I                        | | HpaII
                  |  |   | HhaI        AciI            | | BsiSI
@@ -686,24 +687,24 @@ MaeII     NotI
 J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                                  Ksp632I
-                                                        >.........====
                                                           HpaII
                                                           >===
-                        HhaI                             BssKI
-                        ==>=                            >=====
-                 TaqI   Hin6I                         HhaI
-                 >===   >===                          ==>=
-              BsiYI                      AciI         Hin6I
-              ======>====             >..====         >===
+                                                         BssKI
+                                                        >=====
+                        HhaI                          HhaI
+                        ==>=                          ==>=
+                 TaqI   Hin6I                         Hin6I
+                 >===   >===                          >===
+              BsiYI                      AciI                     Ksp632I
+              ======>====             >..====           >.........====
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
-              ====<======                <===         ===<
-              BsiYI                      AciI         Hin6I
-                 ===<   ===<                          =<==  <.....====
-                 TaqI   Hin6I                         HhaI        Ksp632I
+              ====<======                <===         ===<   .....====
+              BsiYI                      AciI         Hin6I       Ksp632I
+                 ===<   ===<                          =<==
+                 TaqI   Hin6I                         HhaI
                         =<==                             =====<
                         HhaI                             BssKI
                                                           ===<

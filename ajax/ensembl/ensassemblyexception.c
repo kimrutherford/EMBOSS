@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.50 $
+** @version $Revision: 1.52 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -152,12 +152,12 @@ static void assemblyexceptionadaptorFetchAll(const void *key,
 ** it has been split out of the Bio::EnsEMBL::DBSQL::SliceAdaptor class.
 **
 ** @cc Bio::EnsEMBL::Slice
-** @cc CVS Revision: 1.292
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.301
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::DBSQL::SliceAdaptor
-** @cc CVS Revision: 1.126
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.134
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -318,7 +318,8 @@ EnsPAssemblyexception ensAssemblyexceptionNewIni(
 ** @@
 ******************************************************************************/
 
-EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae)
+EnsPAssemblyexception ensAssemblyexceptionNewRef(
+    EnsPAssemblyexception ae)
 {
     if (!ae)
         return NULL;
@@ -364,7 +365,8 @@ EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae)
 ** @@
 ******************************************************************************/
 
-void ensAssemblyexceptionDel(EnsPAssemblyexception *Pae)
+void ensAssemblyexceptionDel(
+    EnsPAssemblyexception *Pae)
 {
     EnsPAssemblyexception pthis = NULL;
 
@@ -382,23 +384,14 @@ void ensAssemblyexceptionDel(EnsPAssemblyexception *Pae)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pae)
-        return;
-
-    pthis = *Pae;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pae) || --pthis->Use)
     {
         *Pae = NULL;
 
         return;
     }
 
-    AJFREE(pthis);
-
-    *Pae = NULL;
+    ajMemFree((void **) Pae);
 
     return;
 }
@@ -720,8 +713,9 @@ EnsEAssemblyexceptionType ensAssemblyexceptionGetType(
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetAdaptor(EnsPAssemblyexception ae,
-                                      EnsPAssemblyexceptionadaptor aea)
+AjBool ensAssemblyexceptionSetAdaptor(
+    EnsPAssemblyexception ae,
+    EnsPAssemblyexceptionadaptor aea)
 {
     if (!ae)
         return ajFalse;
@@ -748,8 +742,9 @@ AjBool ensAssemblyexceptionSetAdaptor(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetExceptionEnd(EnsPAssemblyexception ae,
-                                           ajuint erend)
+AjBool ensAssemblyexceptionSetExceptionEnd(
+    EnsPAssemblyexception ae,
+    ajuint erend)
 {
     if (!ae)
         return ajFalse;
@@ -776,8 +771,9 @@ AjBool ensAssemblyexceptionSetExceptionEnd(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetExceptionSeqregion(EnsPAssemblyexception ae,
-                                                 ajuint erid)
+AjBool ensAssemblyexceptionSetExceptionSeqregion(
+    EnsPAssemblyexception ae,
+    ajuint erid)
 {
     if (!ae)
         return ajFalse;
@@ -804,8 +800,9 @@ AjBool ensAssemblyexceptionSetExceptionSeqregion(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetExceptionStart(EnsPAssemblyexception ae,
-                                             ajuint erstart)
+AjBool ensAssemblyexceptionSetExceptionStart(
+    EnsPAssemblyexception ae,
+    ajuint erstart)
 {
     if (!ae)
         return ajFalse;
@@ -831,8 +828,9 @@ AjBool ensAssemblyexceptionSetExceptionStart(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetIdentifier(EnsPAssemblyexception ae,
-                                         ajuint identifier)
+AjBool ensAssemblyexceptionSetIdentifier(
+    EnsPAssemblyexception ae,
+    ajuint identifier)
 {
     if (!ae)
         return ajFalse;
@@ -858,8 +856,9 @@ AjBool ensAssemblyexceptionSetIdentifier(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetOrientation(EnsPAssemblyexception ae,
-                                          ajint orientation)
+AjBool ensAssemblyexceptionSetOrientation(
+    EnsPAssemblyexception ae,
+    ajint orientation)
 {
     if (!ae)
         return ajFalse;
@@ -886,8 +885,9 @@ AjBool ensAssemblyexceptionSetOrientation(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetReferenceEnd(EnsPAssemblyexception ae,
-                                           ajuint srend)
+AjBool ensAssemblyexceptionSetReferenceEnd(
+    EnsPAssemblyexception ae,
+    ajuint srend)
 {
     if (!ae)
         return ajFalse;
@@ -914,8 +914,9 @@ AjBool ensAssemblyexceptionSetReferenceEnd(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetReferenceSeqregion(EnsPAssemblyexception ae,
-                                                 ajuint srid)
+AjBool ensAssemblyexceptionSetReferenceSeqregion(
+    EnsPAssemblyexception ae,
+    ajuint srid)
 {
     if (!ae)
         return ajFalse;
@@ -942,8 +943,9 @@ AjBool ensAssemblyexceptionSetReferenceSeqregion(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetReferenceStart(EnsPAssemblyexception ae,
-                                             ajuint srstart)
+AjBool ensAssemblyexceptionSetReferenceStart(
+    EnsPAssemblyexception ae,
+    ajuint srstart)
 {
     if (!ae)
         return ajFalse;
@@ -970,8 +972,9 @@ AjBool ensAssemblyexceptionSetReferenceStart(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
-                                   EnsEAssemblyexceptionType aet)
+AjBool ensAssemblyexceptionSetType(
+    EnsPAssemblyexception ae,
+    EnsEAssemblyexceptionType aet)
 {
     if (!ae)
         return ajFalse;
@@ -1016,7 +1019,9 @@ AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
 ** @@
 ******************************************************************************/
 
-AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
+AjBool ensAssemblyexceptionTrace(
+    const EnsPAssemblyexception ae,
+    ajuint level)
 {
     AjPStr indent = NULL;
 
@@ -1028,27 +1033,29 @@ AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%SensAssemblyexceptionTrace %p\n"
+            "%S  Use %u\n"
             "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
             "%S  ReferenceSeqregion %u\n"
             "%S  ReferenceStart %u\n"
             "%S  ReferenceEnd %u\n"
             "%S  ExceptionSeqregion %u\n"
-            "%S  ExceptionStart %d\n"
+            "%S  ExceptionStart %u\n"
             "%S  ExceptionEnd %u\n"
             "%S  Orientation %d\n"
-            "%S  Type '%s'\n"
-            "%S  Use %u\n",
+            "%S  Type '%s'\n",
             indent, ae,
+            indent, ae->Use,
             indent, ae->Identifier,
+            indent, ae->Adaptor,
             indent, ae->ReferenceSeqregion,
             indent, ae->ReferenceStart,
             indent, ae->ReferenceEnd,
             indent, ae->ExceptionSeqregion,
             indent, ae->ExceptionStart,
             indent, ae->ExceptionEnd,
-            indent, ensAssemblyexceptionTypeToChar(ae->Type),
             indent, ae->Orientation,
-            indent, ae->Use);
+            indent, ensAssemblyexceptionTypeToChar(ae->Type));
 
     ajStrDel(&indent);
 
@@ -1060,12 +1067,13 @@ AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Assembly Exception object.
+** Functions for calculating information from an
+** Ensembl Assembly Exception object.
 **
 ** @fdata [EnsPAssemblyexception]
 **
-** @nam3rule Calculate Calculate Ensembl Assembly Exception values
-** @nam4rule Exception Calculate attributes for the exception
+** @nam3rule Calculate Calculate Ensembl Assembly Exception information
+** @nam4rule Exception Calculate exception information
 ** @nam4rule Memsize Calculate the memory size in bytes
 ** @nam4rule Reference Calculate attriutes for the reference
 ** @nam5rule Length Calculate the length
@@ -1117,7 +1125,8 @@ ajuint ensAssemblyexceptionCalculateExceptionLength(
 ** @@
 ******************************************************************************/
 
-size_t ensAssemblyexceptionCalculateMemsize(const EnsPAssemblyexception ae)
+size_t ensAssemblyexceptionCalculateMemsize(
+    const EnsPAssemblyexception ae)
 {
     size_t size = 0;
 
@@ -1203,7 +1212,8 @@ ajuint ensAssemblyexceptionCalculateReferenceLength(
 ** @@
 ******************************************************************************/
 
-EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(const AjPStr type)
+EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(
+    const AjPStr type)
 {
     register EnsEAssemblyexceptionType i = ensEAssemblyexceptionTypeNULL;
 
@@ -1270,9 +1280,10 @@ const char* ensAssemblyexceptionTypeToChar(EnsEAssemblyexceptionType aet)
          i++);
 
     if (!assemblyexceptionKType[i])
-        ajDebug("ensAssemblyexceptionTypeToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Assembly Exception Type enumeration %d.\n",
+        ajDebug("ensAssemblyexceptionTypeToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Assembly Exception Type "
+                "enumeration %d.\n",
                 aet);
 
     return assemblyexceptionKType[i];
@@ -1577,6 +1588,8 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 
     EnsPAssemblyexception ae = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     if (!aea)
         return ajFalse;
 
@@ -1586,7 +1599,9 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
     if (!aes)
         return ajFalse;
 
-    sqls = ensDatabaseadaptorSqlstatementNew(aea->Adaptor, statement);
+    dba = ensAssemblyexceptionadaptorGetDatabaseadaptor(aea);
+
+    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
@@ -1644,7 +1659,7 @@ static AjBool assemblyexceptionadaptorFetchAllbyStatement(
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(aea->Adaptor, &sqls);
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
     return ajTrue;
 }
@@ -1671,6 +1686,8 @@ static AjBool assemblyexceptionadaptorCacheInit(
 {
     ajuint *Pidentifier = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPList list = NULL;
     AjPList aes  = NULL;
 
@@ -1685,7 +1702,7 @@ static AjBool assemblyexceptionadaptorCacheInit(
         return ajTrue;
     else
     {
-        aea->CacheByReferenceSeqregion = ajTableuintNew(0);
+        aea->CacheByReferenceSeqregion = ajTableuintNew(0U);
 
         ajTableSetDestroyvalue(
             aea->CacheByReferenceSeqregion,
@@ -1716,11 +1733,12 @@ static AjBool assemblyexceptionadaptorCacheInit(
         "coord_system.coord_system_id "
         "AND "
         "coord_system.species_id = %u",
-        ensDatabaseadaptorGetIdentifier(aea->Adaptor));
+        ensDatabaseadaptorGetIdentifier(
+            ensAssemblyexceptionadaptorGetDatabaseadaptor(aea)));
 
     aes = ajListNew();
 
-    assemblyexceptionadaptorFetchAllbyStatement(aea, statement, aes);
+    result = assemblyexceptionadaptorFetchAllbyStatement(aea, statement, aes);
 
     ajStrDel(&statement);
 
@@ -1748,7 +1766,7 @@ static AjBool assemblyexceptionadaptorCacheInit(
 
     ajListFree(&aes);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -1875,7 +1893,8 @@ static void assemblyexceptionadaptorListAssemblyexceptionValdel(void **Pvalue)
 ** @@
 ******************************************************************************/
 
-void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor *Paea)
+void ensAssemblyexceptionadaptorDel(
+    EnsPAssemblyexceptionadaptor *Paea)
 {
     EnsPAssemblyexceptionadaptor pthis = NULL;
 
@@ -1889,16 +1908,12 @@ void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor *Paea)
                 *Paea);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Paea)
+    if (!(pthis = *Paea))
         return;
-
-    pthis = *Paea;
 
     ajTableDel(&pthis->CacheByReferenceSeqregion);
 
-    AJFREE(pthis);
-
-    *Paea = NULL;
+    ajMemFree((void **) Paea);
 
     return;
 }

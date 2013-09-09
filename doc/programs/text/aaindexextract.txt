@@ -43,7 +43,7 @@ AAINDEX database file: aaindex1.test
 Command line arguments
 
 Extract amino acid property data from AAINDEX
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     AAINDEX database file

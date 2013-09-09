@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.34 $
+** @version $Revision: 1.36 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic qcsequenceadaptorKTables **************************************
+/* @conststatic qcsequenceadaptorKTablenames **********************************
 **
 ** Array of Ensembl Quality Check Sequence Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcsequenceadaptorKTables[] =
+static const char *qcsequenceadaptorKTablenames[] =
 {
     "sequence",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *qcsequenceadaptorKTables[] =
 
 
 
-/* @conststatic qcsequenceadaptorKColumns *************************************
+/* @conststatic qcsequenceadaptorKColumnnames *********************************
 **
 ** Array of Ensembl Quality Check Sequence Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcsequenceadaptorKColumns[] =
+static const char *qcsequenceadaptorKColumnnames[] =
 {
     "sequence.sequence_id",
     "sequence.sequence_db_id",
@@ -403,14 +403,7 @@ void ensQcsequenceDel(EnsPQcsequence *Pqcs)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pqcs)
-        return;
-
-    pthis = *Pqcs;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pqcs) || --pthis->Use)
     {
         *Pqcs = NULL;
 
@@ -424,9 +417,7 @@ void ensQcsequenceDel(EnsPQcsequence *Pqcs)
     ajStrDel(&pthis->Type);
     ajStrDel(&pthis->Description);
 
-    AJFREE(pthis);
-
-    *Pqcs = NULL;
+    ajMemFree((void **) Pqcs);
 
     return;
 }
@@ -1229,12 +1220,12 @@ AjBool ensQcsequenceTrace(const EnsPQcsequence qcs, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Quality Check Sequence object.
 **
 ** @fdata [EnsPQcsequence]
 **
-** @nam3rule Calculate   Calculate Ensembl Quality Check Sequence values
+** @nam3rule Calculate   Calculate Ensembl Quality Check Sequence information
 ** @nam4rule Memsize     Calculate the memory size in bytes
 **
 ** @argrule Memsize qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
@@ -1440,11 +1431,12 @@ AjBool ensQcsequenceMatch(const EnsPQcsequence qcs1,
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching values of an Ensembl Quality Check Sequence object.
+** Functions for fetching information from an
+** Ensembl Quality Check Sequence object.
 **
 ** @fdata [EnsPQcsequence]
 **
-** @nam3rule Fetch Fetch Ensembl Quality Check Sequence values
+** @nam3rule Fetch Fetch Ensembl Quality Check Sequence information
 ** @nam4rule All Fetch all objects
 ** @nam4rule Anchor Fetch an HTML anchor
 ** @nam5rule External Fetch an HTML document-external anchor
@@ -1509,6 +1501,9 @@ AjBool ensQcsequenceFetchAnchorExternal(const EnsPQcsequence qcs,
 
     if (!Pstr)
         return ajFalse;
+
+    if (!*Pstr)
+        *Pstr = ajStrNew();
 
     ensQcsequenceFetchUrlExternal(qcs, &exturl);
 
@@ -1607,6 +1602,9 @@ AjBool ensQcsequenceFetchAnchorInternal(const EnsPQcsequence qcs,
 
     if (!Pstr)
         return ajFalse;
+
+    if (!*Pstr)
+        *Pstr = ajStrNew();
 
     sgmlid = ajStrNewS(qcs->Name);
 
@@ -2033,8 +2031,8 @@ EnsPQcsequenceadaptor ensQcsequenceadaptorNew(
 
     qcsa->Adaptor = ensBaseadaptorNew(
         dba,
-        qcsequenceadaptorKTables,
-        qcsequenceadaptorKColumns,
+        qcsequenceadaptorKTablenames,
+        qcsequenceadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2099,16 +2097,12 @@ void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor *Pqcsa)
                 *Pqcsa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pqcsa)
+    if (!(pthis = *Pqcsa))
         return;
-
-    pthis = *Pqcsa;
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    AJFREE(pthis);
-
-    *Pqcsa = NULL;
+    ajMemFree((void **) Pqcsa);
 
     return;
 }
@@ -2180,7 +2174,8 @@ EnsPBaseadaptor ensQcsequenceadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcsequenceadaptorGetDatabaseadaptor(
     EnsPQcsequenceadaptor qcsa)
 {
-    return (qcsa) ? ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor) : NULL;
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensQcsequenceadaptorGetBaseadaptor(qcsa));
 }
 
 
@@ -2250,6 +2245,8 @@ AjBool ensQcsequenceadaptorFetchAllbyQcdatabase(EnsPQcsequenceadaptor qcsa,
                                                 const EnsPQcdatabase qcdb,
                                                 AjPList qcss)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcsa)
@@ -2264,15 +2261,16 @@ AjBool ensQcsequenceadaptorFetchAllbyQcdatabase(EnsPQcsequenceadaptor qcsa,
     constraint = ajFmtStr("sequence.sequence_db_id = %u",
                           ensQcdatabaseGetIdentifier(qcdb));
 
-    ensBaseadaptorFetchAllbyConstraint(qcsa->Adaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcss);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcsequenceadaptorGetBaseadaptor(qcsa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcss);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2308,9 +2306,13 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 {
     char *txtaccession = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPList qcss = NULL;
 
     AjPStr constraint = NULL;
+
+    EnsPBaseadaptor ba = NULL;
 
     EnsPQcsequence qcs = NULL;
 
@@ -2323,7 +2325,11 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
     if (!Pqcs)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(qcsa->Adaptor, &txtaccession, accession);
+    *Pqcs = NULL;
+
+    ba = ensQcsequenceadaptorGetBaseadaptor(qcsa);
+
+    ensBaseadaptorEscapeC(ba, &txtaccession, accession);
 
     constraint = ajFmtStr("sequence.sequence_db_id = %u "
                           "AND "
@@ -2338,11 +2344,12 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 
     qcss = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(qcsa->Adaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcss);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcss);
 
     if (ajListGetLength(qcss) > 1)
         ajWarn("ensQcsequenceadaptorFetchByAccession got more than "
@@ -2372,7 +2379,7 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2401,18 +2408,10 @@ AjBool ensQcsequenceadaptorFetchByIdentifier(EnsPQcsequenceadaptor qcsa,
                                              ajuint identifier,
                                              EnsPQcsequence *Pqcs)
 {
-    if (!qcsa)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Pqcs)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(qcsa->Adaptor,
-                                           identifier,
-                                           (void **) Pqcs);
+    return ensBaseadaptorFetchByIdentifier(
+        ensQcsequenceadaptorGetBaseadaptor(qcsa),
+        identifier,
+        (void **) Pqcs);
 }
 
 
@@ -2443,9 +2442,13 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
 {
     char *txtname = NULL;
 
+    AjBool result = AJFALSE;
+
     AjPList qcss = NULL;
 
     AjPStr constraint = NULL;
+
+    EnsPBaseadaptor ba = NULL;
 
     EnsPQcsequence qcs = NULL;
 
@@ -2458,7 +2461,11 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
     if (!Pqcs)
         return ajFalse;
 
-    ensBaseadaptorEscapeC(qcsa->Adaptor, &txtname, name);
+    *Pqcs = NULL;
+
+    ba = ensQcsequenceadaptorGetBaseadaptor(qcsa);
+
+    ensBaseadaptorEscapeC(ba, &txtname, name);
 
     constraint = ajFmtStr("sequence.sequence_db_id = %u "
                           "AND "
@@ -2470,11 +2477,12 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
 
     qcss = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(qcsa->Adaptor,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcss);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ba,
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcss);
 
     if (ajListGetLength(qcss) > 1)
         ajWarn("ensQcsequenceadaptorFetchByName got more than "
@@ -2503,7 +2511,7 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2568,7 +2576,7 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
     if (!ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
+    dba = ensQcsequenceadaptorGetDatabaseadaptor(qcsa);
 
     statement = ajFmtStr("DELETE FROM "
                          "sequence "
@@ -2580,8 +2588,8 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qcs->Adaptor    = (EnsPQcsequenceadaptor) NULL;
-        qcs->Identifier = 0;
+        qcs->Adaptor    = NULL;
+        qcs->Identifier = 0U;
 
         result = ajTrue;
     }
@@ -2636,7 +2644,7 @@ AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
         ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
+    dba = ensQcsequenceadaptorGetDatabaseadaptor(qcsa);
 
     ensDatabaseadaptorEscapeC(dba, &txtname, qcs->Name);
     ensDatabaseadaptorEscapeC(dba, &txtaccession, qcs->Accession);
@@ -2734,7 +2742,7 @@ AjBool ensQcsequenceadaptorUpdate(EnsPQcsequenceadaptor qcsa,
     if (!ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
+    dba = ensQcsequenceadaptorGetDatabaseadaptor(qcsa);
 
     ensDatabaseadaptorEscapeC(dba, &txtname, qcs->Name);
     ensDatabaseadaptorEscapeC(dba, &txtaccession, qcs->Accession);

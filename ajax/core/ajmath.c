@@ -3,8 +3,8 @@
 ** AJAX maths functions
 **
 ** @author Copyright (C) 1998 Alan Bleasby
-** @version $Revision: 1.35 $
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @version $Revision: 1.36 $
+** @modified $Date: 2012/12/07 09:56:21 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -66,16 +66,22 @@ static void spcrc64calctab(unsigned long long *crctab);
 **
 ** Rounds an integer to be a multiple of a given number.
 **
-** @param [r] i [ajint] Integer to round.
-** @param [r] vround [ajint] Rounding multiple.
+** @param [r] i [ajuint] Integer to round.
+** @param [r] vround [ajuint] Rounding multiple.
 ** @return [ajint] Result.
 **
 ** @release 1.0.0
 ******************************************************************************/
 
-ajint ajRound(ajint i, ajint vround)
+ajint ajRound(ajuint i, ajuint vround)
 {
-    return vround * ((ajint)(i+vround-1)/vround);
+    ajuint modi;
+
+    modi = i % vround;
+    if(!modi)
+        return i;
+
+    return i + (vround - modi);
 }
 
 
@@ -86,13 +92,13 @@ ajint ajRound(ajint i, ajint vround)
 ** Rounds a floating point number to have bits free for cumulative addition
 **
 ** @param [r] a [float] Float to round.
-** @param [r] nbits [ajint] Number of bits to free.
+** @param [r] nbits [ajuint] Number of bits to free.
 ** @return [float] Result.
 **
 ** @release 6.2.0
 ******************************************************************************/
 
-float ajRoundFloat(float a, ajint nbits)
+float ajRoundFloat(float a, ajuint nbits)
 {
     double w;
     double x;

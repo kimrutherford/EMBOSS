@@ -1,0 +1,26 @@
+GPROF run-time profiling
+========================
+
+Build EMBOSS with configure option --with-gcov and --disable-shared
+
+Building generates .gcno files with each object file.
+
+Run an application. It will generate count files
+
+cd to the directory where the source and object files are.
+
+gcov with the name of the object file (the soruce file name does not get converted right.
+
+% (e.g.) fuzzpro ... reading swissprot .dat file with a pattern query
+% cd ajax/core
+% gcov libajax_la-ajfileio.o
+File 'ajfileio.c'
+Lines executed:31.12% of 331
+ajfileio.c:creating 'ajfileio.c.gcov'
+
+Look in this file for coverage counts against each record. Skipped
+lines with if/then/else have ####, executed lines have the number of
+times they were used in the all runs to date.
+
+Delete the .gcda file in the source directory, or rebuild to reset the
+counts if you are interested in just a single run.

@@ -166,6 +166,7 @@ int main(int argc, char **argv)
     ajulong nfound;
     ajulong nfoundall;
     AjPList fieldlist = NULL;
+    AjPStr dbfilename = NULL;
     AjPStr tmpstr = NULL;
     AjPStrTok handle = NULL;
     ajulong *pagepos = NULL;
@@ -187,7 +188,7 @@ int main(int argc, char **argv)
     
     fieldlist = ajListstrNew();
     handle = ajStrTokenNewC(fields, ",");
-    while(ajStrTokenNextParse(&handle, &tmpstr))
+    while(ajStrTokenNextParse(handle, &tmpstr))
         ajListPushAppend(fieldlist, ajStrNewS(tmpstr));
     ajStrDel(&tmpstr);
     ajStrTokenDel(&handle);
@@ -196,6 +197,9 @@ int main(int argc, char **argv)
     AJCNEW0(dbxdata, nindex);
 
     ajListFree(&fieldlist);
+
+    if(!ajNamDbGetDbaliasTest(dbname, &dbfilename))
+        ajStrAssignS(&dbfilename, dbname);
 
     if(!ajStrGetLen(idir))
     {
@@ -207,7 +211,7 @@ int main(int argc, char **argv)
     for(i=0; i<nindex;i++)
     {
         fieldext = ajBtreeFieldGetExtensionS(field[i]);
-        dbxdata[i].cache = ajBtreeCacheNewReadS(dbname,fieldext,idir);
+        dbxdata[i].cache = ajBtreeCacheNewReadS(dbfilename,fieldext,idir);
         if(!dbxdata[i].cache)
         {
             ajErr("No '%S' index found\n", field[i]);
@@ -706,6 +710,8 @@ int main(int argc, char **argv)
         AJFREE(pagepos);
         AJFREE(pageindex);
    }
+
+    ajStrDel(&dbfilename);
 
     ajStrDel(&dbname);
     ajStrDel(&fields);

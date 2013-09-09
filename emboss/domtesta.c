@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     
     ajDomWrite(doc,outf);
 
-    ajDomDocumentDestroyNode(doc,doc);
+    ajDomDocumentDestroyNode(doc,&doc);
     
     ajFileClose(&inf);
     ajFileClose(&outf);

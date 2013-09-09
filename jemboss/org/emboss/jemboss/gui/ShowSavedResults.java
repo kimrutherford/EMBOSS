@@ -281,15 +281,28 @@ public class ShowSavedResults extends JFrame
               "' didn't produce any result files.");
 	      else
 	      new ShowResultSet(thisres.hash(),sel,mysettings);
-	      setCursor(cdone);
 	    } 
-            catch (JembossSoapException eae)
-            {
-              AuthPopup ap = new AuthPopup(mysettings,f);
-              ap.setBottomPanel();
-              ap.setSize(380,170);
-              ap.pack();
-              ap.setVisible(true);
+	    catch (JembossSoapException eae)
+	    {
+	    	if(mysettings.getUseAuth())
+	    	{         	   
+	    		AuthPopup ap = new AuthPopup(mysettings,f);
+	    		ap.setBottomPanel();
+	    		ap.setSize(380,170);
+	    		ap.pack();
+	    		ap.setVisible(true);
+	    	}
+	    	else
+	    	{
+	    		JOptionPane.showMessageDialog(null,
+	    				"Problem while getting result list for '"+
+	    						sel+"' :"+eae.getMessage(),"Warning",
+	    						JOptionPane.ERROR_MESSAGE);
+	    	}
+	    }
+	    finally
+	    {
+	    	setCursor(cdone);	    	
 	    }
   	  } 
   	  else 

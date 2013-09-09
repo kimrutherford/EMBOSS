@@ -43,7 +43,7 @@ Features output [actb1_takru.gff]:
 Command line arguments
 
 Merge two overlapping feature tables
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-afeatures]         features   (no help text) features value
@@ -118,9 +118,9 @@ Input file format
 
 ##gff-version 3
 ##sequence-region ACTB1_TAKRU 1 375
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 ACTB1_TAKRU     antigenic       epitope 214     222     1.207   .       .
 ID=ACTB1_TAKRU.1;note=*pos 218
 ACTB1_TAKRU     antigenic       epitope 131     145     1.187   .       .
@@ -281,9 +281,9 @@ Output file format
 
 ##gff-version 3
 ##sequence-region ACTB1_TAKRU 1 375
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 ACTB1_TAKRU     SWISSPROT       mature_protein_region   1       375     .
 .       .       ID=ACTB1_TAKRU.1;note=Actin%2C cytoplasmic 1;ftid=PRO_0000367094
 ACTB1_TAKRU     SWISSPROT       cleaved_initiator_methionine    1       1

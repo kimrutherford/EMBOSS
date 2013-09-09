@@ -8,7 +8,7 @@ Here is a sample session with <b>dan</b>
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
-Enter Shift Increment [1]: <b></b>
+Enter shift increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
 Enter salt concentration (mM) [50.]: <b></b>
 Output report [x13776.dan]: <b></b>
@@ -29,7 +29,7 @@ An example of producing a plot of Tm:
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
-Enter Shift Increment [1]: <b></b>
+Enter shift increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
 Enter salt concentration (mM) [50.]: <b></b>
 Enter minimum temperature [55.]: <b></b>

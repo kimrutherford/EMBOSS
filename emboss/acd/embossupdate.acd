@@ -1,5 +1,6 @@
 application: embossupdate [
-  documentation: "Checks for more recent updates to EMBOSS"
+  documentation: "Check for more recent updates to EMBOSS"
+  gui: "no"
   groups: "Utils"
     relations: "EDAM_topic:0091 Data handling"
     relations: "EDAM_operation:0515 Data retrieval (tool metadata)"

@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX assembly reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.57 $
+** @version $Revision: 1.60 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:10:00 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1738,8 +1738,8 @@ static AjBool asseminLoadMaf(AjPAssemin assemin, AjPAssem assem)
             input->Records++;
 
             ajStrTokenAssignC(&handle, asseminReadLine, " \n\r\t");
-            ajStrTokenNextParse(&handle, &keyword);
-            ajStrTokenNextParse(&handle, &token);
+            ajStrTokenNextParse(handle, &keyword);
+            ajStrTokenNextParse(handle, &token);
 
             switch(CASE2(ajStrGetCharFirst(asseminReadLine),
                          ajStrGetCharPos(asseminReadLine, 1)))
@@ -1774,11 +1774,11 @@ static AjBool asseminLoadMaf(AjPAssemin assemin, AjPAssem assem)
                 case CASE2('C','T'):
                     AJNEW0(tag);
                     ajStrAssignS(&tag->Name, token);
-                    ajStrTokenNextParse(&handle, &token);
+                    ajStrTokenNextParse(handle, &token);
                     ajStrToUint(token, &tag->x1);
-                    ajStrTokenNextParse(&handle, &token);
+                    ajStrTokenNextParse(handle, &token);
                     ajStrToUint(token, &tag->y1);
-                    ajStrTokenRestParse(&handle, &token);
+                    ajStrTokenRestParse(handle, &token);
                     ajStrTrimEndC(&token, "\r\n");
                     ajStrAssignS(&tag->Comment, token);
                     ajListPushAppend(contig->Tags, tag);
@@ -1814,8 +1814,8 @@ static AjBool asseminLoadMaf(AjPAssemin assemin, AjPAssem assem)
             break;
 
         ajStrTokenAssignC(&handle, asseminReadLine, " \n\r\t");
-        ajStrTokenNextParse(&handle, &keyword);
-        ajStrTokenNextParse(&handle, &token);
+        ajStrTokenNextParse(handle, &keyword);
+        ajStrTokenNextParse(handle, &token);
 
 
         input->Records++;
@@ -1878,9 +1878,9 @@ static AjBool asseminLoadMaf(AjPAssemin assemin, AjPAssem assem)
             case CASE2('R','T'):
                 AJNEW0(tag);
                 ajStrAssignS(&tag->Name, token);
-                ajStrTokenNextParseC(&handle, " \t", &token);
+                ajStrTokenNextParseC(handle, " \t", &token);
                 ajStrToUint(token, &tag->x1);
-                ajStrTokenNextParseC(&handle, " \t", &token);
+                ajStrTokenNextParseC(handle, " \t", &token);
                 ajStrToUint(token, &tag->y1);
                 if(!r->Tags)
                     r->Tags = ajListNew();
@@ -1910,11 +1910,11 @@ static AjBool asseminLoadMaf(AjPAssemin assemin, AjPAssem assem)
             case CASE2('A','T'):
         	/* placement of the read */
         	ajStrToInt(token, &r->x1);
-        	ajStrTokenNextParse(&handle, &token);
+        	ajStrTokenNextParse(handle, &token);
         	ajStrToInt(token, &r->y1);
-        	ajStrTokenNextParse(&handle, &token);
+        	ajStrTokenNextParse(handle, &token);
         	ajStrToInt(token, &r->x2);
-        	ajStrTokenNextParse(&handle, &token);
+        	ajStrTokenNextParse(handle, &token);
         	ajStrToInt(token, &r->y2);
 
         	if (r->x1 > r->y1)
@@ -2246,15 +2246,15 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
 
     ajStrTokenAssignC(&handle, asseminReadLine, "\t\n");
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* QNAME */
+    ajStrTokenNextParseNoskip(handle,&token); /* QNAME */
     ajStrAssignS(&r->Name, token);
     ajDebug("QNAME '%S' '%S'\n", token, r->Name);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* FLAG */
+    ajStrTokenNextParseNoskip(handle,&token); /* FLAG */
     ajDebug("FLAG  '%S'\n", token);
     ajStrToInt(token, &r->Flag);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* RNAME */
+    ajStrTokenNextParseNoskip(handle,&token); /* RNAME */
     contig = ajTableFetchmodS(assem->Contigs, token);
 
     if(contig)
@@ -2299,7 +2299,7 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
     }
     ajDebug("RNAME '%S'\n", token);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* POS */
+    ajStrTokenNextParseNoskip(handle,&token); /* POS */
     ajDebug("POS   '%S'\n", token);
 
     if(ajStrGetLen(token))
@@ -2320,15 +2320,15 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
 	    r->x1 = pos;
     }
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* MAPQ */
+    ajStrTokenNextParseNoskip(handle,&token); /* MAPQ */
     ajDebug("MAPQ  '%S'\n", token);
     ajStrToInt(token, &r->MapQ);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* CIGAR */
+    ajStrTokenNextParseNoskip(handle,&token); /* CIGAR */
     ajStrAssignS(&r->Cigar, token);
     ajDebug("CIGAR '%S'\n", token);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* RNEXT */
+    ajStrTokenNextParseNoskip(handle,&token); /* RNEXT */
 
     if(ajStrMatchC(token,"="))
 	r->Rnext = r->Reference;
@@ -2354,7 +2354,7 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
     }
 
     /* in earlier SAM specs PNEXT was known as MPOS */
-    ajStrTokenNextParseNoskip(&handle,&token); /* PNEXT */
+    ajStrTokenNextParseNoskip(handle,&token); /* PNEXT */
     if(ajStrGetLen(token))
     {
 	if(!ajStrToLong(token, &r->Pnext))
@@ -2365,7 +2365,7 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
 	}
     }
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* TLEN */
+    ajStrTokenNextParseNoskip(handle,&token); /* TLEN */
     if(ajStrGetLen(token))
     {
 	if(!ajStrToInt(token, &r->Tlen))
@@ -2376,12 +2376,12 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
 	}
     }
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* SEQ */
+    ajStrTokenNextParseNoskip(handle,&token); /* SEQ */
     ajDebug("SEQ   '%S'\n", token);
     ajStrAssignS(&r->Seq, token);
     seqlen = MAJSTRGETLEN(token);
 
-    ajStrTokenNextParseNoskip(&handle,&token); /* QUAL */
+    ajStrTokenNextParseNoskip(handle,&token); /* QUAL */
     ajDebug("QUAL  '%S'\n", token);
 
     ajStrAssignS(&r->SeqQ, token);
@@ -2423,7 +2423,7 @@ static AjPAssemRead asseminReadSamAlignments(AjPAssemin assemin, AjPAssem assem)
 	}
     }
 
-    while(ajStrTokenNextParseNoskip(&handle,&token)) /* tags */
+    while(ajStrTokenNextParseNoskip(handle,&token)) /* tags */
     {
 	AJNEW0(tag);
 
@@ -3175,10 +3175,11 @@ static AjBool asseminListProcess(AjPAssemin assemin, AjPAssem assem,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStrTok handle = NULL;
+    AjPStr rest  = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
+    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -3206,31 +3207,30 @@ static AjBool asseminListProcess(AjPAssemin assemin, AjPAssem assem,
 
     while(ajReadlineTrim(file, &asseminReadLine))
     {
+        ++recnum;
 	asseminListNoComment(&asseminReadLine);
-
-	if(ajStrGetLen(asseminReadLine))
-	{
-	    ajStrTokenAssignC(&handle, asseminReadLine, " \t\n\r");
-	    ajStrTokenNextParse(&handle, &token);
-	    /* ajDebug("Line  '%S'\n");*/
-	    /* ajDebug("token '%S'\n", asseminReadLine, token); */
-
-	    if(ajStrGetLen(token))
-	    {
-	        ajDebug("++Add to list: '%S'\n", token);
-	        AJNEW0(node);
-	        ajStrAssignS(&node->Qry, token);
-	        asseminQrySave(node, assemin);
-	        ajListPushAppend(list, node);
-	    }
-
-	    ajStrDel(&token);
-	    token = NULL;
-	}
+        if(ajStrExtractWord(asseminReadLine, &rest, &token))
+        {
+            if(ajStrGetLen(rest)) 
+            {
+                ajErr("Bad record %u in list file '%S'\n'%S'",
+                      recnum, listfile, asseminReadLine);
+            }
+            else if(ajStrGetLen(token))
+            {
+                ajDebug("++Add to list: '%S'\n", token);
+                AJNEW0(node);
+                ajStrAssignS(&node->Qry, token);
+                asseminQrySave(node, assemin);
+                ajListPushAppend(list, node);
+            }
+        }
     }
+    
 
     ajFileClose(&file);
     ajStrDel(&token);
+    ajStrDel(&rest);
 
     ajDebug("Trace assemin->Input->List\n");
     ajQuerylistTrace(assemin->Input->List);
@@ -3259,7 +3259,6 @@ static AjBool asseminListProcess(AjPAssemin assemin, AjPAssem assem,
 	ret = asseminQryProcess(assemin, assem);
     }
 
-    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++asseminListProcess depth: %d returns: %B\n", depth, ret);
 

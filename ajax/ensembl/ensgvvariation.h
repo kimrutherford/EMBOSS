@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.14 $
+** @version $Revision: 1.15 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:03:26 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -240,14 +240,17 @@ EnsPGvvariationadaptor ensGvvariationadaptorNew(
 
 void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva);
 
+EnsPBaseadaptor ensGvvariationadaptorGetBaseadaptor(
+    EnsPGvvariationadaptor gvva);
+
 EnsPDatabaseadaptor ensGvvariationadaptorGetDatabaseadaptor(
-    const EnsPGvvariationadaptor gvva);
+    EnsPGvvariationadaptor gvva);
 
 EnsPGvbaseadaptor ensGvvariationadaptorGetGvbaseadaptor(
-    const EnsPGvvariationadaptor gvva);
+    EnsPGvvariationadaptor gvva);
 
 EnsPGvdatabaseadaptor ensGvvariationadaptorGetGvdatabaseadaptor(
-    const EnsPGvvariationadaptor gvva);
+    EnsPGvvariationadaptor gvva);
 
 AjBool ensGvvariationadaptorFetchAll(EnsPGvvariationadaptor gvva,
                                      AjPList gvvs);
@@ -466,6 +469,9 @@ EnsPGvvariationfeatureadaptor ensGvvariationfeatureadaptorNew(
 
 void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa);
 
+EnsPBaseadaptor ensGvvariationfeatureadaptorGetBaseadaptor(
+    const EnsPGvvariationfeatureadaptor gvvfa);
+
 EnsPDatabaseadaptor ensGvvariationfeatureadaptorGetDatabaseadaptor(
     const EnsPGvvariationfeatureadaptor gvvfa);
 
@@ -593,6 +599,12 @@ EnsPGvvariationsetadaptor ensGvvariationsetadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensGvvariationsetadaptorDel(EnsPGvvariationsetadaptor *Pgvvsa);
+
+EnsPBaseadaptor ensGvvariationsetadaptorGetBaseadaptor(
+    EnsPGvvariationsetadaptor gvvsa);
+
+EnsPDatabaseadaptor ensGvvariationsetadaptorGetDatabaseadaptor(
+    EnsPGvvariationsetadaptor gvvsa);
 
 AjBool ensGvvariationsetadaptorFetchAllToplevel(
     EnsPGvvariationsetadaptor gvvsa,

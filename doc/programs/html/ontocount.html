@@ -111,7 +111,7 @@ Output file [stdout]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Count ontology term(s)
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -412,7 +412,10 @@ id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: bioinformatics
 subset: data
+subset: edam
+created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 is_a: EDAM_data:2977 ! Nucleic acid sequence
 
