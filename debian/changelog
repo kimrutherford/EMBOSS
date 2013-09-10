@@ -7,6 +7,10 @@ emboss (6.6.0-1) UNRELEASED; urgency=low
 
   [ Andreas Tille ]
   * Imported Upstream version 6.6.0 (+adapt quilt patches)
+    Closes: #558852 (at least the regexp
+      dpkg-shlibdeps: warning: symbol.*found in none of the libraries
+    does not appear in the build log any more - feel free to reopen
+    with more info)
   * Clarified copyright and licenses for:
     - emboss/data/OBO/chebi.obo [b60238c]
     - emboss/data/OBO/gene_ontology*.obo [dc91819]
