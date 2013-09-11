@@ -1,4 +1,4 @@
-emboss (6.6.0-1) UNRELEASED; urgency=low
+emboss (6.6.0-1) unstable; urgency=low
 
   [ Charles Plessy ]
   ec024a3 Imported Upstream version 6.5.7
