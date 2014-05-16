@@ -1,3 +1,9 @@
+emboss (6.6.0-2) UNRELEASED; urgency=medium
+
+  * debian/copyright: Add Upstream-Contact to report bugs
+
+ -- Andreas Tille <tille@debian.org>  Fri, 16 May 2014 23:28:32 +0200
+
 emboss (6.6.0-1) unstable; urgency=low
 
   [ Charles Plessy ]

@@ -1,5 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-6.5.7.tar.gz
+Upstream-Contact: EMBOSS core development team <emboss-bug@emboss.open-bio.org>
+Source: ftp://emboss.open-bio.org/pub/EMBOSS/
 
 Files: *
 Copyright: The EMBOSS developers or their employers.
