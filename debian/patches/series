@@ -3,3 +3,4 @@ tfm-html.patch
 fix-postgresql-macro.patch
 fix-mysql-macro.patch
 bashism.patch
+plplotP-correct-padding.patch
