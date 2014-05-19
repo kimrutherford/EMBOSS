@@ -6,7 +6,6 @@ Uploaders: Charles Plessy <plessy@debian.org>,
 Section: science
 Priority: optional
 Build-Depends: debhelper (>= 9),
-               quilt,
                libx11-dev,
                x11proto-core-dev,
                libgdchart-gd2-xpm-dev,
@@ -24,7 +23,7 @@ Build-Depends: debhelper (>= 9),
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
                default-jdk
 #Build-Depends-Indep: default-jdk
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-med/emboss.git
 Vcs-Git: git://anonscm.debian.org/debian-med/emboss.git
 Homepage: http://emboss.sourceforge.net
@@ -85,21 +84,13 @@ Package: emboss-lib
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends}
-Conflicts: libajax5,
-           libajax6,
-           libajax5-dev,
+Conflicts: libajax6,
            libajax6-dev,
-           libnucleus5,
            libnucleus6,
-           libnucleus5-dev,
            libnucleus6-dev
-Replaces: libajax5,
-          libajax6,
-          libajax5-dev,
+Replaces: libajax6,
           libajax6-dev,
-          libnucleus5,
           libnucleus6,
-          libnucleus5-dev,
           libnucleus6-dev
 Description: EMBOSS Libraries
  This package contains the core libraries of the European Molecular Biology
@@ -129,4 +120,3 @@ Depends: ${shlibs:Depends},
 Description: graphical user interface to EMBOSS
  Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
  Biology Open Software Suite. It is part of the EMBOSS distribution.
-
