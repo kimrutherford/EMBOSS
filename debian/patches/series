@@ -4,3 +4,4 @@ fix-postgresql-macro.patch
 fix-mysql-macro.patch
 bashism.patch
 plplotP-correct-padding.patch
+remove_non-free_doc.patch

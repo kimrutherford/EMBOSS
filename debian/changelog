@@ -1,4 +1,4 @@
-emboss (6.6.0+dfsg-1) UNRELEASED; urgency=medium
+emboss (6.6.0+dfsg-1) unstable; urgency=medium
 
   [ Andreas Tille ]
   * debian/copyright: Add Upstream-Contact to report bugs
@@ -13,6 +13,8 @@ emboss (6.6.0+dfsg-1) UNRELEASED; urgency=medium
   * debian/copyright: Exclude invariant GFDL 1.1 files which are related to
     quite outdated EMBOSS 2.5.0
   * debian/emboss-doc.doc-base.emboss-admin: removed
+  * debian/patches/remove_non-free_doc.patch: Cleanup Makefile.am from non-free
+    docs
 
  -- Andreas Tille <tille@debian.org>  Mon, 19 May 2014 20:52:12 +0200
 
