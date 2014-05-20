@@ -1,7 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Contact: EMBOSS core development team <emboss-bug@emboss.open-bio.org>
 Source: ftp://emboss.open-bio.org/pub/EMBOSS/
-Files-Excluded: doc/manuals/admin.*
 
 Files: *
 Copyright: The EMBOSS developers or their employers.
