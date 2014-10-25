@@ -5,3 +5,4 @@ fix-mysql-macro.patch
 bashism.patch
 plplotP-correct-padding.patch
 remove_non-free_doc.patch
+path_max.patch
