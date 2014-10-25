@@ -23,8 +23,8 @@ Build-Depends: debhelper (>= 9),
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
                default-jdk
 #Build-Depends-Indep: default-jdk
-Standards-Version: 3.9.5
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-med/emboss.git
+Standards-Version: 3.9.6
+Vcs-Browser: https://anonscm.debian.org/cgit/debian-med/emboss.git
 Vcs-Git: git://anonscm.debian.org/debian-med/emboss.git
 Homepage: http://emboss.sourceforge.net
 
