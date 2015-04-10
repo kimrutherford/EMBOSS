@@ -1,3 +1,18 @@
+emboss (6.6.0+dfsg-2biolinux1) trusty; urgency=medium
+
+  * Current package builds jemboss from source but then installs
+    the pre-built jemboss.jar from the tarball - not good!!
+    Add ant dep and ensure that jemboss.jar really builds
+  * Include image for icon and edit .desktop file
+  * Add /usr/bin/jemboss
+  * Clean ./jemboss/runJemboss.sh which is created on build
+  * Clean various other files that blocked debuild -S (but note
+    we are still using some convenience copies of JARs)
+  * Remove makeJar.csh, and thus remove jemboss dep on csh
+  * Remove activation.jar which does not seem to be used at all
+
+ -- Tim Booth <tbooth@ceh.ac.uk>  Wed, 08 Apr 2015 19:06:09 +0100
+
 emboss (6.6.0+dfsg-2) UNRELEASED; urgency=medium
 
   * Make sure we will not delete documentation files from new upstream

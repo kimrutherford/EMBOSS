@@ -2,6 +2,11 @@
 
 export DH_VERBOSE=1
 
+# TODO - migrate all binary JARs to use the packaged versions instead.
+#  activation.jar never used??  Or sould we use the system version?
+#  Note activation.jar was included in upstream but unused.
+#export CLASSPATH=/usr/share/java/activation.jar:
+
 %:
 	dh $@ --with autotools-dev,autoreconf
 
@@ -32,16 +37,24 @@ DEB_LDFLAGS += $(shell dpkg-buildflags --get LDFLAGS)
 override_dh_auto_configure:
 	dh_autotools-dev_updateconfig
 	dh_auto_configure -- $(CONFFLAGS)
-	
+
 override_dh_auto_build:
 	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(DEB_LDFLAGS)"
+	# Add 2 extra files wanted in jemboss.jar
+	cd jemboss/lib && make jemboss.jar
+	cd jemboss && jar uf lib/jemboss.jar resources/version resources/*.properties
 
 override_dh_clean:
 	dh_autotools-dev_restoreconfig
-	rm --force --recursive debian/emboss_tmp
-	find jemboss/ -type f -name "*.class" | xargs -r rm -f
+	rm -rf debian/emboss_tmp
+	find jemboss/ -type f -name "*.class" -delete
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
 	dh_clean  --exclude=feattext.html~ config.status test-stamp install-stamp
+	rm -f jemboss/runJemboss.sh
+	rm -f jemboss/utils/makeJar.csh
+	rm -f jemboss/lib/jemboss.jar jemboss/resources/resources.jar jemboss/lib/activation.jar
+	find test '(' -name 'Makefile' -o -name 'Makefile.in' ')' -delete
+	rm -f config.guess
 
 override_dh_auto_install-arch:
 	### Binaries and data go to a temporary dir before being moved to their own package ###
@@ -66,25 +79,27 @@ override_dh_auto_install-arch:
 
 	### Documentation goes in emboss-doc. ###
 	$(MAKE) -C doc install DESTDIR=$(CURDIR)/debian/emboss-doc
-	antiword $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.doc > $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.txt
+	antiword debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.doc > debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.txt
 	# Remove this file when the relicenced file becomes part of the upstream tarball.
-	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
+	uudecode -o debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf debian/EMBOSS_qg_new.pdf.uu
 
 override_dh_auto_install-indep:
 	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss bindir=/usr/bin
 	# install target seems to remove executable flag which is claimed by lintian
-	find $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/utils -type f -not -executable -name "*sh" -exec chmod a+x \{\} \;
+	find debian/jemboss/usr/share/EMBOSS/jemboss/utils -type f -not -executable -name "*sh" -exec chmod a+x \{\} \;
 	# dangling LICEN[CS]E FILE
-	rm $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/LICENSE
+	rm debian/jemboss/usr/share/EMBOSS/jemboss/LICENSE
+	# resources.jar not needed as we use the data files in /usr/share/EMBOSS/data/
+	rm -f debian/jemboss/usr/share/EMBOSS/jemboss/resources/resources.jar
 
 	### Installation of the test suite
-	cp -a test $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/
-	sed -i "/SET emboss_tempdata/cSET emboss_tempdata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
-	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
-	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
-	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/data -executable -type f -exec chmod a-x \{\} \;
-	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test -type d -name CVS | xargs rm -rf
-	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test -type f -name .cvsignore -delete
+	cp -a test debian/emboss-test/usr/share/EMBOSS/
+	sed -i "/SET emboss_tempdata/cSET emboss_tempdata /usr/share/EMBOSS/test" debian/emboss-test/usr/share/EMBOSS/test/.embossrc
+	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" debian/emboss-test/usr/share/EMBOSS/test/.embossrc
+	mv debian/emboss-test/usr/share/EMBOSS/test/.embossrc debian/emboss-test/etc/emboss/embossrc.d/emboss-test
+	find debian/emboss-test/usr/share/EMBOSS/test/data -executable -type f -exec chmod a-x \{\} \;
+	find debian/emboss-test/usr/share/EMBOSS/test -type d -name CVS | xargs rm -rf
+	find debian/emboss-test/usr/share/EMBOSS/test -type f -name .cvsignore -delete
 
 override_dh_auto_test:
 	$(RM) test-stamp
@@ -95,16 +110,16 @@ override_dh_auto_test:
 	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
 	echo "SET emboss_docroot $(CURDIR)/doc" >> test/.embossrc
 	cd test/qa && LS_COLORS='' EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH EMBOSS_ROOT=../../../ ./qatest.csh
-	
+
 override_dh_installchangelogs:
 	dh_installchangelogs -k ChangeLog
-	
+
 override_dh_installman:
 	dh_installman -a -p emboss
 	for i in $(RENAMED) ; \
 		do dh_link usr/share/man/man1/$$i.1e.gz usr/share/man/man1/em_$$i.1e.gz ; \
 		done
-	
+
 override_dh_builddeb:
 	dh_builddeb -- -Z xz
 

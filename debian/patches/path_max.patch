@@ -3,8 +3,8 @@ Last-Update: Wed, 24 Sep 2014 10:36:02 UTC
 Bug-Debian: http://bugs.debian.org/762673
 Description: PATH_MAX is missing on Hurd so avoid this
 
---- a/ajax/core/ajfile.c.orig	2013-07-15 23:25:29.000000000 +0200
-+++ b/ajax/core/ajfile.c	2014-09-24 11:01:42.000000000 +0200
+--- a/ajax/core/ajfile.c
++++ b/ajax/core/ajfile.c
 @@ -8574,9 +8574,9 @@
  
  const AjPStr ajFileValueCwd(void)
