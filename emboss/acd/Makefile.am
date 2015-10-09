@@ -339,8 +339,6 @@ wossoperation.acd \
 wossoutput.acd \
 wossparam.acd \
 wosstopic.acd \
-xmlget.acd \
-xmltext.acd \
 yank.acd
 
 dist_embossacd2_DATA = \

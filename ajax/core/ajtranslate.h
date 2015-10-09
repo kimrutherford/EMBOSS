@@ -18,12 +18,12 @@
 ** This should be attended to at some time.
 **
 ** @author Copyright (C) 1999 Gary Williams
-** @version $Revision: 1.24 $
+** @version $Revision: 1.23 $
 ** @modified Feb 15 1999 GWW First version
 ** @modified April 19 1999 GWW Second version using NCBI's GC tables
 ** @modified April 18 2000 GWW Reorganised many of the routines
 ** @modified 2001-2011 Peter Rice
-** @modified $Date: 2013/02/07 10:32:50 $ by $Author: rice $
+** @modified $Date: 2011/10/18 14:23:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -172,16 +172,10 @@ void          ajTrnRevStr(const AjPTrn trnObj, const AjPStr str,
                           AjPStr *pep);
 void          ajTrnSeqC(const AjPTrn trnObj, const char *str, ajint len,
                         AjPStr *pep);
-void          ajTrnSeqInitC(const AjPTrn trnObj, const char *str, ajint len,
-                            AjPStr *pep);
 void          ajTrnSeqRevC(const AjPTrn trnObj, const char *str, ajint len,
                            AjPStr *pep);
-void          ajTrnSeqRevinitC(const AjPTrn trnObj, const char *str, ajint len,
-                               AjPStr *pep);
 void          ajTrnSeqAltRevC(const AjPTrn trnObj, const char *str, ajint len,
                               AjPStr *pep);
-void          ajTrnSeqAltRevinitC(const AjPTrn trnObj, const char *str,
-                                  ajint len, AjPStr *pep);
 void          ajTrnSeqS(const AjPTrn trnObj, const AjPStr str,
                         AjPStr *pep);
 void          ajTrnSeqAltRevS(const AjPTrn trnObj, const AjPStr str,
@@ -194,17 +188,11 @@ void          ajTrnSeqAltRevSeq(const AjPTrn trnObj, const AjPSeq seq,
                                 AjPStr *pep);
 void          ajTrnSeqFrameC(const AjPTrn trnObj, const char *seq, ajint len,
                              ajint frame, AjPStr *pep);
-void          ajTrnSeqFrameInitC(const AjPTrn trnObj, const char *seq,
-                                 ajint len, ajint frame, AjPStr *pep);
 const AjPStr  ajTrnName(ajint trnFileNameInt);
 void          ajTrnSeqFrameS(const AjPTrn trnObj, const AjPStr seq,
                              ajint frame, AjPStr *pep);
-void          ajTrnSeqFrameInitS(const AjPTrn trnObj, const AjPStr seq,
-                                 ajint frame, AjPStr *pep);
 void          ajTrnSeqFrameSeq(const AjPTrn trnObj, const AjPSeq seq,
                                ajint frame, AjPStr *pep);
-void          ajTrnSeqFrameSeqInit(const AjPTrn trnObj, const AjPSeq seq,
-                                   ajint frame, AjPStr *pep);
 ajint         ajTrnSeqDangleC(const AjPTrn trnObj, const char *seq,
                               ajint frame, AjPStr *pep);
 ajint         ajTrnSeqDangleS(const AjPTrn trnObj, const AjPStr seq,
@@ -217,15 +205,12 @@ ajint         ajTrnCodonstrTypeC(const AjPTrn trnObj,
                                  const char *codon, char *aa);
 ajint         ajTrnCodonstrTypeS(const AjPTrn trnObj,
                                  const AjPStr codon, char *aa);
-AjPSeq        ajTrnSeqInit(const AjPTrn trnObj, const AjPSeq seq,
-                           ajint frame);
 AjPSeq        ajTrnSeqOrig(const AjPTrn trnObj, const AjPSeq seq,
                            ajint frame);
 
 /*
 ** End of prototype definitions
 */
-
 
 
 

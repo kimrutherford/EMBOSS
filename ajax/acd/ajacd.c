@@ -11,10 +11,10 @@
 ** the ACD internal structures in a number of other interface formats.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.91 $
+** @version $Revision: 1.87 $
 ** @modified Jun 25 pmr First version
 ** @modified May 06 2004 Jon Ison Minor mods.
-** @modified $Date: 2012/12/07 10:22:55 $ by $Author: rice $
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -71,8 +71,6 @@
 #include "ajurlwrite.h"
 #include "ajvarread.h"
 #include "ajvarwrite.h"
-#include "ajxmlread.h"
-#include "ajxmlwrite.h"
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -286,7 +284,7 @@ static AjPList acdListCount = NULL;
 ** @value SEC_STAGE Section parsing
 ** @value ENDSEC_STAGE End section parsing
 ** @value BAD_STAGE Stage parsing error
-** @value NO_STAGE  No parsing stage defined
+** @value NO_STAGE  No parsing nstage defined
 ******************************************************************************/
 
 typedef enum
@@ -1062,7 +1060,6 @@ static const AjPStr acdPromptOuttext(AcdPAcd thys);
 static const AjPStr acdPromptOuttree(AcdPAcd thys);
 static const AjPStr acdPromptOuturl(AcdPAcd thys);
 static const AjPStr acdPromptOutvariation(AcdPAcd thys);
-static const AjPStr acdPromptOutxml(AcdPAcd thys);
 static const AjPStr acdPromptPattern(AcdPAcd thys);
 static const AjPStr acdPromptProperties(AcdPAcd thys);
 static const AjPStr acdPromptRefseq(AcdPAcd thys);
@@ -1083,7 +1080,6 @@ static const AjPStr acdPromptText(AcdPAcd thys);
 static const AjPStr acdPromptTree(AcdPAcd thys);
 static const AjPStr acdPromptUrl(AcdPAcd thys);
 static const AjPStr acdPromptVariation(AcdPAcd thys);
-static const AjPStr acdPromptXml(AcdPAcd thys);
 static void      acdQualParse(AjPStr* pqual, AjPStr* pnoqual,
 			      AjPStr* pqmaster, ajint* number);
 static AjBool    acdQualToBool(const AcdPAcd thys, const char *qual,
@@ -1257,7 +1253,6 @@ static void acdHelpTextTaxon(const AcdPAcd thys, AjPStr* str);
 static void acdHelpTextText(const AcdPAcd thys, AjPStr* str);
 static void acdHelpTextUrl(const AcdPAcd thys, AjPStr* str);
 static void acdHelpTextVariation(const AcdPAcd thys, AjPStr* str);
-static void acdHelpTextXml(const AcdPAcd thys, AjPStr* str);
 
 static void acdHelpValidAlign(const AcdPAcd thys, AjBool table, AjPStr* str);
 static void acdHelpValidCodon(const AcdPAcd thys, AjBool table, AjPStr* str);
@@ -1326,7 +1321,6 @@ static void acdDelTaxon(void** PPval);
 static void acdDelText(void** PPval);
 static void acdDelUrl(void** PPval);
 static void acdDelVariation(void** PPval);
-static void acdDelXml(void** PPval);
 
 static void acdSetXxxx(AcdPAcd thys);
 static void acdSetAppl(AcdPAcd thys);
@@ -1379,7 +1373,6 @@ static void acdSetOuttext(AcdPAcd thys);
 static void acdSetOuttree(AcdPAcd thys);
 static void acdSetOuturl(AcdPAcd thys);
 static void acdSetOutvariation(AcdPAcd thys);
-static void acdSetOutxml(AcdPAcd thys);
 static void acdSetPattern(AcdPAcd thys);
 static void acdSetProperties(AcdPAcd thys);
 static void acdSetRange(AcdPAcd thys);
@@ -1404,7 +1397,6 @@ static void acdSetToggle(AcdPAcd thys);
 static void acdSetTree(AcdPAcd thys);
 static void acdSetUrl(AcdPAcd thys);
 static void acdSetVariation(AcdPAcd thys);
-static void acdSetXml(AcdPAcd thys);
 
 /*
 ** Known item types
@@ -2238,22 +2230,6 @@ AcdOAttr acdAttrOutvariation[] =
 };
 
 
-AcdOAttr acdAttrOutxml[] =
-{
-    {"name", VT_STR, AJFALSE, "",
-	 "Default file name"},
-    {"extension", VT_STR, AJFALSE, "",
-	 "Default file extension"},
-    {"nulldefault", VT_BOOL, AJFALSE, "N",
-	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, AJFALSE, "N",
-	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, AJFALSE, NULL,
-	 NULL}
-};
-
-
-
 AcdOAttr acdAttrPattern[] =
 {
     {"minlength", VT_INT, AJFALSE, "1",
@@ -2679,21 +2655,6 @@ AcdOAttr acdAttrVariation[] =
 };
 
 
-AcdOAttr acdAttrXml[] =
-{
-    {"entry", VT_BOOL, AJFALSE, "N",
-	 "Read whole entry text"},
-    {"minreads", VT_INT, AJFALSE, "1",
-	 "Minimum number of inputs"},
-    {"maxreads", VT_INT, AJFALSE, "(INT_MAX)",
-	 "Maximum number of inputs"},
-    {"nullok", VT_BOOL, AJFALSE, "N",
-	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, AJFALSE, NULL,
-	 NULL}
-};
-
-
 AcdOAttr acdAttrVar[] =
 {
     {NULL, VT_NULL, AJFALSE, NULL,
@@ -3041,8 +3002,6 @@ AcdOOuttype acdOuttype[] =
 	 acdPromptOuturl,        ajUrloutformatFind},
     {"outvariation",  "vcf",           ajEOutfileTypeVariation, 0,
 	 acdPromptOutvariation,  ajVaroutformatFind},
-    {"outxml",        "xml",           ajEOutfileTypeXml, 0,
-	 acdPromptOutxml,        ajXmloutformatFind},
     {NULL, NULL, ajEOutfileTypeUnknown, 0, NULL, NULL}
 };
 
@@ -3371,14 +3330,6 @@ AcdOQual acdQualOutvariation[] =
 };
 
 
-AcdOQual acdQualOutxml[] =
-{
-    {"odirectory", "",  "string",  "Output directory"},
-    {"oformat",    "",  "string",  "Xml output format"},
-    {NULL, NULL, NULL, NULL}
-};
-
-
 AcdOQual acdQualPattern[] =
 {
     {"pformat",    "",  "string",  "File format"},
@@ -3451,7 +3402,6 @@ AcdOQual acdQualSeq[] =
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
     {"scircular",  "N", "boolean", "Sequence is circular"},
-    {"squick",     "N", "boolean", "Read id and sequence only"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "", "string",   "Input filename"},*/ /* obsolete */
     {"iquery",     "",  "string",  "Input query fields or ID list"},
@@ -3476,7 +3426,6 @@ AcdOQual acdQualSeqall[] =
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
     {"scircular",  "N", "boolean", "Sequence is circular"},
-    {"squick",     "N", "boolean", "Read id and sequence only"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
     {"iquery",     "",  "string",  "Input query fields or ID list"},
@@ -3501,7 +3450,6 @@ AcdOQual acdQualSeqset[] =
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
     {"scircular",  "N", "boolean", "Sequence is circular"},
-    {"squick",     "N", "boolean", "Read id and sequence only"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
     {"iquery",     "",  "string",  "Input query fields or ID list"},
@@ -3526,7 +3474,6 @@ AcdOQual acdQualSeqsetall[] =
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
     {"scircular",  "N", "boolean", "Sequence is circular"},
-    {"squick",     "N", "boolean", "Read id and sequence only"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
     {"iquery",     "",  "string",  "Input query fields or ID list"},
@@ -3622,16 +3569,6 @@ AcdOQual acdQualUrl[] =
 AcdOQual acdQualVariation[] =
 {
     {"iformat",    "",  "string",  "Input variation format"},
-    {"iquery",     "",  "string",  "Input query fields or ID list"},
-    {"ioffset",    "",  "integer", "Input start position offset"},
-    {"idbname",    "",  "string",  "User-provided database name"},
-    {NULL, NULL, NULL, NULL}
-};
-
-
-AcdOQual acdQualXml[] =
-{
-    {"iformat",    "",  "string",  "Input xml format"},
     {"iquery",     "",  "string",  "Input query fields or ID list"},
     {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
@@ -3887,11 +3824,6 @@ AcdOType acdType[] =
 	 &acdSetOutvariation,   NULL,                  &acdDelOutfile,
 	 AJTRUE,  AJTRUE,  &acdPromptOutvariation, &acdUseOutfile, &acdUseOut,
 	 "Variation entries" },
-    {"outxml",     "output",    acdSecOutput,
-	 acdAttrOutxml,    acdQualOutxml,
-	 acdSetOutxml,     NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutxml,  &acdUseOutfile, &acdUseOut,
-	 "Xml" },
     {"pattern",       "input",     acdSecInput,
 	 acdAttrPattern,        acdQualPattern,
 	 &acdSetPattern,        NULL,                  &acdDelPatlist,
@@ -4007,11 +3939,6 @@ AcdOType acdType[] =
 	 &acdSetVariation,       &acdHelpTextVariation, &acdDelVariation,
 	 AJTRUE,  AJTRUE,  &acdPromptVariation,  &acdUseData, &acdUseIn,
 	 "Variation entries" },
-    {"xml",       "input",     acdSecInput,
-	 acdAttrXml,       acdQualXml,
-	 acdSetXml,        acdHelpTextXml,   acdDelXml,
-	 AJTRUE,  AJTRUE,  acdPromptXml,  &acdUseData, &acdUseIn,
-	 "Xml" },
     {"xygraph",        "graph",      acdSecOutput,
 	 acdAttrGraphxy,         acdQualGraphxy,
 	 &acdSetGraphxy,         NULL,                 &acdFree,
@@ -4340,7 +4267,7 @@ void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
 	{
 	    tokenhandle = ajStrTokenNewC(acdLine, white);
 	  
-	    while(ajStrTokenNextParse(tokenhandle, &tmpword))
+	    while(ajStrTokenNextParse(&tokenhandle, &tmpword))
 	    {
 		if(ajStrGetLen(tmpword)) /* nothing before first whitespace */
 		{
@@ -7104,7 +7031,6 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam4rule  GetOuttree   ACD tree output datatype
 ** @nam4rule  GetOuturl  ACD URL output datatype
 ** @nam4rule  GetOutvariation  ACD variation output datatype
-** @nam4rule  GetOutxml   ACD xml output datatype
 ** @nam4rule  GetPattern   ACD prosite pattern datatype
 ** @nam4rule  GetProperties   ACD properties datatype
 ** @nam4rule  GetRange   ACD position ranges datatype
@@ -7129,12 +7055,10 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam4rule  GetTextall   ACD text stream datatype
 ** @nam4rule  GetToggle   ACD boolean toggle datatype
 ** @nam4rule  GetTree   ACD phylogenetic tree datatype
-** @nam4rule  GetUrl   ACD url datatype
-** @nam4rule  GetUrlall   ACD url stream datatype
+** @nam4rule  GetUrl   ACD taxon datatype
+** @nam4rule  GetUrlall   ACD taxon stream datatype
 ** @nam4rule  GetVariation   ACD variation datatype
 ** @nam4rule  GetVariationall   ACD variation stream datatype
-** @nam4rule  GetXml   ACD xml datatype
-** @nam4rule  GetXmlall   ACD xml stream datatype
 ** @nam4rule  GetValue   ACD datatype string value
 ** @nam5rule  GetValueDefault   ACD datatype default value
 ** @nam5rule  Name    Name of ACD datatype value
@@ -7206,7 +7130,6 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   Outtree          [AjPOutfile]
 ** @valrule   Outurl           [AjPOutfile]
 ** @valrule   Outvariation     [AjPOutfile]
-** @valrule   Outxml           [AjPOutfile]
 ** @valrule   Pattern          [AjPPatlistSeq]
 ** @valrule   Properties       [AjPPhyloProp]
 ** @valrule   Range            [AjPRange]
@@ -7239,8 +7162,6 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   Urlall           [AjPUrlall]
 ** @valrule   Variation        [AjPVarload]
 ** @valrule   Variationall     [AjPVarall]
-** @valrule   Xml              [AjPXml]
-** @valrule   Xmlall           [AjPXmlall]
 ** @valrule   Value            [const AjPStr]
 ** @valrule   *Name            [AjPStr]
 ** @valrule   Getpath          [const AjPStr]
@@ -7371,7 +7292,7 @@ static void acdSetAppl(AcdPAcd thys)
     {
         ajStrTokenAssignC(&handle, applexternal, "|");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
         {
             ajStrExtractFirst(token, &message, &appname);
             ajStrAssignS(&appfullname, appname);
@@ -7981,6 +7902,7 @@ static void acdSetAssembly(AcdPAcd thys)
     ajint itry;
 
     AjPStr infname = NULL;
+    AjPStr tmp = NULL;
 
     val = ajAssemloadNew();        /* set the default value */
 
@@ -7993,11 +7915,11 @@ static void acdSetAssembly(AcdPAcd thys)
 
     acdAttrToBool(thys, "entry", ajFalse, &val->Assemin->Input->Text);
 
-    acdGetValueAssoc(thys, "cbegin", &acdTmpStr);
-    ajStrToInt(acdTmpStr, &val->Assemin->cbegin);
+    acdGetValueAssoc(thys, "cbegin", &tmp);
+    ajStrToInt(tmp, &val->Assemin->cbegin);
 
-    acdGetValueAssoc(thys, "cend", &acdTmpStr);
-    ajStrToInt(acdTmpStr, &val->Assemin->cend);
+    acdGetValueAssoc(thys, "cend", &tmp);
+    ajStrToInt(tmp, &val->Assemin->cend);
 
     for(itry=acdPromptTry; itry && !ok; itry--)
     {
@@ -8032,6 +7954,8 @@ static void acdSetAssembly(AcdPAcd thys)
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -12772,61 +12696,6 @@ static void acdSetOutvariation(AcdPAcd thys)
 
 
 
-/* @func ajAcdGetOutxml *******************************************************
-**
-** Returns an item of type Outxml as defined in a named ACD item.
-** Called by the application after all ACD values have been set,
-** and simply returns what the ACD item already has.
-**
-** @param [r] token [const char*] Text token name
-** @return [AjPOutfile] File object. The file was already opened by
-**         acdSetOut so this just returns the pointer.
-** @cre failure to find an item with the right name and type aborts.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjPOutfile ajAcdGetOutxml(const char *token)
-{
-    return acdGetValueRef(token, "outxml");
-}
-
-
-
-
-/* @funcstatic acdSetOutxml ***************************************************
-**
-** Using the definition in the ACD file, and any values for the
-** item or its associated qualifiers provided on the command line,
-** prompts the user if necessary (and possible) and
-** sets the actual value for an ACD outxml item.
-**
-** Understands all attributes and associated qualifiers for this item type.
-**
-** The default value (if no other available) is a null string, which
-** is invalid.
-**
-** Associated qualifiers "-oformat"
-** are stored in the object and applied to the data on output.
-**
-** @param [u] thys [AcdPAcd] ACD item.
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void acdSetOutxml(AcdPAcd thys)
-{
-    acdSetOutType(thys, "outxml");
-
-    return;
-}
-
-
-
-
 /* @func ajAcdGetPattern ******************************************************
 **
 ** Returns an item of type Pattern as defined in a named ACD item.
@@ -14259,8 +14128,6 @@ static void acdSetSeq(AcdPAcd thys)
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
-	acdQualToBool(thys, "squick", ajFalse,
-		      &seqin->Minimal, &acdTmpStr);
 	acdQualToBool(thys, "scircular", ajFalse,
 		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
@@ -14591,8 +14458,6 @@ static void acdSetSeqall(AcdPAcd thys)
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
-	acdQualToBool(thys, "squick", ajFalse,
-		      &seqin->Minimal, &acdTmpStr);
 	acdQualToBool(thys, "scircular", ajFalse,
 		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
@@ -14895,8 +14760,6 @@ static void acdSetSeqsetall(AcdPAcd thys)
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
-	acdQualToBool(thys, "squick", ajFalse,
-		      &seqin->Minimal, &acdTmpStr);
 	acdQualToBool(thys, "scircular", ajFalse,
 		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
@@ -15850,8 +15713,6 @@ static void acdSetSeqset(AcdPAcd thys)
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 
-	acdQualToBool(thys, "squick", ajFalse,
-		      &seqin->Minimal, &acdTmpStr);
 	acdQualToBool(thys, "scircular", ajFalse,
 		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
@@ -16356,6 +16217,7 @@ static void acdSetTaxon(AcdPAcd thys)
     ajint maxreads;
 
     AjPStr infname = NULL;
+    AjPStr tmp = NULL;
     
     val = ajTaxallNew();        /* set the default value */
 
@@ -16366,8 +16228,6 @@ static void acdSetTaxon(AcdPAcd thys)
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
-
-    acdAttrToBool(thys, "entry", ajFalse, &val->Taxin->Input->Text);
 
     for(itry=acdPromptTry; itry && !ok; itry--)
     {
@@ -16400,11 +16260,15 @@ static void acdSetTaxon(AcdPAcd thys)
     if(maxreads > 1)
         val->Multi = ajTrue;
 
+    acdAttrToBool(thys, "entry", ajFalse, &val->Taxin->Input->Text);
+
     acdInFileSave(acdReply, ajTaxallGettaxId(val), ajTrue);
 
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -16495,6 +16359,7 @@ static void acdSetText(AcdPAcd thys)
     ajint maxreads;
 
     AjPStr infname = NULL;
+    AjPStr tmp = NULL;
 
     val = ajTextallNew();        /* set the default value */
 
@@ -16544,6 +16409,8 @@ static void acdSetText(AcdPAcd thys)
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -16851,7 +16718,7 @@ AjPUrl ajAcdGetUrl(const char *token)
 
 /* @func ajAcdGetUrlall *******************************************************
 **
-** Returns an input stream of an item of type URL as defined in a
+** Returns an input stream of an item of type Taxon as defined in a
 ** named ACD item.
 ** Called by the application after all ACD values have been set,
 ** and simply returns what the ACD item already has.
@@ -17062,6 +16929,7 @@ static void acdSetVariation(AcdPAcd thys)
     ajint itry;
 
     AjPStr infname = NULL;
+    AjPStr tmp = NULL;
 
     val = ajVarloadNew();        /* set the default value */
 
@@ -17107,141 +16975,8 @@ static void acdSetVariation(AcdPAcd thys)
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
-    return;
-}
+    ajStrDel(&tmp);
 
-
-
-
-/* @func ajAcdGetXml **********************************************************
-**
-** Returns an item of type xml as defined in a named ACD item.
-** Called by the application after all ACD values have been set,
-** and simply returns what the ACD item already has.
-**
-** @param [r] token [const char*] Text token name
-** @return [AjPXml] Xml object
-** @cre failure to find an item with the right name and type aborts.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjPXml ajAcdGetXml(const char *token)
-{
-    AjPXml val = acdGetValueRef(token, "xml");
-
-    return val;
-}
-
-
-
-
-/* @func ajAcdGetXmlall *******************************************************
-**
-** Returns an input stream of an item of type XML as defined in a
-** named ACD item.
-** Called by the application after all ACD values have been set,
-** and simply returns what the ACD item already has.
-**
-** @param [r] token [const char*] Text token name
-** @return [AjPXmlall] URL input stream
-** @cre failure to find an item with the right name and type aborts.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjPXmlall ajAcdGetXmlall(const char *token)
-{
-    AjPXmlall val = acdGetValueRef(token, "xml");
-
-    if(!val->Multi)
-        ajWarn("ajAcdGetXmlall request xml input stream but maxreads is 1");
-
-    return val;
-}
-
-
-
-
-/* @funcstatic acdSetXml ******************************************************
-**
-** Using the definition in the ACD file, and any values for the
-** item or its associated qualifiers provided on the command line,
-** prompts the user if necessary (and possible) and
-** sets the actual value for an ACD xml input
-**
-** Understands all attributes and associated qualifiers for this item type.
-**
-** @param [u] thys [AcdPAcd] ACD item.
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void acdSetXml(AcdPAcd thys)
-{
-    AjPXmlall val;
-
-    AjBool required = ajFalse;
-    AjBool ok       = ajFalse;
-    AjBool nullok   = ajFalse;
-    ajint itry;
-
-    ajint maxreads;
-
-    AjPStr infname = NULL;
-    
-    val = ajXmlallNew();        /* set the default value */
-
-    acdAttrToBool(thys, "nullok", ajFalse, &nullok);
-    acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
-
-    acdInFilename(&infname);
-    required = acdIsRequired(thys);
-    acdReplyInitS(thys, infname, &acdReplyDef);
-    ajStrDel(&infname);
-
-    acdAttrToBool(thys, "entry", ajFalse, &val->Xmlin->Input->Text);
-
-    for(itry=acdPromptTry; itry && !ok; itry--)
-    {
-	ok = ajTrue;	   /* accept the default if nothing changes */
-
-	ajStrAssignS(&acdReply, acdReplyDef);
-
-	if(required)
-	    acdUserGet(thys, &acdReply);
-
-	if(!ajStrGetLen(acdReply) && nullok)
-        {
-            ajXmlallDel(&val);
-	    break;
-	}
-
-	ajXmlinQryS(val->Xmlin, acdReply);
-
-	acdGetValueAssoc(thys, "iformat", &val->Xmlin->Input->Formatstr);
-	acdGetValueAssoc(thys, "iquery", &val->Xmlin->Input->QryFields);
-	acdQualToLong(thys, "ioffset", 0L, &val->Xmlin->Input->Fpos,
-                      &acdTmpStr);
-
-        ok = ajXmlinRead(val->Xmlin, val->Xml);
-    }
-
-    if(!ok)
-	acdBadRetry(thys);
-
-    if(maxreads > 1)
-        val->Multi = ajTrue;
-
-    acdInFileSave(acdReply, NULL, ajTrue);
-
-    thys->Value = val;
-    ajStrAssignS(&thys->ValStr, acdReply);
-    
     return;
 }
 
@@ -19153,11 +18888,11 @@ static void acdHelpValidList(const AcdPAcd thys, AjBool table, AjPStr* str)
 
     acdAttrValueStr(thys, "codedelimiter", ":", &codedelim);
 
-    while(ajStrTokenNextFind(handle, &line))
+    while(ajStrTokenNextFind(&handle, &line))
     {
 	codehandle = ajStrTokenNewS(line, codedelim);
-	ajStrTokenNextParse(codehandle, &code);
-	ajStrTokenNextParseS(codehandle, delim, &desc);
+	ajStrTokenNextParse(&codehandle, &code);
+	ajStrTokenNextParseS(&codehandle, delim, &desc);
 	acdTextTrim(&code);
 	acdTextTrim(&desc);
 	if(table)
@@ -19216,7 +18951,7 @@ static void acdHelpValidSelect(const AcdPAcd thys, AjBool table, AjPStr* str)
 
     handle = ajStrTokenNewS(value, delim);
 
-    while(ajStrTokenNextFind(handle, &desc))
+    while(ajStrTokenNextFind(&handle, &desc))
     {
 	ajStrTrimC(&desc, white);
 	if(table)
@@ -20160,7 +19895,7 @@ static void acdHelpXsdShow(const AjPList inlist, const AjPList outlist)
                 if(ajStrGetLen(item->Relation))
                 {
                     handle = ajStrTokenNewC(item->Relation, "|");
-                    while(ajStrTokenNextParse(handle, &tmpstr))
+                    while(ajStrTokenNextParse(&handle, &tmpstr))
                     {
                         ajStrExtractWord(tmpstr, &rest, &word);
                         ajUser("    sawsdl:modelReference="
@@ -20190,7 +19925,7 @@ static void acdHelpXsdShow(const AjPList inlist, const AjPList outlist)
                 if(ajStrGetLen(item->Relation))
                 {
                     handle = ajStrTokenNewC(item->Relation, "|");
-                    while(ajStrTokenNextParse(handle, &tmpstr))
+                    while(ajStrTokenNextParse(&handle, &tmpstr))
                     {
                         ajStrExtractWord(tmpstr, &rest, &word);
                         ajUser("    sawsdl:modelReference="
@@ -20214,7 +19949,7 @@ static void acdHelpXsdShow(const AjPList inlist, const AjPList outlist)
                 if(ajStrGetLen(item->Relation))
                 {
                     handle = ajStrTokenNewC(item->Relation, "|");
-                    while(ajStrTokenNextParse(handle, &tmpstr))
+                    while(ajStrTokenNextParse(&handle, &tmpstr))
                     {
                         ajStrExtractWord(tmpstr, &rest, &word);
                         ajUser("    sawsdl:modelReference="
@@ -20262,7 +19997,7 @@ static void acdHelpXsdShow(const AjPList inlist, const AjPList outlist)
             {
                 ajUser("relation: '%S'", item->Relation);
                 handle = ajStrTokenNewC(item->Relation, "|");
-                while(ajStrTokenNextParse(handle, &tmpstr))
+                while(ajStrTokenNextParse(&handle, &tmpstr))
                 {
                     ajStrExtractWord(tmpstr, &rest, &word);
                     ajUser("    sawsdl:modelReference=\"http://purl.org%S\"",
@@ -20541,9 +20276,9 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
                         
 
                         ajStrTokenAssigncharC(&handle, acdoutformats[i], ":,");
-                        while(ajStrTokenNextParse(handle, &fmtname))
+                        while(ajStrTokenNextParse(&handle, &fmtname))
                         {
-                            ajStrTokenNextParse(handle, &fmtdesc);
+                            ajStrTokenNextParse(&handle, &fmtdesc);
                             if(ajStrMatchC(fmtname, "gff2"))
                                 ajFmtPrintAppS(&galaxyin,
                                                "      <option value=\"%S\" "
@@ -20580,9 +20315,9 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
                         
 
                         ajStrTokenAssigncharC(&handle, acdoutformats[i], ":,");
-                        while(ajStrTokenNextParse(handle, &fmtname))
+                        while(ajStrTokenNextParse(&handle, &fmtname))
                         {
-                            ajStrTokenNextParse(handle, &fmtdesc);
+                            ajStrTokenNextParse(&handle, &fmtdesc);
                             if(ajStrMatchS(fmtname, item->Expect))
                                 ajFmtPrintAppS(&galaxyin,
                                                "      <option value=\"%s\" "
@@ -20640,7 +20375,7 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
             if(ajStrGetLen(item->Relation))
             {
                 handle = ajStrTokenNewC(item->Relation, "|");
-                while(ajStrTokenNextParse(handle, &tmpstr))
+                while(ajStrTokenNextParse(&handle, &tmpstr))
                 {
                     ajStrExtractWord(tmpstr, &rest, &word);
                     ajUserDumpC("");
@@ -24932,10 +24667,8 @@ static void acdArgsScan(ajint argc, char * const argv[])
 	    acdDoHelp = ajTrue;
 
 	if(!strcmp(cp, "auto"))
-        {
-            acdPromptTry = 1;
 	    acdAuto = ajTrue;
-        }
+
 
 	if(!strcmp(cp, "warning"))
 	    AjErrorLevel.warning = ajTrue;
@@ -27628,42 +27361,6 @@ static void acdHelpTextVariation(const AcdPAcd thys, AjPStr* Pstr)
 
 
 
-/* @funcstatic acdHelpTextXml *************************************************
-**
-** Sets the help text for this ACD object to be a xml description
-**
-** @param [r] thys [const AcdPAcd] Current ACD object.
-** @param [w] Pstr [AjPStr*] Help text
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void acdHelpTextXml(const AcdPAcd thys, AjPStr* Pstr)
-{
-    ajint maxreads;
-
-    ajStrAssignClear(Pstr);
-
-    acdAttrToInt(thys, "maxreads", 1, &maxreads);
-
-    if(maxreads <= 1)
-        ajStrAssignC(Pstr, "xml");
-    else
-        ajStrAssignC(Pstr, "xml(s)");
-
-    ajStrFmtTitle(Pstr);
-
-    ajStrAppendC(Pstr,
-		 " filename and optional format, or reference (input query)");
-
-    return;
-}
-
-
-
-
 /* @funcstatic acdPromptAssembly **********************************************
 **
 ** Sets the default prompt for this ACD object to be an assembly
@@ -28518,45 +28215,6 @@ static const AjPStr acdPromptOutvariation(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutxml ************************************************
-**
-** Sets the default prompt for this ACD object to be a simple
-** prompt with "second", "third" etc. added.
-**
-** @param [u] thys [AcdPAcd] Current ACD object.
-** @return [const AjPStr] Generated standard prompt
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static const AjPStr acdPromptOutxml(AcdPAcd thys)
-{
-    static ajint count=0;
-
-    const AjPStr knowntype;
-
-    knowntype = acdKnowntypeDesc(thys);
-
-    if(ajStrGetLen(knowntype))
-    {
-	count++;
-	acdPromptStandardS(thys, knowntype);
-	acdPromptStandardAppend(thys, " output file");
-    }
-    else
-	acdPromptStandard(thys, "xml output file", &count);
-
-    if(!acdAttrTestDefined(thys, "default") &&
-       acdAttrTestDefined(thys, "nullok"))
-	acdPromptStandardAppend(thys, " (optional)");
-    
-    return thys->StdPrompt;
-}
-
-
-
-
 /* @funcstatic acdPromptRefseq **********************************************
 **
 ** Sets the default prompt for this ACD object to be a reference sequence
@@ -28839,65 +28497,6 @@ static const AjPStr acdPromptVariation(AcdPAcd thys)
     
     ajStrDel(&varPrompt);
     ajStrDel(&varPromptAlt);
-
-    return thys->StdPrompt;
-}
-
-
-
-
-/* @funcstatic acdPromptXml ***************************************************
-**
-** Sets the default prompt for this ACD object to be a xml
-** prompt with "first", "second" etc. added.
-**
-** @param [u] thys [AcdPAcd] Current ACD object.
-** @return [const AjPStr] Generated standard prompt
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static const AjPStr acdPromptXml(AcdPAcd thys)
-{
-    static ajint count=0;
-    AjPStr xmlPrompt = NULL;
-    AjPStr xmlPromptAlt = NULL;
-    const AjPStr knowntype;
-    ajint maxreads = 0;
-
-    acdAttrToInt(thys, "maxreads", 1, &maxreads);
-
-    knowntype = acdKnowntypeDesc(thys);
-
-    xmlPrompt = ajStrNewRes(32);
-    xmlPromptAlt = ajStrNewRes(32);
-
-    if(ajStrGetLen(knowntype))
-	ajFmtPrintAppS(&xmlPromptAlt, "%S ", knowntype);
-
-    ajFmtPrintAppS(&xmlPromptAlt, "xml");
-
-    if(maxreads > 1)
-	ajStrAppendC(&xmlPromptAlt, "(s)");
-
-    ajFmtPrintS(&xmlPrompt, "Input %S", xmlPromptAlt);
-
-    if(knowntype)
-    {
-	count++;
-	acdPromptStandardS(thys, xmlPromptAlt);
-    }
-    else
-	acdPromptStandardAlt(thys, ajStrGetPtr(xmlPrompt),
-			     ajStrGetPtr(xmlPromptAlt), &count);
-
-    if(!acdAttrTestDefined(thys, "default") &&
-       acdAttrTestDefined(thys, "nullok"))
-	acdPromptStandardAppend(thys, " (optional)");
-    
-    ajStrDel(&xmlPrompt);
-    ajStrDel(&xmlPromptAlt);
 
     return thys->StdPrompt;
 }
@@ -30109,7 +29708,7 @@ static void acdSelectPrompt(const AcdPAcd thys)
 
     handle = ajStrTokenNewS(value, delim);
 
-    while(ajStrTokenNextFind(handle, &line))
+    while(ajStrTokenNextFind(&handle, &line))
     {
 	ajStrTrimC(&line, white);
 	ajUser("  %5d : %S", ++i, line);
@@ -30185,10 +29784,10 @@ static void acdListPrompt(const AcdPAcd thys)
 
     handle = ajStrTokenNewS(value, delim);
 
-    while(ajStrTokenNextFind(handle, &line))
+    while(ajStrTokenNextFind(&handle, &line))
     {
 	codehandle = ajStrTokenNewS(line, codedelim);
-	ajStrTokenNextParse(codehandle, &code);
+	ajStrTokenNextParse(&codehandle, &code);
 	ajStrTrimC(&code, white);
 
         if(ajStrGetLen(code) > margin)
@@ -30199,11 +29798,11 @@ static void acdListPrompt(const AcdPAcd thys)
 
     ajStrTokenAssignS(&handle, value, delim);
 
-    while(ajStrTokenNextFind(handle, &line))
+    while(ajStrTokenNextFind(&handle, &line))
     {
 	codehandle = ajStrTokenNewS(line, codedelim);
-	ajStrTokenNextParse(codehandle, &code);
-	ajStrTokenNextParseS(codehandle, delim, &desc);
+	ajStrTokenNextParse(&codehandle, &code);
+	ajStrTokenNextParseS(&codehandle, delim, &desc);
 	ajStrTrimC(&code, white);
 	ajStrTrimC(&desc, white);
 	ajUser("  %*S : %S", margin, code, desc);
@@ -30252,9 +29851,9 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
     AjPStr delim     = NULL;
     AjPStr value  = NULL;
     AjBool exactcase;
-    AjPStrTok handle = NULL;
-    AjPStrTok rephandle = NULL;
-    AjPStrTok codehandle = NULL;
+    AjPStrTok handle;
+    AjPStrTok rephandle;
+    AjPStrTok codehandle;
 
     AjPStr line      = NULL;
     AjPStr code      = NULL;
@@ -30300,35 +29899,35 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
     ambigList = ajStrNew();
     ajStrAssignClear(&validstr);
     rephandle = ajStrTokenNewS(reply, repdelim);
-    while(ajStrTokenNextParse(rephandle, &repstr))
+    while(ajStrTokenNextParse(&rephandle, &repstr))
     {
 	itoken++;
 	acdLog("testing '%S'\n", repstr);
-	ajStrTokenAssignS(&handle,value, delim);
+	handle = ajStrTokenNewS(value, delim);
 	ifound = jfound = 0;
 	ajStrAssignClear(&validstr);
 
         if(ajStrMatchC(repstr, "*"))
         {
-            while(ajStrTokenNextFind(handle, &line))
+            while(ajStrTokenNextFind(&handle, &line))
             {
-                ajStrTokenAssignS(&codehandle, line, codedelim);
-                ajStrTokenNextParse(codehandle, &code);
+                codehandle = ajStrTokenNewS(line, codedelim);
+                ajStrTokenNextParse(&codehandle, &code);
                 ajStrTrimC(&code, white);
 
                 ajStrAssignS(&hitstr, code);
                 ajListstrPushAppend(list, hitstr);
                 hitstr = NULL;
-                ajStrTokenReset(codehandle);
+                ajStrTokenDel(&codehandle);
             }
         }
         else
         {
-            while(ajStrTokenNextFind(handle, &line))
+            while(ajStrTokenNextFind(&handle, &line))
             {
-                ajStrTokenAssignS(&codehandle, line, codedelim);
-                ajStrTokenNextParse(codehandle, &code);
-                ajStrTokenNextParseS(codehandle, delim, &desc);
+                codehandle = ajStrTokenNewS(line, codedelim);
+                ajStrTokenNextParse(&codehandle, &code);
+                ajStrTokenNextParseS(&codehandle, delim, &desc);
                 ajStrTrimC(&code, white);
                 ajStrTrimC(&desc, white);
  
@@ -30369,9 +29968,12 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
                     acdAmbigApp(&ambigList, desc);
                 }
 
-                ajStrTokenReset(codehandle);
+                ajStrTokenDel(&codehandle);
+                codehandle = NULL;
             } /* end of while */
 	
+            ajStrTokenDel(&codehandle);
+
             if(ifound == 1)
             {
                 ajStrAssignS(&hitstr,hitstr1);
@@ -30396,12 +29998,11 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
                 ok = ajFalse;
                 break;
             }
+            ajStrTokenDel(&handle);
         }
     }
 
-    ajStrTokenDel(&handle);
     ajStrTokenDel(&rephandle);
-    ajStrTokenDel(&codehandle);
     ajStrDel(&repstr);
     
     ilen = (ajuint) ajListstrGetLength(list);
@@ -30546,17 +30147,17 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
     ajStrAssignClear(&ambigList);
     ajStrAssignClear(&validstr);
     rephandle = ajStrTokenNewS(reply, repdelim);
-    while(ajStrTokenNextParse(rephandle, &repstr))
+    while(ajStrTokenNextParse(&rephandle, &repstr))
     {
 	itoken++;
 	
 	acdLog("testing '%S'\n", repstr);
-	ajStrTokenAssignS(&handle, value, delim);
+	handle = ajStrTokenNewS(value, delim);
 	i = jfound = 0;
 
         if(ajStrMatchC(repstr, "*"))
         {
-            for(icnt = 1; ajStrTokenNextFind(handle, &desc); icnt++)
+            for(icnt = 1; ajStrTokenNextFind(&handle, &desc); icnt++)
             {
                 ajStrAssignS(&hitstr, desc);
                 ajListstrPushAppend(list, hitstr);
@@ -30565,7 +30166,7 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
         }
         else
         {
-            for(icnt = 1; ajStrTokenNextFind(handle, &desc); icnt++)
+            for(icnt = 1; ajStrTokenNextFind(&handle, &desc); icnt++)
             {
                 ajStrTrimC(&desc, white);
  
@@ -30617,10 +30218,10 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
                 ok = ajFalse;
                 break;
             }
+            ajStrTokenDel(&handle);
         }
     }
 
-    ajStrTokenDel(&handle);
     ajStrTokenDel(&rephandle);
     ajStrDel(&repstr);
     
@@ -31597,8 +31198,8 @@ static void acdPrettyWrap(ajint left, const char *fmt, ...)
 
     if(ajListGetLength(acdListCommentsCount) && (acdCmtWord <= lastword))
     {
-        ajListPeek(acdListCommentsCount, (void**) &icword);
-        acdCmtWord = *icword;
+	ajListPeek(acdListCommentsCount, (void**) &icword);
+	acdCmtWord = *icword;
 	itercmt  = ajListIterNewread(acdListComments);
 	iterpos  = ajListIterNewread(acdListCommentsColumn);
 	iterword = ajListIterNewread(acdListCommentsCount);
@@ -31617,8 +31218,6 @@ static void acdPrettyWrap(ajint left, const char *fmt, ...)
 		/*if(*icpos < (ajint) ipos)
 		    ipos = *icpos;*/
 	    }
-
-            cmtstr = NULL;
 	}
 
 	ajListIterDel(&itercmt);
@@ -31644,7 +31243,7 @@ static void acdPrettyWrap(ajint left, const char *fmt, ...)
 	ajListPop(acdListCommentsCount, (void**) &icword);
 	ajListPop(acdListCommentsColumn, (void**) &icpos);
 	ajListstrPop(acdListComments, &cmtstr);
-        ajStrRemoveWhiteExcess(&cmtstr);
+	ajStrRemoveWhiteExcess(&cmtstr);
 
 	if(!ajStrPrefixC(cmtstr, "#"))
 	    ajStrInsertC(&cmtstr, 0, "#");
@@ -32834,7 +32433,7 @@ static void acdValidAppl(const AcdPAcd thys)
         i = acdFindAttrC(acdAttrAppl, "relations");
         tokenhandle = ajStrTokenNewC(thys->AttrStr[i], "|");
 
-        while(ajStrTokenNextParse(tokenhandle, &relation))
+        while(ajStrTokenNextParse(&tokenhandle, &relation))
         {
             namespace = acdEdamTest(relation);
             if(!namespace)
@@ -33099,7 +32698,7 @@ static void acdValidQual(AcdPAcd thys)
     {
         relstr = acdAttrValue(thys, "relations");
         tokenhandle = ajStrTokenNewC(relstr, "|");
-        while(ajStrTokenNextParse(tokenhandle, &relation))
+        while(ajStrTokenNextParse(&tokenhandle, &relation))
         {
             namespace = acdEdamTest(relation);
             if(!namespace)
@@ -34206,14 +33805,14 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
 	{
             handle = ajStrTokenNewC(knownLine, "|");
 
-            ok = ajStrTokenNextParse(handle, &knownName);
+            ok = ajStrTokenNextParse(&handle, &knownName);
 
 	    if(ok)
-	      ok = ajStrTokenNextParse(handle, &knownType);
+	      ok = ajStrTokenNextParse(&handle, &knownType);
 	    if(ok)
-	      ok = ajStrTokenNextParse(handle, &knownEdam);
+	      ok = ajStrTokenNextParse(&handle, &knownEdam);
 	    if(ok)
-	      ajStrTokenRestParse(handle, &knownDesc);
+	      ajStrTokenRestParse(&handle, &knownDesc);
 
             ajStrTokenDel(&handle);
 
@@ -35260,8 +34859,8 @@ static AjBool acdResourceList(const AcdPAcd thys,
 	    if(ajStrGetCharFirst(line) == '#')
 		continue;
 	    ajStrTokenAssignC(&handle, line, " ");
-	    ajStrTokenNextParse(handle, &tok1);
-	    ajStrTokenRestParse(handle, &tok2);
+	    ajStrTokenNextParse(&handle, &tok1);
+	    ajStrTokenRestParse(&handle, &tok2);
 
 	    if(ajStrGetLen(*value))
 		ajStrAppendS(value, delim);
@@ -36123,30 +35722,6 @@ static void acdDelVariation(void** PPval)
 
 
 
-/* @funcstatic acdDelXml ******************************************************
-**
-** Function with void** prototype to delete ACD xml input data
-**
-** @param [d] PPval [void**] Value to be deleted
-** @return [void]
-**
-** @release 6.6.0
-**
-******************************************************************************/
-
-static void acdDelXml(void** PPval)
-{
-    if(!*PPval)
-        return;
-
-    ajXmlallDel((AjPXmlall*)PPval);
-
-    return;
-}
-
-
-
-
 /* @funcstatic acdFree ********************************************************
 **
 ** Function to delete ACD data using the standard free function
@@ -36424,9 +35999,9 @@ static const AjPStr acdEdamTest(const AjPStr relation)
     ajStrExtractFirst(relation, &name, &term);
 
     handle = ajStrTokenNewC(term, ":");
-    if(!ajStrTokenNextParse(handle, &namespace)) /* EDAM */
+    if(!ajStrTokenNextParse(&handle, &namespace)) /* EDAM */
         acdErrorValid("Bad relation term '%S'", term);
-    else if(!ajStrTokenNextParse(handle, &token)) /* ID */
+    else if(!ajStrTokenNextParse(&handle, &token)) /* ID */
         acdErrorValid("Bad relation term '%S'", term);
 
     if(ajStrPrefixC(namespace, "EDAM_"))
@@ -36564,11 +36139,11 @@ AjBool ajAcdedamParse(const AjPStr relation, AjPStr* id,
     ajStrExtractFirst(relation, &rest, &term);
 
     handle = ajStrTokenNewC(term, ":_");
-    if(!ajStrTokenNextParse(handle, &token)) /* EDAM */
+    if(!ajStrTokenNextParse(&handle, &token)) /* EDAM */
         return ajFalse;
-    else if(!ajStrTokenNextParse(handle, namespace)) /* namespace */
+    else if(!ajStrTokenNextParse(&handle, namespace)) /* namespace */
         return ajFalse;
-    else if(!ajStrTokenNextParse(handle, id)) /* ID */
+    else if(!ajStrTokenNextParse(&handle, id)) /* ID */
     {
         ajStrSetClear(namespace);
         return ajFalse;

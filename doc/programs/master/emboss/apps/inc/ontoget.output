@@ -9,10 +9,7 @@ id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 is_a: EDAM_data:2977 ! Nucleic acid sequence
 
@@ -30,23 +27,59 @@ name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
 comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
-subset: bioinformatics
 subset: data
-subset: edam
-synonym: "SO:0001260" RELATED []
-created_in: "beta12orEarlier"
+synonym: "sequence_collection" EXACT [SO:0001260]
 is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM_data:1233
-name: Sequence set (protein)
+id: EDAM_data:1234
+name: Sequence set (nucleic acid)
 namespace: data
-def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: bioinformatics
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM_data:1239
+name: Restriction digest
+namespace: data
+def: Restriction digest fragments from digesting a nucleotide sequence with restriction sites using a restriction endonuclease.
+subset: data
+xref: SO:0000412
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM_data:1240
+name: PCR primers
+namespace: data
+def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set.
+subset: data
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM_data:1246
+name: Sequence cluster (nucleic acid)
+namespace: data
+def: A cluster of nucleotide sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Nucleotide sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:1235 ! Sequence cluster
+
+[Term]
+id: EDAM_data:0925
+name: Sequence assembly
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
+relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
 
 [Term]
 id: EDAM_data:1245
@@ -54,54 +87,10 @@ name: Sequence cluster (protein)
 namespace: data
 def: A cluster of protein sequences.
 comment: The sequences are typically related, for example a family of sequences.
-subset: bioinformatics
 subset: data
-subset: edam
-synonym: "Protein sequence cluster" EXACT []
-created_in: "beta12orEarlier"
+synonym: "Protein sequence cluster" EXACT [http://edamontology.org]
 is_a: EDAM_data:1233 ! Sequence set (protein)
 is_a: EDAM_data:1235 ! Sequence cluster
-
-[Term]
-id: EDAM_data:1262
-name: Peptide molecular weight hits
-namespace: data
-def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:1233 ! Sequence set (protein)
-
-[Term]
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-id: EDAM_data:1246
-name: Sequence cluster (nucleic acid)
-namespace: data
-def: A cluster of nucleotide sequences.
-comment: The sequences are typically related, for example a family of sequences.
-subset: bioinformatics
-subset: data
-subset: edam
-synonym: "Nucleotide sequence cluster" EXACT []
-created_in: "beta12orEarlier"
-is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
-is_a: EDAM_data:1235 ! Sequence cluster
-
-[Term]
-id: EDAM_data:1239
-name: Restriction digest
-namespace: data
-def: Restriction digest fragments from digesting a nucleotide sequence with restriction sites using a restriction endonuclease.
-subset: bioinformatics
-subset: data
-subset: edam
-xref: SO:0000412
-created_in: "beta12orEarlier"
-is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
 
 [Term]
 id: EDAM_data:2245
@@ -109,25 +98,33 @@ name: Sequence set (bootstrapped)
 namespace: data
 def: A collection of sequences output from a bootstrapping (resampling) procedure.
 comment: Bootstrapping is often performed in phylogenetic analysis.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM_data:1235
-name: Sequence cluster
+id: EDAM_data:1233
+name: Sequence set (protein)
 namespace: data
-def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
-comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
-subset: bioinformatics
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
-relationship: has_topic EDAM_topic:0724 ! Protein families
-relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+
+[Term]
+id: EDAM_data:1238
+name: Proteolytic digest
+namespace: data
+def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses.
+subset: data
+is_a: EDAM_data:1233 ! Sequence set (protein)
+relationship: has_topic EDAM_topic:0767 ! Protein and peptide identification
+
+[Term]
+id: EDAM_data:1262
+name: Peptide molecular weight hits
+namespace: data
+def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
+subset: data
+is_a: EDAM_data:1233 ! Sequence set (protein)
 
 </pre>
 </td></tr></table><p>

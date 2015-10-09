@@ -384,8 +384,6 @@ wossoperation \
 wossoutput \
 wossparam \
 wosstopic \
-xmlget \
-xmltext \
 yank
 
 dist_pkgdata_DATA = \
@@ -662,8 +660,6 @@ wossoperation_SOURCES = wossoperation.c
 wossoutput_SOURCES = wossoutput.c
 wossparam_SOURCES = wossparam.c
 wosstopic_SOURCES = wosstopic.c
-xmlget_SOURCES = xmlget.c
-xmltext_SOURCES = xmltext.c
 yank_SOURCES = yank.c
 
 # EMBOSS check application SOURCES

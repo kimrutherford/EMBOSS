@@ -17,14 +17,6 @@ section: input [
     relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
-  datafile: pkdata [
-    information: "Amino acid pKa data file"
-    help: "Values of pKa for amino acids"
-    default: "Epk.dat"
-    knowntype: "amino acid pka"
-    relations: "EDAM_data:1529 Protein pKa value"
-  ]
-
 endsection: input
 
 section: additional [

@@ -1,5 +1,5 @@
 Display information about a public database
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-database]          string     The name of the database defined locally for
@@ -11,10 +11,7 @@ Version: EMBOSS:6.6.0.0
                                   from the EMBOSS database definition
    -outfile            outfile    [stdout] Output file name
 
-   Advanced (Unprompted) qualifiers:
-   -server             string     The name of the server defined locally for
-                                  use by EMBOSS. (Any string)
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outfile" associated qualifiers

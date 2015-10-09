@@ -5,39 +5,13 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM_data:1233
-name: Sequence set (protein)
-namespace: data
-def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:0850 ! Sequence set
-
-[Term]
 id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 is_a: EDAM_data:2977 ! Nucleic acid sequence
-
-[Term]
-id: EDAM_data:2245
-name: Sequence set (bootstrapped)
-namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedure.
-comment: Bootstrapping is often performed in phylogenetic analysis.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
 id: EDAM_data:1235
@@ -45,13 +19,27 @@ name: Sequence cluster
 namespace: data
 def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
 comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
-relationship: has_topic EDAM_topic:0724 ! Protein families
 relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
+
+[Term]
+id: EDAM_data:2245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedure.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
 
 </pre>
 </td></tr></table><p>

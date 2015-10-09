@@ -3,8 +3,8 @@
 ** General routines for pattern matching.
 **
 ** @author Copyright (C) Alan Bleasby 1999
-** @version $Revision: 1.25 $
-** @modified $Date: 2012/12/07 10:24:56 $ by $Author: rice $
+** @version $Revision: 1.24 $
+** @modified $Date: 2011/10/18 14:24:25 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -59,36 +59,6 @@ AJ_BEGIN_DECLS
 /* ========================================================================= */
 /* ============================== public data ============================== */
 /* ========================================================================= */
-
-
-
-/* @enum AjEPatType ***********************************************************
-**
-** Enumerated sequence pattern type
-**
-** @value PATSEQ_UNKNOWN type not defined
-** @value PATSEQ_BMH     Boyer, Moore, Horspool
-** @value PATSEQ_BYP     Baeza-Yates, perleberg
-** @value PATSEQ_SO      Shift-OR
-** @value PATSEQ_BYGC    Baeza-Yates, Gonnet classes
-** @value PATSEQ_PROSITE Prosite pattern as regular expression
-** @value PATSEQ_TUB     Tarhito, Ukkonen, Bleasby
-** @value PATSEQ_OTHER   Brute force processing
-** @value PATSEQ_MAX     Beyond last defined value
-******************************************************************************/
-
-typedef enum AjOPatseqType
-{
-    PATSEQ_UNKNOWN,
-    PATSEQ_BMH,
-    PATSEQ_BYP,
-    PATSEQ_SO,
-    PATSEQ_BYGC,
-    PATSEQ_PROSITE,
-    PATSEQ_TUB,
-    PATSEQ_OTHER,
-    PATSEQ_MAX
-} EmbEPatseqType;
 
 
 

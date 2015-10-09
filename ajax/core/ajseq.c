@@ -6,9 +6,9 @@
 ** reading and writing and include simple utilities.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.183 $
+** @version $Revision: 1.178 $
 ** @modified Jun 25 pmr First version
-** @modified $Date: 2013/07/15 20:56:02 $ by $Author: rice $
+** @modified $Date: 2012/07/15 17:39:56 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -217,7 +217,7 @@ static SeqOMolecule seqMolecule[] =
     {"unassigned DNA", "unassigned DNA", "DNA", "DNA", "unassigned DNA"},
     {"genomic DNA", "genomic DNA", "DNA", "DNA", "genomic DNA"},
     {"genomic RNA", "genomic RNA", "DNA", "RNA", "genomic RNA"},
-    {"mRNA", "mRNA", "mRNA", "mRNA", "mRNA"},
+    {"mRNA", "mRNA", "RNA", "RNA", "mRNA"},
     {"tRNA", "tRNA", "RNA", "RNA", "tRNA"},
     {"rRNA", "rRNA", "RNA", "RNA", "rRNA"},
     {"snoRNA", "snoRNA", "RNA", "RNA", "snoRNA"},
@@ -420,7 +420,7 @@ AjPSeq ajSeqNewNameS(const AjPStr str, const AjPStr name)
 /* @func ajSeqNewRangeC *******************************************************
 **
 ** Creates and initialises a sequence object with a specified existing
-** sequence as a string, and provides offsets and direction.
+** sequence as a string,and provides offsets, and direction.
 **
 ** The sequence is set to be already trimmed and if necessary reversed.
 **
@@ -483,7 +483,7 @@ AjPSeq ajSeqNewRangeC(const char* txt,
 /* @func ajSeqNewRangeS *******************************************************
 **
 ** Creates and initialises a sequence object with a specified existing
-** sequence as a string, and provides offsets and direction.
+** sequence as a string,and provides offsets, and direction.
 **
 ** The sequence is set to be already trimmed and if necessary reversed.
 **
@@ -573,7 +573,6 @@ AjPSeq ajSeqNewRes(size_t size)
 //    pthis->Sv   = ajStrNew();
 //    pthis->Gi   = ajStrNew();
 //    pthis->Tax  = ajStrNew();
-//    pthis->Taxcommon  = ajStrNew();
 //    pthis->Taxid = ajStrNew();
 //    pthis->Organelle = ajStrNew();
 //    pthis->Type = ajStrNew();
@@ -650,8 +649,6 @@ AjPSeq ajSeqNewSeq(const AjPSeq seq)
         ajStrAssignS(&pthis->Gi, seq->Gi);
     if(seq->Tax)
         ajStrAssignS(&pthis->Tax, seq->Tax);
-    if(seq->Taxcommon)
-        ajStrAssignS(&pthis->Taxcommon, seq->Taxcommon);
     if(seq->Taxid)
         ajStrAssignS(&pthis->Taxid, seq->Taxid);
     if(seq->Organelle)
@@ -707,8 +704,6 @@ AjPSeq ajSeqNewSeq(const AjPSeq seq)
         pthis->Taxlist = ajListstrNewList(seq->Taxlist);
     if(seq->Cmtlist)
         pthis->Cmtlist = ajListstrNewList(seq->Cmtlist);
-    if(seq->Hostlist)
-        pthis->Hostlist = ajListstrNewList(seq->Hostlist);
 
     if(seq->Xreflist)
     {
@@ -801,7 +796,6 @@ void ajSeqDel(AjPSeq* Pseq)
     ajStrDel(&seq->Sv);
     ajStrDel(&seq->Gi);
     ajStrDel(&seq->Tax);
-    ajStrDel(&seq->Taxcommon);
     ajStrDel(&seq->Taxid);
     ajStrDel(&seq->Organelle);
     ajStrDel(&seq->Type);
@@ -843,7 +837,6 @@ void ajSeqDel(AjPSeq* Pseq)
     ajListFree(&seq->Reflist);
 
     ajListstrFreeData(&seq->Cmtlist);
-    ajListstrFreeData(&seq->Hostlist);
 
     while(ajListPop(seq->Xreflist,(void **)&tmpxref))
 	ajSeqxrefDel(&tmpxref);
@@ -921,10 +914,9 @@ void ajSeqDelarray(AjPSeq **PPseq)
 ** @nam3rule Add     Add to a list of data
 ** @nam4rule AddCmt Add to a gene list
 ** @nam4rule AddGene Add to a gene list
-** @nam4rule AddHost Add to a virus host list
-** @nam4rule AddKey Add to a keyword list
+** @nam4rule AddKey Add to a gene list
 ** @nam4rule AddRef  Add to a reference list
-** @nam4rule AddXref  Add to a cross-reference list
+** @nam4rule AddXref  Add to a reference list
 **
 ** @nam3rule Set Set sequence properties
 ** @nam4rule SetCircular Set sequence as circular
@@ -955,7 +947,6 @@ void ajSeqDelarray(AjPSeq **PPseq)
 ** @argrule SetName setname [const AjPStr] User-defined sequence name
 ** @argrule Cmt str [AjPStr] Comment added to internal list
 ** @argrule Gene gene [AjPSeqGene] Gene object added to internal list
-** @argrule Host str [AjPStr] Viral host added to internal list
 ** @argrule Key str [AjPStr] Keyword added to internal list
 ** @argrule Ref ref [AjPSeqRef] Citation object added to internal list
 ** @argrule Xref xref [AjPSeqXref] Cross-reference object added to internal list
@@ -1010,31 +1001,6 @@ void ajSeqAddGene(AjPSeq seq, AjPSeqGene gene)
         seq->Genelist = ajListNew();
 
     ajListPushAppend(seq->Genelist, gene);
-
-    return;
-}
-
-
-
-
-/* @func ajSeqAddHost *********************************************************
-**
-** Adds a host organism to a sequence object
-**
-** @param [u] seq [AjPSeq] Sequence object.
-** @param [u] str [AjPStr] Host organism swissprot formatted string
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-void ajSeqAddHost(AjPSeq seq,  AjPStr str)
-{
-    if(!seq->Hostlist)
-        seq->Hostlist = ajListstrNew();
-
-    ajListstrPushAppend(seq->Hostlist, str);
 
     return;
 }
@@ -1692,8 +1658,6 @@ void ajSeqClear(AjPSeq seq)
        ajStrSetClear(&seq->Gi);
     if(MAJSTRGETLEN(seq->Tax))
        ajStrSetClear(&seq->Tax);
-    if(MAJSTRGETLEN(seq->Taxcommon))
-       ajStrSetClear(&seq->Taxcommon);
     if(MAJSTRGETLEN(seq->Taxid))
        ajStrSetClear(&seq->Taxid);
     if(MAJSTRGETLEN(seq->Organelle))
@@ -1764,10 +1728,6 @@ void ajSeqClear(AjPSeq seq)
 
     if(seq->Cmtlist)
         while(ajListPop(seq->Cmtlist,(void **)&ptr))
-            ajStrDel(&ptr);
-
-    if(seq->Hostlist)
-        while(ajListPop(seq->Hostlist,(void **)&ptr))
             ajStrDel(&ptr);
 
     if(seq->Xreflist)
@@ -2023,7 +1983,7 @@ void ajSeqSetRangeRev(AjPSeq seq, ajint pos1, ajint pos2)
 	    seq->Begin, seq->End, seq->Rev, seq->Reversed);
 
     if(seq->Trimmed)
-	ajWarn("Sequence '%S' already trimmed in ajSeqSetRangeRev",
+	ajWarn("Sequence '%S' already trimmed in ajSeqSetRange",
 	       ajSeqGetNameS(seq));
 
     if(pos1 && !seq->Begin)
@@ -2410,10 +2370,7 @@ void ajSeqReverseDo(AjPSeq seq)
 	    ajSeqGetLen(seq), seq->Begin, seq->End);
 
     if(seq->Fttable)
-    {
-        ajFeattableSetReverse(seq->Fttable);
 	ajFeattableReverse(seq->Fttable);
-    }
 
     if(seq->Accuracy)
     {
@@ -2543,6 +2500,9 @@ void ajSeqTrim(AjPSeq seq)
 	return;
     }
 
+    if(seq->Rev)
+	ajSeqReverseDo(seq);
+
     /*ajDebug("ajSeqTrim '%S'\n", seq->Seq);*/
     ajDebug("ajSeqTrim Rev:%B Reversed:%B Begin:%d End:%d "
 	   "Offset:%d Offend:%d Len:%d okay:%B\n",
@@ -2600,9 +2560,6 @@ void ajSeqTrim(AjPSeq seq)
 
     if(okay && seq->Fttable)
 	okay = ajFeattableTrimOff(seq->Fttable, seq->Offset, seq->Seq->Len);
-
-    if(seq->Rev)
-	ajSeqReverseDo(seq);
 
     /*ajDebug("ajSeqTrim '%S'\n", seq->Seq);*/
     ajDebug("ajSeqTrim 'Rev:%B Reversed:%B Begin:%d End:%d "
@@ -3664,7 +3621,7 @@ const AjPStr ajSeqGetUsaS(const AjPSeq seq)
 **
 ** @param [r] seq [const AjPSeq] Sequence object.
 ** @param [u] list [AjPList] List of cross-reference objects
-** @return [ajuint] Number of cross-references returned
+** @return [ajuint] NUmber of cross-references returned
 **
 ** @release 6.4.0
 ** @@
@@ -4412,9 +4369,6 @@ void ajSeqTrace(const AjPSeq seq)
 
     if(ajStrGetLen(seq->Tax))
 	ajDebug( "  Taxonomy: '%S'\n", seq->Tax);
-
-    if(ajStrGetLen(seq->Taxcommon))
-	ajDebug( "  Taxcommon: '%S'\n", seq->Taxcommon);
 
     if(ajStrGetLen(seq->Taxid))
 	ajDebug( "  Taxid: '%S'\n", seq->Taxid);
@@ -7400,50 +7354,7 @@ void ajSeqdateDel(AjPSeqDate* Pdate)
 
 
 
-/* @section tests *************************************************************
-**
-** These functions test properties of a sequence date
-**
-** @fdata [AjPSeqDate]
-** @fcategory use
-**
-** @nam3rule Exists    Date is defined
-**
-** @argrule *     date    [const AjPSeqDate] Sequence date object
-**
-** @valrule *      [AjBool] True on success
-**
-******************************************************************************/
-
-
-
-
-/* @func ajSeqdateExists ******************************************************
-**
-** Returns true if a sequence has a creation or modification date defined
-**
-** @param [r] date [const AjPSeqDate] Sequence date
-** @return [AjBool] ajTrue if date(s) are defined
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajSeqdateExists(const AjPSeqDate date)
-{
-    if(!date)
-        return ajFalse;
-
-    if(date->CreDate || date->ModDate || date->SeqDate)
-        return ajTrue;
-    
-    return ajFalse;
-}
-
-
-
-
-/* @section modifiers *********************************************************
+/* @section modifiers ************************************************
 **
 ** These functions update contents of a sequence date object.
 **
@@ -7617,10 +7528,10 @@ static AjBool seqDateSet(AjPTime* date, const AjPStr datestr)
 
     ajStrTokenAssignC(&handle, datestr, "-");
 
-    ajStrTokenNextParse(handle, &tmpstr);
+    ajStrTokenNextParse(&handle, &tmpstr);
     ajStrToInt(tmpstr, &day);
 
-    ajStrTokenNextParse(handle, &tmpstr);
+    ajStrTokenNextParse(&handle, &tmpstr);
     month = 0;
 
     while(months[month] && !ajStrMatchC(tmpstr, months[month]))
@@ -7634,7 +7545,7 @@ static AjBool seqDateSet(AjPTime* date, const AjPStr datestr)
     else
 	month++;
 
-    ajStrTokenNextParse(handle, &tmpstr);
+    ajStrTokenNextParse(&handle, &tmpstr);
     ajStrToInt(tmpstr, &year);
 
     if(year > 1900)
@@ -7705,13 +7616,12 @@ AjPSeqDesc ajSeqdescNew(void)
 
     ret->Short    = ajListstrNew();
     ret->EC       = ajListstrNew();
-    ret->Multi    = ajListstrNew();
-
 
     ret->AltNames = ajListNew();
     ret->SubNames = ajListNew();
     ret->Includes = ajListNew();
     ret->Contains = ajListNew();
+
     return ret;
 }
 
@@ -7745,7 +7655,6 @@ AjPSeqDesc ajSeqdescNewDesc(const AjPSeqDesc desc)
     ajStrAssignS(&ret->Name, desc->Name);
     ret->Short = ajListstrNewList(desc->Short);
     ret->EC = ajListstrNewList(desc->EC);
-    ret->Multi = ajListstrNewList(desc->Multi);
     ajSeqsubdesclistClone(desc->AltNames, ret->AltNames);
     ajSeqsubdesclistClone(desc->SubNames, ret->SubNames);
     ajSeqdesclistClone(desc->Includes, ret->Includes);
@@ -7808,7 +7717,6 @@ void ajSeqdescDel(AjPSeqDesc* Pdesc)
 
     ajListstrFreeData(&sdesc->Short);
     ajListstrFreeData(&sdesc->EC);
-    ajListstrFreeData(&sdesc->Multi);
 
     while(ajListPop(sdesc->AltNames,(void **)&sub))
 	ajSeqsubdescDel(&sub);
@@ -7912,9 +7820,6 @@ void ajSeqdescClear(AjPSeqDesc desc)
 	ajStrDel(&ptr);
 
     while(ajListstrPop(desc->EC,&ptr))
-	ajStrDel(&ptr);
-
-    while(ajListstrPop(desc->Multi,&ptr))
 	ajStrDel(&ptr);
 
     while(ajListPop(desc->AltNames,(void **)&sub))
@@ -9467,7 +9372,7 @@ AjBool ajSeqrefAppendLocation(AjPSeqRef ref, const AjPStr str)
 
 
 
-/* @func ajSeqrefAppendPosition *q**********************************************
+/* @func ajSeqrefAppendPosition ***********************************************
 **
 ** Append to the position string of a citation
 **
@@ -9483,8 +9388,6 @@ AjBool ajSeqrefAppendPosition(AjPSeqRef ref, const AjPStr str)
     if(ajStrGetLen(ref->Position))
 	ajStrAppendK(&ref->Position, ' ');
 
-    /* EMBL positions are nn-nn */
-    /* GenBank positions are (residues nn to nn) */
     ajStrAppendS(&ref->Position, str);
 
     return ajTrue;
@@ -9595,7 +9498,7 @@ AjBool ajSeqrefFmtAuthorsGb(const AjPSeqRef ref, AjPStr* Pdest)
 	return ajFalse;
 
     ajStrAssignS(Pdest, ref->Authors);
-    i = ajStrFindlastC(*Pdest, ", "); /* replace , with and */
+    i = ajStrFindlastC(*Pdest, ","); /* replace , with and */
 
     if(i != -1)
     {
@@ -10076,9 +9979,9 @@ ajuint ajSeqreflistGetXrefs(const AjPList src, AjPList *Plist)
 
         ajStrTokenAssignC(&handle, tmpref->Xref, " =;\r\n");
 
-        while (ajStrTokenNextParseC(handle, " =;\r\n", &dbtoken))
+        while (ajStrTokenNextParseC(&handle, " =;\r\n", &dbtoken))
         {
-            ajStrTokenNextParseC(handle, " ;\r\n", &token);
+            ajStrTokenNextParseC(&handle, " ;\r\n", &token);
 
             if(ajStrGetCharLast(token) == '.')
                 ajStrCutEnd(&token, 1);
@@ -10980,48 +10883,6 @@ const char* ajSeqclsGetEmbl(const AjPStr cls)
 	    cls, clsdef->Embl);
 
     return clsdef->Embl;
-    
-}
-
-
-
-
-/* @func ajSeqclsGetGb ********************************************************
-**
-** Returns the GenBank entry class for a sequence
-**
-** @param [r] cls [const AjPStr] Internal entry class name
-** @return [const char*] Genbank entry class name
-**
-** @release 6.6.0
-******************************************************************************/
-
-const char* ajSeqclsGetGb(const AjPStr cls)
-{
-    static AjBool called = AJFALSE;
-    const SeqOClass *clsdef = NULL;
-
-    if(!called)
-    {
-	seqclsInit();
-	called = ajTrue;
-    }
-
-    ajDebug("ajSeqclsGetGb '%S'\n", cls);
-
-    if(ajStrGetLen(cls))
-	clsdef = ajTableFetchS(seqTableCls, cls);
-
-    if(!clsdef)
-	clsdef = ajTableFetchS(seqTableCls, seqClassDef);
-
-    if(!clsdef)
-	return ajStrGetPtr(seqClassDef);
-
-    ajDebug("ajSeqclsGetGb '%S' => '%s'\n",
-	    cls, clsdef->Genbank);
-
-    return clsdef->Genbank;
     
 }
 

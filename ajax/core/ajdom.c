@@ -3,9 +3,9 @@
 ** AJAX Document Object Model (DOM) functions
 **
 ** @author Copyright (C) 2006 Alan Bleasby
-** @version $Revision: 1.38 $
+** @version $Revision: 1.35 $
 ** @modified Jul 03 2006 ajb First version
-** @modified $Date: 2012/11/14 14:19:11 $ by $Author: rice $
+** @modified $Date: 2012/03/22 21:19:36 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -169,8 +169,6 @@ static AjPDomNode       domNodeCloneNode(AjPDomDocument ownerdocument,
 
 
 static void             domWriteEncoded(const AjPStr s, AjPFile outf);
-static void             domWriteEncodedIndent(const AjPStr s, AjPFile outf,
-                                              ajuint indent);
 
 static AjPDomUserdata   domUserdataNew(void);
 static void domUserdataDel(AjPDomUserdata *thys);
@@ -416,7 +414,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 
             if(!ajDomNodeAppendChild(node, n))
             {
-                ajDomDocumentDestroyNode(n->ownerdocument, &n);
+                ajDomDocumentDestroyNode(n->ownerdocument, n);
                 return NULL;
             }
         }
@@ -767,34 +765,26 @@ static AjPDomNode domDoRemoveChild(AjPDomNode node, AjPDomNode child)
 ** Frees a node and its children
 **
 ** @param [w] doc [AjPDomDocument] document
-** @param [d] Pnode [AjPDomNode*] node
+** @param [w] node [AjPDomNode] node
 ** @return [void]
 **
 ** @release 4.0.0
 ** @@
 ******************************************************************************/
 
-void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode *Pnode)
+void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
 {
-    AjPDomNode node;
 
-    if(!Pnode)
+    if(!node)
         return;
-
-    if(!*Pnode)
-        return;
-
-    node = *Pnode;
 
     if(node->childnodes)
-        ajDomDocumentDestroyNodeList(doc, &node->childnodes, AJDOMDESTROY);
-
-    ajDebug("ajDomDocumentDestroyNode type '%u'", node->type);
+        ajDomDocumentDestroyNodeList(doc, node->childnodes, AJDOMDESTROY);
 
     switch(node->type)
     {
         case ajEDomNodeTypeElement:
-            ajDomDocumentDestroyNodeList(doc, &node->attributes, AJDOMDESTROY);
+            ajDomDocumentDestroyNodeList(doc, node->attributes, AJDOMDESTROY);
             ajStrDel(&node->name);
             break;
         case ajEDomNodeTypeText:
@@ -831,9 +821,9 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode *Pnode)
             ajStrDel(&node->sub.Document.encoding);
             break;
         case ajEDomNodeTypeDocumentType:
-            ajDomDocumentDestroyNodeList(doc, &node->sub.DocumentType.entities,
+            ajDomDocumentDestroyNodeList(doc, node->sub.DocumentType.entities,
                                          AJDOMDESTROY);
-            ajDomDocumentDestroyNodeList(doc, &node->sub.DocumentType.notations,
+            ajDomDocumentDestroyNodeList(doc, node->sub.DocumentType.notations,
                                          AJDOMDESTROY);
             ajStrDel(&node->sub.DocumentType.publicid);
             ajStrDel(&node->sub.DocumentType.systemid);
@@ -849,7 +839,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode *Pnode)
                     "AJAX DOM Node type %d.\n", node->type);
     }
 
-    AJFREE(*Pnode);
+    AJFREE(node);
 
     return;
 }
@@ -862,7 +852,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode *Pnode)
 ** Frees a node list
 **
 ** @param [w] doc [AjPDomDocument] document
-** @param [d] Plist [AjPDomNodeList*] list
+** @param [w] list [AjPDomNodeList] list
 ** @param [r] donodes [AjBool] free nodes as well if true
 ** @return [void]
 **
@@ -870,20 +860,11 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode *Pnode)
 ** @@
 ******************************************************************************/
 
-void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList *Plist,
+void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
                                   AjBool donodes)
 {
-    AjPDomNodeList list;
     AjPDomNodeEntry entry = NULL;
     AjPDomNodeEntry tmp   = NULL;
-
-    if(!Plist)
-        return;
-
-    if(!*Plist)
-        return;
-
-    list = *Plist;
 
     if(list)
     {
@@ -894,7 +875,7 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList *Plist,
             while(entry)
             {
                 if(donodes)
-                    ajDomDocumentDestroyNode(doc, &entry->node);
+                    ajDomDocumentDestroyNode(doc, entry->node);
 
                 tmp = entry;
                 entry = entry->next;
@@ -912,7 +893,7 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList *Plist,
             ajTableFree(&list->table);
         }
 
-        AJFREE(*Plist);
+        AJFREE(list);
     }
 
     return;
@@ -980,7 +961,7 @@ static void domClearMapAll(void **key, void **value, void *cl)
 
     doc = (AjPDomDocument) cl;
 
-    ajDomDocumentDestroyNode(doc, &node);
+    ajDomDocumentDestroyNode(doc, node);
 
     *value = NULL;
 
@@ -1058,7 +1039,7 @@ AjPDomNode ajDomDocumentCreateNode(AjPDomDocument doc,
             {
                 ajDebug("ajDocumentCreateNode: ajDocumentCreateNodeList"
                         " failed\n");
-                ajDomDocumentDestroyNode(doc, &node);
+                ajDomDocumentDestroyNode(doc, node);
                 return NULL;
             }
         default:
@@ -1095,13 +1076,13 @@ AjPDomDocumentType ajDomImplementationCreateDocumentType(const AjPStr qualname,
     char *r = NULL;
 
     if(qualname)
-        p = MAJSTRGETPTR(qualname);
+        p = qualname->Ptr;
 
     if(publicid)
-        r = MAJSTRGETPTR(publicid);
+        r = publicid->Ptr;
 
     if(systemid)
-        s = MAJSTRGETPTR(systemid);
+        s = systemid->Ptr;
 
     return ajDomImplementationCreateDocumentTypeC(p, r, s);
 }
@@ -1189,7 +1170,7 @@ AjPDomDocument ajDomImplementationCreateDocument(const AjPStr uri,
     (void) uri;                         /* temporary use */
 
     if(qualname)
-        p = MAJSTRGETPTR(qualname);
+        p = qualname->Ptr;
 
     return ajDomImplementationCreateDocumentC(NULL, p, doctype);
 }
@@ -1239,7 +1220,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
             if(!element)
             {
                 ajDebug("ajDomImplementationCreateDocumentC: element memory\n");
-                ajDomDocumentDestroyNode(doc, &doc);
+                ajDomDocumentDestroyNode(doc, doc);
 
                 return NULL;
             }
@@ -1270,7 +1251,7 @@ AjPDomNode ajDomNodeMapGetItem(const AjPDomNodeMap map, const AjPStr name)
     char *p = NULL;
 
     if(name)
-        p = MAJSTRGETPTR(name);
+        p = name->Ptr;
 
     return ajDomNodeMapGetItemC(map, p);
 }
@@ -1303,12 +1284,12 @@ AjPDomNode ajDomNodeMapGetItemC(const AjPDomNodeMap map, const char *name)
             map = map->list;
             for(e = map->first; e; e = e->next)
                 if(e->node->type == nodetype &&
-                   !strcmp(name, MAJSTRGETPTR(e->node->name)))
+                   !strcmp(name, e->node->name->Ptr))
                     return e->node;
         }
         else
             for(e = map->first; e; e = e->next)
-                if(!strcmp(name, MAJSTRGETPTR(e->node->name)))
+                if(!strcmp(name, e->node->name->Ptr))
                     return e->node;
     }
 
@@ -1335,7 +1316,7 @@ AjPStr ajDomElementGetAttribute(const AjPDomElement element, const AjPStr name)
     char *p = NULL;
 
     if(name)
-        p = MAJSTRGETPTR(name);
+        p = name->Ptr;
 
     return ajDomElementGetAttributeC(element, p);
 }
@@ -1420,7 +1401,7 @@ AjPDomNode ajDomNodeMapSetItem(AjPDomNodeMap map, AjPDomNode arg)
             return NULL;
         }
 
-        for(e = map->first; e && !ajStrMatchS(arg->name, e->node->name);
+        for(e = map->first; e && strcmp(arg->name->Ptr, e->node->name->Ptr);
             e = e->next)
         {
             ;
@@ -1465,7 +1446,7 @@ AjPDomNode ajDomNodeMapRemoveItem(AjPDomNodeMap map, const AjPStr name)
     char *p = NULL;
 
     if(name)
-        p = MAJSTRGETPTR(name);
+        p = name->Ptr;
 
     return ajDomNodeMapRemoveItemC(map, p);
 }
@@ -1501,7 +1482,7 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
 
         for(e = map->first; e; e = e->next)
         {
-            if(!strcmp(name, MAJSTRGETPTR(e->node->name)) &&
+            if(!strcmp(name, e->node->name->Ptr) &&
                ajDomNodeListRemove(map, e->node))
             {
                 r = e->node;
@@ -1632,7 +1613,7 @@ void ajDomElementSetAttribute(const AjPDomElement element, const AjPStr name,
     if(!ajStrGetLen(name) || !ajStrGetLen(value))
         return;
 
-    ajDomElementSetAttributeC(element, MAJSTRGETPTR(name), MAJSTRGETPTR(value));
+    ajDomElementSetAttributeC(element, name->Ptr, value->Ptr);
 
     return;
 }
@@ -1723,7 +1704,7 @@ void ajDomElementRemoveAttribute(AjPDomElement element, const AjPStr name)
     if(!name)
         return;
 
-    ajDomElementRemoveAttributeC(element, MAJSTRGETPTR(name));
+    ajDomElementRemoveAttributeC(element, name->Ptr);
 
     return;
 }
@@ -1755,7 +1736,7 @@ void ajDomElementRemoveAttributeC(AjPDomElement element, const char *name)
     if(attr)
     {
         domUpdateNode(element->parentnode);
-        ajDomDocumentDestroyNode(attr->ownerdocument, &attr);
+        ajDomDocumentDestroyNode(attr->ownerdocument, attr);
     }
 
     return;
@@ -1897,13 +1878,10 @@ static void domTraverse(AjPDomNodeList list, AjPDomNode node,
                         const AjPStr tagname)
 {
     AjPDomNode n = NULL;
-    AjBool doall;
-
-    doall = ajStrMatchC(tagname, "*");
 
     if(list && node && node->type == ajEDomNodeTypeElement && tagname)
     {
-        if(doall || ajStrMatchS(tagname, node->name))
+        if(ajStrMatchC(tagname, "*") || !strcmp(tagname->Ptr, node->name->Ptr))
             ajDomNodeListAppend(list, node);
 
         for(n = node->firstchild; n; n = n->nextsibling)
@@ -1933,13 +1911,10 @@ static void domTraverseC(AjPDomNodeList list, AjPDomNode node,
                          const char *tagname)
 {
     AjPDomNode n = NULL;
-    AjBool doall = ajFalse;
-
-    doall = ajCharMatchC(tagname, "*");
 
     if(list && node && node->type == ajEDomNodeTypeElement && tagname)
     {
-        if(doall || !strcmp(tagname, MAJSTRGETPTR(node->name)))
+        if(ajCharMatchC(tagname, "*") || !strcmp(tagname, node->name->Ptr))
             ajDomNodeListAppend(list, node);
 
         for(n = node->firstchild; n; n = n->nextsibling)
@@ -1973,7 +1948,7 @@ AjPDomNodeList ajDomElementGetElementsByTagName(AjPDomElement element,
     if(!element || !name)
         return NULL;
 
-    return ajDomElementGetElementsByTagNameC(element, MAJSTRGETPTR(name));
+    return ajDomElementGetElementsByTagNameC(element, name->Ptr);
 }
 
 
@@ -2042,7 +2017,7 @@ void ajDomElementNormalise(AjPDomElement element)
                 {
                     ajDomCharacterDataInsertData(node, 0, last->value);
                     ajDomRemoveChild(element, last);
-                    ajDomDocumentDestroyNode(last->ownerdocument, &last);
+                    ajDomDocumentDestroyNode(last->ownerdocument, last);
                 }
 
                 last = node;
@@ -2126,7 +2101,7 @@ void ajDomCharacterDataAppendData(AjPDomCharacterData data, const AjPStr arg)
     if(!data || !arg)
         return;
 
-    ajDomCharacterDataAppendDataC(data, MAJSTRGETPTR(arg));
+    ajDomCharacterDataAppendDataC(data, arg->Ptr);
 
     return;
 }
@@ -2184,7 +2159,7 @@ void ajDomCharacterDataInsertData(AjPDomCharacterData data, ajint offset,
     if(!data || !arg)
         return;
 
-    ajDomCharacterDataInsertDataC(data, offset, MAJSTRGETPTR(arg));
+    ajDomCharacterDataInsertDataC(data, offset, arg->Ptr);
 
     return;
 }
@@ -2363,7 +2338,7 @@ AjPDomText ajDomTextSplitText(AjPDomText text, ajint offset)
     if(!text || !text->parentnode)
         return NULL;
 
-    if(offset < 0 || offset > text->sub.CharacterData.length)
+    if(offset < 0 || offset >text->sub.CharacterData.length)
         return NULL;
 
     sub = ajStrNew();
@@ -2405,7 +2380,7 @@ AjPDomElement ajDomDocumentCreateElement(AjPDomDocument doc,
     if(!tagname)
         return NULL;
 
-    return ajDomDocumentCreateElementC(doc, MAJSTRGETPTR(tagname));
+    return ajDomDocumentCreateElementC(doc, tagname->Ptr);
 }
 
 
@@ -2492,7 +2467,7 @@ AjPDomText ajDomDocumentCreateTextNode(AjPDomDocument doc, const AjPStr data)
     if(!data)
         return NULL;
 
-    return ajDomDocumentCreateTextNodeC(doc, MAJSTRGETPTR(data));
+    return ajDomDocumentCreateTextNodeC(doc, data->Ptr);
 }
 
 
@@ -2548,7 +2523,7 @@ AjPDomComment ajDomDocumentCreateComment(AjPDomDocument doc, const AjPStr data)
     if(!data)
         return NULL;
 
-    return ajDomDocumentCreateCommentC(doc, MAJSTRGETPTR(data));
+    return ajDomDocumentCreateCommentC(doc, data->Ptr);
 }
 
 
@@ -2606,7 +2581,7 @@ AjPDomCDATASection ajDomDocumentCreateCDATASection(AjPDomDocument doc,
     if(!data)
         return NULL;
 
-    return ajDomDocumentCreateCDATASectionC(doc, MAJSTRGETPTR(data));
+    return ajDomDocumentCreateCDATASectionC(doc, data->Ptr);
 }
 
 
@@ -2735,7 +2710,7 @@ AjPDomEntityReference ajDomDocumentCreateEntityReference(AjPDomDocument doc,
     if(!name)
         return NULL;
 
-    return ajDomDocumentCreateEntityReferenceC(doc, MAJSTRGETPTR(name));
+    return ajDomDocumentCreateEntityReferenceC(doc, name->Ptr);
 }
 
 
@@ -2791,8 +2766,8 @@ AjPDomPi ajDomDocumentCreateProcessingInstruction(AjPDomDocument doc,
     if(!target || !data)
         return NULL;
 
-    return ajDomDocumentCreateProcessingInstructionC(doc, MAJSTRGETPTR(target),
-                                                     MAJSTRGETPTR(data));
+    return ajDomDocumentCreateProcessingInstructionC(doc, target->Ptr,
+                                                     data->Ptr);
 }
 
 
@@ -3116,7 +3091,7 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 
             if(!ajDomNodeInsertBefore(node, n, refchild))
             {
-                ajDomDocumentDestroyNode(n->ownerdocument, &n);
+                ajDomDocumentDestroyNode(n->ownerdocument, n);
                 return NULL;
             }
         }
@@ -3310,7 +3285,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 
             if(!ajDomNodeInsertBefore(node, n, oldchild))
             {
-                ajDomDocumentDestroyNode(n->ownerdocument, &n);
+                ajDomDocumentDestroyNode(n->ownerdocument, n);
 
                 return NULL;
             }
@@ -3449,8 +3424,8 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
                        ||
                        !ajDomNodeListAppend(clone->attributes, ctmp))
                     {
-                        ajDomDocumentDestroyNode(clone->ownerdocument, &ctmp);
-                        ajDomDocumentDestroyNode(clone->ownerdocument, &clone);
+                        ajDomDocumentDestroyNode(clone->ownerdocument, ctmp);
+                        ajDomDocumentDestroyNode(clone->ownerdocument, clone);
                         return NULL;
                     }
             break;
@@ -3573,8 +3548,8 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 
             if(!ctmp || !ajDomNodeAppendChild(clone, ctmp))
             {
-                ajDomDocumentDestroyNode(clone->ownerdocument, &ctmp);
-                ajDomDocumentDestroyNode(clone->ownerdocument, &clone);
+                ajDomDocumentDestroyNode(clone->ownerdocument, ctmp);
+                ajDomDocumentDestroyNode(clone->ownerdocument, clone);
                 return NULL;
             }
         }
@@ -3669,89 +3644,6 @@ static void domWriteEncoded(const AjPStr s, AjPFile outf)
             default:
                 break;
         };
-
-        if(*p)
-            ++p;
-    }
-
-    ajStrDel(&tmp);
-
-    return;
-}
-
-
-
-
-/* @funcstatic domWriteEncodedIndent ******************************************
-**
-** Write a string using entity substitutions, indenting at each internal newline
-**
-** @param [r] s [const AjPStr] string
-** @param [w] outf [AjPFile] output file
-** @param [r] indent [ajuint] indentation
-** @return [void]
-**
-** @release 4.0.0
-** @@
-******************************************************************************/
-
-static void domWriteEncodedIndent(const AjPStr s, AjPFile outf, ajuint indent)
-{
-    size_t len;
-    const char *p;
-    char lastp = '\0';
-    AjPStr tmp = NULL;
-    ajuint i;
-
-    tmp = ajStrNew();
-
-    p = ajStrGetPtr(s);
-
-    while(*p)
-    {
-        len = strcspn(p, "<>&\"\n\r");
-        if(len)
-        {
-            ajStrAssignSubC(&tmp, p, 0, len - 1);
-            ajFmtPrintF(outf, "%S", tmp);
-            p += len;
-        }
-
-        switch (*p)
-        {
-            case '\0':
-                break;
-
-            case '\n':
-                if(lastp == '\r')
-                    break;
-            case '\r':
-                ajFmtPrintF(outf, "\n");
-                for(i=0; i<indent;i++)
-                    ajFmtPrintF(outf, " ");
-                break;
-
-            case '<':
-                ajFmtPrintF(outf, "&lt;");
-                break;
-
-            case '>':
-                ajFmtPrintF(outf, "&gt;");
-                break;
-
-            case '&':
-                ajFmtPrintF(outf, "&apos;");
-                break;
-
-            case '"':
-                ajFmtPrintF(outf, "&quot;");
-                break;
-
-            default:
-                break;
-        };
-
-        lastp = *p;
 
         if(*p)
             ++p;
@@ -3991,8 +3883,7 @@ ajint ajDomWrite(const AjPDomDocument node, AjPFile outf)
 ** @param [r] node [const AjPDomDocument] document to write
 ** @param [u] outf [AjPFile] output file
 ** @param [r] indent [ajint] indent level
-** @return [ajint] Positive OK, zero OK but no additional output,
-**                 negative if error
+** @return [ajint] zero OK, negative if error
 **
 ** @release 4.1.0
 ** @@
@@ -4003,27 +3894,23 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
     AjPDomNodeEntry e = NULL;
     AjPDomNode c = NULL;
     ajint i;
-    AjPStr tmpstr = NULL;
-    ajint iret = 0;
 
     if(!node || !outf)
         return -1;
 
-    ajUser("ajDomWriteIndent indent %u type %u", indent, node->type);
+    for(i = 0; i < indent; ++i)
+        ajFmtPrintF(outf, " ");
 
     switch(node->type)
     {
         case ajEDomNodeTypeElement:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "<");
             ajFmtPrintF(outf, "%S", node->name);
 
             for(e = node->attributes->first; e; e = e->next)
             {
                 ajFmtPrintF(outf, " %S=\"", e->node->name);
-                domWriteEncodedIndent(e->node->value, outf, indent);
+                domWriteEncoded(e->node->value, outf);
                 ajFmtPrintF(outf, "\"");
             }
 
@@ -4032,15 +3919,8 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
                 ajFmtPrintF(outf, ">\n");
 
                 for(c = node->firstchild; c; c = c->nextsibling)
-                {
-                    iret = ajDomWriteIndent(c, outf, indent + 2);
-
-                    if(iret < 0)
+                    if(ajDomWriteIndent(c, outf, indent + 2) == -1)
                         return -1;
-                }
-
-                if(iret)
-                    ajFmtPrintF(outf, "\n");
 
                 for(i = 0; i < indent; ++i)
                     ajFmtPrintF(outf, " ");
@@ -4050,10 +3930,7 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
                 ajFmtPrintF(outf, ">\n");
             }
             else
-            {
                 ajFmtPrintF(outf, "/>\n");
-                iret = 1;
-            }
 
             break;
 
@@ -4061,18 +3938,7 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             break;
 
         case ajEDomNodeTypeText:
-            ajStrAssignS(&tmpstr, node->value);
-            ajStrTrimWhiteStart(&tmpstr);
-            ajStrTrimWhiteEnd(&tmpstr);
-
-            if(ajStrGetLen(tmpstr))
-            {
-                for(i = 0; i < indent; ++i)
-                    ajFmtPrintF(outf, " ");
-                domWriteEncodedIndent(tmpstr, outf, indent);
-                iret = 1;
-            }
-
+            domWriteEncoded(node->value, outf);
             break;
 
         case ajEDomNodeTypeCdataSection:
@@ -4082,9 +3948,6 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             break;
 
         case ajEDomNodeTypeNotation:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "    <!NOTATION ");
             ajFmtPrintF(outf, "%S", node->name);
 
@@ -4104,13 +3967,9 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             }
 
             ajFmtPrintF(outf, ">\n");
-            iret = 1;
             break;
 
         case ajEDomNodeTypeEntityNode:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "    <!ENTITY ");
             ajFmtPrintF(outf, "%S", node->name);
 
@@ -4145,35 +4004,22 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             }
 
             ajFmtPrintF(outf, ">\n");
-            iret = 1;
             break;
 
         case ajEDomNodeTypeProcessingInstruction:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "<?");
             ajFmtPrintF(outf, "%S ", node->sub.ProcessingInstruction.target);
-            domWriteEncodedIndent(node->sub.ProcessingInstruction.data,
-                                  outf, indent);
+            domWriteEncoded(node->sub.ProcessingInstruction.data, outf);
             ajFmtPrintF(outf, "?>\n");
-            iret = 1;
             break;
 
         case ajEDomNodeTypeComment:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "<!--");
-            domWriteEncodedIndent(node->value, outf, indent);
+            domWriteEncoded(node->value, outf);
             ajFmtPrintF(outf, "-->\n");
-            iret = 1;
             break;
 
         case ajEDomNodeTypeDocumentNode:
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
             ajFmtPrintF(outf, "<?xml");
             ajFmtPrintF(outf, " version=\"");
 
@@ -4190,26 +4036,14 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             ajFmtPrintF(outf, "?>\n");
 
             for(c = node->firstchild; c; c = c->nextsibling)
-            {
-                iret = ajDomWriteIndent(c, outf, indent);
-                if(iret < 0)
+                if(ajDomWriteIndent(c, outf, indent + 2) == -1)
                     return -1;
-            }
-            
-            if(iret)
-                ajFmtPrintF(outf, "\n");
 
-            iret=1;
+            ajFmtPrintF(outf, "\n");
             break;
 
         case ajEDomNodeTypeDocumentType:
-            ajFmtPrintF(outf, "\n");
-
-            for(i = 0; i < indent; ++i)
-                ajFmtPrintF(outf, " ");
-
-            ajFmtPrintF(outf, "<!DOCTYPE ");
-
+            ajFmtPrintF(outf, "\n<!DOCTYPE ");
             ajFmtPrintF(outf, "%S", node->sub.DocumentType.name);
 
             if(node->sub.DocumentType.systemid)
@@ -4234,7 +4068,6 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
             else
                 ajFmtPrintF(outf, ">\n");
 
-            iret = 1;
             break;
 
         case ajEDomNodeTypeDocumentFragment:
@@ -4245,11 +4078,7 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
                     "AJAX DOM Node type %d.\n", node->type);
     }
 
-    ajStrDel(&tmpstr);
-
-    ajUser("return %d", iret);
-
-    return iret;
+    return 0;
 }
 
 
@@ -5061,29 +4890,6 @@ ajint ajDomReadFp(AjPDomDocument node, FILE *stream)
 
 ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff)
 {
-    return ajDomReadFilebuffText(node, buff, 0, NULL);
-}
-
-
-
-
-/* @func ajDomReadFilebuffText ************************************************
-**
-** Read XML into memory from a file pointer
-**
-** @param [u] node [AjPDomDocument] document to write
-** @param [u] buff [AjPFilebuff] File buffer
-** @param [r] dotext [AjBool] If true, save input text to string
-** @param [u] Pstr [AjPStr*] Text save buffer
-** @return [ajint] zero OK, negative if error
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-ajint ajDomReadFilebuffText(AjPDomDocument node, AjPFilebuff buff,
-                            AjBool dotext, AjPStr *Pstr)
-{
     AjPDomUserdata userdata = NULL;
     XML_Parser parser = NULL;
     int done = 0;
@@ -5118,13 +4924,13 @@ ajint ajDomReadFilebuffText(AjPDomDocument node, AjPFilebuff buff,
 
     do
     {
-        ajBuffreadLineStore(buff, &line, dotext, Pstr);
+        ajBuffreadLine(buff, &line);
         done = ajFilebuffIsEmpty(buff);
         len = ajStrGetLen(line);
 
-        if(!XML_Parse(parser, MAJSTRGETPTR(line), len, done))
+        if(!XML_Parse(parser, line->Ptr, len, done))
         {
-            ajDebug("ajDomReadFilebuffText: %s at XML line %d\n",
+            ajDebug("ajDomReadFilebuff: %s at XML line %d\n",
                     XML_ErrorString(XML_GetErrorCode(parser)),
                     XML_GetCurrentLineNumber(parser));
 
@@ -5198,7 +5004,7 @@ ajint ajDomReadString(AjPDomDocument node, AjPStr str)
 
     len = ajStrGetLen(str);
 
-    if(!XML_Parse(parser, MAJSTRGETPTR(str), len, done))
+    if(!XML_Parse(parser, str->Ptr, len, done))
     {
         ajDebug("ajDomReadString: %s at XML line %d\n",
                 XML_ErrorString(XML_GetErrorCode(parser)),
@@ -5304,20 +5110,20 @@ AjPDomElement ajDomElementGetNthChildByTagNameC(AjPDomDocument doc,
 
     if(!len)
     {
-        ajDomDocumentDestroyNodeList(doc, &list, AJDOMKEEP);
+        ajDomDocumentDestroyNodeList(doc, list, AJDOMKEEP);
         return NULL;
     }
 
     if(n < 0 || n > len - 1)
     {
         ajDebug("ajDomElementgetNthChildByTagnameC: index out of range");
-        ajDomDocumentDestroyNodeList(doc, &list, AJDOMKEEP);
+        ajDomDocumentDestroyNodeList(doc, list, AJDOMKEEP);
         return NULL;
     }
 
     ret = ajDomNodeListItem(list, n);
 
-    ajDomDocumentDestroyNodeList(doc, &list, AJDOMKEEP);
+    ajDomDocumentDestroyNodeList(doc, list, AJDOMKEEP);
 
     return ret;
 }

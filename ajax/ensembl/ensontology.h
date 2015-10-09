@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.6 $
+** @version $Revision: 1.5 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 11:16:39 $ by $Author: mks $
+** @modified $Date: 2012/07/02 16:22:01 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -247,10 +247,10 @@ EnsPOntologyadaptor ensOntologyadaptorNew(
 void ensOntologyadaptorDel(EnsPOntologyadaptor *Poa);
 
 EnsPBaseadaptor ensOntologyadaptorGetBaseadaptor(
-    EnsPOntologyadaptor oa);
+    const EnsPOntologyadaptor oa);
 
 EnsPDatabaseadaptor ensOntologyadaptorGetDatabaseadaptor(
-    EnsPOntologyadaptor oa);
+    const EnsPOntologyadaptor oa);
 
 AjBool ensOntologyadaptorFetchAll(EnsPOntologyadaptor oa,
                                   AjPList ontologies);
@@ -369,12 +369,6 @@ EnsPOntologytermadaptor ensOntologytermadaptorNew(
 
 void ensOntologytermadaptorDel(EnsPOntologytermadaptor *Pota);
 
-EnsPBaseadaptor ensOntologytermadaptorGetBaseadaptor(
-    EnsPOntologytermadaptor ota);
-
-EnsPDatabaseadaptor ensOntologytermadaptorGetDatabaseadaptor(
-    EnsPOntologytermadaptor ota);
-
 AjBool ensOntologytermadaptorFetchAll(
     EnsPOntologytermadaptor ota,
     AjPList ots);
@@ -394,7 +388,6 @@ AjBool ensOntologytermadaptorFetchAllbyDescendant(
     EnsPOntologyterm ot,
     const AjPStr subset,
     AjBool closest,
-    AjBool zerodistance,
     AjPList ots);
 
 AjBool ensOntologytermadaptorFetchAllbyName(
@@ -427,6 +420,8 @@ AjBool ensOntologytermadaptorRetrieveAllOntologysynonyms(
 ** End of prototype definitions
 */
 
+/* not currently defined or used in source code */
+AjBool ensOntologyadaptorCacheClear(EnsPOntologyadaptor oa);
 
 
 

@@ -28,18 +28,5 @@ AC_MSG_RESULT(no)
 ])
 
 ]
-
-# GOV coverage
-[AC_MSG_CHECKING(if gcov coverage is selected)
-AC_ARG_WITH([gcov],
-    [AS_HELP_STRING([--with-gcov], [selects profiling])],
-[if test "$withval" != no ; then
-  AC_MSG_RESULT(yes)
-  CFLAGS="$CFLAGS -fprofile-arcs -ftest-coverage"
-fi], [
-AC_MSG_RESULT(no)
-])
-
-]
 )
 

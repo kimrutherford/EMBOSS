@@ -6,7 +6,7 @@ Here is a sample session with <b>whichdb</b>
 
 % <b>whichdb -showall </b>
 Search all sequence databases for an entry and retrieve it
-ID or Accession number: <b>x65923</b>
+ID or Accession number: <b>x65921</b>
 Output file [outfile.whichdb]: <b></b>
 
 </pre></td></tr></table><p>

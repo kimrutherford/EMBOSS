@@ -1,12 +1,10 @@
 # pK values for amino acids
-# O=Pyrrolysine U=Selenocysteine J=Hydroxyproline or Leucine/Isoleucine
+# O=Ornithine J=Hydroxyproline or Leucine/Isoleucine
 #
 
 # Amino acid	pK
 
-#Original EMBOSS values
-
-Amino		7.5
+Amino		8.6
 Carboxyl	3.6
 
 # Acidic
@@ -24,34 +22,3 @@ K		10.8
 R		12.5
 Y		10.1
 
-# Wikipedia article values from
-# http://en.wikipedia.org/Proteinogenic_amino_acid#Side_chain_properties
-# 11th January 2013
-
-#C		8.18
-#D		3.90
-#E		4.07
-
-# Basic
-
-#H		6.04
-#K		10.54
-#R		12.48
-#Y		10.46
-
-
-
-# Wikipedia article values from
-# http://en.wikipedia.org/Protein_pKa_calculations
-# 11th January 2013
-
-#C		8.28
-#D		3.9
-#E		4.3
-
-# Basic
-
-#H		6.08
-#K		10.5
-#R		12.0
-#Y		10.1

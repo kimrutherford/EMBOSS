@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.22 $
+** @version $Revision: 1.21 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:58:32 $ by $Author: mks $
+** @modified $Date: 2012/03/04 12:32:43 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -273,18 +273,6 @@ EnsPGvpopulationgenotypeadaptor ensGvpopulationgenotypeadaptorNew(
 
 void ensGvpopulationgenotypeadaptorDel(
     EnsPGvpopulationgenotypeadaptor *Pgvpga);
-
-EnsPBaseadaptor ensGvpopulationgenotypeadaptorGetBaseadaptor(
-    EnsPGvpopulationgenotypeadaptor gvpga);
-
-EnsPDatabaseadaptor ensGvpopulationgenotypeadaptorGetDatabaseadaptor(
-    EnsPGvpopulationgenotypeadaptor gvpga);
-
-EnsPGvbaseadaptor ensGvpopulationgenotypeadaptorGetGvbaseadaptor(
-    EnsPGvpopulationgenotypeadaptor gvpga);
-
-EnsPGvdatabaseadaptor ensGvpopulationgenotypeadaptorGetGvdatabaseadaptor(
-    EnsPGvpopulationgenotypeadaptor gvpga);
 
 AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvpopulation(
     EnsPGvpopulationgenotypeadaptor gvpga,

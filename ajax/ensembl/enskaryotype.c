@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.52 $
+** @version $Revision: 1.50 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic karyotypebandadaptorKTablenames *******************************
+/* @conststatic karyotypebandadaptorKTables ***********************************
 **
 ** Array of Ensembl Karyotype Band Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const karyotypebandadaptorKTablenames[] =
+static const char *const karyotypebandadaptorKTables[] =
 {
     "karyotype",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *const karyotypebandadaptorKTablenames[] =
 
 
 
-/* @conststatic karyotypebandadaptorKColumnnames ******************************
+/* @conststatic karyotypebandadaptorKColumns **********************************
 **
 ** Array of Ensembl Karyotype Band Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const karyotypebandadaptorKColumnnames[] =
+static const char *const karyotypebandadaptorKColumns[] =
 {
     "karyotype.karyotype_id",
     "karyotype.seq_region_id",
@@ -159,7 +159,7 @@ static AjBool karyotypebandadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::KaryotypeBand
 ** @cc CVS Revision: 1.11
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -357,7 +357,14 @@ void ensKaryotypebandDel(EnsPKaryotypeband *Pkb)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pkb) || --pthis->Use)
+    if (!*Pkb)
+        return;
+
+    pthis = *Pkb;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pkb = NULL;
 
@@ -369,7 +376,9 @@ void ensKaryotypebandDel(EnsPKaryotypeband *Pkb)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Stain);
 
-    ajMemFree((void **) Pkb);
+    AJFREE(pthis);
+
+    *Pkb = NULL;
 
     return;
 }
@@ -750,11 +759,11 @@ AjBool ensKaryotypebandTrace(const EnsPKaryotypeband kb, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Karyotype Band object.
+** Functions for calculating values of an Ensembl Karyotype Band object.
 **
 ** @fdata [EnsPKaryotypeband]
 **
-** @nam3rule Calculate Calculate Ensembl Karyotype Band information
+** @nam3rule Calculate Calculate Ensembl Karyotype Band values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * kb [const EnsPKaryotypeband] Ensembl Karyotype Band
@@ -1254,7 +1263,7 @@ AjBool ensListKaryotypebandSortStartDescending(AjPList kbs)
 **
 ** @cc Bio::EnsEMBL::DBSQL::KaryotypeBandAdaptor
 ** @cc CVS Revision: 1.35
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1438,10 +1447,13 @@ static AjBool karyotypebandadaptorFetchAllbyStatement(
 EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensFeatureadaptorNew(
         dba,
-        karyotypebandadaptorKTablenames,
-        karyotypebandadaptorKColumnnames,
+        karyotypebandadaptorKTables,
+        karyotypebandadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1501,7 +1513,7 @@ void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor *Pkba)
 {
     ensFeatureadaptorDel(Pkba);
 
-    return;
+	return;
 }
 
 
@@ -1515,44 +1527,15 @@ void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor *Pkba)
 ** @fdata [EnsPKaryotypebandadaptor]
 **
 ** @nam3rule Get Return Ensembl Karyotype Band Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
-** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
+** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * kba [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensKaryotypebandadaptorGetBaseadaptor ********************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Karyotype Band Adaptor.
-**
-** @param [u] kba [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensKaryotypebandadaptorGetBaseadaptor(
-    EnsPKaryotypebandadaptor kba)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensKaryotypebandadaptorGetFeatureadaptor(kba));
-}
 
 
 
@@ -1573,30 +1556,7 @@ EnsPBaseadaptor ensKaryotypebandadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensKaryotypebandadaptorGetDatabaseadaptor(
     EnsPKaryotypebandadaptor kba)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensKaryotypebandadaptorGetFeatureadaptor(kba));
-}
-
-
-
-
-/* @func ensKaryotypebandadaptorGetFeatureadaptor *****************************
-**
-** Get the Ensembl Feature Adaptor member of an
-** Ensembl Karyotype Band Adaptor.
-**
-** @param [u] kba [EnsPKaryotypebandadaptor] Ensembl Karyotype Band Adaptor
-**
-** @return [EnsPFeatureadaptor] Ensembl Feature or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPFeatureadaptor ensKaryotypebandadaptorGetFeatureadaptor(
-    EnsPKaryotypebandadaptor kba)
-{
-    return kba;
+    return ensFeatureadaptorGetDatabaseadaptor(kba);
 }
 
 
@@ -1609,9 +1569,9 @@ EnsPFeatureadaptor ensKaryotypebandadaptorGetFeatureadaptor(
 **
 ** @fdata [EnsPKaryotypebandadaptor]
 **
-** @nam3rule Fetch Fetch Ensembl Karyotype Band object(s)
-** @nam4rule All Fetch all Ensembl Karyotype Band objects
-** @nam4rule Allby Fetch all Ensembl Karyotype Band objects matching a
+** @nam3rule Fetch Retrieve Ensembl Karyotype Band object(s)
+** @nam4rule All Retrieve all Ensembl Karyotype Band objects
+** @nam4rule Allby Retrieve all Ensembl Karyotype Band objects matching a
 ** criterion
 ** @nam5rule Chromosomeband Fetch all by a chromosome band
 ** @nam5rule Chromosomename Fetch all by a chromosome name
@@ -1677,7 +1637,8 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
 
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPSlice slice = NULL;
+    EnsPSlice slice     = NULL;
+    EnsPSliceadaptor sa = NULL;
 
     if (!kba)
         return ajFalse;
@@ -1691,14 +1652,15 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
     if (!kblist)
         return ajFalse;
 
-    dba = ensKaryotypebandadaptorGetDatabaseadaptor(kba);
+    dba = ensFeatureadaptorGetDatabaseadaptor(kba);
 
-    ensSliceadaptorFetchBySeqregionName(
-        ensRegistryGetSliceadaptor(dba),
-        (const AjPStr) NULL,
-        (const AjPStr) NULL,
-        name,
-        &slice);
+    sa = ensRegistryGetSliceadaptor(dba);
+
+    ensSliceadaptorFetchBySeqregionName(sa,
+                                        (const AjPStr) NULL,
+                                        (const AjPStr) NULL,
+                                        name,
+                                        &slice);
 
     if (!slice)
     {
@@ -1714,12 +1676,11 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
 
     ajCharDel(&txtband);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensKaryotypebandadaptorGetFeatureadaptor(kba),
-        slice,
-        constraint,
-        (const AjPStr) NULL,
-        kblist);
+    result = ensFeatureadaptorFetchAllbySlice(kba,
+                                              slice,
+                                              constraint,
+                                              (const AjPStr) NULL,
+                                              kblist);
 
     ajStrDel(&constraint);
 
@@ -1755,7 +1716,8 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
 
     EnsPDatabaseadaptor dba = NULL;
 
-    EnsPSlice slice = NULL;
+    EnsPSlice slice     = NULL;
+    EnsPSliceadaptor sa = NULL;
 
     if (!kba)
         return ajFalse;
@@ -1766,14 +1728,15 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
     if (!kblist)
         return ajFalse;
 
-    dba = ensKaryotypebandadaptorGetDatabaseadaptor(kba);
+    dba = ensFeatureadaptorGetDatabaseadaptor(kba);
 
-    ensSliceadaptorFetchBySeqregionName(
-        ensRegistryGetSliceadaptor(dba),
-        (const AjPStr) NULL,
-        (const AjPStr) NULL,
-        name,
-        &slice);
+    sa = ensRegistryGetSliceadaptor(dba);
+
+    ensSliceadaptorFetchBySeqregionName(sa,
+                                        (const AjPStr) NULL,
+                                        (const AjPStr) NULL,
+                                        name,
+                                        &slice);
 
     if (!slice)
     {
@@ -1783,12 +1746,11 @@ AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
         return ajFalse;
     }
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensKaryotypebandadaptorGetFeatureadaptor(kba),
-        slice,
-        (const AjPStr) NULL,
-        (const AjPStr) NULL,
-        kblist);
+    result = ensFeatureadaptorFetchAllbySlice(kba,
+                                              slice,
+                                              (const AjPStr) NULL,
+                                              (const AjPStr) NULL,
+                                              kblist);
 
     ensSliceDel(&slice);
 

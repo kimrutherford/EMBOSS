@@ -39,7 +39,6 @@ int main(int argc, char **argv)
     ajint    imin;
     ajint    imax;
     AjPFile  outf = NULL;
-    AjPStr   dbfilename = NULL;
 
     const AjPStr fieldext;
     AjPBtcache cache = NULL;
@@ -53,9 +52,6 @@ int main(int argc, char **argv)
     imax   = ajAcdGetInt("maximum");
     outf   = ajAcdGetOutfile("outfile");
     
-    if(!ajNamDbGetDbaliasTest(dbname, &dbfilename))
-        ajStrAssignS(&dbfilename, dbname);
-
     if(!ajStrGetLen(idir))
     {
 /* if not forced by the user, find the index directory for the database */
@@ -64,7 +60,7 @@ int main(int argc, char **argv)
     }
     fieldext = ajBtreeFieldGetExtensionS(fieldname);
 
-    cache = ajBtreeCacheNewReadS(dbfilename, fieldext, idir);
+    cache = ajBtreeCacheNewReadS(dbname, fieldext, idir);
 
     if(!cache)
 	ajFatal("Cannot open index file '%S' for reading",
@@ -72,8 +68,6 @@ int main(int argc, char **argv)
     
 
     ajBtreeDumpKeywords(cache,imin,imax,outf);
-
-    ajStrDel(&dbfilename);
 
     ajStrDel(&dbname);
     ajStrDel(&fieldname);

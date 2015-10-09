@@ -886,7 +886,7 @@ static void primers_report (AjPFile outfile,
   linetokenhandle = ajStrTokenNewC(output, eol);
 
 /* get next line of relevant results */
-  while (ajStrTokenNextParseC(linetokenhandle, eol, &line)) {
+  while (ajStrTokenNextParseC(&linetokenhandle, eol, &line)) {
     if (!gotsequenceid) {
 
 /*
@@ -924,10 +924,10 @@ resulting primer are interleaved */
     keytokenhandle = ajStrTokenNewC(line, equals);
 
     key = ajStrNew();
-    ajStrTokenNextParse(keytokenhandle, &key);
+    ajStrTokenNextParse(&keytokenhandle, &key);
 
     value = ajStrNew();
-    ajStrTokenNextParse(keytokenhandle, &value);
+    ajStrTokenNextParse(&keytokenhandle, &value);
 
 /* debug */
     (void) ajDebug("key=%S\tvalue=%S\n", key, value);

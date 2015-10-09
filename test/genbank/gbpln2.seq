@@ -18,11 +18,11 @@ REFERENCE   1  (bases 1 to 3400)
 COMMENT     On or before Jan 11, 2002 this sequence version replaced gi:170001,
             gi:170002.
 FEATURES             Location/Qualifiers
-     source          1..3400
+     source          1. .3400
                      /organism="Glycine max"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:3847"
-     CDS             join(363..460,555..663,2182..2286,3065..3208)
+     CDS             join(363. .460,555. .663,2182. .2286,3065. .3208)
                      /codon_start=1
                      /product="leghemoglobin"
                      /protein_id="CAA23729.1"
@@ -38,19 +38,19 @@ FEATURES             Location/Qualifiers
                      /translation="MGAFTEKQEALVNSSFEAFKANLPHHSVVFFNSILEKAPAAKNM
                      FSFLGDAVDPKNPKLAGHAEKLFGLVRDSAVQLQTKGLVVADATLGPIHTQKGVTDLQ
                      FAVVKEALLKTIKEAVGDKWSEELSNPWEVAYDEIAAAIKKAMAIGSLV"
-     exon            <363..460
+     exon            <363. .460
                      /number=1
-     intron          461..554
+     intron          461. .554
                      /number=1
-     exon            555..663
+     exon            555. .663
                      /number=2
-     intron          664..2181
+     intron          664. .2181
                      /number=2
-     exon            2182..2286
+     exon            2182. .2286
                      /number=3
-     intron          2287..3064
+     intron          2287. .3064
                      /number=3
-     exon            3065..>3208
+     exon            3065. .>3208
                      /number=4
 ORIGIN
        1  TTTTACTCAA ATCAATGATA TATATTTTGG TAACTTTTTT TCTTTTACTT ATAATTTTGT

@@ -495,8 +495,8 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
     {
         if(accfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, "|");
-            while(ajStrTokenNextParse(handle, &token))
+            handle = ajStrTokenNewC(rest, "|");
+            while(ajStrTokenNextParse(&handle, &token))
             {
                 ajStrRemoveWhiteExcess(&token);
                 ajStrExchangeKK(&token, '/', '_');
@@ -505,7 +505,6 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
                 ajStrExchangeKK(&token, ')', '_');
                 ajListstrPush(accfield->data, ajStrNewS(token));
             }
-            ajStrTokenReset(handle);
         }
     }
     else if(ajStrMatchC(name, "Name"))
@@ -527,26 +526,26 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
     {
         if(catfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, "|");
-            while(ajStrTokenNextParse(handle, &token))
+            handle = ajStrTokenNewC(rest, "|");
+            while(ajStrTokenNextParse(&handle, &token))
             {
                 ajStrRemoveWhiteExcess(&token);
                 ajListstrPush(catfield->data,ajStrNewS(token));
             }
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrSuffixC(name, "Cat"))
     {
         if(catfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, ";");
-            while(ajStrTokenNextParse(handle, &token))
+            handle = ajStrTokenNewC(rest, ";");
+            while(ajStrTokenNextParse(&handle, &token))
             {
                 ajStrRemoveWhiteExcess(&token);
                 ajListstrPush(catfield->data,ajStrNewS(token));
             }
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrSuffixC(name, "Taxon"))
@@ -554,64 +553,64 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
         ajDebug("%S\n",  line);
         if(taxidfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, "|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, "|");
+            ajStrTokenNextParse(&handle, &token);
             if(taxidfield)
             {
                 ajStrRemoveWhiteExcess(&token);
                 ajListstrPush(taxidfield->data,ajStrNewS(token));
             }
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "EDAMdat"))
     {
         if(edatfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, " \t|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, " \t|");
+            ajStrTokenNextParse(&handle, &token);
             ajListstrPush(edatfield->data,ajStrNewS(token));
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "EDAMfmt"))
     {
         if(efmtfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, " \t|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, " \t|");
+            ajStrTokenNextParse(&handle, &token);
             ajListstrPush(efmtfield->data,ajStrNewS(token));
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "EDAMid"))
     {
         if(eidfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, " \t|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, " \t|");
+            ajStrTokenNextParse(&handle, &token);
             ajListstrPush(eidfield->data,ajStrNewS(token));
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "EDAMtpc"))
     {
         if(etpcfield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, " \t|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, " \t|");
+            ajStrTokenNextParse(&handle, &token);
             ajListstrPush(etpcfield->data,ajStrNewS(token));
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "Xref"))
     {
         if(xreffield && !ajStrMatchC(rest, "None"))
         {
-            ajStrTokenAssignC(&handle, rest, " \t|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, " \t|");
+            ajStrTokenNextParse(&handle, &token);
             ajListstrPush(xreffield->data,ajStrNewS(token));
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
     }
     else if(ajStrMatchC(name, "Query") && !ajStrMatchC(rest, "None"))
@@ -619,14 +618,14 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
         /* index qout qfmt qin qurl */
         if(ajStrParseCountC(rest, "|") >= 4)
         {
-            ajStrTokenAssignC(&handle, rest, "|");
-            ajStrTokenNextParse(handle, &token);
+            handle = ajStrTokenNewC(rest, "|");
+            ajStrTokenNextParse(&handle, &token);
             ajStrRemoveWhiteExcess(&token);
 
             if(qoutfield && !ajStrMatchC(token, "Unknown"))
                 ajListstrPush(qoutfield->data,ajStrNewS(token));
 
-            ajStrTokenNextParse(handle, &token);
+            ajStrTokenNextParse(&handle, &token);
             ajStrRemoveWhiteExcess(&token);
 
             if(qfmtfield &&
@@ -634,30 +633,30 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
                !ajStrMatchC(token, "???"))
                 ajListstrPush(qfmtfield->data,ajStrNewS(token));
 
-            ajStrTokenNextParse(handle, &token);
+            ajStrTokenNextParse(&handle, &token);
             ajStrRemoveWhiteExcess(&token);
 
             if(qinfield &&
                !ajStrMatchC(token, "Unknown") &&
                !ajStrMatchC(token, "???"))
             {
-                ajStrTokenAssignC(&subhandle, token, ";");
-                while(ajStrTokenNextParse(subhandle, &tmpfd))
+                subhandle = ajStrTokenNewC(token, ";");
+                while(ajStrTokenNextParse(&subhandle, &tmpfd))
                 {
                     ajStrRemoveWhiteExcess(&tmpfd);
                     ajListstrPush(qinfield->data,ajStrNewS(tmpfd));
                 }
-                ajStrTokenReset(subhandle);
+                ajStrTokenDel(&subhandle);
             }
 
-            ajStrTokenRestParse(handle, &token);
+            ajStrTokenRestParse(&handle, &token);
 
             if(qurlfield &&
                !ajStrMatchC(token, "Unknown") &&
                !ajStrMatchC(token, "None"))
                 embBtreeParseField(rest, dbxresource_wrdexp, qurlfield);
 
-            ajStrTokenReset(handle);
+            ajStrTokenDel(&handle);
         }
         else
         {
@@ -675,8 +674,6 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
             embBtreeParseField(rest, dbxresource_wrdexp, soapfield);
     }
 
-    ajStrTokenDel(&handle);
-    ajStrTokenDel(&subhandle);
     ajStrDel(&saveline);
     ajStrDel(&rest);
     ajStrDel(&tmpfd);

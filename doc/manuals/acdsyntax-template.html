@@ -746,15 +746,6 @@ validate the various alternative formats from the
 major databases without the need for complex extra command
 line options.</p>
 
-<!-- #acdtype-xml -->
-<h5>Xml</h5>
-
-<p>XML is a new ACD type implemented specifically for XML data from
-databases where the content cotains infomration in an XML syntax. By
-defining a specific ACD type EMBOSS can provide detailed type
-checking, and can automatically detect, parse and validate the various
-named formats.</p>
-
 <a name="sect2313">&nbsp;</a>
 <!-- #acdtype-section-selection -->
 <h4>2.3.1.3 Selection lists</h4>
@@ -967,14 +958,6 @@ which the <i>-oformat</i> associated qualifier can override.</p>
 <p>Output file containing variation data.
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
-
-<!-- #acdtype-outxml -->
-<h5>Outxml</h5>
-
-<p>Output file containing XML data, usually a simple text dump of the
-input though some XML formats may have been converted.  The default
-data format can be specified by an "oformat" attribute which
-the <i>-oformat</i> associated qualifier can override.</p>
 
 <!-- #acdtype-report -->
 <h5>Report</h5>
@@ -2389,15 +2372,6 @@ assumed to be unaligned, and are simply read into memory together for
 processing. We recommend always defining the <i>aligned:</i> attribute
 so that the nature of the sequence set if clearly defined.</p>
 
-<p>The<i>minseqs</i> attribute specifies a minimum number of sequences
-in a set. Some applications may require at least two sequences as
-input to their algorithms. The default is 1, so a set will load one or
-more sequences into memory.</p>
-
-<p>The <i>maxseqs</i> attribute specifies a maximum number of
-sequences, a protection for methods that may have serious problems
-with a large number of sequences.</p>
-
 <p>If the <i>features:</i> attribute is set, the sequence input will
 include feature information either in the same file (if the sequence
 format supports it) or in a separate file (by default in GFF format).</p>
@@ -2512,7 +2486,7 @@ include the full original text of the input file or database entry.</p>
 
 <p>The <i>swiss:</i> amd <i>embl:</i> attributes define URLs
 originating from cross-references in UniProt/SwissProt and
-EMBL/GenBank/DDBJ respectively. They allow the Xref records in DRCAT to
+EMBL/GenBnk/DDBJ respectively. They allow the Xref records in DRCAT to
 be used to define the EDAM identifier term used to select appropriate
 query URLs. For other sources, the <i>identifier:</i> attribute allows
 the EDAM term to be named in the ACD file. All three attributes are
@@ -2526,15 +2500,6 @@ attribute <i>maxreads:</i> with a value of "1".</p>
 
 <p>If the <i>entry:</i> attribute is set, the input will
 include the full original text of the input file or database entry.</p>
-<!-- #acdattr-xml -->
-<h5>Xml</h5>
-
-<p>Applications requiring a single entry should specify the
-attribute <i>maxreads:</i> with a value of "1".</p>
-
-<p>If the <i>entry:</i> attribute is set, the input will
-include the full original text of the input file or database entry.</p>
-
 
 <a name="sect24123">&nbsp;</a>
 <!-- #acdattr-section-selection -->
@@ -3152,26 +3117,6 @@ file extension.</p>
 
 <!-- #acdattr-outvariation -->
 <h5>Outvariation</h5>
-
-<p>The <i>name:</i> attribute will default to "outfile".</p>
-
-<p>The <i>extension:</i> attribute will default to the output file
-format.</p>
-
-<p>The <i>nulldefault:</i> attribute overrides the default name
-generation, and uses an empty string (no data output) as the default for
-programs where data output is only occasionally required. If an empty
-string is specified on the command line, the standard default value
-will be generated instead. In combination with the <i>nullok:</i> and
-<i>missing:</i> attributes, this allows qualifiers to be null by
-default, and turned on from the command line.</p>
-
-<p>The <i>oformat:</i> attribute defines the default value for the
-<i>-oformat</i> qualifier, used as the file format and the default
-file extension.</p>
-
-<!-- #acdattr-outxml -->
-<h5>Outxml</h5>
 
 <p>The <i>name:</i> attribute will default to "outfile".</p>
 

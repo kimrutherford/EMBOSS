@@ -3,8 +3,8 @@
 ** AJAX master include file
 **
 ** @author Copyright (C) 1998 Peter Rice and Alan Bleasby
-** @version $Revision: 1.48 $
-** @modified $Date: 2012/09/03 14:15:56 $ by $Author: rice $
+** @version $Revision: 1.47 $
+** @modified $Date: 2012/07/02 16:46:28 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -78,7 +78,6 @@
 #include "ajresourcedata.h"
 #include "ajurldata.h"
 #include "ajvardata.h"
-#include "ajxmldata.h"
 
 /* input and output data type I/O */
 
@@ -127,10 +126,6 @@
 #include "ajvar.h"
 #include "ajvarread.h"
 #include "ajvarwrite.h"
-
-#include "ajxml.h"
-#include "ajxmlread.h"
-#include "ajxmlwrite.h"
 
 #include "ajalign.h"
 

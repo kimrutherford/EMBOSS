@@ -22,7 +22,7 @@ Indexed key terms are stored in a single buckets.
 
 For the main keys (id, ac, sv) the key defined as a "hybrid key", a
 combination of the key as a string and a possible list of duplicates
-with the same key.
+with te same key.
 
 The index data is stored in a bucket, with the
 following fields:
@@ -31,14 +31,6 @@ following fields:
  int      dups: 0 for a unique identifier, or number of duplicates
 long    offset: file position in sequence file
 long refoffset: file position in reference file (if any - e.g. GCG)
-                now controlled by a setting in the cache file that
-                allows zero or more reference offsets, saving space
-                for simple flat files.
-
-Note: the duplicates may begin to overflow for comon terms - e.g. top
-level termms in taxonomy - as the databases grow beyond 4 billion
-entries. At that point it will become necessary to increase the size,
-noting it in the text file.
 
 with information about duplicates (entries with the same identifier)
 stored in numbuckets
@@ -47,149 +39,5 @@ long    offset: file position in sequence file
 long refoffset: file position in reference file (if any - e.g. GCG)
  int      dbno: 0..n number of the database source file
 
-For the secondary keys (key, des, org) the lists of matched IDs are
-stored in a secbucket
+For the secondary keys (key, des, org) the keys are stored in a secbucket
 
-Split indexes
-=============
-
-It would be convenient to split the indexing so that it could be run
-as separate small jobs or on machines in a cluster with shared or
-duplicated data files.
-
-There are two possible splits - by file or by size. Possibly also by both.
-
-The dbx* application could be told it is doing a split index, told the
-part number and told the files to be indexed in some way - it could
-work them out by checking all the input filenames and sizes, it could
-be given a list of files and start/end points.
-
-First priority is to plan the merging of the resulting index
-files. They could be discrete, for example an ID index where the
-identifiers are unique will have no overlaps. Others could have common
-terms in many or all input files - for example top level taxonomy or
-some general words in descriptions.
-
-We need to determine how many files can be open at a time. it is
-clearly most efficient to process one index at a time, perhaps with a
-master application generating the merge tasks for each index.
-
-On one test system the maximum was 1021 fopen calls (plus presumably
-stdin, stdout and stderr for a total of 1024). Printing the fileno
-indicates this as numbers 0, 1 and 2 are already taken. This would
-allow considerably flexibility in merging as we could keep many
-subindex streams open. We need to read one cache file and then one
-subindex file for each job. Ideally the initial indexing job could
-attempt to open the maximum number of files to check that the merge
-will be possible, and perhaps adjust the split or more likely fail
-with a message if there is an error in opening any of the files.
-
-Possible parameters for splitting:
-
-* by file (split by file number, many job sizes)
-
-* by size (start at beginning of file 1, split either on a new file
-  when a limit is reached or within a file ... may be after the start
-  of the last entry. Splitting by new file would be a simple one.
-
-* by filename (tricky, would need a list of wildcards with all other
-  files indexed at the end)
-
-Basically, in each case there is a start and an end to test, and a
-list of files to be processed. That list could be useful.
-
-When merging, we should merge one index at a time, but there is no
-reason not to use a master job that processes each index in succession
-- using a select list of fields that can be set to 'all' for all
-available fields, reporting any that are not found.
-
-Merging
-=======
-
-Count the primary keys for each file, building a new index of primary
-pages for them. It may be most efficient to run twice so that the
-output is clean. Alternatively, an in-memory list may be best. We need
-to be able to hold all primary keys in memory for wildcard ID searches
-for example.
-
-Then add the secondary pages, noting their locations and updating the
-primaries.
-
-There may be issues in sorting the primary keys to avoid repeated
-searches through up to 1000 subindexes for each new identifier.
-
-Given the inputs are already sorted, we could maintain a sorted list
-and simply insert the next term when one is taken for
-merging... knowing it must be in the same place or later so it may be
-an efficient list insert. Test next - if it fits, insert. However, it
-could be complicated by many common terms which all get deleted
-together. Maybe reinsert last one first then there is never a surprise
-downstream. We need only an array of replaced (intact) list
-nodes. Note we need to fetch each node from its iterator as the next,
-previous and first pointers may have changed. In fact - how safe are
-we with multiple iterators from a single list? Maybe easiest to deal
-directly with nodes, or have functions that handle an array of nodes.
-
-Let's assume we can step through and count, and then step through and
-write at the end when all the secondary buckets are done? or is that
-not feasible?
-
-Assuming we can compress and uncompress a database, we have to be able
-to store all the bucket offsets old and new in memory and rewrite them.
-
-Some examples would help to make things clearer. We can use statistics
-from SRS for EMBL/GenBank and for UniProt as a guide to the sizes of
-memory structures needed, then create them and check memory usage.
-
-It is likely that we should turn off the caches for the input
-subindexes.
-
-Latest release:
-
-UniProt fasta files: id: 24,564,446 des: 265,082,562
-
-
-First step - create subindexes for something. Let's start with the
-three Uniprot fasta files.
-
-index/varsplic uniprot_sprot_varsplic.fasta
-index/sprot    uniprot_sprot.fasta
-index/trembl   uniprot_trembl.fasta
-
-
-File fragmentation
-==================
-
-When extending the file, consider doubling current size or at least a
-50% increase, with a large start size. Aim to reduce number of fragments.
-
-Look for a way to report file fragmentation with cpu usage.
-
-Check filefrag utility, and FIEMAP and FIBMAP ioctl (see man filefrag)
-not in man so check online for more information. Note filefrag is in
-man section 8 (non-standard kernel routines)
-
-Look for a way to defragment disk space on Fedora ... and is it done
-automatically for free space?
-
-Check SeLinux is turned off and more on what it does
-
-Check what all the -stats outputs are for pages read/written and how
-the numbers should add up. Are we missing anything? Did we skip
-counting with some of the newer prim/sec page functions?
-
-Can we report on separate effectiveness of the primary and secondary caches?
-
-Run again with tracker-control -terminate to turn off file tracker
-which was consuming 50% on two cpus after the run. Seemed to be
-already much faster.
-
-Need suitable cache size - increase defaults in emboss.standard, see
-swissresource for suggestions
-
-Bug with extending file .... when compressing pages have zero type,
-starting with second page (2048). Somewhere there seems to be a read
-where the file is larger than the current totsize. As it is so early
-we can check on a short file. Looks like page at 2048 is never
-created! Check root page creation against previous versions - we may
-have accidentally deleted a line.

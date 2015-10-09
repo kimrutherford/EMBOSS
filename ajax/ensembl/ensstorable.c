@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.30 $
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:08:30 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -74,16 +74,6 @@
 /* =========================== private functions =========================== */
 /* ========================================================================= */
 
-static int listUintCompareAscending(
-    const void *item1,
-    const void *item2);
-
-static int listUintCompareDescending(
-    const void *item1,
-    const void *item2);
-
-static void listUintDelete(void **Pitem, void *cl);
-
 
 
 
@@ -108,8 +98,8 @@ static void listUintDelete(void **Pitem, void *cl);
 ** @nam2rule Storable Functions for manipulating Ensembl Storable objects
 **
 ** @cc Bio::EnsEMBL::Storable
-** @cc CVS Revision: 1.27
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -286,14 +276,23 @@ void ensStorableDel(EnsPStorable *Pstorable)
                 *Pstorable);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pstorable) || --pthis->Use)
+    if (!*Pstorable)
+        return;
+
+    pthis = *Pstorable;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pstorable = NULL;
 
         return;
     }
 
-    ajMemFree((void **) Pstorable);
+    AJFREE(pthis);
+
+    *Pstorable = NULL;
 
     return;
 }
@@ -530,245 +529,4 @@ AjBool ensStorableIsStored(const EnsPStorable storable,
     */
 
     return ajFalse;
-}
-
-
-
-
-/* @datasection [AjPList] AJAX List *******************************************
-**
-** @nam2rule List Functions for manipulating AJAX List objects
-**
-******************************************************************************/
-
-
-
-
-/* @funcstatic listUintCompareAscending ***************************************
-**
-** Comparison function to sort AJAX unsigned integer (SQL identifier) objects
-** in ascending order.
-**
-** @param [r] item1 [const void*] AJAX unsigned integer address 1
-** @param [r] item2 [const void*] AJAX unsigned integer address 2
-** @see ajListSortUnique
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static int listUintCompareAscending(
-    const void *item1,
-    const void *item2)
-{
-    int result = 0;
-
-    ajuint *Pidentifier1 = *(ajuint *const *) item1;
-    ajuint *Pidentifier2 = *(ajuint *const *) item2;
-
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
-    if (ajDebugTest("listUintCompareAscending"))
-        ajDebug("listUintCompareAscending\n"
-                "  identifier1 %u\n"
-                "  identifier2 %u\n",
-                *Pidentifier1,
-                *Pidentifier2);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if (Pidentifier1 && (!Pidentifier2))
-        return -1;
-
-    if ((!Pidentifier1) && (!Pidentifier2))
-        return 0;
-
-    if ((!Pidentifier1) && Pidentifier2)
-        return +1;
-
-    /* Evaluate identifier objects */
-
-    if (*Pidentifier1 < *Pidentifier2)
-        result = -1;
-
-    if (*Pidentifier1 > *Pidentifier2)
-        result = +1;
-
-    return result;
-}
-
-
-
-
-/* @funcstatic listUintCompareDescending **************************************
-**
-** Comparison function to sort AJAX unsigned integer (SQL identifier) objects
-** in descending order.
-**
-** @param [r] item1 [const void*] AJAX unsigned integer address 1
-** @param [r] item2 [const void*] AJAX unsigned integer address 2
-** @see ajListSortUnique
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static int listUintCompareDescending(
-    const void *item1,
-    const void *item2)
-{
-    int result = 0;
-
-    ajuint *Pidentifier1 = *(ajuint *const *) item1;
-    ajuint *Pidentifier2 = *(ajuint *const *) item2;
-
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
-    if (ajDebugTest("listUintCompareDescending"))
-        ajDebug("listUintCompareDescending\n"
-                "  identifier1 %u\n"
-                "  identifier2 %u\n",
-                *Pidentifier1,
-                *Pidentifier2);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if (Pidentifier1 && (!Pidentifier2))
-        return -1;
-
-    if ((!Pidentifier1) && (!Pidentifier2))
-        return 0;
-
-    if ((!Pidentifier1) && Pidentifier2)
-        return +1;
-
-    /* Evaluate identifier objects */
-
-    if (*Pidentifier1 > *Pidentifier2)
-        result = -1;
-
-    if (*Pidentifier1 < *Pidentifier2)
-        result = +1;
-
-    return result;
-}
-
-
-
-
-/* @funcstatic listUintDelete *************************************************
-**
-** ajListSortUnique "itemdel" function to delete AJAX unsigned integer
-** (SQL identifier) objects that are redundant.
-**
-** @param [r] Pitem [void**] AJAX unsigned integer objects address
-** @param [r] cl [void*] Standard. Passed in from ajListSortUnique
-** @see ajListSortUnique
-**
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void listUintDelete(void **Pitem, void *cl)
-{
-    if (!Pitem)
-        return;
-
-    (void) cl;
-
-    ajMemFree(Pitem);
-
-    return;
-}
-
-
-
-
-/* @section list **************************************************************
-**
-** Functions for manipulating AJAX List objects.
-**
-** @fdata [AjPList]
-**
-** @nam3rule Uint Functions for manipulating AJAX List objects of
-** AJAX unsigned integer objects
-** @nam4rule Sort       Sort functions
-** @nam5rule Ascending  Sort in ascending order
-** @nam5rule Descending Sort in descending order
-** @nam6rule Unique     Sort unique
-**
-** @argrule * list [AjPList]
-** AJAX List of AJAX unsigned integer objects
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
-******************************************************************************/
-
-
-
-
-/* @func ensListUintSortAscendingUnique ***************************************
-**
-** Sort an AJAX List of AJAX unsigned integer objects in ascending order.
-**
-** @param [u] list [AjPList] AJAX List of AJAX unsigned integer objects
-** @see ajListSortUnique
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensListUintSortAscendingUnique(AjPList list)
-{
-    if (!list)
-        return ajFalse;
-
-    ajListSortUnique(list,
-                     &listUintCompareAscending,
-                     &listUintDelete);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensListUintSortDescendingUnique **************************************
-**
-** Sort an AJAX List of AJAX unsigned integer objects in descending order.
-**
-** @param [u] list [AjPList] AJAX List of AJAX unsigned integer objects
-** @see ajListSortUnique
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensListUintSortDescendingUnique(AjPList list)
-{
-    if (!list)
-        return ajFalse;
-
-    ajListSortUnique(list,
-                     &listUintCompareDescending,
-                     &listUintDelete);
-
-    return ajTrue;
 }

@@ -103,16 +103,16 @@ int main(int argc, char **argv)
 	primdata->Oligob = NULL;
 
 	handle = ajStrTokenNewC(rdline, " \t");
-	ajStrTokenNextParse(handle, &primdata->Name);
+	ajStrTokenNextParse(&handle, &primdata->Name);
 
 	if(!(nprimers % 1000))
 	    ajDebug("Name [%d]: '%S'\n", nprimers, primdata->Name);
 
-	ajStrTokenNextParse(handle, &primdata->Oligoa);
+	ajStrTokenNextParse(&handle, &primdata->Oligoa);
 	ajStrFmtUpper(&primdata->Oligoa);
 	primdata->Prima = ajRegComp(primdata->Oligoa);
 
-	ajStrTokenNextParse(handle, &primdata->Oligob);
+	ajStrTokenNextParse(&handle, &primdata->Oligob);
 	ajStrFmtUpper(&primdata->Oligob);
 	primdata->Primb = ajRegComp(primdata->Oligob);
 	ajStrTokenDel(&handle);

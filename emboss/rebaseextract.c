@@ -253,10 +253,9 @@ int main(int argc, char **argv)
 	    {
 		ajStrAssignS(&isostr,isoschiz);
 		handle = ajStrTokenNewC(isostr,"\t\n>,");
-	        ajStrTokenNextParse(handle, &token);
+	        ajStrTokenNextParse(&handle, &token);
 
 		if((value=ajTableFetchmodS(ptable, token)))
-                {
 		    if(ajStrMatchS(value,pattern))
 		    {
 			equstr1 = ajStrNew();
@@ -265,8 +264,7 @@ int main(int argc, char **argv)
 			ajStrAssignS(&equstr2, token);
 			ajListPushAppend(equ1,(void *) equstr1);
 			ajListPushAppend(equ2,(void *) equstr2);
-		    }
-                }
+		    }		
 		ajStrTokenDel(&handle);
 	    }
 	}
@@ -461,7 +459,7 @@ static void rebaseextract_process_pattern(const AjPStr pattern,
 
     tokens=ajStrTokenNewC(tmppattern,",");
 
-    while(ajStrTokenNextParseC(tokens,",",&ppat))
+    while(ajStrTokenNextParseC(&tokens,",",&ppat))
     {
 	ajFmtPrintF(outf,"%S\t",code);
 

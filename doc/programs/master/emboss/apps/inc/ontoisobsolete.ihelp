@@ -1,5 +1,5 @@
 Report whether an ontology term id is obsolete
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or

@@ -586,16 +586,16 @@ static void acdrelations_procacdfile1
           ajStrAssignC(&tmp, line->Ptr+pos);
           
           parse = ajStrTokenNewC(tmp, "\" /");
-          ajStrTokenNextParse(parse, &tok);
-          ajStrTokenNextParse(parse, &tok); 
+          ajStrTokenNextParse(&parse, &tok);
+          ajStrTokenNextParse(&parse, &tok); 
           
           /* Get namespace and id tokens */
-          ajStrTokenNextParse(parse, &namespace);
-          ajStrTokenNextParse(parse, &id);           
+          ajStrTokenNextParse(&parse, &namespace);
+          ajStrTokenNextParse(&parse, &id);           
 
           /* Get rest of string (name)
              Strip whitespace at start and trailing " from name. */
-          ajStrTokenRestParse(parse, &name);
+          ajStrTokenRestParse(&parse, &name);
           ajStrRemoveWhiteExcess(&name);
           ajStrRemoveSetC(&name, "\"\n");
           ajStrTokenDel(&parse);

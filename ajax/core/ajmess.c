@@ -3,9 +3,9 @@
 ** AJAX message functions
 **
 ** @author Richard Durbin and Ed Griffiths from ACEdb (messubs.c)
-** @version $Revision: 1.56 $
+** @version $Revision: 1.55 $
 ** @modified Ian Longden for EMBOSS
-** @modified $Date: 2012/12/07 09:54:19 $ by $Author: rice $
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1778,7 +1778,7 @@ void ajDebug(const char* fmt, ...)
     static ajint debugset = 0;
     static ajint depth    = 0;
     AjPStr bufstr         = NULL;
-
+    
     if(depth)
     {				   /* recursive call, get out quick */
 	if(messDebugFile)
@@ -1795,7 +1795,9 @@ void ajDebug(const char* fmt, ...)
 
     if(!debugset && acdDebugSet)
     {
-	if(acdDebug)
+	messDebug = acdDebug;
+
+	if(messDebug)
 	{
 	    ajFmtPrintS(&messDebugName, "%s.dbg", ajStrGetPtr(acdProgram));
 	    messDebugFile = ajFileNewOutNameS(messDebugName);
@@ -1816,18 +1818,14 @@ void ajDebug(const char* fmt, ...)
 	    ajStrDel(&bufstr);
 	}
 
-	messDebug = acdDebug;
-
 	debugset = 1;
     }
 
     if(messDebug)
     {
-
 	va_start(args, fmt);
 	ajFmtVPrintF(messDebugFile, fmt, args);
 	va_end(args);
-
     }
 
     depth--;

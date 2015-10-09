@@ -1,5 +1,5 @@
 Find weights common to multiple molecular weights files
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-files]             filelist   Molecular weights file list

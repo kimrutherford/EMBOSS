@@ -1,17 +1,17 @@
 index	flat/1
-fileid_0	/data/pmr/devemboss/test/embl/condiv.dat	3385
-fileid_1	/data/pmr/devemboss/test/embl/est.dat	4142
-fileid_2	/data/pmr/devemboss/test/embl/fun.dat	2977
-fileid_3	/data/pmr/devemboss/test/embl/hum1.dat	4153856
-fileid_4	/data/pmr/devemboss/test/embl/inv.dat	112520
-fileid_5	/data/pmr/devemboss/test/embl/pln.dat	6881
-fileid_6	/data/pmr/devemboss/test/embl/pro.dat	87963
-fileid_7	/data/pmr/devemboss/test/embl/rod.dat	21601
-fileid_8	/data/pmr/devemboss/test/embl/sts.dat	2222
-fileid_9	/data/pmr/devemboss/test/embl/syn.dat	11091
-fileid_10	/data/pmr/devemboss/test/embl/vrl.dat	3323
-fileid_11	/data/pmr/devemboss/test/embl/vrt.dat	30884
-fileid_12	/data/pmr/devemboss/test/embl/wgs.dat	11138
+fileid_0	/homes/pmr/devemboss/test/embl/condiv.dat	3385
+fileid_1	/homes/pmr/devemboss/test/embl/est.dat	4142
+fileid_2	/homes/pmr/devemboss/test/embl/fun.dat	2977
+fileid_3	/homes/pmr/devemboss/test/embl/hum1.dat	4153856
+fileid_4	/homes/pmr/devemboss/test/embl/inv.dat	112520
+fileid_5	/homes/pmr/devemboss/test/embl/pln.dat	6881
+fileid_6	/homes/pmr/devemboss/test/embl/pro.dat	87963
+fileid_7	/homes/pmr/devemboss/test/embl/rod.dat	21601
+fileid_8	/homes/pmr/devemboss/test/embl/sts.dat	2222
+fileid_9	/homes/pmr/devemboss/test/embl/syn.dat	11091
+fileid_10	/homes/pmr/devemboss/test/embl/vrl.dat	3323
+fileid_11	/homes/pmr/devemboss/test/embl/vrt.dat	30884
+fileid_12	/homes/pmr/devemboss/test/embl/wgs.dat	11138
 primary_namespace	ID
 secondary_namespaces	ACC	VERSION
 format	embl

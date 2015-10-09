@@ -3,8 +3,8 @@
 ** B+ Tree Indexing plus Disc Cache.
 **
 ** @author Copyright (c) 2003 Alan Bleasby
-** @version $Revision: 1.57 $
-** @modified $Date: 2012/12/07 10:24:08 $ by $Author: rice $
+** @version $Revision: 1.56 $
+** @modified $Date: 2012/07/17 15:05:51 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -701,7 +701,7 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
@@ -755,7 +755,7 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;()");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
@@ -814,7 +814,7 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
 
@@ -885,13 +885,13 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine," \t\n\r;");
 
-    if(!ajStrTokenNextParse(embindexHandle,&idstr))
+    if(!ajStrTokenNextParse(&embindexHandle,&idstr))
 	return;
 
-    if(!ajStrTokenNextParse(embindexHandle,&token))
+    if(!ajStrTokenNextParse(&embindexHandle,&token))
 	return;
 
-    if(!ajStrTokenNextParse(embindexHandle,&svstr))
+    if(!ajStrTokenNextParse(&embindexHandle,&svstr))
 	return;
 
     if(!ajStrMatchC(token, "SV"))
@@ -937,7 +937,7 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r \t()");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimWhite(&token);
 	ajStrTrimEndC(&token,".,:'\"");
@@ -990,7 +990,7 @@ void embBtreeParseEmblKw(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1034,7 +1034,7 @@ void embBtreeParseEmblTx(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;()");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimEndC(&embindexToken," ");
@@ -1085,7 +1085,7 @@ void embBtreeParseEmblAc(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
 
@@ -1164,7 +1164,7 @@ void embBtreeFindEmblAc(const AjPStr readline, EmbPBtreeField field,
 
     ajStrTokenAssignC(&embindexHandle,embindexLine," \t\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
 
@@ -1235,7 +1235,7 @@ void embBtreeParseEmblSv(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine," \t\n\r;");
 
-    if(!ajStrTokenNextParse(embindexHandle,&embindexToken))
+    if(!ajStrTokenNextParse(&embindexHandle,&embindexToken))
 	return;
 
     if(field->freecount)
@@ -1244,13 +1244,13 @@ void embBtreeParseEmblSv(const AjPStr readline, EmbPBtreeField field)
     ajStrAssignS(&str, embindexToken);
     ajStrAppendK(&str, '.');
 
-    if(!ajStrTokenNextParse(embindexHandle,&embindexToken))
+    if(!ajStrTokenNextParse(&embindexHandle,&embindexToken))
 	return;
 
     if(!ajStrMatchC(embindexToken, "SV"))
 	return;
 
-    if(!ajStrTokenNextParse(embindexHandle,&embindexToken))
+    if(!ajStrTokenNextParse(&embindexHandle,&embindexToken))
 	return;
 
     ajStrAppendS(&str, embindexToken);
@@ -1285,7 +1285,7 @@ void embBtreeParseEmblDe(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r \t()");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
 	ajStrTrimEndC(&embindexToken,".,:;'\"");
@@ -1336,7 +1336,7 @@ void embBtreeParseGenbankAc(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
 
@@ -1409,7 +1409,7 @@ void embBtreeParseGenbankDe(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r \t()");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1450,7 +1450,7 @@ void embBtreeParseGenbankKw(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1494,7 +1494,7 @@ void embBtreeParseGenbankTx(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;()");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimEndC(&embindexToken," ");
@@ -1549,7 +1549,7 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimWhite(&token);
 
@@ -1623,7 +1623,7 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
@@ -1677,7 +1677,7 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r \t()");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
@@ -1731,7 +1731,7 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;()");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
@@ -1782,7 +1782,7 @@ void embBtreeParseFastaDe(const AjPStr readline, EmbPBtreeField field)
     
     ajStrTokenAssignC(&embindexHandle,readline,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1824,7 +1824,7 @@ void embBtreeParseFastaAc(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,readline,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1868,7 +1868,7 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     
     ajStrTokenAssignC(&embindexHandle,kwline,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
@@ -1920,7 +1920,7 @@ void embBtreeParseFastaSv(const AjPStr readline, EmbPBtreeField field)
 
     ajStrTokenAssignC(&embindexHandle,readline,"\n\r ");
 
-    while(ajStrTokenNextParse(embindexHandle,&embindexToken))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimEndC(&embindexToken,".");
 	ajStrTrimWhite(&embindexToken);
@@ -1964,7 +1964,7 @@ void embBtreeFastaSV(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 
     ajStrTokenAssignC(&embindexHandle,kwline,"\n ");
 
-    while(ajStrTokenNextParse(embindexHandle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);

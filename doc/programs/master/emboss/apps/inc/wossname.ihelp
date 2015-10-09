@@ -1,5 +1,5 @@
 Find programs by keywords in their short description
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a

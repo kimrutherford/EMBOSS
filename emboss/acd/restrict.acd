@@ -217,14 +217,19 @@ section: output [
     relations: "EDAM_data:2527 Parameter"
   ]
 
+  boolean: name [
+    default: "N"
+    information: "Show sequence name"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
   report: outfile [
     parameter: "Y"
     rformat: "table"
     rscoreshow: "N"
     multiple: "Y"
     taglist: "str:enzyme=Enzyme_name str:site=Restriction_site
-              int:5prime int:3prime int:5frag int:3frag
-              int:5primerev int:3primerev int:5fragrev int:3fragrev"
+              int:5prime int:3prime int:5primerev int:3primerev"
     precision: "0"
     relations: "EDAM_data:1305 Nucleic acid features (restriction sites)"
   ]

@@ -6,12 +6,12 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        70
-Fullcount    86
+Fullcount    90
 Kwlimit      15
 Idlimit      15

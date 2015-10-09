@@ -108,51 +108,11 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-[no]xml</td>
-<td>boolean</td>
-<td>Display XML databases</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-[no]standard</td>
-<td>boolean</td>
-<td>Display standard databases</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-[no]user</td>
-<td>boolean</td>
-<td>Display user-defined databases</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-[no]include</td>
-<td>boolean</td>
-<td>Display databases defined in included files</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
 <td>-full</td>
 <td>boolean</td>
 <td>Display all columns</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-access</td>
-<td>boolean</td>
-<td>This displays the levels of access that can be used on this database</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -164,57 +124,9 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-taxscope</td>
-<td>boolean</td>
-<td>This displays the taxons covered by this database</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
 <td>-fields</td>
 <td>boolean</td>
-<td>This displays the search fields that can be used on this database, including the standard 'id' or 'acc' fields</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-numfields</td>
-<td>boolean</td>
-<td>This displays the number of search fields that can be used on this database, including the standard 'id' or 'acc' fields</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-aliases</td>
-<td>boolean</td>
-<td>This displays the alias names that can be used for this database</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-numaliases</td>
-<td>boolean</td>
-<td>This displays the number of alias names that can be used for this database</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-examples</td>
-<td>boolean</td>
-<td>This displays the example queries that can be used to test this database</td>
-<td>Boolean value Yes/No</td>
-<td>$(full)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-numexamples</td>
-<td>boolean</td>
-<td>This displays the number of example queries that can be used to test this database</td>
+<td>This displays the search fields that can be used on this database, other than the standard 'id' or 'acc' fields.</td>
 <td>Boolean value Yes/No</td>
 <td>$(full)</td>
 </tr>
@@ -277,7 +189,7 @@ to get only the comment output, you can specify
 <tr bgcolor="#FFFFCC">
 <td>-id</td>
 <td>boolean</td>
-<td>Display 'id' access column</td>
+<td>Display 'id' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
@@ -285,7 +197,7 @@ to get only the comment output, you can specify
 <tr bgcolor="#FFFFCC">
 <td>-query</td>
 <td>boolean</td>
-<td>Display 'qry' access column</td>
+<td>Display 'qry' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
@@ -293,7 +205,7 @@ to get only the comment output, you can specify
 <tr bgcolor="#FFFFCC">
 <td>-all</td>
 <td>boolean</td>
-<td>Display 'all' access column</td>
+<td>Display 'all' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>

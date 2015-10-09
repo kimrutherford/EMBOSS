@@ -5,30 +5,23 @@
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM_data:1916
-name: Alignment
-namespace: data
-def: An alignment of molecular sequences, structures or profiles derived from them.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:3031 ! Core data
-
-[Term]
 id: EDAM_topic:0083
 name: Alignment
 namespace: topic
 def: Topic concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
-subset: bioinformatics
-subset: edam
 subset: topics
-created_in: "beta12orEarlier"
-obsolete_since: "beta12orEarlier"
-is_obsolete: true
+is_obsolete: true ! {since=beta12orEarlier}
 consider: EDAM_topic:0182 ! Sequence alignment
 consider: EDAM_topic:0183 ! Structure alignment
 consider: EDAM_topic:0184 ! Threading
+
+[Term]
+id: EDAM_data:1916
+name: Alignment
+namespace: data
+def: An alignment of molecular sequences, structures or profiles derived from them.
+subset: data
+is_a: EDAM_data:3031 ! Core data
 
 </pre>
 </td></tr></table><p>

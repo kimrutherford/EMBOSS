@@ -46,7 +46,7 @@ wordmatch    Find regions of identity (exact matches) of two sequences
 Command line arguments
 
 Find programs with similar function to a specified program
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any

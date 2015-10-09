@@ -10,7 +10,6 @@ alistat_output                      | file           |  "EDAM_data:2083 Alignmen
 amino_acid_classification           | file           |  "EDAM_data:1502 Amino acid index (chemical classes)"           | Amino acid chemical classes data
 amino_acid_frequencies              | file           |  "EDAM_data:1535 Peptide fragment molecular weight frequencies" | Amino acid frequencies data
 amino_acid_hydropathy               | file           |  "EDAM_data:1506 Amino acid index (hydropathy)"                 | Amino acid hydropathy values data
-amino_acid_pka                      | file           |  "EDAM_data:1529 Protein pKa value"
 amino_acid_properties               | file           |  "EDAM_data:1502 Amino acid index (chemical classes)"           | Amino acids properties and molecular weight data
 ancestral_states                    | properties     |  "EDAM_data:1427 Phylogenetic discrete data"                    | Phylip ancestral states file
 ascii_text                          | file           |  "EDAM_data:0969 Text"                                          | ASCII text
@@ -24,10 +23,6 @@ cds_sequence                        | sequence       |  "EDAM_data:0849 Sequence
 cirdna_mapping_commands             | file           |  "EDAM_data:2152 Rendering parameter"                           | Commands to the cirdna drawing program
 clique_input                        | file           |  "EDAM_data:1427 Phylogenetic discrete data"                    | Phylip clique program input
 clique_output                       | file           |  "EDAM_data:1428 Phylogenetic report (cliques)"                 | Phylip clique program output
-clustalo_distance_matrix            | distances      |  "EDAM_data:0870 Sequence distance matrix"                      | Clustalo distance matrix
-clustalo_guide_tree                 | file           |  "EDAM_data:0872 Phylogenetic tree"                             | Clustalo guide tree         
-clustalo_hmm                        | file           |  "EDAM_data:1384 Sequence alignment (protein)"                  | Pre-aligned protein multiple sequence file
-clustalo_profile                    | file           |  "EDAM_data:1384 Sequence alignment (protein)"                  | Pre-aligned protein multiple sequence file
 codon_list                          | string         |  "EDAM_data:0848 Raw sequence"                                  | Codon triplet(s)
 codon_usage                         | codon          |  "EDAM_data:1597 Codon usage table"                             | Codon usage
 comparison_matrix                   | file           |  "EDAM_data:0874 Comparison matrix"                             | Comparison matrix file

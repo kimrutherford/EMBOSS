@@ -3,9 +3,9 @@
 ** AJAX file routines
 **
 ** @author Copyright (C) 1999 Peter Rice
-** @version $Revision: 1.29 $
+** @version $Revision: 1.28 $
 ** @modified Peter Rice pmr@ebi.ac.uk I/O file functions from ajfile.c
-** @modified $Date: 2012/12/07 10:05:36 $ by $Author: rice $
+** @modified $Date: 2012/03/13 13:29:28 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -163,37 +163,28 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
     ajint ilen;
     ajint jlen;
     ajint ipos;
-
+    ajuint buffsize;
     const char* pnewline = NULL;
 #ifndef __ppc__
     size_t iread;
 #endif
-
-    /*
-    ** delete the output record here
-    ** if simply read, it is a reference counted copy of file->Buff
-    ** so we decrement the reference count, reuse file->Buff (now single use)
-    ** and make a new reference copy at the end
-    ** saving the need for any string free and allocate
-    */
-
+    
     MAJSTRDEL(Pdest);
 
     if(file->Buffsize)
-    {
-        buff  = MAJSTRGETUNIQUEPTR(&file->Buff);
-    }
+        buffsize = file->Buffsize;
     else
-    {
-        file->Buffsize = ajFileValueBuffsize();
+        buffsize = ajFileValueBuffsize();
 
-        if(!file->Buff)
-            ajStrAssignResC(&file->Buff, file->Buffsize, "");
-        else if(file->Buffsize > MAJSTRGETRES(file->Buff))
-            ajStrSetRes(&file->Buff, file->Buffsize);
+    if(!file->Buff)
+      ajStrAssignResC(&file->Buff, buffsize, "");
+    else if(buffsize > MAJSTRGETRES(file->Buff))
+      ajStrSetRes(&file->Buff, buffsize);
 
-        buff = MAJSTRGETPTR(file->Buff);
-    }
+    if(MAJSTRGETUSE(file->Buff) == 1)
+      buff = MAJSTRGETPTR(file->Buff);
+    else
+      buff  = ajStrGetuniquePtr(&file->Buff);
 
     isize = MAJSTRGETRES(file->Buff);
     ilen  = 0;
@@ -274,8 +265,6 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 
         if(!cp && !ipos)
 	{
-            file->Filepos += ilen;
-
 	    if(feof(file->fp))
 	    {
 		file->End = ajTrue;
@@ -294,6 +283,7 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 	}
 
 	ilen += jlen;
+        file->Filepos += jlen;
 
 	/*
 	 ** We need to read again if:
@@ -302,17 +292,17 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 	 ** (must be careful about that - we may just have read enough)
 	 */
 
-	if(((file->Readblock && !pnewline) || (jlen == (isize-1))) &&
+	if(((file->Readblock && !pnewline) ||(jlen == (isize-1))) &&
 	   (buff[ilen-1] != '\n'))
 	{
             MAJSTRSETVALIDLEN(&file->Buff, ilen); /* fix before resizing! */
-	    ajStrSetResRound(&file->Buff, ilen+file->Buffsize+1);
+	    ajStrSetResRound(&file->Buff, ilen+buffsize+1);
 	    /*ajDebug("more to do: jlen: %d ipos: %d isize: %d ilen: %d "
 		    "Size: %d\n",
 		    jlen, ipos, isize, ilen, ajStrGetRes(file->Buff));*/
 	    ipos += jlen;
-	    buff = MAJSTRGETUNIQUEPTR(&file->Buff);
-	    isize = MAJSTRGETRES(file->Buff) - ipos;
+	    buff = ajStrGetuniquePtr(&file->Buff);
+	    isize = ajStrGetRes(file->Buff) - ipos;
 	    /*ajDebug("expand to: ipos: %d isize: %d Size: %d\n",
               ipos, isize, ajStrGetRes(file>Buff));*/
 	}
@@ -322,16 +312,13 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
         }
     }
     
-    file->Filepos += ilen;
-
     MAJSTRSETVALIDLEN(&file->Buff, ilen);
-    if (MAJSTRGETCHARLAST(file->Buff) != '\n')
+    if (ajStrGetCharLast(file->Buff) != '\n')
     {
 	/*ajDebug("Appending missing newline to '%S'\n", file->Buff);*/
 	ajStrAppendK(&file->Buff, '\n');
     }
-
-    MAJSTRASSIGNREF(Pdest, file->Buff);
+    ajStrAssignRef(Pdest, file->Buff);
 
 /*
   if(file->Readblock)
@@ -398,14 +385,14 @@ AjBool ajReadlineTrimPos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 
 
     /*ajDebug("Remove carriage-return characters from PC-style files\n");*/
-    if(MAJSTRGETCHARLAST(file->Buff) == '\n')
+    if(ajStrGetCharLast(file->Buff) == '\n')
 	ajStrCutEnd(&file->Buff, 1);
 
     /* PC files have \r\n Macintosh files have just \r : this fixes both */
-    if(MAJSTRGETCHARLAST(file->Buff) == '\r')
+    if(ajStrGetCharLast(file->Buff) == '\r')
 	ajStrCutEnd(&file->Buff, 1);
 
-    MAJSTRASSIGNREF(Pdest, file->Buff);
+    ajStrAssignRef(Pdest, file->Buff);
 
     return ajTrue;
 }

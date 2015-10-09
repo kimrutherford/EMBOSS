@@ -1,8 +1,0 @@
-This packages uses a patch system. Please read
-/usr/share/doc/quilt/README.source for more informations.
-
-The binary packages are built against the zlib and expat library distributed in
-Debian, not the conveniences copies co-distributed with EMBOSS. This is done by:
-
- - passing ‘--enable-systemlibs’ to the configure command.
- - passing ‘LDFLAGS="-lexpat"’ to the make command.

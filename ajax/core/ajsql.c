@@ -3,8 +3,8 @@
 ** AJAX SQL functions
 **
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.36 $
-** @modified $Date: 2013/06/29 22:25:51 $ by $Author: rice $
+** @version $Revision: 1.34 $
+** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -24,9 +24,10 @@
 **
 ******************************************************************************/
 
-/* ========================================================================= */
-/* ============================= include files ============================= */
-/* ========================================================================= */
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 
 #include "ajlib.h"
 
@@ -49,47 +50,31 @@
 #include "libpq-fe.h"
 #endif /* HAVE_POSTGRESQL */
 
+/* ==================================================================== */
+/* ======================== private functions ========================= */
+/* ==================================================================== */
 
-
-
-/* ========================================================================= */
-/* =============================== constants =============================== */
-/* ========================================================================= */
-
-
-
-
-/* ========================================================================= */
-/* =========================== global variables ============================ */
-/* ========================================================================= */
-
-
-
-
-/* ========================================================================= */
-/* ============================= private data ============================== */
-/* ========================================================================= */
-
-
-
-
-/* ========================================================================= */
-/* =========================== private constants =========================== */
-/* ========================================================================= */
-
-
-
-
-/* #conststatic sqlconnectionKClient ******************************************
+/* sqlInit ********************************************************************
 **
-** #value [const char**] sqlconnectionKClient AJAX SQL Connection client
-** library enumeration. The following strings are used for conversion in
-** database operations and correspond to AjESqlconnectionClient.
-** #see AjESqlconnectionClient
+** Private boolean variable to ascertain that ajSqlInit has been called once
+** and only once.
 **
 ******************************************************************************/
 
-static const char *sqlconnectionKClient[] =
+static AjBool sqlInit = AJFALSE;
+
+
+
+
+/* sqlconectionClient *********************************************************
+**
+** AJAX SQL Connection client library enumeration. The following strings are
+** used for conversion in database operations and correspond to
+** AjESqlconnectionClient.
+**
+******************************************************************************/
+
+static const char *sqlconnectionClient[] =
 {
     NULL,
     "mysql",
@@ -100,62 +85,16 @@ static const char *sqlconnectionKClient[] =
 
 
 
-/* ========================================================================= */
-/* =========================== private variables =========================== */
-/* ========================================================================= */
-
-
-
-
-/* #varstatic initialisation **************************************************
-**
-** #value [AjBool] sqlGInit Private boolean variable to ascertain that
-** ajSqlInit has been called once and only once.
-**
-******************************************************************************/
-
-static AjBool sqlGInit = AJFALSE;
-
-
-
-
-/* #varstatic statistics ******************************************************
-**
-** #value [ajuint] sqlconnectionGCountTotal
-** Count of all AJAX SQL Connection objects
-** #value [ajuint] sqlconnectionGCountFree
-** Count of freed AJAX SQL Connection objects
-** #value [ajuint] sqlconnectionGCountError
-** Count of error
-** #value [ajuint] sqlstatementGCountTotal
-** Count of all AJAX SQL Statement objects
-** #value [ajuint] sqlstatementGCountFree
-** Count of freed AJAX SQL Statement objects
-** #value [ajuint] sqlstatementGCountError
-** Count of errors
-**
-******************************************************************************/
-
 #ifdef AJ_SAVESTATS
 
-static ajuint sqlconnectionGCountTotal = 0U;
-static ajuint sqlconnectionGCountFree  = 0U;
-static ajuint sqlconnectionGCountError = 0U;
-static ajuint sqlstatementGCountTotal  = 0U;
-static ajuint sqlstatementGCountFree   = 0U;
-static ajuint sqlstatementGCountError  = 0U;
+static ajlong sqlconnectionTotalCount = 0;
+static ajlong sqlconnectionFreeCount  = 0;
+static ajlong sqlconnectionErrorCount = 0;
+static ajlong sqlstatementTotalCount  = 0;
+static ajlong sqlstatementFreeCount   = 0;
+static ajlong sqlstatementErrorCount  = 0;
 
 #endif /* AJ_SAVESTATS */
-
-
-
-
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
-
-
-
 
 #ifdef HAVE_MYSQL
 
@@ -199,7 +138,7 @@ static AjBool arrVoidResize(AjPVoid *thys, ajuint size);
 /* @filesection ajsql *********************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library
-** @nam2rule Sql AJAX SQL interface to MySQL or Postgres
+** @nam2rule Sql SQL interface to MySQL or Postgres
 **
 ******************************************************************************/
 
@@ -209,6 +148,7 @@ static AjBool arrVoidResize(AjPVoid *thys, ajuint size);
 /* @datasection [none] Internals **********************************************
 **
 ** Function is for setup or control of internals
+**
 **
 ******************************************************************************/
 
@@ -241,7 +181,7 @@ static AjBool arrVoidResize(AjPVoid *thys, ajuint size);
 
 AjBool ajSqlInit(void)
 {
-    if(sqlGInit)
+    if(sqlInit)
         return ajTrue;
 
 #ifdef HAVE_MYSQL
@@ -258,7 +198,7 @@ AjBool ajSqlInit(void)
 
 #endif /* HAVE_MYSQL */
 
-    sqlGInit = ajTrue;
+    sqlInit = ajTrue;
 
     return ajTrue;
 }
@@ -292,7 +232,7 @@ AjBool ajSqlInit(void)
 
 void ajSqlExit(void)
 {
-    if(!sqlGInit)
+    if(!sqlInit)
         return;
 
 #ifdef HAVE_MYSQL
@@ -304,20 +244,20 @@ void ajSqlExit(void)
 #ifdef AJ_SAVESTATS
 
     ajDebug("SQL Connection usage: "
-            "%u opened, %u closed, %u in use, %u failed\n",
-            sqlconnectionGCountTotal,  sqlconnectionGCountFree,
-            sqlconnectionGCountTotal - sqlconnectionGCountFree,
-            sqlconnectionGCountError);
+            "%Ld opened, %Ld closed, %Ld in use, %Ld failed\n",
+            sqlconnectionTotalCount,  sqlconnectionFreeCount,
+            sqlconnectionTotalCount - sqlconnectionFreeCount,
+            sqlconnectionErrorCount);
 
     ajDebug("SQL Statement usage: "
-            "%u opened, %u closed, %u in use, %u failed\n",
-            sqlstatementGCountTotal,  sqlstatementGCountFree,
-            sqlstatementGCountTotal - sqlstatementGCountFree,
-            sqlstatementGCountError);
+            "%Ld opened, %Ld closed, %Ld in use, %Ld failed\n",
+            sqlstatementTotalCount,  sqlstatementFreeCount,
+            sqlstatementTotalCount - sqlstatementFreeCount,
+            sqlstatementErrorCount);
 
 #endif /* AJ_SAVESTATS */
 
-    sqlGInit = ajFalse;
+    sqlInit = ajFalse;
 
     return;
 }
@@ -446,7 +386,7 @@ static AjPSqlconnection sqlconnectionMysqlNewData(
 
 #ifdef AJ_SAVESTATS
 
-        sqlconnectionGCountError++;
+        sqlconnectionErrorCount++;
 
 #endif /* AJ_SAVESTATS */
     }
@@ -627,7 +567,7 @@ static AjPSqlconnection sqlconnectionPostgresqlNewData(
 
 #ifdef AJ_SAVESTATS
 
-            sqlconnectionGCountError++;
+            sqlconnectionErrorCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -798,7 +738,7 @@ AjPSqlconnection ajSqlconnectionNewData(AjESqlconnectionClient client,
 #ifdef AJ_SAVESTATS
 
     if(sqlc)
-        sqlconnectionGCountTotal++;
+        sqlconnectionTotalCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -959,7 +899,7 @@ void ajSqlconnectionDel(AjPSqlconnection *Psqlc)
 
 #ifdef AJ_SAVESTATS
 
-    sqlconnectionGCountFree++;
+    sqlconnectionFreeCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -1056,7 +996,7 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
 
             if(length >= LONG_MAX)
                 ajFatal("ajSqlconnectionEscapeC exceeded the maximum length.");
-
+            
             *Ptxt = ajCharNewRes(2 * length + 1);
 
             length = mysql_real_escape_string((MYSQL *) sqlc->Pconnection,
@@ -1088,7 +1028,7 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
 
             if(length >= LONG_MAX)
                 ajFatal("ajSqlconnectionEscapeC exceeded the maximum length.");
-
+            
             *Ptxt = ajCharNewRes(2 * length + 1);
 
             length = PQescapeStringConn((PGconn *) sqlc->Pconnection,
@@ -1333,8 +1273,8 @@ AjESqlconnectionClient ajSqlconnectionClientFromStr(const AjPStr client)
 
     AjESqlconnectionClient eclient = ajESqlconnectionClientNULL;
 
-    for(i = ajESqlconnectionClientMySQL; sqlconnectionKClient[i]; i++)
-        if(ajStrMatchC(client, sqlconnectionKClient[i]))
+    for(i = ajESqlconnectionClientMySQL; sqlconnectionClient[i]; i++)
+        if(ajStrMatchC(client, sqlconnectionClient[i]))
             eclient = i;
 
     if(!eclient)
@@ -1388,14 +1328,14 @@ const char* ajSqlconnectionClientToChar(AjESqlconnectionClient client)
         return NULL;
 
     for(i = ajESqlconnectionClientMySQL;
-        sqlconnectionKClient[i] && (i < client);
+        sqlconnectionClient[i] && (i < client);
         i++);
 
-    if(!sqlconnectionKClient[i])
+    if(!sqlconnectionClient[i])
         ajDebug("ajSqlconnectionClientToChar encountered an "
                 "out of boundary error on client %d.\n", client);
 
-    return sqlconnectionKClient[i];
+    return sqlconnectionClient[i];
 }
 
 
@@ -1467,7 +1407,7 @@ static AjPSqlstatement sqlstatementMysqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-        sqlstatementGCountError++;
+        sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -1534,7 +1474,7 @@ static AjPSqlstatement sqlstatementMysqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-            sqlstatementGCountError++;
+            sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
         }
@@ -1636,7 +1576,7 @@ static AjPSqlstatement sqlstatementPostgresqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-                sqlstatementGCountError++;
+                sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -1716,7 +1656,7 @@ static AjPSqlstatement sqlstatementPostgresqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-                sqlstatementGCountError++;
+                sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -1733,7 +1673,7 @@ static AjPSqlstatement sqlstatementPostgresqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-                sqlstatementGCountError++;
+                sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
         }
@@ -1749,7 +1689,7 @@ static AjPSqlstatement sqlstatementPostgresqlNewRun(AjPSqlconnection sqlc,
 
 #ifdef AJ_SAVESTATS
 
-        sqlstatementGCountError++;
+        sqlstatementErrorCount++;
 
 #endif /* AJ_SAVESTATS */
     }
@@ -1889,7 +1829,7 @@ AjPSqlstatement ajSqlstatementNewRun(AjPSqlconnection sqlc,
 #ifdef AJ_SAVESTATS
 
     if(sqls)
-        sqlstatementGCountTotal++;
+        sqlstatementTotalCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -2003,7 +1943,7 @@ void ajSqlstatementDel(AjPSqlstatement *Psqls)
 
 #ifdef AJ_SAVESTATS
 
-    sqlstatementGCountFree++;
+    sqlstatementFreeCount++;
 
 #endif /* AJ_SAVESTATS */
 
@@ -2945,7 +2885,7 @@ AjBool ajSqlcolumnRewind(AjPSqlrow sqlr)
 ******************************************************************************/
 
 AjBool ajSqlcolumnGetValue(AjPSqlrow sqlr,
-                           void **Pvalue, ajulong *Plength)
+                            void **Pvalue, ajulong *Plength)
 {
     if(!sqlr)
         return ajFalse;

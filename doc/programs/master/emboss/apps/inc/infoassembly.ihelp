@@ -1,5 +1,5 @@
 Display information about assemblies
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-assembly]          assembly   (no help text) assembly value
@@ -36,7 +36,6 @@ Version: EMBOSS:6.6.0.0
    -slower             boolean    Make lower case
    -supper             boolean    Make upper case
    -scircular          boolean    Sequence is circular
-   -squick             boolean    Read id and sequence only
    -sformat            string     Input sequence format
    -iquery             string     Input query fields or ID list
    -ioffset            integer    Input start position offset

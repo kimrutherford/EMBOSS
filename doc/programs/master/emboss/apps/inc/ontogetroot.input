@@ -9,10 +9,7 @@ id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 is_a: EDAM_data:2977 ! Nucleic acid sequence
 

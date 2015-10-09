@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.18 $
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -128,13 +128,13 @@ static const char *qcvariationKState[] =
 
 
 
-/* @conststatic qcvariationadaptorKTablenames *********************************
+/* @conststatic qcvariationadaptorKTables *************************************
 **
 ** Array of Ensembl Quality Check Variation Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcvariationadaptorKTablenames[] =
+static const char *qcvariationadaptorKTables[] =
 {
     "variation",
     (const char *) NULL
@@ -143,13 +143,13 @@ static const char *qcvariationadaptorKTablenames[] =
 
 
 
-/* @conststatic qcvariationadaptorKColumnnames ********************************
+/* @conststatic qcvariationadaptorKColumns ************************************
 **
 ** Array of Ensembl Quality Check Variation Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcvariationadaptorKColumnnames[] =
+static const char *qcvariationadaptorKColumns[] =
 {
     "variation.variation_id",
     "variation.analysis_id",
@@ -492,7 +492,14 @@ void ensQcvariationDel(EnsPQcvariation *Pqcv)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pqcv) || --pthis->Use)
+    if (!*Pqcv)
+        return;
+
+    pthis = *Pqcv;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pqcv = NULL;
 
@@ -509,7 +516,9 @@ void ensQcvariationDel(EnsPQcvariation *Pqcv)
     ajStrDel(&pthis->QueryString);
     ajStrDel(&pthis->TargetString);
 
-    ajMemFree((void **) Pqcv);
+    AJFREE(pthis);
+
+    *Pqcv = NULL;
 
     return;
 }
@@ -1451,12 +1460,12 @@ AjBool ensQcvariationTrace(const EnsPQcvariation qcv, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Quality Check Variation object.
 **
 ** @fdata [EnsPQcvariation]
 **
-** @nam3rule Calculate Calculate Ensembl Quality Check Variation information
+** @nam3rule Calculate Calculate Ensembl Quality Check Variation values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * qcv [const EnsPQcvariation] Ensembl Quality Check Variation
@@ -1634,10 +1643,9 @@ const char* ensQcvariationClassToChar(EnsEQcvariationClass qcvc)
          i++);
 
     if (!qcvariationKClass[i])
-        ajDebug("ensQcvariationClassToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Quality Check Variation Class "
-                "enumeration %d.\n",
+        ajDebug("ensQcvariationClassToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Quality Check Variation Class enumeration %d.\n",
                 qcvc);
 
     return qcvariationKClass[i];
@@ -1761,10 +1769,9 @@ const char* ensQcvariationStateToChar(EnsEQcvariationState qcvs)
          i++);
 
     if (!qcvariationKState[i])
-        ajDebug("ensQcvariationStateToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Quality Check Variation State "
-                "enumeration %d.\n",
+        ajDebug("ensQcvariationStateToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Quality Check Variation State enumeration %d.\n",
                 qcvs);
 
     return qcvariationKState[i];
@@ -1887,10 +1894,9 @@ const char* ensQcvariationTypeToChar(EnsEQcvariationType qcvt)
          i++);
 
     if (!qcvariationKType[i])
-        ajDebug("ensQcvariationTypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Quality Check Variation Type "
-                "enumeration %d.\n",
+        ajDebug("ensQcvariationTypeToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Quality Check Variation Type enumeration %d.\n",
                 qcvt);
 
     return qcvariationKType[i];
@@ -2155,10 +2161,13 @@ static AjBool qcvariationadaptorFetchAllbyStatement(
 EnsPQcvariationadaptor ensQcvariationadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensBaseadaptorNew(
         dba,
-        qcvariationadaptorKTablenames,
-        qcvariationadaptorKColumnnames,
+        qcvariationadaptorKTables,
+        qcvariationadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2209,9 +2218,16 @@ EnsPQcvariationadaptor ensQcvariationadaptorNew(
 
 void ensQcvariationadaptorDel(EnsPQcvariationadaptor *Pqcva)
 {
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcvariationadaptorDel"))
+        ajDebug("ensQcvariationadaptorDel\n"
+                "  *Pqcva %p\n",
+                *Pqcva);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
     ensBaseadaptorDel(Pqcva);
 
-    return;
+	return;
 }
 
 
@@ -2281,8 +2297,7 @@ EnsPBaseadaptor ensQcvariationadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcvariationadaptorGetDatabaseadaptor(
     EnsPQcvariationadaptor qcva)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensQcvariationadaptorGetBaseadaptor(qcva));
+    return ensBaseadaptorGetDatabaseadaptor(qcva);
 }
 
 
@@ -2372,8 +2387,6 @@ AjBool ensQcvariationadaptorFetchAllbyQcalignment(
     const EnsPQcalignment qca,
     AjPList qcvs)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcva)
@@ -2388,16 +2401,15 @@ AjBool ensQcvariationadaptorFetchAllbyQcalignment(
     constraint = ajFmtStr("variation.alignment_id = %u",
                           ensQcalignmentGetIdentifier(qca));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcvariationadaptorGetBaseadaptor(qcva),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcvs);
+    ensBaseadaptorFetchAllbyConstraint(qcva,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcvs);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2433,8 +2445,6 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabasePair(
     const EnsPQcdatabase tdb,
     AjPList qcvs)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcva)
@@ -2461,16 +2471,15 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabasePair(
                           ensQcdatabaseGetIdentifier(qdb),
                           ensQcdatabaseGetIdentifier(tdb));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcvariationadaptorGetBaseadaptor(qcva),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcvs);
+    ensBaseadaptorFetchAllbyConstraint(qcva,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcvs);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2503,8 +2512,6 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseQuery(
     const EnsPQcdatabase qdb,
     AjPList qcvs)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcva)
@@ -2524,16 +2531,15 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseQuery(
                        " AND variation.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcvariationadaptorGetBaseadaptor(qcva),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcvs);
+    ensBaseadaptorFetchAllbyConstraint(qcva,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcvs);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2566,9 +2572,6 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseTarget(
     const EnsPQcdatabase tdb,
     AjPList qcvs)
 {
-
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcva)
@@ -2588,16 +2591,15 @@ AjBool ensQcvariationadaptorFetchAllbyQcdatabaseTarget(
                        " AND variation.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcvariationadaptorGetBaseadaptor(qcva),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcvs);
+    ensBaseadaptorFetchAllbyConstraint(qcva,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcvs);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2626,10 +2628,16 @@ AjBool ensQcvariationadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPQcvariation *Pqcv)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensQcvariationadaptorGetBaseadaptor(qcva),
-        identifier,
-        (void **) Pqcv);
+    if (!qcva)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pqcv)
+        return ajFalse;
+
+    return ensBaseadaptorFetchByIdentifier(qcva, identifier, (void **) Pqcv);
 }
 
 
@@ -2694,7 +2702,7 @@ AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
     if (!ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
-    dba = ensQcvariationadaptorGetDatabaseadaptor(qcva);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcva);
 
     statement = ajFmtStr(
         "DELETE FROM "
@@ -2707,8 +2715,8 @@ AjBool ensQcvariationadaptorDelete(EnsPQcvariationadaptor qcva,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qcv->Adaptor    = NULL;
-        qcv->Identifier = 0U;
+        qcv->Adaptor    = (EnsPQcvariationadaptor) NULL;
+        qcv->Identifier = 0;
 
         result = ajTrue;
     }
@@ -2760,9 +2768,10 @@ AjBool ensQcvariationadaptorStore(EnsPQcvariationadaptor qcva,
     if (ensQcvariationGetAdaptor(qcv) && ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
-    dba = ensQcvariationadaptorGetDatabaseadaptor(qcva);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcva);
 
     ensDatabaseadaptorEscapeC(dba, &txtqstr, qcv->QueryString);
+
     ensDatabaseadaptorEscapeC(dba, &txttstr, qcv->TargetString);
 
     statement = ajFmtStr(
@@ -2861,9 +2870,10 @@ AjBool ensQcvariationadaptorUpdate(EnsPQcvariationadaptor qcva,
     if (!ensQcvariationGetIdentifier(qcv))
         return ajFalse;
 
-    dba = ensQcvariationadaptorGetDatabaseadaptor(qcva);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcva);
 
     ensDatabaseadaptorEscapeC(dba, &txtqstr, qcv->QueryString);
+
     ensDatabaseadaptorEscapeC(dba, &txttstr, qcv->TargetString);
 
     statement = ajFmtStr(

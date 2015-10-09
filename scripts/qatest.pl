@@ -287,7 +287,6 @@ sub runtest ($) {
     elsif ($line =~ /^AY\s*(.*)/) {$packa = $1}
     elsif ($line =~ /^CL\s+(.*)/) {
         $newcmdline = $1;
-	$newcmdline =~ s/TESTDATA:/$testdatadir/g;
 	if($iswindows) {
 	  $newcmdline =~ s/~(\S+)/\"\%HOMEDRIVE\%\%HOMEPATH\%$1\"/;
 	}
@@ -901,17 +900,16 @@ close VERSION;
 
 if($iswindows){
   $ppcmd = "SET EMBOSSRC=..\\..\\;SET EMBOSS_RCHOME=N;";
-  $qatestfileemboss = "$basedir\\test\\qatest.dat";
+  $qatestfile = "$basedir\\test\\qatest.dat";
   $acddir = "$basedir\\acd";
   chdir "$basedir\\test\\qa";
 }
 else {
   $ppcmd = "EMBOSSRC=../../ ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;";
-  $qatestfileemboss = "$basedir/test/qatest.dat";
+  $qatestfile = "$basedir/test/qatest.dat";
   $acddir=  "$basedir/emboss/acd";
   chdir "$basedir/test/qa";
 }
-$qatestfilemain = $qatestfileemboss;
 $simple=0;
 
 foreach $test (@ARGV) {
@@ -937,7 +935,7 @@ foreach $test (@ARGV) {
     elsif ($opt =~ /with=(\S+)/) {undef($without{$1})}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
     elsif ($opt =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
-    elsif ($opt =~ /testfile=(\S+)/) {$qatestfilemain="$1"}
+    elsif ($opt =~ /testfile=(\S+)/) {$qatestfile="$1"}
     elsif ($opt =~ /acd=(\S+)/) {$acddir="$1"}
     elsif ($opt =~ /embassy=(\S+)/) {$embassyonly="$1"}
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
@@ -1040,7 +1038,7 @@ if (!$numtests) {
 
 }
 
-@testfiles = ("$qatestfilemain");
+@testfiles = ("$qatestfile");
 if($doembassy) {
     opendir (EMBASSY, "$basedir/embassy") ||
 	die "Failed to find embassy directory";
@@ -1058,15 +1056,6 @@ if($doembassy) {
 foreach $qatestfile (@testfiles) {
 open (IN, "$qatestfile") || die "Cannot open $qatestfile";
 open (LOG, ">$logfile") || die "Cannot open $logfile";
-$testdatadir = $qatestfile;
-if($iswindows) {
-    if($qatestfile eq $qatestfilemain) {$testdatadir = "..\\..\\data"}
-    else {$testdatadir =~ s/qatest.dat$/data\\/g}
-}
-else {
-    if($qatestfile eq $qatestfilemain) {$testdatadir = "../../data"}
-    else {$testdatadir =~ s/qatest.dat$/data\//g}
-}
 
 # make qatest.log unbuffered and be sure to reset the current filehandle
 $fh = select LOG; $|=1; select $fh;

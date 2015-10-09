@@ -27,6 +27,7 @@ endsection: input
 
 
 
+
 section: additional 
 [
   information: "Additional section"
@@ -56,16 +57,6 @@ section: advanced
   information: "Advanced section"
   type: "page"
 ]
-
-  string: server
-  [
-      default: ""
-      information: "Server name"
-      help: "The name of the server defined locally for use by EMBOSS."
-      knowntype: "emboss server name"
-      relations: "EDAM_data:2527 Parameter"
-  ]
-
 
 endsection: advanced
 

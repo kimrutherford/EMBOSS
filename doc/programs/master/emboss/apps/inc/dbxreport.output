@@ -6,8 +6,8 @@
 <pre>
 Index 'id' (.xid)
   compressed:  Yes (Compressed)
-   cachesize: 20000 (Size of primary cache)
-seccachesize: 20000 (Size of secondary cache)
+   cachesize: 2000 (Size of primary cache)
+seccachesize: 2000 (Size of secondary cache)
     pagesize: 2048 (Page size)
  secpagesize:  512 (Secondary page size)
    pagecount:    3 (Primary page count)
@@ -36,8 +36,8 @@ Identifier index 'id' index found with 3 pages
    FOUNDALL: 6
 Index 'acc' (.xac)
   compressed:  Yes (Compressed)
-   cachesize: 20000 (Size of primary cache)
-seccachesize: 20000 (Size of secondary cache)
+   cachesize: 2000 (Size of primary cache)
+seccachesize: 2000 (Size of secondary cache)
     pagesize: 2048 (Page size)
  secpagesize:  512 (Secondary page size)
    pagecount:    3 (Primary page count)

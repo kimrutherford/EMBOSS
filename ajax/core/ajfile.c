@@ -3,9 +3,9 @@
 ** AJAX file routines
 **
 ** @author Copyright (C) 1999 Peter Rice
-** @version $Revision: 1.208 $
+** @version $Revision: 1.206 $
 ** @modified May 14 Jon Ison Added ajFileExtnTrim & ajFileDirExtnTrim
-** @modified $Date: 2013/01/31 13:25:12 $ by $Author: rice $
+** @modified $Date: 2012/07/02 16:51:49 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1027,7 +1027,6 @@ static AjPFile fileNew(void)
     thys->Name = ajStrNew();
     thys->Printname = ajStrNew();
     thys->Buff = ajStrNewRes(fileBuffSize);
-    thys->Buffsize = fileBuffSize;
     thys->List = NULL;
     thys->End = ajFalse;
 
@@ -5787,7 +5786,8 @@ void ajOutfileReset(AjPOutfile outf)
 
 /* @func ajFilenameExists *****************************************************
 **
-** Returns true if file exists
+** Returns true if file exists and is read or write or executable by the user
+** as determined by AJ_FILE_R AJ_FILE_W AJ_FILE_X file modes
 **
 ** @param [r] filename [const AjPStr] Filename.
 ** @return [AjBool] ajTrue on success
@@ -6062,24 +6062,24 @@ AjBool ajFilenameTestExclude(const AjPStr filename,
     {
         ajStrTokenAssignC(&handle, include, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token) ||
                ajStrMatchWildS(fileNameTmp, token))
                 ret = ajTrue;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     if(ajStrGetLen(exclude))
     {   /* nokeep, test exclude last */
         ajStrTokenAssignC(&handle, exclude, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token) ||
                ajStrMatchWildS(fileNameTmp, token))
                 ret = ajFalse;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     ajStrTokenDel(&handle);
@@ -6128,22 +6128,22 @@ AjBool ajFilenameTestExcludePath(const AjPStr filename,
     {
         ajStrTokenAssignC(&handle, include, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token))
                 ret = ajTrue;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     if(ajStrGetLen(exclude))
     {   /* nokeep, test exclude last */
         ajStrTokenAssignC(&handle, exclude, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token))
                 ret = ajFalse;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     ajStrTokenDel(&handle);
@@ -6194,24 +6194,24 @@ AjBool ajFilenameTestInclude(const AjPStr filename,
         /* keep, so test exclude first */
         ajStrTokenAssignC(&handle, exclude, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token) ||
                ajStrMatchWildS(fileNameTmp, token))
                 ret = ajFalse;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     if(ajStrGetLen(include))
     {
         ajStrTokenAssignC(&handle, include, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token) ||
                ajStrMatchWildS(fileNameTmp, token))
                 ret = ajTrue;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     ajStrTokenDel(&handle);
@@ -6259,22 +6259,22 @@ AjBool ajFilenameTestIncludePath(const AjPStr filename,
         /* keep, so test exclude first */
         ajStrTokenAssignC(&handle, exclude, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token))
                 ret = ajFalse;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     if(ajStrGetLen(include))
     {
         ajStrTokenAssignC(&handle, include, " \t,;\n");
 
-        while(ajStrTokenNextParse(handle, &token))
+        while(ajStrTokenNextParse(&handle, &token))
             if(ajStrMatchWildS(filename, token))
                 ret = ajTrue;
 
-        ajStrTokenReset(handle);
+        ajStrTokenReset(&handle);
     }
 
     ajStrTokenDel(&handle);
@@ -6931,250 +6931,6 @@ AjBool ajFilenameTrimPathExt(AjPStr* Pfilename)
 
 
 
-/* @datasection [AjPStr] Filename wildcard functions **************************
-**
-** Functions operating on strings containing filenames with possible wildcards
-**
-** @nam2rule Filewildname Operations on wildcard filename strings
-**
-******************************************************************************/
-
-
-
-
-/* @section Filename tests ****************************************************
-**
-** Tests on filenames and searching the file system
-**
-** @nam3rule Exists tests whether file exists in current directory
-** @nam4rule Dir Tests whether file exists and is a directory
-**
-** @argrule * wildname [const AjPStr] Filename string
-** @argrule Dir path [const AjPStr] Directory path
-**
-** @valrule Exists [AjBool] True if file exists with any requested access
-** @fcategory use
-**
-** @fdata [AjPStr]
-**
-******************************************************************************/
-
-
-
-
-/* @func ajFilewildnameExists *************************************************
-**
-** Returns true if wildcard filename matches an existing file
-**
-** @param [r] wildname [const AjPStr] Wildcard filename.
-** @return [AjBool] ajTrue on success
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajFilewildnameExists(const AjPStr wildname)
-{
-    AjBool ret = ajFalse;
-
-    AjPStr userstr = NULL;
-    AjPStr reststr = NULL;
-
-    AjPStr dirname        = NULL;
-    AjPStr wildfilename   = NULL;
-
-    char *hdir = NULL;
-
-    ajDebug("ajFilewildnameExists '%S'\n", wildname);
-
-    if(ajStrMatchC(wildname, "stdin"))
-        return ajTrue;
-
-    if(ajStrGetCharLast(wildname) == '|')   /* pipe character at end */
-        return ajTrue;
-
-    /* keep a copy of the filename */
-
-    ajStrAssignS(&fileNameTmp, wildname);
-
-    /* replace ~user/ or ~/ with directory */
-
-    if(ajStrGetCharFirst(fileNameTmp) == '~')
-    {
-        ajDebug("starts with '~'\n");
-
-        if(!fileUserExp)
-            fileUserExp = ajRegCompC("^~([^/\\\\]*)");
-
-        ajRegExec(fileUserExp, fileNameTmp);
-        ajRegSubI(fileUserExp, 1, &userstr);
-        ajRegPost(fileUserExp, &reststr);
-        ajDebug("  user: '%S' rest: '%S'\n", userstr, reststr);
-
-        if(ajStrGetLen(userstr))
-        {
-            /* username specified */
-            hdir = ajSysGetHomedirFromName(ajStrGetPtr(userstr));
-
-            if(!hdir)
-            {
-                ajStrDel(&userstr);
-                ajStrDelStatic(&fileNameTmp);
-                ajStrDel(&reststr);
-
-                return ajFalse;
-            }
-
-            ajFmtPrintS(&fileNameTmp, "%s%S", hdir, reststr);
-            AJFREE(hdir);
-
-            ajDebug("use getpwnam: '%S'\n", fileNameTmp);
-        }
-        else
-        {
-            /* just ~/ */
-            hdir = ajSysGetHomedir();
-
-            if(hdir)
-            {
-                ajFmtPrintS(&fileNameTmp, "%s%S", hdir, reststr);
-                AJFREE(hdir);
-            }
-            else
-                ajFmtPrintS(&fileNameTmp,"%S",reststr);
-
-            ajDebug("use HOME: '%S'\n", fileNameTmp);
-        }
-
-        ajStrDel(&userstr);
-        ajStrDel(&reststr);
-    }
-
-
-    if(!fileWildExp)
-        fileWildExp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
-
-    /* wildcard file names (directory names do not allow wildcards) */
-
-    if(ajRegExec(fileWildExp, fileNameTmp))
-    {
-        ajRegSubI(fileWildExp, 1, &dirname);
-        ajRegSubI(fileWildExp, 2, &wildfilename);
-        ajDebug("wild dir '%S' files '%S'\n", dirname, wildfilename);
-        ret = ajFilewildnameExistsDir(wildfilename, dirname);
-        ajStrDelStatic(&fileNameTmp);
-        ajStrDel(&dirname);
-        ajStrDel(&wildfilename);
-
-        return ret;
-    }
-
-#ifdef WIN32
-    if(ajStrMatchC(wildname, "/dev/null"))
-    {
-        ajStrDelStatic(&fileNameTmp);
-        return ajTrue;
-    }
-    else
-#endif /* WIN32 */
-
-    ret = ajFilenameExists(fileNameTmp);
-    ajStrDelStatic(&fileNameTmp);
-
-    return ret;
-}
-
-
-
-
-/* @func ajFilewildnameExistsDir **********************************************
-**
-** Opens directory "dir"
-** Looks for file(s) matching wildcard filename
-**
-** @param [r] wildname [const AjPStr] Wildcard filename.
-** @param [r] path [const AjPStr] Directory
-** @return [AjBool] True if one or more files matched.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajFilewildnameExistsDir(const AjPStr wildname, const AjPStr path)
-{
-    DIR* dp;
-#if defined(AJ_IRIXLF)
-    struct dirent64 *de;
-#else /* !AJ_IRIXLF */
-    struct dirent* de;
-#endif /* AJ_IRIXLF */
-
-#ifdef _POSIX_C_SOURCE
-    char buf[sizeof(struct dirent)+MAXNAMLEN];
-#endif /* _POSIX_C_SOURCE */
-
-    if(ajStrGetLen(path))
-        ajStrAssignS(&fileDirfixTmp, path);
-    else
-        ajStrAssignC(&fileDirfixTmp, CURRENT_DIR);
-
-    if(ajStrGetCharLast(fileDirfixTmp) != SLASH_CHAR)
-        ajStrAppendC(&fileDirfixTmp, SLASH_STRING);
-
-    dp = fileOpenDir(&fileDirfixTmp);
-
-    if(!dp)
-        return ajFalse;
-
-    while(
-#if defined(AJ_IRIXLF)
-#ifdef _POSIX_C_SOURCE
-        !readdir64_r(dp,(struct dirent64 *)buf,&de)
-#else /* !_POSIX_C_SOURCE */
-        (de=readdir64(dp))
-#endif /* _POSIX_C_SOURCE */
-#else /* !AJ_IRIXLF */
-#ifdef _POSIX_C_SOURCE
-        !readdir_r(dp,(struct dirent *)buf,&de)
-#else /* _POSIX_C_SOURCE */
-        (de=readdir(dp))
-#endif /* _POSIX_C_SOURCE */
-#endif /* AJ_IRIXLF */
-          )
-    {
-#ifdef _POSIX_C_SOURCE
-        if(!de)
-            break;
-#endif /* _POSIX_C_SOURCE */
-        /* skip deleted files with inode zero */
-#ifndef __CYGWIN__
-        if(!de->d_ino)
-            continue;
-#endif /* !__CYGWIN__ */
-
-        if(ajCharMatchC(de->d_name, "."))
-            continue;
-
-        if(ajCharMatchC(de->d_name, ".."))
-            continue;
-
-        if(!ajCharMatchWildS(de->d_name, wildname))
-            continue;
-
-        ajDebug("accept '%s'\n", de->d_name);
-        closedir(dp);
-        return ajTrue;
-    }
-
-    ajDebug("no files for '%S' '%S'\n", path, wildname);
-    closedir(dp);
-
-    return ajFalse;
-}
-
-
-
-
 /* @datasection [AjPStr] Directory name functions *****************************
 **
 ** Functions operating on strings containing directory names
@@ -7347,14 +7103,16 @@ AjBool ajDirnameFixExists(AjPStr* Pdirname)
 
 AjBool ajDirnameUp(AjPStr* Pdirname)
 {
+    AjPStr tmpdir = NULL;
     AjBool modded = ajFalse;
 
     const char *p;
     const char *q;
     ajint len;
 
-    len = ajStrGetLen(*Pdirname);
-    p   = ajStrGetPtr(*Pdirname);
+    ajStrAssignS(&tmpdir, *Pdirname);
+    len = ajStrGetLen(tmpdir);
+    p   = ajStrGetPtr(tmpdir);
     q   = p + len -2;
 
     if(q > p)
@@ -7367,10 +7125,12 @@ AjBool ajDirnameUp(AjPStr* Pdirname)
 
         if(q-p > 1)
         {
-            ajStrCutEnd(Pdirname, len-(q-p)-1);
+            ajStrAssignSubC(Pdirname,p,0,q-p);
             modded = ajTrue;
         }
     }
+
+    ajStrDel(&tmpdir);
 
     return modded;
 }

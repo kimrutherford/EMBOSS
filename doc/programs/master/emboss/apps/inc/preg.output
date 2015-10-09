@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: preg
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
@@ -14,6 +14,19 @@
 # Report_file: arf3_rat.preg
 ########################################
 
+#=======================================
+#
+# Sequence: ARF3_RAT     from: 1   to: 181
+# HitCount: 0
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern Sequence
+
+#---------------------------------------
+#---------------------------------------
 #=======================================
 #
 # Sequence: UBR5_RAT     from: 1   to: 2788
@@ -32,7 +45,7 @@
 #---------------------------------------
 # Total_sequences: 2
 # Total_length: 2969
-# Reported_sequences: 1
+# Reported_sequences: 2
 # Reported_hitcount: 1
 #---------------------------------------
 </pre>

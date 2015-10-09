@@ -79,7 +79,7 @@ Created pepwindow.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a hydropathy plot for a protein sequence
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -91,7 +91,7 @@ Version: EMBOSS:6.6.0.0
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
-   -window             integer    [19] Window size (Integer 1 or more)
+   -window             integer    [19] Window size (Integer from 1 to 200)
    -normalize          boolean    [N] Normalize data values
 
    Advanced (Unprompted) qualifiers: (none)
@@ -107,7 +107,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -193,7 +192,7 @@ Version: EMBOSS:6.6.0.0
 <td>-window</td>
 <td>integer</td>
 <td>Window size</td>
-<td>Integer 1 or more</td>
+<td>Integer from 1 to 200</td>
 <td>19</td>
 </tr>
 
@@ -290,14 +289,6 @@ Version: EMBOSS:6.6.0.0
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

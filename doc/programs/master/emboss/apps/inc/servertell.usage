@@ -11,8 +11,7 @@ Display information about a public server
 # access levels id: Yes query: Yes all: Yes
 # scope: text
 # cache file: /homes/user/local/share/EMBOSS/server.srs
-# databases: 16
-# use -full to see complete list of databases
+# databases: 21
 
 SERVER srs [
    method:         "srswww"

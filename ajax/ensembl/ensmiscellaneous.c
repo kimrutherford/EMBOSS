@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.63 $
+** @version $Revision: 1.61 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -61,13 +61,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic miscellaneoussetadaptorKTablenames ****************************
+/* @conststatic miscellaneoussetadaptorKTables ********************************
 **
 ** Array of Ensembl Miscellaneous Set Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const miscellaneoussetadaptorKTablenames[] =
+static const char *const miscellaneoussetadaptorKTables[] =
 {
     "misc_set",
     (const char *) NULL
@@ -76,13 +76,13 @@ static const char *const miscellaneoussetadaptorKTablenames[] =
 
 
 
-/* @conststatic miscellaneoussetadaptorKColumnnames ***************************
+/* @conststatic miscellaneoussetadaptorKColumns *******************************
 **
 ** Array of Ensembl Miscellaneous Set Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const miscellaneoussetadaptorKColumnnames[] =
+static const char *const miscellaneoussetadaptorKColumns[] =
 {
     "misc_set.misc_set_id",
     "misc_set.code",
@@ -95,13 +95,13 @@ static const char *const miscellaneoussetadaptorKColumnnames[] =
 
 
 
-/* @conststatic miscellaneousfeatureadaptorKTablenames ************************
+/* @conststatic miscellaneousfeatureadaptorKTables ****************************
 **
 ** Array of Ensembl Miscellaneous Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const miscellaneousfeatureadaptorKTablenames[] =
+static const char *const miscellaneousfeatureadaptorKTables[] =
 {
     "misc_feature",
     "misc_feature_misc_set",
@@ -112,13 +112,13 @@ static const char *const miscellaneousfeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic miscellaneousfeatureadaptorKColumnnames ***********************
+/* @conststatic miscellaneousfeatureadaptorKColumns ***************************
 **
 ** Array of Ensembl Miscellaneous Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const miscellaneousfeatureadaptorKColumnnames[] =
+static const char *const miscellaneousfeatureadaptorKColumns[] =
 {
     "misc_feature.misc_feature_id",
     "misc_feature.seq_region_id",
@@ -134,13 +134,13 @@ static const char *const miscellaneousfeatureadaptorKColumnnames[] =
 
 
 
-/* @conststatic miscellaneousfeatureadaptorKLeftjoins *************************
+/* @conststatic miscellaneousfeatureadaptorKLeftjoin **************************
 **
-** Array of Ensembl Miscellaneous Feature Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Miscellaneous Feature Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin miscellaneousfeatureadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin miscellaneousfeatureadaptorKLeftjoin[] =
 {
     {
         "misc_feature_misc_set",
@@ -150,7 +150,7 @@ static const EnsOBaseadaptorLeftjoin miscellaneousfeatureadaptorKLeftjoins[] =
         "misc_attrib",
         "misc_feature.misc_feature_id = misc_attrib.misc_feature_id"
     },
-    {(const char *) NULL, (const char *) NULL}
+    {NULL, NULL}
 };
 
 
@@ -158,7 +158,7 @@ static const EnsOBaseadaptorLeftjoin miscellaneousfeatureadaptorKLeftjoins[] =
 
 /* @conststatic miscellaneousfeatureadaptorKFinalcondition ********************
 **
-** Ensembl Miscellaneous Feature Adaptor SQL SELECT final condition
+** Ensembl Miscellaneous Feature Adaptor SQL final conditions
 **
 ******************************************************************************/
 
@@ -271,7 +271,7 @@ static AjBool miscellaneousfeatureadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::MiscSet
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -480,7 +480,14 @@ void ensMiscellaneoussetDel(EnsPMiscellaneousset *Pms)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pms) || --pthis->Use)
+    if (!*Pms)
+        return;
+
+    pthis = *Pms;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pms = NULL;
 
@@ -491,7 +498,9 @@ void ensMiscellaneoussetDel(EnsPMiscellaneousset *Pms)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Description);
 
-    ajMemFree((void **) Pms);
+    AJFREE(pthis);
+
+    *Pms = NULL;
 
     return;
 }
@@ -935,12 +944,11 @@ AjBool ensMiscellaneoussetTrace(const EnsPMiscellaneousset ms, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl Miscellaneous Set object.
+** Functions for calculating values of an Ensembl Miscellaneous Set object.
 **
 ** @fdata [EnsPMiscellaneousset]
 **
-** @nam3rule Calculate Calculate Ensembl Miscellaneous Set information
+** @nam3rule Calculate Calculate Ensembl Miscellaneous Set values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * ms [const EnsPMiscellaneousset] Ensembl Miscellaneous Set
@@ -1207,7 +1215,7 @@ AjBool ensListMiscellaneoussetSortIdentifierDescending(AjPList mss)
 **
 ** @cc Bio::EnsEMBL::DBSQL::MiscSetAdaptor
 ** @cc CVS Revision: 1.16
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1383,8 +1391,8 @@ EnsPMiscellaneoussetadaptor ensMiscellaneoussetadaptorNew(
 
     msa->Adaptor = ensBaseadaptorNew(
         dba,
-        miscellaneoussetadaptorKTablenames,
-        miscellaneoussetadaptorKColumnnames,
+        miscellaneoussetadaptorKTables,
+        miscellaneoussetadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1459,7 +1467,7 @@ static AjBool miscellaneoussetadaptorCacheInit(
         return ajFalse;
     else
     {
-        msa->CacheByIdentifier = ajTableuintNew(0U);
+        msa->CacheByIdentifier = ajTableuintNew(0);
 
         ajTableSetDestroyvalue(
             msa->CacheByIdentifier,
@@ -1470,7 +1478,7 @@ static AjBool miscellaneoussetadaptorCacheInit(
         return ajFalse;
     else
     {
-        msa->CacheByCode = ajTablestrNew(0U);
+        msa->CacheByCode = ajTablestrNew(0);
 
         ajTableSetDestroyvalue(
             msa->CacheByCode,
@@ -1479,12 +1487,11 @@ static AjBool miscellaneoussetadaptorCacheInit(
 
     mss = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(
-        ensMiscellaneoussetadaptorGetBaseadaptor(msa),
-        (const AjPStr) NULL,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        mss);
+    ensBaseadaptorFetchAllbyConstraint(msa->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       mss);
 
     while (ajListPop(mss, (void **) &ms))
     {
@@ -1757,14 +1764,18 @@ void ensMiscellaneoussetadaptorDel(EnsPMiscellaneoussetadaptor *Pmsa)
                 *Pmsa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pmsa))
+    if (!*Pmsa)
         return;
+
+    pthis = *Pmsa;
 
     ensMiscellaneoussetadaptorCacheClear(pthis);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    ajMemFree((void **) Pmsa);
+    AJFREE(pthis);
+
+    *Pmsa = NULL;
 
     return;
 }
@@ -1783,7 +1794,7 @@ void ensMiscellaneoussetadaptorDel(EnsPMiscellaneoussetadaptor *Pmsa)
 ** @nam4rule Baseadaptor     Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * msa [EnsPMiscellaneoussetadaptor]
+** @argrule * msa [const EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor]
@@ -1802,7 +1813,7 @@ void ensMiscellaneoussetadaptorDel(EnsPMiscellaneoussetadaptor *Pmsa)
 ** Get the Ensembl Base Adaptor member of an
 ** Ensembl Miscellaneous Set Adaptor.
 **
-** @param [u] msa [EnsPMiscellaneoussetadaptor]
+** @param [r] msa [const EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
@@ -1812,7 +1823,7 @@ void ensMiscellaneoussetadaptorDel(EnsPMiscellaneoussetadaptor *Pmsa)
 ******************************************************************************/
 
 EnsPBaseadaptor ensMiscellaneoussetadaptorGetBaseadaptor(
-    EnsPMiscellaneoussetadaptor msa)
+    const EnsPMiscellaneoussetadaptor msa)
 {
     return (msa) ? msa->Adaptor : NULL;
 }
@@ -1825,7 +1836,7 @@ EnsPBaseadaptor ensMiscellaneoussetadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Miscellaneous Set Adaptor.
 **
-** @param [u] msa [EnsPMiscellaneoussetadaptor]
+** @param [r] msa [const EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
@@ -1835,10 +1846,9 @@ EnsPBaseadaptor ensMiscellaneoussetadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensMiscellaneoussetadaptorGetDatabaseadaptor(
-    EnsPMiscellaneoussetadaptor msa)
+    const EnsPMiscellaneoussetadaptor msa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensMiscellaneoussetadaptorGetBaseadaptor(msa));
+    return (msa) ? ensBaseadaptorGetDatabaseadaptor(msa->Adaptor) : NULL;
 }
 
 
@@ -1997,8 +2007,6 @@ AjBool ensMiscellaneoussetadaptorFetchByCode(
     if (!Pms)
         return ajFalse;
 
-    *Pms = NULL;
-
     /*
     ** Initially, search the code cache.
     ** For any object returned by the AJAX Table the reference counter needs
@@ -2019,7 +2027,7 @@ AjBool ensMiscellaneoussetadaptorFetchByCode(
 
     /* In case of a cache miss, query the database. */
 
-    dba = ensMiscellaneoussetadaptorGetDatabaseadaptor(msa);
+    dba = ensBaseadaptorGetDatabaseadaptor(msa->Adaptor);
 
     ensDatabaseadaptorEscapeC(dba, &txtcode, code);
 
@@ -2029,12 +2037,11 @@ AjBool ensMiscellaneoussetadaptorFetchByCode(
 
     mss = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(
-        ensMiscellaneoussetadaptorGetBaseadaptor(msa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        mss);
+    ensBaseadaptorFetchAllbyConstraint(msa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       mss);
 
     if (ajListGetLength(mss) > 1)
         ajWarn("ensMiscellaneoussetadaptorFetchByCode got more than one "
@@ -2083,7 +2090,11 @@ AjBool ensMiscellaneoussetadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPMiscellaneousset *Pms)
 {
-    AjBool result = AJFALSE;
+    AjPList mss = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPMiscellaneousset ms = NULL;
 
     if (!msa)
         return ajFalse;
@@ -2093,8 +2104,6 @@ AjBool ensMiscellaneoussetadaptorFetchByIdentifier(
 
     if (!Pms)
         return ajFalse;
-
-    *Pms = NULL;
 
     /*
     ** Initially, search the identifier cache.
@@ -2117,14 +2126,37 @@ AjBool ensMiscellaneoussetadaptorFetchByIdentifier(
 
     /* For a cache miss query the database. */
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensMiscellaneoussetadaptorGetBaseadaptor(msa),
-        identifier,
-        (void **) Pms);
+    constraint = ajFmtStr("misc_set.misc_set_id = %u", identifier);
+
+    mss = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(msa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       mss);
+
+    if (ajListGetLength(mss) > 1)
+        ajWarn("ensMiscellaneoussetadaptorFetchByIdentifier got more "
+               "than one Ensembl Miscellaneous Set for (PRIMARY KEY) "
+               "identifier %u.\n", identifier);
+
+    ajListPop(mss, (void **) Pms);
 
     miscellaneoussetadaptorCacheInsert(msa, Pms);
 
-    return result;
+    while (ajListPop(mss, (void **) &ms))
+    {
+        miscellaneoussetadaptorCacheInsert(msa, &ms);
+
+        ensMiscellaneoussetDel(&ms);
+    }
+
+    ajListFree(&mss);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
 }
 
 
@@ -2137,7 +2169,7 @@ AjBool ensMiscellaneoussetadaptorFetchByIdentifier(
 **
 ** @cc Bio::EnsEMBL::MiscFeature
 ** @cc CVS Revision: 1.19
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2382,7 +2414,14 @@ void ensMiscellaneousfeatureDel(EnsPMiscellaneousfeature *Pmf)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pmf) || --pthis->Use)
+    if (!*Pmf)
+        return;
+
+    pthis = *Pmf;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pmf = NULL;
 
@@ -2405,7 +2444,9 @@ void ensMiscellaneousfeatureDel(EnsPMiscellaneousfeature *Pmf)
 
     ajListFree(&pthis->Miscellaneoussets);
 
-    ajMemFree((void **) Pmf);
+    AJFREE(pthis);
+
+    *Pmf = NULL;
 
     return;
 }
@@ -2844,12 +2885,11 @@ AjBool ensMiscellaneousfeatureTrace(const EnsPMiscellaneousfeature mf,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl Miscellaneous Feature object.
+** Functions for calculating values of an Ensembl Miscellaneous Feature object.
 **
 ** @fdata [EnsPMiscellaneousfeature]
 **
-** @nam3rule Calculate Calculate Ensembl Miscellaneous Feature information
+** @nam3rule Calculate Calculate Ensembl Miscellaneous Feature values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * mf [const EnsPMiscellaneousfeature] Ensembl Miscellaneous Feature
@@ -2968,7 +3008,7 @@ size_t ensMiscellaneousfeatureCalculateMemsize(
 **
 ** @cc Bio::EnsEMBL::MiscFeature::get_all_Attributes
 ** @param [u] mf [EnsPMiscellaneousfeature] Ensembl Miscellaneous Feature
-** @param [rN] code [const AjPStr] Ensembl Attribute code
+** @param [r] code [const AjPStr] Ensembl Attribute code
 ** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3027,7 +3067,7 @@ AjBool ensMiscellaneousfeatureFetchAllAttributes(
 **
 ** @cc Bio::EnsEMBL::MiscFeature::get_all_MiscSets
 ** @param [u] mf [EnsPMiscellaneousfeature] Ensembl Miscellaneous Feature
-** @param [rN] code [const AjPStr] Ensembl Miscellaneous Set code
+** @param [r] code [const AjPStr] Ensembl Miscellaneous Set code
 ** @param [u] mss [AjPList] AJAX List of Ensembl Miscellanaeous Set objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3520,8 +3560,8 @@ AjBool ensListMiscellaneousfeatureSortStartDescending(AjPList mfs)
 ** Ensembl Miscellaneous Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::MiscFeatureAdaptor
-** @cc CVS Revision: 1.27
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -3585,8 +3625,8 @@ static AjBool miscellaneousfeatureadaptorHasAttribute(AjPTable attributes,
 ** Check whether an Ensembl Miscellaneous Set has already been indexed for a
 ** particular Ensembl Miscellaneous Feature.
 **
-** @param [u] sets [AjPTable] AJAX Table of AJAX unsigned integer
-** (Ensembl Miscellaneous Set identifier) objects
+** @param [u] sets [AjPTable] AJAX Table of AJAX unsigned integers
+** (Ensembl Miscellaneous Set identifiers)
 ** @param [r] msid [ajuint] Ensembl Miscellaneous Set identifier
 **
 ** @return [AjBool] ajTrue: A particular Ensembl Miscellaneous Set identifier
@@ -3597,9 +3637,8 @@ static AjBool miscellaneousfeatureadaptorHasAttribute(AjPTable attributes,
 **
 ** @release 6.3.0
 ** @@
-** This function keeps an AJAX Table of AJAX unsigned integer
-** (Ensembl Miscellaneous Set identifier) object key data and
-** AJAX Boolean object value data.
+** This function keeps an AJAX Table of Miscellaneous Set identifier unsigned
+** integer key data and AjBool value data.
 ******************************************************************************/
 
 static AjBool miscellaneousfeatureadaptorHasMiscellaneousset(AjPTable sets,
@@ -3716,11 +3755,11 @@ static AjBool miscellaneousfeatureadaptorFetchAllbyStatement(
     mfa = ensRegistryGetMiscellaneousfeatureadaptor(dba);
     msa = ensRegistryGetMiscellaneoussetadaptor(dba);
 
-    attributes = ajTablestrNew(0U);
+    attributes = ajTablestrNew(0);
 
     ajTableSetDestroyvalue(attributes, &ajMemFree);
 
-    sets = ajTableuintNew(0U);
+    sets = ajTableuintNew(0);
 
     ajTableSetDestroyvalue(sets, &ajMemFree);
 
@@ -3901,11 +3940,14 @@ static AjBool miscellaneousfeatureadaptorFetchAllbyStatement(
 EnsPMiscellaneousfeatureadaptor ensMiscellaneousfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensFeatureadaptorNew(
         dba,
-        miscellaneousfeatureadaptorKTablenames,
-        miscellaneousfeatureadaptorKColumnnames,
-        miscellaneousfeatureadaptorKLeftjoins,
+        miscellaneousfeatureadaptorKTables,
+        miscellaneousfeatureadaptorKColumns,
+        miscellaneousfeatureadaptorKLeftjoin,
         (const char *) NULL,
         miscellaneousfeatureadaptorKFinalcondition,
         &miscellaneousfeatureadaptorFetchAllbyStatement,
@@ -3965,7 +4007,7 @@ void ensMiscellaneousfeatureadaptorDel(
 {
     ensFeatureadaptorDel(Pmfa);
 
-    return;
+	return;
 }
 
 
@@ -3979,46 +4021,16 @@ void ensMiscellaneousfeatureadaptorDel(
 ** @fdata [EnsPMiscellaneousfeatureadaptor]
 **
 ** @nam3rule Get Return Ensembl Miscellaneous Feature Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 **
 ** @argrule * mfa [EnsPMiscellaneousfeatureadaptor]
 ** Ensembl Miscellaneous Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor]
 ** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensMiscellaneousfeatureadaptorGetBaseadaptor *************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Miscellaneous Feature Adaptor.
-**
-** @param [u] mfa [EnsPMiscellaneousfeatureadaptor]
-** Ensembl Miscellaneous Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensMiscellaneousfeatureadaptorGetBaseadaptor(
-    EnsPMiscellaneousfeatureadaptor mfa)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensMiscellaneousfeatureadaptorGetFeatureadaptor(mfa));
-}
 
 
 
@@ -4040,31 +4052,7 @@ EnsPBaseadaptor ensMiscellaneousfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensMiscellaneousfeatureadaptorGetDatabaseadaptor(
     EnsPMiscellaneousfeatureadaptor mfa)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensMiscellaneousfeatureadaptorGetFeatureadaptor(mfa));
-}
-
-
-
-
-/* @func ensMiscellaneousfeatureadaptorGetFeatureadaptor **********************
-**
-** Get the Ensembl Feature Adaptor member of an
-** Ensembl Miscellaneous Feature Adaptor.
-**
-** @param [u] mfa [EnsPMiscellaneousfeatureadaptor]
-** Ensembl Miscellaneous Feature Adaptor
-**
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
-**
-** @release 6.5.1
-** @@
-******************************************************************************/
-
-EnsPFeatureadaptor ensMiscellaneousfeatureadaptorGetFeatureadaptor(
-    EnsPMiscellaneousfeatureadaptor mfa)
-{
-    return mfa;
+    return ensFeatureadaptorGetDatabaseadaptor(mfa);
 }
 
 
@@ -4152,7 +4140,8 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbyAttributecodevalue(
     AjPStr constraint = NULL;
     AjPStr statement  = NULL;
 
-    EnsPAttributetype at = NULL;
+    EnsPAttributetype        at  = NULL;
+    EnsPAttributetypeadaptor ata = NULL;
 
     EnsPBaseadaptor ba = NULL;
 
@@ -4165,23 +4154,22 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbyAttributecodevalue(
         ajFatal("ensMiscellaneousfeatureadaptorFetchAllbyAttributecodevalue "
                 "requires an Ensembl Attribute code.\n");
 
-    ba  = ensMiscellaneousfeatureadaptorGetBaseadaptor(mfa);
+    ba = ensFeatureadaptorGetBaseadaptor(mfa);
 
-    dba = ensBaseadaptorGetDatabaseadaptor(ba);
+    dba = ensFeatureadaptorGetDatabaseadaptor(mfa);
 
-    ensAttributetypeadaptorFetchByCode(
-        ensRegistryGetAttributetypeadaptor(dba),
-        code,
-        &at);
+    ata = ensRegistryGetAttributetypeadaptor(dba);
+
+    ensAttributetypeadaptorFetchByCode(ata, code, &at);
 
     if (!at)
         return ajTrue;
 
     /*
     ** Need to do two queries so that all of the identifiers come back with
-    ** the Ensembl Feature objects. The problem with adding attribute
-    ** constraints to filter the misc_features, which come back is that not
-    ** all of the Ensembl Attribute objects will come back
+    ** the Feature objects. The problem with adding attrib constraints to
+    ** filter the misc_features, which come back is that not all of the
+    ** Attribute objects will come back
     */
 
     statement = ajFmtStr(
@@ -4222,8 +4210,7 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbyAttributecodevalue(
 
     /*
     ** Large queries are split into smaller ones on the basis of the maximum
-    ** number of identifier instances configured in the
-    ** Ensembl Base Adaptor module.
+    ** number of identifiers configured in the Ensembl Base Adaptor module.
     ** This ensures that MySQL is faster and the maximum query size is not
     ** exceeded.
     */
@@ -4338,7 +4325,7 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbySlicecodes(
     if (!mfs)
         return ajFalse;
 
-    dba = ensMiscellaneousfeatureadaptorGetDatabaseadaptor(mfa);
+    dba = ensFeatureadaptorGetDatabaseadaptor(mfa);
 
     msa = ensRegistryGetMiscellaneoussetadaptor(dba);
 
@@ -4400,20 +4387,19 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbySlicecodes(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for retrieving objects releated to Ensembl Miscellaneous Feature
+** Functions for fetching objects releated to Ensembl Miscellaneous Feature
 ** objects from an Ensembl SQL database.
 **
 ** @fdata [EnsPMiscellaneousfeatureadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Miscellaneous Feature-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Miscellaneous Feature-releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Identifiers Fetch all SQL database-internal identifiers
 **
 ** @argrule * mfa [EnsPMiscellaneousfeatureadaptor]
 ** Ensembl Miscellaneous Feature Adaptor
 ** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer
-** (Ensembl Miscellaneous Feature identifier) objects
+** AJAX List of AJAX unsigned integer identifiers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4425,18 +4411,16 @@ AjBool ensMiscellaneousfeatureadaptorFetchAllbySlicecodes(
 
 /* @func ensMiscellaneousfeatureadaptorRetrieveAllIdentifiers *****************
 **
-** Retrieve all SQL database-internal identifier objects of
+** Fetch all SQL database-internal identifiers of
 ** Ensembl Miscellaneous Feature objects.
 **
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX List.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::MiscFeatureAdaptor::list_dbIDs
 ** @param [u] mfa [EnsPMiscellaneousfeatureadaptor]
 ** Ensembl Miscellaneous Feature Adaptor
-** @param [u] identifiers [AjPList]
-** AJAX List of AJAX unsigned integer
-** (Ensembl Miscellaneous Feature identifier) objects
+** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4452,19 +4436,22 @@ AjBool ensMiscellaneousfeatureadaptorRetrieveAllIdentifiers(
 
     AjPStr table = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!mfa)
         return ajFalse;
 
     if (!identifiers)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(mfa);
+
     table = ajStrNewC("misc_feature");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(
-        ensMiscellaneousfeatureadaptorGetBaseadaptor(mfa),
-        table,
-        (AjPStr) NULL,
-        identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 

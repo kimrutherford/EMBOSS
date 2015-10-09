@@ -120,7 +120,7 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find antigenic sites in proteins
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -144,7 +144,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -317,14 +316,6 @@ Version: EMBOSS:6.6.0.0
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -747,7 +738,7 @@ By default <b>antigenic</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_takru
 # Report_format: motif
@@ -860,9 +851,9 @@ Max_score_pos at "*"
 <pre>
 ##gff-version 3
 ##sequence-region ACTB1_TAKRU 1 375
-#!Date 2013-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.6.0.0
+#!Source-version EMBOSS 6.5.6.0
 ACTB1_TAKRU	antigenic	epitope	214	222	1.207	.	.	ID=ACTB1_TAKRU.1;note=*pos 218
 ACTB1_TAKRU	antigenic	epitope	131	145	1.187	.	.	ID=ACTB1_TAKRU.2;note=*pos 137
 ACTB1_TAKRU	antigenic	epitope	5	12	1.166	.	.	ID=ACTB1_TAKRU.3;note=*pos 8

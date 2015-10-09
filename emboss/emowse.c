@@ -333,8 +333,8 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
 	    ptr->sdata=ajStrNew();
 	    ajStrRemoveWhiteExcess(&str);
 	    token = ajStrTokenNewC(str," \t\r\n");
-	    ajStrTokenNextParseC(token," \t\r\n",&ptr->sdata);
-	    ajStrTokenNextParseC(token," \t\r\n",&ptr->sdata);
+	    ajStrTokenNextParseC(&token," \t\r\n",&ptr->sdata);
+	    ajStrTokenNextParseC(&token," \t\r\n",&ptr->sdata);
 	    ajStrTokenDel(&token);
 	    ajListPush(l,(void *)ptr);
 	}
@@ -789,7 +789,7 @@ static ajint emowse_seq_comp(ajint bidx, ajint thys, const AjPSeq seq,
 
     token = ajStrTokenNewC(data[thys]->sdata," \r\t\n");
     
-    while(ajStrTokenNextParseC(token," \r\t\n",&result))
+    while(ajStrTokenNextParseC(&token," \r\t\n",&result))
     {
 	len = ajStrGetLen(result);
 	ajStrFmtUpper(&result);

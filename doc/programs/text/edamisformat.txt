@@ -38,7 +38,7 @@ Obo output file [edamisformat.obo]:
 Command line arguments
 
 Find EDAM ontology terms by is_format_of relation
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any
@@ -120,94 +120,63 @@ name: BioXSD
 namespace: format
 def: BioXSD XML format of basic bioinformatics types of data (sequence records,
 alignments, feature records, references to resources, and more).
-subset: bioinformatics
-subset: edam
 subset: formats
-synonym: "BioXSD XML format" EXACT []
-xref: http://bioxsd.org
-created_in: "beta12orEarlier"
-documentation: http://bioxsd.org
+synonym: "BioXSD XML format" EXACT [http://edamontology.org]
+xref: http://bioxsd.org {documentation=true}
+is_a: EDAM_format:2571 ! Raw sequence format
 is_a: EDAM_format:1919 ! Sequence record format
 is_a: EDAM_format:1920 ! Sequence feature annotation format
-is_a: EDAM_format:2332 ! XML
 is_a: EDAM_format:2555 ! Alignment format (XML)
-is_a: EDAM_format:2571 ! Raw sequence format
-relationship: is_format_of EDAM_data:0863 ! Sequence alignment
-relationship: is_format_of EDAM_data:1255 ! Feature record
+is_a: EDAM_format:2332 ! XML
 relationship: is_format_of EDAM_data:2044 ! Sequence
+relationship: is_format_of EDAM_data:1255 ! Feature record
+relationship: is_format_of EDAM_data:0863 ! Sequence alignment
 
 [Term]
-id: EDAM_format:2055
-name: Sequence assembly format
+id: EDAM_format:2202
+name: Sequence record full format
 namespace: format
-def: Format for sequence assembly data.
-subset: bioinformatics
-subset: edam
+def: Data format for a molecular sequence record, typically corresponding to a f
+ull entry from a molecular sequence database.
 subset: formats
-created_in: "beta12orEarlier"
-is_a: EDAM_format:2350 ! Format (typed)
-relationship: is_format_of EDAM_data:0925 ! Sequence assembly
-
-[Term]
-id: EDAM_format:2014
-name: Sequence-profile alignment format
-namespace: format
-def: Data format for a sequence-profile alignment.
-subset: bioinformatics
-subset: edam
-subset: formats
-created_in: "beta12orEarlier"
-is_a: EDAM_format:2350 ! Format (typed)
-relationship: is_format_of EDAM_data:0869 ! Sequence-profile alignment
+is_a: EDAM_format:1919 ! Sequence record format
+relationship: is_format_of EDAM_data:2201 ! Sequence record full
 
 [Term]
 id: EDAM_format:2068
 name: Sequence motif format
 namespace: format
 def: Format of a sequence motif.
+subset: formats
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:1353 ! Sequence motif
+
+[Term]
+id: EDAM_format:2067
+name: Sequence distance matrix format
+namespace: format
+def: Format of a matrix of genetic distances between molecular sequences.
+subset: formats
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:0870 ! Sequence distance matrix
+
+[Term]
+id: EDAM_format:2203
+name: Sequence record lite format
+namespace: format
+def: Data format for a molecular sequence record 'lite', typically molecular seq
+uence and minimal metadata, such as an identifier of the sequence and/or a comme
+nt.
+subset: formats
 
 
   [Part of this file has been deleted for brevity]
 
-relationship: is_format_of EDAM_data:1255 ! Feature record
-
-[Term]
-id: EDAM_format:2057
-name: Sequence trace format
 namespace: format
-def: Format for sequence trace data (i.e. including base call information).
-subset: bioinformatics
-subset: edam
+def: Format of a sequence annotation track.
 subset: formats
-created_in: "beta12orEarlier"
-is_a: EDAM_format:1919 ! Sequence record format
-relationship: is_format_of EDAM_data:0924 ! Sequence trace
-
-[Term]
-id: EDAM_format:2159
-name: Gene features (coding region) format
-namespace: format
-def: Format used for report on coding regions in nucleotide sequences.
-subset: bioinformatics
-subset: edam
-subset: formats
-created_in: "beta12orEarlier"
-is_a: EDAM_format:2031 ! Gene annotation format
-relationship: is_format_of EDAM_data:1313 ! Nucleic acid features (coding sequen
-ce)
-
-[Term]
-id: EDAM_format:2571
-name: Raw sequence format
-namespace: format
-def: Format of a raw molecular sequence (i.e. the alphabet used).
-subset: bioinformatics
-subset: edam
-subset: formats
-synonym: "Symbol_sequence" RELATED []
-created_in: "beta12orEarlier"
-is_a: EDAM_format:2350 ! Format (typed)
-relationship: is_format_of EDAM_data:0848 ! Raw sequence
+is_a: EDAM_format:1920 ! Sequence feature annotation format
+relationship: is_format_of EDAM_data:3002 ! Sequence annotation track
 
 [Term]
 id: EDAM_format:2920
@@ -215,12 +184,46 @@ name: Alignment format (pair only)
 namespace: format
 def: Data format for molecular sequence alignment information that can hold sequ
 ence alignment(s) of only 2 sequences.
-subset: bioinformatics
-subset: edam
 subset: formats
-created_in: "beta12orEarlier"
 is_a: EDAM_format:1921 ! Alignment format
 relationship: is_format_of EDAM_data:1381 ! Sequence alignment (pair)
+
+[Term]
+id: EDAM_format:2155
+name: Sequence features (repeats) format
+namespace: format
+def: Format used for map of repeats in molecular (typically nucleotide) sequence
+s.
+subset: formats
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:1299 ! Sequence features (repeats)
+
+[Term]
+id: EDAM_format:2921
+name: Sequence variation annotation format
+namespace: format
+def: Format of sequence variation annotation.
+subset: formats
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:0918 ! Nucleic acid features (variation)
+
+[Term]
+id: EDAM_format:2055
+name: Sequence assembly format
+namespace: format
+def: Format for sequence assembly data.
+subset: formats
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:0925 ! Sequence assembly
+
+[Term]
+id: EDAM_format:2057
+name: Sequence trace format
+namespace: format
+def: Format for sequence trace data (i.e. including base call information).
+subset: formats
+is_a: EDAM_format:1919 ! Sequence record format
+relationship: is_format_of EDAM_data:0924 ! Sequence trace
 
 
 Data files

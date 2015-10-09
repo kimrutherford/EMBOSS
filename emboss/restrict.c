@@ -1,15 +1,3 @@
-/*
-** notes
-** =====
-**
-** for solo fragments, need to set lengths as we sort.
-** Need similar array of cutsites (fa), reverse(fr), site# (fs) index (fi)
-** and match (fm)
-**
-** need to copy the list properly ... otherwise sorting for solofrags
-** changes the positions.
-*/
-
 /* @source restrict application
  **
  ** Reports restriction enzyme cleavage sites
@@ -48,13 +36,21 @@
 
 static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 				AjPFeattable TabRpt, AjPList l,
-				ajuint hits, ajint begin, ajint end,
+				ajint hits, ajint begin, ajint end,
 				AjBool ambiguity, ajint mincut, ajint maxcut,
 				AjBool plasmid, AjBool blunt, AjBool sticky,
 				ajint sitelen, AjBool limit,
 				const AjPTable table,
 				AjBool alpha, AjBool frags,
 				AjBool ifrag);
+static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
+			       ajint hits, ajint begin, ajint end,
+			       AjBool ambiguity, ajint mincut, ajint maxcut,
+			       AjBool plasmid, AjBool blunt, AjBool sticky,
+			       ajint sitelen, AjBool limit,
+			       const AjPTable table,
+			       AjBool alpha, AjBool frags,
+			       AjBool nameit);
 static void restrict_read_equiv(AjPFile equfile, AjPTable table,
 				AjBool commercial);
 static void restrict_read_file_of_enzyme_names(AjPStr *enzymes);
@@ -75,6 +71,7 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq seq     = NULL;
     AjPStr enzymes = NULL;
+    AjPFile outf   = NULL;
     AjPReport report    = NULL;
     AjPFeattable TabRpt = NULL;
     ajint begin;
@@ -89,6 +86,7 @@ int main(int argc, char **argv)
     AjBool ambiguity;
     AjBool plasmid;
     AjBool commercial;
+    AjBool nameit;
     AjBool limit;
     AjBool frags;
     AjBool methyl;
@@ -126,10 +124,15 @@ int main(int argc, char **argv)
     limit      = ajAcdGetBoolean("limit");
     frags      = ajAcdGetBoolean("fragments");
     methyl     = ajAcdGetBoolean("methylation");
+    nameit     = ajAcdGetBoolean("name");
     enzfile    = ajAcdGetDatafile("datafile");
     methfile   = ajAcdGetDatafile("mfile");
     ifrag      = ajAcdGetBoolean("solofragment");
     
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+
     if (!blunt  && !sticky)
 	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
 
@@ -199,6 +202,12 @@ int main(int argc, char **argv)
 				plasmid,blunt,sticky,sitelen,
 				limit,table,
 				alpha,frags,ifrag);
+	    if(outf)
+		restrict_printHits(outf,l,name,hits,begin,end,
+				   ambiguity,min,max,
+				   plasmid,blunt,sticky,sitelen,
+				   limit,table,
+				   alpha,frags,nameit);
 	    ajStrDel(&name);
 	}
 	else
@@ -216,6 +225,7 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
     ajFileClose(&methfile);
+     ajFileClose(&outf);
 
     ajReportClose(report);
     ajReportDel(&report);
@@ -233,6 +243,200 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic restrict_printHits *********************************************
+**
+** Print restriction sites
+**
+** @param [w] outf [AjPFile] outfile
+** @param [u] l [AjPList] hits
+** @param [r] name [const AjPStr] sequence name
+** @param [r] hits [ajint] number of hits
+** @param [r] begin [ajint] start position
+** @param [r] end [ajint] end position
+** @param [r] ambiguity [AjBool] allow ambiguities
+** @param [r] mincut [ajint] minimum cuts
+** @param [r] maxcut [ajint] maximum cuts
+** @param [r] plasmid [AjBool] circular
+** @param [r] blunt [AjBool] allow blunt cutters
+** @param [r] sticky [AjBool] allow sticky cutters
+** @param [r] sitelen [ajint] length of cut site
+** @param [r] limit [AjBool] limit count
+** @param [r] table [const AjPTable] supplier table
+** @param [r] alpha [AjBool] alphabetic sort
+** @param [r] frags [AjBool] show fragment lengths
+** @param [r] nameit [AjBool] show name
+** @@
+******************************************************************************/
+
+static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
+			       ajint hits, ajint begin, ajint end,
+			       AjBool ambiguity, ajint mincut, ajint maxcut,
+			       AjBool plasmid, AjBool blunt, AjBool sticky,
+			       ajint sitelen, AjBool limit,
+			       const AjPTable table,
+			       AjBool alpha, AjBool frags,
+			       AjBool nameit)
+{
+    EmbPMatMatch m = NULL;
+    AjPStr ps = NULL;
+    ajint *fa = NULL;
+    ajint *fx = NULL;
+    ajint fc   = 0;
+    ajint fn   = 0;
+    ajint fb   = 0;
+    ajint last = 0;
+
+    const AjPStr value = NULL;
+
+    ajint i;
+    ajint c = 0;
+
+    ps = ajStrNew();
+    fn = 0;
+
+
+    ajFmtPrintF(outf,"# Restrict of %S from %d to %d\n#\n",
+		name,begin,end);
+    ajFmtPrintF(outf,"# Minimum cuts per enzyme: %d\n",mincut);
+    ajFmtPrintF(outf,"# Maximum cuts per enzyme: %d\n",maxcut);
+    ajFmtPrintF(outf,"# Minimum length of recognition site: %d\n",
+		sitelen);
+    if(blunt)
+	ajFmtPrintF(outf,"# Blunt ends allowed\n");
+
+    if(sticky)
+	ajFmtPrintF(outf,"# Sticky ends allowed\n");
+
+    if(plasmid)
+	ajFmtPrintF(outf,"# DNA is circular\n");
+    else
+	ajFmtPrintF(outf,"# DNA is linear\n");
+
+    if(!ambiguity)
+	ajFmtPrintF(outf,"# No ambiguities allowed\n");
+    else
+	ajFmtPrintF(outf,"# Ambiguities allowed\n");
+
+
+
+    hits = embPatRestrictRestrict(l,hits,!limit,alpha);
+
+    if(limit)
+	for(i=0;i<hits;++i)
+	{
+	    ajListPop(l,(void **)&m);
+	    value = ajTableFetchS(table,m->cod);
+	    if(value)
+		ajStrAssignS(&m->cod,value);
+	    ajListPushAppend(l,(void *)m);
+	}
+
+    
+    if(alpha && limit)
+	ajListSortTwo(l,
+		      &embPatRestrictNameCompare,
+		      &embPatRestrictStartCompare);
+
+
+    if(frags)
+    {
+	fa = AJALLOC(hits*2*sizeof(ajint));
+	fx = AJALLOC(hits*2*sizeof(ajint));
+    }
+
+
+    ajFmtPrintF(outf,"# Number of hits: %d\n",hits);
+    ajFmtPrintF(outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");
+    for(i=0;i<hits;++i)
+    {
+	ajListPop(l,(void **)&m);
+	if(!plasmid && m->circ12)
+	{
+	    embMatMatchDel(&m);
+	    continue;
+	}
+
+
+	if(limit)
+	{
+	    value = ajTableFetchS(table,m->cod);
+
+	    if(value)
+		ajStrAssignS(&m->cod,value);
+	}
+
+
+	ajFmtPrintF(outf,"\t%-d\t%-16s%-16s%d\t%d\t",m->start,
+		    ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),m->cut1,
+		    m->cut2);
+	if(frags)
+	    fa[fn++] = m->cut1;
+
+	if(m->cut3 || m->cut4)
+	{
+	    if(plasmid || !m->circ34)
+	    {
+		if(frags)
+		    fa[fn++] = m->cut3;
+		ajFmtPrintF(outf,"%d\t%d",m->cut3,m->cut4);
+	    }
+	}
+
+	if(nameit)
+	    ajFmtPrintF(outf,"  %S",*name);
+
+	ajFmtPrintF(outf,"\n");
+	embMatMatchDel(&m);
+    }
+
+
+
+    if(frags)
+    {
+	ajSortIntInc(fa,fn);
+	ajFmtPrintF(outf,"\n\nFragment lengths:\n");
+
+	if(!fn || (fn==1 && plasmid))
+	    ajFmtPrintF(outf,"    %d\n",end-begin+1);
+	else
+	{
+	    last = -1;
+	    fb = 0;
+	    for(i=0;i<fn;++i)
+	    {
+		if((c=fa[i])!=last)
+		    fa[fb++] = c;
+		last = c;
+	    }
+	    fn = fb;
+
+	    /* Calc lengths */
+	    for(i=0;i<fn-1;++i)
+		fx[fc++] = fa[i+1]-fa[i];
+
+	    if(!plasmid)
+	    {
+		fx[fc++] = fa[0]-begin+1;
+		fx[fc++] = end-fa[fn-1];
+	    }
+	    else
+		fx[fc++] = (fa[0]-begin+1)+(end-fa[fn-1]);
+	    ajSortIntDec(fx,fc);
+	    for(i=0;i<fc;++i)
+		ajFmtPrintF(outf,"    %d\n",fx[i]);
+	}
+	AJFREE(fa);
+	AJFREE(fx);
+    }
+
+    ajStrDel(&ps);
+
+    return;
+}
+
+
+
+
 /* @funcstatic restrict_reportHits ********************************************
 **
 ** Print restriction sites
@@ -241,7 +445,7 @@ int main(int argc, char **argv)
 ** @param [r] seq [const AjPSeq] sequence object
 ** @param [u] TabRpt [AjPFeattable] feature table object to store results
 ** @param [u] l [AjPList] hits
-** @param [r] hits [ajuint] number of hits
+** @param [r] hits [ajint] number of hits
 ** @param [r] begin [ajint] start position
 ** @param [r] end [ajint] end position
 ** @param [r] ambiguity [AjBool] allow ambiguities
@@ -261,7 +465,7 @@ int main(int argc, char **argv)
 
 static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 				AjPFeattable TabRpt, AjPList l,
-				ajuint hits, ajint begin, ajint end,
+				ajint hits, ajint begin, ajint end,
 				AjBool ambiguity, ajint mincut, ajint maxcut,
 				AjBool plasmid, AjBool blunt, AjBool sticky,
 				ajint sitelen, AjBool limit,
@@ -271,17 +475,13 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 {
     AjPFeature gf  = NULL;
     EmbPMatMatch m = NULL;
-    AjPStr  ps = NULL;
-    ajuint  *fa = NULL;
-    ajuint  *fx = NULL;
-    ajuint *fi = NULL;
-    ajuint *fs = NULL;
-    AjBool *fr = NULL;
-    EmbPMatMatch *fm = NULL;
-    ajuint fc = 0;
-    ajuint fn = 0;
-    ajuint fb = 0;
-    ajuint last = 0;
+    AjPStr ps = NULL;
+    ajint *fa = NULL;
+    ajint *fx = NULL;
+    ajint fc = 0;
+    ajint fn = 0;
+    ajint fb = 0;
+    ajint last = 0;
 
     const AjPStr value   = NULL;
     AjPStr tmpStr  = NULL;
@@ -290,21 +490,19 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     AjPStr codStr  = NULL;
     AjPStr patStr  = NULL;
     
-    ajuint i;
-    ajuint j;
-    ajuint imatch;
-
-    ajuint fraglen = 0;
+    ajint i;
+    ajint j;
     
-    ajuint c = 0;
-    ajuint len;
-    ajuint cend;
+    ajint c = 0;
+    ajint len;
+    ajint cend;
     
-    ajuint  nfrags;
+    AjPInt farray = NULL;
+    ajint  nfrags;
 
-    AjIList iter = NULL;
-    AjPList copyl = NULL;
 
+
+    farray  = ajIntNew();
     ps      = ajStrNew();
     fragStr = ajStrNew();
     codStr  = ajStrNew();
@@ -336,430 +534,37 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	ajFmtPrintAppS(&tmpStr,"Ambiguities allowed\n");
 
 
-    if(limit)
-    {
-        if(alpha)
-            ajListSortTwo(l,
-                          &embPatRestrictNameCompare,
-                          &embPatRestrictStartCompare);
-
-        iter = ajListIterNewread(l);
-        while(!ajListIterDone(iter))
-        {
-            m = ajListIterGet(iter);
-	    value = ajTableFetchS(table,m->cod);
-	    if(value)
-		ajStrAssignS(&m->cod,value);
-	}
-        ajListIterDel(&iter);
-    }
-    
     hits = embPatRestrictRestrict(l,hits,!limit,alpha);
+
+    if(frags)
+    {
+	fa = AJALLOC(hits*2*sizeof(ajint));
+	fx = AJALLOC(hits*2*sizeof(ajint));
+    }
 
     ajReportSetHeaderS(report, tmpStr);
 
 
-
-    if(frags || ifrag)
-    {
-	fa = AJALLOC(hits*2*sizeof(ajuint));
-	fr = AJALLOC(hits*2*sizeof(AjBool));
-	fi = AJALLOC(hits*2*sizeof(ajuint));
-	fs = AJALLOC(hits*2*sizeof(ajuint));
-	fx = AJALLOC(hits*2*sizeof(ajuint));
-    }
-    
-    if(frags)
-    {
-        ajListToarray(l, (void***) &fm);
-
-        fn = 0;
-        imatch = 0;
-
-        iter = ajListIterNewread(l);
-        while(!ajListIterDone(iter))
-        {
-            m = ajListIterGet(iter);
-
-            fr[fn] = ajFalse;
-            fi[fn] = fn;
-            fs[fn] = imatch;
-	    fa[fn++] = m->cut1;
-
-            if(m->cut3 || m->cut4)
-            {
-                if(plasmid || !m->circ34)
-                {
-                    fr[fn] = ajTrue;
-                    fi[fn] = fn;
-                    fs[fn] = imatch;
-                    fa[fn++] = m->cut3;
-                }
-            }
-
-            imatch++;
-        }
-
-        ajListIterDel(&iter);
-    }
-    
-    
-    /* report tail */
-    ajStrAssignC(&fragStr, "");
-
-
-    if(frags)                   /* fragment lengths in table and reported */
-    {
-	ajSortUintIncI(fa,fi,fn);
-
-	if(!fn || (fn==1 && plasmid))
-	    ajFmtPrintAppS(&fragStr,"    %d\n",end-begin+1);
-	else
+    if(limit)
+	for(i=0;i<hits;++i)
 	{
-	    last = -1;
-	    fb = 0;
-	    for(i=0;i<fn;++i)
-	    {
-		c=fa[fi[i]];
-                if(c != last)
-                {
-		    fi[fb++]=fi[i];
-                    last=c;
-                }
-	    }
-
-	    fn = fb;
-
-	    /* Calc lengths */
-	    for(i=0; i < (fn-1); ++i)
-            {
-                if(i && !ifrag)
-                {
-                    if(fr[fi[i]])
-                        fm[fs[fi[i]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[i]]]->len1 = fraglen;
-                }
-                
-		fraglen = fa[fi[i+1]] - fa[fi[i]];
-                fx[fc++] = fraglen;
-
-                if(!ifrag)
-                {
-                    if(fr[fi[i]])
-                        fm[fs[fi[i]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[i]]]->len2 = fraglen;
-                }
-            }
-
-            if(i && !ifrag)
-                fm[fs[fi[i]]]->len1 = fraglen;
-
-	    if(!plasmid)
-	    {
-		fraglen = fa[fi[0]] - begin + 1;
-                fx[fc++] = fraglen;
-
-                if(!ifrag)
-                {
-                    if(fr[fi[0]])
-                        fm[fs[fi[0]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[0]]]->len1 = fraglen;
-                }
-                
-                fraglen = end - fa[fi[fn-1]];
-		fx[fc++] = fraglen;
-
-                if(!ifrag)
-                {
-                    if(fr[fi[fn-1]])
-                        fm[fs[fi[fn-1]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[fn-1]]]->len2 = fraglen;
-                }
-	    }
-	    else
-            {
-                fraglen = (fa[fi[0]] - begin + 1) + (end - fa[fi[fn-1]]);
-                fx[fc++] = fraglen;
-
-                if(!ifrag)
-                {
-                    if(fr[fi[0]])
-                        fm[fs[fi[0]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[0]]]->len1 = fraglen;
-
-                    if(fr[fi[fn-1]])
-                        fm[fs[fi[fn-1]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[fn-1]]]->len2 = fraglen;
-                }
-            }
-
-	    ajSortUintDec(fx,fc);
-
-	    for(i=0;i<fc;++i)
-		ajFmtPrintAppS(&fragStr,"    %d\n",fx[i]);
+	    ajListPop(l,(void **)&m);
+	    value = ajTableFetchS(table,m->cod);
+	    if(value)
+		ajStrAssignS(&m->cod,value);
+	    ajListPushAppend(l,(void *)m);
 	}
 
-        AJFREE(fm);
+    
+    if(alpha && limit)
+	ajListSortTwo(l,
+		      &embPatRestrictNameCompare,
+		      &embPatRestrictStartCompare);
 
-    }
-
-    if(ifrag)          /* calculate fragment lengths for single digests */
+    for(i=0;i<hits;++i)
     {
-        copyl = ajListNewListref(l);
-	ajListSort(copyl, &restrict_enzcompare);
-        ajListToarray(copyl, (void***) &fm);
-
-	nfrags = 0;
-        imatch = 0;
-
-        iter = ajListIterNewread(copyl);
-        while(!ajListIterDone(iter))
-	{
-	    m = ajListIterGet(iter);
-
-	    if(!plasmid && m->circ12)
-            {
-                imatch++;
-		continue;
-            }
-
-	    if(limit)
-	    {
-		value = ajTableFetchS(table,m->cod);
-
-		if(value)
-		    ajStrAssignS(&m->cod,value);
-	    }
-
-
-	    if(!ajStrGetLen(codStr))
-	    {
-		ajStrAssignS(&patStr,m->pat);
-		ajStrAssignS(&codStr,m->cod);
-	    }
-
-
-	    if(ajStrMatchS(codStr,m->cod)) /* same enzyme */
-	    {
-                fr[nfrags] = ajFalse;
-                fi[nfrags] = nfrags;
-                fs[nfrags] = imatch;
-                fa[nfrags++] = m->cut1;
-
-		if(m->cut3 || m->cut4)
-		{
-                    if (plasmid || !m->circ34)
-                    {
-                        fr[nfrags] = ajTrue;
-                        fi[nfrags] = nfrags;
-                        fs[nfrags] = imatch;
-                        fa[nfrags++] = m->cut3;
-                    }
-                }
-	    }
-	    else                /* next enzyme - report previous enzyme */
-	    {
-		ajFmtPrintAppS(&fragStr,"\n%S:\n[%S]",
-			       codStr,patStr);
- 
-		ajStrAssignS(&codStr,m->cod);
-		ajStrAssignS(&patStr,m->pat);
-
-		ajSortUintIncI(fa, fi, nfrags);
-
-		last = 0;
-		for(j=0;j<nfrags;++j)
-		{
-		    fraglen = fa[fi[j]] - last;
-                    fx[j] = fraglen;
-
-                    if(fr[fi[j]])
-                        fm[fs[fi[j]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[j]]]->len1 = fraglen;
-
-                    if(j)
-                    {
-                        if(fr[fi[j-1]])
-                            fm[fs[fi[j-1]]]->len4 = fraglen;
-                        else
-                            fm[fs[fi[j-1]]]->len2 = fraglen;
-                    }
-
-		    last  = fa[fi[j]];
-                }
-
-		if(!(nfrags && plasmid))
-		{
-		    if(j)
-                    {
-                        fraglen = len - fa[fi[j-1]];
-                        if(fr[fi[j-1]])
-                            fm[fs[fi[j-1]]]->len4 = fraglen;
-                        else
-                            fm[fs[fi[j-1]]]->len2 = fraglen;
-                    }
-                    else
-                        fraglen = len;
-                    fx[j] = fraglen;
-
-                    if(fr[fi[j-1]])
-                        fm[fs[fi[j-1]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[j-1]]]->len2 = fraglen;
-
-		    ++nfrags;
-		}
-		else
-		{
-                    if(nfrags == 1)
-                    {
-                        fraglen = len;
-                        fa[fi[0]] = fraglen;
-                        if(fr[fi[0]])
-                            fm[fs[fi[0]]]->len3 = fraglen;
-                        else
-                            fm[fs[fi[0]]]->len1 = fraglen;
-                    }
-                    else
-                    {
-                        fraglen = fa[fi[0]] + (len - fa[fi[j-1]]);
-                        fa[fi[0]] = fraglen;
-                        if(fr[fi[0]])
-                            fm[fs[fi[0]]]->len3 = fraglen;
-                        else
-                            fm[fs[fi[0]]]->len1 = fraglen;
-                    }
-		}
-
-		ajSortUintInc(fx,nfrags);
-
-		for(j=0;j<nfrags;++j)
-		{
-		    if(!(j%6))
-			ajFmtPrintAppS(&fragStr,"\n");
-		    ajFmtPrintAppS(&fragStr,"\t%d",fx[j]);
-		}
-		ajFmtPrintAppS(&fragStr,"\n");
-
-                /* next enzyme first cut site */
-
-		nfrags = 0;
-
-                fr[nfrags] = ajFalse;
-                fi[nfrags] = nfrags;
-                fs[nfrags] = imatch;
-                fa[nfrags++] = m->cut1;
-
-		if(m->cut3 || m->cut4)
-		{
-                    if (plasmid || !m->circ34)
-                    {
-                        fr[nfrags] = ajTrue;
-                        fi[nfrags] = nfrags;
-                        fs[nfrags] = imatch;
-                        fa[nfrags++] = m->cut3;
-                    }
-                }
-
-	    }
-
-            imatch++;
-	}
-        ajListIterDel(&iter);
-
-	if(nfrags)              /* report last enzyme */
-	{
-	    ajFmtPrintAppS(&fragStr,"\n%S:\n[%S]",
-			   codStr,patStr);
-
-	    ajSortUintIncI(fa, fi, nfrags);
-
-	    last = 0;
-	    for(j=0;j<nfrags;++j)
-	    {
-		fraglen = fa[fi[j]] - last;
-                fx[j] = fraglen;
-
-                if(fr[fi[j]])
-                    fm[fs[fi[j]]]->len3 = fraglen;
-                else
-                    fm[fs[fi[j]]]->len1 = fraglen;
-
-                if(j)
-                {
-                    if(fr[fi[j-1]])
-                        fm[fs[fi[j-1]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[j-1]]]->len2 = fraglen;
-                }
-
-		last  = fa[fi[j]];
-	    }
-
-	    if(!(nfrags && plasmid))
-	    {
-                if(j)
-                {
-                    fraglen = len - fa[fi[j-1]];
-                    if(fr[fi[j-1]])
-                        fm[fs[fi[j-1]]]->len4 = fraglen;
-                    else
-                        fm[fs[fi[j-1]]]->len2 = fraglen;
-                }
-                else
-                    fraglen = len;
-                fx[j] = fraglen;
-		++nfrags;
-	    }
-	    else
-	    {
-		if(nfrags == 1)
-                {
-                    fraglen = len;
-		    fa[fi[0]] = fraglen;
-                    if(fr[fi[0]])
-                        fm[fs[fi[0]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[0]]]->len1 = fraglen;
-                }
-		else
-                {
-                    fraglen = fa[fi[0]] + (len - fa[fi[j-1]]);
-		    fa[fi[0]] = fraglen;
-                    if(fr[fi[0]])
-                        fm[fs[fi[0]]]->len3 = fraglen;
-                    else
-                        fm[fs[fi[0]]]->len1 = fraglen;
-                }
-	    }
-
-	    ajSortUintInc(fa,nfrags);
-
-	    for(j=0;j<nfrags;++j)
-	    {
-		if(!(j%6))
-		    ajFmtPrintAppS(&fragStr,"\n");
-		ajFmtPrintAppS(&fragStr,"\t%d",fx[j]);
-	    }
-	    ajFmtPrintAppS(&fragStr,"\n");
-	    AJFREE(fa);
-	}
-        AJFREE(fm);
-        ajListFree(&copyl);
-    }
-
-    iter = ajListIterNewread(l);
-    while(!ajListIterDone(iter))
-    {
-        m = ajListIterGet(iter);
-
+	ajListPop(l,(void **)&m);
+	ajListPushAppend(l,(void *)m);	/* Might need for ifrag display */
 	if(!plasmid && m->circ12)
 	    continue;
 
@@ -784,42 +589,210 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	ajFeatTagAddSS(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*3prime %d", m->cut2);
 	ajFeatTagAddSS(gf,  NULL, tmpStr);
-	if(m->len1)
-        {
-            ajFmtPrintS(&tmpStr, "*5frag %u", m->len1);
-            ajFeatTagAddSS(gf,  NULL, tmpStr);
-        }
-	if(m->len2)
-        {
-            ajFmtPrintS(&tmpStr, "*3frag %u", m->len2);
-            ajFeatTagAddSS(gf,  NULL, tmpStr);
-        }
+
+	if(frags)
+	    fa[fn++] = m->cut1;
 
 	if(m->cut3 || m->cut4)
 	{
 	    if(plasmid || !m->circ34)
 	    {
+		if(frags)
+		    fa[fn++] = m->cut3;
 		ajFmtPrintS(&tmpStr, "*5primerev %d", m->cut3);
 		ajFeatTagAddSS(gf,  NULL, tmpStr);
 		ajFmtPrintS(&tmpStr, "*3primerev %d", m->cut4);
 		ajFeatTagAddSS(gf,  NULL, tmpStr);
-                if(m->len3)
-                {
-                    ajFmtPrintS(&tmpStr, "*5fragrev %u", m->len3);
-                    ajFeatTagAddSS(gf,  NULL, tmpStr);
-                }
-                if(m->len4)
-                {
-                    ajFmtPrintS(&tmpStr, "*3fragrev %u", m->len4);
-                    ajFeatTagAddSS(gf,  NULL, tmpStr);
-                }
 	    }
 	}
     }
-    ajListIterDel(&iter);
 
+
+    /* reuse for report tail */
+    ajStrAssignC(&tmpStr, "");
+
+
+    if(frags)
+    {
+	ajSortIntInc(fa,fn);
+
+	if(!fn || (fn==1 && plasmid))
+	    ajFmtPrintAppS(&tmpStr,"    %d\n",end-begin+1);
+	else
+	{
+	    last = -1;
+	    fb = 0;
+	    for(i=0;i<fn;++i)
+	    {
+		if((c=fa[i])!=last)
+		    fa[fb++]=c;
+		last=c;
+	    }
+	    fn = fb;
+
+	    /* Calc lengths */
+	    for(i=0;i<fn-1;++i)
+		fx[fc++] = fa[i+1]-fa[i];
+
+	    if(!plasmid)
+	    {
+		fx[fc++] = fa[0]-begin+1;
+		fx[fc++] = end-fa[fn-1];
+	    }
+	    else
+		fx[fc++] = (fa[0]-begin+1)+(end-fa[fn-1]);
+	    ajSortIntDec(fx,fc);
+
+	    for(i=0;i<fc;++i)
+		ajFmtPrintAppS(&tmpStr,"    %d\n",fx[i]);
+	}
+
+	AJFREE(fa);
+	AJFREE(fx);
+    }
+
+
+    if(ifrag)
+    {
+	ajListSort(l, &restrict_enzcompare);
+
+	nfrags = 0;
+	ajStrAssignC(&fragStr,"");
+
+	for(i=0;i<hits;++i)
+	{
+	    ajListPop(l,(void **)&m);
+	    ajListPushAppend(l,(void *)m);
+
+	    if(!plasmid && m->circ12)
+		continue;
+
+
+	    if(limit)
+	    {
+		value = ajTableFetchS(table,m->cod);
+
+		if(value)
+		    ajStrAssignS(&m->cod,value);
+	    }
+
+
+	    if(!ajStrGetLen(codStr))
+	    {
+		ajStrAssignS(&patStr,m->pat);
+		ajStrAssignS(&codStr,m->cod);
+	    }
+
+
+	    if(ajStrMatchS(codStr,m->cod))
+	    {
+		if(m->cut3 || m->cut4)
+		    if (plasmid || !m->circ34)
+			ajIntPut(&farray,nfrags++,m->cut3);
+		ajIntPut(&farray,nfrags++,m->cut1);
+	    }
+	    else
+	    {
+		ajFmtPrintAppS(&fragStr,"\n%S:\n[%S]",
+			       codStr,patStr);
+		ajStrAssignS(&codStr,m->cod);
+		ajStrAssignS(&patStr,m->pat);
+		
+		ajSortIntInc(ajIntInt(farray),nfrags);
+
+
+		fa   = AJALLOC((nfrags+1)*sizeof(ajint));		
+		last = 0;
+		for(j=0;j<nfrags;++j)
+		{
+		    fa[j] = ajIntGet(farray,j) - last;
+		    last  = ajIntGet(farray,j);
+		}
+
+		if(!(nfrags && plasmid))
+		{
+		    fa[j] = len - ajIntGet(farray,j-1);
+		    ++nfrags;
+		}
+		else
+		{
+		    if(nfrags == 1)
+			fa[0] = len;
+		    else
+			fa[0] += (len - ajIntGet(farray,j-1));
+		}
+
+		ajSortIntInc(fa,nfrags);
+
+		for(j=0;j<nfrags;++j)
+		{
+		    if(!(j%6))
+			ajFmtPrintAppS(&fragStr,"\n");
+		    ajFmtPrintAppS(&fragStr,"\t%d",fa[j]);
+		}
+		ajFmtPrintAppS(&fragStr,"\n");
+
+		AJFREE(fa);
+		nfrags = 0;
+		if(m->cut3 || m->cut4)
+		    if(plasmid || !m->circ34)
+			ajIntPut(&farray,nfrags++,m->cut3);
+		ajIntPut(&farray,nfrags++,m->cut1);
+
+	    }
+	}
+
+
+	if(nfrags)
+	{
+	    ajFmtPrintAppS(&fragStr,"\n%S:\n[%S]",
+			   codStr,m->pat);
+	    ajStrAssignS(&codStr,m->cod);
+
+	    ajSortIntInc(ajIntInt(farray),nfrags);
+
+
+	    fa = AJALLOC((nfrags+1)*sizeof(ajint));		
+	    last = 0;
+	    for(j=0;j<nfrags;++j)
+	    {
+		fa[j] = ajIntGet(farray,j) - last;
+		last  = ajIntGet(farray,j);
+	    }
+
+	    if(!(nfrags && plasmid))
+	    {
+		fa[j] = len - ajIntGet(farray,j-1);
+		++nfrags;
+	    }
+	    else
+	    {
+		if(nfrags == 1)
+		    fa[0] = len;
+		else
+		    fa[0] += (len - ajIntGet(farray,j-1));
+	    }
+
+	    ajSortIntInc(fa,nfrags);
+
+	    for(j=0;j<nfrags;++j)
+	    {
+		if(!(j%6))
+		    ajFmtPrintAppS(&fragStr,"\n");
+		ajFmtPrintAppS(&fragStr,"\t%d",fa[j]);
+	    }
+	    ajFmtPrintAppS(&fragStr,"\n");
+	    AJFREE(fa);
+	}
+    }
     
-    ajReportAppendTailS(report, fragStr);
+
+
+    if(ifrag)
+	ajStrAppendS(&tmpStr,fragStr);
+    
+    ajReportAppendTailS(report, tmpStr);
+    
 
     for(i=0;i<hits;++i)
     {
@@ -827,12 +800,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	embMatMatchDel(&m);
     }
     
-    AJFREE(fa);
-    AJFREE(fr);
-    AJFREE(fs);
-    AJFREE(fi);
-    AJFREE(fx);
-
+    ajIntDel(&farray);
     ajStrDel(&fragStr);
     ajStrDel(&codStr);
     ajStrDel(&patStr);
@@ -981,8 +949,6 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
     AjPStr key   = NULL;
     AjPStr value = NULL;
 
-    AjPStr oldval = NULL;
-
     EmbPPatRestrict enz = NULL;
     
     enztable = ajTablestrNew(ENZGUESS);
@@ -1002,10 +968,7 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
         ajStrFmtUpper(&key);
         value = ajStrNewC("dummy");
         
-        /* check for duplicate names with multiple target sites */
-	oldval = ajTablePut(enztable,(void *)key, (void *)value);
-        if(oldval)
-            ajStrDel(&oldval);
+	ajTablePut(enztable,(void *)key, (void *)value);
     }
     
  
@@ -1017,6 +980,7 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
         if(!ajTableMatchS(enztable,ea[i]))
             ajFatal("Restriction enzyme %S isn't in the database",ea[i]);
     }
+    
     
     ajFileSeek(enzfile,0L,0);
 

@@ -17,7 +17,7 @@ libajax_la_CPPFLAGS += -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT)
 libajax_la_CPPFLAGS += -DAJAX_SYSTEM="$(AJAX_SYSTEM)"
 libajax_la_CPPFLAGS += -DPREFIX=\"$(prefix)\"
 
-libajax_la_LDFLAGS  = -version-info 6:5:0
+libajax_la_LDFLAGS  = -version-info 6:4:0
 libajax_la_LDFLAGS += $(JAVA_LDFLAGS)
 libajax_la_LDFLAGS += $(MYSQL_LDFLAGS)
 libajax_la_LDFLAGS += $(POSTGRESQL_LDFLAGS)
@@ -117,10 +117,7 @@ ajvar.c \
 ajvarbcf.c \
 ajvarread.c \
 ajvarwrite.c \
-ajvector.c \
-ajxml.c \
-ajxmlread.c \
-ajxmlwrite.c
+ajvector.c
 
 include_HEADERS = \
 ajax.h \
@@ -218,8 +215,4 @@ ajvarbcf.h \
 ajvardata.h \
 ajvarread.h \
 ajvarwrite.h \
-ajvector.h \
-ajxml.h \
-ajxmldata.h \
-ajxmlread.h \
-ajxmlwrite.h
+ajvector.h

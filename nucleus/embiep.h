@@ -3,8 +3,8 @@
 ** Isoelectric point routines
 **
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version $Revision: 1.16 $
-** @modified $Date: 2013/06/29 22:38:19 $ by $Author: rice $
+** @version $Revision: 1.15 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -71,32 +71,29 @@ AJ_BEGIN_DECLS
 ** Prototype definitions
 */
 
-void   embIepCalcK (double *K, double **pK);
-void   embIepCalcKend (double *K, double **pK, ajuint resn, ajuint resc);
-AjBool embIepPkNewFile (AjPFile pkfile, double ***pK);
-double* *embIepPkNew (void);
-void   embIepPkDel (double ***pK);
-void   embIepCompC (const char *s, ajuint amino, ajuint carboxyl,
-		    ajuint sscount, ajuint modlysine,
-		    ajuint *c, ajuint *resn, ajuint *resc);
-void   embIepCompS (const AjPStr str, ajuint amino, ajuint carboxyl,
-		    ajuint sscount, ajuint modlysine,
-		    ajuint *c, ajuint *resn, ajuint *resc);
-double embIepGetCharge (const ajuint *c, const double *pro, double *total);
-void   embIepGetProto (const double *K, const ajuint *c,
-		       ajuint *op, double H, double *pro);
-AjBool embIepIepC (const char *s, ajuint amino, ajuint carboxyl,
-		   ajuint sscount, ajuint modlysine,
-		   double **pK, double *iep, AjBool termini);
-AjBool embIepIepS (const AjPStr str, ajuint amino, ajuint carboxyl,
-		   ajuint sscount, ajuint modlysine,
-		   double **pK, double *iep, AjBool termini);
+void   embIepCalcK (double *K, double *pK);
+double *embIeppKNew (void);
+void   embIeppKDel (double *pK);
+void   embIepCompC (const char *s, ajint amino, ajint carboxyl,
+		    ajint sscount, ajint modlysine,
+		    ajint *c);
+void   embIepCompS (const AjPStr str, ajint amino, ajint carboxyl,
+		    ajint sscount, ajint modlysine,
+		    ajint *c);
+double embIepGetCharge (const ajint *c, const double *pro, double *total);
+void   embIepGetProto (const double *K, const ajint *c,
+		       ajint *op, double H, double *pro);
+AjBool embIepIepC (const char *s, ajint amino, ajint carboxyl,
+		   ajint sscount, ajint modlysine,
+		   double *pK, double *iep, AjBool termini);
+AjBool embIepIepS (const AjPStr str, ajint amino, ajint carboxyl,
+		   ajint sscount, ajint modlysine,
+		   double *pK, double *iep, AjBool termini);
 double embIepPhFromHconc (double H);
 double embIepPhToHconc (double pH);
-double embIepPhConverge (const ajuint *c, const double *K,
-			 ajuint *op, double *pro);
-void   embIepPkRead (double **pK);
-void   embIepPkReadFile (double **pK, AjPFile pkfile);
+double embIepPhConverge (const ajint *c, const double *K,
+			 ajint *op, double *pro);
+void   embIepPkRead (double *pK);
 double embIepPkToK (double pK);
 double embIepPkFromK (double K);
 

@@ -285,7 +285,7 @@ int main(int argc, char **argv)
                 count = ajNamSvrCount(nextsvrname);
                 ajStrTokenAssignC(&handle, type, " ,;");
 
-                while(ajStrTokenNextParse(handle, &nexttype))
+                while(ajStrTokenNextParse(&handle, &nexttype))
                     if(ajTableMatchS(showtable,nexttype))
                         showtype = ajTrue;
 
@@ -387,42 +387,40 @@ static void showserverWidth (const AjPStr svrname, const AjPStr scope,
     ajuint testcount;
     ajuint testwidth = 0;
 
-    if (MAJSTRGETLEN(svrname) > *maxname)
-	*maxname = MAJSTRGETLEN(svrname);
+    if (ajStrGetLen(svrname) > *maxname)
+	*maxname = ajStrGetLen(svrname);
 
-    if (MAJSTRGETLEN(scope) > *maxscope)
-	*maxscope = MAJSTRGETLEN(scope);
+    if (ajStrGetLen(scope) > *maxscope)
+	*maxscope = ajStrGetLen(scope);
 
-    if (MAJSTRGETLEN(type) > *maxtype)
-	*maxtype = MAJSTRGETLEN(type);
+    if (ajStrGetLen(type) > *maxtype)
+	*maxtype = ajStrGetLen(type);
 
-    if (MAJSTRGETLEN(methods) > *maxmethod)
-	*maxmethod = MAJSTRGETLEN(methods);
+    if (ajStrGetLen(methods) > *maxmethod)
+	*maxmethod = ajStrGetLen(methods);
 
     testcount = count;
     if(!count)
         testcount++;
-
     for(testcount = count; testcount > 0; testcount /= 10)
         testwidth++;
-    
     if(testwidth > *maxcount)
         *maxcount = testwidth;
 
-    if (MAJSTRGETLEN(defined) > *maxdefined)
-	*maxdefined = MAJSTRGETLEN(defined);
+    if (ajStrGetLen(defined) > *maxdefined)
+	*maxdefined = ajStrGetLen(defined);
 
-    if (MAJSTRGETLEN(version) > *maxversion)
-	*maxversion = MAJSTRGETLEN(version);
+    if (ajStrGetLen(version) > *maxversion)
+	*maxversion = ajStrGetLen(version);
 
-    if (MAJSTRGETLEN(cachefile) > *maxcachefile)
-	*maxcachefile = MAJSTRGETLEN(cachefile);
+    if (ajStrGetLen(cachefile) > *maxcachefile)
+	*maxcachefile = ajStrGetLen(cachefile);
 
-    if (MAJSTRGETLEN(url) > *maxurl)
-	*maxurl = MAJSTRGETLEN(url);
+    if (ajStrGetLen(url) > *maxurl)
+	*maxurl = ajStrGetLen(url);
 
     showserverGetFields(svrname, &fields);
-    i = MAJSTRGETLEN(fields);
+    i = ajStrGetLen(fields);
 
     if (i > *maxfield)
 	*maxfield = i;
@@ -479,20 +477,6 @@ static void showserverHead (AjPFile outfile, AjBool html,
                             ajuint maxversion, ajuint maxcachefile,
                             ajuint maxurl)
 {
-    AjPStr understr = NULL;
-    ajuint maxlen = maxname;
-
-    maxlen = AJMAX(maxlen, maxscope);
-    maxlen = AJMAX(maxlen, maxtype);
-    maxlen = AJMAX(maxlen, maxmethod);
-    maxlen = AJMAX(maxlen, maxcount);
-    maxlen = AJMAX(maxlen, maxfield);
-    maxlen = AJMAX(maxlen, maxdefined);
-    maxlen = AJMAX(maxlen, maxversion);
-    maxlen = AJMAX(maxlen, maxcachefile);
-    maxlen = AJMAX(maxlen, maxurl);
-
-    ajStrAppendCountK(&understr, '=', maxlen);
 
     if(html)
 	/* start the HTML table title line and output the Name header */
@@ -611,13 +595,16 @@ static void showserverHead (AjPFile outfile, AjBool html,
     {
 	ajFmtPrintF(outfile, "\n");
 	
-	ajFmtPrintF(outfile, "# %.*S ", maxname-2, understr);
+	ajFmtPrintF(outfile, "# %.*s ", maxname-2,
+		    "=====================================================");
 
 	if(dotype)
-	    ajFmtPrintF(outfile, "%.*S ", maxtype, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxtype,
+			"==================================================");
 
 	if(doscope)
-	    ajFmtPrintF(outfile, "%.*S ", maxscope, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxscope,
+			"==================================================");
 
 	if(doid)
 	    ajFmtPrintF(outfile, "==  ");
@@ -629,34 +616,39 @@ static void showserverHead (AjPFile outfile, AjBool html,
 	    ajFmtPrintF(outfile, "=== ");
 
 	if(domethod)
-	    ajFmtPrintF(outfile, "%.*S ", maxmethod, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxmethod,
+			"==================================================");
 
 	if(docount)
-	    ajFmtPrintF(outfile, "%.*S ", maxcount, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxcount,
+			"==================================================");
 
 	if(docachefile)
-	    ajFmtPrintF(outfile, "%.*S ", maxcachefile, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxcachefile,
+			"==================================================");
 
 	if(dourl)
-	    ajFmtPrintF(outfile, "%.*S ", maxurl, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxurl,
+			"=================================================="
+                        "==================================================");
 
 	if(dofields)
-	    ajFmtPrintF(outfile, "%.*S ", maxfield, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxfield,
+			"==================================================");
 
 	if(dodefined)
-	    ajFmtPrintF(outfile, "%.*S ", maxdefined, understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxdefined,
+			"==================================================");
 
 	if(doversion)
-	    ajFmtPrintF(outfile, "%.*S ", maxversion,  understr);
+	    ajFmtPrintF(outfile, "%.*s ", maxversion,
+			"==================================================");
 
 	if(docomment)
 	    ajFmtPrintF(outfile, "=======");
 
 	ajFmtPrintF(outfile, "\n");
     }
-
-    ajStrDel(&understr);
-
     return;
 }
 

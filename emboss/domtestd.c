@@ -110,9 +110,9 @@ int main(int argc, char **argv)
         }
     }
         
-    ajDomDocumentDestroyNodeList(doc,&list,0);
+    ajDomDocumentDestroyNodeList(doc,list,0);
 
-    ajDomDocumentDestroyNode(doc, &doc);
+    ajDomDocumentDestroyNode(doc,doc);
 
     ajFileClose(&outf);
 

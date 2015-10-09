@@ -344,7 +344,7 @@ similar
 
 # SITE - Any other interesting site on the sequence.
 
-site SO:0100001
+site SO:0000839_site
 	/note
 	/comment
 

@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX text-based database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.80 $
+** @version $Revision: 1.73 $
 ** @modified Sep 27 pmr First version using code originally in ajseqdb
-** @modified $Date: 2013/07/15 21:22:07 $ by $Author: rice $
+** @modified $Date: 2012/07/14 16:50:25 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1490,7 +1490,6 @@ static AjBool textCdIdxQuery(AjPQuery qry, const AjPStr idqry)
     ajint icmp;
     char *name;
     ajuint ilen;
-    ajuint idlen;
     ajint jlo;
     ajint jhi;
     ajint khi;
@@ -1519,12 +1518,7 @@ static AjBool textCdIdxQuery(AjPQuery qry, const AjPStr idqry)
     jlo = ilo = 0;
     khi = jhi = ihi = fil->NRecords-1;
 
-    ilen = ajStrGetLen(idpref); /* query prefix length to truncate name */
-
-    idlen = fil->RecSize-10;    /* maximum id length in index */
-    if(idlen < ilen)
-        ilen = idlen;
-
+    ilen = ajStrGetLen(idpref);
     first = ajTrue;
 
     if(ilen)
@@ -2096,7 +2090,7 @@ static const AjPStr textObdaIdxName(ajulong ipos, TextPObdaFile fil)
     
     handle = ajStrTokenNewC(textObdaName, "\t;");
 
-    ajStrTokenNextParse(handle, &textObdaTmpName);
+    ajStrTokenNextParse(&handle, &textObdaTmpName);
 
     ajStrTokenDel(&handle);
     ajStrDel(&token);
@@ -2184,10 +2178,10 @@ static void textObdaIdxLine(TextPObdaIdx idxLine, ajulong ipos,
     
     handle = ajStrTokenNewC(textObdaName, "\t");
 
-    ajStrTokenNextParse(handle, &idxLine->EntryName);
-    ajStrTokenNextParse(handle, &token);
+    ajStrTokenNextParse(&handle, &idxLine->EntryName);
+    ajStrTokenNextParse(&handle, &token);
     ajStrToUint(token, &idxLine->DivCode);
-    ajStrTokenNextParse(handle, &token);
+    ajStrTokenNextParse(&handle, &token);
     ajStrToUlong(token, &idxLine->AnnOffset);
 
     ajStrTokenDel(&handle);
@@ -2221,7 +2215,7 @@ static const AjPStr textObdaSecName(ajulong ipos, TextPObdaFile fil)
 
     handle = ajStrTokenNewC(textObdaName, "\t");
 
-    ajStrTokenNextParse(handle, &textObdaTmpName);
+    ajStrTokenNextParse(&handle, &textObdaTmpName);
 
     ajDebug("textObdaSecName  ipos %u name '%S'\n",
 	    ipos, textObdaTmpName);
@@ -2300,8 +2294,8 @@ static void textObdaSecLine(TextPObdaSecidx trgLine, ajulong ipos,
 
     handle = ajStrTokenNewC(textObdaName, "\t");
 
-    ajStrTokenNextParse(handle, &trgLine->Target);
-    ajStrTokenNextParse(handle, &trgLine->Target);
+    ajStrTokenNextParse(&handle, &trgLine->Target);
+    ajStrTokenNextParse(&handle, &trgLine->Target);
 
     ajStrTokenDel(&handle);
 
@@ -2582,13 +2576,12 @@ static AjBool textAccessEntrez(AjPTextin textin)
     AjPQueryField fd;
     AjIList iter;
     ajuint i;
-    ajuint ifield=0;
     AjOSysSocket sock;
 
     const char* embossfields[] = {"id",     "acc",    "sv",
                                   "des",    "org",    "key",
                                   NULL};
-    const char* entrezfields[] = {"[UID]",  "[ACCN]", "[ACCN]",
+    const char* entrezfields[] = {"",       "[ACCN]", "[ACCN]",
                                   "[TITL]", "[ORGN]", "[KYWD]",
                                   NULL};
 
@@ -2656,9 +2649,7 @@ static AjBool textAccessEntrez(AjPTextin textin)
 
 	ajFmtPrintAppS(&get, "&db=%S", searchdb);
 
-        ifield=0;
         iter = ajListIterNewread(fdlist);
-
         while(!ajListIterDone(iter))
         {
             fd = ajListIterGet(iter);
@@ -2667,25 +2658,16 @@ static AjBool textAccessEntrez(AjPTextin textin)
             {
                 if(ajStrMatchC(fd->Field, embossfields[i]))
                 {
-                    if(ifield++)
-                        ajFmtPrintAppS(&get, "|%S%s",
-                                       fd->Wildquery, entrezfields[i]);
-                    else
-                        ajFmtPrintAppS(&get, "&term=%S%s",
-                                       fd->Wildquery, entrezfields[i]);
+                    ajFmtPrintAppS(&get, "&term=%S%s",
+                                   fd->Wildquery, entrezfields[i]);
                     break;
                 }
             }
 
             if(!embossfields[i])
-            {
-                if(ifield++)
-                    ajFmtPrintAppS(&get, "|%S[%S]",
-                                   fd->Wildquery, fd->Field);
-                else
-                    ajFmtPrintAppS(&get, "&term=%S[%S]",
-                                   fd->Wildquery, fd->Field);
-            }
+                ajFmtPrintAppS(&get, "&term=%S[%S]",
+                               fd->Wildquery, fd->Field);
+            break;
          }
 
         ajListIterDel(&iter);
@@ -2860,6 +2842,12 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
     proxyPort = 0;			/* port for proxy access */
 
     gilist = qry->QryData;
+    ajStrAssignC(&urlfetch, "/entrez/eutils/efetch.fcgi");
+
+    /* eutils.ncbi.nlm.nih.gov official address
+     gives an error with valgrind */
+    ajStrAssignC(&host, "www.ncbi.nlm.nih.gov");
+    iport = 80;
 
     if (!gilist)
     {
@@ -2881,13 +2869,6 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
     ajStrAssignS((AjPStr*)&qry->QryData, tmpstr);
     ajDebug("textEntrezQryNext next gi '%S'\n", gistr);
 
-    ajStrAssignC(&urlfetch, "/entrez/eutils/efetch.fcgi");
-
-    /* eutils.ncbi.nlm.nih.gov official address
-     gives an error with valgrind */
-    ajStrAssignC(&host, "www.ncbi.nlm.nih.gov");
-    iport = 80;
-
     ajHttpGetVersion(qry->DbHttpVer, &httpver);
 
     if(ajHttpGetProxyinfo(qry->DbProxy, &proxyPort, &proxyName,
@@ -2902,19 +2883,10 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
     ajStrAppendC(&get, "tool=emboss&email=emboss-bug@emboss.open-bio.org"
                  "&retmax=1000");
 
-    /*
-    ** Needs updating
-    ** retmode=docsum returns summary information for any database
-    ** retmode has a default (from Feb 2012) for all databases
-    ** retmode=html obsolete, uses default retmode
-    */
-
-    if(ajStrMatchC(qry->DbType, "Nucleotide"))
+    if(ajStrPrefixCaseC(qry->DbType, "N"))
 	ajStrAppendC(&get, "&db=nucleotide&retmode=text&rettype=gb");
-    else if(ajStrMatchC(qry->DbType, "Protein"))
-	ajStrAppendC(&get, "&db=nucleotide&retmode=text&rettype=gp");
     else
-        ajFmtPrintAppS(&get, "&db=%S", qry->DbName);
+	ajStrAppendC(&get, "&db=protein&retmode=text&rettype=gp");
 
     ajFmtPrintAppS(&get, "&id=%S", gistr);
     ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
@@ -2945,7 +2917,7 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
     }
 
     ajFilebuffLoadAll(textin->Filebuff);
-    ajFilebuffHtmlNoheader(textin->Filebuff);
+    ajFilebuffHtmlStrip(textin->Filebuff);
 
 #ifndef WIN32
     alarm(0);
@@ -4479,8 +4451,6 @@ static AjBool textEmbossQryEntry(AjPQuery qry)
 
          for(i=0; allhits[i]; i++)
              ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
-
-         AJFREE(allhits);
     }
 
     if(ajStrGetLen(qry->Namespace))
@@ -4498,8 +4468,6 @@ static AjBool textEmbossQryEntry(AjPQuery qry)
 
          for(i=0; allhits[i]; i++)
              ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
-
-         AJFREE(allhits);
     }
 
     if(!ajListGetLength(qry->ResultsList))
@@ -4705,7 +4673,7 @@ static AjBool textEmbossQryNamespace(AjPQuery qry)
     textEmbossOpenCache(qry, "ns", &nscache);
     nslist = ajListNew();
     nshandle = ajStrTokenNewC(qry->Namespace, " \t,;|");
-    while(ajStrTokenNextParse(nshandle, &nsqry))
+    while(ajStrTokenNextParse(&nshandle, &nsqry))
     {
         if(ajBtreeCacheIsSecondary(nscache))
         {
@@ -4782,7 +4750,7 @@ static AjBool textEmbossQryOrganisms(AjPQuery qry)
     textEmbossOpenCache(qry, "org", &orgcache);
     orglist = ajListNew();
     orghandle = ajStrTokenNewC(qry->Organisms, "\t,;|");
-    while(ajStrTokenNextParse(orghandle, &orgqry))
+    while(ajStrTokenNextParse(&orghandle, &orgqry))
     {
         if(ajBtreeCacheIsSecondary(orgcache))
         {
@@ -6066,6 +6034,7 @@ static AjBool textObdaQryOpen(AjPQuery qry)
     TextPObdaQry qryd;
 
     ajuint i;
+    static char *name;
     AjPStr fullName = NULL;
 
     if(!ajStrGetLen(qry->IndexDir))
@@ -6095,7 +6064,7 @@ static AjBool textObdaQryOpen(AjPQuery qry)
 
     for(i=0; i < qryd->nfiles; i++)
     {
-	ajStrAssignS(&fullName, qryd->files[i]);
+	ajStrAssignC(&fullName, name);
 	ajFilenameReplacePathS(&fullName, qry->Directory);
 
 	if(!ajFilenameTestInclude(fullName, qry->Exclude, qry->Filename))
@@ -6114,6 +6083,7 @@ static AjBool textObdaQryOpen(AjPQuery qry)
     }
 
     ajStrDel(&fullName);
+    ajCharDel(&name);
 
     return ajTrue;
 }
@@ -6903,12 +6873,14 @@ static AjBool textAccessWsdbfetch(AjPTextin textin)
 #ifdef HAVE_AXIS2C
     AjPQuery qry    = NULL;
     AjPStr data     = NULL;
+    AjPStrTok token = NULL;
     AjPStr* lines   = NULL;
     AjPStr qryid    = NULL;
     AjPStr url      = NULL;
     AjIList iter    = NULL;
     ajint i;
     ajint n;
+    AjPStr identifier   = NULL;
     AjPQueryField field = NULL;
 
     if(textin->Count > 0)
@@ -6951,13 +6923,6 @@ static AjBool textAccessWsdbfetch(AjPTextin textin)
     ajListIterDel(&iter);
 
     data = textWsdbfetchFetchData(qry->DbName, qryid, url, qry->Formatstr);
-    if(!data)
-    {
-        ajStrDel(&url);
-        ajStrDel(&qryid);
-
-        return ajFalse;
-    }
 
     ajFilebuffDel(&textin->Filebuff);
     textin->Filebuff = ajFilebuffNewNofile();
@@ -6977,6 +6942,8 @@ static AjBool textAccessWsdbfetch(AjPTextin textin)
 
     ajStrDel(&url);
     ajStrDel(&qryid);
+    ajStrDel(&identifier);
+    ajStrTokenDel(&token);
     return ajTrue;
 #else
     (void)textin;
@@ -7954,7 +7921,6 @@ static ajuint textCdTrgFind(AjPQuery qry, const char* indexname,
     ajint t3;
     ajint pos = 0;
     ajint prefixlen;
-    ajint trglen;
     ajint start;
     ajint end;
     ajint i;
@@ -7999,11 +7965,6 @@ static ajuint textCdTrgFind(AjPQuery qry, const char* indexname,
     t = t2 = t3 = trgfp->NRecords - 1;
 
     prefixlen = ajStrGetLen(fdprefix);
-
-    trglen = trgfp->RecSize-8;
-    if(trglen < prefixlen)
-        prefixlen = trglen;
-
     first = ajTrue;
 
     if(prefixlen)
@@ -8558,26 +8519,22 @@ static AjPFilebuff textEBeyeGetresults(const AjPStr domain,
 
     env = ajSoapAxis2GetEnv();
 
+    buff = ajFilebuffNewNofile();
+
     address = EBEYE_EP;
 
     client = ajSoapAxis2GetClient(env, address);
 
     payload = textEbeyeGetnumberofresultsPayload(env, domain, queryterm);
     result = ajSoapAxis2Call(client, env, payload);
+    n = textEbeyeGetnumberofresultsParse(result, env);
 
-    if(result != NULL)
+    for(; i<n; i+=100)
     {
-        buff = ajFilebuffNewNofile();
-
-        n = textEbeyeGetnumberofresultsParse(result, env);
-
-        for(; i<n; i+=100)
-        {
-            payload = textEbeyeGetresultsPayload(env, domain, queryterm,
-                                                 retfields, i);
-            result = ajSoapAxis2Call(client, env, payload);
-            textEbeyeGetresultsParse(result, env, domain, retfields, buff);
-        }
+	payload = textEbeyeGetresultsPayload(env, domain, queryterm,
+	                                     retfields, i);
+	result = ajSoapAxis2Call(client, env, payload);
+	textEbeyeGetresultsParse(result, env, domain, retfields, buff);
     }
 
     axis2_svc_client_free(client, env);
@@ -8804,7 +8761,7 @@ static void textEbeyeGetresultsParse(axiom_node_t *wsResult,
     AJCNEW(fieldnames, n);
     i=0;
 
-    while(ajStrTokenNextParse(handle, &token))
+    while(ajStrTokenNextParse(&handle, &token))
 	fieldnames[i++] = ajStrNewS(token);
 
     results = axiom_element_get_children(elm, env, node);
@@ -9326,7 +9283,7 @@ static axiom_node_t* textEbeyeGetresultsPayload(const axutil_env_t * env,
             query, retfields);
     ajStrTokenAssignC(&handle, retfields, "\t ,;\n\r");
 
-    while(ajStrTokenNextParse(handle, &token))
+    while(ajStrTokenNextParse(&handle, &token))
     {
 	elm = axiom_element_create(env, child, "string", ns, &field);
 	axiom_element_set_text(elm, env, ajStrGetuniquePtr(&token), field);

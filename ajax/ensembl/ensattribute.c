@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.42 $
+** @version $Revision: 1.40 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -32,7 +32,6 @@
 
 #include "ensattribute.h"
 #include "ensgene.h"
-#include "ensoperon.h"
 #include "enstable.h"
 #include "enstranscript.h"
 #include "enstranslation.h"
@@ -44,13 +43,13 @@
 /* =============================== constants =============================== */
 /* ========================================================================= */
 
-/* @conststatic attributetypeadaptorKTablenames *******************************
+/* @conststatic attributetypeadaptorKTables ***********************************
 **
 ** Array of Ensembl Attribute Type Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const attributetypeadaptorKTablenames[] =
+static const char *const attributetypeadaptorKTables[] =
 {
     "attrib_type",
     (const char *) NULL
@@ -59,13 +58,13 @@ static const char *const attributetypeadaptorKTablenames[] =
 
 
 
-/* @conststatic attributetypeadaptorKColumnnames ******************************
+/* @conststatic attributetypeadaptorKColumns **********************************
 **
 ** Array of Ensembl Attribute Type Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const attributetypeadaptorKColumnnames[] =
+static const char *const attributetypeadaptorKColumns[] =
 {
     "attrib_type.attrib_type_id",
     "attrib_type.code",
@@ -154,8 +153,8 @@ static void attributetypeadaptorFetchAll(const void *key,
 ** @nam2rule Attribute Functions for manipulating Ensembl Attribute objects
 **
 ** @cc Bio::EnsEMBL::Attribute
-** @cc CVS Revision: 1.14
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -329,7 +328,14 @@ void ensAttributeDel(EnsPAttribute *Pattribute)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pattribute) || --pthis->Use)
+    if (!*Pattribute)
+        return;
+
+    pthis = *Pattribute;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pattribute = NULL;
 
@@ -340,7 +346,9 @@ void ensAttributeDel(EnsPAttribute *Pattribute)
 
     ajStrDel(&pthis->Value);
 
-    ajMemFree((void **) Pattribute);
+    AJFREE(pthis);
+
+    *Pattribute = NULL;
 
     return;
 }
@@ -477,11 +485,11 @@ AjBool ensAttributeTrace(const EnsPAttribute attribute, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Attribute object.
+** Functions for calculating values of an Ensembl Attribute object.
 **
 ** @fdata [EnsPAttribute]
 **
-** @nam3rule Calculate Calculate Ensembl Attribute information
+** @nam3rule Calculate Calculate Ensembl Attribute values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * attribute [const EnsPAttribute] Ensembl Attribute
@@ -632,7 +640,7 @@ AjPStr ensAttributeGetName(const EnsPAttribute attribute)
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor
 ** @cc CVS Revision: 1.29
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -675,8 +683,6 @@ static AjBool attributeadaptorFetchAllbyStatement(
     EnsPAttributetype        at  = NULL;
     EnsPAttributetypeadaptor ata = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
     if (!aa)
         return ajFalse;
 
@@ -686,11 +692,9 @@ static AjBool attributeadaptorFetchAllbyStatement(
     if (!attributes)
         return ajFalse;
 
-    dba = ensAttributeadaptorGetDatabaseadaptor(aa);
+    ata = ensRegistryGetAttributetypeadaptor(aa);
 
-    ata = ensRegistryGetAttributetypeadaptor(dba);
-
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+    sqls = ensDatabaseadaptorSqlstatementNew(aa, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
@@ -717,7 +721,7 @@ static AjBool attributeadaptorFetchAllbyStatement(
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+    ensDatabaseadaptorSqlstatementDel(aa, &sqls);
 
     return ajTrue;
 }
@@ -761,6 +765,9 @@ static AjBool attributeadaptorFetchAllbyStatement(
 EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
     EnsPAttributeadaptor ata)
 {
+    if (!ata)
+        return NULL;
+
     return ata;
 }
 
@@ -778,8 +785,6 @@ EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
 ** @nam4rule All   Fetch all Ensembl Attribute objects
 ** @nam4rule Allby Fetch all Ensembl Attribute objects matching criteria
 ** @nam5rule Gene  Fetch all by an Ensembl Gene
-** @nam5rule Operon      Fetch all by an Ensembl Operon
-** @nam5rule Operontranscript Fetch all by an Ensembl Operon Transcript
 ** @nam5rule Seqregion   Fetch all by an Ensembl Sequence Region
 ** @nam5rule Slice       Fetch all by an Ensembl Slice
 ** @nam5rule Transcript  Fetch all by an Ensembl Transcript
@@ -789,22 +794,25 @@ EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
 ** @argrule * ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @argrule AllbyGene gene [const EnsPGene] Ensembl Gene
 ** @argrule AllbyGene code [const AjPStr] Ensembl Attribute code
-** @argrule AllbyOperon operon [const EnsPOperon] Ensembl Operon
-** @argrule AllbyOperon code [const AjPStr] Ensembl Attribute code
-** @argrule AllbyOperontranscript ot [const EnsPOperontranscript]
-** Ensembl Operon Transcript
-** @argrule AllbyOperontranscript code [const AjPStr] Ensembl Attribute code
+** @argrule AllbyGene attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
 ** @argrule AllbySeqregion sr [const EnsPSeqregion] Ensembl Sequence Region
 ** @argrule AllbySeqregion code [const AjPStr] Ensembl Attribute code
+** @argrule AllbySeqregion attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
 ** @argrule AllbySlice slice [const EnsPSlice] Ensembl Slice
 ** @argrule AllbySlice code [const AjPStr] Ensembl Attribute code
+** @argrule AllbySlice attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
 ** @argrule AllbyTranscript transcript [const EnsPTranscript]
 ** Ensembl Transcript
 ** @argrule AllbyTranscript code [const AjPStr] Ensembl Attribute code
+** @argrule AllbyTranscript attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
 ** @argrule AllbyTranslation translation [const EnsPTranslation]
 ** Ensembl Translation
 ** @argrule AllbyTranslation code [const AjPStr] Ensembl Attribute code
-** @argrule Allby attributes [AjPList]
+** @argrule AllbyTranslation attributes [AjPList]
 ** AJAX List of Ensembl Attribute objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -843,9 +851,9 @@ AjBool ensAttributeadaptorFetchAllbyGene(
 {
     char *txtcode = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
 
     if (!ata)
         return ajFalse;
@@ -872,175 +880,20 @@ AjBool ensAttributeadaptorFetchAllbyGene(
 
     if (code && ajStrGetLen(code))
     {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
+        dba = ensAttributeadaptorGetDatabaseadaptor(ata);
+
+        ensDatabaseadaptorEscapeC(dba, &txtcode, code);
 
         ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
 
         ajCharDel(&txtcode);
     }
 
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
-    return result;
-}
-
-
-
-
-/* @func ensAttributeadaptorFetchAllbyOperon **********************************
-**
-** Fetch all Ensembl Attribute objects via an Ensembl Operon.
-**
-** The caller is responsible for deleting the Ensembl Attribute objects before
-** deleting the AJAX List.
-**
-** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
-** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
-** @param [r] operon [const EnsPOperon] Ensembl Operon
-** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-AjBool ensAttributeadaptorFetchAllbyOperon(
-    EnsPAttributeadaptor ata,
-    const EnsPOperon operon,
-    const AjPStr code,
-    AjPList attributes)
-{
-    char *txtcode = NULL;
-
-    AjBool result = AJFALSE;
-
-    AjPStr statement = NULL;
-
-    if (!ata)
-        return ajFalse;
-
-    if (!operon)
-        return ajFalse;
-
-    if (!attributes)
-        return ajFalse;
-
-    statement = ajFmtStr(
-        "SELECT "
-        "operon_attrib.attrib_type_id, "
-        "operon_attrib.value "
-        "FROM "
-        "attrib_type, "
-        "operon_attrib "
-        "WHERE "
-        "attrib_type.attrib_type_id = "
-        "operon_attrib.attrib_type_id "
-        "AND "
-        "operon_attrib.operon_id = %u",
-        ensOperonGetIdentifier(operon));
-
-    if (code && ajStrGetLen(code))
-    {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
-
-        ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
-
-        ajCharDel(&txtcode);
-    }
-
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
-
-    ajStrDel(&statement);
-
-    return result;
-}
-
-
-
-
-/* @func ensAttributeadaptorFetchAllbyOperontranscript ************************
-**
-** Fetch all Ensembl Attribute objects via an Ensembl Operon Transcript.
-**
-** The caller is responsible for deleting the Ensembl Attribute objects before
-** deleting the AJAX List.
-**
-** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
-** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
-** @param [r] ot [const EnsPOperontranscript] Ensembl Operon Transcript
-** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-AjBool ensAttributeadaptorFetchAllbyOperontranscript(
-    EnsPAttributeadaptor ata,
-    const EnsPOperontranscript ot,
-    const AjPStr code,
-    AjPList attributes)
-{
-    char *txtcode = NULL;
-
-    AjBool result = AJFALSE;
-
-    AjPStr statement = NULL;
-
-    if (!ata)
-        return ajFalse;
-
-    if (!ot)
-        return ajFalse;
-
-    if (!attributes)
-        return ajFalse;
-
-    statement = ajFmtStr(
-        "SELECT "
-        "operon_transcript_attrib.attrib_type_id, "
-        "operon_transcript_attrib.value "
-        "FROM "
-        "attrib_type, "
-        "operon_transcript_attrib "
-        "WHERE "
-        "attrib_type.attrib_type_id = "
-        "operon_transcript_attrib.attrib_type_id "
-        "AND "
-        "operon_transcript_attrib.operon_transcript_id = %u",
-        ensOperontranscriptGetIdentifier(ot));
-
-    if (code && ajStrGetLen(code))
-    {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
-
-        ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
-
-        ajCharDel(&txtcode);
-    }
-
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
-
-    ajStrDel(&statement);
-
-    return result;
+    return ajTrue;
 }
 
 
@@ -1074,9 +927,9 @@ AjBool ensAttributeadaptorFetchAllbySeqregion(
 {
     char *txtcode = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
 
     if (!ata)
         return ajFalse;
@@ -1103,21 +956,20 @@ AjBool ensAttributeadaptorFetchAllbySeqregion(
 
     if (code && ajStrGetLen(code))
     {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
+        dba = ensAttributeadaptorGetDatabaseadaptor(ata);
+
+        ensDatabaseadaptorEscapeC(dba, &txtcode, code);
 
         ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
 
         ajCharDel(&txtcode);
     }
 
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -1171,11 +1023,10 @@ AjBool ensAttributeadaptorFetchAllbySlice(
         return ajFalse;
     }
 
-    return ensAttributeadaptorFetchAllbySeqregion(
-        ata,
-        sr,
-        code,
-        attributes);
+    return ensAttributeadaptorFetchAllbySeqregion(ata,
+                                                  sr,
+                                                  code,
+                                                  attributes);
 }
 
 
@@ -1209,9 +1060,9 @@ AjBool ensAttributeadaptorFetchAllbyTranscript(
 {
     char *txtcode = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
 
     if (!ata)
         return ajFalse;
@@ -1238,21 +1089,20 @@ AjBool ensAttributeadaptorFetchAllbyTranscript(
 
     if (code && ajStrGetLen(code))
     {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
+        dba = ensAttributeadaptorGetDatabaseadaptor(ata);
+
+        ensDatabaseadaptorEscapeC(dba, &txtcode, code);
 
         ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
 
         ajCharDel(&txtcode);
     }
 
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -1286,9 +1136,9 @@ AjBool ensAttributeadaptorFetchAllbyTranslation(
 {
     char *txtcode = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
 
     if (!ata)
         return ajFalse;
@@ -1315,21 +1165,20 @@ AjBool ensAttributeadaptorFetchAllbyTranslation(
 
     if (code && ajStrGetLen(code))
     {
-        ensDatabaseadaptorEscapeC(
-            ensAttributeadaptorGetDatabaseadaptor(ata),
-            &txtcode,
-            code);
+        dba = ensAttributeadaptorGetDatabaseadaptor(ata);
+
+        ensDatabaseadaptorEscapeC(dba, &txtcode, code);
 
         ajFmtPrintAppS(&statement, " AND attrib_type.code = '%s'", txtcode);
 
         ajCharDel(&txtcode);
     }
 
-    result = attributeadaptorFetchAllbyStatement(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -1340,7 +1189,9 @@ AjBool ensAttributeadaptorFetchAllbyTranslation(
 ** @nam2rule Attributetype Functions for manipulating
 ** Ensembl Attribute Type objects
 **
-** @cc Split out of Bio::EnsEMBL::Attribute
+** @cc Bio::EnsEMBL::Attribute
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1537,7 +1388,14 @@ void ensAttributetypeDel(EnsPAttributetype *Pat)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pat) || --pthis->Use)
+    if (!*Pat)
+        return;
+
+    pthis = *Pat;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pat = NULL;
 
@@ -1548,7 +1406,9 @@ void ensAttributetypeDel(EnsPAttributetype *Pat)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Description);
 
-    ajMemFree((void **) Pat);
+    AJFREE(pthis);
+
+    *Pat = NULL;
 
     return;
 }
@@ -1922,7 +1782,8 @@ AjBool ensAttributetypeTrace(const EnsPAttributetype at, ajuint level)
             "%S  Adaptor %p\n"
             "%S  Code '%S'\n"
             "%S  Name '%S'\n"
-            "%S  Description '%S'\n",
+            "%S  Description '%S'\n"
+            "%S  Value '%S'\n",
             indent, at,
             indent, at->Use,
             indent, at->Identifier,
@@ -1941,11 +1802,11 @@ AjBool ensAttributetypeTrace(const EnsPAttributetype at, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Attribute Type object.
+** Functions for calculating values of an Ensembl Attribute Type object.
 **
 ** @fdata [EnsPAttributetype]
 **
-** @nam3rule Calculate Calculate Ensembl Attribute Type information
+** @nam3rule Calculate Calculate Ensembl Attribute Type values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * at [const EnsPAttributetype] Ensembl Attribute Type
@@ -2011,7 +1872,9 @@ size_t ensAttributetypeCalculateMemsize(const EnsPAttributetype at)
 ** @nam2rule Attributetypeadaptor Functions for manipulating
 ** Ensembl Attribute Type Adaptor objects
 **
-** @cc Split out of Bio::EnsEMBL::DBSQL::AttributeAdaptor
+** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor
+** @cc CVS Revision: 1.29
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2185,8 +2048,8 @@ EnsPAttributetypeadaptor ensAttributetypeadaptorNew(
 
     ata->Adaptor = ensBaseadaptorNew(
         dba,
-        attributetypeadaptorKTablenames,
-        attributetypeadaptorKColumnnames,
+        attributetypeadaptorKTables,
+        attributetypeadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2247,8 +2110,6 @@ EnsPAttributetypeadaptor ensAttributetypeadaptorNew(
 
 static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
 {
-    AjBool result = AJFALSE;
-
     AjPList ats = NULL;
 
     EnsPAttributetype at = NULL;
@@ -2265,7 +2126,7 @@ static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
         return ajFalse;
     else
     {
-        ata->CacheByIdentifier = ajTableuintNew(0U);
+        ata->CacheByIdentifier = ajTableuintNew(0);
 
         ajTableSetDestroyvalue(
             ata->CacheByIdentifier,
@@ -2276,7 +2137,7 @@ static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
         return ajFalse;
     else
     {
-        ata->CacheByCode = ajTablestrNew(0U);
+        ata->CacheByCode = ajTablestrNew(0);
 
         ajTableSetDestroyvalue(
             ata->CacheByCode,
@@ -2285,9 +2146,11 @@ static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
 
     ats = ajListNew();
 
-    result = ensBaseadaptorFetchAll(
-        ensAttributetypeadaptorGetBaseadaptor(ata),
-        ats);
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
 
     while (ajListPop(ats, (void **) &at))
     {
@@ -2303,7 +2166,7 @@ static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
 
     ajListFree(&ats);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2559,15 +2422,19 @@ void ensAttributetypeadaptorDel(EnsPAttributetypeadaptor *Pata)
                 *Pata);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pata))
+    if (!*Pata)
         return;
+
+    pthis = *Pata;
 
     ajTableDel(&pthis->CacheByIdentifier);
     ajTableDel(&pthis->CacheByCode);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    ajMemFree((void **) Pata);
+    AJFREE(pthis);
+
+    *Pata = NULL;
 
     return;
 }
@@ -2637,8 +2504,7 @@ EnsPBaseadaptor ensAttributetypeadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensAttributetypeadaptorGetDatabaseadaptor(
     EnsPAttributetypeadaptor ata)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensAttributetypeadaptorGetBaseadaptor(ata));
+    return (ata) ? ensBaseadaptorGetDatabaseadaptor(ata->Adaptor) : NULL;
 }
 
 
@@ -2778,15 +2644,11 @@ AjBool ensAttributetypeadaptorFetchByCode(EnsPAttributetypeadaptor ata,
 {
     char *txtcode = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList ats = NULL;
 
     AjPStr constraint = NULL;
 
     EnsPAttributetype at = NULL;
-
-    EnsPBaseadaptor ba = NULL;
 
     if (!ata)
         return ajFalse;
@@ -2818,9 +2680,7 @@ AjBool ensAttributetypeadaptorFetchByCode(EnsPAttributetypeadaptor ata,
 
     /* In case of a cache miss, re-query the database. */
 
-    ba = ensAttributetypeadaptorGetBaseadaptor(ata);
-
-    ensBaseadaptorEscapeC(ba, &txtcode, code);
+    ensBaseadaptorEscapeC(ata->Adaptor, &txtcode, code);
 
     constraint = ajFmtStr("attrib_type.code = '%s'", txtcode);
 
@@ -2828,12 +2688,11 @@ AjBool ensAttributetypeadaptorFetchByCode(EnsPAttributetypeadaptor ata,
 
     ats = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        ats);
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
 
     if (ajListGetLength(ats) > 1)
         ajWarn("ensAttributetypeadaptorFetchByCode got more than one "
@@ -2855,7 +2714,7 @@ AjBool ensAttributetypeadaptorFetchByCode(EnsPAttributetypeadaptor ata,
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2880,7 +2739,11 @@ AjBool ensAttributetypeadaptorFetchByIdentifier(EnsPAttributetypeadaptor ata,
                                                 ajuint identifier,
                                                 EnsPAttributetype *Pat)
 {
-    AjBool result = AJFALSE;
+    AjPList ats = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAttributetype at = NULL;
 
     if (!ata)
         return ajFalse;
@@ -2912,12 +2775,35 @@ AjBool ensAttributetypeadaptorFetchByIdentifier(EnsPAttributetypeadaptor ata,
 
     /* For a cache miss re-query the database. */
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensAttributetypeadaptorGetBaseadaptor(ata),
-        identifier,
-        (void **) Pat);
+    constraint = ajFmtStr("attrib_type.attrib_type_id = %u", identifier);
+
+    ats = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
+
+    if (ajListGetLength(ats) > 1)
+        ajWarn("ensAttributetypeadaptorFetchByIdentifier got more than one "
+               "Ensembl Attribute Type for (PRIMARY KEY) identifier %u.\n",
+               identifier);
+
+    ajListPop(ats, (void **) Pat);
 
     attributetypeadaptorCacheInsert(ata, Pat);
 
-    return result;
+    while (ajListPop(ats, (void **) &at))
+    {
+        attributetypeadaptorCacheInsert(ata, &at);
+
+        ensAttributetypeDel(&at);
+    }
+
+    ajListFree(&ats);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
 }

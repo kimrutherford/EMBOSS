@@ -12,7 +12,7 @@ endif
 libensembl_la_CPPFLAGS += -I$(top_srcdir)/plplot
 libensembl_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-libensembl_la_LDFLAGS  = -version-info 6:5:0
+libensembl_la_LDFLAGS  = -version-info 6:4:0
 if ISCYGWIN
 libensembl_la_LDFLAGS += -no-undefined
 libensembl_la_LDFLAGS += -Wl,--add-stdcall-alias
@@ -66,7 +66,6 @@ ensmetacoordinate.c \
 ensmetainformation.c \
 ensmiscellaneous.c \
 ensontology.c \
-ensoperon.c \
 ensprediction.c \
 ensprojectionsegment.c \
 ensprotein.c \
@@ -133,7 +132,6 @@ ensmetacoordinate.h \
 ensmetainformation.h \
 ensmiscellaneous.h \
 ensontology.h \
-ensoperon.h \
 ensprediction.h \
 ensprojectionsegment.h \
 ensprotein.h \

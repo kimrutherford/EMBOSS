@@ -16,20 +16,20 @@ REFERENCE   1  (bases 1 to 1272)
   JOURNAL   J. Virol. 69 (12), 8041-8045 (1995)
    PUBMED   7494318
 FEATURES             Location/Qualifiers
-     source          1..1272
+     source          1. .1272
                      /organism="Human herpesvirus 7"
                      /mol_type="genomic DNA"
                      /strain="JI"
                      /db_xref="taxon:10372"
                      /clone="ED132'1.2"
-     repeat_region   207..928
+     repeat_region   207. .928
                      /note="long and complex repeat region composed of various
                      direct repeats, including TAACCC (TRS), degenerate copies
                      of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
-     misc_signal     938..998
+     misc_signal     938. .998
                      /note="pac2 motif"
      misc_feature    1009
-                     /note="right genome terminus (...ACA)"
+                     /note="right genome terminus (. . .ACA)"
 ORIGIN
        1  AAGCTTAAAC TGAGGTCACA CACGACTTTA ATTACGGCAA CGCAACAGCT GTAAGCTGCA
       61  GGAAAGATAC GATCGTAAGC AAATGTAGTC CTACAATCAA GCGAGGTTGT AGACGTTACC

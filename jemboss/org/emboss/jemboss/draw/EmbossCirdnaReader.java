@@ -192,16 +192,6 @@ public class EmbossCirdnaReader
     {
       System.out.println("SequenceReader Error");
     }
-    finally
-    {
-    	if(in!=null)
-    		try {
-    			in.close();
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    }
 
     System.out.println("Start : "+start);
     System.out.println("End   : "+end);

@@ -90,7 +90,7 @@ Obo output file [edamhasoutput.obo]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find EDAM ontology terms by has_output relation
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any
@@ -413,13 +413,22 @@ id: EDAM_operation:0290
 name: Sequence redundancy removal
 namespace: operation
 def: Compare two or more molecular sequences, identify and remove redundant sequences based on some criteria.
-subset: bioinformatics
-subset: edam
 subset: operations
-created_in: "beta12orEarlier"
 is_a: EDAM_operation:0291 ! Sequence clustering
-relationship: has_output EDAM_data:2044 ! Sequence
+relationship: has_output EDAM_data:2044 {min_cardinality=0} ! Sequence
 relationship: has_topic EDAM_topic:0164 ! Sequence clustering
+
+[Term]
+id: EDAM_operation:2446
+name: Sequence processing
+namespace: operation
+def: Process (read and / or write) one or more molecular sequences and associated annotation.
+subset: operations
+synonym: "Sequence processing (general)" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2420 ! Analysis and processing
+relationship: has_input EDAM_data:2044 {min_cardinality=0} ! Sequence
+relationship: has_output EDAM_data:2044 {min_cardinality=0} ! Sequence
+relationship: has_topic EDAM_topic:0080 ! Sequence analysis
 
 [Term]
 id: EDAM_operation:1813
@@ -427,28 +436,57 @@ name: Sequence retrieval
 namespace: operation
 def: Query a sequence data resource (typically a database) and retrieve sequences and / or annotation.
 comment: This includes direct retrieval methods (e.g. the dbfetch program) but not those that perform calculations on the sequence.
-subset: bioinformatics
-subset: edam
 subset: operations
-synonym: "Data retrieval (sequences)" EXACT []
-created_in: "beta12orEarlier"
+synonym: "Data retrieval (sequences)" EXACT [http://edamontology.org]
 is_a: EDAM_operation:2422 ! Data retrieval
 is_a: EDAM_operation:2446 ! Sequence processing
-relationship: has_output EDAM_data:2044 ! Sequence
+relationship: has_output EDAM_data:2044 {min_cardinality=0} ! Sequence
 
 [Term]
-id: EDAM_operation:2871
-name: Sequence tagged site (STS) mapping
+id: EDAM_operation:2404
+name: Sequence motif processing
 namespace: operation
-def: Generate a physical DNA map (sequence map) from analysis of sequence tagged sites (STS).
-comment: An STS is a short subsequence of known sequence and location that occurs only once in the chromosome or genome that is being mapped. Sources of STSs include 1. expressed sequence tags (ESTs), simple sequence length polymorphisms (SSLPs), and random genomic sequences from cloned genomic DNA or database sequences.
-subset: bioinformatics
-subset: edam
+def: Process (read and / or write) molecular sequence motifs.
 subset: operations
-synonym: "Sequence mapping" EXACT []
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:2944 ! Physical mapping
-relationship: has_output EDAM_data:1279 ! Sequence map
+is_a: EDAM_operation:2420 ! Analysis and processing
+relationship: has_input EDAM_data:1353 {min_cardinality=0} ! Sequence motif
+relationship: has_output EDAM_data:1353 {min_cardinality=0} ! Sequence motif
+relationship: has_topic EDAM_topic:0158 ! Sequence motifs
+
+[Term]
+id: EDAM_operation:0239
+name: Sequence motif recognition
+namespace: operation
+def: Find (scan for) known motifs, patterns and regular expressions in molecular sequence(s).
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+relationship: has_topic EDAM_topic:0080 ! Sequence analysis
+
+[Term]
+id: EDAM_operation:2451
+name: Sequence comparison
+namespace: operation
+def: Compare two or more molecular sequences.
+subset: operations
+is_a: EDAM_operation:2403 ! Sequence analysis
+is_a: EDAM_operation:2424 ! Comparison
+relationship: has_input EDAM_data:2044 {min_cardinality=2} ! Sequence
+relationship: has_output EDAM_data:2955 ! Sequence report
+relationship: has_topic EDAM_topic:0159 ! Sequence comparison
+
+[Term]
+id: EDAM_operation:3197
+name: Genetic variation analysis
+namespace: operation
+def: Analyse a genetic variation, for example to annotate its location, alleles, classification, and effects on individual transcripts predicted for a gene model.
+comment: Genetic variation annotation provides contextual interpretation of coding SNP consequences in transcripts. It allows comparisons to be made between variation data in different populations or strains for the same transcript.
+subset: operations
+synonym: "Sequence variation analysis" EXACT [http://edamontology.org]
+synonym: "Genetic variation annotation" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2508 ! Nucleic acid sequence comparison
+relationship: has_output EDAM_data:0918 ! Nucleic acid features (variation)
 
 [Term]
 id: EDAM_operation:0310
@@ -456,62 +494,24 @@ name: Sequence assembly
 namespace: operation
 def: Combine (align and merge) overlapping fragments of a DNA sequence to reconstruct the original sequence.
 comment: For example, assemble overlapping reads from paired-end sequencers into contigs (a contiguous sequence corresponding to read overlaps). Or assemble contigs, for example ESTs and genomic DNA fragments, depending on the detected fragment overlaps.
-subset: bioinformatics
-subset: edam
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-subset: edam
 subset: operations
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:0337 ! Plotting and rendering
+is_a: EDAM_operation:2429 ! Mapping and assembly
+is_a: EDAM_operation:2448 ! Sequence processing (nucleic acid)
+is_a: EDAM_operation:2478 ! Nucleic acid sequence analysis
+relationship: has_output EDAM_data:0925 ! Sequence assembly
+relationship: has_topic EDAM_topic:0196 ! Sequence assembly
+
+[Term]
+id: EDAM_operation:0258
+name: Sequence alignment analysis
+namespace: operation
+def: Analyse a molecular sequence alignment.
+subset: operations
 is_a: EDAM_operation:2463 ! Sequence alignment processing
-relationship: has_input EDAM_data:0863 ! Sequence alignment
-relationship: has_output EDAM_data:1711 ! Sequence alignment image
-
-[Term]
-id: EDAM_operation:0491
-name: Pairwise sequence alignment construction
-namespace: operation
-def: Align exactly two molecular sequences.
-comment: Methods might perform one-to-one, one-to-many or many-to-many comparisons.
-subset: bioinformatics
-subset: edam
-subset: operations
-synonym: "Pairwise sequence alignment" EXACT []
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:0292 ! Sequence alignment construction
-relationship: has_output EDAM_data:1381 ! Sequence alignment (pair)
-
-[Term]
-id: EDAM_operation:0483
-name: Structured RNA prediction and optimisation
-namespace: operation
-def: Predict or optimise RNA sequences (sequence pools) with likely secondary and tertiary structure for in vitro selection.
-subset: bioinformatics
-subset: edam
-subset: operations
-synonym: "Nucleic acid folding family identification" EXACT []
-synonym: "RNA inverse folding" EXACT []
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:2425 ! Optimisation and refinement
-is_a: EDAM_operation:3095 ! Nucleic acid design
-relationship: has_output EDAM_data:1234 ! Sequence set (nucleic acid)
-relationship: has_topic EDAM_topic:2953 ! Nucleic acid design
-
-[Term]
-id: EDAM_operation:0449
-name: Sequence alignment analysis (site correlation)
-namespace: operation
-def: Analyse correlations between sites in a molecular sequence alignment.
-comment: This is typically done to identify possible covarying positions and predict contacts or structural constraints in protein structures.
-subset: bioinformatics
-subset: edam
-subset: operations
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:0258 ! Sequence alignment analysis
-relationship: has_output EDAM_data:1416 ! Sequence alignment report (site correlation)
+is_a: EDAM_operation:2946 ! Alignment analysis
+relationship: has_input EDAM_data:0863 {min_cardinality=1} ! Sequence alignment ! Extends cardinality constraint on parent.
+relationship: has_output EDAM_data:0867 {min_cardinality=1} ! Sequence alignment report
+relationship: has_topic EDAM_topic:0182 ! Sequence alignment
 
 </pre>
 </td></tr></table><p>

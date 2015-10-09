@@ -33,7 +33,7 @@ COMMENT     Contact: Wilson RK
             Seq primer: SP6
             High quality sequence stop: 265.
 FEATURES             Location/Qualifiers
-     source          1..495
+     source          1. .495
                      /organism="Homo sapiens"
                      /mol_type="mRNA"
                      /db_xref="GDB:3839990"

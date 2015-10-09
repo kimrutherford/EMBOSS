@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.22 $
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:06:34 $ by $Author: mks $
+** @modified $Date: 2012/03/04 12:31:20 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -375,20 +375,19 @@ typedef struct EnsSGvdatabaseadaptor
 
 /* @data EnsPGvbaseadaptorLeftjoin ********************************************
 **
-** Ensembl Genetic Variation Base Adaptor SQL LEFT JOIN condition
+** Ensembl Genetic Variation Base Adaptor Left Join conditions
 **
 ** @alias EnsSGvbaseadaptorLeftjoin
 ** @alias EnsOGvbaseadaptorLeftjoin
 **
-** @attr Tablename [char*] SQL table name
+** @attr Table [char*] SQL table name
 ** @attr Condition [char*] SQL LEFT JOIN condition
 ** @@
-** FIXME: Could this just become an alias of EnsPBaseadaptorLeftjoin
 ******************************************************************************/
 
 typedef struct EnsSGvbaseadaptorLeftjoin
 {
-    char *Tablename;
+    char *Table;
     char *Condition;
 } EnsOGvbaseadaptorLeftjoin;
 
@@ -404,7 +403,6 @@ typedef struct EnsSGvbaseadaptorLeftjoin
 ** @alias EnsSGvbaseadaptor
 ** @alias EnsOGvbaseadaptor
 **
-** @alias EnsPGvgenotypecodeadaptor
 ** @alias EnsPGvpopulationgenotypeadaptor
 ** @alias EnsPGvtranscriptvariationadaptor
 **
@@ -787,11 +785,14 @@ typedef struct EnsSGvsynonym
 ** @alias EnsSGvvariationadaptor
 **
 ** @attr Adaptor [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor
-** @attr Tablenames [char**] SQL table name array
-** @attr Columnnames [char**] SQL column name array
+** @attr Tables [char**]  One-dimensional array of table name character
+**                        strings, which is dynamically assigned.
+** @attr Columns [char**] One-dimensional array of column name character
+**                        strings, which is dynamically assigned.
 ** @attr Condition [char*] SQL SELECT default condition,
 **                         which is dynamically assigned.
-** @attr Leftjoins [EnsPGvbaseadaptorLeftjoin] SQL LEFT JOIN conditions
+** @attr Leftjoin [EnsPGvbaseadaptorLeftjoin]
+** Ensembl Base Adaptor SQL LEFT JOIN conditions
 ** @attr Defaultcondition [char*] SQL SELECT default condition
 ** @@
 ******************************************************************************/
@@ -799,10 +800,10 @@ typedef struct EnsSGvsynonym
 typedef struct EnsSGvvariationadaptor
 {
     EnsPGvbaseadaptor Adaptor;
-    char **Tablenames;
-    char **Columnnames;
+    char **Tables;
+    char **Columns;
     char *Condition;
-    EnsPGvbaseadaptorLeftjoin Leftjoins;
+    EnsPGvbaseadaptorLeftjoin Leftjoin;
     char *Defaultcondition;
 } EnsOGvvariationadaptor;
 

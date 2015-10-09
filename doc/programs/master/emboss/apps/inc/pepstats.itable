@@ -56,14 +56,6 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-pkdata</td>
-<td>datafile</td>
-<td>Values of pKa for amino acids</td>
-<td>Data file</td>
-<td>Epk.dat</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
 <td>-[no]termini</td>
 <td>boolean</td>
 <td>Include charge at N and C terminus</td>
@@ -156,14 +148,6 @@
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

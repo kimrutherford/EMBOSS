@@ -185,6 +185,14 @@ PpiI</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-name</td>
+<td>boolean</td>
+<td>Show sequence name</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Associated qualifiers</th>
 </tr>
 
@@ -261,14 +269,6 @@ PpiI</td>
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

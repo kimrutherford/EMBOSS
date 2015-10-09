@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.20 $
+** @version $Revision: 1.19 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:47:13 $ by $Author: mks $
+** @modified $Date: 2012/04/26 06:38:02 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -176,10 +176,10 @@ void ensExternaldatabaseadaptorDel(
     EnsPExternaldatabaseadaptor *Pedba);
 
 EnsPBaseadaptor ensExternaldatabaseadaptorGetBaseadaptor(
-    EnsPExternaldatabaseadaptor edba);
+    const EnsPExternaldatabaseadaptor edba);
 
 EnsPDatabaseadaptor ensExternaldatabaseadaptorGetDatabaseadaptor(
-    EnsPExternaldatabaseadaptor edba);
+    const EnsPExternaldatabaseadaptor edba);
 
 AjBool ensExternaldatabaseadaptorFetchAll(
     EnsPExternaldatabaseadaptor edba,

@@ -31,7 +31,7 @@ January 2010
 30-June-2009
  
  * better integration with EMBOSS makefiles,
-   standalone jemboss installed by default when emboss installed
+   standalone jemboss comes out of the box when emboss installed
 
 03-July-2008
 

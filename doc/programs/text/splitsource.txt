@@ -31,7 +31,7 @@ Usage
    Split a sequence into original subsequences
 
 
-% splitsource ena:A01139
+% splitsource qasrswww:A01139
 Split sequence(s) into original source sequences
 output sequence(s) [a01139.fasta]:
 
@@ -42,7 +42,7 @@ output sequence(s) [a01139.fasta]:
 Command line arguments
 
 Split sequence(s) into original source sequences
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -66,7 +66,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -127,7 +126,7 @@ Input file format
 
   Input files for usage example
 
-  Database entry: ena:A01139
+  Database entry: qasrswww:A01139
 
 ID   A01139; SV 1; linear; unassigned DNA; PAT; PRO; 279 BP.
 XX
@@ -142,12 +141,11 @@ XX
 KW   .
 XX
 OS   Lactococcus lactis
-OC   Bacteria; Firmicutes; Bacilli; Lactobacillales; Streptococcaceae;
-OC   Lactococcus.
+OC   Bacteria; Firmicutes; Lactobacillales; Streptococcaceae; Lactococcus.
 XX
 OS   Hirudo medicinalis (medicinal leech)
-OC   Eukaryota; Metazoa; Lophotrochozoa; Annelida; Clitellata; Hirudinida;
-OC   Hirudinea; Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
+OC   Eukaryota; Metazoa; Annelida; Clitellata; Hirudinida; Hirudinea;
+OC   Arhynchobdellida; Hirudiniformes; Hirudinidae; Hirudo.
 XX
 RN   [1]
 RP   1-279
@@ -174,10 +172,10 @@ FT                   /note="fusion of MSP signal peptide and hirudin"
 FT                   /protein_id="CAA00134.1"
 FT                   /translation="MKKKIISAILMSTVILSAAAPLSGVYAVVYTDCTESGQNLCLCEG
 FT                   SNVCGQGNKCILGSDGEKNQCVTGEGTPKPQSHNDGDFEEIPEEYLQ"
-FT   sig_peptide     1..81
-FT                   /product="MSP signal peptide"
 FT   mat_peptide     82..279
 FT                   /product="desulfatohirudin"
+FT   sig_peptide     1..81
+FT                   /product="MSP signal peptide"
 XX
 SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
      atgaaaaaaa agattatctc agctatttta atgtctacag tgatactttc tgctgcagcc        60

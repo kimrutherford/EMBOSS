@@ -33,7 +33,6 @@
 ** @attr fmtterms [AjPStr] Format terms
 ** @attr dataterms [AjPStr] Data terms
 ** @attr tpcterms [AjPStr] EDAM topic terms
-** @attr aliases [AjPStr] Database alias name(s)
 ** @attr dbtype [AjPStr] Database type
 ** @attr description [AjPStr] Description
 ** @attr example [AjPStr] Example
@@ -47,7 +46,6 @@ typedef struct dbinfo
     AjPStr fmtterms;
     AjPStr dataterms;
     AjPStr tpcterms;
-    AjPStr aliases;
     AjPStr dbtype;
     AjPStr description;
     AjPStr example;
@@ -61,8 +59,7 @@ static const char* idlists[] = {"accessionList", "entryVersionList",
 
 
 
-static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes,
-                                      const AjPStr dbname);
+static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes);
 static void cachedbfetch_PrintCachefile(const AjPList dbs, AjPFile cachef,
 	                                AjBool usedbfetch);
 static void cachedbfetch_WriteDBdefinition(AjPFile cachef,
@@ -76,9 +73,6 @@ static void    cachedbfetch_SetDbtype(dbPinfo dbinfo, AjPTable dbtypes);
 static AjPList cachedbfetch_wsGetDbList(axiom_node_t *wsResult,
                                         const axutil_env_t *env);
 static AjPList cachedbfetch_wsGetDBListInfoCall(const AjPStr url);
-static AjPStr cachedbfetch_wsGetAliases(const axutil_env_t *env,
-                                         axiom_element_t* elm,
-                                         axiom_node_t* node);
 static AjPStr cachedbfetch_wsGetExamples(const axutil_env_t *env,
                                          axiom_element_t* elm,
                                          axiom_node_t* node);
@@ -96,7 +90,6 @@ static void cachedbfetch_wsGetEdamTerms(const axutil_env_t *env,
 
 static AjPList cachedbfetch_GetDbList(AjPFilebuff buff);
 static AjPList cachedbfetch_GetDBListInfoCall(const AjPStr url);
-static AjPStr cachedbfetch_GetAliases(AjPDomDocument doc, AjPDomElement elm);
 static AjPStr cachedbfetch_GetExamples(AjPDomDocument doc, AjPDomElement elm);
 static AjPStr cachedbfetch_GetFormats(AjPDomDocument doc,  AjPDomElement e,
                                       AjPTable dbtypes, dbPinfo db);
@@ -187,7 +180,6 @@ int main(int argc, char **argv)
 	    ajStrDel(&dbinfo->dataterms);
 	    ajStrDel(&dbinfo->fmtterms);
 	    ajStrDel(&dbinfo->tpcterms);
-	    ajStrDel(&dbinfo->aliases);
 	    AJFREE(dbinfo);
 	}
 
@@ -335,9 +327,6 @@ static AjPList cachedbfetch_wsGetDbList(axiom_node_t *wsResult,
 		db->dataterms = ajStrNew();
 		db->fmtterms = ajStrNew();
 
-                db->aliases = cachedbfetch_wsGetAliases(env, elm,
-                                                        node);
-
 		while(axiom_children_iterator_has_next(dbAttrIter, env))
 		{
 
@@ -437,59 +426,6 @@ static void cachedbfetch_wsGetEdamTerms(const axutil_env_t *env,
     ajDebug("edam terms: %S\n", *dbatt);
 
     return;
-}
-
-
-
-
-/* @funcstatic cachedbfetch_wsGetAliases **************************************
-**
-** Parses the results of WSdbfetch "getDatabaseInfoList" calls
-** for alternative database names
-**
-** @param [r] env [const axutil_env_t*] axis2 environment obj
-** @param [u] elm [axiom_element_t*] "exampleIdentifiers" element
-** @param [u] node [axiom_node_t*] "exampleIdentifiers" node
-** @return [AjPStr] list of identifiers
-** @@
-******************************************************************************/
-
-static AjPStr cachedbfetch_wsGetAliases(const axutil_env_t *env,
-                                        axiom_element_t* elm,
-                                        axiom_node_t* node)
-{
-    AjPStr ret = NULL;
-    axiom_node_t* n  = NULL;
-    axis2_char_t* id = NULL;
-    axutil_qname_t* qname = NULL;
-    axiom_child_element_iterator_t* i = NULL;
-
-    ret = ajStrNew();
-
-    qname = axutil_qname_create(env, "aliasList", WSDBFETCH_NS, "");
-    elm = axiom_element_get_first_child_with_qname(elm, env, qname,
-	                                               node, &n);
-    i = axiom_element_get_child_elements(elm,env,n);
-
-    if(i)
-    {
-        while(axiom_child_element_iterator_has_next(i, env))
-        {
-            n = axiom_child_element_iterator_next(i, env);
-            elm = axiom_node_get_data_element(n, env);
-            id = axiom_element_get_text(elm, env, n);
-
-            if(ajStrGetLen(ret)>0)
-                ajStrAppendC(&ret, ", ");
-
-            ajStrAppendC(&ret, id);
-
-        }
-    }
-
-    axutil_qname_free(qname, env);
-
-    return ret;
 }
 
 
@@ -624,7 +560,7 @@ static AjPStr cachedbfetch_wsGetFormats(const axutil_env_t *env,
 	    continue;
 
 	/* adds the format only if it is supported by one of the db types */
-	if(cachedbfetch_GetDbtypes(format, dbtypes, db->displayname))
+	if(cachedbfetch_GetDbtypes(format, dbtypes))
 	{
 	    if(ajStrGetLen(ret)>0)
 		ajStrAppendC(&ret, ", ");
@@ -708,21 +644,19 @@ static AjPList cachedbfetch_GetDbList(AjPFilebuff buff)
     AjPDomNodeList dbnodes = NULL;
     AjPDomNode dbnode      = NULL;
     AjPDomElement e    = NULL;
-    AjPDomElement elm  = NULL;
 
     AjPStr dbterm = NULL;
 
     dbPinfo db = NULL;
 
-    ajint i;
-    ajint j;
-    ajint n = 0;
-    
+    int i;
+    int j;
+
     doc = ajDomImplementationCreateDocument(NULL,NULL,NULL);
 
     if (ajDomReadFilebuff(doc,buff) == -1)
     {
-	ajDomDocumentDestroyNode(doc,&doc);
+	ajDomDocumentDestroyNode(doc,doc);
 	return AJFALSE;
     }
 
@@ -732,8 +666,8 @@ static AjPList cachedbfetch_GetDbList(AjPFilebuff buff)
 
     if(dbnodes==NULL || ajDomNodeListGetLen(dbnodes) < 1)
     {
-	ajDomDocumentDestroyNodeList(doc,&dbnodes,AJDOMKEEP);
-	ajDomDocumentDestroyNode(doc,&doc);
+	ajDomDocumentDestroyNodeList(doc,dbnodes,AJDOMKEEP);
+	ajDomDocumentDestroyNode(doc,doc);
 	return AJFALSE;
     }
 
@@ -764,11 +698,6 @@ static AjPList cachedbfetch_GetDbList(AjPFilebuff buff)
 
 	db->example = cachedbfetch_GetExamples(doc, e);
 
-	e = ajDomElementGetFirstChildByTagNameC(doc,dbnode,
-	                                        "aliasList");
-
-	db->aliases = cachedbfetch_GetAliases(doc, dbnode);
-
 	e = ajDomElementGetFirstChildByTagNameC(doc,dbnode, "formatInfoList");
 	ajTableClear(dbtypes);
 	db->fmtterms = ajStrNew();
@@ -778,86 +707,28 @@ static AjPList cachedbfetch_GetDbList(AjPFilebuff buff)
 	cachedbfetch_SetDbtype(db, dbtypes);
 
 	e = ajDomElementGetFirstChildByTagNameC(doc,dbnode, "databaseTerms");
-	elm = ajDomElementGetFirstChildByTagNameC(doc, e, "databaseTerm");
+	e = ajDomElementGetFirstChildByTagNameC(doc, e, "databaseTerm");
+	ajStrAssignS(&dbterm, ajDomElementGetText(e));
+	ajDebug( "dbterm: %S\n", dbterm);
 
-        n = 0;
-        while(elm) 
-        {
-            ajStrAssignS(&dbterm, ajDomElementGetText(elm));
-            ajDebug( "dbterm: %S\n", dbterm);
-
-            if( ajStrGetLen(dbterm)> 0  &&
+	if( ajStrGetLen(dbterm)> 0  &&
 		ajStrFindS(db->tpcterms, dbterm) == -1)
-            {
-                if(ajStrGetLen(db->tpcterms)>0)
-                    ajStrAppendC(&db->tpcterms, ", ");
+	{
+	    if(ajStrGetLen(db->tpcterms)>0)
+		ajStrAppendC(&db->tpcterms, ", ");
 
-                ajStrAppendS(&db->tpcterms, dbterm);
-            }
-
-            elm = ajDomElementGetNthChildByTagNameC(doc, e,
-                                                    "databaseTerm", ++n);
-        }
+	    ajStrAppendS(&db->tpcterms, dbterm);
+	}
 
 	ajListPushAppend(dblist,db);
 	ajStrDel(&dbterm);
     }
 
     ajTableDel(&dbtypes);
-    ajDomDocumentDestroyNodeList(doc,&dbnodes,AJDOMKEEP);
-    ajDomDocumentDestroyNode(doc,&doc);
+    ajDomDocumentDestroyNodeList(doc,dbnodes,AJDOMKEEP);
+    ajDomDocumentDestroyNode(doc,doc);
 
     return dblist;
-}
-
-
-
-
-/* @funcstatic cachedbfetch_GetAliases ***************************************
-**
-** Parses the results of dbfetch metadata query response
-** for alternative database names
-**
-** @param [u] doc [AjPDomDocument] ajdom document obj
-** @param [u] elm [AjPDomElement] ajdom element obj for examples list
-** @return [AjPStr] list of example identifiers
-** @@
-******************************************************************************/
-
-static AjPStr cachedbfetch_GetAliases(AjPDomDocument doc, AjPDomElement elm)
-{
-    AjPStr ret = NULL;
-    AjPStr id  = NULL;
-    AjPDomElement e = NULL;
-    AjPDomNode ex;
-    int i=0;
-    int len;
-
-    ret = ajStrNew();
-
-    e = ajDomElementGetFirstChildByTagNameC(doc, elm, "aliasList");
-
-    if(e)
-    {
-        len = ajDomNodeListGetLen(e->childnodes);
-
-        for(i=0; i < len;i++)
-        {
-            ex = ajDomNodeListItem(e->childnodes, i);
-            id = ajDomElementGetText(ex);
-
-            if(!id)
-                continue; /* skip #text elements */
-
-            if(ajStrGetLen(ret) > 0)
-                ajStrAppendC(&ret, ", ");
-
-            ajStrAppendS(&ret, id);
-
-        }
-    }
-
-    return ret;
 }
 
 
@@ -940,9 +811,8 @@ static AjPStr cachedbfetch_GetFormats(AjPDomDocument doc, AjPDomElement e,
     AjPDomElement syntaxterms = NULL;
     AjPDomElement syntaxtermelm = NULL;
     AjPDomElement nameelm = NULL;
-    ajint i = 0;
-    ajint n = 0;
-    
+    int i=0;
+
     ret = ajStrNew();
 
     for(i=0; i<ajDomNodeListGetLen(e->childnodes);i++)
@@ -961,8 +831,7 @@ static AjPStr cachedbfetch_GetFormats(AjPDomDocument doc, AjPDomElement e,
 	    continue;
 
 	/* adds the format only if it is supported by one of the db types */
-	if(cachedbfetch_GetDbtypes(ajStrGetPtr(format), dbtypes,
-                                   db->displayname))
+	if(cachedbfetch_GetDbtypes(ajStrGetPtr(format), dbtypes))
 	{
 	    if(ajStrGetLen(ret)>0)
 		ajStrAppendC(&ret, ", ");
@@ -975,57 +844,43 @@ static AjPStr cachedbfetch_GetFormats(AjPDomDocument doc, AjPDomElement e,
 	dataterms = ajDomElementGetFirstChildByTagNameC(doc, formatinfo,
 	                                                "dataTerms");
 
-        n = 0;
 	datatermelm = ajDomElementGetFirstChildByTagNameC(doc, dataterms,
 	                                               "dataTerm");
 
-        while(datatermelm)
-        {
-            ajStrAssignS(&dataterm, ajDomElementGetText(datatermelm));
-            ajDebug( "%S\n", dataterm);
+	ajStrAssignS(&dataterm, ajDomElementGetText(datatermelm));
+	ajDebug( "%S\n", dataterm);
 
-            if( ajStrGetLen(dataterm)> 0  &&
+	if( ajStrGetLen(dataterm)> 0  &&
 		ajStrFindS(db->dataterms, dataterm) == -1)
-            {
-                if(ajStrGetLen(db->dataterms)>0)
-                    ajStrAppendC(&db->dataterms, ", ");
+	{
+	    if(ajStrGetLen(db->dataterms)>0)
+		ajStrAppendC(&db->dataterms, ", ");
 
-                ajStrAppendS(&db->dataterms, dataterm);
-            }
-
-            datatermelm = ajDomElementGetNthChildByTagNameC(doc, dataterms,
-                                                            "dataTerm", ++n);
-}
+	    ajStrAppendS(&db->dataterms, dataterm);
+	}
 
 	/* syntax terms */
 
 	syntaxterms = ajDomElementGetFirstChildByTagNameC(doc, formatinfo,
 	                                                  "syntaxTerms");
 
-        n = 0;
 	syntaxtermelm = ajDomElementGetFirstChildByTagNameC(doc, syntaxterms,
-                                                          "syntaxTerm");
-        while(syntaxtermelm)
-        {
-            ajStrAssignS(&syntaxterm, ajDomElementGetText(syntaxtermelm));
-            ajDebug( "syntax term: %S\n", syntaxterm);
+	                                                    "syntaxTerm");
 
-            if( ajStrGetLen(syntaxterm)> 0  &&
+	ajStrAssignS(&syntaxterm, ajDomElementGetText(syntaxtermelm));
+	ajDebug( "syntax term: %S\n", syntaxterm);
+
+	if( ajStrGetLen(syntaxterm)> 0  &&
 		ajStrFindS(db->fmtterms, syntaxterm) == -1)
-            {
-                if(ajStrGetLen(db->fmtterms)>0)
-                    ajStrAppendC(&db->fmtterms, ", ");
+	{
+	    if(ajStrGetLen(db->fmtterms)>0)
+		ajStrAppendC(&db->fmtterms, ", ");
 
-                ajStrAppendS(&db->fmtterms, syntaxterm);
-            }
+	    ajStrAppendS(&db->fmtterms, syntaxterm);
+	}
 
-            syntaxtermelm = ajDomElementGetNthChildByTagNameC(doc, syntaxterms,
-                                                              "syntaxTerm",
-                                                              ++n);
-        }
-        
-        ajStrDel(&dataterm);
-        ajStrDel(&syntaxterm);
+	ajStrDel(&dataterm);
+	ajStrDel(&syntaxterm);
 
     }
 
@@ -1044,13 +899,11 @@ static AjPStr cachedbfetch_GetFormats(AjPDomDocument doc, AjPDomElement e,
 **
 ** @param [r] format [const char*] format name
 ** @param [u] dbtypes [AjPTable] set of db-types
-** @param [r] dbname [const AjPStr] database name
 ** @return [AjBool] Returns true if any supporting db-types found
 ** @@
 ******************************************************************************/
 
-static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes,
-                                      const AjPStr dbname)
+static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes)
 {
     AjBool found = ajFalse;
     AjPStr formatS = ajStrNewC(format);
@@ -1061,7 +914,6 @@ static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes,
     static char sequence[] = "sequence";
     static char taxon[]    = "taxon";
     static char text[]     = "text";
-    static char xml[]      = "xml";
 
     if(ajAsseminformatTest(formatS))
     {
@@ -1105,14 +957,8 @@ static AjBool cachedbfetch_GetDbtypes(const char* format, AjPTable dbtypes,
 	found=ajTrue;
     }
 
-    if(ajXmlinformatTest(formatS))
-    {
-	ajTablePut(dbtypes, xml, NULL);
-	found=ajTrue;
-    }
-
     if(!found)
-	ajWarn("%S: No dbtype found supporting format %s", dbname, format);
+	ajWarn("No dbtype found supporting format %s", format);
 
     ajStrDel(&formatS);
 
@@ -1162,7 +1008,7 @@ static void cachedbfetch_SetDbtype(dbPinfo dbinfo, AjPTable dbtypes)
 
 
 
-/* @funcstatic cachedbfetch_PrintCachefile ************************************
+/* @funcstatic cachedbfetch_PrintCachefile **********************************
 **
 ** Prints DB definition for the specified list of wsdbfetch databases
 **
@@ -1175,7 +1021,7 @@ static void cachedbfetch_SetDbtype(dbPinfo dbinfo, AjPTable dbtypes)
 ******************************************************************************/
 
 static void cachedbfetch_PrintCachefile(const AjPList dbs, AjPFile cachef,
-                                        AjBool usedbfetch)
+	                                  AjBool usedbfetch)
 {
     AjPTime today = NULL;
     AjIList iter  = NULL;
@@ -1215,7 +1061,7 @@ static void cachedbfetch_PrintCachefile(const AjPList dbs, AjPFile cachef,
 
 
 
-/* @funcstatic cachedbfetch_WriteDBdefinition *********************************
+/* @funcstatic cachedbfetch_WriteDBdefinition *******************************
 **
 ** Writes a WsDbfetch DB definition to the specified cache-file
 **
@@ -1234,15 +1080,6 @@ static void cachedbfetch_WriteDBdefinition(AjPFile cachef,
     AjPStr dbtype    = NULL;
     AjIList iter   = NULL;
     AjPStr comment = NULL;
-    AjPStrTok handle = NULL;
-    AjPStr    token  = NULL;
-    AjPObo   obo   = NULL;
-    AjPOboin oboin = NULL;
-    AjPOboin obofixin = NULL;
-
-    oboin = ajOboinNew();
-    obofixin = ajOboinNew();
-    obo = ajOboNew();
 
     comment = ajStrNewS(dbinfo->description);
 
@@ -1255,192 +1092,32 @@ static void cachedbfetch_WriteDBdefinition(AjPFile cachef,
 	dbtype = ajStrNewC("text");
 
     ajFmtPrintF(cachef,
-                "DBNAME %S [\n"
-                "  method: %s\n"
-                "  hasacc: N\n"
-                "  format: \"%S\"\n",
-                dbinfo->name,
-                (usedbfetch ? "dbfetch" : "wsdbfetch"),
-                dbinfo->format
-                );                
-
-    ajStrTokenAssignC(&handle, dbinfo->fmtterms, ", ");
-    while(ajStrTokenNextParse(handle, &token))
-    {
-        if(ajStrPrefixC(token, "EDAM_syntax:"))
-            ajStrExchangePosCC(&token, 0, "EDAM_syntax:", "EDAM_format:");
-
-        if(!ajStrPrefixC(token, "EDAM_format:"))
-        {
-            if(ajStrPrefixC(token, "EDAM"))
-                ajWarn("non-EDAM format '%S' for %S",
-                       token, dbinfo->displayname);
-            continue;
-        }
-
-        ajOboinQryS(oboin, token);
-
-        while(ajOboinRead(oboin, obo))
-        {
-            if(ajOboIsObsolete(obo))
-            {
-                if(ajStrMatchC(ajOboGetId(obo), "1977"))
-                {               /* swiss feature */
-                    ajStrAssignC(&token, "EDAM_format:1963");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else if(ajStrMatchC(ajOboGetId(obo), "1624"))
-                {               /* HGVbase entry format */
-                    ajStrAssignC(&token, "EDAM_format:2330");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else if(ajStrMatchC(ajOboGetId(obo), "2376"))
-                {               /* RDF format */
-                    ajStrAssignC(&token, "SWO_data:3000006");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else 
-                {
-                    ajWarn("obsolete EDAM format '%S' (%S) for %S, try '%S'",
-                           token, ajOboGetName(obo), dbinfo->displayname,
-                           ajOboGetReplaced(obo));
-                    continue;
-                }
-            }
-
-            ajFmtPrintF(cachef,
-                        "  edamfmt: \"%S ! %S\"\n",
-                        ajOboGetId(obo), ajOboGetName(obo));
-        }
-    }
-    
-    ajStrTokenAssignC(&handle, dbinfo->dataterms, ", ");
-    while(ajStrTokenNextParse(handle, &token))
-    {
-        if(!ajStrPrefixC(token, "EDAM_data:"))
-        {
-            if(ajStrPrefixC(token, "EDAM"))
-                ajWarn("non-EDAM datatype '%S' for %S",
-                       token,dbinfo->displayname);
-            continue;
-        }
-
-        ajOboinQryS(oboin, token);
-
-        while(ajOboinRead(oboin, obo))
-        {
-            if(ajOboIsObsolete(obo))
-            {
-                if(ajStrMatchC(ajOboGetId(obo), "2018"))
-                {               /* Annotation */
-                    ajStrAssignC(&token, "EDAM_data:1255");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else if(ajStrMatchC(ajOboGetId(obo), "0832"))
-                {               /* HGNC vocabulary */
-                    ajStrAssignC(&token, "EDAM_data:0582");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else 
-                {
-                    ajWarn("obsolete EDAM datatype '%S' (%S) for %S, try '%S'",
-                           token, ajOboGetName(obo), dbinfo->displayname,
-                           ajOboGetReplaced(obo));
-                    continue;
-                }
-            }
-
-            ajFmtPrintF(cachef,
-                        "  edamdat: \"%S ! %S\"\n",
-                        ajOboGetId(obo), ajOboGetName(obo));
-        }
-    }
-    
-    ajStrTokenAssignC(&handle, dbinfo->tpcterms, ", ");
-    while(ajStrTokenNextParse(handle, &token))
-    {
-        if(!ajStrPrefixC(token, "EDAM_topic:"))
-        {
-            if(ajStrPrefixC(token, "EDAM"))
-                ajWarn("non-EDAM topic '%S' for %S",
-                       token, dbinfo->displayname);
-            continue;
-        }
-
-        ajOboinQryS(oboin, token);
-
-        while(ajOboinRead(oboin, obo))
-        {
-            if(ajOboIsObsolete(obo))
-            {
-                if(ajStrMatchC(ajOboGetId(obo), "0770"))
-                {               /* Data types and objects */
-                    ajStrAssignC(&token, "EDAM_topic:0091");
-                    ajOboinQryS(obofixin, token);
-                    ajOboinRead(obofixin, obo);
-                }
-                else 
-                {
-                    ajWarn("obsolete EDAM topic '%S' (%S) for %S, try '%S'",
-                           token, ajOboGetName(obo), dbinfo->displayname,
-                           ajOboGetReplaced(obo));
-                    continue;
-                }
-            }
-
-            ajFmtPrintF(cachef,
-                        "  edamtpc: \"%S ! %S\"\n",
-                        ajOboGetId(obo), ajOboGetName(obo));
-        }
-    }
-    
-    ajFmtPrintF(cachef,
-                "  type: \"%S\"\n",
-                dbtype
-                );
-
-    if(ajStrGetLen(comment))
-        ajFmtPrintF(cachef,
-                    "  comment: \"%S\"\n",
-                    comment
-                    );
-
-    ajStrTokenAssignC(&handle, dbinfo->example, ", ");
-    while(ajStrTokenNextParse(handle, &token))
-    {
-        ajFmtPrintF(cachef,
-                    "  example: \"%S\"\n",
-                    token);
-    }
-
-    ajFmtPrintF(cachef, "]\n\n");
-
-    ajStrTokenAssignC(&handle, dbinfo->aliases, ", ");
-    while(ajStrTokenNextParse(handle, &token))
-    {
-        ajFmtPrintF(cachef,
-                    "ALIAS %S %S\n",
-                    token, dbinfo->name);
-    }
-
-    if(ajStrGetLen(dbinfo->aliases))
-        ajFmtPrintF(cachef, "\n");
+	    "DB %S [\n"
+	    "  method: %s\n"
+	    "  hasacc: N\n"
+	    "  format: \"%S\"\n"
+	    "  edamfmt: \"%S\"\n"
+	    "  edamdat: \"%S\"\n"
+	    "  edamtpc: \"%S\"\n"
+	    "  type: \"%S\"\n"
+	    "  example: \"%S\"\n"
+	    "  comment: \"%S\"\n"
+	    "]\n\n",
+	    dbinfo->name,
+	    (usedbfetch ? "dbfetch" : "wsdbfetch"),
+	    dbinfo->format,
+	    dbinfo->fmtterms,
+	    dbinfo->dataterms,
+	    dbinfo->tpcterms,
+	    dbtype,
+	    dbinfo->example,
+	    comment
+	    );
 
     ajListIterDel(&iter);
 
     ajStrDel(&comment);
     ajStrDel(&dbtype);
-    ajStrDel(&token);
-    ajStrTokenDel(&handle);
-
-    ajOboinDel(&oboin);
-    ajOboinDel(&obofixin);
-    ajOboDel(&obo);
 
     return;
 }

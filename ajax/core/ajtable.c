@@ -5,9 +5,9 @@
 ** Hash table functions.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version $Revision: 1.74 $
+** @version $Revision: 1.73 $
 ** @modified 2011 pmr Auto-resizing, destructors, table merges
-** @modified $Date: 2013/02/17 13:39:44 $ by $Author: mks $
+** @modified $Date: 2012/07/03 16:21:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1486,17 +1486,20 @@ AjBool ajTablePutClean(AjPTable table, void* key, void* value,
   ajStrDel(&newkey);
   }
 */
-        if (keydel)
-            (*keydel) (&node->Key);
-        else if (table->Fkeydel)
-            (*table->Fkeydel) (&node->Key);
+        if(keydel)
+        {
+            (*keydel)(&node->Key);
+        }
+
+        else if(table->Fkeydel)
+        {
+            (*table->Fkeydel)(&node->Key);
+        }
 
         node->Key = key;
 
-        if (valdel)
-            (*valdel) (&node->Value);
-        else if (table->Fvaldel)
-            (*table->Fvaldel) (&node->Value);
+        if(valdel)
+            (*valdel)(&node->Value);
 
         result = ajTrue;
     }
@@ -6064,14 +6067,8 @@ __deprecated AjPTable ajTableNewL(
     ajuint (*hash)(const void* key,
                    ajuint hashsize))
 {
-    /*
-    ** Since the interface of ajTableNewFunctionLen has changed after
-    ** deprecation of ajTableNewL, the hash function pointer needs
-    ** additional casting.
-    */
-    return ajTableNewFunctionLen(size, cmp,
-                                 (ajulong (*)(const void*, ajulong)) hash,
-                                 NULL, NULL);
+
+    return ajTableNewFunctionLen(size, cmp, hash, NULL, NULL);
 }
 
 

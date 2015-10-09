@@ -35,7 +35,7 @@ Reference sequence output file [em498477.embl]: test.out
 Command line arguments
 
 Get reference sequence
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-refsequence]       refseq     (no help text) refseq value

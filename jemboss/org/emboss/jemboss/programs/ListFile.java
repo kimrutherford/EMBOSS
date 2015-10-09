@@ -64,9 +64,9 @@ public class ListFile
         sfs = sf.getSafeFileName();
       }
 
-      BufferedReader in=null;
       try 
       {
+        BufferedReader in;
         if(fn.startsWith("internalList::"))
         {
           fn = fn.substring(14);
@@ -117,14 +117,6 @@ public class ListFile
         filesToMove.put(sfs,listfile.getBytes());   // add list file itself
       }
       catch (IOException e) {}
-      finally
-      {
-    	  if (in!=null)
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
-      }
     } 
     
     return;

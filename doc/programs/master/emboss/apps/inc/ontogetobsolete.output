@@ -1,7 +1,7 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 1916.obo</h3>
+<p><h3>File: 0083.obo</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
@@ -9,12 +9,8 @@ id: EDAM_topic:0083
 name: Alignment
 namespace: topic
 def: Topic concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
-subset: bioinformatics
-subset: edam
 subset: topics
-created_in: "beta12orEarlier"
-obsolete_since: "beta12orEarlier"
-is_obsolete: true
+is_obsolete: true ! {since=beta12orEarlier}
 consider: EDAM_topic:0182 ! Sequence alignment
 consider: EDAM_topic:0183 ! Structure alignment
 consider: EDAM_topic:0184 ! Threading

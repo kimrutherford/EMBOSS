@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.24 $
+** @version $Revision: 1.22 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -31,9 +31,7 @@
 /* ========================================================================= */
 
 #include "ensalign.h"
-#include "ensexon.h"
 #include "ensexternaldatabase.h"
-#include "enstranscript.h"
 
 
 
@@ -63,13 +61,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic dnaalignfeatureadaptorKTablenames *****************************
+/* @conststatic dnaalignfeatureadaptorKTables *********************************
 **
 ** Array of Ensembl DNA Align Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const dnaalignfeatureadaptorKTablenames[] =
+static const char *const dnaalignfeatureadaptorKTables[] =
 {
     "dna_align_feature",
     (const char *) NULL
@@ -78,13 +76,13 @@ static const char *const dnaalignfeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic dnaalignfeatureadaptorKColumnnames ****************************
+/* @conststatic dnaalignfeatureadaptorKColumns ********************************
 **
 ** Array of Ensembl DNA Align Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const dnaalignfeatureadaptorKColumnnames[] =
+static const char *const dnaalignfeatureadaptorKColumns[] =
 {
     "dna_align_feature.dna_align_feature_id",
     "dna_align_feature.seq_region_id",
@@ -110,13 +108,13 @@ static const char *const dnaalignfeatureadaptorKColumnnames[] =
 
 
 
-/* @conststatic proteinalignfeatureadaptorKTablenames *************************
+/* @conststatic proteinalignfeatureadaptorKTables *****************************
 **
 ** Array of Ensembl DNA Align Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const proteinalignfeatureadaptorKTablenames[] =
+static const char *const proteinalignfeatureadaptorKTables[] =
 {
     "protein_align_feature",
     (const char *) NULL
@@ -125,13 +123,13 @@ static const char *const proteinalignfeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic proteinalignfeatureadaptorKColumnnames ************************
+/* @conststatic proteinalignfeatureadaptorKColumns ****************************
 **
 ** Array of Ensembl DNA Align Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const proteinalignfeatureadaptorKColumnnames[] =
+static const char *const proteinalignfeatureadaptorKColumns[] =
 {
     "protein_align_feature.protein_align_feature_id",
     "protein_align_feature.seq_region_id",
@@ -230,20 +228,20 @@ static AjBool proteinalignfeatureadaptorFetchAllbyStatement(
 ** Ensembl Base Align Feature objects
 **
 ** @cc Bio::EnsEMBL::BaseAlignFeature
-** @cc CVS Revision: 1.65
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.64
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::DnaDnaAlignFeature
-** @cc CVS Revision: 1.27
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::DnaPepAlignFeature
-** @cc CVS Revision: 1.18
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.17
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::PepDnaAlignFeature
 ** @cc CVS Revision: 1.13
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -516,7 +514,7 @@ static AjBool basealignfeatureParseFeaturepairs(EnsPBasealignfeature baf,
             if ((srclength / srcunit) != (trglength * trgunit))
                 ajFatal("Feature Pair lengths not comparable "
                         "Lengths: %d %d "
-                        "Ratios: %u %u.\n",
+                        "Ratios: %d %d.\n",
                         srclength, trglength,
                         srcunit, trgunit);
         }
@@ -525,7 +523,7 @@ static AjBool basealignfeatureParseFeaturepairs(EnsPBasealignfeature baf,
             if ((srclength * trgunit) != (trglength * srcunit))
                 ajFatal("Feature Pair lengths not comparable "
                         "Lengths: %d %d "
-                        "Ratios: %u %u.\n",
+                        "Ratios: %d %d.\n",
                         srclength, trglength,
                         srcunit, trgunit);
         }
@@ -756,9 +754,6 @@ static AjBool basealignfeatureParseCigar(const EnsPBasealignfeature baf,
     if (!baf)
         return ajFalse;
 
-    if (!fps)
-        return ajFalse;
-
     if ((!baf->Cigar) && (!ajStrGetLen(baf->Cigar)))
         ajFatal("basealignfeatureParseCigar no CIGAR string defined!\n");
 
@@ -805,8 +800,8 @@ static AjBool basealignfeatureParseCigar(const EnsPBasealignfeature baf,
             mlength = tlength;
         else
             ajFatal("basealignfeatureParseCigar got "
-                    "Base Align Feature source unit %u "
-                    "Base Align Feature target unit %u, "
+                    "Base Align Feature source unit %d "
+                    "Base Align Feature target unit %d, "
                     "but currently only 1 or 3 are allowed.\n",
                     srcunit,
                     trgunit);
@@ -1212,8 +1207,7 @@ EnsPBasealignfeature ensBasealignfeatureNewIniP(
 ** @@
 ******************************************************************************/
 
-EnsPBasealignfeature ensBasealignfeatureNewRef(
-    EnsPBasealignfeature baf)
+EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf)
 {
     if (!baf)
         return NULL;
@@ -1257,8 +1251,7 @@ EnsPBasealignfeature ensBasealignfeatureNewRef(
 ** @@
 ******************************************************************************/
 
-void ensBasealignfeatureDel(
-    EnsPBasealignfeature *Pbaf)
+void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf)
 {
     EnsPBasealignfeature pthis = NULL;
 
@@ -1276,7 +1269,14 @@ void ensBasealignfeatureDel(
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pbaf) || --pthis->Use)
+    if (!*Pbaf)
+        return;
+
+    pthis = *Pbaf;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pbaf = NULL;
 
@@ -1287,7 +1287,9 @@ void ensBasealignfeatureDel(
 
     ajStrDel(&pthis->Cigar);
 
-    ajMemFree((void **) Pbaf);
+    AJFREE(pthis);
+
+    *Pbaf = NULL;
 
     return;
 }
@@ -1546,7 +1548,8 @@ AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
 
     /* Replace the current Feature Pair. */
 
-    ensFeaturepairDel(&baf->Featurepair);
+    if (baf->Featurepair)
+        ensFeaturepairDel(&baf->Featurepair);
 
     baf->Featurepair = ensFeaturepairNewRef(fp);
 
@@ -1601,12 +1604,11 @@ EnsPFeature ensBasealignfeatureGetFeature(const EnsPBasealignfeature baf)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl Base Align Feature object.
+** Functions for calculating values of an Ensembl Base Align Feature object.
 **
 ** @fdata [EnsPBasealignfeature]
 **
-** @nam3rule Calculate Calculate Ensembl Base Align Feature information
+** @nam3rule Calculate Calculate Ensembl Base Align Feature values
 ** @nam4rule Adaptor Calculate the adaptor
 ** @nam4rule Alignmentlength Calculate the alignment length
 ** @nam4rule Memsize Calculate the memory size in bytes
@@ -1859,7 +1861,7 @@ ajuint ensBasealignfeatureCalculateUnitTarget(const EnsPBasealignfeature baf)
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Base Align Feature objects between
-** Ensembl Coordinate System objects.
+** Ensembl Coordinate Systems.
 **
 ** @fdata [EnsPBasealignfeature]
 **
@@ -2097,6 +2099,12 @@ AjBool ensBasealignfeatureTrace(const EnsPBasealignfeature baf, ajuint level)
 AjBool ensBasealignfeatureFetchAllFeaturepairs(const EnsPBasealignfeature baf,
                                                AjPList fps)
 {
+    if (!baf)
+        return ajFalse;
+
+    if (!fps)
+        return ajFalse;
+
     return basealignfeatureParseCigar(baf, fps);
 }
 
@@ -2555,12 +2563,12 @@ AjBool ensListBasealignfeatureSortSourceStartDescending(AjPList bafs)
 ** Ensembl DNA Align Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseAlignFeatureAdaptor
-** @cc CVS Revision: 1.36
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.35
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::DBSQL::DnaAlignFeatureAdaptor
-** @cc CVS Revision: 1.77
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.76
+** @cc CVS Tag: branch-ensembl-66
 **
 ** NOTE: The Ensembl External Database Adaptor has an internal cache of all
 ** Ensembl External Database objects. Therefore, the same set of objects can be
@@ -2835,10 +2843,13 @@ static AjBool dnaalignfeatureadaptorFetchAllbyStatement(
 EnsPDnaalignfeatureadaptor ensDnaalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensFeatureadaptorNew(
         dba,
-        dnaalignfeatureadaptorKTablenames,
-        dnaalignfeatureadaptorKColumnnames,
+        dnaalignfeatureadaptorKTables,
+        dnaalignfeatureadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2894,12 +2905,11 @@ EnsPDnaalignfeatureadaptor ensDnaalignfeatureadaptorNew(
 ** @@
 ******************************************************************************/
 
-void ensDnaalignfeatureadaptorDel(
-    EnsPDnaalignfeatureadaptor *Pdafa)
+void ensDnaalignfeatureadaptorDel(EnsPDnaalignfeatureadaptor *Pdafa)
 {
     ensFeatureadaptorDel(Pdafa);
 
-    return;
+	return;
 }
 
 
@@ -2913,46 +2923,16 @@ void ensDnaalignfeatureadaptorDel(
 ** @fdata [EnsPDnaalignfeatureadaptor]
 **
 ** @nam3rule Get Return Ensembl DNA Align Feature Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
-** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
+** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * dafa [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor or
+** NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensDnaalignfeatureadaptorGetBaseadaptor ******************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl DNA Align Feature Adaptor.
-**
-** @param [u] dafa [EnsPDnaalignfeatureadaptor]
-** Ensembl DNA Align Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensDnaalignfeatureadaptorGetBaseadaptor(
-    EnsPDnaalignfeatureadaptor dafa)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensDnaalignfeatureadaptorGetFeatureadaptor(dafa));
-}
 
 
 
@@ -2974,31 +2954,7 @@ EnsPBaseadaptor ensDnaalignfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensDnaalignfeatureadaptorGetDatabaseadaptor(
     EnsPDnaalignfeatureadaptor dafa)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensDnaalignfeatureadaptorGetFeatureadaptor(dafa));
-}
-
-
-
-
-/* @func ensDnaalignfeatureadaptorGetFeatureadaptor ***************************
-**
-** Get the Ensembl Feature Adaptor member of an
-** Ensembl DNA Align Feature Adaptor.
-**
-** @param [u] dafa [EnsPDnaalignfeatureadaptor]
-** Ensembl DNA Align Feature Adaptor
-**
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-EnsPFeatureadaptor ensDnaalignfeatureadaptorGetFeatureadaptor(
-    EnsPDnaalignfeatureadaptor dafa)
-{
-    return dafa;
+    return (dafa) ? ensFeatureadaptorGetDatabaseadaptor(dafa) : NULL;
 }
 
 
@@ -3075,7 +3031,7 @@ EnsPFeatureadaptor ensDnaalignfeatureadaptorGetFeatureadaptor(
 ** @param [u] dafa [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (target) sequence name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3107,7 +3063,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitname(
     if (!bafs)
         return ajFalse;
 
-    ba = ensDnaalignfeatureadaptorGetBaseadaptor(dafa);
+    ba = ensFeatureadaptorGetBaseadaptor(dafa);
 
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
 
@@ -3118,17 +3074,15 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitname(
     /* Add the Ensembl Analysis name constraint. */
 
     if (anname && ajStrGetLen(anname))
-        ensFeatureadaptorConstraintAppendAnalysisname(
-            ensDnaalignfeatureadaptorGetFeatureadaptor(dafa),
-            &constraint,
-            anname);
+        ensFeatureadaptorConstraintAppendAnalysisname(dafa,
+                                                      &constraint,
+                                                      anname);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        bafs);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                bafs);
 
     ajStrDel(&constraint);
 
@@ -3145,7 +3099,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitname(
 ** @param [u] dafa [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (target) sequence name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3160,10 +3114,11 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitunversioned(
     const AjPStr anname,
     AjPList bafs)
 {
+    char *txthitname = NULL;
+
     AjBool result = AJFALSE;
 
     AjPStr constraint = NULL;
-    AjPStr modhitname = NULL;
 
     EnsPBaseadaptor ba = NULL;
 
@@ -3176,32 +3131,27 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitunversioned(
     if (!bafs)
         return ajFalse;
 
-    ba = ensDnaalignfeatureadaptorGetBaseadaptor(dafa);
+    ba = ensFeatureadaptorGetBaseadaptor(dafa);
 
-    ensBaseadaptorEscapeS(ba, &modhitname, hitname);
+    ensBaseadaptorEscapeC(ba, &txthitname, hitname);
 
-    /* Escape expensive SQL wilcard characters. */
-    ajStrExchangeCC(&modhitname, "_", "\\_");
+    constraint = ajFmtStr("dna_align_feature.hit_name LIKE '%s.%%'",
+                          txthitname);
 
-    constraint = ajFmtStr("dna_align_feature.hit_name LIKE '%S.%%'",
-                          modhitname);
-
-    ajStrDel(&modhitname);
+    ajCharDel(&txthitname);
 
     /* Add the Ensembl Analysis name constraint. */
 
     if (anname && ajStrGetLen(anname))
-        ensFeatureadaptorConstraintAppendAnalysisname(
-            ensDnaalignfeatureadaptorGetFeatureadaptor(dafa),
-            &constraint,
-            anname);
+        ensFeatureadaptorConstraintAppendAnalysisname(dafa,
+                                                      &constraint,
+                                                      anname);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        bafs);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                bafs);
 
     ajStrDel(&constraint);
 
@@ -3220,7 +3170,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbyHitunversioned(
 ** Ensembl DNA Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] coverage [float] Alignment coverage threshold
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3252,12 +3202,11 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySlicecoverage(
     if (coverage > 0.0F)
         constraint = ajFmtStr("dna_align_feature.hcoverage > %f", coverage);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensDnaalignfeatureadaptorGetFeatureadaptor(dafa),
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(dafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -3276,7 +3225,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySlicecoverage(
 ** Ensembl DNA Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] edbname [const AjPStr] Ensembl External Database name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3298,8 +3247,6 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySliceexternaldatabasename(
 
     AjPStr constraint = NULL;
 
-    EnsPFeatureadaptor fa = NULL;
-
     if (!dafa)
         return ajFalse;
 
@@ -3312,20 +3259,17 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySliceexternaldatabasename(
     if (!bafs)
         return ajFalse;
 
-    fa = ensDnaalignfeatureadaptorGetFeatureadaptor(dafa);
-
-    ensFeatureadaptorEscapeC(fa, &txtname, edbname);
+    ensFeatureadaptorEscapeC(dafa, &txtname, edbname);
 
     constraint = ajFmtStr("external_db.db_name = %s", txtname);
 
     ajCharDel(&txtname);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        fa,
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(dafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -3344,7 +3288,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySliceexternaldatabasename(
 ** Ensembl DNA Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] identity [float] Alignment identity threshold
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3376,12 +3320,11 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySliceidentity(
     if (identity > 0.0F)
         constraint = ajFmtStr("dna_align_feature.perc_ident > %f", identity);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensDnaalignfeatureadaptorGetFeatureadaptor(dafa),
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(dafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -3411,10 +3354,20 @@ AjBool ensDnaalignfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPBasealignfeature *Pbaf)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensDnaalignfeatureadaptorGetBaseadaptor(dafa),
-        identifier,
-        (void **) Pbaf);
+    EnsPBaseadaptor ba = NULL;
+
+    if (!dafa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pbaf)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dafa);
+
+    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Pbaf);
 }
 
 
@@ -3429,12 +3382,12 @@ AjBool ensDnaalignfeatureadaptorFetchByIdentifier(
 **
 ** @nam3rule Retrieve Retrieve Ensembl DNA Align Feature-releated object(s)
 ** @nam4rule All Retrieve all Ensembl DNA Align Feature-releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Identifiers Fetch all SQL database-internal identifiers
 **
 ** @argrule * dafa [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor
 ** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer objects
+** AJAX List of AJAX unsigned integer identifiers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3446,13 +3399,13 @@ AjBool ensDnaalignfeatureadaptorFetchByIdentifier(
 
 /* @func ensDnaalignfeatureadaptorRetrieveAllIdentifiers **********************
 **
-** Retrieve all SQL database-internal identifier objects of
+** Retrieve all SQL database-internal identifiers of
 ** Ensembl DNA Align Feature objects.
 **
 ** @param [u] dafa [EnsPDnaalignfeatureadaptor]
 ** Ensembl DNA Align Feature Adaptor
 ** @param [u] identifiers [AjPList]
-** AJAX List of AJAX unsigned integer objects
+** AJAX List of AJAX unsigned integer identifiers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3468,19 +3421,22 @@ AjBool ensDnaalignfeatureadaptorRetrieveAllIdentifiers(
 
     AjPStr table = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!dafa)
         return ajFalse;
 
     if (!identifiers)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(dafa);
+
     table = ajStrNewC("dna_align_feature");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(
-        ensDnaalignfeatureadaptorGetBaseadaptor(dafa),
-        table,
-        (AjPStr) NULL,
-        identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 
@@ -3497,12 +3453,12 @@ AjBool ensDnaalignfeatureadaptorRetrieveAllIdentifiers(
 ** Ensembl Protein Align Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseAlignFeatureAdaptor
-** @cc CVS Revision: 1.36
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.35
+** @cc CVS Tag: branch-ensembl-66
 **
 ** @cc Bio::EnsEMBL::BBSQL::ProteinAlignFeatureAdaptor
-** @cc CVS Revision: 1.52
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.51
+** @cc CVS Tag: branch-ensembl-66
 **
 ** NOTE: The Ensembl External Database Adaptor has an internal cache of all
 ** Ensembl External Database objects. Therefore, the same set of objects can be
@@ -3762,10 +3718,13 @@ static AjBool proteinalignfeatureadaptorFetchAllbyStatement(
 EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensFeatureadaptorNew(
         dba,
-        proteinalignfeatureadaptorKTablenames,
-        proteinalignfeatureadaptorKColumnnames,
+        proteinalignfeatureadaptorKTables,
+        proteinalignfeatureadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -3821,12 +3780,11 @@ EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
 ** @@
 ******************************************************************************/
 
-void ensProteinalignfeatureadaptorDel(
-    EnsPProteinalignfeatureadaptor *Ppafa)
+void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Ppafa)
 {
     ensFeatureadaptorDel(Ppafa);
 
-    return;
+	return;
 }
 
 
@@ -3840,46 +3798,16 @@ void ensProteinalignfeatureadaptorDel(
 ** @fdata [EnsPProteinalignfeatureadaptor]
 **
 ** @nam3rule Get Return Ensembl Protein Align Feature Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 **
 ** @argrule * pafa [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor]
 ** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensProteinalignfeatureadaptorGetBaseadaptor **************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Protein Align Feature Adaptor.
-**
-** @param [u] pafa [EnsPProteinalignfeatureadaptor]
-** Ensembl Protein Align Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensProteinalignfeatureadaptorGetBaseadaptor(
-    EnsPProteinalignfeatureadaptor pafa)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensProteinalignfeatureadaptorGetFeatureadaptor(pafa));
-}
 
 
 
@@ -3901,31 +3829,7 @@ EnsPBaseadaptor ensProteinalignfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensProteinalignfeatureadaptorGetDatabaseadaptor(
     EnsPProteinalignfeatureadaptor pafa)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensProteinalignfeatureadaptorGetFeatureadaptor(pafa));
-}
-
-
-
-
-/* @func ensProteinalignfeatureadaptorGetFeatureadaptor ***********************
-**
-** Get the Ensembl Feature Adaptor member of an
-** Ensembl Protein Align Feature Adaptor.
-**
-** @param [u] pafa [EnsPProteinalignfeatureadaptor]
-** Ensembl Protein Align Feature Adaptor
-**
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPFeatureadaptor ensProteinalignfeatureadaptorGetFeatureadaptor(
-    EnsPProteinalignfeatureadaptor pafa)
-{
-    return pafa;
+    return (pafa) ? ensFeatureadaptorGetDatabaseadaptor(pafa) : NULL;
 }
 
 
@@ -4002,7 +3906,7 @@ EnsPFeatureadaptor ensProteinalignfeatureadaptorGetFeatureadaptor(
 ** @param [u] pafa [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (target) sequence name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4034,7 +3938,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitname(
     if (!bafs)
         return ajFalse;
 
-    ba = ensProteinalignfeatureadaptorGetBaseadaptor(pafa);
+    ba = ensFeatureadaptorGetBaseadaptor(pafa);
 
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
 
@@ -4045,17 +3949,15 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitname(
     /* Add the Ensembl Analysis name constraint. */
 
     if (anname && ajStrGetLen(anname))
-        ensFeatureadaptorConstraintAppendAnalysisname(
-            ensProteinalignfeatureadaptorGetFeatureadaptor(pafa),
-            &constraint,
-            anname);
+        ensFeatureadaptorConstraintAppendAnalysisname(pafa,
+                                                      &constraint,
+                                                      anname);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        bafs);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                bafs);
 
     ajStrDel(&constraint);
 
@@ -4073,7 +3975,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitname(
 ** @param [u] pafa [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (target) sequence name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4088,10 +3990,11 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitunversioned(
     const AjPStr anname,
     AjPList bafs)
 {
+    char *txthitname = NULL;
+
     AjBool result = AJFALSE;
 
     AjPStr constraint = NULL;
-    AjPStr modhitname = NULL;
 
     EnsPBaseadaptor ba = NULL;
 
@@ -4104,33 +4007,27 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitunversioned(
     if (!bafs)
         return ajFalse;
 
-    ba = ensProteinalignfeatureadaptorGetBaseadaptor(pafa);
+    ba = ensFeatureadaptorGetBaseadaptor(pafa);
 
-    ensBaseadaptorEscapeS(ba, &modhitname, hitname);
+    ensBaseadaptorEscapeC(ba, &txthitname, hitname);
 
-    /* Escape expensive SQL wilcard characters. */
-    ajStrExchangeCC(&modhitname, "_", "\\_");
+    constraint = ajFmtStr("protein_align_feature.hit_name LIKE '%s.%%'",
+                          txthitname);
 
-    constraint = ajFmtStr(
-        "protein_align_feature.hit_name LIKE '%S.%%'",
-        modhitname);
-
-    ajStrDel(&modhitname);
+    ajCharDel(&txthitname);
 
     /* Add the Ensembl Analysis name constraint. */
 
     if (anname && ajStrGetLen(anname))
-        ensFeatureadaptorConstraintAppendAnalysisname(
-            ensProteinalignfeatureadaptorGetFeatureadaptor(pafa),
-            &constraint,
-            anname);
+        ensFeatureadaptorConstraintAppendAnalysisname(pafa,
+                                                      &constraint,
+                                                      anname);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        bafs);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                bafs);
 
     ajStrDel(&constraint);
 
@@ -4149,7 +4046,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbyHitunversioned(
 ** Ensembl Protein Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] coverage [float] Alignment target coverage threshold
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4179,16 +4076,14 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySlicecoverage(
         return ajFalse;
 
     if (coverage > 0.0F)
-        constraint = ajFmtStr(
-            "protein_align_feature.hcoverage > %f",
-            coverage);
+        constraint = ajFmtStr("protein_align_feature.hcoverage > %f",
+                              coverage);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensProteinalignfeatureadaptorGetFeatureadaptor(pafa),
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(pafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -4207,7 +4102,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySlicecoverage(
 ** Ensembl Protein Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] edbname [const AjPStr] Ensembl External Database name
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4229,8 +4124,6 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySliceexternaldatabasename(
 
     AjPStr constraint = NULL;
 
-    EnsPFeatureadaptor fa = NULL;
-
     if (!pafa)
         return ajFalse;
 
@@ -4243,20 +4136,17 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySliceexternaldatabasename(
     if (!bafs)
         return ajFalse;
 
-    fa = ensProteinalignfeatureadaptorGetFeatureadaptor(pafa);
-
-    ensFeatureadaptorEscapeC(fa, &txtname, edbname);
+    ensFeatureadaptorEscapeC(pafa, &txtname, edbname);
 
     constraint = ajFmtStr("external_db.db_name = %s", txtname);
 
     ajCharDel(&txtname);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        fa,
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(pafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -4275,7 +4165,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySliceexternaldatabasename(
 ** Ensembl Protein Align Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] identity [float] Alignment identity threshold
-** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -4305,16 +4195,14 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySliceidentity(
         return ajFalse;
 
     if (identity > 0.0F)
-        constraint = ajFmtStr(
-            "protein_align_feature.perc_ident > %f",
-            identity);
+        constraint = ajFmtStr("protein_align_feature.perc_ident > %f",
+                              identity);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensProteinalignfeatureadaptorGetFeatureadaptor(pafa),
-        slice,
-        constraint,
-        anname,
-        bafs);
+    result = ensFeatureadaptorFetchAllbySlice(pafa,
+                                              slice,
+                                              constraint,
+                                              anname,
+                                              bafs);
 
     ajStrDel(&constraint);
 
@@ -4345,10 +4233,20 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPBasealignfeature *Pbaf)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensProteinalignfeatureadaptorGetBaseadaptor(pafa),
-        identifier,
-        (void **) Pbaf);
+    EnsPBaseadaptor ba = NULL;
+
+    if (!pafa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pbaf)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(pafa);
+
+    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Pbaf);
 }
 
 
@@ -4356,19 +4254,19 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for retrieving objects releated to Ensembl Base Align Feature
+** Functions for fetching objects releated to Ensembl Base Align Feature
 ** objects (type protein) from an Ensembl SQL database.
 **
 ** @fdata [EnsPProteinalignfeatureadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Base Align Feature-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Base Align Feature-releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Identifiers Fetch all SQL database-internal identifiers
 **
 ** @argrule * pafa [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor
 ** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer objects
+** AJAX List of AJAX unsigned integer identifiers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4380,12 +4278,12 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
 
 /* @func ensProteinalignfeatureadaptorRetrieveAllIdentifiers ******************
 **
-** Retrieve all SQL database-internal identifier objects of
+** Fetch all SQL database-internal identifiers of
 ** Ensembl Base Align Feature objects.
 **
 ** @param [u] pafa [EnsPProteinalignfeatureadaptor]
 ** Ensembl Protein Align Feature Adaptor
-** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integer objects
+** @param [u] identifiers [AjPList] AJAX List of ajuint identifiers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4401,396 +4299,24 @@ AjBool ensProteinalignfeatureadaptorRetrieveAllIdentifiers(
 
     AjPStr table = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!pafa)
         return ajFalse;
 
     if (!identifiers)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(pafa);
+
     table = ajStrNewC("protein_align_feature");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(
-        ensProteinalignfeatureadaptorGetBaseadaptor(pafa),
-        table,
-        (AjPStr) NULL,
-        identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 
     return result;
-}
-
-
-
-
-/* @datasection [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-**
-** @nam2rule Supportingfeatureadaptor Functions for manipulating
-** Ensembl Supporting Feature Adaptor objects
-**
-** @cc Bio::EnsEMBL::DBSQL::SupportingFeatureAdaptor
-** @cc CVS Revision: 1.22
-** @cc CVS Tag: branch-ensembl-68
-**
-******************************************************************************/
-
-
-
-
-/* @section member retrieval **************************************************
-**
-** Functions for returning members of an
-** Ensembl Supporting Feature Adaptor object.
-**
-** @fdata [EnsPSupportingfeatureadaptor]
-**
-** @nam3rule Get Return Ensembl Supporting Feature Adaptor attribute(s)
-** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-**
-** @argrule * sfa [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-**
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-**
-** @fcategory use
-******************************************************************************/
-
-
-
-
-/* @func ensSupportingfeatureadaptorGetDatabaseadaptor ************************
-**
-** Get the Ensembl Database Adaptor member of an
-** Ensembl Supporting Feature Adaptor.
-**
-** @param [u] sfa [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-**
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPDatabaseadaptor ensSupportingfeatureadaptorGetDatabaseadaptor(
-    EnsPSupportingfeatureadaptor sfa)
-{
-    return sfa;
-}
-
-
-
-
-/* @section object retrieval **************************************************
-**
-** Functions for fetching Ensembl Base Align Feature objects from an
-** Ensembl SQL database.
-**
-** @fdata [EnsPSupportingfeatureadaptor]
-**
-** @nam3rule Fetch      Fetch Ensembl Base Align Feature object(s)
-** @nam4rule FetchAll   Fetch all Ensembl Base Align Feature objects
-** @nam4rule FetchAllby Fetch all Ensembl Base Align Feature objects
-**                      matching a criterion
-** @nam5rule Exon       Fetch all Ensembl Base Align Feature objects
-**                      by an Ensembl Exon
-** @nam5rule Transcript Fetch all Ensembl Base Align Feature objects
-**                      by an Ensembl Transcript
-** @nam4rule FetchBy    Fetch one Ensembl Base Align Feature object
-**                      matching a criterion
-**
-** @argrule * sfa [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-** @argrule Exon exon [EnsPExon] Ensembl Exon
-** @argrule Transcript transcript [EnsPTranscript] Ensembl Transcript
-** @argrule Allby bafs [AjPList]
-** AJAX List of Ensembl Base Align Feature objects
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory use
-******************************************************************************/
-
-
-
-
-/* @func ensSupportingfeatureadaptorFetchAllbyExon ****************************
-**
-** Fetch all supporting Ensembl Base Align Feature objects via an Ensembl Exon.
-**
-** @param [u] sfa [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-** @param [u] exon [EnsPExon] Ensembl Exon
-** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-AjBool ensSupportingfeatureadaptorFetchAllbyExon(
-    EnsPSupportingfeatureadaptor sfa,
-    EnsPExon exon,
-    AjPList bafs)
-{
-    ajuint identifier = 0U;
-
-    AjPSqlstatement sqls = NULL;
-    AjISqlrow sqli       = NULL;
-    AjPSqlrow sqlr       = NULL;
-
-    AjPStr statement = NULL;
-    AjPStr type      = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPFeature efeature = NULL;
-    EnsPFeature nfeature = NULL;
-    EnsPFeature ofeature = NULL;
-
-    EnsPSlice eslice = NULL;
-
-    EnsPBasealignfeature baf = NULL;
-
-    EnsPDnaalignfeatureadaptor dafa = NULL;
-
-    EnsPProteinalignfeatureadaptor pafa = NULL;
-
-    if (!sfa)
-        return ajFalse;
-
-    if (!exon)
-        return ajFalse;
-
-    if (!bafs)
-        return ajFalse;
-
-    if (ensExonGetIdentifier(exon) == 0)
-    {
-        ajDebug("ensSupportingfeatureadaptorFetchAllbyExon cannot get "
-                "supporting Ensembl Base Align Feature objects for an "
-                "Ensembl Exon without an identifier.\n");
-
-        return ajFalse;
-    }
-
-    dba = ensSupportingfeatureadaptorGetDatabaseadaptor(sfa);
-
-    dafa = ensRegistryGetDnaalignfeatureadaptor(dba);
-    pafa = ensRegistryGetProteinalignfeatureadaptor(dba);
-
-    efeature = ensExonGetFeature(exon);
-
-    eslice = ensFeatureGetSlice(efeature);
-
-    statement = ajFmtStr(
-        "SELECT "
-        "supporting_feature.feature_type, "
-        "supporting_feature.feature_id "
-        "FROM "
-        "supporting_feature "
-        "WHERE "
-        "supporting_feature.exon_id = %u",
-        ensExonGetIdentifier(exon));
-
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-
-    sqli = ajSqlrowiterNew(sqls);
-
-    while (!ajSqlrowiterDone(sqli))
-    {
-        type       = ajStrNew();
-        identifier = 0U;
-
-        sqlr = ajSqlrowiterGet(sqli);
-
-        ajSqlcolumnToStr(sqlr, &type);
-        ajSqlcolumnToUint(sqlr, &identifier);
-
-        if (ajStrMatchC(type, "dna_align_feature"))
-            ensDnaalignfeatureadaptorFetchByIdentifier(
-                dafa,
-                identifier,
-                &baf);
-        else if (ajStrMatchC(type, "protein_align_feature"))
-            ensProteinalignfeatureadaptorFetchByIdentifier(
-                pafa,
-                identifier,
-                &baf);
-        else
-            ajWarn("ensSupportingfeatureadaptorFetchAllbyExon got "
-                   "unexpected value in supporting_feature.feature_type "
-                   "'%S'.\n", type);
-
-        if (baf)
-        {
-            ofeature = ensFeaturepairGetSourceFeature(baf->Featurepair);
-
-            nfeature = ensFeatureTransfer(ofeature, eslice);
-
-            ensFeaturepairSetSourceFeature(baf->Featurepair, nfeature);
-
-            ensFeatureDel(&nfeature);
-
-            ajListPushAppend(bafs, (void *) baf);
-        }
-        else
-            ajDebug("ensSupportingfeatureadaptorFetchAllbyExon could not "
-                    "retrieve Supporting feature of type '%S' and "
-                    "identifier %u from database.\n", type, identifier);
-
-        ajStrDel(&type);
-    }
-
-    ajSqlrowiterDel(&sqli);
-
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
-
-    ajStrDel(&statement);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensSupportingfeatureadaptorFetchAllbyTranscript **********************
-**
-** Fetch Ensembl Supporting Feature objects via an Ensembl Transcript.
-**
-** @param [u] sfa [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-AjBool ensSupportingfeatureadaptorFetchAllbyTranscript(
-    EnsPSupportingfeatureadaptor sfa,
-    EnsPTranscript transcript,
-    AjPList bafs)
-{
-    ajuint identifier = 0U;
-
-    AjPSqlstatement sqls = NULL;
-    AjISqlrow sqli       = NULL;
-    AjPSqlrow sqlr       = NULL;
-
-    AjPStr statement = NULL;
-    AjPStr type      = NULL;
-
-    EnsPFeature tfeature = NULL;
-    EnsPFeature nfeature = NULL;
-    EnsPFeature ofeature = NULL;
-
-    EnsPSlice tslice = NULL;
-
-    EnsPBasealignfeature baf = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPDnaalignfeatureadaptor dafa = NULL;
-
-    EnsPProteinalignfeatureadaptor pafa = NULL;
-
-    if (!sfa)
-        return ajFalse;
-
-    if (!transcript)
-        return ajFalse;
-
-    if (!bafs)
-        return ajFalse;
-
-    if (!ensTranscriptGetIdentifier(transcript))
-    {
-        ajDebug("ensSupportingfeatureadaptorFetchAllbyTranscript cannot get "
-                "Ensembl Supporting Feature objects for an Ensembl Transcript "
-                "without an identifier.\n");
-
-        return ajFalse;
-    }
-
-    dba = ensSupportingfeatureadaptorGetDatabaseadaptor(sfa);
-
-    dafa = ensRegistryGetDnaalignfeatureadaptor(dba);
-    pafa = ensRegistryGetProteinalignfeatureadaptor(dba);
-
-    tfeature = ensTranscriptGetFeature(transcript);
-
-    tslice = ensFeatureGetSlice(tfeature);
-
-    statement = ajFmtStr(
-        "SELECT "
-        "transcript_supporting_feature.feature_type, "
-        "transcript_supporting_feature.feature_id "
-        "FROM "
-        "transcript_supporting_feature "
-        "WHERE "
-        "transcript_supporting_feature.transcript_id = %u",
-        ensTranscriptGetIdentifier(transcript));
-
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-
-    sqli = ajSqlrowiterNew(sqls);
-
-    while (!ajSqlrowiterDone(sqli))
-    {
-        type       = ajStrNew();
-        identifier = 0U;
-
-        sqlr = ajSqlrowiterGet(sqli);
-
-        ajSqlcolumnToStr(sqlr, &type);
-        ajSqlcolumnToUint(sqlr, &identifier);
-
-        if (ajStrMatchC(type, "dna_align_feature"))
-            ensDnaalignfeatureadaptorFetchByIdentifier(
-                dafa,
-                identifier,
-                &baf);
-        else if (ajStrMatchC(type, "protein_align_feature"))
-            ensProteinalignfeatureadaptorFetchByIdentifier(
-                pafa,
-                identifier,
-                &baf);
-        else
-            ajWarn("ensSupportingfeatureadaptorFetchAllbyTranscript got "
-                   "unexpected value in "
-                   "transcript_supporting_feature.feature_type '%S'.\n", type);
-
-        if (baf)
-        {
-            ofeature = ensFeaturepairGetSourceFeature(baf->Featurepair);
-
-            nfeature = ensFeatureTransfer(ofeature, tslice);
-
-            ensFeaturepairSetSourceFeature(baf->Featurepair, nfeature);
-
-            ensFeatureDel(&nfeature);
-
-            ajListPushAppend(bafs, (void *) baf);
-        }
-        else
-            ajDebug("ensSupportingfeatureadaptorFetchAllbyTranscript could "
-                    "not fetch Supporting feature of type '%S' and "
-                    "identifier %u from database.\n", type, identifier);
-
-        ajStrDel(&type);
-    }
-
-    ajSqlrowiterDel(&sqli);
-
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
-
-    ajStrDel(&statement);
-
-    return ajTrue;
 }

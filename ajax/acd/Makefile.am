@@ -15,7 +15,7 @@ endif
 libacd_la_CPPFLAGS += -I$(top_srcdir)/plplot
 libacd_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-libacd_la_LDFLAGS  = -version-info 6:5:0
+libacd_la_LDFLAGS  = -version-info 6:4:0
 if ISCYGWIN
 libacd_la_LDFLAGS += -no-undefined
 libacd_la_LDFLAGS += -Wl,--add-stdcall-alias

@@ -6,7 +6,7 @@ Split a sequence into original subsequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>splitsource ena:A01139 </b>
+% <b>splitsource qasrswww:A01139 </b>
 Split sequence(s) into original source sequences
 output sequence(s) [a01139.fasta]: <b></b>
 

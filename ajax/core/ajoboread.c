@@ -3,10 +3,10 @@
 ** AJAX OBO reading functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.47 $
+** @version $Revision: 1.42 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added query and reading functions
-** @modified $Date: 2012/12/18 08:44:39 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -208,9 +208,6 @@ static OboOTagdef oboTermTags[] =
     {"created_by",      TAG_ANY, 0, 1, 0, NULL},               /* new in 1.3 */
     {"creation_date",   TAG_ANY, 0, 1, 0, NULL},            /* new in 1.3 */
     {"spec",            TAG_ANY, 0, 1, 0, NULL},            /* EDAM only */
-    {"created_in",      TAG_ANY, 0, 1, 0, NULL},            /* EDAM only */
-    {"obsolete_since",  TAG_ANY, 0, 1, 0, NULL},            /* EDAM only */
-    {"documentation",   TAG_ANY, 0, 0, 0, NULL},            /* EDAM only */
     {NULL, 0, 0, 0, 0, NULL}
 };
 
@@ -337,8 +334,6 @@ static const char *oboHeaderTags[] =
     "saved-by",
     "auto-generated-by",
     "import",
-    "ontology",
-    "property_value",
     "subsetdef",
     "synonymtypedef",
     "default-namespace",
@@ -2221,11 +2216,10 @@ static AjBool oboinListProcess(AjPOboin oboin, AjPObo obo,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStr rest  = NULL;
+    AjPStrTok handle = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
-    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -2253,29 +2247,31 @@ static AjBool oboinListProcess(AjPOboin oboin, AjPObo obo,
 
     while(ajReadlineTrim(file, &oboinReadLine))
     {
-        ++recnum;
 	oboinListNoComment(&oboinReadLine);
-        if(ajStrExtractWord(oboinReadLine, &rest, &token))
-        {
-            if(ajStrGetLen(rest)) 
-            {
-                ajErr("Bad record %u in list file '%S'\n'%S'",
-                      recnum, listfile, oboinReadLine);
-            }
-            else if(ajStrGetLen(token))
-            {
-                ajDebug("++Add to list: '%S'\n", token);
-                AJNEW0(node);
-                ajStrAssignS(&node->Qry, token);
-                oboinQrySave(node, oboin);
-                ajListPushAppend(list, node);
-            }
-        }
+
+	if(ajStrGetLen(oboinReadLine))
+	{
+	    ajStrTokenAssignC(&handle, oboinReadLine, " \t\n\r");
+	    ajStrTokenNextParse(&handle, &token);
+	    /* ajDebug("Line  '%S'\n");*/
+	    /* ajDebug("token '%S'\n", oboinReadLine, token); */
+
+	    if(ajStrGetLen(token))
+	    {
+	        ajDebug("++Add to list: '%S'\n", token);
+	        AJNEW0(node);
+	        ajStrAssignS(&node->Qry, token);
+	        oboinQrySave(node, oboin);
+	        ajListPushAppend(list, node);
+	    }
+
+	    ajStrDel(&token);
+	    token = NULL;
+	}
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
-    ajStrDel(&rest);
 
     /*
     ajDebug("Trace oboin->Input->List\n");
@@ -2307,6 +2303,7 @@ static AjBool oboinListProcess(AjPOboin oboin, AjPObo obo,
 	ret = oboinQryProcess(oboin, obo);
     }
 
+    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++oboListProcess depth: %d returns: %B\n", depth, ret);
 
@@ -2857,7 +2854,7 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
         validstr = ajStrNewC(validations);
         ajStrTokenAssignC(&validsplit, validstr, ",");
 
-        while(ajStrTokenNextParse(validsplit, &tmpstr))
+        while(ajStrTokenNextParse(&validsplit, &tmpstr))
         {
             if(ajStrMatchC(tmpstr, "none"))
             {
@@ -3101,7 +3098,7 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
             ajStrAssignS(&name, token);
 
             if(ajStrGetCharLast(name) != ':')
-                oboinWarn(obofile, linecnt, (term ? term->Id : NULL),
+                oboinWarn(obofile, linecnt, term->Id,
                         "bad name '%S'",
                         token);
             ajStrCutEnd(&name, 1);
@@ -3197,13 +3194,10 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
 
                             if(i > 1)
                             {
-                                if(ajStrFindlastC(rest, " EXACT [") > 1)
-                                {
-                                    namekey = ajStrNewRes((size_t) i);
-                                    ajStrAssignSubS(&namekey, rest,
-                                                    1, (ajlong) i-1);
-                                    ajListstrPushAppend(namelist, namekey);
-                                }
+                                namekey = ajStrNewRes((size_t) i);
+                                ajStrAssignSubS(&namekey, rest,
+                                                1, (ajlong) i-1);
+                                ajListstrPushAppend(namelist, namekey);
                             }
                         }
                     }
@@ -3480,7 +3474,7 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
 
             ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
 
-            while (ajStrTokenNextParse(idsplit, &tmpstr))
+            while (ajStrTokenNextParse(&idsplit, &tmpstr))
             {
                 if(ajStrPrefixS(tmpstr, idprefix))
                 {
@@ -3524,7 +3518,7 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
         {
             ajStrTokenAssignC(&idsplit, terms[i]->Trueid, " \t,;[]{}()'\"");
 
-            while (ajStrTokenNextParse(idsplit, &tmpstr))
+            while (ajStrTokenNextParse(&idsplit, &tmpstr))
             {
                 ajStrTrimEndC(&tmpstr, ".");
 
@@ -3615,8 +3609,8 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
             else if(ajStrMatchC(obotag->Name, "relationship"))
             {
                 ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
-                ajStrTokenNextParse(idsplit, &tmpstr);
-                ajStrTokenNextParse(idsplit, &tmpid);
+                ajStrTokenNextParse(&idsplit, &tmpstr);
+                ajStrTokenNextParse(&idsplit, &tmpid);
 
                 ajStrAssignS(&tmpname, obotag->Comment);
                 ipos = ajStrFindAnyK(tmpname, '!');
@@ -3646,7 +3640,7 @@ AjPOboData ajObodataParseObofile(AjPFile obofile, const char* validations)
                 /* check for IDs */
                 ajStrTokenAssignC(&idsplit, obotag->Value, " \t,;[]{}()'\"");
 
-                while (ajStrTokenNextParse(idsplit, &tmpstr))
+                while (ajStrTokenNextParse(&idsplit, &tmpstr))
                 {
                     ajStrTrimEndC(&tmpstr, ".");
 

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.15 $
+** @version $Revision: 1.14 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 11:12:31 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -94,19 +94,15 @@ EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
 
 void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca);
 
-EnsPDatabaseadaptor ensMetacoordinateadaptorGetDatabaseadaptor(
-    EnsPMetacoordinateadaptor mca);
-
-AjBool ensMetacoordinateadaptorRetrieveAllCoordsystems(
-    EnsPMetacoordinateadaptor mca,
+AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
+    const EnsPMetacoordinateadaptor mca,
     const AjPStr name,
     AjPList css);
 
-AjBool ensMetacoordinateadaptorRetrieveMaximumlength(
-    EnsPMetacoordinateadaptor mca,
+ajint ensMetacoordinateadaptorGetMaximumlength(
+    const EnsPMetacoordinateadaptor mca,
     const EnsPCoordsystem cs,
-    const AjPStr name,
-    ajint *Pmaxlength);
+    const AjPStr name);
 
 /*
 ** End of prototype definitions

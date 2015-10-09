@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.30 $
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:05:09 $ by $Author: mks $
+** @modified $Date: 2012/02/20 22:07:21 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -469,8 +469,13 @@ AjBool ensDatabaseentryFetchAllMastersByTranslation(
 EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
     EnsPDatabaseadaptor dba);
 
+EnsPDatabaseentryadaptor ensDatabaseentryadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensDatabaseentryadaptorDel(EnsPDatabaseentryadaptor *Pdbea);
+
 EnsPDatabaseadaptor ensDatabaseentryadaptorGetDatabaseadaptor(
-    EnsPDatabaseentryadaptor dbea);
+    const EnsPDatabaseentryadaptor dbea);
 
 AjBool ensDatabaseentryadaptorFetchAllDependents(
     EnsPDatabaseentryadaptor dbea,
@@ -578,38 +583,35 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
 AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers);
+    AjPList idlist);
 
 AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers);
+    AjPList idlist);
 
 AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers);
+    AjPList idlist);
 
 AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers);
+    AjPList idlist);
 
 AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers);
+    AjPList idlist);
 
 AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers);
+    AjPList idlist);
 
 /*
 ** End of prototype definitions

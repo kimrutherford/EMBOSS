@@ -3,9 +3,9 @@
 ** B+ Tree Indexing plus Disc Cache.
 **
 ** @author Copyright (c) 2003 Alan Bleasby
-** @version $Revision: 1.44 $
+** @version $Revision: 1.43 $
 ** @modified  subsequently heavily modified by Peter Rice
-** @modified $Date: 2013/01/24 15:30:42 $ by $Author: rice $
+** @modified $Date: 2012/07/02 17:17:16 $ by $Author: rice $
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
@@ -438,7 +438,6 @@ typedef struct AjSBtpage
 **
 ** @attr fp [FILE*] Tree index file pointer
 ** @attr filename [AjPStr] Filename
-** @attr basename [AjPStr] File base name
 ** @attr plru [AjPBtpage] Least recently used primary cache page
 ** @attr pmru [AjPBtpage] Most recently used primary cache page
 ** @attr slru [AjPBtpage] Least recently used secondary cache page
@@ -450,8 +449,7 @@ typedef struct AjSBtpage
 ** @attr replace [AjPStr] Replacement ID
 ** @attr pripagetable [AjPTable] Table of cached primary pages
 ** @attr secpagetable [AjPTable] Table of cached secondary pages
-** @attr totsize [ajulong] Tree index total length used
-** @attr maxsize [ajulong] Tree index total length available
+** @attr totsize [ajulong] Tree index total length
 ** @attr filesize [ajulong] Tree index length after any compression
 ** @attr pripagecount [ajulong] Tree index number of primary pages
 ** @attr secpagecount [ajulong] Tree index number of secondary pages
@@ -490,7 +488,6 @@ typedef struct AjSBtCache
 {
     FILE *fp;
     AjPStr filename;
-    AjPStr basename;
     AjPBtpage plru;
     AjPBtpage pmru;
     AjPBtpage slru;
@@ -503,7 +500,6 @@ typedef struct AjSBtCache
     AjPTable pripagetable;
     AjPTable secpagetable;
     ajulong totsize;
-    ajulong maxsize;
     ajulong filesize;
     ajulong pripagecount;
     ajulong secpagecount;

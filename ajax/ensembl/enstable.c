@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.34 $
+** @version $Revision: 1.32 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:08:58 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -74,14 +74,6 @@
 /* =========================== private functions =========================== */
 /* ========================================================================= */
 
-static void tablestrToList(void **Pkey,
-                           void **Pvalue,
-                           void *cl);
-
-static void tableuintToList(void **Pkey,
-                            void **Pvalue,
-                            void *cl);
-
 static AjBool tableuintliststrMatch(AjPStr *Pstr, void *cl);
 
 
@@ -108,350 +100,6 @@ static AjBool tableuintliststrMatch(AjPStr *Pstr, void *cl);
 ** @nam2rule Table Functions for manipulating AJAX Table objects
 **
 ******************************************************************************/
-
-
-
-
-/* @datasection [AjPTable] AJAX Table *****************************************
-**
-** @nam2rule Tablestr Functions for manipulating AJAX Table objects of
-**                    AJAX String key data and
-**                    generic value data
-**
-******************************************************************************/
-
-
-
-
-/* @section cast **************************************************************
-**
-** Cast AJAX Table objects into AJAX List objects and vice versa.
-**
-** @fdata [AjPTable]
-**
-** @nam3rule From Convert from an AJAX object
-** @nam3rule To Convert to an AJAX object
-** @nam4rule List Convert between an AJAX List
-**
-** @argrule * table [AjPTable] AJAX Table
-** @argrule FromList FobjectGetKey [AjPStr function]
-** Get AJAX String key function address
-** @argrule * list [AjPList] AJAX List
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory new
-******************************************************************************/
-
-
-
-
-/* @func ensTablestrFromList **************************************************
-**
-** Moves generic objects from an AJAX List into an AJAX Table of
-** AJAX String key data and generic value data.
-**
-** Empty nodes of the AJAX List are ignored.
-**
-** This function relies on ajTablePutClean and expects keydel and valdel
-** functions set in the AJAX Table to delete duplicate key and value data.
-** The last key and value pair will win.
-**
-** @param [u] table [AjPTable] AJAX Table of AJAX unsigned integer key data
-** @param [f] FobjectGetKey [AjPStr function]
-** Get AJAX String key function address
-** @param [u] list [AjPList] AJAX List
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensTablestrFromList(
-    AjPTable table,
-    AjPStr (*FobjectGetKey) (const void *object),
-    AjPList list)
-{
-    void *object = NULL;
-
-    AjPStr key = NULL;
-
-    if (!table)
-        return ajFalse;
-
-    if (!FobjectGetKey)
-        return ajFalse;
-
-    if (!list)
-        return ajFalse;
-
-    while (ajListPop(list, (void **) &object))
-    {
-        if (!object)
-            continue;
-
-        key = ajStrNewS((*FobjectGetKey) (object));
-
-        ajTablePutClean(table,
-                        (void *) key,
-                        (void *) object,
-                        (void (*)(void **)) NULL,
-                        (void (*)(void **)) NULL);
-    }
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic tablestrToList *************************************************
-**
-** An ajTableMapDel "apply" function to clear an AJAX Table of
-** AJAX String key data and generic value data.
-**
-** This function deletes the AJAX String key data
-** and moves the generic value data onto the AJAX List.
-**
-** @param [d] Pkey [void**] AJAX String key data address
-** @param [d] Pvalue [void**] Generic value data address
-** @param [u] cl [void*] AJAX List, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void tablestrToList(void **Pkey,
-                           void **Pvalue,
-                           void *cl)
-{
-    if (!Pkey)
-        return;
-
-    if (!Pvalue)
-        return;
-
-    if (!cl)
-        return;
-
-    ajStrDel((AjPStr *) Pkey);
-
-    ajListPushAppend(cl, *Pvalue);
-
-    *Pvalue = NULL;
-
-    return;
-}
-
-
-
-
-/* @func ensTablestrToList ****************************************************
-**
-** Moves generic value data from an AJAX Table of
-** AJAX String key data and
-** generic value data onto an AJAX List.
-**
-** @param [u] table [AjPTable] AJAX Table
-** @param [u] list [AjPList] AJAX List
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-**
-******************************************************************************/
-
-AjBool ensTablestrToList(AjPTable table, AjPList list)
-{
-    if (!table)
-        return ajFalse;
-
-    if (!list)
-        return ajFalse;
-
-    ajTableMapDel(table, &tablestrToList, (void *) list);
-
-    return ajTrue;
-}
-
-
-
-
-/* @datasection [AjPTable] AJAX Table *****************************************
-**
-** @nam2rule Tableuint Functions for manipulating AJAX Table objects of
-**                     AJAX unsigned integer key data and
-**                     generic value data
-**
-******************************************************************************/
-
-
-
-
-/* @section cast **************************************************************
-**
-** Cast AJAX Table objects into AJAX List objects and vice versa.
-**
-** @fdata [AjPTable]
-**
-** @nam3rule From Convert from an AJAX object
-** @nam3rule To Convert to an AJAX object
-** @nam4rule List Convert between an AJAX List
-**
-** @argrule * table [AjPTable] AJAX Table
-** @argrule FromList FobjectGetIdentifier [ajuint function]
-** Get AJAX unsigned integer key function address
-** @argrule * list [AjPList] AJAX List
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory new
-******************************************************************************/
-
-
-
-
-/* @func ensTableuintFromList *************************************************
-**
-** Moves data from an AJAX List into an AJAX Table of
-** AJAX unsigned integer key data and generic value data.
-**
-** Empty nodes of the AJAX List are ignored.
-**
-** This function relies on ajTablePutClean and expects keydel and valdel
-** functions set in the AJAX Table to delete duplicate key and value data.
-** The last key and value pair will win.
-**
-** @param [u] table [AjPTable]
-** AJAX Table of AJAX unsigned integer key data and generic value data
-** @param [f] FobjectGetIdentifier [ajuint function]
-** Get AJAX unsigned integer key function address
-** @param [u] list [AjPList] AJAX List
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensTableuintFromList(
-    AjPTable table,
-    ajuint (*FobjectGetIdentifier) (const void *object),
-    AjPList list)
-{
-    void *object = NULL;
-
-    ajuint *Pidentifier = NULL;
-
-    if (!table)
-        return ajFalse;
-
-    if (!FobjectGetIdentifier)
-        return ajFalse;
-
-    if (!list)
-        return ajFalse;
-
-    while (ajListPop(list, (void **) &object))
-    {
-        if (!object)
-            continue;
-
-        AJNEW0(Pidentifier);
-
-        *Pidentifier = (*FobjectGetIdentifier) (object);
-
-        ajTablePutClean(table,
-                        (void *) Pidentifier,
-                        (void *) object,
-                        (void (*)(void **)) NULL,
-                        (void (*)(void **)) NULL);
-    }
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic tableuintToList ************************************************
-**
-** An ajTableMapDel "apply" function to clear an AJAX Table of
-** AJAX unsigned integer key data and generic value data.
-**
-** This function deletes the AJAX unsigned integer key data
-** and moves the generic value data onto the AJAX List.
-**
-** @param [d] Pkey [void**] AJAX unsigned integer key data address
-** @param [d] Pvalue [void**] Generic value data address
-** @param [u] cl [void*] AJAX List, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static void tableuintToList(void **Pkey,
-                            void **Pvalue,
-                            void *cl)
-{
-    if (!Pkey)
-        return;
-
-    if (!Pvalue)
-        return;
-
-    if (!cl)
-        return;
-
-    ajMemFree(Pkey);
-
-    ajListPushAppend(cl, *Pvalue);
-
-    *Pvalue = NULL;
-
-    return;
-}
-
-
-
-
-/* @func ensTableuintToList ***************************************************
-**
-** Moves generic value data from an AJAX Table of
-** AJAX unsigned integer key data and
-** generic value data onto an AJAX List.
-**
-** @param [u] table [AjPTable]
-** AJAX Table od AJAX unsigned integer key data and generic value data
-** @param [u] list [AjPList] AJAX List
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-**
-******************************************************************************/
-
-AjBool ensTableuintToList(AjPTable table, AjPList list)
-{
-    if (!table)
-        return ajFalse;
-
-    if (!list)
-        return ajFalse;
-
-    ajTableMapDel(table, &tableuintToList, (void *) list);
-
-    return ajTrue;
-}
 
 
 
@@ -560,7 +208,7 @@ void ensTableuintliststrClear(AjPTable table)
 {
     ajTableClearDelete(table);
 
-    return;
+	return;
 }
 
 
@@ -584,7 +232,7 @@ void ensTableuintliststrDelete(AjPTable *Ptable)
 {
     ajTableDel(Ptable);
 
-    return;
+	return;
 }
 
 

@@ -6,9 +6,9 @@
 <pre>
 ##gff-version 3
 ##sequence-region ACTB1_TAKRU 1 375
-#!Date 2013-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.6.0.0
+#!Source-version EMBOSS 6.5.6.0
 ACTB1_TAKRU	SWISSPROT	mature_protein_region	1	375	.	.	.	ID=ACTB1_TAKRU.1;note=Actin%2C cytoplasmic 1;ftid=PRO_0000367094
 ACTB1_TAKRU	SWISSPROT	cleaved_initiator_methionine	1	1	.	.	.	ID=ACTB1_TAKRU.2;note=Removed%3B alternate;comment=By similarity
 ACTB1_TAKRU	SWISSPROT	mature_protein_region	2	375	.	.	.	ID=ACTB1_TAKRU.3;note=Actin%2C cytoplasmic 1%2C N-terminally processed;ftid=PRO_0000000809

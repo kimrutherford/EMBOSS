@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.13 $
+** @version $Revision: 1.12 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:44:36 $ by $Author: mks $
+** @modified $Date: 2011/09/29 15:45:04 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -74,7 +74,6 @@
 #include "ensmetainformation.h"
 #include "ensmiscellaneous.h"
 #include "ensontology.h"
-#include "ensoperon.h"
 #include "ensprediction.h"
 #include "ensprojectionsegment.h"
 #include "ensprotein.h"

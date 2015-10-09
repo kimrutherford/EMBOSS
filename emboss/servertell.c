@@ -78,7 +78,6 @@ int main(int argc, char **argv)
     AjPStr   svrname = NULL;
     AjPFile  outfile = NULL;    
     AjPStr type     = NULL;
-    AjBool verbose = ajFalse;
     AjBool id;
     AjBool qry;
     AjBool all;
@@ -91,23 +90,16 @@ int main(int argc, char **argv)
     AjPStr cachefile = NULL;
     AjPStr url = NULL;
     AjPList list = NULL;
-    AjPList dblist = NULL;
-    AjPList aliaslist = NULL;
-    AjIList iter = NULL;
-    AjIList dbiter = NULL;
-    AjIList aliter = NULL;
-    const AjPStr dbname = NULL;
-    const AjPStr alias = NULL;
     AjPTagval tagval = NULL;
+    AjIList iter = NULL;
     ajuint space = 0;
     ajuint count = 0;
-    ajuint maxlen = 0;
 
     /* ACD processing */
     embInit("servertell", argc, argv);
 
     svrname   = ajAcdGetString("server");
-    verbose  = ajAcdGetBoolean("full");
+/*    verbose  = ajAcdGetBoolean("full"); */
     outfile  = ajAcdGetOutfile("outfile");
     
 
@@ -115,17 +107,7 @@ int main(int argc, char **argv)
     /* Check EMBOSS server information.
        Write output file */
 
-    if(verbose)
-    {
-        dblist = ajListNew();
-        ajNamSvrListListDatabases(svrname, dblist);
-        count = ajListGetLength(dblist);
-    }
-    else 
-    {
-        count = ajNamSvrCount(svrname);
-    }
-
+    count = ajNamSvrCount(svrname);
     if(ajNamSvrDetails(svrname, &type, &scope, &id, &qry, &all, &comment,
                        &release, &methods, &defined,
                        &cachedir, &cachefile, &url))
@@ -134,23 +116,13 @@ int main(int argc, char **argv)
         ajFmtPrintF(outfile, "# access levels id: %B query: %B all: %B\n",
                     id, qry, all);
         ajFmtPrintF(outfile, "# scope: %S\n", scope);
-
         if(ajStrGetLen(cachedir))
            ajFmtPrintF(outfile, "# cache directory: %S file: %S\n",
                        cachedir, cachefile);
         else
            ajFmtPrintF(outfile, "# cache file: %S\n",
                        cachefile);
-
-        ajFmtPrintF(outfile, "# databases: %u\n", count);
-
-        if(!verbose)
-            ajFmtPrintF(outfile,
-                        "# use -full to see complete list of databases\n",
-                        count);
-
-        ajFmtPrintF(outfile, "\n");
-
+        ajFmtPrintF(outfile, "# databases: %u\n\n", count);
         ajFmtPrintF(outfile, "SERVER %S [\n", svrname);
 
         list = ajNamSvrGetAttrlist(svrname);
@@ -179,71 +151,6 @@ int main(int argc, char **argv)
         ajStrDel(&cachedir);
         ajStrDel(&cachefile);
         ajStrDel(&url);
-    }
-
-    if(verbose)
-    {
-        dbiter = ajListIterNewread(dblist);
-
-        while(!ajListIterDone(dbiter))
-        {
-            dbname = ajListIterGet(dbiter);
-            ajFmtPrintF(outfile, "\nDBNAME %S [\n", dbname);
-            list = ajNamDbGetAttrlistSvr(dbname, svrname);
-            iter = ajListIterNewread(list);
-
-            while(!ajListIterDone(iter))
-            {
-                tagval = ajListIterGet(iter);
-                space = 15 - ajStrGetLen(ajTagvalGetTag(tagval));
-                ajFmtPrintF(outfile, "   %S:%.*s\"%S\"\n",
-                            ajTagvalGetTag(tagval),
-                            space, "                    ",
-                            ajTagvalGetValue(tagval));
-                ajTagvalDel(&tagval);                
-            }
-
-            ajListIterDel(&iter);
-            ajListFree(&list);
-            ajFmtPrintF(outfile, "]\n");
-
-            aliaslist = ajListNew();
-            ajNamSvrListFindAliases(svrname, dbname, aliaslist);
-
-            if(ajListGetLength(aliaslist))
-            {
-                ajFmtPrintF(outfile, "\n");
-                    
-                aliter = ajListIterNewread(aliaslist);
-
-                maxlen = 1;
-                while(!ajListIterDone(aliter))
-                {
-                    alias = ajListIterGet(aliter);
-                    if(MAJSTRGETLEN(alias) > maxlen)
-                        maxlen = MAJSTRGETLEN(alias);
-                }
-                
-                ajListIterDel(&aliter);
-                aliter = ajListIterNewread(aliaslist);
-
-                while(!ajListIterDone(aliter))
-                {
-                    alias = ajListIterGet(aliter);
-
-                    if(ajStrFindK(alias, ':') < 0)
-                        ajFmtPrintF(outfile, "ALIAS %-*S %S\n",
-                                    maxlen, alias, dbname);
-                }
-
-                ajListIterDel(&aliter);
-            }
-
-            ajListstrFree(&aliaslist);
-        }
-
-        ajListIterDel(&dbiter);
-        ajListstrFree(&dblist);
     }
 
     /* Memory clean-up and exit */

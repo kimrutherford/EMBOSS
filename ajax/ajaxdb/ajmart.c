@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX sequence database access
 **
 ** @author Copyright (C) 2009 Alan Bleasby
-** @version $Revision: 1.35 $
+** @version $Revision: 1.33 $
 ** @modified Nov 23 ajb First version
-** @modified $Date: 2012/12/07 10:21:39 $ by $Author: rice $
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -255,7 +255,7 @@ void ajMartqueryDel(AjPMartquery *thys)
     ajMartFilterDel(&pthis->Filters);
 
     if(pthis->Config)
-        ajDomDocumentDestroyNode(pthis->Config,&pthis->Config);
+        ajDomDocumentDestroyNode(pthis->Config,pthis->Config);
     
     ajStrDel(&pthis->Reghost);
     ajStrDel(&pthis->Regpath);
@@ -4597,7 +4597,7 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
     {
         ret[i] = ajStrNew();
 
-        ajStrTokenNextParseNoskip(handle,&token);
+        ajStrTokenNextParseNoskip(&handle,&token);
         
         for(j = 0; j < att->Natts; ++j)
         {
@@ -4713,7 +4713,7 @@ void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
 
     handle = ajStrTokenNewC(dir, "+");    
 
-    if(!ajStrTokenNextParse(handle, &str))
+    if(!ajStrTokenNextParse(&handle, &str))
     {
         ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
         return;
@@ -4722,7 +4722,7 @@ void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
     ajStrExchangeKK(&str,'%','.');
     ajStrAssignS(host,str);
 
-    if(!ajStrTokenNextParse(handle, &str))
+    if(!ajStrTokenNextParse(&handle, &str))
     {
         ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
         return;
@@ -4731,7 +4731,7 @@ void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
     ajStrExchangeKK(&str,'^','/');
     ajStrAssignS(path,str);
 
-    if(!ajStrTokenNextParse(handle, &str))
+    if(!ajStrTokenNextParse(&handle, &str))
     {
         ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
         return;

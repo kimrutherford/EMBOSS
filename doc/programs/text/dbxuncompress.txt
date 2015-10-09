@@ -53,7 +53,7 @@ Output file [embl.dbxuncompress]:
 Command line arguments
 
 Uncompress a compressed dbx index
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     EMBOSS database name (Any string from 2 to
@@ -113,11 +113,11 @@ Order        22
 Fill         21
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        223
 Fullcount    445
 Kwlimit      75

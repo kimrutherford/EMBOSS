@@ -34,7 +34,7 @@ Variation output file [0.vcf]: test.vcf
 Command line arguments
 
 Get sequence variations
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-variation]         variation  Variation filename and optional format, or

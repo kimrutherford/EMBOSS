@@ -6,8 +6,8 @@
 <pre>
 Processing directory: /homes/user/test/data/
 Processing file: emrod
-entries: 6 (6) time: 0.0/0.0s (-0.0/0.0)
-Total time: 0:00.0
+entries: 6 (6) time: 0.0s (0.0s)
+Total time: 0.0s
 Entry idlen 15 OK. Maximum ID length was 6 for 'L48662'.
 Field acc acclen 15 OK. Maximum acc term length was 6 for 'L48662'.
 </pre>
@@ -33,11 +33,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        6
 Fullcount    6
 Kwlimit      15
@@ -55,11 +55,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        6
 Fullcount    6
 Kwlimit      15

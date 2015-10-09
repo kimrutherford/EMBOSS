@@ -57,7 +57,7 @@ syco        Draw synonymous codon usage statistic plot for a nucleotide sequence
 Command line arguments
 
 Find programs by EDAM topic
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any

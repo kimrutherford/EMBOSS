@@ -36,7 +36,7 @@ Obo output file [0850.obo]:
 Command line arguments
 
 Get ontology term(s) by parent id
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -103,11 +103,8 @@ o not (typically) correspond to molecular sequence database records or entries a
 nd which (typically) are derived from some analytical method.
 comment: This concept may be used for arbitrary sequence sets and associated dat
 a arising from processing.
-subset: bioinformatics
 subset: data
-subset: edam
-synonym: "SO:0001260" RELATED []
-created_in: "beta12orEarlier"
+synonym: "sequence_collection" EXACT [SO:0001260]
 is_a: EDAM_data:2955 ! Sequence report
 
 
@@ -128,44 +125,15 @@ Output file format
   File: 0850.obo
 
 [Term]
-id: EDAM_data:1233
-name: Sequence set (protein)
-namespace: data
-def: Any collection of multiple protein sequences and associated metadata that d
-o not (typically) correspond to common sequence database records or database ent
-ries.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:0850 ! Sequence set
-
-[Term]
 id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
 is_a: EDAM_data:2977 ! Nucleic acid sequence
-
-[Term]
-id: EDAM_data:2245
-name: Sequence set (bootstrapped)
-namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedur
-e.
-comment: Bootstrapping is often performed in phylogenetic analysis.
-subset: bioinformatics
-subset: data
-subset: edam
-created_in: "beta12orEarlier"
-is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
 id: EDAM_data:1235
@@ -175,13 +143,30 @@ def: A set of sequences that have been clustered or otherwise classified as belo
 nging to a group including (typically) sequence cluster information.
 comment: The cluster might include sequences identifiers, short descriptions, al
 ignment and summary information.
-subset: bioinformatics
 subset: data
-subset: edam
-created_in: "beta12orEarlier"
 is_a: EDAM_data:0850 ! Sequence set
-relationship: has_topic EDAM_topic:0724 ! Protein families
 relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
+
+[Term]
+id: EDAM_data:2245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedur
+e.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that d
+o not (typically) correspond to common sequence database records or database ent
+ries.
+subset: data
+is_a: EDAM_data:0850 ! Sequence set
 
 
 Data files

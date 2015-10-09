@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.6 $
+** @version $Revision: 1.5 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:51:33 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -125,10 +125,10 @@ AjBool ensGvattributeadaptorCacheClear(EnsPGvattributeadaptor gvaa);
 void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa);
 
 EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
-    EnsPGvattributeadaptor gvaa);
+    const EnsPGvattributeadaptor gvaa);
 
 EnsPDatabaseadaptor ensGvattributeadaptorGetDatabaseadaptor(
-    EnsPGvattributeadaptor gvaa);
+    const EnsPGvattributeadaptor gvaa);
 
 AjBool ensGvattributeadaptorFetchAllbyCode(EnsPGvattributeadaptor gvaa,
                                            const AjPStr code,

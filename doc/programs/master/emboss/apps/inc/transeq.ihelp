@@ -1,5 +1,5 @@
 Translate nucleic acid sequences
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -65,12 +65,6 @@ Version: EMBOSS:6.6.0.0
                                   you prefer to define frame '-1' as using the
                                   set of codons starting with the last codon
                                   of the sequence, then set this to be true.
-   -[no]methionine     boolean    [Y] START codons at the beginning of protein
-                                  products will usually code for Methionine,
-                                  despite what the codon will code for when it
-                                  is internal to a protein. This qualifier
-                                  sets all such START codons to code for
-                                  Methionine by default.
 
    Associated qualifiers:
 
@@ -84,7 +78,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset

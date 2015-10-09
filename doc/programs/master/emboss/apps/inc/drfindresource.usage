@@ -4,7 +4,7 @@ Here is a sample session with <b>drfindresource</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>drfindresource pathogens </b>
+% <b>drfindresource pathogen </b>
 Find public databases by resource
 Data resource output file [drfindresource.drcat]: <b></b>
 

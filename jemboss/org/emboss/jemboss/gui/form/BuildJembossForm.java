@@ -1068,7 +1068,7 @@ public class BuildJembossForm implements ActionListener
                                             && textf[h].isEnabled())
         {
           if(withSoap)
-            options = filesForSoap(textf[h].getText(),options,val,filesToMove,optionsA);
+            options = filesForSoap(textf[h].getText(),options,val,filesToMove);
           else
           {
             options = options.concat(" -" + val + " " +  textf[h].getText());
@@ -1085,7 +1085,7 @@ public class BuildJembossForm implements ActionListener
           String fns = filelist[h].getListFile();
           String ls = System.getProperty("line.separator");
           options = filesForSoap("internalList::internalList"+ls+
-                                 fns,options,val,filesToMove,optionsA);
+                                 fns,options,val,filesToMove);
         }
         else
         {
@@ -1113,15 +1113,12 @@ public class BuildJembossForm implements ActionListener
           
           fn = fn.trim();
 
+          optionsA.add("-" + val);
+          optionsA.add(fn);
           
           if(withSoap)
-          {
-            options = filesForSoap(fn,options,val,filesToMove, optionsA);
-          }
-          else
-          {
-            optionsA.add("-" + val);
-            optionsA.add(fn);
+            options = filesForSoap(fn,options,val,filesToMove);
+          else {
             fn = addQuote(fn);
             options = options.concat(" -" + val + " " +  fn);
           }
@@ -1149,7 +1146,7 @@ public class BuildJembossForm implements ActionListener
           if(withSoap)
           {
             options = filesForSoap("internalList::internalList"+ls+
-                                   fns,options,val,filesToMove,optionsA);
+                                   fns,options,val,filesToMove);
           }
           else
           { 
@@ -1173,8 +1170,7 @@ public class BuildJembossForm implements ActionListener
             sfn = sf.getSafeFileName();
             filesToMove.put(sfn,cp.getBytes());
             options = options.concat(" -" + val + " " + sfn);
-            optionsA.add("-" + val);
-            optionsA.add(sfn);
+
           }
           else
           {
@@ -1232,7 +1228,7 @@ public class BuildJembossForm implements ActionListener
 
 
   private String filesForSoap(String fn, String options, String val,
-                             Hashtable filesToMove, List optionsA)
+                             Hashtable filesToMove)
   {
 
     String sfn;
@@ -1253,71 +1249,38 @@ public class BuildJembossForm implements ActionListener
       {
         ListFile.parse(fn, filesToMove);
         if(fn.startsWith("internalList::"))
-        {
           options = options.concat(" -" + val + " list::internalList");
-          optionsA.add("-" + val);
-          optionsA.add("list::internalList");
-        }
         else
         {
           MakeFileSafe sf = new MakeFileSafe(lfn);
           String sfs = sf.getSafeFileName();
           options = options.concat(" -" + val + " list::" +  sfs);
-          optionsA.add("-" + val);
-          optionsA.add("list::"+sfs);
         }
       }
       else                                      // presume remote
       {
 //      System.out.println("Can't find list file "+lfn);
         options = options.concat(" -" + val + " list::" +  lfn);
-        optionsA.add("-" + val);
-        optionsA.add("list::"+lfn);
       }
       
       sfn=lfn;
     }
     else                                        // not list file
     {                                  
+      MakeFileSafe sf = new MakeFileSafe(fn);
+      sfn = sf.getSafeFileName();
+
       File inFile = new File(fn);
       if(inFile.exists() && inFile.canRead() 
                          && inFile.isFile())    // read & add to transfer list
       {
-        MakeFileSafe sf = new MakeFileSafe(fn);
-        sfn = sf.getSafeFileName();
         filesToMove.put(sfn,getLocalFile(inFile));
         options = options.concat(" -" + val + " " +  sfn);
-        optionsA.add("-" + val);
-        optionsA.add(sfn);
       }
-      else
+      else     //presume remote
       {
-    	  // if file name contains ':' character
-    	  // check whether first part of the file name is a local readable file
-    	  if(fn.indexOf(':')>0)
-    	  {
-    		  String fnx= fn.substring(0,  fn.lastIndexOf(':'));
-    		  inFile = new File(fnx);
-    		  if(inFile.exists() && inFile.canRead() 
-    				  && inFile.isFile())    // read & add to transfer list
-    		  {
-    			  MakeFileSafe sf = new MakeFileSafe(fnx);
-    			  String seqid = fn.substring(fn.lastIndexOf(':')+1);
-
-    			  sfn = sf.getSafeFileName();
-    			  filesToMove.put(sfn,getLocalFile(inFile));
-
-    			  options = options.concat(" -" + val + " " +  sfn+':'+seqid);
-    			  optionsA.add("-" + val);
-    			  optionsA.add(sfn+':'+seqid);
-    			  return options;
-    		  }
-
-    	  }
-    	  //presume remote
-    	  options = options.concat(" -" + val + " " +  fn);
-    	  optionsA.add("-" + val);
-    	  optionsA.add(fn);
+//      System.out.println("Can't find plain file "+fn);
+        options = options.concat(" -" + val + " " +  fn);
       }
     }
 

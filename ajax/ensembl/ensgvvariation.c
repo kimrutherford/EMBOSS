@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.36 $
+** @version $Revision: 1.32 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -127,14 +127,14 @@ static const char *const gvvariationKValidation[] =
 
 
 
-/* @conststatic gvvariationadaptorKTablenames *********************************
+/* @conststatic gvvariationadaptorKTables *************************************
 **
 ** Array of Ensembl Genetic Variation Variation Adaptor
 ** SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvvariationadaptorKTablenames[] =
+static const char *const gvvariationadaptorKTables[] =
 {
     "variation",
     "source source1",
@@ -146,14 +146,14 @@ static const char *const gvvariationadaptorKTablenames[] =
 
 
 
-/* @conststatic gvvariationadaptorKColumnnames ********************************
+/* @conststatic gvvariationadaptorKColumns ************************************
 **
 ** Array of Ensembl Genetic Variation Variation Adaptor
 ** SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvvariationadaptorKColumnnames[] =
+static const char *const gvvariationadaptorKColumns[] =
 {
     "variation.variation_id",
     "variation.source_id",
@@ -178,13 +178,13 @@ static const char *const gvvariationadaptorKColumnnames[] =
 
 
 
-/* @conststatic gvvariationadaptorKLeftjoins **********************************
+/* @conststatic gvvariationadaptorKLeftjoin ***********************************
 **
-** Array of Ensembl Genetic Variation Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Genetic Variation Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin gvvariationadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin gvvariationadaptorKLeftjoin[] =
 {
     {
         "variation_synonym",
@@ -202,7 +202,8 @@ static const EnsOBaseadaptorLeftjoin gvvariationadaptorKLeftjoins[] =
 
 /* @conststatic gvvariationadaptorKDefaultcondition ***************************
 **
-** Ensembl Genetic Variation Variation Adaptor SQL SELECT default condition
+** Array of Ensembl Genetic Variation Variation Adaptor
+** SQL default condition
 **
 ******************************************************************************/
 
@@ -212,14 +213,14 @@ static const char *gvvariationadaptorKDefaultcondition =
 
 
 
-/* @conststatic gvvariationfeatureadaptorKTablenames **************************
+/* @conststatic gvvariationfeatureadaptorKTables ******************************
 **
 ** Array of Ensembl Genetic Variation Variation Feature Adaptor
 ** SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvvariationfeatureadaptorKTablenames[] =
+static const char *const gvvariationfeatureadaptorKTables[] =
 {
     "variation_feature",
     "source",
@@ -230,14 +231,14 @@ static const char *const gvvariationfeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic gvvariationfeatureadaptorKColumnnames *************************
+/* @conststatic gvvariationfeatureadaptorKColumns *****************************
 **
 ** Array of Ensembl Genetic Variation Variation Feature Adaptor
 ** SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvvariationfeatureadaptorKColumnnames[] =
+static const char *const gvvariationfeatureadaptorKColumns[] =
 {
     "variation_feature.variation_feature_id",
     "variation_feature.seq_region_id",
@@ -258,13 +259,13 @@ static const char *const gvvariationfeatureadaptorKColumnnames[] =
 
 
 
-/* @conststatic gvvariationfeatureadaptorKLeftjoins ***************************
+/* @conststatic gvvariationfeatureadaptorKLeftjoin ****************************
 **
-** Array of Ensembl Genetic Variation Feature Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Genetic Variation Feature Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin gvvariationfeatureadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin gvvariationfeatureadaptorKLeftjoin[] =
 {
     {
         "failed_variation",
@@ -278,8 +279,8 @@ static const EnsOBaseadaptorLeftjoin gvvariationfeatureadaptorKLeftjoins[] =
 
 /* @conststatic gvvariationfeatureadaptorKDefaultcondition ********************
 **
-** Ensembl Genetic Variation Variation Feature Adaptor
-** SQL SELECT default condition
+** Array of Ensembl Genetic Variation Variation Feature Adaptor
+** SQL default condition
 **
 ******************************************************************************/
 
@@ -289,14 +290,14 @@ static const char *gvvariationfeatureadaptorKDefaultcondition =
 
 
 
-/* @conststatic gvvariationsetadaptorKTablenames ******************************
+/* @conststatic gvvariationsetadaptorKTables **********************************
 **
 ** Array of Ensembl Genetic Variation Variation Set Adaptor
 ** SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvvariationsetadaptorKTablenames[] =
+static const char *const gvvariationsetadaptorKTables[] =
 {
     "variation_set",
     (const char *) NULL
@@ -305,14 +306,14 @@ static const char *const gvvariationsetadaptorKTablenames[] =
 
 
 
-/* @conststatic gvvariationsetadaptorKColumnnames *****************************
+/* @conststatic gvvariationsetadaptorKColumns *********************************
 **
 ** Array of Ensembl Genetic Variation Variation Set Adaptor
 ** SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvvariationsetadaptorKColumnnames[] =
+static const char *const gvvariationsetadaptorKColumns[] =
 {
     "variation_set.variation_set_id",
     "variation_set.name",
@@ -330,18 +331,18 @@ static const char *const gvvariationsetadaptorKColumnnames[] =
 
 /* #varstatic array elements **************************************************
 **
-** #value [ajuint] gvvariationadaptorGColumnnamesElements
-** Number of gvvariationsetadaptorKColumnnames elements
-** #value [ajuint] gvvariationadaptorGTablenamesElements
+** #value [ajuint] gvvariationadaptorGColumnElements
+** Number of gvvariationsetadaptorKColumns elements
+** #value [ajuint] gvvariationadaptorGTableElements
 ** Number of gvvariationsetadaptorKTable elements
-** #value [ajuint] gvvariationadaptorGLeftjoinsElements
-** Number of gvvariationsetadaptorKLeftjoins elements
+** #value [ajuint] gvvariationadaptorGLeftJoinElements
+** Number of gvvariationsetadaptorKJeftJoin elements
 **
 ******************************************************************************/
 
-static ajuint gvvariationadaptorGColumnnamesElements = 0U;
-static ajuint gvvariationadaptorGTablenamesElements  = 0U;
-static ajuint gvvariationadaptorGLeftjoinsElements   = 0U;
+static ajuint gvvariationadaptorGColumnElements   = 0U;
+static ajuint gvvariationadaptorGTableElements    = 0U;
+static ajuint gvvariationadaptorGLeftJoinElements = 0U;
 
 
 
@@ -349,6 +350,10 @@ static ajuint gvvariationadaptorGLeftjoinsElements   = 0U;
 /* ========================================================================= */
 /* =========================== private functions =========================== */
 /* ========================================================================= */
+
+static void gvvariationGeneMove(void **Pkey,
+                                void **Pvalue,
+                                void *cl);
 
 static int listGvvariationCompareIdentifierAscending(
     const void *item1,
@@ -457,8 +462,8 @@ static void listGvvariationsetDelete(void **Pitem, void *cl);
 ** Ensembl Genetic Variation Variation objects
 **
 ** @cc Bio::EnsEMBL::Variation::Variation
-** @cc CVS Revision: 1.68
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.67
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -874,7 +879,14 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvv) || --pthis->Use)
+    if (!*Pgvv)
+        return;
+
+    pthis = *Pgvv;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvv = NULL;
 
@@ -913,7 +925,9 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
     ajStrDel(&pthis->FlankFive);
     ajStrDel(&pthis->FlankThree);
 
-    ajMemFree((void **) Pgvv);
+    AJFREE(pthis);
+
+    *Pgvv = NULL;
 
     return;
 }
@@ -1377,7 +1391,7 @@ ajuint ensGvvariationGetValidations(const EnsPGvvariation gvv)
 **
 ** @nam3rule Load Return Ensembl Genetic Variation Variation attribute(s)
 ** loaded on demand
-** @nam4rule All Returns all Ensembl Genetic Variation Variation members
+** @nam4rule All Returns all Ensembl Genetic Variation Variation attributes
 ** loaded on demand
 ** @nam5rule Faileddescriptions Returns an AJAX List of AJAX String
 ** (failed description) objects
@@ -1464,6 +1478,10 @@ const AjPList ensGvvariationLoadAllFaileddescriptions(EnsPGvvariation gvv)
 
 const AjPList ensGvvariationLoadAllGvalleles(EnsPGvvariation gvv)
 {
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvalleleadaptor gvaa = NULL;
+
     if (!gvv)
         return NULL;
 
@@ -1480,14 +1498,16 @@ const AjPList ensGvvariationLoadAllGvalleles(EnsPGvvariation gvv)
         return NULL;
     }
 
+    dba = ensGvvariationadaptorGetDatabaseadaptor(gvv->Adaptor);
+
+    gvaa = ensRegistryGetGvalleleadaptor(dba);
+
     gvv->Gvalleles = ajListNew();
 
-    ensGvalleleadaptorFetchAllbyGvvariation(
-        ensRegistryGetGvalleleadaptor(
-            ensGvvariationadaptorGetDatabaseadaptor(gvv->Adaptor)),
-        gvv,
-        (EnsPGvpopulation) NULL,
-        gvv->Gvalleles);
+    ensGvalleleadaptorFetchAllbyGvvariation(gvaa,
+                                            gvv,
+                                            (EnsPGvpopulation) NULL,
+                                            gvv->Gvalleles);
 
     return gvv->Gvalleles;
 }
@@ -1521,11 +1541,10 @@ AjPStr ensGvvariationLoadFlankFive(EnsPGvvariation gvv)
         return gvv->FlankFive;
 
     if (gvv->Adaptor)
-        ensGvvariationadaptorRetrieveFlank(
-            gvv->Adaptor,
-            gvv->Identifier,
-            &gvv->FlankFive,
-            &gvv->FlankThree);
+        ensGvvariationadaptorRetrieveFlank(gvv->Adaptor,
+                                           gvv->Identifier,
+                                           &gvv->FlankFive,
+                                           &gvv->FlankThree);
 
     return gvv->FlankFive;
 }
@@ -1559,11 +1578,10 @@ AjPStr ensGvvariationLoadFlankThree(EnsPGvvariation gvv)
         return gvv->FlankThree;
 
     if (gvv->Adaptor)
-        ensGvvariationadaptorRetrieveFlank(
-            gvv->Adaptor,
-            gvv->Identifier,
-            &gvv->FlankFive,
-            &gvv->FlankThree);
+        ensGvvariationadaptorRetrieveFlank(gvv->Adaptor,
+                                           gvv->Identifier,
+                                           &gvv->FlankFive,
+                                           &gvv->FlankThree);
 
     return gvv->FlankThree;
 }
@@ -2226,7 +2244,7 @@ AjBool ensGvvariationTrace(const EnsPGvvariation gvv, ajuint level)
 
     /* Trace the AJAX List of Ensembl Genetic Variation Allele objects. */
 
-    ajDebug("%S  Ensembl Genetic Variation Allele objects:\n", indent);
+    ajDebug("%S  Ensembl Genetic Variation Alleles:\n", indent);
 
     iter = ajListIterNew(gvv->Gvalleles);
 
@@ -2241,7 +2259,7 @@ AjBool ensGvvariationTrace(const EnsPGvvariation gvv, ajuint level)
 
     /* Trace the AJAX List of Ensembl Genetic Variation Synonym objects. */
 
-    ajDebug("%S  Ensembl Genetic Variation Synonym objects:\n", indent);
+    ajDebug("%S  Ensembl Genetic Variation Synonyms:\n", indent);
 
     iter = ajListIterNew(gvv->Gvsynonyms);
 
@@ -2262,13 +2280,12 @@ AjBool ensGvvariationTrace(const EnsPGvvariation gvv, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Variation object.
 **
 ** @fdata [EnsPGvvariation]
 **
-** @nam3rule Calculate
-** Calculate Ensembl Genetic Variation Variation information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Variation values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
@@ -2553,18 +2570,18 @@ AjBool ensGvvariationAddValidation(EnsPGvvariation gvv,
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching information from an
+** Functions for fetching values of an
 ** Ensembl Genetic Variation Variation object.
 **
 ** @fdata [EnsPGvvariation]
 **
-** @nam3rule Fetch Fetch Ensembl Genetic Variation Variation information
+** @nam3rule Fetch Fetch Ensembl Genetic Variation Variation values
 ** @nam4rule All Fetch all objects
 ** @nam5rule Genes Fetch all Ensembl Gene objects
 ** @nam5rule Gvsources Fetch all Ensembl Genetic Variation Source objects
 ** @nam5rule Gvsynonyms Fetch all Ensembl Genetic Variation Synonym objects
-** @nam5rule Gvvariationfeatures
-** Fetch all Ensembl Genetic Variation Variation Feature objects
+** @nam5rule Gvvariationfeatures Fetch all Ensembl Genetic Variation Variation
+** Feature objects
 **
 ** @argrule AllGenes gvv [EnsPGvvariation]
 ** Ensembl Genetic Variation Variation
@@ -2591,6 +2608,49 @@ AjBool ensGvvariationAddValidation(EnsPGvvariation gvv,
 **
 ** @fcategory misc
 ******************************************************************************/
+
+
+
+
+/* @funcstatic gvvariationGeneMove ********************************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of Ensembl Gene
+** objects used in ensGvvariationFetchAllGenes. This function deletes the
+** AJAX unsigned identifier key data and moves the Ensembl Gene value data
+** onto the AJAX List.
+**
+** @param [d] Pkey [void**] AJAX unsigned integer key data address
+** @param [d] Pvalue [void**] Ensembl Gene value data address
+** @param [u] cl [void*] AJAX List, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static void gvvariationGeneMove(void **Pkey,
+                                void **Pvalue,
+                                void *cl)
+{
+    if (!Pkey)
+        return;
+
+    if (!Pvalue)
+        return;
+
+    if (!cl)
+        return;
+
+    ajMemFree(Pkey);
+
+    ajListPushAppend(cl, *Pvalue);
+
+    *Pvalue = NULL;
+
+    return;
+}
 
 
 
@@ -2638,9 +2698,9 @@ AjBool ensGvvariationFetchAllGenes(EnsPGvvariation gvv,
     EnsPGvvariationfeature        gvvf  = NULL;
     EnsPGvvariationfeatureadaptor gvvfa = NULL;
 
-    EnsPSlice    slice   = NULL;
-    EnsPSlice newslice   = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice  = NULL;
+    EnsPSlice     newslice  = NULL;
+    EnsPSliceadaptor slicea = NULL;
 
     if (!gvv)
         return ajFalse;
@@ -2654,7 +2714,7 @@ AjBool ensGvvariationFetchAllGenes(EnsPGvvariation gvv,
     if (!gvv->Adaptor)
         return ajTrue;
 
-    genetable = ajTableuintNew(0U);
+    genetable = ajTableuintNew(0);
 
     ajTableSetDestroyvalue(genetable, (void (*)(void **)) &ensGeneDel);
 
@@ -2664,7 +2724,7 @@ AjBool ensGvvariationFetchAllGenes(EnsPGvvariation gvv,
         ensEDatabaseadaptorGroupCore,
         ensDatabaseadaptorGetSpecies(gvdba));
 
-    sla = ensRegistryGetSliceadaptor(csdba);
+    slicea = ensRegistryGetSliceadaptor(csdba);
 
     genea = ensRegistryGetGeneadaptor(csdba);
 
@@ -2689,7 +2749,7 @@ AjBool ensGvvariationFetchAllGenes(EnsPGvvariation gvv,
 
         vfeature = ensGvvariationfeatureGetFeature(gvvf);
 
-        ensSliceadaptorFetchByFeature(sla, vfeature, flank, &slice);
+        ensSliceadaptorFetchByFeature(slicea, vfeature, flank, &slice);
 
         /* Fetch all Ensembl Gene objects on the new Ensembl Slice. */
 
@@ -2745,7 +2805,7 @@ AjBool ensGvvariationFetchAllGenes(EnsPGvvariation gvv,
 
     /* Move all Ensembl Gene objects from the AJAX Table onto the AJAX List. */
 
-    ensTableuintToList(genetable, genes);
+    ajTableMapDel(genetable, &gvvariationGeneMove, genes);
 
     ajTableFree(&genetable);
 
@@ -2902,6 +2962,10 @@ AjBool ensGvvariationFetchAllGvsynonyms(const EnsPGvvariation gvv,
 AjBool ensGvvariationFetchAllGvvariationfeatures(EnsPGvvariation gvv,
                                                  AjPList gvvfs)
 {
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvvariationfeatureadaptor gvvfa = NULL;
+
     if (!gvv)
         return ajFalse;
 
@@ -2917,11 +2981,13 @@ AjBool ensGvvariationFetchAllGvvariationfeatures(EnsPGvvariation gvv,
         return ajTrue;
     }
 
-    return ensGvvariationfeatureadaptorFetchAllbyGvvariation(
-        ensRegistryGetGvvariationfeatureadaptor(
-            ensGvvariationadaptorGetDatabaseadaptor(gvv->Adaptor)),
-        gvv,
-        gvvfs);
+    dba = ensGvvariationadaptorGetDatabaseadaptor(gvv->Adaptor);
+
+    gvvfa = ensRegistryGetGvvariationfeatureadaptor(dba);
+
+    return ensGvvariationfeatureadaptorFetchAllbyGvvariation(gvvfa,
+                                                             gvv,
+                                                             gvvfs);
 }
 
 
@@ -3178,10 +3244,9 @@ const char* ensGvvariationClassToChar(
          i++);
 
     if (!gvvariationKClass[i])
-        ajDebug("ensGvvariationClassToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Variation Class "
-                "enumeration %d.\n",
+        ajDebug("ensGvvariationClassToChar encountered an "
+                "out of boundary error on Ensembl "
+                "Genetic Variation Variation Class enumeration %d.\n",
                 gvvc);
 
     return gvvariationKClass[i];
@@ -3314,10 +3379,9 @@ const char* ensGvvariationValidationToChar(
          i++);
 
     if (!gvvariationKValidation[i])
-        ajDebug("ensGvvariationValidationToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Variation Validation "
-                "enumeration %d.\n",
+        ajDebug("ensGvvariationValidationToChar encountered an "
+                "out of boundary error on Ensembl "
+                "Genetic Variation Variation Validation enumeration %d.\n",
                 gvvv);
 
     return gvvariationKValidation[i];
@@ -3394,7 +3458,7 @@ ajuint ensGvvariationValidationsFromSet(const AjPStr gvvvset)
 
     gvvvstring = ajStrNew();
 
-    while (ajStrTokenNextParse(token, &gvvvstring))
+    while (ajStrTokenNextParse(&token, &gvvvstring))
         gvvvbf |= (1 << ensGvvariationValidationFromStr(gvvvstring));
 
     ajStrDel(&gvvvstring);
@@ -3576,8 +3640,8 @@ static void listGvvariationDelete(void **Pitem, void *cl)
 ** Ensembl Genetic Variation Variation Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor
-** @cc CVS Revision: 1.90
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.87
+** @cc CVS Tag: branch-ensembl-66
 **
 ** NOTE: Since the "source" SQL table contains only a small number of records
 ** linked to a potentially large number of records in other SQL tables, the
@@ -3624,6 +3688,10 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
     AjPStr defaultcondition = NULL;
     AjPStr fvsconstraint    = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
+    EnsPGvdatabaseadaptor gvdba = NULL;
+
     if (!gvva)
         return ajFalse;
 
@@ -3631,24 +3699,24 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
         return ajFalse;
 
     /*
-    ** The SQL column name, SQL table name and Leftjoin arrays have been
-    ** allocated to their maximum size.
-    ** Set the iterators to their last common array element.
+    ** The Columns, Tables and Leftjoin arrays have been allocated to their
+    ** maximum size. Set the iterators to their last common array element.
     */
 
-    for (i = 0U; gvvariationadaptorKColumnnames[i]; i++);
+    for (i = 0U; gvvariationadaptorKColumns[i]; i++);
 
-    for (j = 0U; gvvariationadaptorKTablenames[j]; j++);
+    for (j = 0U; gvvariationadaptorKTables[j]; j++);
 
-    for (k = 0U; gvvariationadaptorKLeftjoins[k].Tablename; k++);
+    for (k = 0U; gvvariationadaptorKLeftjoin[k].Table; k++);
 
-    ajCharDel(&gvva->Defaultcondition);
+    if (gvva->Defaultcondition)
+        ajCharDel(&gvva->Defaultcondition);
 
     defaultcondition = ajStrNewC(gvvariationadaptorKDefaultcondition);
 
     if (joinallele == ajTrue)
     {
-        gvva->Tablenames[j] = ajCharNewC("allele");
+        gvva->Tables[j] = ajCharNewC("allele");
         j++;
 
         if (ajStrGetLen(defaultcondition))
@@ -3662,15 +3730,14 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
                          "variation.variation_id");
     }
 
-    if (!ensGvbaseadaptorGetFailedvariations(
-            ensGvvariationadaptorGetGvbaseadaptor(gvva)))
+    if (!ensGvbaseadaptorGetFailedvariations(gvva->Adaptor))
     {
-        gvva->Tablenames[j] = ajCharNewC("failed_variation");
+        gvva->Tables[j] = ajCharNewC("failed_variation");
         j++;
 
-        gvva->Leftjoins[k].Tablename =
+        gvva->Leftjoin[k].Table =
             ajCharNewC("failed_variation");
-        gvva->Leftjoins[k].Condition =
+        gvva->Leftjoin[k].Condition =
             ajCharNewC("variation.variation_id = "
                        "failed_variation.variation_id");
         k++;
@@ -3678,7 +3745,7 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
 
     if (joinflank == ajTrue)
     {
-        gvva->Columnnames[i] = ajCharNewC(
+        gvva->Columns[i] = ajCharNewC(
             "("
             "flanking_sequence.up_seq IS NOT NULL "
             "OR "
@@ -3686,25 +3753,25 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
             ")");
         i++;
 
-        gvva->Tablenames[j] = ajCharNewC("flanking_sequence");
+        gvva->Tables[j] = ajCharNewC("flanking_sequence");
         j++;
 
-        gvva->Leftjoins[k].Tablename =
+        gvva->Leftjoin[k].Table =
             ajCharNewC("flanking_sequence");
-        gvva->Leftjoins[k].Condition =
+        gvva->Leftjoin[k].Condition =
             ajCharNewC("variation.variation_id = "
                        "flanking_sequence.variation_id");
         k++;
     }
     else
     {
-        gvva->Columnnames[i] = ajCharNewC("0");
+        gvva->Columns[i] = ajCharNewC("0");
         i++;
     }
 
     if (joinsource)
     {
-        gvva->Tablenames[i] = ajCharNewC("source");
+        gvva->Tables[i] = ajCharNewC("source");
         i++;
 
         if (ajStrGetLen(defaultcondition))
@@ -3715,36 +3782,35 @@ static AjBool gvvariationadaptorFetchAllbyConstraint(
                          "variation.source_id = source.source_id");
     }
 
-    gvva->Columnnames[i]         = NULL;
-    gvva->Tablenames[j]          = NULL;
-    gvva->Leftjoins[k].Tablename = NULL;
-    gvva->Leftjoins[k].Condition = NULL;
+    gvva->Columns[i]            = (char *) NULL;
+    gvva->Tables[j]             = (char *) NULL;
+    gvva->Leftjoin[k].Table     = (char *) NULL;
+    gvva->Leftjoin[k].Condition = (char *) NULL;
 
     /*
     ** FIXME: Not sure, but this may have to add the failed_variation
     ** condition here.
     */
 
-    ensGvdatabaseadaptorFailedvariationsconstraint(
-        ensGvvariationadaptorGetGvdatabaseadaptor(gvva),
-        (const AjPStr) NULL,
-        &fvsconstraint);
-
+    gvdba = ensGvvariationadaptorGetGvdatabaseadaptor(gvva);
+    ensGvdatabaseadaptorFailedvariationsconstraint(gvdba,
+                                                   (const AjPStr) NULL,
+                                                   &fvsconstraint);
     ajStrAppendC(&defaultcondition, " AND ");
     ajStrAppendS(&defaultcondition, fvsconstraint);
-
     ajStrDel(&fvsconstraint);
 
     gvva->Defaultcondition = ajCharNewC(ajStrGetPtr(defaultcondition));
 
     ajStrDel(&defaultcondition);
 
-    return ensBaseadaptorFetchAllbyConstraint(
-        ensGvvariationadaptorGetBaseadaptor(gvva),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvs);
+    ba = ensGvbaseadaptorGetBaseadaptor(gvva->Adaptor);
+
+    return ensBaseadaptorFetchAllbyConstraint(ba,
+                                              constraint,
+                                              (EnsPAssemblymapper) NULL,
+                                              (EnsPSlice) NULL,
+                                              gvvs);
 }
 
 
@@ -3862,8 +3928,8 @@ static AjBool gvvariationadaptorFetchAllbyStatement(
     ** Ensembl Genetic Variation Population and Ensembl Genetic Variation
     ** Synonym value data.
     */
-    gvpopulations = ajTableuintNew(0U);
-    gvsynonyms    = ajTableuintNew(0U);
+    gvpopulations = ajTableuintNew(0);
+    gvsynonyms    = ajTableuintNew(0);
 
     ajTableSetDestroyvalue(gvpopulations,
                            (void (*)(void **)) &ensGvpopulationDel);
@@ -4028,7 +4094,7 @@ static AjBool gvvariationadaptorFetchAllbyStatement(
                 }
             }
             else
-                gvp = NULL;
+                gvp = (EnsPGvpopulation) NULL;
 
             if (gvaidentifier)
             {
@@ -4048,7 +4114,7 @@ static AjBool gvvariationadaptorFetchAllbyStatement(
                 gvaidentifierold = gvaidentifier;
             }
             else
-                gvallele = NULL;
+                gvallele = (EnsPGvallele) NULL;
         }
 
         if (gvvsidentifier)
@@ -4164,85 +4230,78 @@ EnsPGvvariationadaptor ensGvvariationadaptorNew(
 {
     register ajuint i = 0U;
 
-    EnsPGvbaseadaptor gvba = NULL;
-
     EnsPGvvariationadaptor gvva = NULL;
 
     if (!dba)
         return NULL;
 
-    gvba = ensGvbaseadaptorNew(
+    AJNEW0(gvva);
+
+    gvva->Adaptor = ensGvbaseadaptorNew(
         ensRegistryGetGvdatabaseadaptor(dba),
-        gvvariationadaptorKTablenames,
-        gvvariationadaptorKColumnnames,
-        gvvariationadaptorKLeftjoins,
+        gvvariationadaptorKTables,
+        gvvariationadaptorKColumns,
+        gvvariationadaptorKLeftjoin,
         gvvariationadaptorKDefaultcondition,
         (const char *) NULL,
         gvvariationadaptorFetchAllbyStatement);
 
-    if (!gvba)
-        return NULL;
-
-    AJNEW0(gvva);
-
-    gvva->Adaptor = gvba;
-
     /*
-    ** Allocate SQL column name, SQL table name and Leftjoin arrays to their
-    ** maximum size and populate them with unghangeable values.
+    ** Allocate Columns, Tables and Leftjoin arrays to their maximum size
+    ** and populate them with unghangeable values.
     */
 
     /*
-    ** The SQL column name array needs additional space for the
+    ** The Columns array needs additional space for the
     ** flanking sequence flag SQL column.
     */
 
-    for (i = 0U; gvvariationadaptorKColumnnames[i]; i++);
+    for (i = 0U; gvvariationadaptorKColumns[i]; i++);
 
-    gvvariationadaptorGColumnnamesElements = i + 1U + 1U;
+    gvvariationadaptorGColumnElements = i + 1U + 1U;
 
-    gvva->Columnnames = AJCALLOC0(gvvariationadaptorGColumnnamesElements,
-                                  sizeof (char *));
+    gvva->Columns = AJCALLOC0(gvvariationadaptorGColumnElements,
+                              sizeof (char *));
 
-    for (i = 0U; gvvariationadaptorKColumnnames[i]; i++)
-        gvva->Columnnames[i] = ajCharNewC(gvvariationadaptorKColumnnames[i]);
+    for (i = 0U; gvvariationadaptorKColumns[i]; i++)
+        gvva->Columns[i] = ajCharNewC(gvvariationadaptorKColumns[i]);
 
     /*
-    ** The SQL table name array needs additional space for
+    ** The Tables array needs additional space for
     ** "allele", "failed_variation", "flanking_sequence",
-    ** and "source" SQL table names.
+    ** and "source" SQL tables.
     */
 
-    for (i = 0U; gvvariationadaptorKTablenames[i]; i++);
+    for (i = 0U; gvvariationadaptorKTables[i]; i++);
 
-    gvvariationadaptorGTablenamesElements = i + 1U + 4U;
+    gvvariationadaptorGTableElements = i + 1U + 4U;
 
-    gvva->Tablenames = AJCALLOC0(gvvariationadaptorGTablenamesElements,
-                                 sizeof (char *));
+    gvva->Tables = AJCALLOC0(gvvariationadaptorGTableElements,
+                             sizeof (char *));
 
-    for (i = 0U; gvvariationadaptorKTablenames[i]; i++)
-        gvva->Tablenames[i] = ajCharNewC(gvvariationadaptorKTablenames[i]);
+    for (i = 0U; gvvariationadaptorKTables[i]; i++)
+        gvva->Tables[i] = ajCharNewC(gvvariationadaptorKTables[i]);
 
     /*
-    ** The Leftjoins array needs additional space for
+    ** The LeftJoin array needs additional space for
     ** "failed_variation" and "flanking_sequence"
-    ** SQL LEFT JOIN conditions.
+    ** SQL left join statements.
     */
 
-    for (i = 0U; gvvariationadaptorKLeftjoins[i].Tablename; i++);
+    for (i = 0U; gvvariationadaptorKLeftjoin[i].Table; i++);
 
-    gvvariationadaptorGLeftjoinsElements = i + 1U + 2U;
+    gvvariationadaptorGLeftJoinElements = i + 1U + 2U;
 
-    gvva->Leftjoins = AJCALLOC0(gvvariationadaptorGLeftjoinsElements,
-                                sizeof (EnsOBaseadaptorLeftjoin));
+    gvva->Leftjoin = AJCALLOC0(gvvariationadaptorGLeftJoinElements,
+                               sizeof (EnsOBaseadaptorLeftjoin));
 
-    for (i = 0U; gvvariationadaptorKLeftjoins[i].Tablename; i++)
+    for (i = 0U; gvvariationadaptorKLeftjoin[i].Table; i++)
     {
-        gvva->Leftjoins[i].Tablename =
-            ajCharNewC(gvvariationadaptorKLeftjoins[i].Tablename);
+        gvva->Leftjoin[i].Table =
+            ajCharNewC(gvvariationadaptorKLeftjoin[i].Table);
 
-        gvva->Leftjoins[i].Condition =
-            ajCharNewC(gvvariationadaptorKLeftjoins[i].Condition);
+        gvva->Leftjoin[i].Condition =
+            ajCharNewC(gvvariationadaptorKLeftjoin[i].Condition);
     }
 
     return gvva;
@@ -4308,32 +4367,36 @@ void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva)
                 *Pgvva);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvva))
+    if (!*Pgvva)
         return;
+
+    pthis = *Pgvva;
 
     ensGvbaseadaptorDel(&pthis->Adaptor);
 
-    for (i = 0U; i < gvvariationadaptorGTablenamesElements; i++)
-        ajCharDel(&pthis->Tablenames[i]);
+    for (i = 0U; i < gvvariationadaptorGTableElements; i++)
+        ajCharDel(&pthis->Tables[i]);
 
-    AJFREE(pthis->Tablenames);
+    AJFREE(pthis->Tables);
 
-    for (i = 0U; i < gvvariationadaptorGColumnnamesElements; i++)
-        ajCharDel(&pthis->Columnnames[i]);
+    for (i = 0U; i < gvvariationadaptorGColumnElements; i++)
+        ajCharDel(&pthis->Columns[i]);
 
-    AJFREE(pthis->Columnnames);
+    AJFREE(pthis->Columns);
 
-    for (i = 0U; i < gvvariationadaptorGLeftjoinsElements; i++)
+    for (i = 0U; i < gvvariationadaptorGLeftJoinElements; i++)
     {
-        ajCharDel(&(pthis->Leftjoins[i].Tablename));
-        ajCharDel(&(pthis->Leftjoins[i].Condition));
+        ajCharDel(&(pthis->Leftjoin[i].Table));
+        ajCharDel(&(pthis->Leftjoin[i].Condition));
     }
 
-    AJFREE(pthis->Leftjoins);
+    AJFREE(pthis->Leftjoin);
 
     ajCharDel(&pthis->Defaultcondition);
 
-    ajMemFree((void **) Pgvva);
+    AJFREE(pthis);
+
+    *Pgvva = NULL;
 
     return;
 }
@@ -4350,8 +4413,6 @@ void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva)
 **
 ** @nam3rule Get Return Ensembl Genetic Variation Variation Adaptor
 ** attribute(s)
-** @nam4rule Baseadaptor
-** Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor
 ** Return the Ensembl Database Adaptor
 ** @nam4rule Gvbaseadaptor
@@ -4359,11 +4420,9 @@ void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva)
 ** @nam4rule Gvdatabaseadaptor
 ** Return the Ensembl Genetic Variation Database Adaptor
 **
-** @argrule * gvva [EnsPGvvariationadaptor]
+** @argrule * gvva [const EnsPGvvariationadaptor]
 ** Ensembl Genetic Variation Variation Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor]
 ** Ensembl Database Adaptor or NULL
 ** @valrule Gvbaseadaptor [EnsPGvbaseadaptor]
@@ -4377,36 +4436,12 @@ void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva)
 
 
 
-/* @func ensGvvariationadaptorGetBaseadaptor **********************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Genetic Variation Variation Adaptor.
-**
-** @param [u] gvva [EnsPGvvariationadaptor]
-** Ensembl Genetic Variation Variation Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensGvvariationadaptorGetBaseadaptor(
-    EnsPGvvariationadaptor gvva)
-{
-    return ensGvbaseadaptorGetBaseadaptor(
-        ensGvvariationadaptorGetGvbaseadaptor(gvva));
-}
-
-
-
-
 /* @func ensGvvariationadaptorGetDatabaseadaptor ******************************
 **
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Variation Adaptor.
 **
-** @param [u] gvva [EnsPGvvariationadaptor]
+** @param [r] gvva [const EnsPGvvariationadaptor]
 ** Ensembl Genetic Variation Variation Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
@@ -4416,10 +4451,10 @@ EnsPBaseadaptor ensGvvariationadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvvariationadaptorGetDatabaseadaptor(
-    EnsPGvvariationadaptor gvva)
+    const EnsPGvvariationadaptor gvva)
 {
-    return ensGvbaseadaptorGetDatabaseadaptor(
-        ensGvvariationadaptorGetGvbaseadaptor(gvva));
+    return (gvva) ?
+        ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor) : NULL;
 }
 
 
@@ -4430,7 +4465,7 @@ EnsPDatabaseadaptor ensGvvariationadaptorGetDatabaseadaptor(
 ** Get the Ensembl Genetic Variation Base Adaptor member of an
 ** Ensembl Genetic Variation Variation Adaptor.
 **
-** @param [u] gvva [EnsPGvvariationadaptor]
+** @param [r] gvva [const EnsPGvvariationadaptor]
 ** Ensembl Genetic Variation Variation Adaptor
 **
 ** @return [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor or NULL
@@ -4440,7 +4475,7 @@ EnsPDatabaseadaptor ensGvvariationadaptorGetDatabaseadaptor(
 ******************************************************************************/
 
 EnsPGvbaseadaptor ensGvvariationadaptorGetGvbaseadaptor(
-    EnsPGvvariationadaptor gvva)
+    const EnsPGvvariationadaptor gvva)
 {
     return (gvva) ? gvva->Adaptor : NULL;
 }
@@ -4453,7 +4488,7 @@ EnsPGvbaseadaptor ensGvvariationadaptorGetGvbaseadaptor(
 ** Get the Ensembl Genetic Variation Database Adaptor member of an
 ** Ensembl Genetic Variation Variation Adaptor.
 **
-** @param [u] gvva [EnsPGvvariationadaptor]
+** @param [r] gvva [const EnsPGvvariationadaptor]
 ** Ensembl Genetic Variation Variation Adaptor
 **
 ** @return [EnsPGvdatabaseadaptor]
@@ -4464,10 +4499,10 @@ EnsPGvbaseadaptor ensGvvariationadaptorGetGvbaseadaptor(
 ******************************************************************************/
 
 EnsPGvdatabaseadaptor ensGvvariationadaptorGetGvdatabaseadaptor(
-    EnsPGvvariationadaptor gvva)
+    const EnsPGvvariationadaptor gvva)
 {
-    return ensGvbaseadaptorGetGvdatabaseadaptor(
-        ensGvvariationadaptorGetGvbaseadaptor(gvva));
+    return (gvva) ?
+        ensGvbaseadaptorGetGvdatabaseadaptor(gvva->Adaptor) : NULL;
 }
 
 
@@ -4872,6 +4907,8 @@ AjBool ensGvvariationadaptorFetchAllbyGvvariationset(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPGvvariationset variationset = NULL;
 
     if (!gvva)
@@ -4901,10 +4938,7 @@ AjBool ensGvvariationadaptorFetchAllbyGvvariationset(
 
     while (ajListPop(variationsets, (void **) &variationset))
     {
-        /*
-        ** FIXME: This recursive approach may not work because fetching
-        ** sub-sets of sub-sets can be problematic.
-        */
+        /* FIXME: This recursive approach may not work because fetching sub sets of sub sets can be problematic. */
         ensGvvariationadaptorFetchAllbyGvvariationset(gvva,
                                                       variationset,
                                                       gvvs);
@@ -4918,6 +4952,8 @@ AjBool ensGvvariationadaptorFetchAllbyGvvariationset(
     ** Then get all Ensembl Genetic Variation Variation objects belonging to
     ** this Ensembl Genetic Variation Variation Set.
     */
+
+    ba = ensGvbaseadaptorGetBaseadaptor(gvva->Adaptor);
 
     /* FIXME: The SQL statement needs to be changed to an SQL constraint. */
     statement = ajFmtStr(
@@ -4962,12 +4998,11 @@ AjBool ensGvvariationadaptorFetchAllbyGvvariationset(
         "variation_set_variation.variation_set_id = %u",
         ensGvvariationsetGetIdentifier(gvvset));
 
-    gvvariationadaptorFetchAllbyStatement(
-        ensGvvariationadaptorGetBaseadaptor(gvva),
-        statement,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvs);
+    gvvariationadaptorFetchAllbyStatement(ba,
+                                          statement,
+                                          (EnsPAssemblymapper) NULL,
+                                          (EnsPSlice) NULL,
+                                          gvvs);
 
     ajStrDel(&statement);
 
@@ -5027,10 +5062,16 @@ AjBool ensGvvariationadaptorFetchAllbyIdentifiers(
 
     register ajuint i = 0U;
 
+    ajuint identifier = 0U;
+
+    ajuint *Pidentifier = NULL;
+
     AjPList lgvvs = NULL;
 
     AjPStr constraint = NULL;
     AjPStr csv        = NULL;
+
+    EnsPGvvariation gvv = NULL;
 
     if (!gvva)
         return ajFalse;
@@ -5044,8 +5085,7 @@ AjBool ensGvvariationadaptorFetchAllbyIdentifiers(
 
     /*
     ** Large queries are split into smaller ones on the basis of the maximum
-    ** number of identifier instances configured in the
-    ** Ensembl Base Adaptor module.
+    ** number of identifiers configured in the Ensembl Base Adaptor module.
     ** This ensures that MySQL is faster and the maximum query size is not
     ** exceeded.
     */
@@ -5095,10 +5135,26 @@ AjBool ensGvvariationadaptorFetchAllbyIdentifiers(
     ** to the AJAX Table.
     */
 
-    ensTableuintFromList(
-        gvvs,
-        (ajuint (*)(const void *)) &ensGvvariationGetIdentifier,
-        lgvvs);
+    while (ajListPop(lgvvs, (void **) &gvv))
+    {
+        identifier = ensGvvariationGetIdentifier(gvv);
+
+        if (ajTableMatchV(gvvs, (const void *) &identifier))
+            ajTablePut(gvvs, (void *) &identifier, (void *) gvv);
+        else
+        {
+            /*
+            ** This should not happen, because the keys should have been in
+            ** the AJAX Table in the first place.
+            */
+
+            AJNEW0(Pidentifier);
+
+            *Pidentifier = ensGvvariationGetIdentifier(gvv);
+
+            ajTablePut(gvvs, (void *) Pidentifier, (void *) gvv);
+        }
+    }
 
     ajListFree(&lgvvs);
 
@@ -5166,8 +5222,7 @@ static AjBool gvvariationadaptorFetchAllbyNames(
 
     /*
     ** Large queries are split into smaller ones on the basis of the maximum
-    ** number of identifier instances configured in the
-    ** Ensembl Base Adaptor module.
+    ** number of identifiers configured in the Ensembl Base Adaptor module.
     ** This ensures that MySQL is faster and the maximum query size is not
     ** exceeded.
     */
@@ -5196,15 +5251,15 @@ static AjBool gvvariationadaptorFetchAllbyNames(
             {
                 statement = ajFmtStr(
                     template,
-                    /* SQL column name array */
+                    /* Columns */
                     (synonym && subsnp) ?
                     "CONCAT('ss',variation.subsnp_id) AS name, v.variation_id" :
                     "v.name, v.variation_id",
-                    /* SQL table name array */
+                    /* Tables */
                     synonym ?
                     (subsnp ? "allele" : "variation_synonym") :
                     "variation",
-                    /* SQL SELECT default condition */
+                    /* Condition */
                     (synonym && subsnp ? "v.subsnp_id" : "v.name"),
                     /* Name list */
                     csv);
@@ -5422,6 +5477,7 @@ AjBool ensGvvariationadaptorFetchAllbyNames(
 
     AjPList lgvvs = NULL;
 
+    AjPStr name      = NULL;
     AjPStr statement = NULL;
     AjPStr csv       = NULL;
 
@@ -5442,7 +5498,7 @@ AjBool ensGvvariationadaptorFetchAllbyNames(
                                       (AjPTable) NULL,
                                       (AjPTable *) NULL);
 
-    ba = ensGvvariationadaptorGetBaseadaptor(gvva);
+    ba = ensGvbaseadaptorGetBaseadaptor(gvva->Adaptor);
 
     lgvvs = ajListNew();
 
@@ -5499,10 +5555,24 @@ AjBool ensGvvariationadaptorFetchAllbyNames(
     ** to the AJAX Table.
     */
 
-    ensTablestrFromList(
-        gvvs,
-        (AjPStr (*)(const void *)) &ensGvvariationGetName,
-        lgvvs);
+    while (ajListPop(lgvvs, (void **) &gvv))
+    {
+        name = ensGvvariationGetName(gvv);
+
+        if (ajTableMatchV(gvvs, (const void *) name))
+            ajTablePut(gvvs, (void *) name, (void *) gvv);
+        else
+        {
+            /*
+            ** This should not happen, because the keys should have been in
+            ** the AJAX Table in the first place.
+            */
+
+            ajTablePut(gvvs,
+                       (void *) ajStrNewS(ensGvvariationGetName(gvv)),
+                       (void *) gvv);
+        }
+    }
 
     /* Check, which names yielded no result above and search for synonyms. */
 
@@ -5559,10 +5629,24 @@ AjBool ensGvvariationadaptorFetchAllbyNames(
     ** to the AJAX Table based on a synonym.
     */
 
-    ensTablestrFromList(
-        gvvs,
-        (AjPStr (*)(const void *)) &ensGvvariationGetName,
-        lgvvs);
+    while (ajListPop(lgvvs, (void **) &gvv))
+    {
+        name = ensGvvariationGetName(gvv);
+
+        if (ajTableMatchV(gvvs, (const void *) name))
+            ajTablePut(gvvs, (void *) name, (void *) gvv);
+        else
+        {
+            /*
+            ** This should not happen, because the keys should have been in
+            ** the AJAX Table in the first place.
+            */
+
+            ajTablePut(gvvs,
+                       (void *) ajStrNewS(ensGvvariationGetName(gvv)),
+                       (void *) gvv);
+        }
+    }
 
     ajListFree(&lgvvs);
 
@@ -5621,7 +5705,7 @@ AjBool ensGvvariationadaptorFetchAllbySource(
     if (!gvvs)
         return ajFalse;
 
-    ba = ensGvvariationadaptorGetBaseadaptor(gvva);
+    ba = ensGvbaseadaptorGetBaseadaptor(gvva->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtsource, source);
 
@@ -5747,8 +5831,6 @@ AjBool ensGvvariationadaptorFetchByIdentifier(
     if (!Pgvv)
         return ajFalse;
 
-    *Pgvv = NULL;
-
     constraint = ajFmtStr("variation.variation_id = %u", identifier);
 
     gvvs = ajListNew();
@@ -5763,7 +5845,7 @@ AjBool ensGvvariationadaptorFetchByIdentifier(
                                                     gvvs);
 
     if (ajListGetLength(gvvs) > 1)
-        ajWarn("ensGvvariationadaptorFetchByIdentifier got more than one "
+        ajWarn("ensGvvariationadaptorFetchByIdentifier go more than one "
                "Ensembl Genetic Variation Variation for identifier %u.",
                identifier);
 
@@ -5835,8 +5917,6 @@ AjBool ensGvvariationadaptorFetchByName(
     if (!Pgvv)
         return ajFalse;
 
-    *Pgvv = NULL;
-
     /*
     ** NOTE: Because information from the "source" SQL table is
     ** modelled as independent EnsPGvsource object, neither
@@ -5848,7 +5928,7 @@ AjBool ensGvvariationadaptorFetchByName(
     ** other methods since otherwise the join takes too long.
     */
 
-    ba = ensGvvariationadaptorGetBaseadaptor(gvva);
+    ba = ensGvbaseadaptorGetBaseadaptor(gvva->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtname, name);
 
@@ -5882,8 +5962,8 @@ AjBool ensGvvariationadaptorFetchByName(
 
     if (ajListGetLength(gvvs) > 1)
         ajWarn("ensGvvariationadaptorFetchByName got more than one "
-               "Ensembl Genetic Variation Variation for "
-               "name '%S' and source '%S'.", name, source);
+               "Ensembl Genetic Variation Variation for name '%S' and "
+               "source '%S'.", name, source);
 
     ajListPop(gvvs, (void **) Pgvv);
 
@@ -5971,9 +6051,7 @@ AjBool ensGvvariationadaptorFetchBySubidentifier(
     if (!Pgvv)
         return ajFalse;
 
-    *Pgvv = NULL;
-
-    dba = ensGvvariationadaptorGetDatabaseadaptor(gvva);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor);
 
     if (ajStrPrefixC(name, "ss"))
     {
@@ -6000,8 +6078,8 @@ AjBool ensGvvariationadaptorFetchBySubidentifier(
 
     if (ajListGetLength(gvvs) > 1)
         ajWarn("ensGvvariationadaptorFetchBySubidentifier got more than one "
-               "Ensembl Genetic Variation Variation for "
-               "sub-identifier '%S'.", name);
+               "Ensembl Genetic Variation Variation for sub-identifier '%S'.",
+               name);
 
     ajListPop(gvvs, (void **) Pgvv);
 
@@ -6066,7 +6144,7 @@ AjBool ensGvvariationadaptorFetchBySynonym(
 
     *Pgvv = NULL;
 
-    dba = ensGvvariationadaptorGetDatabaseadaptor(gvva);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor);
 
     ensDatabaseadaptorEscapeC(dba, &txtname, synonym);
 
@@ -6227,7 +6305,7 @@ static AjBool gvvariationadaptorRetrieveAllFaileddescriptions(
     if (!fvs)
         return ajFalse;
 
-    dba = ensGvvariationadaptorGetDatabaseadaptor(gvva);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor);
 
     /*
     ** NOTE: The Perl API uses the following construct ...
@@ -6281,7 +6359,7 @@ static AjBool gvvariationadaptorRetrieveAllFaileddescriptions(
 
             *Pgvvidentifier = gvvidentifier;
 
-            table = ajTableuintNew(0U);
+            table = ajTableuintNew(0);
 
             ajTableSetDestroyvalue(table, (void (*)(void **)) &ajStrDel);
 
@@ -6356,7 +6434,7 @@ AjBool ensGvvariationadaptorRetrieveAllFaileddescriptions(
     if (!fvs)
         return ajFalse;
 
-    fvstable1 = ajTableuintNew(0U);
+    fvstable1 = ajTableuintNew(0);
 
     ajTableSetDestroyvalue(fvstable1, (void (*)(void **)) &ajTableDel);
 
@@ -6372,7 +6450,7 @@ AjBool ensGvvariationadaptorRetrieveAllFaileddescriptions(
     if (!fvstable2)
         return ajFalse;
 
-    strtable = ajTablestrNew(0U);
+    strtable = ajTablestrNew(0);
 
     ajTableSetDestroyvalue(strtable, &ajMemFree);
 
@@ -6454,7 +6532,7 @@ static AjBool gvvariationadaptorRetrieveFlankFromCore(
     if (!Psequence)
         return ajFalse;
 
-    dba = ensGvvariationadaptorGetDatabaseadaptor(gvva);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor);
 
     rsa = ensRegistryGetReferenceadaptor(dba);
 
@@ -6514,8 +6592,6 @@ AjBool ensGvvariationadaptorRetrieveFlank(EnsPGvvariationadaptor gvva,
     ajint srstrand = 0;
 
     ajuint srid     = 0U;
-    ajuint srstart  = 0U;
-    ajuint srend    = 0U;
     ajuint usrstart = 0U;
     ajuint usrend   = 0U;
     ajuint dsrstart = 0U;
@@ -6543,7 +6619,7 @@ AjBool ensGvvariationadaptorRetrieveFlank(EnsPGvvariationadaptor gvva,
     if (!Pthreeseq)
         return ajFalse;
 
-    dba = ensGvvariationadaptorGetDatabaseadaptor(gvva);
+    dba = ensGvbaseadaptorGetDatabaseadaptor(gvva->Adaptor);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6567,14 +6643,14 @@ AjBool ensGvvariationadaptorRetrieveFlank(EnsPGvvariationadaptor gvva,
 
     while (!ajSqlrowiterDone(sqli))
     {
-        srid     = 0U;
+        srid     = 0;
         srstrand = 0;
         useq     = ajStrNew();
         dseq     = ajStrNew();
-        usrstart = 0U;
-        usrend   = 0U;
-        dsrstart = 0U;
-        dsrend   = 0U;
+        usrstart = 0;
+        usrend   = 0;
+        dsrstart = 0;
+        dsrend   = 0;
 
         sqlr = ajSqlrowiterGet(sqli);
 
@@ -6590,25 +6666,12 @@ AjBool ensGvvariationadaptorRetrieveFlank(EnsPGvvariationadaptor gvva,
         if (!ajStrGetLen(useq))
         {
             if (srid)
-            {
-                if (usrend < usrstart)
-                {
-                    srstart = usrend;
-                    srend   = usrstart;
-                }
-                else
-                {
-                    srstart = usrstart;
-                    srend   = usrend;
-                }
-
                 gvvariationadaptorRetrieveFlankFromCore(gvva,
                                                         srid,
-                                                        srstart,
-                                                        srend,
+                                                        usrstart,
+                                                        usrend,
                                                         srstrand,
                                                         &useq);
-            }
             else
                 ajWarn("ensGvvariationadaptorRetrieveFlank "
                        "could not get "
@@ -6622,25 +6685,12 @@ AjBool ensGvvariationadaptorRetrieveFlank(EnsPGvvariationadaptor gvva,
         if (!ajStrGetLen(dseq))
         {
             if (srid)
-            {
-                if (dsrend < dsrstart)
-                {
-                    srstart = dsrend;
-                    srend   = dsrstart;
-                }
-                else
-                {
-                    srstart = dsrstart;
-                    srend   = dsrend;
-                }
-
                 gvvariationadaptorRetrieveFlankFromCore(gvva,
                                                         srid,
-                                                        srstart,
-                                                        srend,
+                                                        dsrstart,
+                                                        dsrend,
                                                         srstrand,
                                                         &dseq);
-            }
             else
                 ajWarn("ensGvvariationadaptorRetrieveFlank "
                        "could not get "
@@ -7033,7 +7083,14 @@ void ensGvvariationfeatureDel(EnsPGvvariationfeature *Pgvvf)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvvf) || --pthis->Use)
+    if (!*Pgvvf)
+        return;
+
+    pthis = *Pgvvf;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvvf = NULL;
 
@@ -7051,7 +7108,9 @@ void ensGvvariationfeatureDel(EnsPGvvariationfeature *Pgvvf)
     ajStrDel(&pthis->Validationcode);
     ajStrDel(&pthis->Consequencetype);
 
-    ajMemFree((void **) Pgvvf);
+    AJFREE(pthis);
+
+    *Pgvvf = NULL;
 
     return;
 }
@@ -7381,20 +7440,26 @@ AjPStr ensGvvariationfeatureGetValidationcode(
 EnsPGvvariation ensGvvariationfeatureLoadGvvariation(
     EnsPGvvariationfeature gvvf)
 {
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvvariationadaptor gvva = NULL;
+
     if (!gvvf)
         return NULL;
 
     if (gvvf->Gvvariation)
         return gvvf->Gvvariation;
 
-    if (!gvvf->Adaptor)
-        return NULL;
+    if (gvvf->Adaptor)
+    {
+        dba = ensGvvariationfeatureadaptorGetDatabaseadaptor(gvvf->Adaptor);
 
-    ensGvvariationadaptorFetchByIdentifier(
-        ensRegistryGetGvvariationadaptor(
-            ensGvvariationfeatureadaptorGetDatabaseadaptor(gvvf->Adaptor)),
-        gvvf->Gvvariationidentifier,
-        &gvvf->Gvvariation);
+        gvva = ensRegistryGetGvvariationadaptor(dba);
+
+        ensGvvariationadaptorFetchByIdentifier(gvva,
+                                               gvvf->Gvvariationidentifier,
+                                               &gvvf->Gvvariation);
+    }
 
     return gvvf->Gvvariation;
 }
@@ -7877,13 +7942,13 @@ AjBool ensGvvariationfeatureTrace(const EnsPGvvariationfeature gvvf,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Variation Feature object.
 **
 ** @fdata [EnsPGvvariationfeature]
 **
-** @nam3rule Calculate
-**Calculate Ensembl Genetic Variation Variation Feature information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Variation Feature
+** values
 ** @nam4rule Length Calculate the length
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
@@ -8741,10 +8806,7 @@ static AjBool gvvariationfeatureadaptorFetchAllbyStatement(
         ajSqlcolumnToStr(sqlr, &consequence);
         ajSqlcolumnToStr(sqlr, &class);
 
-        /*
-        ** Skip multiple rows, because of the LEFT JOIN condition to the
-        ** "failed_variation" SQL table.
-        */
+        /* Skip multiple rows because of the left join to failed_variation. */
 
         if (lastgvvfid == identifier)
         {
@@ -8893,9 +8955,9 @@ EnsPGvvariationfeatureadaptor ensGvvariationfeatureadaptorNew(
 
     fa = ensFeatureadaptorNew(
         dba,
-        gvvariationfeatureadaptorKTablenames,
-        gvvariationfeatureadaptorKColumnnames,
-        gvvariationfeatureadaptorKLeftjoins,
+        gvvariationfeatureadaptorKTables,
+        gvvariationfeatureadaptorKColumns,
+        gvvariationfeatureadaptorKLeftjoin,
         gvvariationfeatureadaptorKDefaultcondition,
         (const char *) NULL,
         &gvvariationfeatureadaptorFetchAllbyStatement,
@@ -8973,17 +9035,21 @@ void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa)
     if (ajDebugTest("ensGvvariationfeatureadaptorDel"))
         ajDebug("ensGvvariationfeatureadaptorDel\n"
                 "  *Pgvvfa %p\n",
-                *Pgvvfa);
+                *Pgvvfa));
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvvfa))
-        return;
-
-    ensFeatureadaptorDel(&pthis->Featureadaptor);
-
-    ajMemFree((void **) Pgvvfa);
-
+if (!*Pgvvfa)
     return;
+
+pthis = *Pgvvfa;
+
+ensFeatureadaptorDel(&pthis->Featureadaptor);
+
+AJFREE(pthis);
+
+*Pgvvfa = NULL;
+
+return;
 }
 
 
@@ -8998,7 +9064,6 @@ void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa)
 **
 ** @nam3rule Get Return Ensembl Genetic Variation Variation Feature Adaptor
 ** attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 ** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 ** @nam4rule Gvdatabaseadaptor
@@ -9007,8 +9072,6 @@ void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa)
 ** @argrule * gvvfa [const EnsPGvvariationfeatureadaptor]
 ** Ensembl Genetic Variation Variation Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor]
 ** Ensembl Database Adaptor or NULL
 ** @valrule Featureadaptor [EnsPFeatureadaptor]
@@ -9018,30 +9081,6 @@ void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa)
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensGvvariationfeatureadaptorGetBaseadaptor ***************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Genetic Variation Variation Feature Adaptor.
-**
-** @param [r] gvvfa [const EnsPGvvariationfeatureadaptor]
-** Ensembl Genetic Variation Variation Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensGvvariationfeatureadaptorGetBaseadaptor(
-    const EnsPGvvariationfeatureadaptor gvvfa)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensGvvariationfeatureadaptorGetFeatureadaptor(gvvfa));
-}
 
 
 
@@ -9063,8 +9102,8 @@ EnsPBaseadaptor ensGvvariationfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensGvvariationfeatureadaptorGetDatabaseadaptor(
     const EnsPGvvariationfeatureadaptor gvvfa)
 {
-    return ensGvdatabaseadaptorGetDatabaseadaptor(
-        ensGvvariationfeatureadaptorGetGvdatabaseadaptor(gvvfa));
+    return (gvvfa) ?
+        ensGvdatabaseadaptorGetDatabaseadaptor(gvvfa->Adaptor) : NULL;
 }
 
 
@@ -9223,8 +9262,6 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyFrequency(
 
     register ajuint i = 0U;
 
-    AjBool result = AJFALSE;
-
     AjPStr columns       = NULL;
     AjPStr fvsconstraint = NULL;
     AjPStr statement     = NULL;
@@ -9250,9 +9287,9 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyFrequency(
 
     /* Build the column expression. */
 
-    ba = ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa);
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
 
-    txtcolumns = ensBaseadaptorGetColumnnames(ba);
+    txtcolumns = ensBaseadaptorGetColumns(ba);
 
     columns = ajStrNew();
 
@@ -9265,10 +9302,9 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyFrequency(
 
     /* Build the final SQL statement. */
 
-    ensGvdatabaseadaptorFailedvariationsconstraint(
-        ensGvvariationfeatureadaptorGetGvdatabaseadaptor(gvvfa),
-        (const AjPStr) NULL,
-        &fvsconstraint);
+    ensGvdatabaseadaptorFailedvariationsconstraint(gvvfa->Adaptor,
+                                                   (const AjPStr) NULL,
+                                                   &fvsconstraint);
 
     statement = ajFmtStr(
         "SELECT "
@@ -9314,17 +9350,16 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyFrequency(
 
     ajStrDel(&fvsconstraint);
 
-    result = gvvariationfeatureadaptorFetchAllbyStatement(
-        ba,
-        statement,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvfs);
+    gvvariationfeatureadaptorFetchAllbyStatement(ba,
+                                                 statement,
+                                                 (EnsPAssemblymapper) NULL,
+                                                 (EnsPSlice) NULL,
+                                                 gvvfs);
 
     ajStrDel(&columns);
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -9363,8 +9398,6 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvpopulation(
 
     register ajuint i = 0U;
 
-    AjBool result = AJFALSE;
-
     AjPStr columns   = NULL;
     AjPStr statement = NULL;
 
@@ -9384,9 +9417,9 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvpopulation(
 
     /* Build the column expression. */
 
-    ba = ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa);
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
 
-    txtcolumns = ensBaseadaptorGetColumnnames(ba);
+    txtcolumns = ensBaseadaptorGetColumns(ba);
 
     columns = ajStrNew();
 
@@ -9404,14 +9437,14 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvpopulation(
         "%S "
         "FROM "
         "variation_feature vf, "
-        "source, "
-        "allele "
+        "source s, "
+        "allele a "
         "WHERE "
-        "variation_feature.source_id = source.source_id "
+        "variation_feature.source_id = s.source_id "
         "AND "
-        "variation_feature.variation_id = allele.variation_id "
+        "variation_feature.variation_id = a.variation_id "
         "AND "
-        "allele.sample_id = %u "
+        "a.sample_id = %u "
         "AND "
         "variation_feature.seq_region_id = %u "
         "AND "
@@ -9426,17 +9459,16 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvpopulation(
         ensSliceGetStart(slice),
         ensSliceGetEnd(slice));
 
-    result = gvvariationfeatureadaptorFetchAllbyStatement(
-        ba,
-        statement,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvfs);
+    gvvariationfeatureadaptorFetchAllbyStatement(ba,
+                                                 statement,
+                                                 (EnsPAssemblymapper) NULL,
+                                                 (EnsPSlice) NULL,
+                                                 gvvfs);
 
     ajStrDel(&columns);
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -9473,6 +9505,8 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvvariation(
 
     AjPStr constraint = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!gvvfa)
         return ajFalse;
 
@@ -9482,15 +9516,16 @@ AjBool ensGvvariationfeatureadaptorFetchAllbyGvvariation(
     if (!gvvfs)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
+
     constraint = ajFmtStr("variation_feature.variation_id = %u",
                           ensGvvariationGetIdentifier(gvv));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvfs);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                gvvfs);
 
     ajStrDel(&constraint);
 
@@ -9545,8 +9580,6 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceAnnotated(
 
     register ajuint i = 0U;
 
-    AjBool result = AJFALSE;
-
     AjPStr columns       = NULL;
     AjPStr constraint    = NULL;
     AjPStr fvsconstraint = NULL;
@@ -9554,15 +9587,13 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceAnnotated(
 
     EnsPBaseadaptor ba = NULL;
 
-    ensGvdatabaseadaptorFailedvariationsconstraint(
-        ensGvvariationfeatureadaptorGetGvdatabaseadaptor(gvvfa),
-        (const AjPStr) NULL,
-        &fvsconstraint);
+    ensGvdatabaseadaptorFailedvariationsconstraint(gvvfa->Adaptor,
+                                                   (const AjPStr) NULL,
+                                                   &fvsconstraint);
 
-    constraint = ajFmtStr(
-        "vsource.somatic = %d AND %S",
-        somatic,
-        fvsconstraint);
+    constraint = ajFmtStr("vsource.somatic = %d AND %S",
+                          somatic,
+                          fvsconstraint);
 
     ajStrDel(&fvsconstraint);
 
@@ -9612,9 +9643,9 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceAnnotated(
 
     /* Build the column expression. */
 
-    ba = ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa);
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
 
-    txtcolumns = ensBaseadaptorGetColumnnames(ba);
+    txtcolumns = ensBaseadaptorGetColumns(ba);
 
     columns = ajStrNew();
 
@@ -9665,18 +9696,17 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceAnnotated(
         ensSliceGetStart(slice),
         ensSliceGetEnd(slice));
 
-    result = gvvariationfeatureadaptorFetchAllbyStatement(
-        ba,
-        statement,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvfs);
+    gvvariationfeatureadaptorFetchAllbyStatement(ba,
+                                                 statement,
+                                                 (EnsPAssemblymapper) NULL,
+                                                 (EnsPSlice) NULL,
+                                                 gvvfs);
 
     ajStrDel(&columns);
     ajStrDel(&constraint);
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -9733,10 +9763,9 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceConstraint(
     if (!gvvfs)
         return ajFalse;
 
-    ensGvdatabaseadaptorFailedvariationsconstraint(
-        ensGvvariationfeatureadaptorGetGvdatabaseadaptor(gvvfa),
-        (const AjPStr) NULL,
-        &fvsconstraint);
+    ensGvdatabaseadaptorFailedvariationsconstraint(gvvfa->Adaptor,
+                                                   (const AjPStr) NULL,
+                                                   &fvsconstraint);
 
     /* By default, filter out somatic mutations. */
 
@@ -9750,12 +9779,11 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceConstraint(
                                  somatic,
                                  fvsconstraint);
 
-    result = ensFeatureadaptorFetchAllbySlice(
-        ensGvvariationfeatureadaptorGetFeatureadaptor(gvvfa),
-        slice,
-        newconstraint,
-        (AjPStr) NULL,
-        gvvfs);
+    result = ensFeatureadaptorFetchAllbySlice(gvvfa->Featureadaptor,
+                                              slice,
+                                              newconstraint,
+                                              (AjPStr) NULL,
+                                              gvvfs);
 
     ajStrDel(&fvsconstraint);
     ajStrDel(&newconstraint);
@@ -9848,10 +9876,20 @@ AjBool ensGvvariationfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGvvariationfeature *Pgvvf)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa),
-        identifier,
-        (void **) Pgvvf);
+    EnsPBaseadaptor ba = NULL;
+
+    if (!gvvfa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pgvvf)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Pgvvf);
 }
 
 
@@ -9867,13 +9905,12 @@ AjBool ensGvvariationfeatureadaptorFetchByIdentifier(
 ** @nam3rule Retrieve Retrieve Ensembl Genetic Variation Variation Feature-
 ** related object(s)
 ** @nam4rule All Retrieve all releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Identifiers Retrieve all AJAX unsigned integer identifiers
 **
-** @argrule * gvvfa [EnsPGvvariationfeatureadaptor]
-** Ensembl Genetic Variation Variation Feature Adaptor
-** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer
-** (Ensembl Genetic Variation Variation Feature identifier) objects
+** @argrule * gvvfa [EnsPGvvariationfeatureadaptor] Ensembl Genetic Variation
+** Variation Feature Adaptor
+** @argrule AllIdentifiers identifiers [AjPList] AJAX List of AJAX unsigned
+** integers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -9885,18 +9922,16 @@ AjBool ensGvvariationfeatureadaptorFetchByIdentifier(
 
 /* @func ensGvvariationfeatureadaptorRetrieveAllIdentifiers *******************
 **
-** Retrieve all SQL database-internal identifier objects of
-** Ensembl Genetic Variation Variation Feature objects.
+** Fetch all SQL database-internal identifiers of Ensembl Genetic Variation
+** Variation Feature objects.
 **
 ** The caller is responsible for deleting the AJAX unsigned integers before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationFeatureAdaptor::list_dbIDs
-** @param [u] gvvfa [EnsPGvvariationfeatureadaptor]
-** Ensembl Genetic Variation Variation Feature Adaptor
-** @param [u] identifiers [AjPList]
-** AJAX List of AJAX unsigned integer
-** (Ensembl Genetic Variation Variation Feature identifier) objects
+** @param [u] gvvfa [EnsPGvvariationfeatureadaptor] Ensembl Genetic Variation
+**                                                  Variation Feature Adaptor
+** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -9912,19 +9947,22 @@ AjBool ensGvvariationfeatureadaptorRetrieveAllIdentifiers(
 
     AjPStr table = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!gvvfa)
         return ajFalse;
 
     if (!identifiers)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(gvvfa->Featureadaptor);
+
     table = ajStrNewC("variation_feature");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(
-        ensGvvariationfeatureadaptorGetBaseadaptor(gvvfa),
-        table,
-        (AjPStr) NULL,
-        identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 
@@ -9941,7 +9979,7 @@ AjBool ensGvvariationfeatureadaptorRetrieveAllIdentifiers(
 **
 ** @cc Bio::EnsEMBL::Variation::VariationSet
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -10157,7 +10195,14 @@ void ensGvvariationsetDel(EnsPGvvariationset *Pgvvs)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvvs) || --pthis->Use)
+    if (!*Pgvvs)
+        return;
+
+    pthis = *Pgvvs;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvvs = NULL;
 
@@ -10168,7 +10213,9 @@ void ensGvvariationsetDel(EnsPGvvariationset *Pgvvs)
     ajStrDel(&pthis->Description);
     ajStrDel(&pthis->Shortname);
 
-    ajMemFree((void **) Pgvvs);
+    AJFREE(pthis);
+
+    *Pgvvs = NULL;
 
     return;
 }
@@ -10582,13 +10629,13 @@ AjBool ensGvvariationsetTrace(const EnsPGvvariationset gvvs,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Variation Set object.
 **
 ** @fdata [EnsPGvvariationset]
 **
-** @nam3rule Calculate
-** Calculate Ensembl Genetic Variation Variation Set information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Variation Set
+** values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvvs [const EnsPGvvariationset]
@@ -10654,12 +10701,12 @@ size_t ensGvvariationsetCalculateMemsize(const EnsPGvvariationset gvvs)
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching information from an
+** Functions for fetching values of an
 ** Ensembl Genetic Variation Variation Set object.
 **
 ** @fdata [EnsPGvvariationset]
 **
-** @nam3rule Fetch Fetch Ensembl Genetic Variation Variation Set information
+** @nam3rule Fetch Fetch Ensembl Genetic Variation Variation Set values
 ** @nam4rule All Fetch all objects
 ** @nam5rule Gvvariations Fetch all Ensembl Genetic Variation Variation objects
 ** @nam5rule Sub Fetch sub-Ensembl Genetic Variation Variation Set objects
@@ -10682,7 +10729,7 @@ size_t ensGvvariationsetCalculateMemsize(const EnsPGvvariationset gvvs)
 
 /* @func ensGvvariationsetFetchAllGvvariations ********************************
 **
-** Recursively fetch all Ensembl Genetic Variation Variation Set objects, which
+** Recursively fetch all Ensembl Genetic Variation Variation Sets, which
 ** belong to this Ensembl Genetic Variation Variation Set and all subsets.
 **
 ** The caller is responsible for deleting the
@@ -10704,17 +10751,24 @@ AjBool ensGvvariationsetFetchAllGvvariations(
     EnsPGvvariationset gvvs,
     AjPList gvvss)
 {
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvvariationadaptor gvva = NULL;
+
     if (!gvvs)
         return ajFalse;
 
     if (!gvvss)
         return ajFalse;
 
-    return ensGvvariationadaptorFetchAllbyGvvariationset(
-        ensRegistryGetGvvariationadaptor(
-            ensGvvariationsetadaptorGetDatabaseadaptor(gvvs->Adaptor)),
-        gvvs,
-        gvvss);
+    if (!gvvs->Adaptor)
+        return ajTrue;
+
+    dba = ensBaseadaptorGetDatabaseadaptor(gvvs->Adaptor);
+
+    gvva = ensRegistryGetGvvariationadaptor(dba);
+
+    return ensGvvariationadaptorFetchAllbyGvvariationset(gvva, gvvs, gvvss);
 }
 
 
@@ -10722,12 +10776,10 @@ AjBool ensGvvariationsetFetchAllGvvariations(
 
 /* @func ensGvvariationsetFetchAllSub *****************************************
 **
-** Recursively fetch all Ensembl Genetic Variation Variation Set objects, which
-** are subsets of this Ensembl Genetic Variation Variation Set.
-**
+** Recursively fetch all Ensembl Genetic Variation Variation Sets, which are
+** subsets of this Ensembl Genetic Variation Variation Set.
 ** The caller is responsible for deleting the
-** Ensembl Genetic Variation Variation Set objects before deleting the
-** AJAX List.
+** Ensembl Genetic Variation Variation Sets before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::VariationSet::get_all_sub_VariationSets
 ** @param [u] gvvs [EnsPGvvariationset] Ensembl Genetic Variation Variation Set
@@ -10753,11 +10805,13 @@ AjBool ensGvvariationsetFetchAllSub(EnsPGvvariationset gvvs,
     if (!gvvss)
         return ajFalse;
 
-    return ensGvvariationsetadaptorFetchAllbySuper(
-        gvvs->Adaptor,
-        gvvs,
-        immediate,
-        gvvss);
+    if (gvvs->Adaptor)
+        return ajTrue;
+
+    return ensGvvariationsetadaptorFetchAllbySuper(gvvs->Adaptor,
+                                                   gvvs,
+                                                   immediate,
+                                                   gvvss);
 }
 
 
@@ -10765,12 +10819,10 @@ AjBool ensGvvariationsetFetchAllSub(EnsPGvvariationset gvvs,
 
 /* @func ensGvvariationsetFetchAllSuper ***************************************
 **
-** Recursively fetch all Ensembl Genetic Variation Variation Set objects, which
-** are supersets of this Ensembl Genetic Variation Variation Set.
-**
+** Recursively fetch all Ensembl Genetic Variation Variation Sets, which are
+** supersets of this Ensembl Genetic Variation Variation Set.
 ** The caller is responsible for deleting the
-** Ensembl Genetic Variation Variation Set objects before deleting the
-** AJAX List.
+** Ensembl Genetic Variation Variation Sets before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::VariationSet::get_all_sub_VariationSets
 ** @param [u] gvvs [EnsPGvvariationset] Ensembl Genetic Variation Variation Set
@@ -10796,11 +10848,13 @@ AjBool ensGvvariationsetFetchAllSuper(EnsPGvvariationset gvvs,
     if (!gvvss)
         return ajFalse;
 
-    return ensGvvariationsetadaptorFetchAllbySub(
-        gvvs->Adaptor,
-        gvvs,
-        immediate,
-        gvvss);
+    if (gvvs->Adaptor)
+        return ajTrue;
+
+    return ensGvvariationsetadaptorFetchAllbySub(gvvs->Adaptor,
+                                                 gvvs,
+                                                 immediate,
+                                                 gvvss);
 }
 
 
@@ -10814,7 +10868,7 @@ AjBool ensGvvariationsetFetchAllSuper(EnsPGvvariationset gvvs,
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationSetAdaptor
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -10832,8 +10886,8 @@ AjBool ensGvvariationsetFetchAllSuper(EnsPGvvariationset gvvs,
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
-** @param [u] gvvss [AjPList]
-** AJAX List of Ensembl Genetic Variation Variation Set objects
+** @param [u] gvvss [AjPList] AJAX List of Ensembl Genetic Variation
+**                            Variation Sets
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -10989,10 +11043,18 @@ static AjBool gvvariationsetadaptorFetchAllbyStatement(
 EnsPGvvariationsetadaptor ensGvvariationsetadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
+    if (ajDebugTest("ensGvvariationsetadaptorNew"))
+        ajDebug("ensGvvariationsetadaptorNew\n"
+                "  dba %p\n",
+                dba);
+
     return ensBaseadaptorNew(
         dba,
-        gvvariationsetadaptorKTablenames,
-        gvvariationsetadaptorKColumnnames,
+        gvvariationsetadaptorKTables,
+        gvvariationsetadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -11046,80 +11108,7 @@ void ensGvvariationsetadaptorDel(EnsPGvvariationsetadaptor *Pgvvsa)
 {
     ensBaseadaptorDel(Pgvvsa);
 
-    return;
-}
-
-
-
-
-/* @section member retrieval **************************************************
-**
-** Functions for returning members of an
-** Ensembl Genetic Variation Variation Set Adaptor object.
-**
-** @fdata [EnsPGvvariationsetadaptor]
-**
-** @nam3rule Get
-** Return Ensembl Genetic Variation Variation Set Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
-** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-**
-** @argrule * gvvsa [EnsPGvvariationsetadaptor]
-** Ensembl Genetic Variation Variation Set Adaptor
-**
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-**
-** @fcategory use
-******************************************************************************/
-
-
-
-
-/* @func ensGvvariationsetadaptorGetBaseadaptor *******************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Genetic Variation Variation Set Adaptor.
-**
-** @param [u] gvvsa [EnsPGvvariationsetadaptor]
-** Ensembl Genetic Variation Variation Set Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensGvvariationsetadaptorGetBaseadaptor(
-    EnsPGvvariationsetadaptor gvvsa)
-{
-    return gvvsa;
-}
-
-
-
-
-/* @func ensGvvariationsetadaptorGetDatabaseadaptor ***************************
-**
-** Get the Ensembl Database Adaptor member of an
-** Ensembl Genetic Variation Variation Set Adaptor.
-**
-** @param [u] gvvsa [EnsPGvvariationsetadaptor]
-** Ensembl Genetic Variation Variation Set Adaptor
-**
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPDatabaseadaptor ensGvvariationsetadaptorGetDatabaseadaptor(
-    EnsPGvvariationsetadaptor gvvsa)
-{
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensGvvariationsetadaptorGetBaseadaptor(gvvsa));
+	return;
 }
 
 
@@ -11177,7 +11166,7 @@ EnsPDatabaseadaptor ensGvvariationsetadaptorGetDatabaseadaptor(
 
 /* @func ensGvvariationsetadaptorFetchAllToplevel *****************************
 **
-** Fetch all top-level Ensembl Genetic Variation Variation Set objects, which
+** Fetch all top-level Ensembl Genetic Variation Variation Sets, which
 ** are not sub-sets of any other Ensembl Genetic Variation Variation Set.
 **
 ** The caller is responsible for deleting the
@@ -11223,12 +11212,11 @@ AjBool ensGvvariationsetadaptorFetchAllToplevel(
         "variation_set.variation_set_id "
         ")");
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensGvvariationsetadaptorGetBaseadaptor(gvvsa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvss);
+    result = ensBaseadaptorFetchAllbyConstraint(gvvsa,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                gvvss);
 
     ajStrDel(&constraint);
 
@@ -11315,21 +11303,63 @@ static void listGvvariationsetDelete(void **Pitem, void *cl)
 
 
 
+/* @funcstatic gvvariationsetadaptorGvvariationsetMove ************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of Ensembl Genetic
+** Variation Variation Sets used in ensGvvariationsetadaptorFetchAllbySub.
+** This function deletes the AJAX unsigned identifier key data and moves the
+** Ensembl Genetic Variation Variation Set value data onto the
+** AJAX List.
+**
+** @param [d] Pkey [void**] AJAX unsigned integer key data address
+** @param [d] Pvalue [void**] Ensembl Gene value data address
+** @param [u] cl [void*] AJAX List, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static void gvvariationsetadaptorGvvariationsetMove(void **Pkey,
+                                                    void **Pvalue,
+                                                    void *cl)
+{
+    if (!Pkey)
+        return;
+
+    if (!Pvalue)
+        return;
+
+    if (!cl)
+        return;
+
+    ajMemFree(Pkey);
+
+    ajListPushAppend(cl, *Pvalue);
+
+    *Pvalue = NULL;
+
+    return;
+}
+
+
+
+
 /* @func ensGvvariationsetadaptorFetchAllbyGvvariation ************************
 **
 ** Fetch an Ensembl Genetic Variation Variation Set via an
 ** Ensembl Genetic Variation Variation.
-**
 ** The caller is responsible for deleting the
-** Ensembl Genetic Variation Variation Set objects before deleting the
-** AJAX List.
+** Ensembl Genetic Variation Variation Sets before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationSetAdaptor::fetch_by_Variation
 ** @param [u] gvvsa [EnsPGvvariationsetadaptor]
 ** Ensembl Genetic Variation Variation Set Adaptor
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] gvvss [AjPList]
-** AJAX List of Ensembl Genetic Variation Variation Set objects
+** AJAX List of Ensembl Genetic Variation Variation Sets
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -11353,8 +11383,6 @@ AjBool ensGvvariationsetadaptorFetchAllbyGvvariation(
     AjPStr columns = NULL;
     AjPStr statement = NULL;
 
-    EnsPBaseadaptor ba = NULL;
-
     EnsPGvvariationset gvvs = NULL;
 
     if (!gvvsa)
@@ -11366,9 +11394,7 @@ AjBool ensGvvariationsetadaptorFetchAllbyGvvariation(
     if (!gvvss)
         return ajFalse;
 
-    ba = ensGvvariationsetadaptorGetBaseadaptor(gvvsa);
-
-    txtcolumns = ensBaseadaptorGetColumnnames(ba);
+    txtcolumns = ensBaseadaptorGetColumns(gvvsa);
 
     columns = ajStrNew();
 
@@ -11397,20 +11423,19 @@ AjBool ensGvvariationsetadaptorFetchAllbyGvvariation(
 
     variationsets = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        statement,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        variationsets);
+    result = ensBaseadaptorFetchAllbyConstraint(gvvsa,
+                                                statement,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                variationsets);
 
     ajStrDel(&statement);
 
     /*
     ** Fetch all supersets of the returned Ensembl Genetic Variation
-    ** Variation Set objects as well. Since an Ensembl Genetic Variation
-    ** Variation may occur at several places in a hierarchy, which will cause
-    ** duplicated data sort the AJAX List uniquely.
+    ** Variation Sets as well. Since an Ensembl Genetic Variation Variation may
+    ** occur at several places in a hierarchy, which will cause duplicated
+    ** data sort the AJAX List uniquely.
     */
 
     while (ajListPop(variationsets, (void **) &gvvs))
@@ -11442,12 +11467,10 @@ AjBool ensGvvariationsetadaptorFetchAllbyGvvariation(
 
 /* @func ensGvvariationsetadaptorFetchAllbySub ********************************
 **
-** Fetch all Ensembl Genetic Variation Variation Set objects, by a subset of an
+** Fetch all Ensembl Genetic Variation Variation Sets, by a subset of an
 ** Ensembl Genetic Variation Variation Set.
-**
 ** The caller is responsible for deleting the
-** Ensembl Genetic Variation Variation Set objects before deleting the
-** AJAX List.
+** Ensembl Genetic Variation Variation Sets before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationSetAdaptor::
 **     fetch_all_by_sub_VariationSet
@@ -11509,12 +11532,12 @@ AjBool ensGvvariationsetadaptorFetchAllbySub(
     ** Variation Set objects onto an AJAX List.
     */
 
-    gvvstable = ajTableuintNew(0U);
+    gvvstable = ajTableuintNew(0);
 
-    dba = ensGvvariationsetadaptorGetDatabaseadaptor(gvvsa);
+    dba = ensBaseadaptorGetDatabaseadaptor(gvvsa);
 
     /*
-    ** First, get all Ensembl Genetic Variation Variation Set objects that are
+    ** First, get all Ensembl Genetic Variation Variation Sets that are
     ** direct supersets of this one.
     */
 
@@ -11595,11 +11618,11 @@ AjBool ensGvvariationsetadaptorFetchAllbySub(
     ajListFree(&variationsets);
 
     /*
-    ** Move all Ensembl Genetic Variation Variation Set objects from the
+    ** Move all Ensembl Genetic Variation Variation Sets from the
     ** AJAX Table onto the AJAX List.
     */
 
-    ensTableuintToList(gvvstable, gvvss);
+    ajTableMapDel(gvvstable, &gvvariationsetadaptorGvvariationsetMove, gvvss);
 
     ajTableFree(&gvvstable);
 
@@ -11611,11 +11634,10 @@ AjBool ensGvvariationsetadaptorFetchAllbySub(
 
 /* @func ensGvvariationsetadaptorFetchAllbySuper ******************************
 **
-** Fetch all Ensembl Genetic Variation Variation Set objects, by a superset of
-** an Ensembl Genetic Variation Variation Set.
+** Fetch all Ensembl Genetic Variation Variation Sets, by a superset of an
+** Ensembl Genetic Variation Variation Set.
 ** The caller is responsible for deleting the
-** Ensembl Genetic Variation Variation Set objects before deleting the
-** AJAX List.
+** Ensembl Genetic Variation Variation Sets before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationSetAdaptor::
 **     fetch_all_by_super_VariationSet
@@ -11677,12 +11699,12 @@ AjBool ensGvvariationsetadaptorFetchAllbySuper(
     ** Variation Set objects onto an AJAX List.
     */
 
-    gvvstable = ajTableuintNew(0U);
+    gvvstable = ajTableuintNew(0);
 
-    dba = ensGvvariationsetadaptorGetDatabaseadaptor(gvvsa);
+    dba = ensBaseadaptorGetDatabaseadaptor(gvvsa);
 
     /*
-    ** First, get all Ensembl Genetic Variation Variation Set objects that are
+    ** First, get all Ensembl Genetic Variation Variation Sets that are
     ** direct supersets of this one.
     */
 
@@ -11763,11 +11785,11 @@ AjBool ensGvvariationsetadaptorFetchAllbySuper(
     ajListFree(&variationsets);
 
     /*
-    ** Move all Ensembl Genetic Variation Variation Set objects from the
+    ** Move all Ensembl Genetic Variation Variation Sets from the
     ** AJAX Table onto the AJAX List.
     */
 
-    ensTableuintToList(gvvstable, gvvss);
+    ajTableMapDel(gvvstable, &gvvariationsetadaptorGvvariationsetMove, gvvss);
 
     ajTableFree(&gvvstable);
 
@@ -11802,10 +11824,16 @@ AjBool ensGvvariationsetadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGvvariationset *Pgvvs)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensGvvariationsetadaptorGetBaseadaptor(gvvsa),
-        identifier,
-        (void **) Pgvvs);
+    if (!gvvsa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pgvvs)
+        return ajFalse;
+
+    return ensBaseadaptorFetchByIdentifier(gvvsa, identifier, (void **) Pgvvs);
 }
 
 
@@ -11837,13 +11865,9 @@ AjBool ensGvvariationsetadaptorFetchByName(
 {
     char *txtname = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList gvvss = NULL;
 
     AjPStr constraint = NULL;
-
-    EnsPBaseadaptor ba = NULL;
 
     EnsPGvvariationset gvvs = NULL;
 
@@ -11856,11 +11880,7 @@ AjBool ensGvvariationsetadaptorFetchByName(
     if (!Pgvvs)
         return ajFalse;
 
-    *Pgvvs = NULL;
-
-    ba = ensGvvariationsetadaptorGetBaseadaptor(gvvsa);
-
-    ensBaseadaptorEscapeC(ba, &txtname, name);
+    ensBaseadaptorEscapeC(gvvsa, &txtname, name);
 
     constraint = ajFmtStr("variation_set.name = '%s'", txtname);
 
@@ -11868,12 +11888,11 @@ AjBool ensGvvariationsetadaptorFetchByName(
 
     gvvss = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvvss);
+    ensBaseadaptorFetchAllbyConstraint(gvvsa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvvss);
 
     if (ajListGetLength(gvvss) > 1)
         ajWarn("ensGvvariationsetadaptorFetchByName got more "
@@ -11889,7 +11908,7 @@ AjBool ensGvvariationsetadaptorFetchByName(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -11919,14 +11938,15 @@ AjBool ensGvvariationsetadaptorFetchByShortname(
     const AjPStr shortname,
     EnsPGvvariationset *Pgvvs)
 {
-    AjBool result = AJFALSE;
-
     AjPList list = NULL;
 
     AjPStr gvattcode  = NULL;
     AjPStr constraint = NULL;
 
-    EnsPGvattribute gva = NULL;
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPGvattribute        gva  = NULL;
+    EnsPGvattributeadaptor gvaa = NULL;
 
     EnsPGvvariationset gvvs = NULL;
 
@@ -11938,20 +11958,22 @@ AjBool ensGvvariationsetadaptorFetchByShortname(
 
     if (!Pgvvs)
         return ajFalse;
+    else
+        *Pgvvs = NULL;
 
-    *Pgvvs = NULL;
+    dba = ensBaseadaptorGetDatabaseadaptor(gvvsa);
+
+    gvaa = ensRegistryGetGvattributeadaptor(dba);
 
     list = ajListNew();
 
     /* NOTE: _short_name_attrib_type_code has not been implmented. */
     gvattcode = ajStrNewC("short_name");
 
-    ensGvattributeadaptorFetchAllbyCode(
-        ensRegistryGetGvattributeadaptor(
-            ensGvvariationsetadaptorGetDatabaseadaptor(gvvsa)),
-        gvattcode,
-        shortname,
-        list);
+    ensGvattributeadaptorFetchAllbyCode(gvaa,
+                                        gvattcode,
+                                        shortname,
+                                        list);
 
     ajStrDel(&gvattcode);
 
@@ -11973,12 +11995,11 @@ AjBool ensGvvariationsetadaptorFetchByShortname(
     while (ajListPop(list, (void **) &gva))
         ensGvattributeDel(&gva);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensGvvariationsetadaptorGetBaseadaptor(gvvsa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        list);
+    ensBaseadaptorFetchAllbyConstraint(gvvsa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       list);
 
     if (ajListGetLength(list) > 1)
         ajWarn("ensGvvariationsetadaptorFetchByName got more "
@@ -11994,7 +12015,7 @@ AjBool ensGvvariationsetadaptorFetchByShortname(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -12025,9 +12046,10 @@ AjBool ensGvvariationsetadaptorRetrieveAllGvvariationidentifiers(
     if (!gvvs)
         return ajFalse;
 
-    dba = ensGvvariationsetadaptorGetDatabaseadaptor(gvvsa);
+    dba = ensBaseadaptorGetDatabaseadaptor(gvvsa);
 
     gvdba = ensRegistryGetGvdatabaseadaptor(dba);
+
     gvvsa = ensRegistryGetGvvariationsetadaptor(dba);
 
     gvvss = ajListNew();
@@ -12042,7 +12064,7 @@ AjBool ensGvvariationsetadaptorRetrieveAllGvvariationidentifiers(
 
         ensGvvariationsetDel(&lgvvs);
     }
-    /* FIXME: Get variation set identifier objects. */
+    /* FIXME: Get variation set identifiers. */
 
     ensGvdatabaseadaptorFailedvariationsconstraint(gvdba,
                                                    (const AjPStr) NULL,
@@ -12063,10 +12085,9 @@ AjBool ensGvvariationsetadaptorRetrieveAllGvvariationidentifiers(
         "WHERE "
         "variation_set_variation.variation_set_id IN (%S) "
         "AND %S",
-        csv,
+        $set_str,
         fvconstraint);
 
-    ajStrDel(&csv);
     ajStrDel(&fvconstraint);
 
     return ajTrue;

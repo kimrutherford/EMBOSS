@@ -9,12 +9,9 @@ id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
-subset: bioinformatics
-subset: edam
 subset: operations
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:0431 ! Restriction site recognition
 is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
 relationship: has_output EDAM_data:1289 ! Restriction map
 
 </pre>

@@ -6,7 +6,7 @@ The SwissProt annotation marks the true leucine zipper motif as from 253 to 274.
 <pre>
 ########################################
 # Program: pepcoil
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: pepcoil
 #    -sequence tsw:gcn4_yeast
 # Report_format: motif

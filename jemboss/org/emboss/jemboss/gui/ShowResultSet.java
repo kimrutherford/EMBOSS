@@ -280,9 +280,9 @@ public class ShowResultSet extends JFrame
             thiskey.endsWith(".dat") )
         {
           int index = findInt(thiskey);
-          if(index>0 && index <= stabs.length)
+          if(index>0 && index < stabs.length)
           {
-            stabs[index-1] = thiskey;
+            stabs[index-1] = new String(thiskey);
             ntabs++;
           }
           else
@@ -393,7 +393,7 @@ public class ShowResultSet extends JFrame
 
     String pngtabs[] = new String[ntabs];
     for(int i=0;i<ntabs;i++)
-      pngtabs[i] = stabs[i];
+      pngtabs[i] = new String(stabs[i]);
     
     return pngtabs;
   }
@@ -412,7 +412,7 @@ public class ShowResultSet extends JFrame
     RECompiler rec = new RECompiler();
     try
     {
-      REProgram  rep = rec.compile("^.*/?(.*?)([:digit:]+)");
+      REProgram  rep = rec.compile("^(.*?)([:digit:]+)");
       RE regexp = new RE(rep);
       if(regexp.match(exp))
       {

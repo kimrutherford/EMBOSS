@@ -87,7 +87,6 @@ Resource name: <b>emblresource</b>
         GB : Genbank, DDBJ
     REFSEQ : Refseq
      FASTQ : Fastq files
-     USPTO : Iguspto files
 Entry format [SWISS]: <b>embl</b>
 Wildcard database filename [*.dat]: <b>rod.dat</b>
 Database directory [.]: <b>embl</b>
@@ -114,7 +113,7 @@ General log output file [outfile.dbxflat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -126,7 +125,7 @@ Version: EMBOSS:6.6.0.0
    -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
                                   (Genbank, DDBJ); REFSEQ (Refseq); FASTQ
-                                  (Fastq files); USPTO (Iguspto files))
+                                  (Fastq files))
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string)
    -directory          directory  [.] Database directory
@@ -211,7 +210,7 @@ Version: EMBOSS:6.6.0.0
 <td>-idformat</td>
 <td>list</td>
 <td>Entry format</td>
-<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr><tr><td>FASTQ</td> <td><i>(Fastq files)</i></td></tr><tr><td>USPTO</td> <td><i>(Iguspto files)</i></td></tr></table></td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr><tr><td>FASTQ</td> <td><i>(Fastq files)</i></td></tr></table></td>
 <td>SWISS</td>
 </tr>
 
@@ -547,11 +546,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        7
 Fullcount    9
 Kwlimit      15
@@ -569,11 +568,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        6
 Fullcount    6
 Kwlimit      15

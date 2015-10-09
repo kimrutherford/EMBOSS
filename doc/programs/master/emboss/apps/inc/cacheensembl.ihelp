@@ -1,5 +1,5 @@
 Generate server cache file for an Ensembl server
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
    -servername         string     Server name (Any string)

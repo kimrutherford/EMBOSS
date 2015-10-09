@@ -43,7 +43,7 @@ Command line arguments
    see the documentation for the program of choice.
 
 Test an application ACD file
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers: (none)

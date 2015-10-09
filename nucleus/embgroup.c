@@ -3,8 +3,8 @@
 ** Group Routines.
 **
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version $Revision: 1.60 $
-** @modified $Date: 2012/12/07 10:23:51 $ by $Author: rice $
+** @version $Revision: 1.59 $
+** @modified $Date: 2012/07/17 15:06:23 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -69,7 +69,7 @@ static void grpParse(AjPFile file, AjPList groups,
                      EmbPGroupProg *Pprognode);
 static void grpParseEmbassy(AjPFile file, AjPStr* embassyname);
 static void grpNoComment(AjPStr* text);
-static AjPStr grpParseValueRB(AjPStrTok tokenhandle, const char* delim);
+static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim);
 static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 			 AjBool colon, AjPStr* keywords);
 static void grpSubSplitList(AjPList groups, AjPList sublist);
@@ -632,32 +632,32 @@ static void grpParse(AjPFile file, AjPList groups,
     tokenhandle = ajStrTokenNewC(text, white);
 
     /* find application token */
-    while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+    while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
 	if(ajStrPrefixCaseC(tmpstr, "application"))
 	    break;
 
     /* next token is the application name */
-    ajStrTokenNextParseC(tokenhandle, white, &ppnode->name);
+    ajStrTokenNextParseC(&tokenhandle, white, &ppnode->name);
 
     /* if next token is '[' */
-    ajStrTokenNextParseC(tokenhandle, white, &tmpstr);
+    ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "[") == 0)
     {
 	token=ajStrNew();
 
 	/* is the next token 'doc' or 'groups' or 'gui' */
-	while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+	while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
 	{
 	    while(!ajStrMatchC(tmpstr, "]"))
 	    {
 		ajStrAssignS(&token, tmpstr);
-		value = grpParseValueRB(tokenhandle, white);
+		value = grpParseValueRB(&tokenhandle, white);
 		done = ajStrMatchC(value, "]");
 
 		if(!done)
 		{
-		    ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr);
+		    ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
 		    ajStrFmtLower(&tmpstr);
 		    done = ajStrMatchC(tmpstr, "]");
 		}
@@ -751,10 +751,10 @@ static void grpParse(AjPFile file, AjPList groups,
 
     ajDebug("appl: '%S'\n", ppnode->name);
 
-    while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+    while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
     {
         ajStrAssignS(&type, tmpstr);
-        ajStrTokenNextParseC(tokenhandle, white, &tmpstr);
+        ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
         ajStrAssignS(&qual, tmpstr);
 
         /*ajDebug("qual: '%S' '%S'\n", type, qual);*/
@@ -763,19 +763,19 @@ static void grpParse(AjPFile file, AjPList groups,
             continue;
 
         while(!ajStrMatchC(tmpstr, "["))
-            ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr);
+            ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
 
-	while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+	while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
 	{
 	    while(!ajStrMatchC(tmpstr, "]"))
 	    {
 		ajStrAssignS(&token, tmpstr);
-		value = grpParseValueRB(tokenhandle, white);
+		value = grpParseValueRB(&tokenhandle, white);
 		done = ajStrMatchC(value, "]");
 
 		if(!done)
 		{
-		    ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr);
+		    ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
 		    ajStrFmtLower(&tmpstr);
 		    done = ajStrMatchC(tmpstr, "]");
 		}
@@ -879,31 +879,31 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
     tokenhandle = ajStrTokenNewC(text, white);
 
     /* find appl token */
-    while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+    while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
 	if(ajStrPrefixCaseC(tmpstr, "application"))
 	    break;
 
     /* next token is the application name */
-    ajStrTokenNextParseC(tokenhandle, white, &tmpstr);
+    ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
 
     /* if next token is '[' */
-    ajStrTokenNextParseC(tokenhandle, white, &tmpstr);
+    ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
     if(ajStrCmpC(tmpstr, "[") == 0)
     {
 	token=ajStrNew();
 
 	/* is the next token 'doc' or 'groups' or 'gui' */
-	while(ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr))
+	while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
 	{
 	    while(!ajStrMatchC(tmpstr, "]"))
 	    {
 		ajStrAssignS(&token, tmpstr);
-		value = grpParseValueRB(tokenhandle, white);
+		value = grpParseValueRB(&tokenhandle, white);
 		done = ajStrMatchC(value, "]");
 
 		if(!done)
 		{
-		    ajStrTokenNextParseC(tokenhandle, whiteplus, &tmpstr);
+		    ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
 		    ajStrFmtLower(&tmpstr);
 		    done = ajStrMatchC(tmpstr, "]");
 		}
@@ -979,7 +979,7 @@ static void grpNoComment(AjPStr* text)
 ** Quotes can be single or double, or any kind of parentheses,
 ** depending on the first character of the next token examined.
 **
-** @param [u] tokenhandle [AjPStrTok] Current parsing handle for input text
+** @param [u] tokenhandle [AjPStrTok*] Current parsing handle for input text
 ** @param [r] delim [const char*] Delimiter string
 ** @return [AjPStr] String containing next value using acdStrTok
 **
@@ -987,7 +987,7 @@ static void grpNoComment(AjPStr* text)
 ** @@
 ******************************************************************************/
 
-static AjPStr grpParseValueRB(AjPStrTok tokenhandle, const char* delim)
+static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
 {
     char  endq[]   = " ";
     char  endqbr[] = " ]";
@@ -1089,7 +1089,7 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 
     tokenhandle = ajStrTokenNewC(value, delim);
 
-    while(ajStrTokenNextParse(tokenhandle, &tmpstr))
+    while(ajStrTokenNextParse(&tokenhandle, &tmpstr))
     {
 	ajStrTrimWhite(&tmpstr);
 	ajStrTrimC(&tmpstr, ".");
@@ -1112,7 +1112,7 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 	    subnames = ajListstrNew();
 	    colontokenhandle  = ajStrTokenNewC(tmpstr, colonstring);
 
-	    while(ajStrTokenNextParse(colontokenhandle, &substr))
+	    while(ajStrTokenNextParse(&colontokenhandle, &substr))
 	    {
 		copystr = ajStrNewS(substr); /* make new copy of the string
 					       for the list to hold */
@@ -2379,7 +2379,7 @@ void embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
     }
 
     handle = ajStrTokenNewC(query, ",");
-    while(ajStrTokenNextParse(handle, &qrystr))
+    while(ajStrTokenNextParse(&handle, &qrystr))
     {
         for(i=0;i<imax;i++)
         {
@@ -2546,8 +2546,6 @@ void embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
     ajStrDel(&qrystr);
     ajStrDel(&oboqry);
     ajStrDel(&gname);
-
-    ajStrTokenDel(&handle);
 
     return;
 }

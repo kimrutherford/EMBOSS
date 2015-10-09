@@ -3,8 +3,8 @@
 ** AJAX sort functions
 **
 ** @author Copyright (C) 2001 Alan Bleasby
-** @version $Revision: 1.19 $
-** @modified $Date: 2013/06/29 22:26:18 $ by $Author: rice $
+** @version $Revision: 1.18 $
+** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -505,7 +505,7 @@ void ajSortIntInc(ajint *a, ajuint n)
 
 
 
-/* @func ajSortUintInc ********************************************************
+/* @func ajSortUintInc  *******************************************************
 **
 ** Sort an unsigned ajuint array (ascending)
 **

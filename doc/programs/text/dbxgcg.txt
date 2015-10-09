@@ -55,7 +55,7 @@ General log output file [outfile.dbxgcg]:
 Command line arguments
 
 Index a GCG formatted database using b+tree indices
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -186,11 +186,11 @@ Order        71
 Fill         46
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        48
 Fullcount    48
 Kwlimit      15
@@ -206,11 +206,11 @@ Order        71
 Fill         46
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        40
 Fullcount    40
 Kwlimit      15

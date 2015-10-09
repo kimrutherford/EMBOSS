@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.74 $
+** @version $Revision: 1.72 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:06:02 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -90,13 +90,13 @@ static const char *const geneKStatus[] =
 
 
 
-/* @conststatic geneadaptorKTablenames ****************************************
+/* @conststatic geneadaptorKTables ********************************************
 **
 ** Array of Ensembl Gene Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const geneadaptorKTablenames[] =
+static const char *const geneadaptorKTables[] =
 {
     "gene",
     "xref",
@@ -106,13 +106,13 @@ static const char *const geneadaptorKTablenames[] =
 
 
 
-/* @conststatic geneadaptorKColumnnames ***************************************
+/* @conststatic geneadaptorKColumns *******************************************
 **
 ** Array of Ensembl Gene Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const geneadaptorKColumnnames[] =
+static const char *const geneadaptorKColumns[] =
 {
     "gene.gene_id",
     "gene.seq_region_id",
@@ -145,13 +145,13 @@ static const char *const geneadaptorKColumnnames[] =
 
 
 
-/* @conststatic geneadaptorKLeftjoins *****************************************
+/* @conststatic geneadaptorKLeftjoin ******************************************
 **
-** Array of Ensembl Gene Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Gene Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin geneadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin geneadaptorKLeftjoin[] =
 {
     {"xref", "gene.display_xref_id = xref.xref_id"},
     {(const char *) NULL, (const char *) NULL}
@@ -231,7 +231,7 @@ static AjBool geneadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::Gene
 ** @cc CVS Revision: 1.180
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -479,7 +479,7 @@ EnsPGene ensGeneNewIni(EnsPGeneadaptor ga,
                 "  status %d\n"
                 "  current %b\n"
                 "  cantrcid %u\n"
-                "  canann '%S'\n"
+                "  canann %p\n"
                 "  stableid '%S'\n"
                 "  version %u\n"
                 "  cdate '%S'\n"
@@ -725,7 +725,14 @@ void ensGeneDel(EnsPGene *Pgene)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgene) || --pthis->Use)
+    if (!*Pgene)
+        return;
+
+    pthis = *Pgene;
+
+    pthis->Use--;
+
+    if ((*Pgene)->Use)
     {
         *Pgene = NULL;
 
@@ -765,7 +772,9 @@ void ensGeneDel(EnsPGene *Pgene)
 
     ajListFree(&pthis->Transcripts);
 
-    ajMemFree((void **) Pgene);
+    AJFREE(pthis);
+
+    *Pgene = NULL;
 
     return;
 }
@@ -1192,6 +1201,8 @@ ajuint ensGeneGetVersion(const EnsPGene gene)
 
 const AjPList ensGeneLoadAttributes(EnsPGene gene)
 {
+    EnsPAttributeadaptor ata = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!gene)
@@ -1203,8 +1214,7 @@ const AjPList ensGeneLoadAttributes(EnsPGene gene)
     if (!gene->Adaptor)
     {
         ajDebug("ensGeneLoadAttributes cannot fetch "
-                "Ensembl Attribute objects for an "
-                "Ensembl Gene without an "
+                "Ensembl Attribute objects for an Ensembl Gene without an "
                 "Ensembl Gene Adaptor.\n");
 
         return NULL;
@@ -1215,21 +1225,21 @@ const AjPList ensGeneLoadAttributes(EnsPGene gene)
     if (!dba)
     {
         ajDebug("ensGeneLoadAttributes cannot fetch "
-                "Ensembl Attribute objects for an "
-                "Ensembl Gene without an "
+                "Ensembl Attribute objects for an Ensembl Gene without an "
                 "Ensembl Database Adaptor set in the "
                 "Ensembl Gene Adaptor.\n");
 
         return NULL;
     }
 
+    ata = ensRegistryGetAttributeadaptor(dba);
+
     gene->Attributes = ajListNew();
 
-    ensAttributeadaptorFetchAllbyGene(
-        ensRegistryGetAttributeadaptor(dba),
-        gene,
-        (AjPStr) NULL,
-        gene->Attributes);
+    ensAttributeadaptorFetchAllbyGene(ata,
+                                      gene,
+                                      (AjPStr) NULL,
+                                      gene->Attributes);
 
     return gene->Attributes;
 }
@@ -1259,6 +1269,7 @@ const AjPList ensGeneLoadDatabaseentries(EnsPGene gene)
     AjPStr objtype = NULL;
 
     EnsPDatabaseadaptor dba = NULL;
+    EnsPDatabaseentryadaptor dbea = NULL;
 
     if (!gene)
         return NULL;
@@ -1287,17 +1298,18 @@ const AjPList ensGeneLoadDatabaseentries(EnsPGene gene)
         return NULL;
     }
 
+    dbea = ensRegistryGetDatabaseentryadaptor(dba);
+
     objtype = ajStrNewC("Gene");
 
     gene->Databaseentries = ajListNew();
 
-    ensDatabaseentryadaptorFetchAllbyObject(
-        ensRegistryGetDatabaseentryadaptor(dba),
-        gene->Identifier,
-        objtype,
-        (AjPStr) NULL,
-        ensEExternaldatabaseTypeNULL,
-        gene->Databaseentries);
+    ensDatabaseentryadaptorFetchAllbyObject(dbea,
+                                            gene->Identifier,
+                                            objtype,
+                                            (AjPStr) NULL,
+                                            ensEExternaldatabaseTypeNULL,
+                                            gene->Databaseentries);
 
     ajStrDel(&objtype);
 
@@ -1328,6 +1340,8 @@ const AjPList ensGeneLoadTranscripts(EnsPGene gene)
 {
     EnsPDatabaseadaptor dba = NULL;
 
+    EnsPTranscriptadaptor tca = NULL;
+
     if (!gene)
         return NULL;
 
@@ -1345,12 +1359,11 @@ const AjPList ensGeneLoadTranscripts(EnsPGene gene)
 
     dba = ensGeneadaptorGetDatabaseadaptor(gene->Adaptor);
 
+    tca = ensRegistryGetTranscriptadaptor(dba);
+
     gene->Transcripts = ajListNew();
 
-    ensTranscriptadaptorFetchAllbyGene(
-        ensRegistryGetTranscriptadaptor(dba),
-        gene,
-        gene->Transcripts);
+    ensTranscriptadaptorFetchAllbyGene(tca, gene, gene->Transcripts);
 
     return gene->Transcripts;
 }
@@ -1742,7 +1755,8 @@ AjBool ensGeneSetFeature(EnsPGene gene, EnsPFeature feature)
 
     /* Replace the current Feature. */
 
-    ensFeatureDel(&gene->Feature);
+    if (gene->Feature)
+        ensFeatureDel(&gene->Feature);
 
     gene->Feature = ensFeatureNewRef(feature);
 
@@ -2112,7 +2126,7 @@ AjBool ensGeneTrace(const EnsPGene gene, ajuint level)
             "%S  Description '%S'\n"
             "%S  Source '%S'\n"
             "%S  Biotype '%S'\n"
-            "%S  Status '%s'\n"
+            "%S  Status %d\n"
             "%S  Current '%B'\n"
             "%S  Canonicalannotation '%S'\n"
             "%S  Canonicaltranscriptidentifier %u\n"
@@ -2132,7 +2146,7 @@ AjBool ensGeneTrace(const EnsPGene gene, ajuint level)
             indent, gene->Description,
             indent, gene->Source,
             indent, gene->Biotype,
-            indent, ensGeneStatusToChar(gene->Status),
+            indent, gene->Status,
             indent, gene->Current,
             indent, gene->Canonicalannotation,
             indent, gene->Canonicaltranscriptidentifier,
@@ -2215,11 +2229,11 @@ AjBool ensGeneTrace(const EnsPGene gene, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Gene object.
+** Functions for calculating values of an Ensembl Gene object.
 **
 ** @fdata [EnsPGene]
 **
-** @nam3rule Calculate Calculate Ensembl Gene information
+** @nam3rule Calculate Calculate Ensembl Gene values
 ** @nam4rule Coordinates Calculate coordinates
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
@@ -2362,7 +2376,7 @@ AjBool ensGeneCalculateCoordinates(EnsPGene gene)
 
     ensFeatureSetSlice(gfeature, slice);
 
-    /* Clear internal members that depend on Transcript coordinates. None! */
+    /* Clear internal values that depend on Transcript coordinates. None! */
 
     return ajTrue;
 }
@@ -2514,11 +2528,11 @@ size_t ensGeneCalculateMemsize(const EnsPGene gene)
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching information from an Ensembl Gene object.
+** Functions for fetching values of an Ensembl Gene object.
 **
 ** @fdata [EnsPGene]
 **
-** @nam3rule Fetch Fetch Ensembl Gene information
+** @nam3rule Fetch Fetch Ensembl Gene values
 ** @nam4rule All Fetch all objects
 ** @nam5rule Attributes Fetch all Ensembl Attribute objects
 ** @nam5rule Databaseentries Fetch all Ensembl Database Entry objects
@@ -2856,17 +2870,26 @@ AjBool ensGeneFetchAllExons(EnsPGene gene, AjPList exons)
 AjBool ensGeneFetchCanonicaltranscript(EnsPGene gene,
                                        EnsPTranscript *Ptranscript)
 {
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPTranscriptadaptor tca = NULL;
+
     if (!gene)
         return ajFalse;
 
     if (!Ptranscript)
         return ajFalse;
 
-    return ensTranscriptadaptorFetchByIdentifier(
-        ensRegistryGetTranscriptadaptor(
-            ensGeneadaptorGetDatabaseadaptor(gene->Adaptor)),
+    dba = ensGeneadaptorGetDatabaseadaptor(gene->Adaptor);
+
+    tca = ensRegistryGetTranscriptadaptor(dba);
+
+    ensTranscriptadaptorFetchByIdentifier(
+        tca,
         gene->Canonicaltranscriptidentifier,
         Ptranscript);
+
+    return ajTrue;
 }
 
 
@@ -3050,7 +3073,7 @@ AjBool ensGeneSimilarity(EnsPGene gene1, EnsPGene gene2)
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Gene objects between
-** Ensembl Coordinate System objects.
+** Ensembl Coordinate Systems.
 **
 ** @fdata [EnsPGene]
 **
@@ -3110,7 +3133,7 @@ EnsPGene ensGeneTransfer(EnsPGene gene, EnsPSlice slice)
     if (!newfeature)
     {
         ajDebug("ensGeneTransfer could not transfer the Ensembl Feature %p "
-                "onto the new Ensembl Slice %p.\n", gene->Feature, slice);
+                "onto the new Slice %p.\n", gene->Feature, slice);
 
         ensFeatureTrace(gene->Feature, 1);
 
@@ -3308,7 +3331,7 @@ EnsPGene ensGeneTransform(EnsPGene gene,
 
     newgene->Feature = newgf;
 
-    /* Clear internal members that depend on Transcript coordinates. */
+    /* Clear internal values that depend on Transcript coordinates. */
 
     return newgene;
 }
@@ -3472,10 +3495,9 @@ const char* ensGeneStatusToChar(EnsEGeneStatus status)
          i++);
 
     if (!geneKStatus[i])
-        ajDebug("ensGeneStatusToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Gene Status "
-                "enumeration %d.\n",
+        ajDebug("ensGeneStatusToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Gene Status enumeration %d.\n",
                 status);
 
     return geneKStatus[i];
@@ -4111,8 +4133,8 @@ AjBool ensSequenceAddFeatureGene(AjPSeq seq,
 ** Ensembl Gene Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::GeneAdaptor
-** @cc CVS Revision: 1.207
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.198
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -4162,7 +4184,8 @@ static AjBool geneadaptorFetchAllbyStatement(
 
     AjBool current = AJFALSE;
 
-    EnsEGeneStatus estatus = ensEGeneStatusNULL;
+    EnsEGeneStatus estatus =
+        ensEGeneStatusNULL;
 
     EnsEExternalreferenceInfotype erit = ensEExternalreferenceInfotypeNULL;
 
@@ -4453,11 +4476,18 @@ static AjBool geneadaptorFetchAllbyStatement(
 EnsPGeneadaptor ensGeneadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    return ensFeatureadaptorNew(
+    EnsPGeneadaptor ga = NULL;
+
+    if (!dba)
+        return NULL;
+
+    AJNEW0(ga);
+
+    ga->Adaptor = ensFeatureadaptorNew(
         dba,
-        geneadaptorKTablenames,
-        geneadaptorKColumnnames,
-        geneadaptorKLeftjoins,
+        geneadaptorKTables,
+        geneadaptorKColumns,
+        geneadaptorKLeftjoin,
         (const char *) NULL,
         (const char *) NULL,
         &geneadaptorFetchAllbyStatement,
@@ -4468,6 +4498,8 @@ EnsPGeneadaptor ensGeneadaptorNew(
         (size_t (*)(const void *)) &ensGeneCalculateMemsize,
         (EnsPFeature (*)(const void *)) &ensGeneGetFeature,
         "Gene");
+
+    return ga;
 }
 
 
@@ -4512,7 +4544,28 @@ EnsPGeneadaptor ensGeneadaptorNew(
 
 void ensGeneadaptorDel(EnsPGeneadaptor *Pga)
 {
-    ensFeatureadaptorDel(Pga);
+    EnsPGeneadaptor pthis = NULL;
+
+    if (!Pga)
+        return;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensGeneadaptorDel"))
+        ajDebug("ensGeneadaptorDel\n"
+                "  *Pga %p\n",
+                *Pga);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pga)
+        return;
+
+    pthis = *Pga;
+
+    ensFeatureadaptorDel(&pthis->Adaptor);
+
+    AJFREE(pthis);
+
+    *Pga = NULL;
 
     return;
 }
@@ -4527,44 +4580,16 @@ void ensGeneadaptorDel(EnsPGeneadaptor *Pga)
 ** @fdata [EnsPGeneadaptor]
 **
 ** @nam3rule Get Return Ensembl Gene Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 ** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
 **
-** @argrule * ga [EnsPGeneadaptor] Ensembl Gene Adaptor
+** @argrule * ga [const EnsPGeneadaptor] Ensembl Gene Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @valrule Featureadaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensGeneadaptorGetBaseadaptor *****************************************
-**
-** Get the Ensembl Base Adaptor member of the
-** Ensembl Feature Adaptor member of an Ensembl Gene Adaptor.
-**
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.2.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensGeneadaptorGetBaseadaptor(
-    EnsPGeneadaptor ga)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensGeneadaptorGetFeatureadaptor(ga));
-}
 
 
 
@@ -4574,19 +4599,17 @@ EnsPBaseadaptor ensGeneadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of the
 ** Ensembl Feature Adaptor member of an Ensembl Gene Adaptor.
 **
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
+** @param [r] ga [const EnsPGeneadaptor] Ensembl Gene Adaptor
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(
-    EnsPGeneadaptor ga)
+EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(const EnsPGeneadaptor ga)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensGeneadaptorGetFeatureadaptor(ga));
+    return (ga) ? ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor) : NULL;
 }
 
 
@@ -4596,18 +4619,17 @@ EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(
 **
 ** Get the Ensembl Feature Adaptor member of an Ensembl Gene Adaptor.
 **
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
+** @param [r] ga [const EnsPGeneadaptor] Ensembl Gene Adaptor
 **
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
+** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
-    EnsPGeneadaptor ga)
+EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(const EnsPGeneadaptor ga)
 {
-    return ga;
+    return (ga) ? ga->Adaptor : NULL;
 }
 
 
@@ -4624,11 +4646,8 @@ EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
 ** @nam4rule All Fetch all Ensembl Gene objects
 ** @nam4rule Allby Fetch all Ensembl Gene objects matching a criterion
 ** @nam5rule Biotype Fetch all by biological type
-** @nam5rule Displaylabel Fetch all by display label
-** @nam5rule Externalname Fetch all by an external name
-** @nam5rule Identifiers Fetch all by an AJAX Table
 ** @nam5rule Slice   Fetch all by an Ensembl Slice
-** @nam5rule Stableidentifier Fetch all by an Ensembl Gene stable identifier
+** @nam5rule Stableidentifier Fetch all by a stable Ensembl Gene identifier
 ** @nam4rule By Fetch one Ensembl Gene object matching a criterion
 ** @nam5rule Displaylabel
 ** Fetch by a display label
@@ -4636,10 +4655,6 @@ EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
 ** Fetch by an Ensembl Exon identifier
 ** @nam5rule Exonstableidentifier
 ** Fetch by an Ensembl Exon stable identifier
-** @nam5rule Externaldatabasename
-** Fetch by an Ensembl External Database name
-** @nam5rule Externalname
-** Fetch by an Ensembl Database Entry name
 ** @nam5rule Identifier
 ** Fetch by SQL database-internal identifier
 ** @nam5rule Stableidentifier
@@ -4659,26 +4674,6 @@ EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
 ** AJAX List of Ensembl Gene objects
 ** @argrule AllbyBiotype biotype [const AjPStr]
 ** Biotype
-** @argrule AllbyBiotype genes [AjPList]
-** AJAX List of Ensembl Gene objects
-** @argrule AllbyDisplaylabel label [const AjPStr]
-** Display label
-** @argrule AllbyDisplaylabel genes [AjPList]
-** AJAX List of Ensembl Gene objects
-** @argrule AllbyExternaldatabasename dbname [const AjPStr]
-** Ensembl External Database name
-** @argrule AllbyExternaldatabasename genes [AjPList]
-** AJAX List of Ensembl Gene objects
-** @argrule AllbyExternalname name [const AjPStr]
-** Ensembl Database Entry name
-** @argrule AllbyExternalname dbname [const AjPStr]
-** Ensembl External Database name
-** @argrule AllbyExternalname override [AjBool]
-** Override optimisation of '_' SQL any
-** @argrule AllbyExternalname genes [AjPList]
-** AJAX List of Ensembl Gene objects
-** @argrule AllbyIdentifiers genes [AjPTable]
-** AJAX Table of Ensembl Gene objects
 ** @argrule AllbySlice slice [EnsPSlice]
 ** Ensembl Slice
 ** @argrule AllbySlice anname [const AjPStr]
@@ -4689,11 +4684,9 @@ EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(
 ** Biotype name
 ** @argrule AllbySlice loadtranscripts [AjBool]
 ** Load Ensembl Transcript objects
-** @argrule AllbySlice genes [AjPList]
-** AJAX List of Ensembl Gene objects
 ** @argrule AllbyStableidentifier stableid [const AjPStr]
 ** Ensembl Gene stable identifier
-** @argrule AllbyStableidentifier genes [AjPList]
+** @argrule Allby genes [AjPList]
 ** AJAX List of Ensembl Gene objects
 ** @argrule ByDisplaylabel label [const AjPStr] Display label
 ** @argrule ByExonidentifier identifier [ajuint]
@@ -4749,6 +4742,8 @@ AjBool ensGeneadaptorFetchAll(
 
     AjPStr constraint = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!ga)
         return ajFalse;
 
@@ -4760,12 +4755,13 @@ AjBool ensGeneadaptorFetchAll(
         "AND "
         "gene.is_current = 1");
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensGeneadaptorGetBaseadaptor(ga),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                genes);
 
     ajStrDel(&constraint);
 
@@ -4800,8 +4796,6 @@ AjBool ensGeneadaptorFetchAllbyBiotype(
 {
     char *txtbiotype = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     EnsPBaseadaptor ba = NULL;
@@ -4815,7 +4809,7 @@ AjBool ensGeneadaptorFetchAllbyBiotype(
     if (!genes)
         return ajFalse;
 
-    ba = ensGeneadaptorGetBaseadaptor(ga);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtbiotype, biotype);
 
@@ -4827,240 +4821,15 @@ AjBool ensGeneadaptorFetchAllbyBiotype(
 
     ajCharDel(&txtbiotype);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
+    ensBaseadaptorFetchAllbyConstraint(ba,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       genes);
 
     ajStrDel(&constraint);
 
-    return result;
-}
-
-
-
-
-/* @func ensGeneadaptorFetchAllbyDisplaylabel *********************************
-**
-** Fetch all Ensembl Gene objects via a display label.
-**
-** The caller is responsible for deleting the Ensembl Gene objects
-** before deleting the AJAX List.
-**
-** @cc Bio::EnsEMBL::DBSQL::GeneAdaptor::fetch_all_by_display_label
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [r] label [const AjPStr] Display label
-** @param [u] genes [AjPList] AJAX List of Ensembl Gene objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-AjBool ensGeneadaptorFetchAllbyDisplaylabel(
-    EnsPGeneadaptor ga,
-    const AjPStr label,
-    AjPList genes)
-{
-    char *txtlabel = NULL;
-
-    AjBool result = AJFALSE;
-
-    AjPStr constraint = NULL;
-
-    EnsPBaseadaptor ba = NULL;
-
-    if (!ga)
-        return ajFalse;
-
-    if (!label)
-        return ajFalse;
-
-    if (!genes)
-        return ajFalse;
-
-    ba = ensGeneadaptorGetBaseadaptor(ga);
-
-    ensBaseadaptorEscapeC(ba, &txtlabel, label);
-
-    constraint = ajFmtStr(
-        "gene.is_current = 1 "
-        "AND "
-        "xref.display_label = '%s'",
-        txtlabel);
-
-    ajCharDel(&txtlabel);
-
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
-
-    ajStrDel(&constraint);
-
-    return result;
-}
-
-
-
-
-/* @func ensGeneadaptorFetchAllbyExternaldatabasename *************************
-**
-** Fetch all Ensembl Gene objects via an Ensembl External Database name.
-**
-** The caller is responsible for deleting the Ensembl Gene objects
-** before deleting the AJAX List.
-**
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [r] dbname [const AjPStr] Ensembl External Database name
-** @param [u] genes [AjPList] AJAX List of Ensembl Gene objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensGeneadaptorFetchAllbyExternaldatabasename(
-    EnsPGeneadaptor ga,
-    const AjPStr dbname,
-    AjPList genes)
-{
-    AjBool result = AJFALSE;
-
-    AjPTable table = NULL;
-
-    if (!ga)
-        return ajFalse;
-
-    if (!dbname)
-        return ajFalse;
-
-    if (!genes)
-        return ajFalse;
-
-    table = ajTableuintNew(0U);
-
-    ajTableSetDestroyvalue(table, (void (*)(void **)) &ensGeneDel);
-
-    result = ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
-        ensRegistryGetDatabaseentryadaptor(
-            ensGeneadaptorGetDatabaseadaptor(ga)),
-        dbname,
-        table);
-
-    result = ensGeneadaptorFetchAllbyIdentifiers(ga, table);
-
-    ensTableuintToList(table, genes);
-
-    ajTableFree(&table);
-
-    return result;
-}
-
-
-
-
-/* @func ensGeneadaptorFetchAllbyExternalname *********************************
-**
-** Fetch all Ensembl Gene objects via an Ensembl Database Entry name and
-** Ensembl External Database name.
-**
-** The caller is responsible for deleting the Ensembl Gene objects
-** before deleting the AJAX List.
-**
-** @cc Bio::EnsEMBL::DBSQL::GeneAdaptor::fetch_all_by_external_name
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [r] name [const AjPStr] Ensembl Database Entry name
-** @param [rN] dbname [const AjPStr] Ensembl External Database name
-** @param [r] override [AjBool] Override optimisation of '_' SQL any
-** @param [u] genes [AjPList] AJAX List of Ensembl Gene objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ensGeneadaptorFetchAllbyExternalname(
-    EnsPGeneadaptor ga,
-    const AjPStr name,
-    const AjPStr dbname,
-    AjBool override,
-    AjPList genes)
-{
-    AjBool result = AJFALSE;
-
-    AjPTable table = NULL;
-
-    if (!ga)
-        return ajFalse;
-
-    if (!name)
-        return ajFalse;
-
-    if (!genes)
-        return ajFalse;
-
-    table = ajTableuintNew(0U);
-
-    ajTableSetDestroyvalue(table, (void (*)(void **)) &ensGeneDel);
-
-    result = ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
-        ensRegistryGetDatabaseentryadaptor(
-            ensGeneadaptorGetDatabaseadaptor(ga)),
-        name,
-        dbname,
-        override,
-        table);
-
-    result = ensGeneadaptorFetchAllbyIdentifiers(ga, table);
-
-    ensTableuintToList(table, genes);
-
-    ajTableFree(&table);
-
-    return result;
-}
-
-
-
-
-/* @func ensGeneadaptorFetchAllbyIdentifiers **********************************
-**
-** Fetch all Ensembl Gene objects by an AJAX Table of
-** AJAX unsigned integer key data and assign them as value data.
-**
-** The caller is responsible for deleting the AJAX unsigned integer key and
-** Ensembl Gene value data before deleting the AJAX Table.
-**
-** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::fetch_all_by_dbID_list
-** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [u] genes [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer key data and
-** Ensembl Gene value data
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-AjBool ensGeneadaptorFetchAllbyIdentifiers(
-    EnsPGeneadaptor ga,
-    AjPTable genes)
-{
-    return ensBaseadaptorFetchAllbyIdentifiers(
-        ensGeneadaptorGetBaseadaptor(ga),
-        (EnsPSlice) NULL,
-        (ajuint (*)(const void *)) &ensGeneGetIdentifier,
-        genes);
+    return ajTrue;
 }
 
 
@@ -5132,8 +4901,8 @@ AjBool ensGeneadaptorFetchAllbySlice(
 
     EnsPGene gene = NULL;
 
-    EnsPSlice newslice   = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice newslice  = NULL;
+    EnsPSliceadaptor sa = NULL;
 
     EnsPTranscript oldtranscript = NULL;
     EnsPTranscript newtranscript = NULL;
@@ -5170,12 +4939,11 @@ AjBool ensGeneadaptorFetchAllbySlice(
         ajCharDel(&txtbiotype);
     }
 
-    ensFeatureadaptorFetchAllbySlice(
-        ensGeneadaptorGetFeatureadaptor(ga),
-        slice,
-        constraint,
-        anname,
-        genes);
+    ensFeatureadaptorFetchAllbySlice(ga->Adaptor,
+                                     slice,
+                                     constraint,
+                                     anname,
+                                     genes);
 
     ajStrDel(&constraint);
 
@@ -5198,7 +4966,7 @@ AjBool ensGeneadaptorFetchAllbySlice(
 
     tca = ensRegistryGetTranscriptadaptor(dba);
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sa = ensRegistryGetSliceadaptor(dba);
 
     /* Get the extent of the region spanned by Ensembl Transcript objects. */
 
@@ -5235,7 +5003,7 @@ AjBool ensGeneadaptorFetchAllbySlice(
 
         if (ajTableMatchV(gntable, (const void *) &gnid))
             ajDebug("ensGeneadaptorFetchAllbySlice got duplicate "
-                    "Ensembl Gene objects with identifier %u.\n", gnid);
+                    "Ensembl Gene with identifier %u.\n", gnid);
         else
         {
             AJNEW0(Pidentifier);
@@ -5257,14 +5025,14 @@ AjBool ensGeneadaptorFetchAllbySlice(
     if ((start >= ensSliceGetStart(slice)) && (end <= ensSliceGetEnd(slice)))
         newslice = ensSliceNewRef(slice);
     else
-        ensSliceadaptorFetchBySlice(sla,
+        ensSliceadaptorFetchBySlice(sa,
                                     slice,
                                     start,
                                     end,
                                     ensSliceGetStrand(slice),
                                     &newslice);
 
-    /* Associate Ensembl Transcript identifiers with Ensembl Genes. */
+    /* Associate Transcript identifiers with Genes. */
 
     statement = ajFmtStr(
         "SELECT "
@@ -5294,9 +5062,8 @@ AjBool ensGeneadaptorFetchAllbySlice(
 
         if (ajTableMatchV(trtable, (const void *) &trid))
         {
-            ajDebug("ensGeneadaptorFetchAllbySlice got duplicate "
-                    "Ensembl Transcript objects with identifier %u "
-                    "for Ensembl Gene with identifier %u.\n",
+            ajDebug("ensGeneadaptorFetchAllbySlice got duplicate Transcript "
+                    "with identifier %u for Gene with identifier %u.\n",
                     trid, gnid);
 
             continue;
@@ -5315,9 +5082,8 @@ AjBool ensGeneadaptorFetchAllbySlice(
                        (void *) ensGeneNewRef(gene));
         }
         else
-            ajDebug("ensGeneadaptorFetchAllbySlice could not fetch "
-                    "Ensembl Gene with identifier %u for "
-                    "Ensembl Transcript with identifier %u.\n",
+            ajDebug("ensGeneadaptorFetchAllbySlice could not get Gene with "
+                    "identifier %u for Transcript with identifier %u.\n",
                     gnid, trid);
     }
 
@@ -5327,7 +5093,7 @@ AjBool ensGeneadaptorFetchAllbySlice(
 
     ajStrDel(&statement);
 
-    /* Get all Ensembl Transcript identifiers as comma-separated values. */
+    /* Get all Transcript identifiers as comma-separated values. */
 
     ajTableToarrayKeys(trtable, &keyarray);
 
@@ -5423,8 +5189,6 @@ AjBool ensGeneadaptorFetchAllbyStableidentifier(
 {
     char *txtstableid = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     EnsPBaseadaptor ba = NULL;
@@ -5438,7 +5202,7 @@ AjBool ensGeneadaptorFetchAllbyStableidentifier(
     if (!genes)
         return ajFalse;
 
-    ba = ensGeneadaptorGetBaseadaptor(ga);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -5446,16 +5210,15 @@ AjBool ensGeneadaptorFetchAllbyStableidentifier(
 
     ajCharDel(&txtstableid);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
+    ensBaseadaptorFetchAllbyConstraint(ba,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       genes);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -5485,11 +5248,6 @@ AjBool ensGeneadaptorFetchByDisplaylabel(
 {
     char *txtlabel = NULL;
 
-    AjBool nonref = AJFALSE;
-    AjBool result = AJFALSE;
-
-    AjIList iter = NULL;
-
     AjPList genes = NULL;
 
     AjPStr constraint = NULL;
@@ -5507,9 +5265,7 @@ AjBool ensGeneadaptorFetchByDisplaylabel(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
-
-    ba = ensGeneadaptorGetBaseadaptor(ga);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtlabel, label);
 
@@ -5523,46 +5279,15 @@ AjBool ensGeneadaptorFetchByDisplaylabel(
 
     genes = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
+    ensBaseadaptorFetchAllbyConstraint(ba,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       genes);
 
     if (ajListGetLength(genes) > 1)
         ajDebug("ensGeneadaptorFetchByDisplaylabel got more than one "
-                "Ensembl Gene objects for display label '%S'.\n", label);
-
-    /*
-    ** Since more than one Ensembl Gene object may be obtained,
-    ** find the one linked to a reference Ensembl Slice object
-    ** (or not linked to a non-refrence Ensembl Slice object).
-    */
-
-    iter = ajListIterNew(genes);
-
-    while (!ajListIterDone(iter))
-    {
-        gene = (EnsPGene) ajListIterGet(iter);
-
-        ensSliceIsNonreference(ensFeatureGetSlice(ensGeneGetFeature(gene)),
-                               &nonref);
-
-        if (nonref == ajFalse)
-            *Pgene = ensGeneNewRef(gene);
-    }
-
-    ajListIterDel(&iter);
-
-    if (!*Pgene)
-    {
-        ajListPeekFirst(genes, (void **) Pgene);
-
-        ensGeneNewRef(*Pgene);
-    }
-
-    /* Clear the remaining AJAX List of Ensembl Gene objects. */
+                "Gene for display label '%S'.\n", label);
 
     ajListPop(genes, (void **) Pgene);
 
@@ -5573,7 +5298,7 @@ AjBool ensGeneadaptorFetchByDisplaylabel(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -5608,6 +5333,8 @@ AjBool ensGeneadaptorFetchByExonidentifier(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!ga)
@@ -5619,9 +5346,7 @@ AjBool ensGeneadaptorFetchByExonidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
-
-    dba = ensGeneadaptorGetDatabaseadaptor(ga);
+    dba = ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor);
 
     statement = ajFmtStr(
         "SELECT "
@@ -5662,18 +5387,15 @@ AjBool ensGeneadaptorFetchByExonidentifier(
     if (!gid)
     {
         ajDebug("ensGeneadaptorFetchByExonidentifier "
-                "could not get an "
-                "Ensembl Gene identifier for "
-                "Ensembl Exon identifier %u.\n",
-                identifier);
+                "could not get Gene identifier for Exon "
+                "identifier '%S'.\n", identifier);
 
         return ajFalse;
     }
 
-    return ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        gid,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, gid, (void **) Pgene);
 }
 
 
@@ -5710,6 +5432,8 @@ AjBool ensGeneadaptorFetchByExonstableidentifier(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!ga)
@@ -5721,11 +5445,9 @@ AjBool ensGeneadaptorFetchByExonstableidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
+    dba = ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor);
 
-    dba = ensGeneadaptorGetDatabaseadaptor(ga);
-
-    ensDatabaseadaptorEscapeC(dba, &txtstableid, stableid);
+    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
     statement = ajFmtStr(
         "SELECT "
@@ -5768,18 +5490,15 @@ AjBool ensGeneadaptorFetchByExonstableidentifier(
     if (!gid)
     {
         ajDebug("ensGeneadaptorFetchByExonstableidentifier "
-                "could not get an "
-                "Ensembl Gene identifier for "
-                "Ensembl Exon stable identifier '%S'.\n",
-                stableid);
+                "could not get Gene identifier for Exon "
+                "stable identifier '%S'.\n", stableid);
 
         return ajFalse;
     }
 
-    return ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        gid,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, gid, (void **) Pgene);
 }
 
 
@@ -5806,7 +5525,7 @@ AjBool ensGeneadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGene *Pgene)
 {
-    AjBool result = AJFALSE;
+    EnsPBaseadaptor ba = NULL;
 
     EnsPCache cache = NULL;
 
@@ -5819,23 +5538,20 @@ AjBool ensGeneadaptorFetchByIdentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
-
-    cache = ensFeatureadaptorGetCache(ga);
+    cache = ensFeatureadaptorGetCache(ga->Adaptor);
 
     ensCacheFetch(cache, (void *) &identifier, (void **) Pgene);
 
     if (*Pgene)
         return ajTrue;
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        identifier,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Pgene);
 
     ensCacheStore(cache, (void *) &identifier, (void **) Pgene);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -5868,8 +5584,6 @@ AjBool ensGeneadaptorFetchByStableidentifier(
 {
     char *txtstableid = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList genes = NULL;
 
     AjPStr constraint = NULL;
@@ -5887,9 +5601,7 @@ AjBool ensGeneadaptorFetchByStableidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
-
-    ba = ensGeneadaptorGetBaseadaptor(ga);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -5911,16 +5623,15 @@ AjBool ensGeneadaptorFetchByStableidentifier(
 
     genes = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        genes);
+    ensBaseadaptorFetchAllbyConstraint(ba,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       genes);
 
     if (ajListGetLength(genes) > 1)
         ajDebug("ensGeneadaptorFetchByStableidentifier got more than one "
-                "Ensembl Gene for stable identifier '%S' and version %u.\n",
+                "Gene for stable identifier '%S' and version %u.\n",
                 stableid,
                 version);
 
@@ -5933,7 +5644,7 @@ AjBool ensGeneadaptorFetchByStableidentifier(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -5968,6 +5679,8 @@ AjBool ensGeneadaptorFetchByTranscriptidentifier(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!ga)
@@ -5979,9 +5692,7 @@ AjBool ensGeneadaptorFetchByTranscriptidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
-
-    dba = ensGeneadaptorGetDatabaseadaptor(ga);
+    dba = ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6014,18 +5725,15 @@ AjBool ensGeneadaptorFetchByTranscriptidentifier(
     if (!gid)
     {
         ajDebug("ensGeneadaptorFetchByTranscriptidentifier "
-                "could not get an "
-                "Ensembl Gene identifier for "
-                "Ensembl Transcript identifier %u.\n",
-                identifier);
+                "could not get Gene identifier for Transcript "
+                "identifier %u.\n", identifier);
 
         return ajFalse;
     }
 
-    return ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        gid,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, gid, (void **) Pgene);
 }
 
 
@@ -6062,6 +5770,8 @@ AjBool ensGeneadaptorFetchByTranscriptstableidentifier(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!ga)
@@ -6073,11 +5783,9 @@ AjBool ensGeneadaptorFetchByTranscriptstableidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
+    dba = ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor);
 
-    dba = ensGeneadaptorGetDatabaseadaptor(ga);
-
-    ensDatabaseadaptorEscapeC(dba, &txtstableid, stableid);
+    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6114,18 +5822,15 @@ AjBool ensGeneadaptorFetchByTranscriptstableidentifier(
     if (!gid)
     {
         ajDebug("ensGeneadaptorFetchByTranscriptstableidentifier "
-                "could not get an "
-                "Ensembl Gene identifier for "
-                "Ensembl Transcript stable identifier '%S'.\n",
-                stableid);
+                "could not get Gene identifier for Transcript "
+                "stable identifier '%S'.\n", stableid);
 
         return ajFalse;
     }
 
-    return ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        gid,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, gid, (void **) Pgene);
 }
 
 
@@ -6162,6 +5867,8 @@ AjBool ensGeneadaptorFetchByTranslationstableidentifier(
 
     AjPStr statement = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPDatabaseadaptor dba = NULL;
 
     if (!ga)
@@ -6173,11 +5880,9 @@ AjBool ensGeneadaptorFetchByTranslationstableidentifier(
     if (!Pgene)
         return ajFalse;
 
-    *Pgene = NULL;
+    dba = ensFeatureadaptorGetDatabaseadaptor(ga->Adaptor);
 
-    dba = ensGeneadaptorGetDatabaseadaptor(ga);
-
-    ensDatabaseadaptorEscapeC(dba, &txtstableid, stableid);
+    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6217,18 +5922,15 @@ AjBool ensGeneadaptorFetchByTranslationstableidentifier(
     if (!gid)
     {
         ajDebug("ensGeneadaptorFetchByTranslationstableidentifier "
-                "could not get an "
-                "Ensembl Gene identifier for "
-                "Ensembl Translation stable identifier '%S'.\n",
-                stableid);
+                "could not get Gene identifier for Translation "
+                "stable identifier '%S'.\n", stableid);
 
         return ajFalse;
     }
 
-    return ensBaseadaptorFetchByIdentifier(
-        ensGeneadaptorGetBaseadaptor(ga),
-        gid,
-        (void **) Pgene);
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
+    return ensBaseadaptorFetchByIdentifier(ba, gid, (void **) Pgene);
 }
 
 
@@ -6236,21 +5938,21 @@ AjBool ensGeneadaptorFetchByTranslationstableidentifier(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for retrieving objects releated to Ensembl Gene objects from an
+** Functions for fetching objects releated to Ensembl Gene objects from an
 ** Ensembl SQL database.
 **
 ** @fdata [EnsPGeneadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Gene-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Gene-releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
-** @nam5rule Stableidentifiers Retrieve all stable identifier objects
+** @nam5rule Identifiers Fetch all SQL database-internal identifiers
+** @nam5rule Stableidentifiers Fetch all stable Ensembl Gene identifiers
 **
 ** @argrule * ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer (Ensembl Gene identifier) objects
-** @argrule AllStableidentifiers stableids [AjPList]
-** AJAX List of AJAX String (Ensembl Gene stable identifier) objects
+** @argrule AllIdentifiers identifiers [AjPList] AJAX List of AJAX unsigned
+**                                               integer identifiers
+** @argrule AllStableidentifiers identifiers [AjPList] AJAX List of AJAX String
+**                                              stable Ensembl Exon identifiers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -6262,15 +5964,14 @@ AjBool ensGeneadaptorFetchByTranslationstableidentifier(
 
 /* @func ensGeneadaptorRetrieveAllIdentifiers *********************************
 **
-** Retrieve all SQL database-internal identifier objects of Ensembl Genes.
+** Retrieve all SQL database-internal identifiers of Ensembl Genes.
 **
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX List.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::GeneAdaptor::list_dbIDs
 ** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [u] identifiers [AjPList]
-** AJAX List of AJAX unsigned integer (Ensembl Gene identifier) objects
+** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -6286,19 +5987,22 @@ AjBool ensGeneadaptorRetrieveAllIdentifiers(
 
     AjPStr table = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!ga)
         return ajFalse;
 
     if (!identifiers)
         return ajFalse;
 
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
+
     table = ajStrNewC("gene");
 
-    result = ensBaseadaptorRetrieveAllIdentifiers(
-        ensGeneadaptorGetBaseadaptor(ga),
-        table,
-        (AjPStr) NULL,
-        identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 
@@ -6310,15 +6014,14 @@ AjBool ensGeneadaptorRetrieveAllIdentifiers(
 
 /* @func ensGeneadaptorRetrieveAllStableidentifiers ***************************
 **
-** Retrieve all stable identifier objects of Ensembl Genes.
+** Retrieve all stable identifiers of Ensembl Genes.
 **
 ** The caller is responsible for deleting the AJAX String objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::GeneAdaptor::list_stable_ids
 ** @param [u] ga [EnsPGeneadaptor] Ensembl Gene Adaptor
-** @param [u] stableids [AjPList]
-** AJAX List of AJAX String (Ensembl Gene stable identifier) objects
+** @param [u] identifiers [AjPList] AJAX List of AJAX String objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -6328,27 +6031,30 @@ AjBool ensGeneadaptorRetrieveAllIdentifiers(
 
 AjBool ensGeneadaptorRetrieveAllStableidentifiers(
     EnsPGeneadaptor ga,
-    AjPList stableids)
+    AjPList identifiers)
 {
     AjBool result = AJFALSE;
 
     AjPStr primary = NULL;
     AjPStr table   = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     if (!ga)
         return ajFalse;
 
-    if (!stableids)
+    if (!identifiers)
         return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(ga->Adaptor);
 
     table   = ajStrNewC("gene");
     primary = ajStrNewC("stable_id");
 
-    result = ensBaseadaptorRetrieveAllStrings(
-        ensGeneadaptorGetBaseadaptor(ga),
-        table,
-        primary,
-        stableids);
+    result = ensBaseadaptorRetrieveAllStrings(ba,
+                                              table,
+                                              primary,
+                                              identifiers);
 
     ajStrDel(&table);
     ajStrDel(&primary);

@@ -3,9 +3,9 @@
 ** AJAX file routines
 **
 ** @author Copyright (C) 1999 Peter Rice
-** @version $Revision: 1.89 $
+** @version $Revision: 1.86 $
 ** @modified May 14 Jon Ison Added ajFileExtnTrim & ajFileDirExtnTrim
-** @modified $Date: 2013/01/31 13:25:12 $ by $Author: rice $
+** @modified $Date: 2011/12/19 16:34:51 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -94,7 +94,6 @@ AJ_BEGIN_DECLS
 ** @value ajEOutfileTypeTree Phylogenetic tree data
 ** @value ajEOutfileTypeURL URL data
 ** @value ajEOutfileTypeVariation Variation data
-** @value ajEOutfileTypeXml XML data
 ** @@
 ******************************************************************************/
 
@@ -118,8 +117,7 @@ typedef enum AjOOutfileType
     ajEOutfileTypeText,
     ajEOutfileTypeTree,
     ajEOutfileTypeURL,
-    ajEOutfileTypeVariation,
-    ajEOutfileTypeXml
+    ajEOutfileTypeVariation
 } AjEOutfileType;
 
 
@@ -510,9 +508,6 @@ AjBool         ajFilenameExistsDir(const AjPStr filename);
 AjBool         ajFilenameExistsExec(const AjPStr filename);
 AjBool         ajFilenameExistsRead(const AjPStr filename);
 AjBool         ajFilenameExistsWrite(const AjPStr filename);
-AjBool         ajFilewildnameExists(const AjPStr wildname);
-AjBool         ajFilewildnameExistsDir(const AjPStr wildname,
-                                       const AjPStr path);
 AjBool         ajFileValueRedirectStderr(void);
 AjBool         ajFileValueRedirectStdin(void);
 AjBool         ajFileValueRedirectStdout(void);

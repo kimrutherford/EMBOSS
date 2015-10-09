@@ -44,10 +44,6 @@ static void   eprimer32_read(int fd, AjPStr * result);
 static void   eprimer32_send_range(FILE * stream, const char * tag,
                                    const AjPRange value, 
                                    ajint begin);
-static void   eprimer32_send_range_pair(FILE * stream, const char * tag,
-                                        const AjPRange avalue,
-                                        const AjPRange bvalue, 
-                                        ajint begin);
 static void eprimer32_send_range2(FILE * stream, const char * tag,
                                   const AjPRange value);
 static void eprimer32_send_int(FILE * stream, const char * tag, ajint value);
@@ -89,6 +85,7 @@ int main(int argc, char **argv)
     AjBool do_primer;
     AjBool do_hybrid;
     ajint num_return;
+    ajint first_base_index;
 
     /* "Sequence" Input Tags */
     AjPSeqall sequence;
@@ -155,8 +152,6 @@ int main(int argc, char **argv)
 
     /* Internal Oligo "Sequence" Input Tags */
     AjPRange internal_oligo_excluded_region;
-    AjPRange okleft_region;
-    AjPRange okright_region;
 
     /* Internal Oligo "Global" Input Tags */
     AjPStr internal_oligo_input;
@@ -212,6 +207,7 @@ int main(int argc, char **argv)
     do_primer        = ajAcdGetToggle("primer");
     do_hybrid        = ajAcdGetToggle("hybridprobe");
     num_return       = ajAcdGetInt("numreturn");
+    first_base_index = ajAcdGetInt("firstbaseindex");
 
     /* "Sequence" Input Tags */
     sequence        = ajAcdGetSeqall("sequence");
@@ -220,8 +216,6 @@ int main(int argc, char **argv)
     excluded_region = ajAcdGetRange("excludedregion");
     left_input      = ajAcdGetString("forwardinput");
     right_input     = ajAcdGetString("reverseinput");
-    okleft_region   = ajAcdGetRange("okleftregion");
-    okright_region  = ajAcdGetRange("okrightregion");
 
     /* Primer details */
     pick_anyway         = ajAcdGetBoolean("pickanyway");
@@ -366,7 +360,7 @@ int main(int argc, char **argv)
         eprimer32_send_string(stream, "PRIMER_TASK", taskstr);
         eprimer32_send_int(stream, "PRIMER_NUM_RETURN", num_return);
         eprimer32_send_int(stream, "PRIMER_FIRST_BASE_INDEX", 
-                           1);
+                           first_base_index);
         eprimer32_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
         
         /* mispriming library may not have been specified */
@@ -498,8 +492,6 @@ int main(int argc, char **argv)
                             internal_oligo_excluded_region, begin);
         eprimer32_send_string(stream, "SEQUENCE_INTERNAL_OLIGO",
                              internal_oligo_input);
-        eprimer32_send_range_pair(stream, "SEQUENCE_PRIMER_PAIR_OK_REGION_LIST",
-                                  okleft_region, okright_region, begin);
 
 
         /* end the primer3 input sequence record with a '=' */
@@ -539,8 +531,6 @@ int main(int argc, char **argv)
     ajRangeDel(&excluded_region);
     ajRangeDel(&product_size_range);
     ajRangeDel(&internal_oligo_excluded_region);
-    ajRangeDel(&okleft_region);
-    ajRangeDel(&okright_region);
 
     ajStrDel(&left_input);
     ajStrDel(&right_input);
@@ -704,87 +694,6 @@ static void eprimer32_send_range2(FILE * stream, const char * tag,
     }
 
     ajStrDel(&str);
-
-    return;
-}
-
-
-
-
-/* @funcstatic eprimer32_send_range_pair **************************************
-**
-** Write range data to primer3_core as 'start,length start2,length2,etc'
-**
-** @param [u] stream [FILE *] File handle
-** @param [r] tag [const char *] Tag of primer3 data type
-** @param [r] avalue [const AjPRange] First ranges to write
-** @param [r] bvalue [const AjPRange] Second ranges to write
-** @param [r] begin [ajint] Start position of subsequence (-sbegin)
-** @return [void]
-**
-******************************************************************************/
-
-static void eprimer32_send_range_pair(FILE * stream, const char * tag,
-                                      const AjPRange avalue, 
-                                      const AjPRange bvalue, 
-                                      ajint begin)
-{
-    AjPStr str;
-    ajuint n = 0;
-    ajuint start;
-    ajuint end;
-    ajuint asize;
-    ajuint bsize;
-
-    asize = ajRangeGetSize(avalue);
-    bsize = ajRangeGetSize(bvalue);
-
-    if(asize || bsize)
-    {
-        str = ajStrNew();
-
-        ajFmtPrintS(&str, "%s=", tag);
-
-        for(n=0; n < asize; n++)
-        {
-            if(n)
-                ajFmtPrintAppS(&str,";");
-            ajRangeElementGetValues(avalue, n, &start, &end);
-            start -= begin;
-            end   -= begin;
-            ajFmtPrintAppS(&str, "%u,%u", start, end-start+1);
-            if(n < bsize)
-            {
-                ajRangeElementGetValues(bvalue, n, &start, &end);
-                start -= begin;
-                end   -= begin;
-                ajFmtPrintAppS(&str, ",%u,%u", start, end-start+1);
-            }
-            else 
-            {
-                ajFmtPrintAppS(&str, ",,");
-            }
-        }
-
-        for(n=asize; n < bsize; n++)
-        {
-            if(n)
-                ajFmtPrintAppS(&str,";");
-            ajFmtPrintAppS(&str, ",,");
-            ajRangeElementGetValues(bvalue, n, &start, &end);
-            start -= begin;
-            end   -= begin;
-            ajFmtPrintAppS(&str, ",%u,%u", start, end-start+1);
-        }
-
-        if(ajStrGetLen(str))
-        {
-            ajFmtPrintAppS(&str, "\n");
-            eprimer32_write(str, stream);
-        }
-
-        ajStrDel(&str);
-    }
 
     return;
 }
@@ -1033,7 +942,7 @@ static void eprimer32_report(AjPFile outfile, const AjPStr output,
     linetokenhandle = ajStrTokenNewC(output, eol);
 
     /* get next line of relevant results */
-    while(ajStrTokenNextParseC(linetokenhandle, eol, &line))
+    while(ajStrTokenNextParseC(&linetokenhandle, eol, &line))
     {
         if(!gotsequenceid)
         {
@@ -1077,10 +986,10 @@ static void eprimer32_report(AjPFile outfile, const AjPStr output,
         keytokenhandle = ajStrTokenNewC(line, equals);
 
         key = ajStrNew();
-        ajStrTokenNextParse(keytokenhandle, &key);
+        ajStrTokenNextParse(&keytokenhandle, &key);
 
         value = ajStrNew();
-        ajStrTokenNextParse(keytokenhandle, &value);
+        ajStrTokenNextParse(&keytokenhandle, &value);
 
         ajDebug("key=%S\tvalue=%S\n", key, value);
 

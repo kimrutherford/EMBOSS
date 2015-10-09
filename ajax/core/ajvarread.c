@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX variation data reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.27 $
+** @version $Revision: 1.25 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/12/07 10:07:16 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -48,12 +48,6 @@
 
 AjPTable varDbMethods = NULL;
 
-static AjPStrTok varHandle = NULL;
-static AjPStrTok varDataHandle = NULL;
-static AjPStrTok varFieldHandle = NULL;
-static AjPStr varToken = NULL;
-static AjPStr varDataToken = NULL;
-static AjPStr varFieldToken = NULL;
 static AjPStr varinReadLine     = NULL;
 static AjPStr varFieldName = NULL;
 
@@ -1284,6 +1278,7 @@ static AjBool varinLoadBcf(AjPVarin varin, AjPVar var)
     ajuint n;
     ajuint nsamples = 0;
     AjBool firstsample = AJTRUE;
+    AjPStrTok tok = NULL;
     ajuint iread;
     ajuint maxread = 1000;
     int bcfstat = 1;
@@ -1318,9 +1313,9 @@ static AjBool varinLoadBcf(AjPVarin varin, AjPVar var)
         bcfdata->Header = ajVarbcfHdrRead(fp);
         h = bcfdata->Header;
 
-        ajStrTokenAssigncharC(&varHandle, h->txt, "\n");
+        tok = ajStrTokenNewcharC(h->txt, "\n");
 
-        while (ajStrTokenNextFind(varHandle, &varinReadLine))
+        while (ajStrTokenNextFind(&tok, &varinReadLine))
         {
             input->Records++;
             if(!varinReadVcf41Header(varin, var))
@@ -1328,8 +1323,6 @@ static AjBool varinLoadBcf(AjPVarin varin, AjPVar var)
                 break;
             }
         }
-
-        ajStrTokenReset(varHandle);
 
         return ajTrue;
     }
@@ -1438,6 +1431,7 @@ static AjBool varinLoadVcf3x(AjPVarin varin, AjPVar var)
     AjPVarSample varsample = NULL;
     AjPVarHeader varheader = var->Header;
     const AjPStr varname = NULL;
+    AjPStrTok handle = NULL;
     AjPStr token = NULL;
     ajuint i;
     ajulong n;
@@ -1563,20 +1557,19 @@ static AjBool varinLoadVcf3x(AjPVarin varin, AjPVar var)
 
         n = ajStrCalcCountK(varinReadLine, '\t') - 8;
 
-        ajStrTokenAssignC(&varHandle, varinReadLine, "\t");
+        handle = ajStrTokenNewC(varinReadLine, "\t");
         i = 0;
-        while(ajStrTokenNextParse(varHandle, &varToken))
+        while(ajStrTokenNextParse(&handle, &token))
         {
             if(++i <= 9) continue;
 
-            token = ajStrNewS(varToken);
             ajListPushAppend(varheader->SampleIds, token);
             token = NULL;
         }
 
         ajVarfieldDel(&varfield);
-        ajStrTokenReset(varHandle);
-        ajStrDelStatic(&varToken);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
 
         ajDebug("varinLoadVcf3x header done\n");
 
@@ -1640,8 +1633,8 @@ static AjBool varinLoadVcf3x(AjPVarin varin, AjPVar var)
     }
 
     ajVarfieldDel(&varfield);
-    ajStrTokenReset(varHandle);
-    ajStrDelStatic(&varToken);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
 
     return ajTrue;
 }
@@ -1672,6 +1665,7 @@ static AjBool varinLoadVcf40(AjPVarin varin, AjPVar var)
     AjPVarSample varsample = NULL;
     AjPVarHeader varheader = var->Header;
     const AjPStr varname = NULL;
+    AjPStrTok handle = NULL;
     AjPStr token = NULL;
     ajuint i;
     ajulong n;
@@ -1799,21 +1793,20 @@ static AjBool varinLoadVcf40(AjPVarin varin, AjPVar var)
 
         n = ajStrCalcCountK(varinReadLine, '\t') - 8;
 
-        ajStrTokenAssignC(&varHandle, varinReadLine, "\t");
+        handle = ajStrTokenNewC(varinReadLine, "\t");
         i = 0;
 
-        while(ajStrTokenNextParse(varHandle, &varToken))
+        while(ajStrTokenNextParse(&handle, &token))
         {
             if(++i <= 9) continue;
-
-            token = ajStrNewS(varToken);
+            
             ajListPushAppend(varheader->SampleIds, token);
             token = NULL;
         }
 
         ajVarfieldDel(&varfield);
-        ajStrTokenReset(varHandle);
-        ajStrDelStatic(&varToken);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
 
         ajDebug("varinLoadVcf41 header done\n");
 
@@ -1877,8 +1870,8 @@ static AjBool varinLoadVcf40(AjPVarin varin, AjPVar var)
     }
 
     ajVarfieldDel(&varfield);
-    ajStrTokenReset(varHandle);
-    ajStrDelStatic(&varToken);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
 
     return ajTrue;
 }
@@ -2017,6 +2010,7 @@ static AjBool varinLoadVcf41(AjPVarin varin, AjPVar var)
     AjBool ok = ajTrue;
     AjPVarField varfield = NULL;
     AjPVarHeader varheader = var->Header;
+    AjPStrTok handle = NULL;
     AjPStr token = NULL;
     ajuint i;
     ajulong n;
@@ -2074,21 +2068,20 @@ static AjBool varinLoadVcf41(AjPVarin varin, AjPVar var)
 
         n = ajStrCalcCountK(varinReadLine, '\t') - 8;
 
-        ajStrTokenAssignC(&varHandle, varinReadLine, "\t");
+        handle = ajStrTokenNewC(varinReadLine, "\t");
         i = 0;
 
-        while(ajStrTokenNextParse(varHandle, &varToken))
+        while(ajStrTokenNextParse(&handle, &token))
         {
             if(++i <= 9) continue;
 
-            token = ajStrNewS(varToken);
             ajListPushAppend(varheader->SampleIds, token);
             token = NULL;
         }
 
         ajVarfieldDel(&varfield);
-        ajStrTokenReset(varHandle);
-        ajStrDelStatic(&varToken);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
 
         ajDebug("varinLoadVcf41 header done\n");
         return ajTrue;
@@ -2155,8 +2148,8 @@ static AjBool varinLoadVcf41(AjPVarin varin, AjPVar var)
     }
 
     ajVarfieldDel(&varfield);
-    ajStrTokenReset(varHandle);
-    ajStrDelStatic(&varToken);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
 
     return ajTrue;
 }
@@ -2348,6 +2341,7 @@ static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
     AjPStr tmpstr = NULL;
     ajuint i;
     AjBool isknown = ajFalse;
+    AjPStrTok handle = NULL;
 
     /* PEDIGREE not listed: has no ID field */
 
@@ -2383,19 +2377,19 @@ static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
         return varFieldName;
     }
 
-    ajStrTokenAssignC(&varFieldHandle, varinReadLine, "=");
+    handle = ajStrTokenNewC(varinReadLine, "=");
 
-    if(!ajStrTokenNextParse(varFieldHandle, &varFieldToken))
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
     {
-        ajStrDelStatic(&varFieldToken);
-        ajStrTokenReset(varFieldHandle);
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
         return NULL;
     }
 
-    if(!ajStrTokenNextParseC(varFieldHandle, ",", &var->Id))
+    if(!ajStrTokenNextParseC(&handle, ",", &var->Id))
     {
-        ajStrDelStatic(&varFieldToken);
-        ajStrTokenReset(varFieldHandle);
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
         return NULL;
     }
     
@@ -2403,17 +2397,17 @@ static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
 
     if(ajStrMatchC(varFieldName, "FILTER"))
     {
-        ajStrTokenRestParse(varFieldHandle, &var->Desc);
+        ajStrTokenRestParse(&handle, &var->Desc);
         ajStrTrimC(&var->Desc, "\"");
-        ajStrDelStatic(&varFieldToken);
-        ajStrTokenReset(varFieldHandle);
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
         return varFieldName;
     }
     
-    if(!ajStrTokenNextParse(varFieldHandle, &varFieldToken))
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
     {
-        ajStrDelStatic(&varFieldToken);
-        ajStrTokenReset(varFieldHandle);
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
         return NULL;
     }
     
@@ -2433,22 +2427,22 @@ static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
         default:
             if(!ajStrToInt(tmpstr, &var->Number))
             {
-                ajStrDelStatic(&varFieldToken);
-                ajStrTokenReset(varFieldHandle);
+                ajStrDel(&tmpstr);
+                ajStrTokenDel(&handle);
                 return NULL;
             }
             break;
     }
         
-    if(!ajStrTokenNextParse(varFieldHandle, &varFieldToken))
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
     {
-        ajStrDelStatic(&varFieldToken);
-        ajStrTokenReset(varFieldHandle);
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
         return NULL;
     }
 
     ajDebug("Type '%S'\n", tmpstr);
-    ajStrTokenRestParse(varFieldHandle, &var->Desc);
+    ajStrTokenRestParse(&handle, &var->Desc);
     ajStrTrimC(&var->Desc, "\"");
 
     if(ajStrMatchC(tmpstr, "Integer"))
@@ -2465,8 +2459,8 @@ static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
         return NULL;
 
 
-    ajStrDelStatic(&varFieldToken);
-    ajStrTokenReset(varFieldHandle);
+    ajStrDel(&tmpstr);
+    ajStrTokenDel(&handle);
 
     ajStrAssignS(&var->Field, varFieldName);
 
@@ -2659,46 +2653,46 @@ static ajuint varinParseListVcf(const AjPStr str, AjPStr **Parray)
 static ajuint varinDataVcf(const AjPStr str, AjPVar var)
 {
     AjPVarData vardata = ajVardataNew();
+    AjPStrTok handle = NULL;
     AjPStr token = NULL;
     ajuint n;
     ajuint i = 0;
  
     n = (ajuint) ajStrCalcCountK(str, '\t') - 8;
 
-    ajStrTokenAssignC(&varDataHandle, str, "\t\n");
-    while(ajStrTokenNextParse(varDataHandle, &varDataToken))
+    handle = ajStrTokenNewC(str, "\t\n");
+    while(ajStrTokenNextParse(&handle, &token))
     {
         switch (i++) 
         {
             case 0:             /* CHROM */
-                ajStrAssignS(&vardata->Chrom, varDataToken);
+                ajStrAssignS(&vardata->Chrom, token);
                 break;
             case 1:             /* POS */
-                ajStrToUint(varDataToken, &vardata->Pos);
+                ajStrToUint(token, &vardata->Pos);
                 break;
             case 2:             /* ID */
-                ajStrAssignS(&vardata->Id, varDataToken);
+                ajStrAssignS(&vardata->Id, token);
                 break;
             case 3:             /* REF */
-                ajStrAssignS(&vardata->Ref, varDataToken);
+                ajStrAssignS(&vardata->Ref, token);
                 break;
             case 4:             /* ALT */
-                ajStrAssignS(&vardata->Alt, varDataToken);
+                ajStrAssignS(&vardata->Alt, token);
                 break;
             case 5:             /* QUAL */
-                ajStrAssignS(&vardata->Qual, varDataToken);
+                ajStrAssignS(&vardata->Qual, token);
                 break;
             case 6:             /* FILTER */
-                ajStrAssignS(&vardata->Filter, varDataToken);
+                ajStrAssignS(&vardata->Filter, token);
                 break;
             case 7:             /* INFO */
-                ajStrAssignS(&vardata->Info, varDataToken);
+                ajStrAssignS(&vardata->Info, token);
                 break;
             case 8:             /* FORMAT */
-                ajStrAssignS(&vardata->Format, varDataToken);
+                ajStrAssignS(&vardata->Format, token);
                 break;
             default:            /* sample(s) */
-                token = ajStrNewS(varDataToken);
                 ajListPushAppend(vardata->Samples, token);
                 token = NULL;
                 break;
@@ -2708,8 +2702,8 @@ static ajuint varinDataVcf(const AjPStr str, AjPVar var)
     ajListPushAppend(var->Data, vardata);
     vardata = NULL;
 
-    ajStrDelStatic(&varDataToken);
-    ajStrTokenReset(varDataHandle);
+    ajStrDel(&token);
+    ajStrTokenDel(&handle);
 
     return n;
 }
@@ -3060,14 +3054,6 @@ void ajVarinExit(void)
     ajRegFree(&varRegDesc2);
     ajRegFree(&varRegGenomes);
     ajRegFree(&varRegMixture);
-
-    ajStrTokenDel(&varHandle);
-    ajStrTokenDel(&varDataHandle);
-    ajStrTokenDel(&varFieldHandle);
-
-    ajStrDel(&varToken);
-    ajStrDel(&varDataToken);
-    ajStrDel(&varFieldToken);
 
     VarInitVcf = ajFalse;
 
@@ -3464,11 +3450,10 @@ static AjBool varinListProcess(AjPVarin varin, AjPVar var,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStr rest  = NULL;
+    AjPStrTok handle = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
-    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -3496,30 +3481,31 @@ static AjBool varinListProcess(AjPVarin varin, AjPVar var,
 
     while(ajReadlineTrim(file, &varinReadLine))
     {
-        ++recnum;
 	varinListNoComment(&varinReadLine);
 
-        if(ajStrExtractWord(varinReadLine, &rest, &token))
-        {
-            if(ajStrGetLen(rest)) 
-            {
-                ajErr("Bad record %u in list file '%S'\n'%S'",
-                      recnum, listfile, varinReadLine);
-            }
-            else if(ajStrGetLen(token))
-            {
-                ajDebug("++Add to list: '%S'\n", token);
-                AJNEW0(node);
-                ajStrAssignS(&node->Qry, token);
-                varinQrySave(node, varin);
-                ajListPushAppend(list, node);
-            }
-        }
+	if(ajStrGetLen(varinReadLine))
+	{
+	    ajStrTokenAssignC(&handle, varinReadLine, " \t\n\r");
+	    ajStrTokenNextParse(&handle, &token);
+	    /* ajDebug("Line  '%S'\n");*/
+	    /* ajDebug("token '%S'\n", varinReadLine, token); */
+
+	    if(ajStrGetLen(token))
+	    {
+	        ajDebug("++Add to list: '%S'\n", token);
+	        AJNEW0(node);
+	        ajStrAssignS(&node->Qry, token);
+	        varinQrySave(node, varin);
+	        ajListPushAppend(list, node);
+	    }
+
+	    ajStrDel(&token);
+	    token = NULL;
+	}
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
-    ajStrDel(&rest);
 
     ajDebug("Trace varin->Input->List\n");
     ajQuerylistTrace(varin->Input->List);
@@ -3548,6 +3534,7 @@ static AjBool varinListProcess(AjPVarin varin, AjPVar var,
 	ret = varinQryProcess(varin, var);
     }
 
+    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++varinListProcess depth: %d returns: %B\n", depth, ret);
 

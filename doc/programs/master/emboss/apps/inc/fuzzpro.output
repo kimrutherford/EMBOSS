@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"

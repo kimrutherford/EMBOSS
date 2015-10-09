@@ -1,8 +1,0 @@
-# EMBOSS unfortunately uses a modified copy of the PCRE library. Upstream
-# understands the problems it causes for us, but will not remove it in the
-# short term. The other embedded and modified library is PLplot. Thanks
-# to Upstream's efforts, the emboss packages in Debian can be built
-# against Debian's zlib and expat libraries instead of the convenience code
-# copies in the original upstream sources.
-# -- Charles Plessy <plessy@debian.org>  Thu, 16 Sep 2010 20:27:09 +0900
-emboss-lib: embedded-library usr/lib/emboss/lib/libepcre.so.7.0.9: pcre3

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.19 $
+** @version $Revision: 1.17 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -62,13 +62,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic gvattributeadaptorKTablenames *********************************
+/* @conststatic gvattributeadaptorKTables *************************************
 **
 ** Array of Ensembl Genetic Variation Attribute Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvattributeadaptorKTablenames[] =
+static const char *const gvattributeadaptorKTables[] =
 {
     "attrib",
     (const char *) NULL
@@ -77,13 +77,13 @@ static const char *const gvattributeadaptorKTablenames[] =
 
 
 
-/* @conststatic gvattributeadaptorKColumnnames ********************************
+/* @conststatic gvattributeadaptorKColumns ************************************
 **
 ** Array of Ensembl Genetic Variation Attribute Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvattributeadaptorKColumnnames[] =
+static const char *const gvattributeadaptorKColumns[] =
 {
     "attrib.attrib_id",
     "attrib.attrib_type_id",
@@ -165,7 +165,7 @@ static AjBool gvattributeadaptorCacheInsert(EnsPGvattributeadaptor gvaa,
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::AttributeAdaptor
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -352,7 +352,14 @@ void ensGvattributeDel(EnsPGvattribute *Pgva)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgva) || --pthis->Use)
+    if (!*Pgva)
+        return;
+
+    pthis = *Pgva;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgva = NULL;
 
@@ -363,7 +370,9 @@ void ensGvattributeDel(EnsPGvattribute *Pgva)
 
     ajStrDel(&pthis->Value);
 
-    ajMemFree((void **) Pgva);
+    AJFREE(pthis);
+
+    *Pgva = NULL;
 
     return;
 }
@@ -559,13 +568,12 @@ AjBool ensGvattributeTrace(const EnsPGvattribute gva, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Attribute object.
 **
 ** @fdata [EnsPGvattribute]
 **
-** @nam3rule Calculate
-** Calculate Ensembl Genetic Variation Attribute information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Attribute values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gva [const EnsPGvattribute] Ensembl Genetic Variation Attribute
@@ -715,7 +723,7 @@ AjPStr ensGvattributeGetName(const EnsPGvattribute gva)
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::AttributeAdaptor
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -934,7 +942,7 @@ static AjBool gvattributeadaptorSetsInit(EnsPGvattributeadaptor gvaa)
     else
         gvaa->CacheBySet = ajVoidNew();
 
-    dba = ensGvattributeadaptorGetDatabaseadaptor(gvaa);
+    dba = ensBaseadaptorGetDatabaseadaptor(gvaa->Adaptor);
 
     statement = ajStrNewC(
         "SELECT "
@@ -1067,8 +1075,8 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 
     gvaa->Adaptor = ensBaseadaptorNew(
         dba,
-        gvattributeadaptorKTablenames,
-        gvattributeadaptorKColumnnames,
+        gvattributeadaptorKTables,
+        gvattributeadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1134,8 +1142,6 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 
 static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 {
-    AjBool result = AJFALSE;
-
     AjPList gvas = NULL;
 
     EnsPGvattribute gva = NULL;
@@ -1152,7 +1158,7 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
         return ajFalse;
     else
     {
-        gvaa->CacheByIdentifier = ajTableuintNew(0U);
+        gvaa->CacheByIdentifier = ajTableuintNew(0);
 
         ajTableSetDestroyvalue(
             gvaa->CacheByIdentifier,
@@ -1161,9 +1167,11 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 
     gvas = ajListNew();
 
-    result = ensBaseadaptorFetchAll(
-        ensGvattributeadaptorGetBaseadaptor(gvaa),
-        gvas);
+    ensBaseadaptorFetchAllbyConstraint(gvaa->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvas);
 
     while (ajListPop(gvas, (void **) &gva))
     {
@@ -1179,7 +1187,7 @@ static AjBool gvattributeadaptorCacheInit(EnsPGvattributeadaptor gvaa)
 
     ajListFree(&gvas);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -1388,14 +1396,18 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa)
                 *Pgvaa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvaa))
+    if (!*Pgvaa)
         return;
+
+    pthis = *Pgvaa;
 
     ensGvattributeadaptorCacheClear(pthis);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    ajMemFree((void **) Pgvaa);
+    AJFREE(pthis);
+
+    *Pgvaa = NULL;
 
     return;
 }
@@ -1415,7 +1427,7 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa)
 ** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * gvaa [EnsPGvattributeadaptor]
+** @argrule * gvaa [const EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor]
@@ -1434,7 +1446,7 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa)
 ** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Attribute Adaptor.
 **
-** @param [u] gvaa [EnsPGvattributeadaptor]
+** @param [r] gvaa [const EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
@@ -1444,7 +1456,7 @@ void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa)
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
-    EnsPGvattributeadaptor gvaa)
+    const EnsPGvattributeadaptor gvaa)
 {
     return (gvaa) ? gvaa->Adaptor : NULL;
 }
@@ -1457,7 +1469,7 @@ EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Attribute Adaptor.
 **
-** @param [u] gvaa [EnsPGvattributeadaptor]
+** @param [r] gvaa [const EnsPGvattributeadaptor]
 ** Ensembl Genetic Variation Attribute Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
@@ -1467,10 +1479,9 @@ EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvattributeadaptorGetDatabaseadaptor(
-    EnsPGvattributeadaptor gvaa)
+    const EnsPGvattributeadaptor gvaa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensGvattributeadaptorGetBaseadaptor(gvaa));
+    return (gvaa) ? ensBaseadaptorGetDatabaseadaptor(gvaa->Adaptor) : NULL;
 }
 
 
@@ -1610,7 +1621,11 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
                                               ajuint identifier,
                                               EnsPGvattribute *Pgva)
 {
-    AjBool result = AJFALSE;
+    AjPList gvas = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPGvattribute gva = NULL;
 
     if (!gvaa)
         return ajFalse;
@@ -1642,14 +1657,37 @@ AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
 
     /* For a cache miss re-query the database. */
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensGvattributeadaptorGetBaseadaptor(gvaa),
-        identifier,
-        (void **) Pgva);
+    constraint = ajFmtStr("attrib.attrib_id = %u", identifier);
+
+    gvas = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(gvaa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvas);
+
+    if (ajListGetLength(gvas) > 1)
+        ajWarn("ensGvattributeadaptorFetchByIdentifier got more than one "
+               "Ensembl Attribute for (PRIMARY KEY) identifier %u.\n",
+               identifier);
+
+    ajListPop(gvas, (void **) Pgva);
 
     gvattributeadaptorCacheInsert(gvaa, Pgva);
 
-    return result;
+    while (ajListPop(gvas, (void **) &gva))
+    {
+        gvattributeadaptorCacheInsert(gvaa, &gva);
+
+        ensGvattributeDel(&gva);
+    }
+
+    ajListFree(&gvas);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
 }
 
 
@@ -2029,10 +2067,9 @@ const char* ensGvattributetypeCodeToChar(EnsEGvattributetypeCode gvatc)
          i++);
 
     if (!gvattributetypeKCode[i])
-        ajDebug("ensGvattributetypeCodeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Attribute Type Code "
-                "enumeration %d.\n",
+        ajDebug("ensGvattributetypeCodeToChar encountered an "
+                "out of boundary error on Ensembl Genetic Variation "
+                "Attribute Type Code enumeration %d.\n",
                 gvatc);
 
     return gvattributetypeKCode[i];

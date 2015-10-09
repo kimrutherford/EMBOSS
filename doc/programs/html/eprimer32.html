@@ -164,7 +164,7 @@ Pick PCR primers and hybridization oligos
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Pick PCR primers and hybridization oligos
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -280,10 +280,6 @@ Version: EMBOSS:6.6.0.0
                                   and optional internal oligos. Must be a
                                   substring of the reverse strand of SEQUENCE.
                                   (Any string)
-   -okleftregion       range      [(full sequence)] Possible left primer of
-                                  pair location
-   -okrightregion      range      [(full sequence)] Possible right primer of
-                                  pair location
 *  -gcclamp            integer    [0] Require the specified number of
                                   consecutive Gs and Cs at the 3' end of both
                                   the forward and reverse primer. (This
@@ -610,6 +606,16 @@ Version: EMBOSS:6.6.0.0
                                   TASK is 1 or 4, Eprimer32 produces a file
                                   (sequence-id).int, which lists all
                                   acceptable internal oligos.
+   -firstbaseindex     integer    [1] This parameter is the index of the first
+                                  base in the input sequence. For input and
+                                  output using 1-based indexing (such as that
+                                  used in GenBank and to which many users are
+                                  accustomed) set this parameter to 1. For
+                                  input and output using 0-based indexing set
+                                  this parameter to 0. (This parameter also
+                                  affects the indexes in the contents of the
+                                  files produced when the primer file flag is
+                                  set.) (Any integer value)
    -pickanyway         boolean    [N] If true pick a primer pair even if
                                   LEFT-INPUT, RIGHT-INPUT, or
                                   INTERNAL-OLIGO-INPUT violates specific
@@ -723,7 +729,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -878,22 +883,6 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 <td>The sequence of a reverse primer to check and around which to design forward primers and optional internal oligos. Must be a substring of the reverse strand of SEQUENCE.</td>
 <td>Any string</td>
 <td>&nbsp;</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-okleftregion</td>
-<td>range</td>
-<td>Possible left primer of pair location</td>
-<td>Sequence range</td>
-<td><i>full sequence</i></td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td>-okrightregion</td>
-<td>range</td>
-<td>Possible right primer of pair location</td>
-<td>Sequence range</td>
-<td><i>full sequence</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1234,6 +1223,14 @@ An empty value for this parameter indicates that no repeat library should be use
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-firstbaseindex</td>
+<td>integer</td>
+<td>This parameter is the index of the first base in the input sequence. For input and output using 1-based indexing (such as that used in GenBank and to which many users are accustomed) set this parameter to 1. For input and output using 0-based indexing set this parameter to 0. (This parameter also affects the indexes in the contents of the files produced when the primer file flag is set.)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-pickanyway</td>
 <td>boolean</td>
 <td>If true pick a primer pair even if LEFT-INPUT, RIGHT-INPUT, or INTERNAL-OLIGO-INPUT violates specific constraints.</td>
@@ -1398,14 +1395,6 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

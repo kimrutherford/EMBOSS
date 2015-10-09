@@ -17,7 +17,7 @@ REFERENCE   1  (bases 1 to 366)
   JOURNAL   Eur. J. Immunol. 26 (9), 2225-2233 (1996)
    PUBMED   8814271
 FEATURES             Location/Qualifiers
-     source          1..366
+     source          1. .366
                      /organism="Mus musculus"
                      /mol_type="mRNA"
                      /strain="C3H/HeJ-lpr/lpr"
@@ -56,7 +56,7 @@ REFERENCE   2  (bases 1 to 1493)
   JOURNAL   Submitted (20-DEC-1994) Huber A., Universitaet Karlsruhe, Zoologie
             I, Kornblumenstr. 13, 76128 Karlsruhe, Germany
 FEATURES             Location/Qualifiers
-     source          1..1493
+     source          1. .1493
                      /organism="Rattus norvegicus"
                      /mol_type="mRNA"
                      /strain="Sprague-Dawley"
@@ -66,8 +66,8 @@ FEATURES             Location/Qualifiers
                      /tissue_type="retina"
                      /clone_lib="rat retinal library"
                      /dev_stage="adult"
-     5'UTR           1..83
-     CDS             84..1130
+     5'UTR           1. .83
+     CDS             84. .1130
                      /function="phototransduction"
                      /citation=[1]
                      /codon_start=1
@@ -88,7 +88,7 @@ FEATURES             Location/Qualifiers
                      IFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIF
                      THQGSNFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEAS
                      ATASKTETSQVAPA"
-     3'UTR           1128..1493
+     3'UTR           1128. .1493
 ORIGIN
        1  GGAGCCGTAG GTAGCTGAGC TCGCCAGGCA GCCTTGGTCT CTGTCTACGA ACAGCCCGTG
       61  GGGCAGCCTC AAGGGCCGCA GCCATGAACG GCACAGAGGG CCCCAATTTT TATGTGCCCT
@@ -137,12 +137,12 @@ REFERENCE   2  (bases 1 to 1218)
             Frosst Center for Therapeutic Research, P. O. Box 1005, Pointe
             Claire - Dorval, Quebec H9R 4P8, Canada
 FEATURES             Location/Qualifiers
-     source          1..1218
+     source          1. .1218
                      /organism="Rattus norvegicus"
                      /mol_type="mRNA"
                      /strain="Sprague-Dawley"
                      /db_xref="taxon:10116"
-     CDS             1..1218
+     CDS             1. .1218
                      /note="family 1 G-protein coupled receptor"
                      /codon_start=1
                      /product="EP1 prostanoid receptor"

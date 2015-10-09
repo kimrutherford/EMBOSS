@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.26 $
+** @version $Revision: 1.24 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -108,13 +108,13 @@ static const char *const gvsourceKType[] =
 
 
 
-/* @conststatic gvsourceadaptorKTablenames ************************************
+/* @conststatic gvsourceadaptorKTables ****************************************
 **
 ** Array of Ensembl Genetic Variation Source Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvsourceadaptorKTablenames[] =
+static const char *const gvsourceadaptorKTables[] =
 {
     "source",
     (const char *) NULL
@@ -123,13 +123,13 @@ static const char *const gvsourceadaptorKTablenames[] =
 
 
 
-/* @conststatic gvsourceadaptorKColumnnames ***********************************
+/* @conststatic gvsourceadaptorKColumns ***************************************
 **
 ** Array of Ensembl Genetic Variation Source Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvsourceadaptorKColumnnames[] =
+static const char *const gvsourceadaptorKColumns[] =
 {
     "source.source_id",
     "source.name",
@@ -204,8 +204,8 @@ static void gvsourceadaptorFetchAll(const void *key,
 ** Variation objects can reference the same data objects.
 **
 ** @cc Bio::EnsEMBL::Variation::Variation
-** @cc CVS Revision: 1.68
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.67
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -430,7 +430,14 @@ void ensGvsourceDel(EnsPGvsource *Pgvs)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvs) || --pthis->Use)
+    if (!*Pgvs)
+        return;
+
+    pthis = *Pgvs;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvs = NULL;
 
@@ -442,7 +449,9 @@ void ensGvsourceDel(EnsPGvsource *Pgvs)
     ajStrDel(&pthis->Description);
     ajStrDel(&pthis->URL);
 
-    ajMemFree((void **) Pgvs);
+    AJFREE(pthis);
+
+    *Pgvs = NULL;
 
     return;
 }
@@ -1012,12 +1021,12 @@ AjBool ensGvsourceTrace(const EnsPGvsource gvs, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Source object.
 **
 ** @fdata [EnsPGvsource]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Source information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Source values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvs [const EnsPGvsource] Ensembl Genetic Variation Source
@@ -1297,10 +1306,9 @@ const char* ensGvsourceSomaticToChar(
          i++);
 
     if (!gvsourceKSomatic[i])
-        ajDebug("ensGvsourceSomaticToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Source Somatic "
-                "enumeration %d.\n",
+        ajDebug("ensGvsourceSomaticToChar encountered an "
+                "out of boundary error on Ensembl "
+                "Genetic Variation Source Somatic enumeration %d.\n",
                 gvss);
 
     return gvsourceKSomatic[i];
@@ -1431,10 +1439,9 @@ const char* ensGvsourceTypeToChar(
          i++);
 
     if (!gvsourceKType[i])
-        ajDebug("ensGvsourceTypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Source Type "
-                "enumeration %d.\n",
+        ajDebug("ensGvsourceTypeToChar encountered an "
+                "out of boundary error on Ensembl "
+                "Genetic Variation Source Type enumeration %d.\n",
                 gvst);
 
     return gvsourceKType[i];
@@ -1457,8 +1464,8 @@ const char* ensGvsourceTypeToChar(
 ** Ensembl Genetic Variation objects can reference the same data objects.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor
-** @cc CVS Revision: 1.90
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.87
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1790,9 +1797,12 @@ static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
 
     AjPStr key = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPGvsource gvs = NULL;
 
-    EnsPMetainformation mi = NULL;
+    EnsPMetainformation        mi  = NULL;
+    EnsPMetainformationadaptor mia = NULL;
 
     if (ajDebugTest("gvsourceadaptorCacheInit"))
         ajDebug("gvsourceadaptorCacheInit\n"
@@ -1806,7 +1816,7 @@ static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
         return ajFalse;
     else
     {
-        gvsa->CacheByIdentifier = ajTableuintNew(0U);
+        gvsa->CacheByIdentifier = ajTableuintNew(0);
 
         ajTableSetDestroyvalue(
             gvsa->CacheByIdentifier,
@@ -1817,7 +1827,7 @@ static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
         return ajFalse;
     else
     {
-        gvsa->CacheByName = ajTablestrNew(0U);
+        gvsa->CacheByName = ajTablestrNew(0);
 
         ajTableSetDestroyvalue(
             gvsa->CacheByName,
@@ -1826,15 +1836,15 @@ static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
 
     /* Get the default Ensembl Genetic Variation Source. */
 
+    dba = ensBaseadaptorGetDatabaseadaptor(gvsa->Adaptor);
+
+    mia = ensRegistryGetMetainformationadaptor(dba);
+
     key = ajStrNewC("source.default_source");
 
     mis = ajListNew();
 
-    ensMetainformationadaptorFetchAllbyKey(
-        ensRegistryGetMetainformationadaptor(
-            ensGvsourceadaptorGetDatabaseadaptor(gvsa)),
-        key,
-        mis);
+    ensMetainformationadaptorFetchAllbyKey(mia, key, mis);
 
     ajStrDel(&key);
 
@@ -1844,12 +1854,11 @@ static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
 
     gvss = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(
-        ensGvsourceadaptorGetBaseadaptor(gvsa),
-        (const AjPStr) NULL,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvss);
+    ensBaseadaptorFetchAllbyConstraint(gvsa->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvss);
 
     while (ajListPop(gvss, (void **) &gvs))
     {
@@ -1942,8 +1951,8 @@ EnsPGvsourceadaptor ensGvsourceadaptorNew(EnsPDatabaseadaptor dba)
 
     gvsa->Adaptor = ensBaseadaptorNew(
         dba,
-        gvsourceadaptorKTablenames,
-        gvsourceadaptorKColumnnames,
+        gvsourceadaptorKTables,
+        gvsourceadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2025,8 +2034,10 @@ void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa)
                 *Pgvsa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvsa))
+    if (!*Pgvsa)
         return;
+
+    pthis = *Pgvsa;
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
@@ -2035,7 +2046,9 @@ void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa)
 
     ensGvsourceDel(&pthis->DefaultGvsource);
 
-    ajMemFree((void **) Pgvsa);
+    AJFREE(pthis);
+
+    *Pgvsa = NULL;
 
     return;
 }
@@ -2054,7 +2067,7 @@ void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa)
 ** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * gvsa [EnsPGvsourceadaptor]
+** @argrule * gvsa [const EnsPGvsourceadaptor]
 ** Ensembl Genetic Variation Source Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor]
@@ -2073,7 +2086,7 @@ void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa)
 ** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Source Adaptor.
 **
-** @param [u] gvsa [EnsPGvsourceadaptor]
+** @param [r] gvsa [const EnsPGvsourceadaptor]
 ** Ensembl Genetic Variation Source Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
@@ -2083,7 +2096,7 @@ void ensGvsourceadaptorDel(EnsPGvsourceadaptor *Pgvsa)
 ******************************************************************************/
 
 EnsPBaseadaptor ensGvsourceadaptorGetBaseadaptor(
-    EnsPGvsourceadaptor gvsa)
+    const EnsPGvsourceadaptor gvsa)
 {
     return (gvsa) ? gvsa->Adaptor : NULL;
 }
@@ -2096,7 +2109,7 @@ EnsPBaseadaptor ensGvsourceadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Source Adaptor.
 **
-** @param [u] gvsa [EnsPGvsourceadaptor]
+** @param [r] gvsa [const EnsPGvsourceadaptor]
 ** Ensembl Genetic Variation Source Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
@@ -2106,10 +2119,9 @@ EnsPBaseadaptor ensGvsourceadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensGvsourceadaptorGetDatabaseadaptor(
-    EnsPGvsourceadaptor gvsa)
+    const EnsPGvsourceadaptor gvsa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensGvsourceadaptorGetBaseadaptor(gvsa));
+    return (gvsa) ? ensBaseadaptorGetDatabaseadaptor(gvsa->Adaptor) : NULL;
 }
 
 
@@ -2328,7 +2340,11 @@ AjBool ensGvsourceadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGvsource *Pgvs)
 {
-    AjBool result = AJFALSE;
+    AjPList gvss = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPGvsource gvs = NULL;
 
     if (!gvsa)
         return ajFalse;
@@ -2338,8 +2354,6 @@ AjBool ensGvsourceadaptorFetchByIdentifier(
 
     if (!Pgvs)
         return ajFalse;
-
-    *Pgvs = NULL;
 
     /*
     ** Initially, search the identifier cache.
@@ -2362,14 +2376,38 @@ AjBool ensGvsourceadaptorFetchByIdentifier(
 
     /* For a cache miss re-query the database. */
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensGvsourceadaptorGetBaseadaptor(gvsa),
-        identifier,
-        (void **) Pgvs);
+    constraint = ajFmtStr("source.source_id = %u", identifier);
+
+    gvss = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(gvsa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvss);
+
+    if (ajListGetLength(gvss) > 1)
+        ajWarn("ensGvsourceadaptorFetchByIdentifier got more than one "
+               "Ensembl Genetic Variation Source objects for (PRIMARY KEY) "
+               "identifier %u.\n",
+               identifier);
+
+    ajListPop(gvss, (void **) Pgvs);
 
     gvsourceadaptorCacheInsert(gvsa, Pgvs);
 
-    return result;
+    while (ajListPop(gvss, (void **) &gvs))
+    {
+        gvsourceadaptorCacheInsert(gvsa, &gvs);
+
+        ensGvsourceDel(&gvs);
+    }
+
+    ajListFree(&gvss);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
 }
 
 
@@ -2400,13 +2438,9 @@ AjBool ensGvsourceadaptorFetchByName(
 {
     char *txtname = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList gvss = NULL;
 
     AjPStr constraint = NULL;
-
-    EnsPBaseadaptor ba = NULL;
 
     EnsPGvsource gvs = NULL;
 
@@ -2418,8 +2452,6 @@ AjBool ensGvsourceadaptorFetchByName(
 
     if (!Pgvs)
         return ajFalse;
-
-    *Pgvs = NULL;
 
     /*
     ** Initially, search the name cache.
@@ -2441,9 +2473,7 @@ AjBool ensGvsourceadaptorFetchByName(
 
     /* In case of a cache miss, re-query the database. */
 
-    ba = ensGvsourceadaptorGetBaseadaptor(gvsa);
-
-    ensBaseadaptorEscapeC(ba, &txtname, name);
+    ensBaseadaptorEscapeC(gvsa->Adaptor, &txtname, name);
 
     constraint = ajFmtStr("source.name = '%s'", txtname);
 
@@ -2451,12 +2481,11 @@ AjBool ensGvsourceadaptorFetchByName(
 
     gvss = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        gvss);
+    ensBaseadaptorFetchAllbyConstraint(gvsa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       gvss);
 
     if (ajListGetLength(gvss) > 1)
         ajWarn("ensGvsourceadaptorFetchByName got more than one "
@@ -2478,7 +2507,7 @@ AjBool ensGvsourceadaptorFetchByName(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 

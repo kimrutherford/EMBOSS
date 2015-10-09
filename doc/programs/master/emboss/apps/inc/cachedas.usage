@@ -138,8 +138,7 @@ Note: the coordinate system for this source was guessed by an automated proceedu
 DS_226                         GENCODE sequences                                 
 ENCODE peptide reference server.
 DS_227                         GENCODE alignments                                
-Local and global gapped alignments with UniProt and 
-UniParc using Exonerate 1.0.
+Local and global gapped alignments with UniProt and UniParc using Exonerate 1.0.
 DS_228                         GENCODE Pfam                                      
 Putative domains predicted using Pfam HMMs on ENCODE peptides.
 DS_229                         GENCODE PDBsum                                    
@@ -1883,94 +1882,94 @@ DS_2782                        Mus_musculus.VEGA44.transcript
 Annotation source for Mus_musculus transcript
 DS_2783                        Mus_musculus.VEGA44.translation                   
 Annotation source for Mus_musculus translation
-DS_2784                        RRBS HIPEpiC                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Iris Pigment Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+DS_2784                        RRBS HIPE                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HIPE cells (merged replicates).
 DS_2785                        RRBS HRE                                          
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Renal Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HRE cells (merged replicates).
 DS_2786                        RRBS HEK293                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Embryonic Kidney (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2787                        RRBS HRPEpiC                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Retinal Pigment Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2788                        RRBS HPAEpiC                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Pulmonary alveolar epithelial cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2789                        RRBS NT2-D1                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Malignant Pluripotent Testicular Embryonal Carcinoma (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HEK293 cells (merged replicates).
+DS_2787                        RRBS HRPE                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HRPE cells (merged replicates).
+DS_2788                        RRBS HPAE                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HPAE cells (merged replicates).
+DS_2789                        RRBS NT2D1                                        
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for NT2D1 cells (merged replicates).
 DS_2790                        RRBS NB4                                          
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Acute Promyelocytic Leukemia Cell Line (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for NB4 cells (merged replicates).
 DS_2791                        RRBS CMK                                          
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Acute Megakaryocytic Leukemia Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2792                        RRBS IMR90                                        
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Fetal Lung Fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for CMK cells (merged replicates).
+DS_2792                        RRBS IMR-90                                       
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for IMR-90 cells (merged replicates).
 DS_2793                        RRBS GM12892                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for B-Lymphocyte (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2794                        RRBS SKNSHRA                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Neuroblastoma Cell Line Differentiated with Retinoic acid (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2795                        RRBS HNPCEpiC                                     
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Non-Pignment Ciliary Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for GM12892 cells (merged replicates).
+DS_2794                        RRBS SKNShra                                      
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for SKNShra cells (merged replicates).
+DS_2795                        RRBS HNPCE                                        
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HNPCE cells (merged replicates).
 DS_2796                        RRBS GM12891                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for B-Lymphocyte (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for GM12891 cells (merged replicates).
 DS_2797                        RRBS SAEC                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Small Airway Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for SAEC cells (merged replicates).
 DS_2798                        RRBS AG09309                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Adult human toe fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2799                        RRBS h1ESC                                        
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Embryonic Stem Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2800                        RRBS PanIslets                                    
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Pancreatic Islets (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for AG09309 cells (merged replicates).
+DS_2799                        RRBS H1-hESC                                      
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for H1-hESC cells (merged replicates).
+DS_2800                        RRBS PanIslet                                     
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Pancreatic Islet cells (merged replicates).
 DS_2801                        RRBS HCT116                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Colorectal Carcinoma (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HCT116 cells (merged replicates).
 DS_2802                        RRBS GM12878                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Lymphoblastoid (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2803                        RRBS HCPEpiC                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Choroid Plexus Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for GM12878 cells (merged replicates).
+DS_2803                        RRBS HCPE                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HCPE cells (merged replicates).
 DS_2804                        RRBS AG10803                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Adult Human Abdominal Skin Fibroblasts (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2805                        RRBS NH-A                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Astrocytes  (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2806                        RRBS Osteobl                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Osteoblasts (NHOst) (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2807                        RRBS MCF7                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Breast Cancer (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2808                        RRBS JURKAT                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for T Lymphoblastoid (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2809                        RRBS SKMC                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Skeletal Muscle Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for AG10803 cells (merged replicates).
+DS_2805                        RRBS NHA                                          
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for NHA cells (merged replicates).
+DS_2806                        RRBS Osteoblast                                   
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Osteoblast cells (merged replicates).
+DS_2807                        RRBS MCF-7                                        
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for MCF-7 cells (merged replicates).
+DS_2808                        RRBS Jurkat                                       
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Jurkat cells (merged replicates).
+DS_2809                        RRBS SkMC                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Skeletal Muscle cells (merged replicates).
 DS_2810                        RRBS HCM                                          
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Cardiac Myocytes (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2811                        RRBS HRCEpiC                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Renal Cortical Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HCM cells (merged replicates).
+DS_2811                        RRBS HRCE                                         
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HRCE cells (merged replicates).
 DS_2812                        RRBS AG09319                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Adult human gum tissue fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for AG09319 cells (merged replicates).
 DS_2813                        RRBS NHDF-neo                                     
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Neonatal Human Dermal Fibroblasts (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2814                        RRBS HEEpiC                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Esophageal Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2815                        RRBS HAEpiC                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Amniotic Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for NHDF-neo cells (merged replicates).
+DS_2814                        RRBS HEE                                          
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HEE cells (merged replicates).
+DS_2815                        RRBS HAE                                          
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HAE cells (merged replicates).
 DS_2816                        RRBS HMEC                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Mammary Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HMEC cells (merged replicates).
 DS_2817                        RRBS GM19240                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for B-Lymphocyte (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for GM19240 cells (merged replicates).
 DS_2818                        RRBS AG04450                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Fetal lung fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2819                        RRBS HSMMtube                                     
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for skeletal muscle myotubes differentiated from the HSMM cell line (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2820                        RRBS HEPG2                                        
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Hepatocellular Liver Carcinoma Cell (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for AG04450 cells (merged replicates).
+DS_2819                        RRBS HSMMt                                        
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HSMMt cells (merged replicates).
+DS_2820                        RRBS Hep-G2                                       
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Hep-G2 cells (merged replicates).
 DS_2821                        RRBS GM19239                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for B-Lymphocyte (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for GM19239 cells (merged replicates).
 DS_2822                        RRBS K562                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Mylogenous Leukaemia Line (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2823                        RRBS Fibrobl                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Child Fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for K562 cells (merged replicates).
+DS_2823                        RRBS Fibroblast                                   
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Fibroblast cells (merged replicates).
 DS_2824                        RRBS NHBE                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Normal Human Bronchial Epithelial Cells (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for NHBE cells (merged replicates).
 DS_2825                        RRBS HCF                                          
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Cardiac Fibroblasts (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for HCF cells (merged replicates).
 DS_2826                        RRBS AG04449                                      
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Fetal thigh fibroblast (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_2827                        RRBS Melano                                       
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Melanocytes (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for AG04449 cells (merged replicates).
+DS_2827                        RRBS Melanocyte                                   
+Reduced representation bisulphite sequencing (RRBS) from ENCODE for Melanocyte cells (merged replicates).
 DS_4075                        Homo_sapiens.VEGA46-clone.transcript              
 Annotation source (returns clones) for Homo_sapiens transcript
 DS_4076                        Homo_sapiens.VEGA46-clone.translation             
@@ -3583,37 +3582,6 @@ DS_6737                        Trichoplax_adhaerens.TRIAD1.transcript
 Annotation source for Trichoplax_adhaerens transcript
 DS_6738                        Trichoplax_adhaerens.TRIAD1.translation           
 Annotation source for Trichoplax_adhaerens translation
-DS_6739                        RefSeq_rat_3_4                                    
-RefSeq for Rat 3.4
-DS_6740                        Mouse fosmids m38                                 
-WIBR-1 mouse Fosmid end read sequences have been mapped to the GRCm38 Mouse assembly using SSAHA.
-DS_6742                        RRBS HSMM                                         
-Reduced representation bisulphite sequencing (RRBS) from ENCODE for Human Skeletal Muscle Myoblasts (merged replicates). A colour gradient indicates methylation level: dark blue indicates highly methylated areas, through green to yellow, which indicates low methylation.
-DS_6743                        Micer clones m38                                  
-MHPP/MHPN library end-sequences have been mapped to GRCm38 mouse assembly using SSAHA alignment of the reads.
-DS_6744                        129S7/AB2.2 clones m38                            
-129S7/AB2.2 BAC Library, mapped to the GRCm38 mouse assembly. The 129S7/AB2.2 mouse BAC library end-sequences have been mapped to the GRCm38 mouse assembly using SSAHA alignment of the reads.
-DS_6746                        MSM clones m38                                    
-MSM BAC Library, mapped to the GRCm38 mouse assembly. The MSM mouse BAC library end-sequences have been mapped to the GRCm38 mouse assembly using SSAHA alignment of the reads.
-DS_6748                        DIL NOD clones m38                                
-DIL NOD BAC Library, mapped to the GRCm38 mouse assembly. The NOD/MrkTac mouse BAC library end-sequences have been mapped to the GRCm38 mouse assembly using SSAHA alignment of the reads.
-DS_6750                        BAC map m38                                       
-BAC Clones (RP23/24 libraries) DAS Source For GRCm38 C57BL/6J Mouse Assembly:  End read sequences have been mapped to the GRCm38 Mouse assembly using SSAHA. 
-DS_6752                        CHORI29 clones m38                                
-CHORI-29 NOD BAC Library, mapped to the GRCm38 mouse assembly. The NOD/ShiLtJ mouse BAC library end-sequences have been mapped to the GRCm38 mouse assembly using SSAHA alignment of the reads.
-DS_6754                        GenomeRNAi Phenotypes                             
-RNAi knockdown phenotypes from the
-GenomeRNAi database for Homo Sapiens
-DS_6755                        GenomeRNAi Reagents                               
-RNAi reagents from the GenomeRNAi
-database for Homo Sapiens
-DS_6756                        GenomeRNAi Reagents                               
-RNAi reagents from the GenomeRNAi
-database for Drosophila Melanogaster
-DS_6757                        GenomeRNAi Phenotypes                             
-RNAi knockdown phenotypes from the
-GenomeRNAi database for Drosophila
-Melanogaster
 
 </pre></td></tr></table><p>
 <p>

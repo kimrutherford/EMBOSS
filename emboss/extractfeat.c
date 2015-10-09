@@ -814,7 +814,7 @@ static AjBool extractfeat_MatchFeature(const AjPFeature gf,
         val = ajFalse;
         tokens = ajStrTokenNewC(type, " \t\n\r,;|");
 
-        while (ajStrTokenNextParse(tokens, &key))
+        while (ajStrTokenNextParse( &tokens, &key))
         {
             if (ajFeatTypeMatchWildS(gf, key))
             {

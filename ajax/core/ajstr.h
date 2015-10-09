@@ -12,9 +12,9 @@
 ** that it can be simply freed.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.103 $
+** @version $Revision: 1.101 $
 ** @modified 1998-2011 Peter Rice
-** @modified $Date: 2012/12/07 09:52:11 $ by $Author: rice $
+** @modified $Date: 2011/10/03 11:39:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -209,13 +209,6 @@ char*      ajCharNull(void);
 
 void       ajCharDel(char** Ptxt);
 
-/* filters */
-
-char*      ajCharGetfilter(const char *txt);
-char*      ajCharGetfilterCase(const char *txt);
-char*      ajCharGetfilterUpper(const char *txt);
-char*      ajCharGetfilterLower(const char *txt);
-
 /* formatting */
 
 AjBool     ajCharFmtLower(char *txt);
@@ -277,14 +270,10 @@ void       ajStrDel(AjPStr* Pstr);
 void       ajStrDelarray(AjPStr** PPstr);
 AjBool     ajStrDelStatic(AjPStr* Pstr);
 
-#define MAJSTRDEL(Pstr) {                       \
-        if(*Pstr)                               \
-        {                                               \
-            if((*Pstr)->Use <= 1) ajStrDel(Pstr);       \
-            else {--(*Pstr)->Use;(*Pstr) = NULL;}       \
-        }                                               \
-    }
-        
+#define MAJSTRDEL(Pstr) if(*Pstr)               \
+    {if((*Pstr)->Use <= 1) ajStrDel(Pstr);      \
+        else {--(*Pstr)->Use;(*Pstr) = NULL;}}
+
 /* assignment */
 
 AjBool     ajStrAssignC(AjPStr* Pstr, const char* txt);
@@ -295,12 +284,6 @@ AjBool     ajStrAssignEmptyC(AjPStr* pthis, const char* str);
 AjBool     ajStrAssignEmptyS(AjPStr* pthis, const AjPStr str);
 AjBool     ajStrAssignLenC(AjPStr* Pstr, const char* txt, size_t ilen);
 AjBool     ajStrAssignRef(AjPStr* Pstr, AjPStr refstr);
-#define MAJSTRASSIGNREF(Pstr,refstr) {                  \
-        MAJSTRDEL(Pstr);                                \
-        (refstr)->Use++;                                \
-        *(Pstr) = (refstr);                             \
-    }
-
 AjBool     ajStrAssignResC(AjPStr* Pstr, size_t size, const char* txt);
 AjBool     ajStrAssignResS(AjPStr* Pstr, size_t i, const AjPStr str);
 AjBool     ajStrAssignSubC(AjPStr* Pstr, const char* txt,
@@ -308,16 +291,8 @@ AjBool     ajStrAssignSubC(AjPStr* Pstr, const char* txt,
 AjBool     ajStrAssignSubS(AjPStr* Pstr, const AjPStr str,
                            ajlong pos1, ajlong pos2);
 
-#define MAJSTRASSIGNCLEAR(Pstr) {               \
-        if((*Pstr) && (*Pstr)->Use == 1)        \
-        {                                       \
-            (*Pstr)->Ptr[0]='\0';               \
-            (*Pstr)->Len=0;                     \
-        } else {                                \
-            ajStrAssignClear(Pstr);             \
-    }                                           \
-}
-
+#define MAJSTRASSIGNCLEAR(Pstr) if((*Pstr) && (*Pstr)->Use == 1)        \
+    {(*Pstr)->Ptr[0]='\0';(*Pstr)->Len=0;} else {ajStrAssignClear(Pstr);}
 
 
 /* combination */
@@ -372,7 +347,6 @@ AjBool     ajStrKeepSetAlphaRestC(AjPStr* Pstr, const char* txt,
 AjBool     ajStrKeepSetAlphaRestS(AjPStr* Pstr, const AjPStr str,
                                   AjPStr* Prest);
 AjBool     ajStrKeepSetAscii(AjPStr* Pstr, int minchar, int maxchar);
-AjBool     ajStrKeepSetFilter(AjPStr* Pstr, const char* filter);
 AjBool     ajStrQuoteStrip(AjPStr *Pstr);
 AjBool     ajStrQuoteStripAll(AjPStr *Pstr);
 AjBool     ajStrRemoveDupchar(AjPStr* Pstr);
@@ -430,7 +404,6 @@ AjBool     ajStrIsCharsetS(const AjPStr str, const AjPStr str2);
 AjBool     ajStrIsCharsetCaseC(const AjPStr str, const char* txt);
 AjBool     ajStrIsCharsetCaseS(const AjPStr str, const AjPStr str2);
 AjBool     ajStrIsDouble(const AjPStr str);
-AjBool     ajStrIsFilter(const AjPStr str, const char* filter);
 AjBool     ajStrIsFloat(const AjPStr str);
 AjBool     ajStrIsHex(const AjPStr str);
 AjBool     ajStrIsInt(const AjPStr str);
@@ -449,19 +422,8 @@ char       ajStrGetAsciiCommon(const AjPStr str);
 char       ajStrGetAsciiHigh(const AjPStr str);
 char       ajStrGetAsciiLow(const AjPStr str);
 char       ajStrGetCharFirst(const AjPStr str);
-#define    MAJSTRGETCHARFIRST(str) ((str)->Ptr[0])
 char       ajStrGetCharLast(const AjPStr str);
-#define    MAJSTRGETCHARLAST(str) ((str)->Len ?                         \
-                                   (str)->Ptr[(str)->Len-1] : '\0')
-
 char       ajStrGetCharPos(const AjPStr str, ajlong pos);
-#define    MAJSTRGETCHARPOS(str, pos) ((pos) > 0 ?  \
-    (str)->Ptr[(pos)] :                             \
-    (str)->Ptr[(str)->Len + (pos))
-char*      ajStrGetfilter(const AjPStr str);
-char*      ajStrGetfilterCase(const AjPStr str);
-char*      ajStrGetfilterUpper(const AjPStr str);
-char*      ajStrGetfilterLower(const AjPStr str);
 size_t     ajStrGetLen(const AjPStr str);
 #define    MAJSTRGETLEN(str) ((str) ? (str)->Len : 0)
 const char* ajStrGetPtr(const AjPStr str);
@@ -476,8 +438,6 @@ AjBool     ajStrGetValid(const AjPStr thys);
 /* modifiable string retrieval */
 
 char*      ajStrGetuniquePtr(AjPStr *Pstr);
-#define MAJSTRGETUNIQUEPTR(Pstr) (((*Pstr)->Use > 1) ?                  \
-                                  ajStrGetuniquePtr(Pstr) : (*Pstr)->Ptr)
 #define MAJSTRGETUNIQUESTR(Pstr) (((*Pstr)->Use > 1) ?                  \
                                   ajStrGetuniqueStr(Pstr) : *Pstr)
 AjPStr     ajStrGetuniqueStr(AjPStr *Pstr);
@@ -491,8 +451,6 @@ AjBool     ajStrSetValid(AjPStr *Pstr);
 AjBool     ajStrSetValidLen(AjPStr* Pstr, size_t len);
 
 #define MAJSTRSETVALIDLEN(Pstr,len) (*Pstr)->Len = len
-
-
 
 /* string to datatype conversion functions */
 
@@ -519,7 +477,6 @@ AjBool     ajStrFromVoid(AjPStr* Pstr, const void* val);
 /* formatting */
 
 AjBool     ajStrFmtBlock(AjPStr* pthis, ajulong blksize);
-AjBool     ajStrFmtCapital(AjPStr* Pstr);
 AjBool     ajStrFmtLower(AjPStr* Pstr);
 AjBool     ajStrFmtLowerSub(AjPStr* Pstr, ajlong pos1, ajlong pos2);
 AjBool     ajStrFmtPercentDecode(AjPStr* Pstr);
@@ -556,7 +513,6 @@ AjBool     ajStrPrefixC(const AjPStr str, const char* txt2);
 AjBool     ajStrPrefixS(const AjPStr str, const AjPStr str2);
 AjBool     ajStrPrefixCaseC(const AjPStr str, const char* pref);
 AjBool     ajStrPrefixCaseS(const AjPStr str, const AjPStr pref);
-
 AjBool     ajStrSuffixC(const AjPStr thys, const char* suff);
 AjBool     ajStrSuffixS(const AjPStr thys, const AjPStr suff);
 AjBool     ajStrSuffixCaseC(const AjPStr str, const char* pref);
@@ -581,7 +537,6 @@ int        ajStrVcmp(const void* str1, const void* str2);
 /* comparison (search) */
 
 ajlong     ajStrFindC(const AjPStr str, const char* txt);
-ajlong     ajStrFindK(const AjPStr str, char chr);
 ajlong     ajStrFindS(const AjPStr str, const AjPStr str2);
 ajlong     ajStrFindAnyC(const AjPStr str, const char* txt);
 ajlong     ajStrFindAnyK(const AjPStr str, char chr);
@@ -688,7 +643,7 @@ AjBool     ajStrTokenAssigncharS(AjPStrTok* Ptoken, const char *txt,
 
 /* reset */
 
-void       ajStrTokenReset(AjPStrTok token);
+void       ajStrTokenReset(AjPStrTok* Ptoken);
 
 /* debug */
 
@@ -696,21 +651,18 @@ void       ajStrTokenTrace(const AjPStrTok token);
 
 /* parsing */
 
-AjBool     ajStrTokenNextFind(AjPStrTok token, AjPStr* Pstr);
-AjBool     ajStrTokenNextFindC(AjPStrTok token, const char* strdelim,
+AjBool     ajStrTokenNextFind(AjPStrTok* Ptoken, AjPStr* Pstr);
+AjBool     ajStrTokenNextFindC(AjPStrTok* Ptoken, const char* strdelim,
                                AjPStr* Pstr);
-AjBool     ajStrTokenNextParse(AjPStrTok token, AjPStr* Pstr);
-AjBool     ajStrTokenNextParseC(AjPStrTok token, const char* txtdelim,
+AjBool     ajStrTokenNextParse(AjPStrTok* Ptoken, AjPStr* Pstr);
+AjBool     ajStrTokenNextParseC(AjPStrTok* Ptoken, const char* txtdelim,
                                 AjPStr* Pstr);
-AjBool     ajStrTokenNextParseS(AjPStrTok token, const AjPStr strdelim,
+AjBool     ajStrTokenNextParseS(AjPStrTok* Ptoken, const AjPStr strdelim,
                                 AjPStr* Pstr);
-AjBool     ajStrTokenNextParseNoskip(AjPStrTok token, AjPStr* Pstr);
-AjBool     ajStrTokenNextParseDelimiters(AjPStrTok token, AjPStr* Pstr,
+AjBool     ajStrTokenNextParseNoskip(AjPStrTok* Ptoken, AjPStr* Pstr);
+AjBool     ajStrTokenNextParseDelimiters(AjPStrTok* Ptoken, AjPStr* Pstr,
                                          AjPStr* Pdelim);
-AjBool     ajStrTokenRestParse(AjPStrTok token, AjPStr* Pstr);
-AjBool     ajStrTokenStep(AjPStrTok token);
-AjBool     ajStrTokenStepC(AjPStrTok token, const char* txtdelim);
-AjBool     ajStrTokenStepS(AjPStrTok token, const AjPStr strdelim);
+AjBool     ajStrTokenRestParse(AjPStrTok* Ptoken, AjPStr* Pstr);
 
 /*
 ** End of prototype definitions

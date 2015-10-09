@@ -131,7 +131,7 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 	{
 	    gf = ajListIterGet(iter) ;
 	    tokens = ajStrTokenNewC(type, whiteSpace);
-	    while(ajStrTokenNextParse(tokens, &key))
+	    while(ajStrTokenNextParse( &tokens, &key))
 		if(ajStrMatchWildS(ajFeatGetType(gf), key))
 		{
 		    if(lower)

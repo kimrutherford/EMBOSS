@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX taxonomy reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.31 $
+** @version $Revision: 1.27 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/12/07 10:10:52 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -52,7 +52,6 @@ static AjPStr taxinReadLine     = NULL;
 #define TAXFLAG_HIDDENSUBTREE 0x20
 
 
-static AjBool taxinReadEbi(AjPTaxin thys, AjPTax tax);
 static AjBool taxinReadNcbi(AjPTaxin thys, AjPTax tax);
 
 
@@ -96,9 +95,6 @@ static TaxOInFormat taxinFormatDef[] =
   {"ncbi",          "NCBI taxonomy format",
        AJFALSE, AJTRUE,
        &taxinReadNcbi},
-  {"taxonomy",      "EBI taxonomy format",
-       AJFALSE, AJTRUE,
-       &taxinReadEbi},
   {NULL, NULL, 0, 0, NULL}
 };
 
@@ -1047,49 +1043,6 @@ static AjBool taxinRead(AjPTaxin taxin, AjPTax tax)
 
 
 
-/* @funcstatic taxinReadEbi ***************************************************
-**
-** Given data in a taxonomy structure, tries to read everything needed
-** using EBI format.
-**
-** @param [u] taxin [AjPTaxin] Tax input object
-** @param [w] tax [AjPTax] tax object
-** @return [AjBool] ajTrue on success
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-static AjBool taxinReadEbi(AjPTaxin taxin, AjPTax tax)
-{
-    AjPFilebuff buff;
-
-    ajlong fpos     = 0;
-    ajuint linecnt = 0;
-
-    AjPStrTok handle = NULL;
-    AjPStr tmpstr = NULL;
-
-    ajDebug("taxinReadEbi\n");
-    ajTaxClear(tax);
-    buff = taxin->Input->Filebuff;
-
-    /* ajFilebuffTrace(buff); */
-
-    while(ajBuffreadLinePos(buff, &taxinReadLine, &fpos))
-    {
-        linecnt++;
-    }
-
-    ajStrTokenDel(&handle);
-    ajStrDel(&tmpstr);
-
-    return ajTrue;
-}
-
-
-
-
 /* @funcstatic taxinReadNcbi **************************************************
 **
 ** Given data in a taxonomy structure, tries to read everything needed
@@ -1129,66 +1082,66 @@ static AjBool taxinReadNcbi(AjPTaxin taxin, AjPTax tax)
         linecnt++;
         if(linecnt == 1)
         {
-            ajStrTokenNextParse(handle, &tax->Id);         
+            ajStrTokenNextParse(&handle, &tax->Id);         
             ajStrTrimWhite(&tax->Id);
             ajStrToUint(tax->Id, &tax->Taxid);
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             ajStrToUint(tmpstr, &tax->Parent);
 
-            ajStrTokenNextParse(handle, &tax->Rank);         
+            ajStrTokenNextParse(&handle, &tax->Rank);         
             ajStrTrimWhite(&tax->Rank);
 
-            ajStrTokenNextParse(handle, &tax->Emblcode);         
+            ajStrTokenNextParse(&handle, &tax->Emblcode);         
             ajStrTrimWhite(&tax->Emblcode);
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             ajStrToUint(tmpstr, &icode);
             tax->Divid = icode;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(ajStrMatchC(tmpstr, "1"))
                 tax->Flags |= 1;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             ajStrToUint(tmpstr, &icode);
             tax->Gencode = icode;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(ajStrMatchC(tmpstr, "1"))
                 tax->Flags |= 2;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             ajStrToUint(tmpstr, &icode);
             tax->Mitocode = icode;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(ajStrMatchC(tmpstr, "1"))
                 tax->Flags |= 4;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(ajStrMatchC(tmpstr, "1"))
                 tax->Flags |= 8;
 
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(ajStrMatchC(tmpstr, "1"))
                 tax->Flags |= 16;
 
-            ajStrTokenNextParse(handle, &tax->Comment);         
+            ajStrTokenNextParse(&handle, &tax->Comment);         
             ajStrTrimWhite(&tax->Comment);
         }
         else
         {
-            ajStrTokenNextParse(handle, &tmpstr);         
+            ajStrTokenNextParse(&handle, &tmpstr);         
             ajStrTrimWhite(&tmpstr);
             if(!ajStrMatchS(tax->Id, tmpstr))
             {
@@ -1199,13 +1152,13 @@ static AjBool taxinReadNcbi(AjPTaxin taxin, AjPTax tax)
 
             name = ajTaxnameNew();
 
-            ajStrTokenNextParse(handle, &name->Name);         
+            ajStrTokenNextParse(&handle, &name->Name);         
             ajStrTrimWhite(&name->Name);
 
-            ajStrTokenNextParse(handle, &name->UniqueName);         
+            ajStrTokenNextParse(&handle, &name->UniqueName);         
             ajStrTrimWhite(&name->UniqueName);
 
-            ajStrTokenNextParse(handle, &name->NameClass);         
+            ajStrTokenNextParse(&handle, &name->NameClass);         
             ajStrTrimWhite(&name->NameClass);
 
             if(ajStrMatchC(name->NameClass, "scientific name"))
@@ -1952,11 +1905,10 @@ static AjBool taxinListProcess(AjPTaxin taxin, AjPTax tax,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStr rest  = NULL;
+    AjPStrTok handle = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
-    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -1984,31 +1936,31 @@ static AjBool taxinListProcess(AjPTaxin taxin, AjPTax tax,
 
     while(ajReadlineTrim(file, &taxinReadLine))
     {
-        ++recnum;
 	taxinListNoComment(&taxinReadLine);
 
-        if(ajStrExtractWord(taxinReadLine, &rest, &token))
-        {
-            
-            if(ajStrGetLen(rest)) 
-            {
-                ajErr("Bad record %u in list file '%S'\n'%S'",
-                      recnum, listfile, taxinReadLine);
-            }
-            else if(ajStrGetLen(token))
-            {
-                ajDebug("++Add to list: '%S'\n", token);
-                AJNEW0(node);
-                ajStrAssignS(&node->Qry, token);
-                taxinQrySave(node, taxin);
-                ajListPushAppend(list, node);
-            }
-        }
+	if(ajStrGetLen(taxinReadLine))
+	{
+	    ajStrTokenAssignC(&handle, taxinReadLine, " \t\n\r");
+	    ajStrTokenNextParse(&handle, &token);
+	    /* ajDebug("Line  '%S'\n");*/
+	    /* ajDebug("token '%S'\n", taxinReadLine, token); */
+
+	    if(ajStrGetLen(token))
+	    {
+	        ajDebug("++Add to list: '%S'\n", token);
+	        AJNEW0(node);
+	        ajStrAssignS(&node->Qry, token);
+	        taxinQrySave(node, taxin);
+	        ajListPushAppend(list, node);
+	    }
+
+	    ajStrDel(&token);
+	    token = NULL;
+	}
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
-    ajStrDel(&rest);
 
     ajDebug("Trace taxin->Input->List\n");
     ajQuerylistTrace(taxin->Input->List);
@@ -2037,6 +1989,7 @@ static AjBool taxinListProcess(AjPTaxin taxin, AjPTax tax,
 	ret = taxinQryProcess(taxin, tax);
     }
 
+    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++taxinListProcess depth: %d returns: %B\n", depth, ret);
 

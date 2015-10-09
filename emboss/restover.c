@@ -251,7 +251,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
     ajint fn = 0;
     ajint fb = 0;
     ajint last = 0;
-    AjPStr overhang = NULL;
+    AjPStr overhead = NULL;
 
     const AjPStr value = NULL;
 
@@ -261,14 +261,13 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
     ajint hang1;
     ajint hang2;
 
-    AjIList iter = NULL;
 
     ps = ajStrNew();
     fn = 0;
 
     if(html)
 	ajFmtPrintF(outf,"<BR>");
-    ajFmtPrintF(outf,"# Restover of %S from %d to %d\n",name,begin,end);
+    ajFmtPrintF(outf,"# Restrict of %S from %d to %d\n",name,begin,end);
 
     if(html)
 	ajFmtPrintF(outf,"<BR>");
@@ -286,19 +285,6 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	ajFmtPrintF(outf,"<BR>");
     ajFmtPrintF(outf,"# Minimum length of recognition site: %d\n",
 		sitelen);
-    if(limit)
-    {
-        iter = ajListIterNewread(l);
-        while(!ajListIterDone(iter))
-        {
-            m = ajListIterGet(iter);
-	    value = ajTableFetchS(table,m->cod);
-	    if(value)
-		ajStrAssignS(&m->cod,value);
-	}
-        ajListIterDel(&iter);
-    }
-    
     if(html)
 	ajFmtPrintF(outf,"<BR>");
 
@@ -350,17 +336,17 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	}
 
 	if(m->cut2 >= m->cut1)
-	    ajStrAssignSubS(&overhang, ajSeqGetSeqS( seq), m->cut1, m->cut2-1);
+	    ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut1, m->cut2-1);
 	else
 	{
-	    ajStrAssignSubS(&overhang, ajSeqGetSeqS( seq), m->cut2, m->cut1-1);
-	    ajStrReverse(&overhang);
+	    ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut2, m->cut1-1);
+	    ajStrReverse(&overhead);
 	}
 
-	ajDebug("overhang:%S seqcmp:%S\n", overhang, seqcmp);
+	ajDebug("overhead:%S seqcmp:%S\n", overhead, seqcmp);
 
-	/* Print out only those who have the required overhang. */
-	if(ajStrMatchCaseS(overhang, seqcmp))
+	/* Print out only those who have the same overhang. */
+	if(ajStrMatchCaseS(overhead, seqcmp))
 	{
 	    if(html)
 	    {
@@ -382,16 +368,16 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	if(m->cut3 || m->cut4)
 	{
 	    if(m->cut4 >= m->cut3)
-		ajStrAssignSubS(&overhang, ajSeqGetSeqS( seq),
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq),
 				m->cut3, m->cut4-1);
 	    else
 	    {
-		ajStrAssignSubS(&overhang, ajSeqGetSeqS( seq),
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq),
 				m->cut4, m->cut3-1);
-		ajStrReverse(&overhang);
+		ajStrReverse(&overhead);
 	    }
 
-	    if(ajStrMatchCaseS(overhang, seqcmp))
+	    if(ajStrMatchCaseS(overhead, seqcmp))
 	    {
 		if(html)
 		    ajFmtPrintF(outf,
@@ -417,7 +403,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 		fa[fn++] = m->cut3;
 	    /*	       ajFmtPrintF(*outf,"%d\t%d",m->cut3,m->cut4);*/
 	}
-	ajStrDel(&overhang);
+	ajStrDel(&overhead);
 
 	embMatMatchDel(&m);
     }

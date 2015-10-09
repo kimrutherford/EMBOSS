@@ -84,7 +84,7 @@ Output report [opsd_human.pepdigest]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Report on protein proteolytic enzyme or reagent cleavage sites
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Protein sequence(s) filename and optional
@@ -141,7 +141,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -366,14 +365,6 @@ Version: EMBOSS:6.6.0.0
 <td> -scircular1<br>-scircular_seqall</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_seqall</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -798,7 +789,7 @@ By default <b>pepdigest</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: pepdigest
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: pepdigest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.25 $
+** @version $Revision: 1.24 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 11:25:55 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -224,9 +224,6 @@ EnsPRepeatconsensusadaptor ensRepeatconsensusadaptorNew(
 
 void ensRepeatconsensusadaptorDel(EnsPRepeatconsensusadaptor *Prca);
 
-EnsPBaseadaptor ensRepeatconsensusadaptorGetBaseadaptor(
-    EnsPRepeatconsensusadaptor rca);
-
 EnsPDatabaseadaptor ensRepeatconsensusadaptorGetDatabaseadaptor(
     EnsPRepeatconsensusadaptor rca);
 
@@ -342,13 +339,7 @@ EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(
 
 void ensRepeatfeatureadaptorDel(EnsPRepeatfeatureadaptor *Prfa);
 
-EnsPBaseadaptor ensRepeatfeatureadaptorGetBaseadaptor(
-    EnsPRepeatfeatureadaptor rfa);
-
 EnsPDatabaseadaptor ensRepeatfeatureadaptorGetDatabaseadaptor(
-    EnsPRepeatfeatureadaptor rfa);
-
-EnsPFeatureadaptor ensRepeatfeatureadaptorGetFeatureadaptor(
     EnsPRepeatfeatureadaptor rfa);
 
 AjBool ensRepeatfeatureadaptorFetchAllbySlice(

@@ -265,12 +265,11 @@ int main(int argc, char **argv)
 
 	if(hits)
 	{
-	    if(limit)
-		remap_RestrictPreferred(restrictlist,retable);
-
 	    /* this bit is lifted from printHits */
 	    embPatRestrictRestrict(restrictlist, hits, !limit,
-                                   ajFalse);
+					  ajFalse);
+	    if(limit)
+		remap_RestrictPreferred(restrictlist,retable);
 	}
 
 
@@ -736,7 +735,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 
         /* start token to parse isoschizomers names */
         tok = ajStrTokenNewC(value->iso,  tokens);
-        while(ajStrTokenNextParseC(tok, tokens, &code))
+        while(ajStrTokenNextParseC(&tok, tokens, &code))
         {
             cutname = ajStrNew();
             ajStrAssignS(&cutname, code);
@@ -1275,7 +1274,7 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
 	    /* parse isoschizomer names from m->iso */
 	    ajStrTokenDel(&tok);
             tok = ajStrTokenNewC(m->iso,  tokens);
-            while(ajStrTokenNextParseC(tok, tokens, &code))
+            while(ajStrTokenNextParseC(&tok, tokens, &code))
             {
 	        if(ajStrGetLen(newiso) > 0)
 	            ajStrAppendC(&newiso, ",");

@@ -292,18 +292,18 @@ COMMENT     Original source text: Escherichia coli DNA; mRNA; clone
             [5],[10]; clone
             lambda-h80dlac DNA [11],[15]; clone puk217 [28]; pgm8 [37].
 FEATURES             Location/Qualifiers
-     source          1..7477
+     source          1. .7477
                      /organism="Escherichia coli"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:562"
      variation       16
                      /note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
-     mRNA            51..1230
+     mRNA            51. .1230
                      /note="lacI (repressor) mRNA; preferred in vivo 3' end
                      [12],[29]"
-     gene            79..1161
+     gene            79. .1161
                      /gene="lacI"
-     CDS             79..1161
+     CDS             79. .1161
                      /gene="lacI"
                      /note="lac repressor protein (gtg start codon)"
                      /codon_start=1
@@ -317,32 +317,32 @@ FEATURES             Location/Qualifiers
                      DWSAMSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDT
                      EDSSCYIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNT
                      QTASPRALADSLMQLARQVSRLESGQ"
-     misc_signal     1162..1199
+     misc_signal     1162. .1199
                      /note="cap protein binding site"
-     variation       1183..1186
+     variation       1183. .1186
                      /note="ttag in wild-type; aatt in strain UV5 [26]"
-     variation       1209..1211
+     variation       1209. .1211
                      /note="gct in wild-type; gt in mutant l305 [5]"
      variation       1212
                      /note="t in wild-type; a in mutant l241 [5]"
      variation       1230
                      /note="c in wild-type; a in mutant p-r-1a [5]"
-     variation       1237..1238
+     variation       1237. .1238
                      /note="gt in wild-type; aa in strain UV5 [26]"
-     variation       1242..1245
+     variation       1242. .1245
                      /note="gtgg in wild-type; ttca in synthetic operator [8]"
-     mRNA            1246..>4358
+     mRNA            1246. .>4358
                      /note="lacZ mRNA [2],[5]"
-     misc_signal     1246..1266
+     misc_signal     1246. .1266
                      /note="lac repressor protein binding site"
-     variation       1267..1268
+     variation       1267. .1268
                      /note="tc in wild-type; tg in synthetic operator [8]"
-     variation       1282..1291
+     variation       1282. .1291
                      /note="ctatgaccat in wild-type; gatccggcca in strain UV5
                      [26]"
-     gene            1284..4358
+     gene            1284. .4358
                      /gene="lacZ"
-     CDS             1284..4358
+     CDS             1284. .4358
                      /gene="lacZ"
                      /note="beta-d-galactosidase"
                      /codon_start=1
@@ -367,9 +367,9 @@ FEATURES             Location/Qualifiers
                      YRIDGSGQMAITVDVEVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAA
                      CFDRWDLPLSDMYTPYVFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETS
                      HRHLLHAEEGTWLNIDGFHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
-     gene            4410..5663
+     gene            4410. .5663
                      /gene="lacY"
-     CDS             4410..5663
+     CDS             4410. .5663
                      /gene="lacY"
                      /note="lactose permease"
                      /codon_start=1
@@ -384,9 +384,9 @@ FEATURES             Location/Qualifiers
                      FFAPLIINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCF
                      KYITSQFEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGF
                      TLISVFTLSGPGPLSLLRRQVNEVA"
-     gene            5727..6338
+     gene            5727. .6338
                      /gene="lacA"
-     CDS             5727..6338
+     CDS             5727. .6338
                      /gene="lacA"
                      /note="thiogalactoside acetyltransferase (ttg start
                      codon)"
@@ -542,20 +542,20 @@ REFERENCE   1  (bases 1 to 1832)
    PUBMED   3901000
   REMARK    (1-1832)
 FEATURES             Location/Qualifiers
-     source          1..1832
+     source          1. .1832
                      /organism="Escherichia coli"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:562"
-     CDS             <1..18
+     CDS             <1. .18
                      /codon_start=1
                      /transl_table=11
                      /product="lacY gene product"
                      /protein_id="CAA36161.1"
                      /db_xref="GI:4377496"
                      /translation="VNEVA"
-     gene            82..693
+     gene            82. .693
                      /gene="lacA"
-     CDS             82..693
+     CDS             82. .693
                      /gene="lacA"
                      /codon_start=1
                      /transl_table=11
@@ -624,11 +624,11 @@ REFERENCE   1  (bases 1 to 1113)
    PUBMED   355891
 COMMENT     KST ECO.LACI.
 FEATURES             Location/Qualifiers
-     source          1..1113
+     source          1. .1113
                      /organism="Escherichia coli"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:562"
-     CDS             31..1113
+     CDS             31. .1113
                      /note="unnamed protein product; reading frame"
                      /codon_start=1
                      /transl_table=11
@@ -708,11 +708,11 @@ REFERENCE   1  (bases 1 to 1500)
 COMMENT     lacZ is a beta-galactosidase and lacA is transacetylase. KST
             ECO.LACY.
 FEATURES             Location/Qualifiers
-     source          1..1500
+     source          1. .1500
                      /organism="Escherichia coli"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:562"
-     CDS             <1..54
+     CDS             <1. .54
                      /note="unnamed protein product; reading frame (lacZ)"
                      /codon_start=1
                      /transl_table=11
@@ -767,7 +767,7 @@ FEATURES             Location/Qualifiers
                      /db_xref="PDB:3IAQ"
                      /db_xref="UniProtKB/Swiss-Prot:P00722"
                      /translation="FQLSAGRYHYQLVWCQK"
-     CDS             106..1359
+     CDS             106. .1359
                      /note="unnamed protein product; reading frame (lacY)"
                      /codon_start=1
                      /transl_table=11
@@ -794,7 +794,7 @@ FEATURES             Location/Qualifiers
                      FFAPLIINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCF
                      KYITSQFEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGF
                      TLISVFTLSGPGPLSLLRRQVNEVA"
-     CDS             1423..>1500
+     CDS             1423. .>1500
                      /note="unnamed protein product; reading frame (lacA)"
                      /codon_start=1
                      /transl_table=11
@@ -859,11 +859,11 @@ REFERENCE   2
    PUBMED   3038536
 COMMENT     Data kindly reviewed (18-MAY-1983) by U. Ruether.
 FEATURES             Location/Qualifiers
-     source          1..3078
+     source          1. .3078
                      /organism="Escherichia coli"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:562"
-     CDS             <1..3072
+     CDS             <1. .3072
                      /note="unnamed protein product; galactosidase"
                      /codon_start=1
                      /transl_table=11
@@ -935,7 +935,7 @@ FEATURES             Location/Qualifiers
                      RIDGSGQMAITVDVEVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAAC
                      FDRWDLPLSDMYTPYVFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSH
                      RHLLHAEEGTWLNIDGFHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
-     mat_peptide     1..3069
+     mat_peptide     1. .3069
                      /product="unnamed"
 ORIGIN
        1  ACCATGATTA CGGATTCACT GGCCGTCGTT TTACAACGTC GTGACTGGGA AAACCCTGGC
@@ -1018,15 +1018,15 @@ REFERENCE   3  (bases 1 to 1212)
   JOURNAL   Submitted (17-JAN-1994) S.A. Wilson, University College London,
             Dept of Biochemistry, Gower Street, London WC1E 6BT, UK
 FEATURES             Location/Qualifiers
-     source          1..1212
+     source          1. .1212
                      /organism="Pseudomonas aeruginosa"
                      /mol_type="genomic DNA"
                      /strain="PAC1"
                      /db_xref="taxon:287"
                      /clone="plasmid pAS20"
-     gene            97..1212
+     gene            97. .1212
                      /gene="amiB"
-     CDS             97..1212
+     CDS             97. .1212
                      /gene="amiB"
                      /codon_start=1
                      /transl_table=11
@@ -1084,14 +1084,14 @@ REFERENCE   1  (bases 1 to 1065)
   JOURNAL   FEBS Lett. 215 (2), 291-294 (1987)
    PUBMED   3108030
 FEATURES             Location/Qualifiers
-     source          1..1065
+     source          1. .1065
                      /organism="Pseudomonas aeruginosa"
                      /mol_type="genomic DNA"
                      /strain="PAC433"
                      /db_xref="taxon:287"
-     gene            25..1065
+     gene            25. .1065
                      /gene="amiE"
-     CDS             25..1065
+     CDS             25. .1065
                      /gene="amiE"
                      /EC_number="3.5.1.4"
                      /codon_start=1
@@ -1162,7 +1162,7 @@ REFERENCE   4  (bases 1 to 2167)
 COMMENT     On Jul 25, 2002 this sequence version replaced gi:151357.
             Data kindly reviewed (04-SEP-1991) by Rice P. M.
 FEATURES             Location/Qualifiers
-     source          1..2167
+     source          1. .2167
                      /organism="Pseudomonas aeruginosa"
                      /mol_type="genomic DNA"
                      /strain="PAC"
@@ -1171,15 +1171,15 @@ FEATURES             Location/Qualifiers
                      /map="38 min"
      misc_feature    1
                      /note="last base of an XhoI site"
-     promoter        8..24
+     promoter        8. .24
                      /note="proposed rpoN-dependent promoter"
-     promoter        65..81
+     promoter        65. .81
                      /note="proposed rpoN-dependent promoter"
-     RBS             121..126
+     RBS             121. .126
                      /note="proposed Shine-Dalgarno sequence"
-     gene            135..1292
+     gene            135. .1292
                      /gene="amiC"
-     CDS             135..1292
+     CDS             135. .1292
                      /gene="amiC"
                      /note="negative regulator of amiR"
                      /codon_start=1
@@ -1199,11 +1199,11 @@ FEATURES             Location/Qualifiers
                      RRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFF
                      PENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNN
                      HSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
-     misc_feature    648..653
+     misc_feature    648. .653
                      /gene="amiC"
                      /note="end of 658bp XhoI fragment, deletion in pSW3 causes
                      constitutive expression of amiE"
-     variation       912..1167
+     variation       912. .1167
                      /gene="amiC"
                      /note="ClaI fragment deleted in pSW36, constitutive
                      phenotype"
@@ -1213,9 +1213,9 @@ FEATURES             Location/Qualifiers
                      /note="conflict"
                      /citation=[2]
                      /replace="g"
-     gene            1289..1879
+     gene            1289. .1879
                      /gene="amiR"
-     CDS             1289..1879
+     CDS             1289. .1879
                      /gene="amiR"
                      /note="aliphatic amidase regulator, positive regulator of
                      amiE"
@@ -1300,15 +1300,15 @@ REFERENCE   3  (bases 1 to 1130)
   JOURNAL   Submitted (17-JAN-1994) S.A. Wilson, University College London,
             Dept of Biochemistry, Gower Street, London WC1E 6BT, UK
 FEATURES             Location/Qualifiers
-     source          1..1130
+     source          1. .1130
                      /organism="Pseudomonas aeruginosa"
                      /mol_type="genomic DNA"
                      /strain="PAC1"
                      /db_xref="taxon:287"
                      /clone="plasmid pAS20"
-     gene            61..576
+     gene            61. .576
                      /gene="amiS"
-     CDS             61..576
+     CDS             61. .576
                      /gene="amiS"
                      /codon_start=1
                      /transl_table=11

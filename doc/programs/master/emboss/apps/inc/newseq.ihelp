@@ -1,5 +1,5 @@
 Create a sequence file from a typed-in sequence
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-name]              string     The name of of the sequence should be a

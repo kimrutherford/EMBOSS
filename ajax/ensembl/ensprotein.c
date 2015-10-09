@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.22 $
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic proteinfeatureadaptorKTablenames ******************************
+/* @conststatic proteinfeatureadaptorKTables **********************************
 **
 ** Array of Ensembl Protein Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const proteinfeatureadaptorKTablenames[] =
+static const char *const proteinfeatureadaptorKTables[] =
 {
     "protein_feature",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *const proteinfeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic proteinfeatureadaptorKColumnnames *****************************
+/* @conststatic proteinfeatureadaptorKColumns *********************************
 **
 ** Array of Ensembl Protein Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const proteinfeatureadaptorKColumnnames[] =
+static const char *const proteinfeatureadaptorKColumns[] =
 {
     "protein_feature.protein_feature_id",
     "protein_feature.translation_id",
@@ -102,13 +102,13 @@ static const char *const proteinfeatureadaptorKColumnnames[] =
 
 
 
-/* @conststatic proteinfeatureadaptorKLeftjoins *******************************
+/* @conststatic proteinfeatureadaptorKLeftjoin ********************************
 **
-** Array of Ensembl Protein Feature Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Protein Feature Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin proteinfeatureadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin proteinfeatureadaptorKLeftjoin[] =
 {
     {"interpro", "protein_feature.hit_name = interpro.id"},
     {"xref", "interpro.interpro_ac = xref.dbprimary_acc"},
@@ -162,7 +162,7 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::ProteinFeature
 ** @cc CVS Revision: 1.18
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -358,7 +358,14 @@ void ensProteinfeatureDel(EnsPProteinfeature *Ppf)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Ppf) || --pthis->Use)
+    if (!*Ppf)
+        return;
+
+    pthis = *Ppf;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Ppf = NULL;
 
@@ -370,7 +377,9 @@ void ensProteinfeatureDel(EnsPProteinfeature *Ppf)
     ajStrDel(&pthis->Accession);
     ajStrDel(&pthis->Description);
 
-    ajMemFree((void **) Ppf);
+    AJFREE(pthis);
+
+    *Ppf = NULL;
 
     return;
 }
@@ -755,12 +764,11 @@ AjBool ensProteinfeatureTrace(const EnsPProteinfeature pf, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl Protein Feature object.
+** Functions for calculating values of an Ensembl Protein Feature object.
 **
 ** @fdata [EnsPProteinfeature]
 **
-** @nam3rule Calculate Calculate Ensembl Protein Feature information
+** @nam3rule Calculate Calculate Ensembl Protein Feature values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * pf [const EnsPProteinfeature] Ensembl Protein Feature
@@ -823,7 +831,7 @@ size_t ensProteinfeatureCalculateMemsize(const EnsPProteinfeature pf)
 **
 ** @cc Bio::EnsEMBL::DBSQL::ProteinFeatureAdaptor
 ** @cc CVS Revision: 1.35
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1061,11 +1069,14 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensBaseadaptorNew(
         dba,
-        proteinfeatureadaptorKTablenames,
-        proteinfeatureadaptorKColumnnames,
-        proteinfeatureadaptorKLeftjoins,
+        proteinfeatureadaptorKTables,
+        proteinfeatureadaptorKColumns,
+        proteinfeatureadaptorKLeftjoin,
         (const char *) NULL,
         (const char *) NULL,
         &proteinfeatureadaptorFetchAllbyStatement);
@@ -1117,7 +1128,7 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa)
 {
     ensBaseadaptorDel(Ppfa);
 
-    return;
+	return;
 }
 
 
@@ -1131,40 +1142,15 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa)
 ** @fdata [EnsPProteinfeatureadaptor]
 **
 ** @nam3rule Get Return Ensembl Protein Feature Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensProteinfeatureadaptorGetBaseadaptor *******************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Protein Feature Adaptor.
-**
-** @param [u] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensProteinfeatureadaptorGetBaseadaptor(
-    EnsPProteinfeatureadaptor pfa)
-{
-    return pfa;
-}
 
 
 
@@ -1185,8 +1171,7 @@ EnsPBaseadaptor ensProteinfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensProteinfeatureadaptorGetDatabaseadaptor(
     EnsPProteinfeatureadaptor pfa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensProteinfeatureadaptorGetBaseadaptor(pfa));
+    return ensBaseadaptorGetDatabaseadaptor(pfa);
 }
 
 
@@ -1248,8 +1233,6 @@ AjBool ensProteinfeatureadaptorFetchAllbyTranslationidentifier(
     ajuint tlid,
     AjPList pfs)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!pfa)
@@ -1263,16 +1246,15 @@ AjBool ensProteinfeatureadaptorFetchAllbyTranslationidentifier(
 
     constraint = ajFmtStr("protein_feature.translation_id = %u", tlid);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensProteinfeatureadaptorGetBaseadaptor(pfa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        pfs);
+    ensBaseadaptorFetchAllbyConstraint(pfa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       pfs);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -1297,8 +1279,14 @@ AjBool ensProteinfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPProteinfeature *Ppf)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensProteinfeatureadaptorGetBaseadaptor(pfa),
-        identifier,
-        (void **) Ppf);
+    if (!pfa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Ppf)
+        return ajFalse;
+
+    return ensBaseadaptorFetchByIdentifier(pfa, identifier, (void **) Ppf);
 }

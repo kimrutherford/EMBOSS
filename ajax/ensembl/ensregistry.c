@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.68 $
+** @version $Revision: 1.64 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/07/15 20:55:27 $ by $Author: rice $
+** @modified $Date: 2012/04/26 06:39:46 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -106,6 +106,8 @@ typedef struct RegistrySComparativeGenomics
 ** Ensembl Attribute Type Adaptor
 ** @attr Coordsystemadaptor [EnsPCoordsystemadaptor]
 ** Ensembl Coordinate System Adaptor
+** @attr Databaseentryadaptor [EnsPDatabaseentryadaptor]
+** Ensembl Database Entry Adaptor
 ** @attr Densityfeatureadaptor [EnsPDensityfeatureadaptor]
 ** Ensembl Density Feature Adaptor
 ** @attr Densitytypeadaptor [EnsPDensitytypeadaptor]
@@ -122,8 +124,6 @@ typedef struct RegistrySComparativeGenomics
 ** Ensembl External Database Adaptor
 ** @attr Geneadaptor [EnsPGeneadaptor]
 ** Ensembl Gene Adaptor
-** @attr Intronsupportingevidenceadaptor [EnsPIntronsupportingevidenceadaptor]
-** Ensembl Intron Supporting Evidence Adaptor
 ** @attr Karyotypebandadaptor [EnsPKaryotypebandadaptor]
 ** Ensembl Karyotype Band Adaptor
 ** @attr Markeradaptor [EnsPMarkeradaptor]
@@ -138,10 +138,6 @@ typedef struct RegistrySComparativeGenomics
 ** Ensembl Miscellaneous Feature Adaptor
 ** @attr Miscellaneoussetadaptor [EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor
-** @attr Operonadaptor [EnsPOperonadaptor]
-** Ensembl Operon Adaptor
-** @attr Operontranscriptadaptor [EnsPOperontranscriptadaptor]
-** Ensembl Operon Transcript Adaptor
 ** @attr Predictionexonadaptor [EnsPPredictionexonadaptor]
 ** Ensembl Prediction Exon Adaptor
 ** @attr Predictiontranscriptadaptor [EnsPPredictiontranscriptadaptor]
@@ -182,6 +178,7 @@ typedef struct RegistrySCoreStyle
     EnsPAssemblymapperadaptor Assemblymapperadaptor;
     EnsPAttributetypeadaptor Attributetypeadaptor;
     EnsPCoordsystemadaptor Coordsystemadaptor;
+    EnsPDatabaseentryadaptor Databaseentryadaptor;
     EnsPDensityfeatureadaptor Densityfeatureadaptor;
     EnsPDensitytypeadaptor Densitytypeadaptor;
     EnsPDitagadaptor Ditagadaptor;
@@ -190,7 +187,6 @@ typedef struct RegistrySCoreStyle
     EnsPExonadaptor Exonadaptor;
     EnsPExternaldatabaseadaptor Externaldatabaseadaptor;
     EnsPGeneadaptor Geneadaptor;
-    EnsPIntronsupportingevidenceadaptor Intronsupportingevidenceadaptor;
     EnsPKaryotypebandadaptor Karyotypebandadaptor;
     EnsPMarkeradaptor Markeradaptor;
     EnsPMarkerfeatureadaptor Markerfeatureadaptor;
@@ -198,8 +194,6 @@ typedef struct RegistrySCoreStyle
     EnsPMetainformationadaptor Metainformationadaptor;
     EnsPMiscellaneousfeatureadaptor Miscellaneousfeatureadaptor;
     EnsPMiscellaneoussetadaptor Miscellaneoussetadaptor;
-    EnsPOperonadaptor Operonadaptor;
-    EnsPOperontranscriptadaptor Operontranscriptadaptor;
     EnsPPredictionexonadaptor Predictionexonadaptor;
     EnsPPredictiontranscriptadaptor Predictiontranscriptadaptor;
     EnsPProteinalignfeatureadaptor Proteinalignfeatureadaptor;
@@ -289,7 +283,7 @@ typedef struct RegistrySFunctionalGenomics
 ** @attr Gvdatabaseadaptor [EnsPGvdatabaseadaptor]
 ** Ensembl Genetic Variation Database Adaptor
 ** @attr Gvgenotypecodeadaptor [EnsPGvgenotypecodeadaptor]
-** Ensembl Genetic Variation Genotype Code Adaptor
+** ENsembl Genetic Variation Genotype Code Adaptor
 ** @attr Gvindividualadaptor [EnsPGvindividualadaptor]
 ** Ensembl Genetic Variation Individual Adaptor
 ** @attr Gvpopulationadaptor [EnsPGvpopulationadaptor]
@@ -512,19 +506,10 @@ static AjPList registryGIdentifier = NULL;
 
 /* #varstatic registryGSource *************************************************
 **
-** AJAX Table storing
-** AJAX String (URL) key data and
-** AJAX unsigned integer (Number of Ensembl Database Adaptor objects)
-** value data, representing sources that have been used to populate the
-** Ensembl Registry. Keeping track of sources prevents multiple attempts
-** to initialise and potentially overwrite the Ensembl Registry.
-**
-**   key data:   AJAX String object
-**               Source URL of schema mysql:// or file:/// representing an
-**               Ensembl Database Connection
-**   value data: AJAX unsigned integer
-**               Number of Ensembl Database Adaptor objects
-**               registered from this source.
+** AJAX List storing AJAX String objects representing sources that have been
+** used to populate the Ensembl Registry. Keeping track of sources prevents
+** multiple attempts to initialise and potentially overwrite the
+** Ensembl Registry.
 **
 ** Valid sources are:
 **
@@ -535,7 +520,7 @@ static AjPList registryGIdentifier = NULL;
 **
 ******************************************************************************/
 
-static AjPTable registryGSource = NULL;
+static AjPList registryGSource = NULL;
 
 
 
@@ -559,65 +544,47 @@ static RegistryPIdentifier registryIdentifierNew(
 static void registryIdentifierDel(
     RegistryPIdentifier *Pri);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
-static AjBool registryIdentifierTrace(
-    const RegistryPIdentifier ri,
-    ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
-
 static void registryCoreStyleDel(
     RegistryPCoreStyle *Prcs);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryCoreStyleTrace(
     const RegistryPCoreStyle rcs,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static void registryComparativeGenomicsDel(
     RegistryPComparativeGenomics *Prcg);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryComparativeGenomicsTrace(
     const RegistryPComparativeGenomics rcg,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static void registryFunctionalGenomicsDel(
     RegistryPFunctionalGenomics *Prfg);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryFunctionalGenomicsTrace(
     const RegistryPFunctionalGenomics rfg,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static void registryGeneticVariationDel(
     RegistryPGeneticVariation *Prgv);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryGeneticVariationTrace(
     const RegistryPGeneticVariation rgv,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static void registryOntologyDel(
     RegistryPOntology *Pro);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryOntologyTrace(
     const RegistryPOntology ro,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static void registryQualityCheckDel(
     RegistryPQualityCheck *Pqc);
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 static AjBool registryQualityCheckTrace(
     const RegistryPQualityCheck rqc,
     ajuint level);
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 static AjBool registryAliasLoadDatabaseconnection(
     EnsPDatabaseconnection dbc,
@@ -626,6 +593,9 @@ static AjBool registryAliasLoadDatabaseconnection(
 static ajuint registryEntryLoadCollection(EnsPDatabaseconnection dbc,
                                           AjPStr dbname,
                                           EnsEDatabaseadaptorGroup dbag);
+
+static AjBool registrySourceRegister(const AjPStr source,
+                                     AjBool *Pregistered);
 
 static int registryStringCompareCase(
     const void *item1,
@@ -674,7 +644,6 @@ static void registryComparativeGenomicsDel(
     if (!Prcg)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryComparativeGenomicsDel"))
     {
         ajDebug("registryComparativeGenomicsDel\n"
@@ -683,10 +652,11 @@ static void registryComparativeGenomicsDel(
 
         registryComparativeGenomicsTrace(*Prcg, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Prcg))
+    if (!*Prcg)
         return;
+
+    pthis = *Prcg;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
 
@@ -694,7 +664,9 @@ static void registryComparativeGenomicsDel(
 
     ensDatabaseadaptorDel(&pthis->Databaseadaptor);
 
-    ajMemFree((void **) Prcg);
+    AJFREE(pthis);
+
+    *Prcg = NULL;
 
     return;
 }
@@ -702,7 +674,6 @@ static void registryComparativeGenomicsDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryComparativeGenomicsTrace *******************************
 **
 ** Trace a Registry Comparative Genomics object.
@@ -741,7 +712,6 @@ static AjBool registryComparativeGenomicsTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -766,7 +736,6 @@ static void registryCoreStyleDel(
     if (!Prcs)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryCoreStyleDel"))
     {
         ajDebug("registryCoreStyleDel\n"
@@ -775,10 +744,11 @@ static void registryCoreStyleDel(
 
         registryCoreStyleTrace(*Prcs, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Prcs))
+    if (!*Prcs)
         return;
+
+    pthis = *Prcs;
 
     ajStrDel(&pthis->Stableidentifierprefix);
 
@@ -801,6 +771,9 @@ static void registryCoreStyleDel(
 
     ensCoordsystemadaptorDel(
         &pthis->Coordsystemadaptor);
+
+    ensDatabaseentryadaptorDel(
+        &pthis->Databaseentryadaptor);
 
     ensDensityfeatureadaptorDel(
         &pthis->Densityfeatureadaptor);
@@ -826,9 +799,6 @@ static void registryCoreStyleDel(
     ensGeneadaptorDel(
         &pthis->Geneadaptor);
 
-    ensIntronsupportingevidenceadaptorDel(
-        &pthis->Intronsupportingevidenceadaptor);
-
     ensKaryotypebandadaptorDel(
         &pthis->Karyotypebandadaptor);
 
@@ -849,12 +819,6 @@ static void registryCoreStyleDel(
 
     ensMiscellaneoussetadaptorDel(
         &pthis->Miscellaneoussetadaptor);
-
-    ensOperonadaptorDel(
-        &pthis->Operonadaptor);
-
-    ensOperontranscriptadaptorDel(
-        &pthis->Operontranscriptadaptor);
 
     ensPredictionexonadaptorDel(
         &pthis->Predictionexonadaptor);
@@ -903,7 +867,9 @@ static void registryCoreStyleDel(
     ensDatabaseadaptorDel(
         &pthis->Databaseadaptor);
 
-    ajMemFree((void **) Prcs);
+    AJFREE(pthis);
+
+    *Prcs = NULL;
 
     return;
 }
@@ -911,7 +877,6 @@ static void registryCoreStyleDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryCoreStyleTrace *****************************************
 **
 ** Trace a Registry Core-Style object.
@@ -947,18 +912,16 @@ static AjBool registryCoreStyleTrace(
             "%S  Assemblyexceptionfeatureadaptor %p\n"
             "%S  Assemblymapperadaptor %p\n"
             "%S  Coordsystemadaptor %p\n"
+            "%S  Databaseentryadaptor %p\n"
             "%S  Dnaalignfeatureadaptor %p\n"
             "%S  Exonadaptor %p\n"
             "%S  Externaldatabaseadaptor %p\n"
             "%S  Geneadaptor %p\n"
-            "%S  Intronsupportingevidenceadaptor %p\n"
             "%S  Karyotypebandadaptor %p\n"
             "%S  Metainformationadaptor %p\n"
             "%S  Metacoordinateadaptor %p\n"
             "%S  Miscellaneousfeatureadaptor %p\n"
             "%S  Miscellaneoussetadaptor %p\n"
-            "%S  Operonadaptor %p\n"
-            "%S  Operontranscriptadaptor %p\n"
             "%S  Proteinalignfeatureadaptor %p\n"
             "%S  Proteinfeatureadaptor %p\n"
             "%S  Repeatfeatureadaptor %p\n"
@@ -978,18 +941,16 @@ static AjBool registryCoreStyleTrace(
             indent, rcs->Assemblyexceptionfeatureadaptor,
             indent, rcs->Assemblymapperadaptor,
             indent, rcs->Coordsystemadaptor,
+            indent, rcs->Databaseentryadaptor,
             indent, rcs->Dnaalignfeatureadaptor,
             indent, rcs->Exonadaptor,
             indent, rcs->Externaldatabaseadaptor,
             indent, rcs->Geneadaptor,
-            indent, rcs->Intronsupportingevidenceadaptor,
             indent, rcs->Karyotypebandadaptor,
             indent, rcs->Metainformationadaptor,
             indent, rcs->Metacoordinateadaptor,
             indent, rcs->Miscellaneousfeatureadaptor,
             indent, rcs->Miscellaneoussetadaptor,
-            indent, rcs->Operonadaptor,
-            indent, rcs->Operontranscriptadaptor,
             indent, rcs->Proteinalignfeatureadaptor,
             indent, rcs->Proteinfeatureadaptor,
             indent, rcs->Repeatfeatureadaptor,
@@ -1007,7 +968,6 @@ static AjBool registryCoreStyleTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1032,7 +992,6 @@ static void registryEntryDel(
     if (!Pentry)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryEntryDel"))
     {
         ajDebug("registryEntryDel\n"
@@ -1041,10 +1000,11 @@ static void registryEntryDel(
 
         registryEntryTrace(*Pentry, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pentry))
+    if (!*Pentry)
         return;
+
+    pthis = *Pentry;
 
     registryCoreStyleDel(
         (RegistryPCoreStyle *)
@@ -1082,7 +1042,9 @@ static void registryEntryDel(
         (RegistryPQualityCheck *)
         &pthis->Registry[ensEDatabaseadaptorGroupQualityCheck]);
 
-    ajMemFree((void **) Pentry);
+    AJFREE(pthis);
+
+    *Pentry = NULL;
 
     return;
 }
@@ -1168,7 +1130,6 @@ static void registryFunctionalGenomicsDel(
     if (!Prfg)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryFunctionalGenomicsDel"))
     {
         ajDebug("registryFunctionalGenomicsDel\n"
@@ -1177,10 +1138,11 @@ static void registryFunctionalGenomicsDel(
 
         registryFunctionalGenomicsTrace(*Prfg, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Prfg))
+    if (!*Prfg)
         return;
+
+    pthis = *Prfg;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
 
@@ -1188,7 +1150,9 @@ static void registryFunctionalGenomicsDel(
 
     ensDatabaseadaptorDel(&pthis->Databaseadaptor);
 
-    ajMemFree((void **) Prfg);
+    AJFREE(pthis);
+
+    *Prfg = NULL;
 
     return;
 }
@@ -1196,7 +1160,6 @@ static void registryFunctionalGenomicsDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryFunctionalGenomicsTrace ********************************
 **
 ** Trace a Registry Functional Genomics object.
@@ -1235,7 +1198,6 @@ static AjBool registryFunctionalGenomicsTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1261,7 +1223,6 @@ static void registryGeneticVariationDel(
     if (!Prgv)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryGeneticVariationDel"))
     {
         ajDebug("registryGeneticVariationDel\n"
@@ -1270,10 +1231,11 @@ static void registryGeneticVariationDel(
 
         registryGeneticVariationTrace(*Prgv, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Prgv))
+    if (!*Prgv)
         return;
+
+    pthis = *Prgv;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
 
@@ -1318,7 +1280,9 @@ static void registryGeneticVariationDel(
     ensDatabaseadaptorDel(
         &pthis->Databaseadaptor);
 
-    ajMemFree((void **) Prgv);
+    AJFREE(pthis);
+
+    *Prgv = NULL;
 
     return;
 }
@@ -1326,7 +1290,6 @@ static void registryGeneticVariationDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryGeneticVariationTrace **********************************
 **
 ** Trace a Registry Genetic Variation object.
@@ -1383,7 +1346,6 @@ static AjBool registryGeneticVariationTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1451,70 +1413,20 @@ static void registryIdentifierDel(
     if (!Pri)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
-    if (ajDebugTest("registryIdentifierDel"))
-    {
-        ajDebug("registryIdentifierDel\n"
-                "  *Pri %p\n",
-                *Pri);
-
-        registryIdentifierTrace(*Pri, 1);
-    }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
-
-    if (!(pthis = *Pri))
+    if (!*Pri)
         return;
+
+    pthis = *Pri;
 
     ajStrDel(&pthis->RegularExpression);
     ajStrDel(&pthis->SpeciesName);
 
-    ajMemFree((void **) Pri);
+    AJFREE(pthis);
+
+    *Pri = NULL;
 
     return;
 }
-
-
-
-
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
-/* @funcstatic registryIdentifierTrace ****************************************
-**
-** Trace a Registry Identifier object.
-**
-** @param [r] ri [const RegistryPIdentifier] Registry Identifier object
-** @param [r] level [ajuint] Indentation level
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-static AjBool registryIdentifierTrace(
-    const RegistryPIdentifier ri,
-    ajuint level)
-{
-    AjPStr indent = NULL;
-
-    if (!ri)
-        return ajFalse;
-
-    indent = ajStrNew();
-
-    ajStrAppendCountK(&indent, ' ', level * 2);
-
-    ajDebug("%registryIdentifierTrace %p\n"
-            "%S  RegularExpression '%S'\n"
-            "%S  SpeciesName '%S'\n",
-            indent, ri,
-            indent, ri->RegularExpression,
-            indent, ri->SpeciesName);
-
-    ajStrDel(&indent);
-
-    return ajTrue;
-}
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1539,7 +1451,6 @@ static void registryOntologyDel(
     if (!Pro)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryOntologyDel"))
     {
         ajDebug("registryOntologyDel\n"
@@ -1548,10 +1459,11 @@ static void registryOntologyDel(
 
         registryOntologyTrace(*Pro, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pro))
+    if (!*Pro)
         return;
+
+    pthis = *Pro;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
 
@@ -1565,7 +1477,9 @@ static void registryOntologyDel(
 
     ensDatabaseadaptorDel(&pthis->Databaseadaptor);
 
-    ajMemFree((void **) Pro);
+    AJFREE(pthis);
+
+    *Pro = NULL;
 
     return;
 }
@@ -1573,7 +1487,6 @@ static void registryOntologyDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryOntologyTrace ******************************************
 **
 ** Trace a Registry Ontology object.
@@ -1615,7 +1528,6 @@ static AjBool registryOntologyTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1640,7 +1552,6 @@ static void registryQualityCheckDel(
     if (!Prqc)
         return;
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("registryQualityCheckDel"))
     {
         ajDebug("registryQualityCheckDel\n"
@@ -1649,10 +1560,11 @@ static void registryQualityCheckDel(
 
         registryQualityCheckTrace(*Prqc, 1);
     }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Prqc))
+    if (!*Prqc)
         return;
+
+    pthis = *Prqc;
 
     /* Delete all Ensembl Object Adaptors based on the Database Adaptor. */
 
@@ -1679,7 +1591,9 @@ static void registryQualityCheckDel(
     ensDatabaseadaptorDel(
         &pthis->Databaseadaptor);
 
-    ajMemFree((void **) Prqc);
+    AJFREE(pthis);
+
+    *Prqc = NULL;
 
     return;
 }
@@ -1687,7 +1601,6 @@ static void registryQualityCheckDel(
 
 
 
-#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
 /* @funcstatic registryQualityCheckTrace **************************************
 **
 ** Trace a Registry Quality Check object.
@@ -1737,7 +1650,6 @@ static AjBool registryQualityCheckTrace(
 
     return ajTrue;
 }
-#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
 
 
@@ -1747,8 +1659,8 @@ static AjBool registryQualityCheckTrace(
 ** Functions to control Ensembl Registry Internals
 **
 ** @cc Bio::EnsEMBL::Registry
-** @cc CVS Revision: 1.227.4.2
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.214
+** @cc CVS Tag: branch-ensembl-65
 **
 ******************************************************************************/
 
@@ -1809,11 +1721,25 @@ void ensRegistryExit(void)
 {
     ensRegistryClear();
 
-    ajTableDel(&registryGAlias);
-    ajTableDel(&registryGEntry);
-    ajTableDel(&registryGSource);
+    /* Free the AJAX Table of Registry Alias objects. */
 
-    ajListFree(&registryGIdentifier);
+    if (registryGAlias)
+        ajTableFree(&registryGAlias);
+
+    /* Clear and free the AJAX Table of Registry Entry objects. */
+
+    if (registryGEntry)
+        ajTableFree(&registryGEntry);
+
+    /* Clear and free the AJAX List of Registry Identifier objects. */
+
+    if (registryGIdentifier)
+        ajListFree(&registryGIdentifier);
+
+    /* Clear and free the AJAX List of Registry Source objects. */
+
+    if (registryGSource)
+        ajListstrFreeData(&registryGSource);
 
     return;
 }
@@ -1833,17 +1759,19 @@ void ensRegistryExit(void)
 
 void ensRegistryInit(void)
 {
-    registryGAlias  = ajTablestrNew(0U);
-    registryGEntry  = ajTablestrNew(0U);
-    registryGSource = ajTablestrNew(0U);
+    registryGAlias = ajTablestrNew(0);
 
     ajTableSetDestroyvalue(registryGAlias,
                            (void (*)(void **)) &ajStrDel);
+
+    registryGEntry = ajTablestrNew(0);
+
     ajTableSetDestroyvalue(registryGEntry,
-                           (void (*)(void **)) &registryEntryDel);
-    ajTableSetDestroyvalue(registryGSource, &ajMemFree);
+                           (void (*)(void **Pvalue)) &registryEntryDel);
 
     registryGIdentifier = ajListNew();
+
+    registryGSource = ajListstrNew();
 
     return;
 }
@@ -1884,22 +1812,25 @@ void ensRegistryInit(void)
 ** @release 6.4.0
 ** @@
 ** NOTE: In this implementation the reference adaptor is not set during
-** registration of core-style, but non-core databases (i.e. cdna,
+** registration of core-sytle, but non-core databases (i.e. cdna,
 ** otherfeatures, vega databases). The ensRegistryGetReferenceadaptor function
-** checks a hierarchy of Ensembl Database Adaptors to return an appropriate one
-** in case none has been explicitly set as reference adaptor.
+** checks a hierarchy of Database Adaptors to return an appropriate Database
+** Adaptor in case none has been explicitly set as reference adaptor.
 ** Bio::EnsEMBL::Utils::ConfigRegistry::load_core
 ** Bio::EnsEMBL::Utils::ConfigRegistry::load_adaptors
 ** Bio::EnsEMBL::Utils::ConfigRegistry::load_and_attach_dnadb_to_core
+** TODO: This function could be re-written!
+** New ensDatabaseadaptorNewName and ensDatabaseadaptorNewUrl functions have
+** been added and use the Ensembl database naming schema to fill in all
+** Ensembl Database Adaptor members.
 ******************************************************************************/
 
 ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 {
-    ajuint *Presult = NULL;
-
     ajuint result = 0U;
 
-    AjBool debug = AJFALSE;
+    AjBool debug      = AJFALSE;
+    AjBool registered = AJFALSE;
 
     AjPRegexp rec = NULL;
     AjPRegexp rem = NULL;
@@ -1937,18 +1868,18 @@ ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
     }
 
     if (!dbc)
-        return 0U;
+        return ajFalse;
 
-    /* Check if this Ensembl Database Connection has been registered before. */
+    /* Check if this Ensembl Database Connection has been used before. */
 
     ensDatabaseconnectionFetchUrl(dbc, &source);
 
-    if ((Presult = ajTablestrFetchS(registryGSource, source)))
-    {
-        ajStrDel(&source);
+    registrySourceRegister(source, &registered);
 
-        return *Presult;
-    }
+    ajStrDel(&source);
+
+    if (registered)
+        return ajTrue;
 
     multi = ajStrNewC("default");
 
@@ -2148,19 +2079,6 @@ ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
     ajRegFree(&rem);
     ajRegFree(&res);
 
-    /*
-    ** Register this source. The AJAX String object source remains with the
-    ** AJAX Table object.
-    */
-
-    AJNEW0(Presult);
-    *Presult = result;
-
-    ajTablePut(registryGSource, (void *) source, (void *) Presult);
-    
-    Presult = NULL;
-    source = NULL;
-
     ajStrDel(&statement);
     ajStrDel(&multi);
 
@@ -2168,9 +2086,8 @@ ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
     {
         ajDebug("ensRegistryLoadDatabaseconnection\n");
 
-        ensRegistryAliasTrace(1U);
-        ensRegistryEntryTrace(1U);
-        ensRegistrySourceTrace(1U);
+        ensRegistryEntryTrace(1);
+        ensRegistryAliasTrace(1);
     }
 
     return result;
@@ -2183,7 +2100,7 @@ ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 **
 ** Load Ensembl Registry internals via an AJAX Server name.
 **
-** @param [uN] servername [AjPStr] AJAX Server name (optional)
+** @param [u] servername [AjPStr] AJAX Server name
 **
 ** @return [ajuint] Number of Ensembl Database Adaptor objects registered
 **
@@ -2193,13 +2110,11 @@ ajuint ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc)
 
 ajuint ensRegistryLoadServername(AjPStr servername)
 {
-    ajuint *Presult = NULL;
+    ajuint dbid   = 0U;
+    ajuint result = 0U;
 
-    ajuint adaptors = 0U;
-    ajuint dbid     = 0U;
-    ajuint result   = 0U;
-
-    AjBool debug = AJFALSE;
+    AjBool debug      = AJFALSE;
+    AjBool registered = AJFALSE;
 
     AjIList dbniter  = NULL;
     AjIList svriter  = NULL;
@@ -2209,7 +2124,6 @@ ajuint ensRegistryLoadServername(AjPStr servername)
     AjPStr dbname  = NULL;
     AjPStr source  = NULL;
     AjPStr svrname = NULL;
-    AjPStr urlpfx  = NULL;
     AjPStr value   = NULL;
 
     EnsPDatabaseadaptor dba = NULL;
@@ -2229,8 +2143,7 @@ ajuint ensRegistryLoadServername(AjPStr servername)
     ** List objects must be re-created and freed for each server.
     */
 
-    source = ajStrNew();
-    value  = ajStrNew();
+    value = ajStrNew();
 
     svrnames = ajListstrNew();
 
@@ -2245,222 +2158,182 @@ ajuint ensRegistryLoadServername(AjPStr servername)
     {
         svrname = ajListstrIterGet(svriter);
 
-        /*
-        ** Only AJAX Server definitions with
-        ** attribute key "method" and
-        ** attribute value "ensembl" are relevant.
-        */
+        /* Only AJAX Server definitions of "method" "ensembl" are relevant. */
 
-        if (!ajNamSvrGetAttrC(svrname, "method", &value))
-        {
-            ajWarn("ensRegistryLoadServername could not get "
-                   "attribute key 'method' for server name '%S'.",
-                   svrname);
-            continue;
-        }
+        ajNamSvrGetAttrC(svrname, "method", &value);
 
         if (debug)
             ajDebug("ensRegistryLoadServername got "
                     "server name '%S' method '%S'.\n",
                     svrname, value);
 
-        if (!ajStrMatchC(value, "ensembl"))
-            continue;
-
-        /* Register the AJAX Server as Registry Source entry via an URL. */
-
-        ajStrAssignC(&source, "file:///");
-        if (ajNamSvrGetAttrC(svrname, "cachedirectory", &value))
+        if (ajStrMatchC(value, "ensembl"))
         {
+            /* Register the AJAX Server as Registry Source entry via a URL. */
+
+            ajNamSvrGetAttrC(svrname, "cachefile", &value);
+
+            source = ajStrNew();
+
             /*
-            ** FIXME: It would be good if the namSvrCacheOpen function
-            ** in the ajnam module could populate the "cachedirectory"
-            ** attribute somehow. This would also no longer reqiuire
-            ** another namSvrCacheOpen in ajNamSvrDetails, as the
-            ** full path would be available.
+            ** TODO: It would be good to get the absolute location of the
+            ** cache file that was used for configuration. An ajNamSvrDetails
+            ** function exists, but it is quite verbose.
+
+            ajStrAssignC(&source, "file:///");
             */
-            ajStrAppendS(&source, value);
-            ajStrAppendC(&source, "/");
-        }
-        if (ajNamSvrGetAttrC(svrname, "cachefile", &value))
-            ajStrAppendS(&source, value);
-        else
-        {
-            ajWarn("ensRegistryLoadServername could not get "
-                   "attribute key 'cachefile' for server name '%S'.",
-                   svrname);
-            continue;
-        }
 
-        if (debug)
-            ajDebug("ensRegistryLoadServername register '%S' from "
-                    "source '%S'.\n",
-                    svrname, source);
+            ajStrAppendS(&source, value);
 
-        if ((Presult = ajTablestrFetchS(registryGSource, source)))
-        {
             if (debug)
+                ajDebug("ensRegistryLoadServername register '%S' from "
+                        "source '%S'.\n",
+                        svrname, source);
+
+            registrySourceRegister(source, &registered);
+
+            if ((debug == ajTrue) && (registered == ajTrue))
                 ajDebug("ensRegistryLoadServername '%S' already "
                         "registered via source '%S'.\n",
                         svrname, source);
-            result += *Presult;
-            continue;
-        }
 
-        /*
-        ** Create an Ensembl Database Connection to the AJAX Server for
-        ** stream-lining subsequent SQL requests.
-        */
+            ajStrDel(&source);
 
-        if (!ajNamSvrGetAttrC(svrname, "url", &value))
-        {
-            ajWarn("ensRegistryLoadServername could not get "
-                   "attribute key 'url' for server name '%S'.",
-                   svrname);
-            continue;
-        }
-
-        dbc = ensDatabaseconnectionNewUrl(value);
-
-        if (!dbc)
-        {
-            ajDebug("ensRegistryLoadServer could not create an "
-                    "Ensembl Database Connection for server name '%S' "
-                    "and URL '%S'.\n",
-                    svrname, value);
-            continue;
-        }
-
-        ajStrAssignS(&urlpfx, value);
-
-        if (ajStrGetCharLast(urlpfx) != '/')
-            ajStrAppendK(&urlpfx, '/');
-
-        /* Get all database names for this AJAX Server. */
-
-        adaptors = 0U;
-
-        dbnames = ajListstrNew();
-
-        ajNamSvrListListDatabases(svrname, dbnames);
-
-        dbniter = ajListIterNew(dbnames);
-
-        while (!ajListIterDone(dbniter))
-        {
-            dbname = ajListstrIterGet(dbniter);
-
-            if (!ajNamSvrGetdbAttrC(svrname, dbname, "dbalias", &value))
+            if (registered == ajTrue)
             {
-                ajWarn("ensRegistryLoadServername could not get "
-                       "attribute key 'dbalias' for "
-                       "database name '%S' and "
-                       "server name '%S'.",
-                       dbname, svrname);
+                /*
+                ** FIXME: Even if a server has already been registered,
+                ** the result needs incrementing since seqEnsemblQryFirst
+                ** depends on a value greater zero. It would be good to get
+                ** the actual number of Ensembl Database Adaptors
+                ** linked to a particular server.
+                */
+                result++;
+
                 continue;
             }
 
-            ajStrInsertS(&value, 0, urlpfx);
+            /*
+            ** Create an Ensembl Database Connection to the AJAX Server for
+            ** stream-lining subsequent SQL requests.
+            */
 
-            dba = ensDatabaseadaptorNewUrl(value);
+            ajNamSvrGetAttrC(svrname, "url", &value);
 
-            if (ensDatabaseadaptorGetMultispecies(dba) == ajTrue)
+            dbc = ensDatabaseconnectionNewUrl(value);
+
+            if (!dbc)
             {
-                /*
-                ** For Ensembl Database Adaptor objects representing
-                ** collection databases, the species name needs resetting
-                ** to the AJAX database name and the species identifier
-                ** needs parsing from the "special" field of the AJAX
-                ** server database definition.
-                */
+                ajDebug("ensRegistryLoadServer could not create an "
+                        "Ensembl Database Connection for server name '%S' "
+                        "and URL '%S'.\n",
+                        svrname, value);
 
-                ensDatabaseadaptorSetSpecies(dba, dbname);
+                continue;
+            }
 
-                if (ajNamSvrGetdbAttrSpecialC(
-                        svrname, dbname, "SpeciesIdentifier", &value) == 1)
+            /* Get all database names for this AJAX Server. */
+
+            dbnames = ajListstrNew();
+
+            ajNamSvrListListDatabases(svrname, dbnames);
+
+            dbniter = ajListIterNew(dbnames);
+
+            while (!ajListIterDone(dbniter))
+            {
+                dbname = ajListstrIterGet(dbniter);
+
+                ajNamSvrGetdbAttrC(svrname, dbname, "url", &value);
+
+                dba = ensDatabaseadaptorNewUrl(value);
+
+                if (ensDatabaseadaptorGetMultispecies(dba) == ajTrue)
                 {
-                    /* Trim a trailing ';' character. */
+                    /*
+                    ** For Ensembl Database Adaptors representing collection
+                    ** databases, the species name needs resetting to the AJAX
+                    ** database name and the species identifier needs parsing
+                    ** from the "special" field of the AJAX server database
+                    ** definition.
+                    */
 
-                    if (ajStrGetCharLast(value) == ';')
-                        ajStrCutEnd(&value, 1);
+                    ensDatabaseadaptorSetSpecies(dba, dbname);
 
-                    dbid = 0U;
+                    if (ajNamSvrGetdbAttrSpecialC(
+                            svrname, dbname, "SpeciesIdentifier", &value) == 1)
+                    {
+                        /* Trim a trailing ';' character. */
+                        
+                        if (ajStrGetCharLast(value) == ';')
+                            ajStrCutEnd(&value, 1);
 
-                    if (ajStrToUint(value, &dbid))
-                        ensDatabaseadaptorSetIdentifier(dba, dbid);
+                        dbid = 0U;
+
+                        if (ajStrToUint(value, &dbid))
+                            ensDatabaseadaptorSetIdentifier(dba, dbid);
+                        else
+                        {
+                            ajDebug("ensRegistryLoadServer could not parse a "
+                                    "valid unsigned integer from the "
+                                    "\"SpeciesIdentifer=INTEGER\" expression "
+                                    "'%S' in the \"special\" field of AJAX "
+                                    "database definition for "
+                                    "Ensembl collection database '%S'.\n",
+                                    value, dbname);
+
+                            ensDatabaseadaptorDel(&dba);
+
+                            continue;
+                        }
+                    }
                     else
                     {
-                        ajDebug("ensRegistryLoadServer could not parse a "
-                                "valid unsigned integer from the "
-                                "\"SpeciesIdentifer=INTEGER\" expression "
-                                "'%S' in the \"special\" field of AJAX "
-                                "database definition for "
+                        ajDebug("ensRegistryLoadServer could not find a "
+                                "\"SpeciesIdentifer=INTEGER\" entry in the "
+                                "\"special\" field of AJAX database "
+                                "definition for "
                                 "Ensembl collection database '%S'.\n",
-                                value, dbname);
+                                dbname);
 
                         ensDatabaseadaptorDel(&dba);
 
                         continue;
                     }
                 }
-                else
+
+                if (ensRegistryAddDatabaseadaptor(dba) == ajTrue)
                 {
-                    ajDebug("ensRegistryLoadServer could not find a "
-                            "\"SpeciesIdentifer=INTEGER\" entry in the "
-                            "\"special\" field of AJAX database "
-                            "definition for "
-                            "Ensembl collection database '%S'.\n",
-                            dbname);
+                    /* Get and add the stable identifier prefix. */
 
-                    ensDatabaseadaptorDel(&dba);
+                    if (ajNamSvrGetdbAttrSpecialC(
+                            svrname, dbname, "SpeciesPrefix", &value) == 1)
+                        ensRegistryAddStableidentifierprefix(dba, value);
 
-                    continue;
+                    result++;
                 }
+                else
+                    ensDatabaseadaptorDel(&dba);
             }
 
-            if (ensRegistryAddDatabaseadaptor(dba) == ajTrue)
-            {
-                /* Get and add the stable identifier prefix. */
+            ajListIterDel(&dbniter);
+            ajListstrFree(&dbnames);
 
-                if (ajNamSvrGetdbAttrSpecialC(
-                        svrname, dbname, "SpeciesPrefix", &value) == 1)
-                    ensRegistryAddStableidentifierprefix(dba, value);
-
-                adaptors++;
-            }
-            else
-                ensDatabaseadaptorDel(&dba);
+            ensDatabaseconnectionDel(&dbc);
         }
-
-        ajListIterDel(&dbniter);
-        ajListstrFree(&dbnames);
-
-        ensDatabaseconnectionDel(&dbc);
-
-        /* Register this source. */
-
-        AJNEW0(Presult);
-        *Presult = adaptors;
-        ajTablePut(registryGSource,
-                   (void *) ajStrNewS(source),
-                   (void *) Presult);
-
-        result += adaptors;
     }
 
     ajListIterDel(&svriter);
     ajListstrFree(&svrnames);
 
-    ajStrDel(&source);
     ajStrDel(&value);
 
     if (debug)
     {
         ajDebug("ensRegistryLoadServername\n");
 
-        ensRegistryAliasTrace(1U);
-        ensRegistryEntryTrace(1U);
-        ensRegistrySourceTrace(1U);
+        ensRegistryEntryTrace(1);
+        ensRegistryAliasTrace(1);
     }
 
     return result;
@@ -3266,23 +3139,23 @@ AjBool ensRegistryIdentifierLoadFile(const AjPStr filename)
 
         ajStrTokenAssignC(&token, line, "\"");
 
-        if (!ajStrTokenNextFind(token, &expression))
+        if (!ajStrTokenNextFind(&token, &expression))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "regular expression from line '%S'.\n", line);
 
-        if (!ajStrTokenNextFind(token, &space))
+        if (!ajStrTokenNextFind(&token, &space))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "begin of species from line '%S'.\n", line);
 
-        if (!ajStrTokenNextFind(token, &alias))
+        if (!ajStrTokenNextFind(&token, &alias))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "species from line '%S'.\n", line);
 
-        if (!ajStrTokenNextFind(token, &space))
+        if (!ajStrTokenNextFind(&token, &space))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "begin of group from line '%S'.\n", line);
 
-        if (!ajStrTokenNextFind(token, &group))
+        if (!ajStrTokenNextFind(&token, &group))
             ajWarn("ensRegistryIdentifierLoadFile could not parse "
                    "group from line '%S'.\n", line);
 
@@ -3613,6 +3486,67 @@ AjBool ensRegistryEntryTrace(ajuint level)
 
 
 
+/* @funcstatic registrySourceRegister *****************************************
+**
+** Check, whether a source has been registered before and if this was not the
+** case, automatically register it.
+**
+** Sources are AJAX String representations of file names or Ensembl Database
+** Connection URLs that have been used to initialise the Ensembl Registry.
+** Tracking source avoids multiple initialisations from the same source.
+**
+** @param [r] source [const AjPStr] Ensembl Registry source
+** @param [w] Pregistered [AjBool*] Registered boolean
+**                                  ajTrue if registered before, ajFalse if not
+**
+** @return [AjBool] ajTrue opon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static AjBool registrySourceRegister(const AjPStr source,
+                                     AjBool *Pregistered)
+{
+    AjIList iterator = NULL;
+
+    AjPStr entry = NULL;
+
+    if (!Pregistered)
+        return ajFalse;
+
+    *Pregistered = ajFalse;
+
+    if (!(source && ajStrGetLen(source)))
+        return ajFalse;
+
+    iterator = ajListIterNew(registryGSource);
+
+    while (!ajListIterDone(iterator))
+    {
+        entry = ajListstrIterGet(iterator);
+
+        if (ajStrMatchCaseS(entry, source))
+        {
+            *Pregistered = ajTrue;
+
+            break;
+        }
+    }
+
+    ajListIterDel(&iterator);
+
+    /* If this source has not been seen before, add it to the AJAX List. */
+
+    if (!*Pregistered)
+        ajListstrPushAppend(registryGSource, ajStrNewS(source));
+
+    return ajTrue;
+}
+
+
+
+
 /* @func ensRegistrySourceTrace ***********************************************
 **
 ** Trace Ensembl Registry Source objects.
@@ -3627,30 +3561,28 @@ AjBool ensRegistryEntryTrace(ajuint level)
 
 AjBool ensRegistrySourceTrace(ajuint level)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
+    AjIList iterator = NULL;
 
-    register ajuint i = 0U;
-
+    AjPStr entry = NULL;
     AjPStr indent = NULL;
 
     indent = ajStrNew();
 
     ajStrAppendCountK(&indent, ' ', level * 2);
 
-    ajDebug("%SensRegistrySourceTrace %p\n",
+    ajDebug("%ensRegistrySourceTrace %p\n",
             indent, registryGSource);
 
-    ajTableToarrayKeysValues(registryGSource, &keyarray, &valarray);
+    iterator = ajListIterNew(registryGSource);
 
-    for (i = 0U; keyarray[i]; i++)
-        ajDebug("%S  Source URL '%S'\n"
-                "%S    Ensembl Database Adaptor objects '%u'\n",
-                indent, (AjPStr) keyarray[i],
-                indent, *((ajuint *) valarray[i]));
+    while (!ajListIterDone(iterator))
+    {
+        entry = ajListstrIterGet(iterator);
 
-    AJFREE(keyarray);
-    AJFREE(valarray);
+        ajDebug("%S  Source '%S'\n", indent, (AjPStr) entry);
+    }
+
+    ajListIterDel(&iterator);
 
     ajStrDel(&indent);
 
@@ -3758,7 +3690,7 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
                 "  database '%S'\n"
                 "  alias '%S'\n"
                 "  dbag '%s'\n"
-                "  multi '%B'\n"
+                "  multi %B\n"
                 "  identifier %u\n",
                 dbc,
                 database,
@@ -3855,7 +3787,7 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
                 "  database '%S'\n"
                 "  alias '%S'\n"
                 "  dbag '%s'\n"
-                "  multi '%B'\n"
+                "  multi %B\n"
                 "  identifier %u\n",
                 dba,
                 dbc,
@@ -4428,7 +4360,7 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor *Pdba)
                "a Registry Entry for species '%S'.\n",
                ensDatabaseadaptorGetSpecies(*Pdba));
 
-        *Pdba = NULL;
+        *Pdba = (EnsPDatabaseadaptor) NULL;
 
         return ajTrue;
     }
@@ -4578,7 +4510,7 @@ AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor *Pdba)
 
     /* Clear the Ensembl Database Adaptor pointer. */
 
-    *Pdba = NULL;
+    *Pdba = (EnsPDatabaseadaptor) NULL;
 
     return ajTrue;
 }
@@ -5259,18 +5191,12 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Return the Ensembl External Database Adaptor
 ** @nam4rule Geneadaptor
 ** Return the Ensembl Gene Adaptor
-** @nam4rule Intronsupportingevidenceadaptor
-** Return the Ensembl Intron Supporting Evidence Adaptor
 ** @nam4rule Karyotypebandadaptor
 ** Return the Ensembl Karyotype Band Adaptor
 ** @nam4rule Markeradaptor
 ** Return the Ensembl Marker Adaptor
 ** @nam4rule Markerfeatureadaptor
 ** Return the Ensembl Marker Feature Adaptor
-** @nam4rule Markermaplocationadaptor
-** Return the Ensembl Marker Map Location Adaptor
-** @nam4rule Markersynonymadaptor
-** Return the Ensembl Marker Synonym Adaptor
 ** @nam4rule Metacoordinateadaptor
 ** Return the Ensembl Meta-Coordinate Adaptor
 ** @nam4rule Metainformationadaptor
@@ -5279,10 +5205,6 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Return the Ensembl Miscellaneous Feature Adaptor
 ** @nam4rule Miscellaneoussetadaptor
 ** Return the Ensembl Miscellaneous Set Adaptor
-** @nam4rule Operonadaptor
-** Return the Ensembl Operon Adaptor
-** @nam4rule Operontranscriptadaptor
-** Return the Ensembl Operon Transcript Adaptor
 ** @nam4rule Predictionexonadaptor
 ** Return the Ensembl Prediction Exon Adaptor
 ** @nam4rule Predictiontranscriptadaptor
@@ -5307,8 +5229,6 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Return the Ensembl Slice Adaptor
 ** @nam4rule Stableidentifierprefix
 ** Return the Ensembl stable identifier prefix
-** @nam4rule Supportingfeatureadaptor
-** Return the Ensembl Supporting Feature Adaptor
 ** @nam4rule Transcriptadaptor
 ** Return the Ensembl Transcript Adaptor
 ** @nam4rule Translationadaptor
@@ -5348,18 +5268,12 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Ensembl External Database Adaptor or NULL
 ** @valrule Geneadaptor [EnsPGeneadaptor]
 ** Ensembl Gene Adaptor or NULL
-** @valrule Intronsupportingevidenceadaptor [EnsPIntronsupportingevidenceadaptor]
-** Ensembl Intron Supporting Evidence Adaptor or NULL
 ** @valrule Karyotypebandadaptor [EnsPKaryotypebandadaptor]
 ** Ensembl Karyotype Band Adaptor or NULL
 ** @valrule Markeradaptor [EnsPMarkeradaptor]
 ** Ensembl Marker Adaptor or NULL
 ** @valrule Markerfeatureadaptor [EnsPMarkerfeatureadaptor]
 ** Ensembl Marker Feature Adaptor or NULL
-** @valrule Markermaplocationadaptor [EnsPMarkermaplocationadaptor]
-** Ensembl Marker Map Location Adaptor or NULL
-** @valrule Markersynonymadaptor [EnsPMarkersynonymadaptor]
-** Ensembl Marker Synonym Adaptor or NULL
 ** @valrule Metacoordinateadaptor [EnsPMetacoordinateadaptor]
 ** Ensembl Meta-Coordinate Adaptor or NULL
 ** @valrule Metainformationadaptor [EnsPMetainformationadaptor]
@@ -5368,10 +5282,6 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Ensembl Miscellaneous Feature Adaptor or NULL
 ** @valrule Miscellaneoussetadaptor [EnsPMiscellaneoussetadaptor]
 ** Ensembl Miscellaneous Set Adaptor or NULL
-** @valrule Operonadaptor [EnsPOperonadaptor]
-** Ensembl Operon Adaptor or NULL
-** @valrule Operontranscriptadaptor [EnsPOperontranscriptadaptor]
-** Ensembl Operon Transcript Adaptor or NULL
 ** @valrule Predictionexonadaptor [EnsPPredictionexonadaptor]
 ** Ensembl Prediction Exon Adaptor or NULL
 ** @valrule Predictiontranscriptadaptor [EnsPPredictiontranscriptadaptor]
@@ -5396,8 +5306,6 @@ EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba)
 ** Ensembl Slice Adaptor or NULL
 ** @valrule Stableidentifierprefix [AjPStr]
 ** Ensembl stable identifier prefix or NULL
-** @valrule Supportingfeatureadaptor [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor or NULL
 ** @valrule Transcriptadaptor [EnsPTranscriptadaptor]
 ** Ensembl Transcript Adaptor or NULL
 ** @valrule Translationadaptor [EnsPTranslationadaptor]
@@ -5909,7 +5817,17 @@ EnsPCoordsystemadaptor ensRegistryGetCoordsystemadaptor(
 EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
     EnsPDatabaseadaptor dba)
 {
+    RegistryPEntry entry   = NULL;
+    RegistryPCoreStyle rcs = NULL;
+
     if (!dba)
+        return NULL;
+
+    entry = (RegistryPEntry) ajTableFetchmodV(
+        registryGEntry,
+        (const void *) ensDatabaseadaptorGetSpecies(dba));
+
+    if (!entry)
         return NULL;
 
     switch (ensDatabaseadaptorGetGroup(dba))
@@ -5922,7 +5840,17 @@ EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
 
         case ensEDatabaseadaptorGroupCopyDNA:
 
-            return dba;
+            rcs = (RegistryPCoreStyle)
+                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
+
+            if (!rcs)
+                break;
+
+            if (!rcs->Databaseentryadaptor)
+                rcs->Databaseentryadaptor =
+                    ensDatabaseentryadaptorNew(dba);
+
+            return rcs->Databaseentryadaptor;
 
             break;
 
@@ -6478,73 +6406,6 @@ EnsPGeneadaptor ensRegistryGetGeneadaptor(
 
 
 
-/* @func ensRegistryGetIntronsupportingevidenceadaptor ************************
-**
-** Get an Ensembl Intron Supporting Evidence Adaptor from the Ensembl Registry.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPIntronsupportingevidenceadaptor]
-** Ensembl Intron Supporting Evidence Adaptor or NULL
-**
-** @release 6.2.0
-** @@
-******************************************************************************/
-
-EnsPIntronsupportingevidenceadaptor ensRegistryGetIntronsupportingevidenceadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    RegistryPEntry entry   = NULL;
-    RegistryPCoreStyle rcs = NULL;
-
-    if (!dba)
-        return NULL;
-
-    entry = (RegistryPEntry) ajTableFetchmodV(
-        registryGEntry,
-        (const void *) ensDatabaseadaptorGetSpecies(dba));
-
-    if (!entry)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            rcs = (RegistryPCoreStyle)
-                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
-
-            if (!rcs)
-                break;
-
-            if (!rcs->Intronsupportingevidenceadaptor)
-                rcs->Intronsupportingevidenceadaptor =
-                    ensIntronsupportingevidenceadaptorNew(dba);
-
-            return rcs->Intronsupportingevidenceadaptor;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetIntronsupportingevidenceadaptor got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
 /* @func ensRegistryGetKaryotypebandadaptor ***********************************
 **
 ** Get an Ensembl Karyotype Band Adaptor from the Ensembl Registry.
@@ -6743,106 +6604,6 @@ EnsPMarkerfeatureadaptor ensRegistryGetMarkerfeatureadaptor(
         default:
 
             ajWarn("ensRegistryGetMarkerfeatureadaptor got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensRegistryGetMarkermaplocationadaptor *******************************
-**
-** Get an Ensembl Marker Map Location Adaptor from the Ensembl Registry.
-**
-** The Ensembl Marker Map Location Adaptor is an alias for an
-** Ensembl Database Adaptor connected to Ensembl Core-Style databases.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPMarkermaplocationadaptor]
-** Ensembl Marker Map Location Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPMarkermaplocationadaptor ensRegistryGetMarkermaplocationadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    if (!dba)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            return dba;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetMarkermaplocationadaptor got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensRegistryGetMarkersynonymadaptor ***********************************
-**
-** Get an Ensembl Marker Synonym Adaptor from the Ensembl Registry.
-**
-** The Ensembl Marker Synonym Adaptor is an alias for an
-** Ensembl Database Adaptor connected to Ensembl Core-Style databases.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPMarkersynonymadaptor]
-** Ensembl Marker Synonym Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPMarkersynonymadaptor ensRegistryGetMarkersynonymadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    if (!dba)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            return dba;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetMarkersynonymadaptor got an "
                    "Ensembl Database Adaptor "
                    "with an unexpected group %d.\n",
                    ensDatabaseadaptorGetGroup(dba));
@@ -7111,140 +6872,6 @@ EnsPMiscellaneoussetadaptor ensRegistryGetMiscellaneoussetadaptor(
         default:
 
             ajWarn("ensRegistryGetMiscellaneoussetadaptor got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensRegistryGetOperonadaptor ******************************************
-**
-** Get an Ensembl Operon Adaptor from the Ensembl Registry.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPOperonadaptor]
-** Ensembl Operon Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPOperonadaptor ensRegistryGetOperonadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    RegistryPEntry entry   = NULL;
-    RegistryPCoreStyle rcs = NULL;
-
-    if (!dba)
-        return NULL;
-
-    entry = (RegistryPEntry) ajTableFetchmodV(
-        registryGEntry,
-        (const void *) ensDatabaseadaptorGetSpecies(dba));
-
-    if (!entry)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            rcs = (RegistryPCoreStyle)
-                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
-
-            if (!rcs)
-                break;
-
-            if (!rcs->Operonadaptor)
-                rcs->Operonadaptor =
-                    ensOperonadaptorNew(dba);
-
-            return rcs->Operonadaptor;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetOperonadaptor got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensRegistryGetOperontranscriptadaptor ********************************
-**
-** Get an Ensembl Operon Transcript Adaptor from the Ensembl Registry.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPOperontranscriptadaptor]
-** Ensembl Operon Transcript Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPOperontranscriptadaptor ensRegistryGetOperontranscriptadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    RegistryPEntry entry   = NULL;
-    RegistryPCoreStyle rcs = NULL;
-
-    if (!dba)
-        return NULL;
-
-    entry = (RegistryPEntry) ajTableFetchmodV(
-        registryGEntry,
-        (const void *) ensDatabaseadaptorGetSpecies(dba));
-
-    if (!entry)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            rcs = (RegistryPCoreStyle)
-                entry->Registry[ensDatabaseadaptorGetGroup(dba)];
-
-            if (!rcs)
-                break;
-
-            if (!rcs->Operontranscriptadaptor)
-                rcs->Operontranscriptadaptor =
-                    ensOperontranscriptadaptorNew(dba);
-
-            return rcs->Operontranscriptadaptor;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetOperontranscriptadaptor got an "
                    "Ensembl Database Adaptor "
                    "with an unexpected group %d.\n",
                    ensDatabaseadaptorGetGroup(dba));
@@ -8071,55 +7698,6 @@ AjPStr ensRegistryGetStableidentifierprefix(
         default:
 
             ajWarn("ensRegistryGetStableidentifierprefix got an "
-                   "Ensembl Database Adaptor "
-                   "with an unexpected group %d.\n",
-                   ensDatabaseadaptorGetGroup(dba));
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensRegistryGetSupportingfeatureadaptor *******************************
-**
-** Get an Ensembl Supporting Feature Adaptor from the Ensembl Registry.
-** The Ensembl Supporting Feature Adaptor is an alias for an
-** Ensembl Database Adaptor connected to an Ensembl Core-style database.
-**
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @return [EnsPSupportingfeatureadaptor]
-** Ensembl Supporting Feature Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPSupportingfeatureadaptor ensRegistryGetSupportingfeatureadaptor(
-    EnsPDatabaseadaptor dba)
-{
-    if (!dba)
-        return NULL;
-
-    switch (ensDatabaseadaptorGetGroup(dba))
-    {
-        case ensEDatabaseadaptorGroupCore:
-
-        case ensEDatabaseadaptorGroupVega:
-
-        case ensEDatabaseadaptorGroupOtherFeatures:
-
-        case ensEDatabaseadaptorGroupCopyDNA:
-
-            return dba;
-
-            break;
-
-        default:
-
-            ajWarn("ensRegistryGetSupportingfeatureeadaptor got an "
                    "Ensembl Database Adaptor "
                    "with an unexpected group %d.\n",
                    ensDatabaseadaptorGetGroup(dba));

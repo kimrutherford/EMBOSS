@@ -3,8 +3,8 @@
 ** support for DAS sequence data sources
 **
 ** @author Copyright (c) 2009 Mahmut Uludag
-** @version $Revision: 1.30 $
-** @modified $Date: 2012/12/07 10:20:44 $ by $Author: rice $
+** @version $Revision: 1.27 $
+** @modified $Date: 2011/10/18 14:23:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -516,7 +516,6 @@ void ajDasServerGetSources(AjPDasServer server, const AjPStr cmd)
 	ajFmtPrintS(&cmdpath, "%S%S", server->path, cmd);
 
     ajFilebuffDel(&textin->Filebuff);
-
     textin->Filebuff = ajHttpRead(httpver, dbname, dbproxy,
                                   server->host, server->port, cmdpath);
 
@@ -941,9 +940,6 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 
 	    ajStrAssignS(&url, source->sequence_query_uri);
 
-            if(!ajStrPrefixCaseC(url, "http://"))
-                ajStrInsertC(&url, 0, "http://");
-
 	    i = ajStrFindlastC(url,"/sequence");
 
 	    if(i != -1)
@@ -975,9 +971,6 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 	    {
 		ajStrAssignS(&url, source->features_query_uri);
 
-                if(!ajStrPrefixCaseC(url, "http://"))
-                    ajStrInsertC(&url, 0, "http://");
-
 		i = ajStrFindlastC(url,"/features");
 
 		if(i != -1)
@@ -994,12 +987,12 @@ static AjBool dasWriteDBdefinition(AjPFile cachef, const AjPDasSource source,
 	    ajFmtPrintS(&taxon, "  taxon: \"%S\"\n", coord->taxid);
 
 	ajFmtPrintF(cachef,
-		"DBNAME %S [\n"
-		"  method: \"das\"\n"
+		"DB %S [\n"
+		"  method: das\n"
 		"  type: \"%S\"\n"
 		"%S"
 		"  format: \"%S\"\n"
-		"  url: \"%S\"\n"
+		"  url: %S\n"
 		"  example: \"%S\"\n"
 		"  comment: \"%S\"\n"
 		"  hasaccession: \"N\"\n"
@@ -1067,17 +1060,17 @@ AjPStr ajDasTestrangeParse(const AjPStr testrange, AjPStr* id,
 
     ret = ajStrNew();
 
-    if(!(ajStrTokenNextParseNoskip(token, id)))
+    if(!(ajStrTokenNextParseNoskip(&token, id)))
     {
 	ajStrTokenDel(&token);
 	return ret;
     }
 
-    if(ajStrTokenNextParseNoskip(token, &tmp))
+    if(ajStrTokenNextParseNoskip(&token, &tmp))
     {
 	ajStrToInt(tmp, ibegin);
 
-	if(ajStrTokenNextParseNoskip(token, &tmp))
+	if(ajStrTokenNextParseNoskip(&token, &tmp))
 	{
 	    ajStrToInt(tmp, iend);
 	    ajFmtPrintS(&ret,"%S[%d:%d]", *id, *ibegin, *iend);

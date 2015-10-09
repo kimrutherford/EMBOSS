@@ -56,9 +56,9 @@ int main(int argc, char **argv)
     double pH;
     double iep;
 
-    ajuint *c   = NULL;
-    ajuint *op  = NULL;
-    double **pK = NULL;
+    ajint *c    = NULL;
+    ajint *op   = NULL;
+    double *pK  = NULL;
     double *K   = NULL;
     double *pro = NULL;
     double sum;
@@ -68,7 +68,6 @@ int main(int argc, char **argv)
     AjPStr title = NULL;
     AjPStr tmp = NULL;
 
-    AjPFile pkptr = NULL;
     float *xa = NULL;
     float *ya = NULL;
     float minchg = 0.0;
@@ -78,8 +77,6 @@ int main(int argc, char **argv)
     ajint be;
     ajint en;
     ajint i;
-    ajuint resn = 0;
-    ajuint resc = 0;
 
     embInit("iep", argc, argv);
 
@@ -92,7 +89,6 @@ int main(int argc, char **argv)
     carboxyl  = ajAcdGetInt("carboxyl");
     sscount   = ajAcdGetInt("disulphides");
     modlysine = ajAcdGetInt("lysinemodified");
-    pkptr     = ajAcdGetDatafile("pkdata");
     outf      = ajAcdGetOutfile("outfile");
 
 
@@ -102,7 +98,7 @@ int main(int argc, char **argv)
     AJCNEW(op,  EMBIEPSIZE);
     AJCNEW(pro, EMBIEPSIZE);
 
-    embIepPkNewFile(pkptr, &pK);
+    pK = embIeppKNew();
     
     embIepCalcK(K,pK);				/* Convert to dissoc consts */
 
@@ -122,10 +118,7 @@ int main(int argc, char **argv)
 	    pro[i]=0.;
 	}
 
-	embIepCompS(substr, amino, carboxyl, sscount, modlysine,
-                    c, &resn, &resc);
-
-        embIepCalcKend(K, pK, resn, resc);
+	embIepCompS(substr, amino, carboxyl, sscount, modlysine, c);
 
 	if(dofile && outf)
 	{
@@ -214,7 +207,7 @@ int main(int argc, char **argv)
     ajGraphicsClose();
     ajGraphxyDel(&graph);
 
-    embIepPkDel(&pK);
+    embIeppKDel(pK);
     
     AJFREE(K);
     AJFREE(pro);
@@ -223,7 +216,6 @@ int main(int argc, char **argv)
 
     ajStrDel(&substr);
     ajFileClose(&outf);
-    ajFileClose(&pkptr);
 
     ajSeqallDel(&all);
     ajSeqDel(&a);

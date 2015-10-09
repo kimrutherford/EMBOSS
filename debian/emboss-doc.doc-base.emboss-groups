@@ -1,9 +1,0 @@
-Document: emboss-groups
-Title: EMBOSS Application Groups
-Author: The EMBOSS Developpers
-Section: Science/Biology
-Abstract: Documentation of the EMBOSS applications organized into logical groups according to their function.  
-
-Format: HTML
-Index: /usr/share/doc/emboss-doc/doc/programs/html/groups.html
-Files: /usr/share/doc/emboss-doc/doc/programs/html/*.html

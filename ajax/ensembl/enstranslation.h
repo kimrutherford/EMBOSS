@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.30 $
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:10:30 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -205,36 +205,21 @@ EnsPTranslationadaptor ensTranslationadaptorNew(
 
 void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla);
 
-EnsPBaseadaptor ensTranslationadaptorGetBaseadaptor(
-    EnsPTranslationadaptor tla);
-
 EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
     EnsPTranslationadaptor tla);
-
-AjBool ensTranslationadaptorFetchAllbyExternaldatabasename(
-    EnsPTranslationadaptor tla,
-    const AjPStr dbname,
-    AjPList translations);
 
 AjBool ensTranslationadaptorFetchAllbyExternalname(
     EnsPTranslationadaptor tla,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
     AjPList translations);
 
-AjBool ensTranslationadaptorFetchAllbyIdentifiers(
-    EnsPTranslationadaptor tla,
-    AjPTable translations);
+AjBool ensTranslationadaptorFetchAllbyTranscript(EnsPTranslationadaptor tla,
+                                                 EnsPTranscript transcript);
 
-AjBool ensTranslationadaptorFetchAllbyTranscript(
-    EnsPTranslationadaptor tla,
-    EnsPTranscript transcript);
-
-AjBool ensTranslationadaptorFetchByIdentifier(
-    EnsPTranslationadaptor tla,
-    ajuint identifier,
-    EnsPTranslation *Ptranslation);
+AjBool ensTranslationadaptorFetchByIdentifier(EnsPTranslationadaptor tla,
+                                              ajuint identifier,
+                                              EnsPTranslation *Ptranslation);
 
 AjBool ensTranslationadaptorFetchByStableidentifier(
     EnsPTranslationadaptor tla,
@@ -259,7 +244,7 @@ AjBool ensTranslationadaptorRetrieveAllIdentifiers(
 
 AjBool ensTranslationadaptorRetrieveAllStableidentifiers(
     EnsPTranslationadaptor tla,
-    AjPList stableids);
+    AjPList identifiers);
 
 /*
 ** End of prototype definitions

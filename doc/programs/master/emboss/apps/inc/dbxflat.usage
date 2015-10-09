@@ -13,7 +13,6 @@ Resource name: <b>emblresource</b>
         GB : Genbank, DDBJ
     REFSEQ : Refseq
      FASTQ : Fastq files
-     USPTO : Iguspto files
 Entry format [SWISS]: <b>embl</b>
 Wildcard database filename [*.dat]: <b>rod.dat</b>
 Database directory [.]: <b>embl</b>

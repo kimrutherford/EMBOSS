@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.23 $
+** @version $Revision: 1.22 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:30:58 $ by $Author: mks $
+** @modified $Date: 2012/03/04 14:30:36 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -156,8 +156,6 @@ EnsPCache ensCacheNew(const EnsECacheType type,
                       const char *label);
 
 void ensCacheDel(EnsPCache *Pcache);
-
-AjBool ensCacheClear(EnsPCache cache);
 
 AjBool ensCacheTrace(const EnsPCache cache, ajuint level);
 

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.18 $
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:03:15 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -121,12 +121,18 @@ AjBool ensGenericassemblymapperCheckComponent(
     const EnsPGenericassemblymapper gam,
     ajuint cmpsrid);
 
+AjBool ensGenericassemblymapperFastmap(EnsPGenericassemblymapper gam,
+                                       const EnsPSeqregion sr,
+                                       ajint srstart,
+                                       ajint srend,
+                                       ajint srstrand,
+                                       AjPList mrs);
+
 AjBool ensGenericassemblymapperMap(EnsPGenericassemblymapper gam,
                                    const EnsPSeqregion sr,
                                    ajint srstart,
                                    ajint srend,
                                    ajint srstrand,
-                                   AjBool fastmap,
                                    AjPList mrs);
 
 /* Ensembl Chained Assembly Mapper */
@@ -206,8 +212,7 @@ EnsPToplevelassemblymapper ensToplevelassemblymapperNewIni(
 EnsPToplevelassemblymapper ensToplevelassemblymapperNewRef(
     EnsPToplevelassemblymapper tlam);
 
-void ensToplevelassemblymapperDel(
-    EnsPToplevelassemblymapper *Ptlam);
+void ensToplevelassemblymapperDel(EnsPToplevelassemblymapper *Ptlam);
 
 EnsPAssemblymapperadaptor ensToplevelassemblymapperGetAdaptor(
     const EnsPToplevelassemblymapper tlam);
@@ -235,53 +240,47 @@ AjBool ensToplevelassemblymapperMap(EnsPToplevelassemblymapper tlam,
 
 /* Ensembl Assembly Mapper */
 
-EnsPAssemblymapper ensAssemblymapperNewIni(
-    EnsPAssemblymapperadaptor ama,
-    EnsPGenericassemblymapper gam,
-    EnsPChainedassemblymapper cam,
-    EnsPToplevelassemblymapper tlam);
+EnsPAssemblymapper ensAssemblymapperNewIni(EnsPAssemblymapperadaptor ama,
+                                           EnsPGenericassemblymapper gam,
+                                           EnsPChainedassemblymapper cam,
+                                           EnsPToplevelassemblymapper tlam);
 
-EnsPAssemblymapper ensAssemblymapperNewRef(
-    EnsPAssemblymapper am);
+EnsPAssemblymapper ensAssemblymapperNewRef(EnsPAssemblymapper am);
 
-void ensAssemblymapperDel(
-    EnsPAssemblymapper *Pam);
+void ensAssemblymapperDel(EnsPAssemblymapper *Pam);
 
-AjBool ensAssemblymapperTrace(
-    const EnsPAssemblymapper am,
-    ajuint level);
+AjBool ensAssemblymapperTrace(const EnsPAssemblymapper am, ajuint level);
 
-AjBool ensAssemblymapperMapSeqregion(
-    EnsPAssemblymapper am,
-    const EnsPSeqregion sr,
-    ajint srstart,
-    ajint srend,
-    ajint srstrand,
-    AjBool fastmap,
-    AjPList mrs);
+AjBool ensAssemblymapperFastmap(EnsPAssemblymapper am,
+                                const EnsPSeqregion sr,
+                                ajint srstart,
+                                ajint srend,
+                                ajint srstrand,
+                                AjPList mrs);
 
-AjBool ensAssemblymapperMapSlice(
-    EnsPAssemblymapper am,
-    const EnsPSlice slice,
-    AjBool fastmap,
-    AjPList mrs);
+AjBool ensAssemblymapperMapSeqregion(EnsPAssemblymapper am,
+                                     const EnsPSeqregion sr,
+                                     ajint srstart,
+                                     ajint srend,
+                                     ajint srstrand,
+                                     AjPList mrs);
 
-AjBool ensAssemblymapperMapToSeqregion(
-    EnsPAssemblymapper am,
-    const EnsPSeqregion sr,
-    ajint srstart,
-    ajint srend,
-    ajint srstrand,
-    const EnsPSeqregion optsr,
-    AjBool fastmap,
-    AjPList mrs);
+AjBool ensAssemblymapperMapSlice(EnsPAssemblymapper am,
+                                 const EnsPSlice slice,
+                                 AjPList mrs);
 
-AjBool ensAssemblymapperMapToSlice(
-    EnsPAssemblymapper am,
-    const EnsPSlice slice,
-    const EnsPSlice optslice,
-    AjBool fastmap,
-    AjPList mrs);
+AjBool ensAssemblymapperMapToSeqregion(EnsPAssemblymapper am,
+                                       const EnsPSeqregion sr,
+                                       ajint srstart,
+                                       ajint srend,
+                                       ajint srstrand,
+                                       const EnsPSeqregion optsr,
+                                       AjPList mrs);
+
+AjBool ensAssemblymapperMapToSlice(EnsPAssemblymapper am,
+                                   const EnsPSlice slice,
+                                   const EnsPSlice optslice,
+                                   AjPList mrs);
 
 /* Ensembl Assembly Mapper Adaptor */
 
@@ -291,14 +290,12 @@ EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
 EnsPAssemblymapperadaptor ensAssemblymapperadaptorNew(
     EnsPDatabaseadaptor dba);
 
-AjBool ensAssemblymapperadaptorClear(
-    EnsPAssemblymapperadaptor ama);
+AjBool ensAssemblymapperadaptorClear(EnsPAssemblymapperadaptor ama);
 
-void ensAssemblymapperadaptorDel(
-    EnsPAssemblymapperadaptor *Pama);
+void ensAssemblymapperadaptorDel(EnsPAssemblymapperadaptor *Pama);
 
 EnsPDatabaseadaptor ensAssemblymapperadaptorGetDatabaseadaptor(
-    EnsPAssemblymapperadaptor ama);
+    const EnsPAssemblymapperadaptor ama);
 
 AjBool ensAssemblymapperadaptorFetchByCoordsystems(
     EnsPAssemblymapperadaptor ama,

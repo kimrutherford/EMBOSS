@@ -38,7 +38,7 @@ Taxon output file [9606.tax]:
 Command line arguments
 
 Get taxon(s)
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-taxons]            taxon      Taxon filename and optional format, or

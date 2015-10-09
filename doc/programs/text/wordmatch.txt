@@ -39,7 +39,7 @@ Second features output [HBB_HUMAN.gff]:
 Command line arguments
 
 Find regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -71,7 +71,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -91,7 +90,6 @@ Version: EMBOSS:6.6.0.0
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
    -scircular2         boolean    Sequence is circular
-   -squick2            boolean    Read id and sequence only
    -sformat2           string     Input sequence format
    -iquery2            string     Input query fields or ID list
    -ioffset2           integer    Input start position offset
@@ -433,7 +431,7 @@ Output file format
 
 ########################################
 # Program: wordmatch
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -459,9 +457,9 @@ Output file format
 
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2013-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.6.0.0
+#!Source-version EMBOSS 6.5.6.0
 HBA_HUMAN       wordmatch       polypeptide_region      15      18      1
 .       .       ID=HBA_HUMAN.1;note=HBB_HUMAN
 HBA_HUMAN       wordmatch       polypeptide_region      59      63      1
@@ -473,9 +471,9 @@ HBA_HUMAN       wordmatch       polypeptide_region      117     120     1
 
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2013-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.6.0.0
+#!Source-version EMBOSS 6.5.6.0
 HBB_HUMAN       wordmatch       polypeptide_region      16      19      1
 .       .       ID=HBB_HUMAN.1;note=HBA_HUMAN
 HBB_HUMAN       wordmatch       polypeptide_region      64      68      1

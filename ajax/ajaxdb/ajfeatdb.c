@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX feature database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.46 $
+** @version $Revision: 1.44 $
 ** @modified Sep 2010 pmr first version
-** @modified $Date: 2012/12/07 10:20:52 $ by $Author: rice $
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -507,12 +507,12 @@ static AjOFeattabAccess feattabAccess[] =
     {
       "das",   &featAccessDas, NULL,
       "&",     "retrieve features from a DAS server",
-      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
     },
     {
       "chado", &featAccessChado, NULL,
       "",      "retrieve features from a CHADO server",
-      AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJFALSE
+      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
     },
     {
       "gcg",   &featAccessGcg, NULL,
@@ -4247,7 +4247,7 @@ static AjBool featEmbossQryOrganisms(AjPQuery qry)
     featEmbossOpenCache(qry, "org", &orgcache);
     orglist = ajListNew();
     orghandle = ajStrTokenNewC(qry->Organisms, "\t,;|");
-    while(ajStrTokenNextParse(orghandle, &orgqry))
+    while(ajStrTokenNextParse(&orghandle, &orgqry))
     {
         if(ajBtreeCacheIsSecondary(orgcache))
         {

@@ -3,9 +3,9 @@
 ** AJAX Document Object Model (DOM) functions
 **
 ** @author Copyright (C) 2006 Alan Bleasby
-** @version $Revision: 1.17 $
+** @version $Revision: 1.16 $
 ** @modified Jul 03 2006 ajb First version
-** @modified $Date: 2012/09/03 14:24:14 $ by $Author: rice $
+** @modified $Date: 2012/03/22 21:19:52 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -478,9 +478,9 @@ AjPDomNode      ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
                                       AjPDomNode refchild);
 AjPDomNode      ajDomRemoveChild(AjPDomNode node, AjPDomNode child);
 void            ajDomDocumentDestroyNode(AjPDomDocument doc,
-                                         AjPDomNode *Pnode);
+                                         AjPDomNode node);
 void            ajDomDocumentDestroyNodeList(AjPDomDocument doc,
-                                             AjPDomNodeList *Plist,
+                                             AjPDomNodeList list,
                                              AjBool donodes);
 AjPDomNode      ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
                                       AjPDomNode oldchild);
@@ -524,8 +524,6 @@ void            ajDomNodePrintNode(const AjPDomNode node);
 
 ajint           ajDomReadFp(AjPDomDocument node, FILE *stream);
 ajint           ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff);
-ajint           ajDomReadFilebuffText(AjPDomDocument node, AjPFilebuff buff,
-                                      AjBool dotext, AjPStr *Pstr);
 ajint           ajDomReadString(AjPDomDocument node, AjPStr str);
 
 AjPStr          ajDomTextGetText(AjPDomText text);

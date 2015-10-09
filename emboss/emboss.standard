@@ -21,9 +21,7 @@
 # EBI Chemical Ontology (CHEBI)
 #######################################
 
-DBNAME chebi [
-  comment: "Chemical Entities of Biological Interest"
-  release: "93"
+DB chebi [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -35,11 +33,6 @@ DBNAME chebi [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "none"
-  edamtpc: "0154 ! Small molecules"
-  edamdat: "0962 ! Small molecule report"
-  edamid:  "1174 ! ChEBI ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
@@ -47,9 +40,7 @@ DBNAME chebi [
 # used to define sequence database evidence
 #######################################
 
-DBNAME eco [
-  comment: "Evidence code ontology"
-  release: "2.02"
+DB eco [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -61,8 +52,6 @@ DBNAME eco [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "none"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
@@ -71,9 +60,7 @@ DBNAME eco [
 # and the Data Resource Catalogue
 #######################################
 
-DBNAME edam [
-  comment: "EMBRACE Data and Methods ontology"
-  release: "1.1"
+DB edam [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -91,16 +78,9 @@ DBNAME edam [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME edam_data [
-  comment: "EMBRACE Data and Methods ontology (data)"
-  release: "1.1"
+DB edam_data [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -120,16 +100,9 @@ DBNAME edam_data [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME edam_format [
-  comment: "EMBRACE Data and Methods ontology (formats)"
-  release: "1.1"
+DB edam_format [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -149,16 +122,9 @@ DBNAME edam_format [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME edam_identifier [
-  comment: "EMBRACE Data and Methods ontology (identifiers)"
-  release: "1.1"
+DB edam_identifier [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -178,16 +144,9 @@ DBNAME edam_identifier [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME edam_operation [
-  comment: "EMBRACE Data and Methods ontology (operations)"
-  release: "1.1"
+DB edam_operation [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -207,16 +166,9 @@ DBNAME edam_operation [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME edam_topic [
-  comment: "EMBRACE Data and Methods ontology (topics)"
-  release: "1.1"
+DB edam_topic [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -238,11 +190,6 @@ DBNAME edam_topic [
   field: "isid ! identifier(s) from is_identifier_of relation(s)"
   field: "isfmt ! identifier(s) from is_format_of relation(s)"
   field: "issrc ! identifier(s) from is_source_of relation(s)"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 ############################################
@@ -250,9 +197,7 @@ DBNAME edam_topic [
 # used to annotate public sequence databases
 ############################################
 
-DBNAME go [
-  comment: "Gene Ontology"
-  release: "1.1.3300"
+DB go [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -265,16 +210,9 @@ DBNAME go [
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
   field: "ns ! namespace"
-  taxon: "1 all"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME go_component [
-  comment: "Gene Ontology (cellular components)"
-  release: "1.1.3300"
+DB go_component [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -288,16 +226,9 @@ DBNAME go_component [
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
   field: "ns ! namespace"
-  taxon: "1 all"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME go_function [
-  comment: "Gene Ontology (molecular functions)"
-  release: "1.1.3300"
+DB go_function [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -311,16 +242,9 @@ DBNAME go_function [
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
   field: "ns ! namespace"
-  taxon: "1 all"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
-DBNAME go_process [
-  comment: "Gene Ontology (biological processes)"
-  release: "1.1.3300"
+DB go_process [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -334,20 +258,13 @@ DBNAME go_process [
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
   field: "ns ! namespace"
-  taxon: "1 all"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
 # Pathways ontology (PW)
 #######################################
 
-DBNAME pw [
-  comment: "Pathways ontology"
-  release: "12:06:2012 11:03"
+DB pw [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -359,11 +276,6 @@ DBNAME pw [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "1 all"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
@@ -371,9 +283,7 @@ DBNAME pw [
 # used to define OBO file relations
 #######################################
 
-DBNAME ro [
-  comment: "Relations ontology"
-  release: "20:03:2009 11:58"
+DB ro [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -385,11 +295,6 @@ DBNAME ro [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
@@ -397,9 +302,7 @@ DBNAME ro [
 # used to define sequence features
 #######################################
 
-DBNAME so [
-  comment: "Sequence ontology"
-  release: "02:05:2012 11:08"
+DB so [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -411,11 +314,6 @@ DBNAME so [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #######################################
@@ -424,9 +322,7 @@ DBNAME so [
 # in collaboration with EDAM
 #######################################
 
-DBNAME swo [
-  comment: "Software ontology"
-  release: "12-jul-2012"
+DB swo [
   type:   "obo"
   format: "obo"
   method: "emboss"
@@ -438,11 +334,6 @@ DBNAME swo [
   field: "nam ! words in the name"
   field: "isa ! parent identifier from is_a relation(s)"
   field: "des ! words in the description"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
-  edamdat: "0966 ! Ontology term"
-  edamid:  "1176 ! GO term ID"
-  edamfmt: "2196 ! OBO format"
 ]
 
 #############################################
@@ -454,9 +345,7 @@ DBNAME swo [
 # and identifier for each query
 #############################################
 
-DBNAME drcat [
-  comment: "Data Resource Catalogue"
-  release: "alpha 1 21-jun-2011"
+DB drcat [
   type:   "resource"
   format: "drcat"
   method: "emboss"
@@ -485,8 +374,6 @@ DBNAME drcat [
   field: "stat ! status"
   field: "xref ! Database cross-reference"
   field: "taxid ! NCBI taxonomy identifier"
-  taxon: "none"
-  edamtpc: "0089 ! Ontologies"
 ]
 
 #############################################
@@ -494,9 +381,7 @@ DBNAME drcat [
 # lists all taxons in the public sequence databases
 #############################################
 
-DBNAME taxon [
-  comment: "NCBI taxonomy"
-  release: "July 2012"
+DB taxon [
   type:   "taxonomy"
   format: "ncbi"
   method: "embosstax"
@@ -511,9 +396,6 @@ DBNAME taxon [
   field: "gc ! genetic code"
   field: "mgc ! mitochondrial genetic code"
   taxon: "1 ! all"
-  edamtpc: "0637 ! Taxonomy"
-  edamid:  "1179 ! NCBI taxonomy ID"
-  edamdat: "3028 ! Taxonomic data"
 ]
 
 ################################################
@@ -689,7 +571,7 @@ SERVER dbfetch [
 # Resource definitions for the dbx indexing system.
 ##################################################################
 
-RESOURCE dbxresource [
+RES dbxresource [
   type: "Index"
   idlen:  "15"
   acclen: "15"
@@ -699,7 +581,7 @@ RESOURCE dbxresource [
   keylen: "15"
 ]
 
-RESOURCE taxresource [
+RES taxresource [
   type: "Index"
   fields: "id acc tax rnk up gc mgc"
   rnklen: "16"
@@ -710,7 +592,7 @@ RESOURCE taxresource [
   mgclen: "2"
 ]
 
-RESOURCE emblresource [
+RES emblresource [
   type: "Index"
   idlen:  "15"
   acclen: "15"
@@ -720,19 +602,17 @@ RESOURCE emblresource [
   orglen: "75"
 ]
 
-RESOURCE swissresource [
+RES swissresource [
   type: "Index"
   idlen:  "12"
   acclen: "6"
   svlen:  "10"
-  deslen: "125"
+  deslen: "85"
   keylen: "75"
   orglen: "75"
-  despagesize: "4096"
+  despagesize: "2048"
   keypagesize: "2048"
   orgpagesize: "2048"
-  cachesize: "20000"
-  seccachesize: "100000"
 ]
 
 RES pirresource [
@@ -745,7 +625,7 @@ RES pirresource [
   orglen: "35"
 ]
 
-RESOURCE chebiresource [
+RES chebiresource [
   type: "Index"
   fields: "id acc nam isa des ns"
   acclen: "400"
@@ -769,7 +649,7 @@ RES oboresource [
   despagesize: "4096"
 ]
 
-RESOURCE sworesource [
+RES sworesource [
   type: "Index"
   fields: "id acc nam isa des ns"
   idlen: "60"
@@ -785,19 +665,18 @@ RESOURCE sworesource [
   isapagesize: "16384"
 ]
 
-RESOURCE edamresource [
+RES edamresource [
   type: "Index"
   fields: "id acc nam isa des ns hasattr hasin hasout
            isid isfmt issrc"
   acclen: "80"
   namlen: "32"
   deslen: "30"
-  isalen: "20"
   accpagesize: "8192"
   despagesize: "4096"
 ]
 
-RESOURCE drcatresource [
+RES drcatresource [
   type: "Index"
   fields: "id acc nam des url cat taxid
            edat efmt eid etpc xref
@@ -824,13 +703,9 @@ RESOURCE drcatresource [
 SET PAGESIZE 2048
 SET SECPAGESIZE 512
 
-# Cachesize - a cache of disc pages to be used by the 'dbx' indexing
-# system and is required for 'method emboss'. It is the number of
-# PAGESIZE or SECPAGESIZE blocks to cache and the initial size for the
-# primary and secondary caches. We recommend a value of 20000.  The
-# secondary cache can be set separately as SECCACHESIZE.  There is
-# little to gain by reducing the values, but heavy I/O loads can be
-# avoided by increasing them without exceeding the available physical
-# memory for the indexing runs and other system load.
+# Cachesize - a cache of disc pages to be used by the 'dbx'
+# indexing system and is required for 'method emboss'. It is
+# the number of PAGESIZE blocks to cache. We recommend
+# a value of 2000
 
-SET CACHESIZE 20000
+SET CACHESIZE 2000

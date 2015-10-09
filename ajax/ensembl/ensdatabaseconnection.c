@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.37 $
-** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
-** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
+** @version $Revision: 1.35 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
@@ -98,8 +98,8 @@
 ** Ensembl Database Connection objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBConnection
-** @cc CVS Revision: 1.79
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.77
+** @cc CVS Tag: branch-ensembl-66
 **
 ** NOTE: The Perl API also supports the ORACLE, ODBC and Sybase SQL client
 ** libraries.
@@ -479,7 +479,14 @@ void ensDatabaseconnectionDel(EnsPDatabaseconnection *Pdbc)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pdbc) || --pthis->Use)
+    if (!*Pdbc)
+        return;
+
+    pthis = *Pdbc;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pdbc = NULL;
 
@@ -495,7 +502,9 @@ void ensDatabaseconnectionDel(EnsPDatabaseconnection *Pdbc)
     ajStrDel(&pthis->Socketfile);
     ajStrDel(&pthis->Databasename);
 
-    ajMemFree((void **) Pdbc);
+    AJFREE(pthis);
+
+    *Pdbc = NULL;
 
     return;
 }
@@ -1388,7 +1397,7 @@ AjPSqlstatement ensDatabaseconnectionSqlstatementNew(
 **
 ** @fdata [EnsPDatabaseconnection]
 **
-** @nam3rule Fetch Fetch an object from an Ensembl Database Connection
+** @nam3rule Fetch Retrieve object from an Ensembl Database Connection
 ** @nam4rule Url Fetch a Uniform Resource Locator representation
 **
 ** @argrule * dbc [const EnsPDatabaseconnection] Ensembl Database Connection

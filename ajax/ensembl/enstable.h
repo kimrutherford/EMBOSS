@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.17 $
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:09:10 $ by $Author: mks $
+** @modified $Date: 2012/02/20 22:15:34 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -61,30 +61,6 @@ AJ_BEGIN_DECLS
 /*
 ** Prototype definitions
 */
-
-/*
-** AJAX Table of AJAX String key data and
-** generic value data.
-*/
-
-AjBool ensTablestrFromList(
-    AjPTable table,
-    AjPStr (*FobjectGetKey) (const void *object),
-    AjPList list);
-
-AjBool ensTablestrToList(AjPTable table, AjPList list);
-
-/*
-** AJAX Table of AJAX unsigned integer key data and
-** generic value data.
-*/
-
-AjBool ensTableuintFromList(
-    AjPTable table,
-    ajuint (*FobjectGetIdentifier) (const void *object),
-    AjPList list);
-
-AjBool ensTableuintToList(AjPTable table, AjPList list);
 
 /*
 ** AJAX Table of

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.54 $
+** @version $Revision: 1.52 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:04:58 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -166,6 +166,12 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
     const AjPStr statement,
     AjPList dbes);
 
+static int databaseentryadaptorCompareIdentifier(
+    const void *item1,
+    const void *item2);
+
+static void databaseentryadaptorDeleteIdentifier(void **Pitem, void *cl);
+
 static AjBool databaseentryadaptorFetchAllDependenciesByObject(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr constraint,
@@ -179,15 +185,14 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
     const AjPStr ensembltype,
     const AjPStr extratype,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers);
+    AjPList idlist);
 
 static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
     const AjPStr ensembltype,
     const AjPStr extratype,
-    AjPTable identifiers);
+    AjPList idlist);
 
 
 
@@ -519,7 +524,14 @@ void ensExternalreferenceDel(
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Per) || --pthis->Use)
+    if (!*Per)
+        return;
+
+    pthis = *Per;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Per = NULL;
 
@@ -537,7 +549,9 @@ void ensExternalreferenceDel(
     ajStrDel(&pthis->Linkageannotation);
     ajStrDel(&pthis->Infotext);
 
-    ajMemFree((void **) Per);
+    AJFREE(pthis);
+
+    *Per = NULL;
 
     return;
 }
@@ -1436,12 +1450,11 @@ AjBool ensExternalreferenceTrace(const EnsPExternalreference er, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl External Reference object.
+** Functions for calculating values of an Ensembl External Reference object.
 **
 ** @fdata [EnsPExternalreference]
 **
-** @nam3rule Calculate Calculate Ensembl External Reference information
+** @nam3rule Calculate Calculate Ensembl External Reference values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * er [const EnsPExternalreference] Ensembl External Reference
@@ -1650,10 +1663,9 @@ const char* ensExternalreferenceInfotypeToChar(
          i++);
 
     if (!externalreferenceKInfotype[i])
-        ajDebug("ensExternalreferenceInfotypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl External Reference Information Type "
-                "enumeration %d.\n",
+        ajDebug("ensExternalreferenceInfotypeToChar encountered an "
+                "out of boundary error on Ensembl External Reference "
+                "Information Type enumeration %d.\n",
                 erit);
 
     return externalreferenceKInfotype[i];
@@ -1782,10 +1794,9 @@ const char* ensExternalreferenceObjecttypeToChar(
          i++);
 
     if (!externalreferenceObjecttype[i])
-        ajDebug("ensExternalreferenceObjecttypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl External Reference Object Type "
-                "enumeration %d.\n",
+        ajDebug("ensExternalreferenceObjecttypeToChar encountered an "
+                "out of boundary error on "
+                "Ensembl External Reference Object Type enumeration %d.\n",
                 erot);
 
     return externalreferenceObjecttype[i];
@@ -1801,7 +1812,7 @@ const char* ensExternalreferenceObjecttypeToChar(
 **
 ** @cc Bio::EnsEMBL::IdentityXref
 ** @cc CVS Revision: 1.19
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2014,7 +2025,14 @@ void ensIdentityreferenceDel(EnsPIdentityreference *Pir)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pir) || --pthis->Use)
+    if (!*Pir)
+        return;
+
+    pthis = *Pir;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pir = NULL;
 
@@ -2023,7 +2041,9 @@ void ensIdentityreferenceDel(EnsPIdentityreference *Pir)
 
     ajStrDel(&pthis->Cigar);
 
-    ajMemFree((void **) Pir);
+    AJFREE(pthis);
+
+    *Pir = NULL;
 
     return;
 }
@@ -2626,12 +2646,11 @@ AjBool ensIdentityreferenceTrace(const EnsPIdentityreference ir, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
-** Ensembl Identity Reference object.
+** Functions for calculating values of an Ensembl Identity Reference object.
 **
 ** @fdata [EnsPIdentityreference]
 **
-** @nam3rule Calculate Calculate Ensembl Identity Reference information
+** @nam3rule Calculate Calculate Ensembl Identity Reference values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * ir [const EnsPIdentityreference] Ensembl Identity Reference
@@ -2685,7 +2704,7 @@ size_t ensIdentityreferenceCalculateMemsize(const EnsPIdentityreference ir)
 **
 ** @cc Bio::EnsEMBL::OntologyXref
 ** @cc CVS Revision: 1.5
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2870,7 +2889,14 @@ void ensOntologylinkageDel(EnsPOntologylinkage *Pol)
                 *Pol);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pol) || --pthis->Use)
+    if (!*Pol)
+        return;
+
+    pthis = *Pol;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pol = NULL;
 
@@ -2881,7 +2907,9 @@ void ensOntologylinkageDel(EnsPOntologylinkage *Pol)
 
     ensDatabaseentryDel(&pthis->Source);
 
-    ajMemFree((void **) Pol);
+    AJFREE(pthis);
+
+    *Pol = NULL;
 
     return;
 }
@@ -3001,10 +3029,9 @@ const char* ensOntologylinkageTypeToChar(EnsEOntologylinkageType olt)
          i++);
 
     if (!ontologylinkageType[i])
-        ajDebug("ensOntologylinkageTypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Ontology Linkage Type "
-                "enumeration %d.\n",
+        ajDebug("ensOntologylinkageTypeToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Ontology Linkage Type enumeration %d.\n",
                 olt);
 
     return ontologylinkageType[i];
@@ -3019,8 +3046,8 @@ const char* ensOntologylinkageTypeToChar(EnsEOntologylinkageType olt)
 ** Ensembl Database Entry objects
 **
 ** @cc Bio::EnsEMBL::DBEntry
-** @cc CVS Revision: 1.53
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.51
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -3100,11 +3127,11 @@ EnsPDatabaseentry ensDatabaseentryNewCpy(const EnsPDatabaseentry dbe)
 
     pthis->Adaptor = dbe->Adaptor;
 
-    pthis->Externalreference = ensExternalreferenceNewCpy(
-        dbe->Externalreference);
+    pthis->Externalreference =
+        ensExternalreferenceNewCpy(dbe->Externalreference);
 
-    pthis->Identityreference = ensIdentityreferenceNewCpy(
-        dbe->Identityreference);
+    pthis->Identityreference =
+        ensIdentityreferenceNewCpy(dbe->Identityreference);
 
     /* Copy the AJAX List of (synonym) AJAX String objects. */
 
@@ -3340,7 +3367,14 @@ void ensDatabaseentryDel(EnsPDatabaseentry *Pdbe)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pdbe) || --pthis->Use)
+    if (!*Pdbe)
+        return;
+
+    pthis = *Pdbe;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pdbe = NULL;
 
@@ -3358,7 +3392,9 @@ void ensDatabaseentryDel(EnsPDatabaseentry *Pdbe)
 
     ajListFree(&pthis->Ontologylinkages);
 
-    ajMemFree((void **) Pdbe);
+    AJFREE(pthis);
+
+    *Pdbe = NULL;
 
     return;
 }
@@ -3599,11 +3635,11 @@ AjBool ensDatabaseentryTrace(const EnsPDatabaseentry dbe, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Database Entry object.
+** Functions for calculating values of an Ensembl Database Entry object.
 **
 ** @fdata [EnsPDatabaseentry]
 **
-** @nam3rule Calculate Calculate Ensembl Database Entry information
+** @nam3rule Calculate Calculate Ensembl Database Entry values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * dbe [const EnsPDatabaseentry] Ensembl Database Entry
@@ -4204,7 +4240,7 @@ AjBool ensDatabaseentryAddOntologylinkage(EnsPDatabaseentry dbe,
 **
 ** @fdata [EnsPDatabaseentry]
 **
-** @nam3rule Clear Clear Ensembl Database Entry members
+** @nam3rule Clear Clear Ensembl Database Entry values
 ** @nam4rule Ontologylinkages Clear Ensembl Ontology Linkage objects
 **
 ** @argrule * dbe [EnsPDatabaseentry] Ensembl Database Entry
@@ -4248,11 +4284,11 @@ AjBool ensDatabaseentryClearOntologylinkages(EnsPDatabaseentry dbe)
 
 /* @section fetch *************************************************************
 **
-** Functions for fetching information from an Ensembl Database Entry object.
+** Functions for fetching values of an Ensembl Database Entry object.
 **
 ** @fdata [EnsPDatabaseentry]
 **
-** @nam3rule Fetch Fetch Ensembl Database Entry information
+** @nam3rule Fetch Fetch Ensembl Database Entry values
 ** @nam4rule All Fetch all objects
 ** @nam5rule Dependents   Fetch all Ensembl Database Entry objects,
 **                        which depend on an Ensembl Database Entry
@@ -4314,10 +4350,9 @@ AjBool ensDatabaseentryFetchAllDependents(
     if (!dbes)
         return ajFalse;
 
-    return ensDatabaseentryadaptorFetchAllDependents(
-        dbe->Adaptor,
-        dbe,
-        dbes);
+    return ensDatabaseentryadaptorFetchAllDependents(dbe->Adaptor,
+                                                     dbe,
+                                                     dbes);
 }
 
 
@@ -4676,8 +4711,8 @@ AjBool ensDatabaseentryFetchAllMastersByTranslation(
 ** Ensembl Database Entry Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor
-** @cc CVS Revision: 1.175
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.165
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -4754,8 +4789,6 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
     EnsPDatabaseentry dbe       = NULL;
     EnsPDatabaseentry sourcedbe = NULL;
 
@@ -4782,10 +4815,9 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
     if (!dbes)
         return ajFalse;
 
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
+    aa = ensRegistryGetAnalysisadaptor(dbea->Adaptor);
 
-    aa   = ensRegistryGetAnalysisadaptor(dba);
-    edba = ensRegistryGetExternaldatabaseadaptor(dba);
+    edba = ensRegistryGetExternaldatabaseadaptor(dbea->Adaptor);
 
     dbetable = ajTableuintNew(0U);
 
@@ -4796,7 +4828,7 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
     linkages = ensTableuintliststrNewLen(0U);
     synonyms = ensTableuintliststrNewLen(0U);
 
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+    sqls = ensDatabaseadaptorSqlstatementNew(dbea->Adaptor, statement);
 
     if (ajSqlrowGetColumns(sqlr) >= 10U)
         ident = ajTrue;
@@ -5010,7 +5042,7 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+    ensDatabaseadaptorSqlstatementDel(dbea->Adaptor, &sqls);
 
     ajTableDel(&dbetable);
 
@@ -5018,6 +5050,137 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
     ensTableuintliststrDelete(&synonyms);
 
     return ajTrue;
+}
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Database Entry Adaptor by pointer.
+** It is the responsibility of the user to first destroy any previous
+** Database Entry Adaptor. The target pointer does not need to be
+** initialised to NULL, but it is good programming practice to do so anyway.
+**
+** @fdata [EnsPDatabaseentryadaptor]
+**
+** @nam3rule New Constructor
+**
+** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule * [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor or NULL
+**
+** @fcategory new
+******************************************************************************/
+
+
+
+
+/* @func ensDatabaseentryadaptorNew *******************************************
+**
+** Default constructor for an Ensembl Database Entry Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetDatabaseentryadaptor
+**
+** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::new
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor or NULL
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+EnsPDatabaseentryadaptor ensDatabaseentryadaptorNew(
+    EnsPDatabaseadaptor dba)
+{
+    EnsPDatabaseentryadaptor dbea = NULL;
+
+    if (!dba)
+        return NULL;
+
+    AJNEW0(dbea);
+
+    dbea->Adaptor = dba;
+
+    return dbea;
+}
+
+
+
+
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Database Entry Adaptor object.
+**
+** @fdata [EnsPDatabaseentryadaptor]
+**
+** @nam3rule Del Destroy (free) an Ensembl Database Entry Adaptor
+**
+** @argrule * Pdbea [EnsPDatabaseentryadaptor*]
+** Ensembl Database Entry Adaptor address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @func ensDatabaseentryadaptorDel *******************************************
+**
+** Default destructor for an Ensembl Database Entry Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pdbea [EnsPDatabaseentryadaptor*]
+** Ensembl Database Entry Adaptor address
+**
+** @return [void]
+**
+** @release 6.2.0
+** @@
+******************************************************************************/
+
+void ensDatabaseentryadaptorDel(EnsPDatabaseentryadaptor *Pdbea)
+{
+    EnsPDatabaseentryadaptor pthis = NULL;
+
+    if (!Pdbea)
+        return;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensDatabaseentryadaptorDel"))
+        ajDebug("ensDatabaseentryadaptorDel\n"
+                "  *Pdbea %p\n",
+                *Pdbea);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pdbea)
+        return;
+
+    pthis = *Pdbea;
+
+    AJFREE(pthis);
+
+    *Pdbea = NULL;
+
+    return;
 }
 
 
@@ -5031,9 +5194,9 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
 ** @fdata [EnsPDatabaseentryadaptor]
 **
 ** @nam3rule Get Return Ensembl Database Entry Adaptor attribute(s)
-** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * dbea [EnsPDatabaseentryadaptor]
+** @argrule * dbea [const EnsPDatabaseentryadaptor]
 ** Ensembl Database Entry Adaptor
 **
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor]
@@ -5051,8 +5214,8 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
 ** Ensembl Database Entry Adaptor.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::db
-** @param [u] dbea [EnsPDatabaseentryadaptor]
-** Ensembl Database Entry Adaptor
+** @param [r] dbea [const EnsPDatabaseentryadaptor] Ensembl Database
+**                                                  Entry Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 **
@@ -5061,9 +5224,12 @@ static AjBool databaseentryadaptorFetchAllbyStatement(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensDatabaseentryadaptorGetDatabaseadaptor(
-    EnsPDatabaseentryadaptor dbea)
+    const EnsPDatabaseentryadaptor dbea)
 {
-    return dbea;
+    if (!dbea)
+        return NULL;
+
+    return dbea->Adaptor;
 }
 
 
@@ -5207,10 +5373,7 @@ static AjBool databaseentryadaptorFetchAllDependenciesByObject(
 
     if ((objecttype != NULL) && (ajStrGetLen(objecttype) > 0))
     {
-        ensDatabaseadaptorEscapeC(
-            ensDatabaseentryadaptorGetDatabaseadaptor(dbea),
-            &txtobjecttype,
-            objecttype);
+        ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtobjecttype, objecttype);
 
         statement = ajFmtStr(
             "SELECT "
@@ -5232,7 +5395,7 @@ static AjBool databaseentryadaptorFetchAllDependenciesByObject(
             "WHERE "
             "xref.xref_id = object_xref.xref_id "
             "AND "
-            "object_xref.ensembl_object_type = '%s' "
+            "object_xref.ensembl_object_type = '%S' "
             "AND "
             "object_xref.ensembl_id = %u "
             "AND ",
@@ -5554,18 +5717,16 @@ AjBool ensDatabaseentryadaptorFetchAllMasters(
     if (dbes)
         return ajFalse;
 
-    constraint = ajFmtStr(
-        "dependent_xref.dependent_xref_id = %u "
-        "AND "
-        "dependent_xref.master_xref_id = xref.xref_id",
-        dbe->Identifier);
+    constraint = ajFmtStr("dependent_xref.dependent_xref_id = $%u "
+                          "AND "
+                          "dependent_xref.master_xref_id = xref.xref_id",
+                          dbe->Identifier);
 
-    result = databaseentryadaptorFetchAllDependenciesByObject(
-        dbea,
-        constraint,
-        (AjPStr) NULL,
-        0,
-        dbes);
+    result = databaseentryadaptorFetchAllDependenciesByObject(dbea,
+                                                              constraint,
+                                                              (AjPStr) NULL,
+                                                              0,
+                                                              dbes);
 
     ajStrDel(&constraint);
 
@@ -5795,11 +5956,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyDescription(
     char *txtdescription = NULL;
     char *txtdbname      = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
 
     if (!dbea)
         return ajFalse;
@@ -5810,9 +5967,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyDescription(
     if (!dbes)
         return ajFalse;
 
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
-
-    ensDatabaseadaptorEscapeC(dba, &txtdescription, description);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdescription, description);
 
     statement = ajFmtStr(
         "SELECT "
@@ -5841,18 +5996,18 @@ AjBool ensDatabaseentryadaptorFetchAllbyDescription(
 
     if (dbname && ajStrGetLen(dbname))
     {
-        ensDatabaseadaptorEscapeC(dba, &txtdbname, dbname);
+        ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
         ajFmtPrintAppS(&statement, " AND exDB.db_name = '%s'", txtdbname);
 
         ajCharDel(&txtdbname);
     }
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -5938,11 +6093,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
     char *txtdbname = NULL;
     char *txtname   = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
 
     if (!dbea)
         return ajFalse;
@@ -5953,9 +6104,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
     if (!dbes)
         return ajFalse;
 
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
-
-    ensDatabaseadaptorEscapeC(dba, &txtname, name);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtname, name);
 
     statement = ajFmtStr(
         "SELECT "
@@ -5983,7 +6132,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
 
     if (dbname && ajStrGetLen(dbname))
     {
-        ensDatabaseadaptorEscapeC(dba, &txtdbname, dbname);
+        ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
         if (ajStrFindAnyK(dbname, '%') > 0)
             ajFmtPrintAppS(&statement,
@@ -5997,7 +6146,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
         ajCharDel(&txtdbname);
     }
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
@@ -6033,10 +6182,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
                 "interpro.interpro_ac = '%s'",
                 txtname);
 
-            result = databaseentryadaptorFetchAllbyStatement(
-                dbea,
-                statement,
-                dbes);
+            databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
             ajStrDel(&statement);
         }
@@ -6044,7 +6190,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyName(
 
     ajCharDel(&txtname);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -6080,11 +6226,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyObject(
     char *txtobjecttype = NULL;
     char *txtdbname = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
-
-    EnsPDatabaseadaptor dba = NULL;
 
     if (!dbea)
         return ajFalse;
@@ -6095,9 +6237,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyObject(
     if (!objecttype)
         return ajFalse;
 
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
-
-    ensDatabaseadaptorEscapeC(dba, &txtobjecttype, objecttype);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtobjecttype, objecttype);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6157,7 +6297,7 @@ AjBool ensDatabaseentryadaptorFetchAllbyObject(
 
     if (dbname && ajStrGetLen(dbname))
     {
-        ensDatabaseadaptorEscapeC(dba, &txtdbname, dbname);
+        ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
         if (ajStrFindAnyK(dbname, '%') > 0)
             ajFmtPrintAppS(&statement,
@@ -6176,11 +6316,11 @@ AjBool ensDatabaseentryadaptorFetchAllbyObject(
                        " AND external_db.type = '%s'",
                        ensExternaldatabaseTypeToChar(dbtype));
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -6212,8 +6352,6 @@ AjBool ensDatabaseentryadaptorFetchAllbySource(
 {
     char *txtsource = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPStr statement = NULL;
 
     if (!dbea)
@@ -6225,10 +6363,7 @@ AjBool ensDatabaseentryadaptorFetchAllbySource(
     if (!dbes)
         return ajFalse;
 
-    ensDatabaseadaptorEscapeC(
-        ensDatabaseentryadaptorGetDatabaseadaptor(dbea),
-        &txtsource,
-        source);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtsource, source);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6255,11 +6390,11 @@ AjBool ensDatabaseentryadaptorFetchAllbySource(
 
     ajCharDel(&txtsource);
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -6401,8 +6536,6 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
     char *txtdbname = NULL;
     char *txtaccession = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList dbes = NULL;
 
     AjPStr statement = NULL;
@@ -6421,17 +6554,9 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
     if (!Pdbe)
         return ajFalse;
 
-    *Pdbe = NULL;
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
-    ensDatabaseadaptorEscapeC(
-        ensDatabaseentryadaptorGetDatabaseadaptor(dbea),
-        &txtdbname,
-        dbname);
-
-    ensDatabaseadaptorEscapeC(
-        ensDatabaseentryadaptorGetDatabaseadaptor(dbea),
-        &txtaccession,
-        accession);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtaccession, accession);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6458,7 +6583,7 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
 
     dbes = ajListNew();
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
@@ -6494,10 +6619,7 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
                 "interpro.interpro_ac = '%s'",
                 txtaccession);
 
-            result = databaseentryadaptorFetchAllbyStatement(
-                dbea,
-                statement,
-                dbes);
+            databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
             ajStrDel(&statement);
         }
@@ -6518,7 +6640,7 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
     ajCharDel(&txtdbname);
     ajCharDel(&txtaccession);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -6544,8 +6666,6 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPDatabaseentry *Pdbe)
 {
-    AjBool result = AJFALSE;
-
     AjPList dbes = NULL;
 
     AjPStr statement = NULL;
@@ -6560,8 +6680,6 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
 
     if (!Pdbe)
         return ajFalse;
-
-    *Pdbe = NULL;
 
     statement = ajFmtStr(
         "SELECT "
@@ -6581,12 +6699,12 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
         "ON "
         "xref.xref_id = external_synonym.xref_id "
         "WHERE "
-        "xref.xref_id = %u",
+        "xref.xref_id = %d",
         identifier);
 
     dbes = ajListNew();
 
-    result = databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
+    databaseentryadaptorFetchAllbyStatement(dbea, statement, dbes);
 
     ajStrDel(&statement);
 
@@ -6596,7 +6714,7 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
                 identifier);
 
     if (ajListGetLength(dbes) > 1)
-        ajDebug("ensDatabaseentryadaptorFetchById got more than one (%Lu) "
+        ajDebug("ensDatabaseentryadaptorFetchById got more than one (%u) "
                 "Ensembl Database Entry for identifier %u.\n",
                 ajListGetLength(dbes), identifier);
 
@@ -6607,7 +6725,7 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
 
     ajListFree(&dbes);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -6615,35 +6733,49 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for retrieving objects releated to Ensembl Database Entry objects
+** Functions for fetching objects releated to Ensembl Database Entry objects
 ** from an Ensembl SQL database.
 **
 ** @fdata [EnsPDatabaseentryadaptor]
 **
 ** @nam3rule Retrieve Retrieve Ensembl Database Entry-releated object(s)
 ** @nam4rule All Retrieve all Ensembl Databse Entry-releated objects
-** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
-** @nam5rule Geneidentifiers
-** Retrieve all Ensembl Gene identifier objects
-** @nam5rule Transcriptidentifiers
-** Retrieve all Ensembl Transcript identifier objects
-** @nam5rule Translationidentifiers
-** Retrieve all Ensembl Translation identifier objects
-** @nam6rule By Retrieve by a criterion
-** @nam7rule Externalname Retrieve by an Ensembl Database Entry name
-** @nam7rule Externaldatabasename Retrieve by an Ensembl External Database name
+** @nam5rule Identifiers Fetch all SQL database-internal identifiers
+** @nam5rule Geneidentifiers Fetch all Ensembl Gene identifiers
+** @nam6rule By Fetch by a criterion
+** @nam7rule Externalname Fetch by an external name
+** @nam7rule Externaldatabasename Fetch by an Ensembl external Database name
+** @nam5rule Transcriptidentifiers Fetch all Ensembl Transcript identifiers
+** @nam6rule By Fetch by a criterion
+** @nam7rule Externalname Fetch by an external name
+** @nam7rule Externaldatabasename Fetch by an Ensembl external Database name
+** @nam5rule Translationidentifiers Fetch all Ensembl Translation identifiers
+** @nam6rule By Fetch by a criterion
+** @nam7rule Externalname Fetch by an external name
+** @nam7rule Externaldatabasename Fetch by an Ensembl external Database name
 **
 ** @argrule * dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @argrule Externaldatabasename dbname [const AjPStr]
-** Ensembl External Database name
-** @argrule Externalname name [const AjPStr]
-** Ensembl Database Entry name
-** @argrule Externalname dbname [const AjPStr]
-** Ensembl External Database name
-** @argrule Externalname override [AjBool]
-** Override optimisation of '_' SQL any
-** @argrule * identifiers [AjPTable]
-** AJAX Table of AJAX unsigned integer key data and generic value data
+** @argrule AllIdentifiers identifiers [AjPList] AJAX List of AJAX unsigned
+**                                               integer identifiers
+** @argrule AllGeneidentifiersByExternaldatabasename dbname [const AjPStr]
+** External Database name
+** @argrule AllGeneidentifiersByExternalname name [const AjPStr]
+** External name
+** @argrule AllGeneidentifiersByExternalname dbname [const AjPStr]
+** External Database name
+** @argrule AllTranscriptidentifiersByExternaldatabasename dbname
+** [const AjPStr] External Database name
+** @argrule AllTranscriptidentifiersByExternalname name [const AjPStr]
+** External name
+** @argrule AllTranscriptidentifiersByExternalname dbname [const AjPStr]
+** External Database name
+** @argrule AllTranslationidentifiersByExternaldatabasename dbname
+** [const AjPStr] External Database name
+** @argrule AllTranslationidentifiersByExternalname name [const AjPStr]
+** External name
+** @argrule AllTranslationidentifiersByExternalname dbname [const AjPStr]
+** External Database name
+** @argrule * idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -6653,25 +6785,111 @@ AjBool ensDatabaseentryadaptorFetchByIdentifier(
 
 
 
+/* @funcstatic databaseentryadaptorCompareIdentifier **************************
+**
+** Comparison function to sort unsigned integer (SQL) identifiers in
+** ascending order.
+**
+** @param [r] item1 [const void*] Unsigned integer address 1
+** @param [r] item2 [const void*] Unsigned integer address 2
+** @see ajListSortUnique
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.3.0
+** @@
+******************************************************************************/
+
+static int databaseentryadaptorCompareIdentifier(
+    const void *item1,
+    const void *item2)
+{
+    int result = 0;
+
+    ajuint *Pidentifier1 = *(ajuint *const *) item1;
+    ajuint *Pidentifier2 = *(ajuint *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("databaseentryadaptorCompareIdentifier"))
+        ajDebug("databaseentryadaptorCompareIdentifier\n"
+                "  identifier1 %u\n"
+                "  identifier2 %u\n",
+                *Pidentifier1,
+                *Pidentifier2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (Pidentifier1 && (!Pidentifier2))
+        return -1;
+
+    if ((!Pidentifier1) && (!Pidentifier2))
+        return 0;
+
+    if ((!Pidentifier1) && Pidentifier2)
+        return +1;
+
+    /* Evaluate identifiers */
+
+    if (*Pidentifier1 < *Pidentifier2)
+        result = -1;
+
+    if (*Pidentifier1 > *Pidentifier2)
+        result = +1;
+
+    return result;
+}
+
+
+
+
+/* @funcstatic databaseentryadaptorDeleteIdentifier ***************************
+**
+** ajListSortUnique "itemdel" function to delete unsigned integer SQL
+** identifiers that are redundant.
+**
+** @param [r] Pitem [void**] AJAX unsigned integer pointer address
+** @param [r] cl [void*] Standard. Passed in from ajListSortUnique
+** @see ajListSortUnique
+**
+** @return [void]
+**
+** @release 6.3.0
+** @@
+******************************************************************************/
+
+static void databaseentryadaptorDeleteIdentifier(void **Pitem, void *cl)
+{
+    if (!Pitem)
+        return;
+
+    (void) cl;
+
+    ajMemFree(Pitem);
+
+    return;
+}
+
+
+
+
 /* @funcstatic databaseentryadaptorRetrieveAllIdentifiersByExternalname *******
 **
-** Retrieve SQL database-internal Ensembl identifier objects via an
-** Ensembl Database Entry name.
+** Fetch SQL database-internal Ensembl identifiers via an external name.
 **
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::_type_by_external_id
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] name [const AjPStr] Ensembl Database Entry name
+** @param [r] name [const AjPStr] External name
 ** @param [r] ensembltype [const AjPStr] Ensembl Object type
 ** @param [rN] extratype [const AjPStr] Additional Ensembl Object type
-** @param [rN] dbname [const AjPStr] Ensembl External Database name
-** @param [r] override [AjBool] Override optimisation of '_' SQL any
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl identifier) key data and
-** generic value data
+** @param [rN] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -6685,8 +6903,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
     const AjPStr ensembltype,
     const AjPStr extratype,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     char *txtname   = NULL;
     char *txtdbname = NULL;
@@ -6695,15 +6912,10 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
     ajlong strpos = 0;
 
-    AjBool failure = AJFALSE;
-
-    AjPRegexp exp = NULL;
-
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
 
-    AjPStr intname   = NULL;
     AjPStr operator  = NULL;
     AjPStr statement = NULL;
     AjPStr sqlfrom   = NULL;
@@ -6711,62 +6923,44 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
     AjPStr sqlselect = NULL;
     AjPStr temporary = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
     if (!dbea)
         return ajFalse;
 
-    if (!(name && ajStrGetLen(name)))
+    if (!name)
         return ajFalse;
 
-    if (!(ensembltype && ajStrGetLen(ensembltype)))
+    if (!ensembltype)
         return ajFalse;
 
-    if (!identifiers)
+    if (!idlist)
         return ajFalse;
-
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
 
     /*
     ** Accept SQL wildcard characters from the second position only to
     ** avoid too generic queries, which use too many database resources.
     */
 
-    intname = ajStrNewS(name);
-
-    strpos = ajStrFindAnyC(intname, "%_");
+    strpos = ajStrFindAnyK(name, '%');
 
     if (strpos == -1)
+    {
         operator = ajStrNewC("=");
+    }
     else if (strpos <= 2)
     {
-        if (!override)
-        {
-            /*
-            ** For NCBI RefSeq entries such as NM_00000065, escape the '_' so
-            ** that SQL LIKE does not have to scan entire tables.
-            ** Escape only the '_' in the third character position.
-            */
-            exp = ajRegCompC("\\w\\w_");
-            if (ajRegExec(exp, intname))
-                ajStrInsertK(&intname, 2, '\\');
-            else
-                failure = ajTrue;
-            ajRegFree(&exp);
+        ajWarn("databaseentryadaptorRetrieveAllIdentifiersByExternalname "
+               "got a name '%S', which is too generic and will use "
+               "SQL database resources.", name);
 
-            if (failure)
-            {
-                ajWarn("databaseentryadaptorRetrieveAllIdentifiersByExternalname "
-                       "got a name '%S', which is too vague and will "
-                       "monopolise SQL database resources.", intname);
-                ajStrDel(&intname);
-                return ajFalse;
-            }
-        }
+        return ajFalse;
+    }
+    else
+    {
+        operator = ajStrNewC("LIKE");
     }
 
-    if (!operator)
-        operator = ajStrNewC("LIKE");
+    if (ajStrFindAnyK(name, '_') > 0)
+        ajStrAssignC(&operator, "=");
 
     sqlselect = ajStrNewC("object_xref.ensembl_id");
     sqlfrom   = ajStrNew();
@@ -6817,83 +7011,58 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
     if (ajStrMatchC(ensembltype, "Gene"))
     {
-        ajStrAssignC(&sqlfrom, "gene");
+        ajStrAssignC(&sqlfrom, "gene, seq_region, coord_system");
 
-        ajStrAppendC(&sqlwhere,
-                     "gene.is_current = 1 "
-                     "AND "
-                     "gene.gene_id = object_xref.ensembl_id");
-
-        if (ensDatabaseadaptorGetMultispecies(dba))
-        {
-            ajStrAppendC(&sqlfrom, ", seq_region, coord_system");
-
-            ajFmtPrintAppS(&sqlwhere,
-                           " "
-                           "AND "
-                           "gene.seq_region_id = "
-                           "seq_region.seq_region_id "
-                           "AND "
-                           "seq_region.coord_system_id = "
-                           "coord_system.coord_system_id "
-                           "AND "
-                           "coord_system.species_id = %u",
-                           ensDatabaseadaptorGetIdentifier(dba));
-        }
+        ajFmtPrintAppS(&sqlwhere,
+                       "gene.is_current = 1 "
+                       "AND "
+                       "gene.gene_id = object_xref.ensembl_id "
+                       "AND "
+                       "gene.seq_region_id = seq_region.seq_region_id "
+                       "AND "
+                       "seq_region.coord_system_id = "
+                       "coord_system.coord_system_id "
+                       "AND "
+                       "coord_system.species_id = %u",
+                       ensDatabaseadaptorGetIdentifier(dbea->Adaptor));
     }
     else if (ajStrMatchCaseC(ensembltype, "Transcript"))
     {
-        ajStrAssignC(&sqlfrom, "transcript");
+        ajStrAssignC(&sqlfrom, "transcript, seq_region, coord_system");
 
-        ajStrAppendC(&sqlwhere,
-                     "transcript.is_current = 1 "
-                     "AND "
-                     "transcript.transcript_id = object_xref.ensembl_id");
-
-        if (ensDatabaseadaptorGetMultispecies(dba))
-        {
-            ajStrAssignC(&sqlfrom, "transcript, seq_region, coord_system");
-
-            ajFmtPrintAppS(&sqlwhere,
-                           " "
-                           "AND "
-                           "transcript.seq_region_id = "
-                           "seq_region.seq_region_id "
-                           "AND "
-                           "seq_region.coord_system_id = "
-                           "coord_system.coord_system_id "
-                           "AND "
-                           "coord_system.species_id = %u",
-                           ensDatabaseadaptorGetIdentifier(dba));
-        }
+        ajFmtPrintAppS(&sqlwhere,
+                       "transcript.is_current = 1 "
+                       "AND "
+                       "transcript.transcript_id = object_xref.ensembl_id "
+                       "AND "
+                       "transcript.seq_region_id = seq_region.seq_region_id "
+                       "AND "
+                       "seq_region.coord_system_id = "
+                       "coord_system.coord_system_id "
+                       "AND "
+                       "coord_system.species_id = %u",
+                       ensDatabaseadaptorGetIdentifier(dbea->Adaptor));
     }
     else if (ajStrMatchCaseC(ensembltype, "Translation"))
     {
-        ajStrAssignC(&sqlfrom, "transcript, translation");
+        ajStrAssignC(&sqlfrom,
+                     "transcript, translation, "
+                     "seq_region, coord_system");
 
-        ajStrAppendC(&sqlwhere,
-                     "transcript.is_current = 1 "
-                     "AND "
-                     "transcript.transcript_id = translation.transcript_id "
-                     "AND "
-                     "translation.translation_id = object_xref.ensembl_id");
-
-        if (ensDatabaseadaptorGetMultispecies(dba))
-        {
-            ajStrAppendC(&sqlfrom, ", seq_region, coord_system");
-
-            ajFmtPrintAppS(&sqlwhere,
-                           " "
-                           "AND "
-                           "transcript.seq_region_id = "
-                           "seq_region.seq_region_id "
-                           "AND "
-                           "seq_region.coord_system_id = "
-                           "coord_system.coord_system_id "
-                           "AND "
-                           "coord_system.species_id = %u",
-                           ensDatabaseadaptorGetIdentifier(dba));
-        }
+        ajFmtPrintAppS(&sqlwhere,
+                       "transcript.is_current = 1 "
+                       "AND "
+                       "transcript.transcript_id = translation.transcript_id "
+                       "AND "
+                       "translation.translation_id = object_xref.ensembl_id "
+                       "AND "
+                       "transcript.seq_region_id = seq_region.seq_region_id "
+                       "AND "
+                       "seq_region.coord_system_id = "
+                       "coord_system.coord_system_id "
+                       "AND "
+                       "coord_system.species_id = %u",
+                       ensDatabaseadaptorGetIdentifier(dbea->Adaptor));
     }
 
     if (dbname && ajStrGetLen(dbname))
@@ -6905,11 +7074,10 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
         ajStrAppendC(&sqlfrom, ", external_db");
 
-        ensDatabaseadaptorEscapeC(dba, &txtdbname, dbname);
+        ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
         ajFmtPrintAppS(&sqlwhere,
-                       " "
-                       "AND "
+                       " AND "
                        "external_db.db_name LIKE '%s%%' "
                        "AND "
                        "external_db.external_db_id = xref.external_db_id",
@@ -6918,7 +7086,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
         ajCharDel(&txtdbname);
     }
 
-    ensDatabaseadaptorEscapeC(dba, &txtname, intname);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtname, name);
 
     statement = ajFmtStr(
         "SELECT "
@@ -6944,7 +7112,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
         operator,
         txtname);
 
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+    sqls = ensDatabaseadaptorSqlstatementNew(dbea->Adaptor, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
@@ -6956,15 +7124,12 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
         ajSqlcolumnToUint(sqlr, Pidentifier);
 
-        if (ajTableMatchV(identifiers, (const void *) Pidentifier))
-            AJFREE(Pidentifier);
-        else
-            ajTablePut(identifiers, (void *) Pidentifier, NULL);
+        ajListPushAppend(idlist, (void *) Pidentifier);
     }
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+    ensDatabaseadaptorSqlstatementDel(dbea->Adaptor, &sqls);
 
     ajStrDel(&statement);
 
@@ -6989,7 +7154,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
             "AND "
             "external_synonym.xref_id = object_xref.xref_id "
             "AND "
-            "object_xref.ensembl_object_type = '%S' "
+            "object_xref.ensembl_object_type = '%%S' "
             "AND "
             "object_xref.xref_id = xref.xref_id ",
             sqlselect,
@@ -7021,7 +7186,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
             txtname,
             ensembltype);
 
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+    sqls = ensDatabaseadaptorSqlstatementNew(dbea->Adaptor, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
@@ -7033,15 +7198,12 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
         ajSqlcolumnToUint(sqlr, Pidentifier);
 
-        if (ajTableMatchV(identifiers, (const void *) Pidentifier))
-            AJFREE(Pidentifier);
-        else
-            ajTablePut(identifiers, (void *) Pidentifier, NULL);
+        ajListPushAppend(idlist, (void *) Pidentifier);
     }
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+    ensDatabaseadaptorSqlstatementDel(dbea->Adaptor, &sqls);
 
     ajStrDel(&statement);
 
@@ -7051,7 +7213,10 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
     ajStrDel(&sqlfrom);
     ajStrDel(&sqlwhere);
     ajStrDel(&operator);
-    ajStrDel(&intname);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return ajTrue;
 }
@@ -7061,21 +7226,17 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternalname(
 
 /* @funcstatic databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename
 **
-** Retrieve SQL database-internal Ensembl identifier objects via an
-** Ensembl External Database name.
-**
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** Fetch SQL database-internal Ensembl identifiers via an external database
+** name.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::_type_by_external_db_id
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] dbname [const AjPStr] Ensembl External Database name
+** @param [r] dbname [const AjPStr] External Database name
 ** @param [r] ensembltype [const AjPStr] Ensembl Object type
 ** @param [rN] extratype [const AjPStr] Additional Ensembl Object type
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl identifier) key data and
-** generic value data
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7090,7 +7251,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
     const AjPStr dbname,
     const AjPStr ensembltype,
     const AjPStr extratype,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     char *txtdbname = NULL;
 
@@ -7106,8 +7267,6 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
     AjPStr sqlselect = NULL;
     AjPStr temporary = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
     if (!dbea)
         return ajFalse;
 
@@ -7117,10 +7276,8 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
     if (!ensembltype)
         return ajFalse;
 
-    if (!identifiers)
+    if (!idlist)
         return ajFalse;
-
-    dba = ensDatabaseentryadaptorGetDatabaseadaptor(dbea);
 
     sqlselect = ajStrNewC("object_xref.ensembl_id");
     sqlfrom   = ajStrNew();
@@ -7199,7 +7356,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
                      "translation.translation_id = object_xref.ensembl_id");
     }
 
-    ensDatabaseadaptorEscapeC(dba, &txtdbname, dbname);
+    ensDatabaseadaptorEscapeC(dbea->Adaptor, &txtdbname, dbname);
 
     statement = ajFmtStr(
         "SELECT "
@@ -7227,7 +7384,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
 
     ajCharDel(&txtdbname);
 
-    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+    sqls = ensDatabaseadaptorSqlstatementNew(dbea->Adaptor, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
@@ -7239,20 +7396,21 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
 
         ajSqlcolumnToUint(sqlr, Pidentifier);
 
-        if (ajTableMatchV(identifiers, (const void *) Pidentifier))
-            AJFREE(Pidentifier);
-        else
-            ajTablePut(identifiers, (void *) Pidentifier, NULL);
+        ajListPushAppend(idlist, (void *) Pidentifier);
     }
 
     ajSqlrowiterDel(&sqli);
 
-    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+    ensDatabaseadaptorSqlstatementDel(dbea->Adaptor, &sqls);
 
     ajStrDel(&statement);
     ajStrDel(&sqlselect);
     ajStrDel(&sqlfrom);
     ajStrDel(&sqlwhere);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return ajTrue;
 }
@@ -7262,19 +7420,15 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
 
 /* @func ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename
 **
-** Retrieve SQL database-internal Ensembl Gene identifier objects via an
-** Ensembl External Database name.
-**
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** Fetch SQL database-internal Ensembl Gene identifiers via an
+** External Database name.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::list_gene_ids_by_external_db_id
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] dbname [const AjPStr] Ensembl External Database name
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Gene identifier) key data and
-** generic value data
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7285,7 +7439,7 @@ static AjBool databaseentryadaptorRetrieveAllIdentifiersByExternaldatabasename(
 AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7298,7 +7452,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
     if (!dbname)
         return ajFalse;
 
-    if (!identifiers)
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7310,7 +7464,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
             dbname,
             ensembltype,
             extratype,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Transcript");
@@ -7320,7 +7474,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
             dbname,
             ensembltype,
             extratype,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Gene");
@@ -7330,11 +7484,15 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
             dbname,
             ensembltype,
             (AjPStr) NULL,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);
     ajStrDel(&extratype);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return result;
 }
@@ -7344,21 +7502,16 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
 
 /* @func ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname ******
 **
-** Retrieve SQL database-internal Ensembl Gene identifier objects via an
-** Ensembl Database Entry name.
-**
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** Fetch SQL database-internal Ensembl Gene identifiers via an
+** external name.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::list_gene_ids_by_extids
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] name [const AjPStr] Ensembl Database Entry name
-** @param [rN] dbname [const AjPStr] Ensembl External Database name
-** @param [r] override [AjBool] Override optimisation of '_' SQL any
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Gene identifier) key data and
-** generic value data
+** @param [r] name [const AjPStr] External name
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7370,8 +7523,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7384,7 +7536,10 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
     if (!name)
         return ajFalse;
 
-    if (!identifiers)
+    if (!dbname)
+        return ajFalse;
+
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7397,8 +7552,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
             ensembltype,
             extratype,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Transcript");
@@ -7409,8 +7563,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
             ensembltype,
             extratype,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Gene");
@@ -7421,12 +7574,15 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
             ensembltype,
             (AjPStr) NULL,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);
     ajStrDel(&extratype);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return result;
 }
@@ -7436,20 +7592,17 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
 
 /* @func ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabasename
 **
-** Retrieve SQL database-internal Ensembl Transcript identifier objects via an
-** Ensembl External Database name.
+** Fetch SQL database-internal Ensembl Transcript identifiers via an
+** External Database name.
 **
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::
 **     list_transcript_ids_by_external_db_id
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] dbname [const AjPStr] Ensembl External Database name
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Transcript identifier) key data
-** and generic value data
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7460,7 +7613,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternalname(
 AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7473,7 +7626,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabase
     if (!dbname)
         return ajFalse;
 
-    if (!identifiers)
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7485,7 +7638,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabase
             dbname,
             ensembltype,
             extratype,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Transcript");
@@ -7495,11 +7648,15 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabase
             dbname,
             ensembltype,
             extratype,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);
     ajStrDel(&extratype);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return result;
 }
@@ -7509,21 +7666,16 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternaldatabase
 
 /* @func ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname*
 **
-** Retrieve SQL database-internal Ensembl Transcript identifier objects via an
-** Ensembl Database Entry name.
-**
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** Fetch SQL database-internal Ensembl Transcript identifiers via an
+** external name.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::list_transcript_ids_by_extids
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] name [const AjPStr] Ensembl Database Entry name
-** @param [rN] dbname [const AjPStr] Ensembl External Database name
-** @param [r] override [AjBool] Override optimisation of '_' SQL any
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Transcript identifier) key data
-** and generic value data
+** @param [r] name [const AjPStr] External name
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7535,8 +7687,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7549,7 +7700,10 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
     if (!name)
         return ajFalse;
 
-    if (!identifiers)
+    if (!dbname)
+        return ajFalse;
+
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7562,8 +7716,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
             ensembltype,
             extratype,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrAssignC(&ensembltype, "Transcript");
@@ -7574,12 +7727,15 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
             ensembltype,
             (AjPStr) NULL,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);
     ajStrDel(&extratype);
+
+    ajListSortUnique(idlist,
+                     &databaseentryadaptorCompareIdentifier,
+                     &databaseentryadaptorDeleteIdentifier);
 
     return result;
 }
@@ -7589,20 +7745,17 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
 
 /* @func ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabasename
 **
-** Retrieve SQL database-internal Ensembl Translation identifier objects via an
-** Ensembl External Database name.
+** Fetch SQL database-internal Ensembl Translation identifiers via an
+** External Database name.
 **
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::
 **     list_translation_ids_by_external_db_id
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] dbname [const AjPStr] Ensembl External Database name
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Translation identifier) key data and
-** generic value data
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7613,7 +7766,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranscriptidentifiersByExternalname(
 AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7626,7 +7779,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabas
     if (!dbname)
         return ajFalse;
 
-    if (!identifiers)
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7636,7 +7789,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabas
             dbname,
             ensembltype,
             extratype,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);
@@ -7649,21 +7802,16 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternaldatabas
 
 /* @func ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname
 **
-** Retrieve SQL database-internal Ensembl Translation identifier objects via an
-** Ensembl Database Entry name.
-**
-** The caller is responsible for deleting the AJAX unsigned integer objects
-** before deleting the AJAX Table.
+** Fetch SQL database-internal Ensembl Translation identifiers via an
+** external name.
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor::list_translation_ids_by_extids
 ** @param [u] dbea [EnsPDatabaseentryadaptor] Ensembl Database Entry Adaptor
-** @param [r] name [const AjPStr] Ensembl Database Entry name
-** @param [rN] dbname [const AjPStr] Ensembl External Database name
-** @param [r] override [AjBool] Override optimisation of '_' SQL any
-** @param [u] identifiers [AjPTable]
-** AJAX Table of
-** AJAX unsigned integer (Ensembl Translation identifier) key data and
-** generic value data
+** @param [r] name [const AjPStr] External name
+** @param [r] dbname [const AjPStr] External Database name
+** @param [u] idlist [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon sucess, ajFalse otherwise
 **
@@ -7675,8 +7823,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr name,
     const AjPStr dbname,
-    AjBool override,
-    AjPTable identifiers)
+    AjPList idlist)
 {
     AjBool result = AJTRUE;
 
@@ -7688,7 +7835,10 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
     if (!name)
         return ajFalse;
 
-    if (!identifiers)
+    if (!dbname)
+        return ajFalse;
+
+    if (!idlist)
         return ajFalse;
 
     ensembltype = ajStrNewC("Translation");
@@ -7699,8 +7849,7 @@ AjBool ensDatabaseentryadaptorRetrieveAllTranslationidentifiersByExternalname(
             ensembltype,
             (AjPStr) NULL,
             dbname,
-            override,
-            identifiers))
+            idlist))
         result = ajFalse;
 
     ajStrDel(&ensembltype);

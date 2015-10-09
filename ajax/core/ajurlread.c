@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX url reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.19 $
+** @version $Revision: 1.17 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/12/07 10:07:32 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -711,7 +711,7 @@ static AjBool urlinRead(AjPUrlin urlin, AjPUrl url)
                 handle = ajStrTokenNewC(urlin->Identifiers, ";");
                 for(i=0; i<nids; i++)
                 {
-                    ajStrTokenNextParse(handle, &idstr);
+                    ajStrTokenNextParse(&handle, &idstr);
                     ajFmtPrintS(&snstr, "%%s%u", (i+1));
                     ajStrExchangeSS(&urlstr, snstr, idstr);
                 }
@@ -1519,11 +1519,10 @@ static AjBool urlinListProcess(AjPUrlin urlin, AjPUrl url,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStr rest  = NULL;
+    AjPStrTok handle = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
-    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -1551,30 +1550,31 @@ static AjBool urlinListProcess(AjPUrlin urlin, AjPUrl url,
 
     while(ajReadlineTrim(file, &urlinReadLine))
     {
-        ++recnum;
 	urlinListNoComment(&urlinReadLine);
 
-        if(ajStrExtractWord(urlinReadLine, &rest, &token))
-        {
-            if(ajStrGetLen(rest)) 
-            {
-                ajErr("Bad record %u in list file '%S'\n'%S'",
-                      recnum, listfile, urlinReadLine);
-            }
-            else if(ajStrGetLen(token))
-            {
-                ajDebug("++Add to list: '%S'\n", token);
-                AJNEW0(node);
-                ajStrAssignS(&node->Qry, token);
-                urlinQrySave(node, urlin);
-                ajListPushAppend(list, node);
-            }
-        }
+	if(ajStrGetLen(urlinReadLine))
+	{
+	    ajStrTokenAssignC(&handle, urlinReadLine, " \t\n\r");
+	    ajStrTokenNextParse(&handle, &token);
+	    /* ajDebug("Line  '%S'\n");*/
+	    /* ajDebug("token '%S'\n", urlinReadLine, token); */
+
+	    if(ajStrGetLen(token))
+	    {
+	        ajDebug("++Add to list: '%S'\n", token);
+	        AJNEW0(node);
+	        ajStrAssignS(&node->Qry, token);
+	        urlinQrySave(node, urlin);
+	        ajListPushAppend(list, node);
+	    }
+
+	    ajStrDel(&token);
+	    token = NULL;
+	}
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
-    ajStrDel(&rest);
 
     ajDebug("Trace urlin->Input->List\n");
     ajQuerylistTrace(urlin->Input->List);
@@ -1603,6 +1603,7 @@ static AjBool urlinListProcess(AjPUrlin urlin, AjPUrl url,
 	ret = urlinQryProcess(urlin, url);
     }
 
+    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++urlinListProcess depth: %d returns: %B\n", depth, ret);
 

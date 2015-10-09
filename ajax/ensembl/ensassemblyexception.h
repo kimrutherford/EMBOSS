@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.25 $
+** @version $Revision: 1.24 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:26:10 $ by $Author: mks $
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -183,11 +183,9 @@ EnsPAssemblyexception ensAssemblyexceptionNewIni(
     ajint ori,
     EnsEAssemblyexceptionType aet);
 
-EnsPAssemblyexception ensAssemblyexceptionNewRef(
-    EnsPAssemblyexception ae);
+EnsPAssemblyexception ensAssemblyexceptionNewRef(EnsPAssemblyexception ae);
 
-void ensAssemblyexceptionDel(
-    EnsPAssemblyexception *Pae);
+void ensAssemblyexceptionDel(EnsPAssemblyexception *Pae);
 
 EnsPAssemblyexceptionadaptor ensAssemblyexceptionGetAdaptor(
     const EnsPAssemblyexception ae);
@@ -219,66 +217,50 @@ ajuint ensAssemblyexceptionGetReferenceStart(
 EnsEAssemblyexceptionType ensAssemblyexceptionGetType(
     const EnsPAssemblyexception ae);
 
-AjBool ensAssemblyexceptionSetAdaptor(
-    EnsPAssemblyexception ae,
-    EnsPAssemblyexceptionadaptor aea);
+AjBool ensAssemblyexceptionSetAdaptor(EnsPAssemblyexception ae,
+                                      EnsPAssemblyexceptionadaptor aea);
 
-AjBool ensAssemblyexceptionSetExceptionEnd(
-    EnsPAssemblyexception ae,
-    ajuint erend);
+AjBool ensAssemblyexceptionSetExceptionEnd(EnsPAssemblyexception ae,
+                                           ajuint erend);
 
-AjBool ensAssemblyexceptionSetExceptionSeqregion(
-    EnsPAssemblyexception ae,
-    ajuint erid);
+AjBool ensAssemblyexceptionSetExceptionSeqregion(EnsPAssemblyexception ae,
+                                                 ajuint erid);
 
-AjBool ensAssemblyexceptionSetExceptionStart(
-    EnsPAssemblyexception ae,
-    ajuint erstart);
+AjBool ensAssemblyexceptionSetExceptionStart(EnsPAssemblyexception ae,
+                                             ajuint erstart);
 
-AjBool ensAssemblyexceptionSetIdentifier(
-    EnsPAssemblyexception ae,
-    ajuint identifier);
+AjBool ensAssemblyexceptionSetIdentifier(EnsPAssemblyexception ae,
+                                         ajuint identifier);
 
-AjBool ensAssemblyexceptionSetOrientation(
-    EnsPAssemblyexception ae,
-    ajint orientation);
+AjBool ensAssemblyexceptionSetOrientation(EnsPAssemblyexception ae,
+                                          ajint orientation);
 
-AjBool ensAssemblyexceptionSetReferenceEnd(
-    EnsPAssemblyexception ae,
-    ajuint srend);
+AjBool ensAssemblyexceptionSetReferenceEnd(EnsPAssemblyexception ae,
+                                           ajuint srend);
 
-AjBool ensAssemblyexceptionSetReferenceSeqregion(
-    EnsPAssemblyexception ae,
-    ajuint srid);
+AjBool ensAssemblyexceptionSetReferenceSeqregion(EnsPAssemblyexception ae,
+                                                 ajuint srid);
 
-AjBool ensAssemblyexceptionSetReferenceStart(
-    EnsPAssemblyexception ae,
-    ajuint srstart);
+AjBool ensAssemblyexceptionSetReferenceStart(EnsPAssemblyexception ae,
+                                             ajuint srstart);
 
-AjBool ensAssemblyexceptionSetType(
-    EnsPAssemblyexception ae,
-    EnsEAssemblyexceptionType type);
+AjBool ensAssemblyexceptionSetType(EnsPAssemblyexception ae,
+                                   EnsEAssemblyexceptionType type);
 
-AjBool ensAssemblyexceptionTrace(
-    const EnsPAssemblyexception ae,
-    ajuint level);
+AjBool ensAssemblyexceptionTrace(const EnsPAssemblyexception ae, ajuint level);
 
 ajuint ensAssemblyexceptionCalculateExceptionLength(
     const EnsPAssemblyexception ae);
 
-size_t ensAssemblyexceptionCalculateMemsize(
-    const EnsPAssemblyexception ae);
+size_t ensAssemblyexceptionCalculateMemsize(const EnsPAssemblyexception ae);
 
 ajuint ensAssemblyexceptionCalculateReferenceLength(
     const EnsPAssemblyexception ae);
 
-EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(
-    const AjPStr type);
+EnsEAssemblyexceptionType ensAssemblyexceptionTypeFromStr(const AjPStr type);
 
 const char *ensAssemblyexceptionTypeToChar(
     const EnsEAssemblyexceptionType aet);
-
-/* AJAX List of Ensembl Assembly Excepion objects */
 
 AjBool ensListAssemblyexceptionSortReferenceEndAscending(AjPList aes);
 
@@ -295,8 +277,7 @@ EnsPAssemblyexceptionadaptor ensAssemblyexceptionadaptorNew(
 EnsPDatabaseadaptor ensAssemblyexceptionadaptorGetDatabaseadaptor(
     EnsPAssemblyexceptionadaptor aea);
 
-void ensAssemblyexceptionadaptorDel(
-    EnsPAssemblyexceptionadaptor *Paea);
+void ensAssemblyexceptionadaptorDel(EnsPAssemblyexceptionadaptor *Paea);
 
 AjBool ensAssemblyexceptionadaptorFetchAll(
     const EnsPAssemblyexceptionadaptor aea,

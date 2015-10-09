@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.21 $
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 11:06:37 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -176,13 +176,7 @@ EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
 
 void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor *Padaptor);
 
-EnsPBaseadaptor ensKaryotypebandadaptorGetBaseadaptor(
-    EnsPKaryotypebandadaptor kba);
-
 EnsPDatabaseadaptor ensKaryotypebandadaptorGetDatabaseadaptor(
-    EnsPKaryotypebandadaptor kba);
-
-EnsPFeatureadaptor ensKaryotypebandadaptorGetFeatureadaptor(
     EnsPKaryotypebandadaptor kba);
 
 AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(

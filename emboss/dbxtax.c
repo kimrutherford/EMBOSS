@@ -370,7 +370,7 @@ static AjBool dbxtax_ParseNode(EmbPBtreeEntry entry,
 
     handle = ajStrTokenNewC(line, "|");
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* taxid */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* taxid */
         return ajFalse;
     ajStrTrimWhite(&tmpstr);
 
@@ -379,13 +379,13 @@ static AjBool dbxtax_ParseNode(EmbPBtreeEntry entry,
     if(oldids && accfield)
         embBtreeParseField(oldids, dbxtax_wrdexp, accfield);
     
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* parent taxid */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* parent taxid */
         return ajFalse;
     ajStrTrimWhite(&tmpstr);
     if(upfield && ajStrGetLen(tmpstr))
 	ajListPush(upfield->data,ajStrNewS(tmpstr));
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* rank */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* rank */
         return ajFalse;
 
     ajStrTrimWhite(&tmpstr);
@@ -394,40 +394,40 @@ static AjBool dbxtax_ParseNode(EmbPBtreeEntry entry,
     if(rnkfield && ajStrGetLen(tmpstr))
 	ajListPush(rnkfield->data,ajStrNewS(tmpstr));
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* embl code */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* embl code */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* division */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* division */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* division flag */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* division flag */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* gencode */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* gencode */
         return ajFalse;
     ajStrTrimWhite(&tmpstr);
     if(gcfield && ajStrGetLen(tmpstr))
 	ajListPush(gcfield->data,ajStrNewS(tmpstr));
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* gencode flag */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* gencode flag */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* mitocode */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* mitocode */
         return ajFalse;
     ajStrTrimWhite(&tmpstr);
     if(mgcfield && ajStrGetLen(tmpstr) && !ajStrMatchC(tmpstr, "0"))
 	ajListPush(mgcfield->data,ajStrNewS(tmpstr));
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* mitocode flag */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* mitocode flag */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* genbank hidden flag */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* genbank hidden flag */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* nosequence flag */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* nosequence flag */
         return ajFalse;
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* comments */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* comments */
         return ajFalse;
 
     ajStrDel(&tmpstr);
@@ -463,7 +463,7 @@ static AjBool dbxtax_ParseName(EmbPBtreeEntry entry, const AjPStr line)
 
     handle = ajStrTokenNewC(line, "|");
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* taxid */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* taxid */
         return ajFalse;
     ajStrTrimWhite(&tmpstr);
     if(!ajStrMatchS(entry->id, tmpstr))
@@ -473,7 +473,7 @@ static AjBool dbxtax_ParseName(EmbPBtreeEntry entry, const AjPStr line)
         return ajFalse;
     }
 
-    if(!ajStrTokenNextParse(handle, &tmpname)) /* name */
+    if(!ajStrTokenNextParse(&handle, &tmpname)) /* name */
     {
         ajStrTokenDel(&handle);
         ajStrDel(&tmpstr);
@@ -483,7 +483,7 @@ static AjBool dbxtax_ParseName(EmbPBtreeEntry entry, const AjPStr line)
 
     ajStrTrimWhite(&tmpname);
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* uniquename */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* uniquename */
     {
         ajStrTokenDel(&handle);
         ajStrDel(&tmpstr);
@@ -495,7 +495,7 @@ static AjBool dbxtax_ParseName(EmbPBtreeEntry entry, const AjPStr line)
 /*    if(ajStrGetLen(tmpstr))
       ajStrAssignS(&tmpname, tmpstr);*/
 
-    if(!ajStrTokenNextParse(handle, &tmpstr)) /* nameclass */
+    if(!ajStrTokenNextParse(&handle, &tmpstr)) /* nameclass */
     {
         ajStrTokenDel(&handle);
         ajStrDel(&tmpstr);
@@ -559,8 +559,8 @@ static void dbxtax_ParseMerged(AjPFile mergefile)
     while(ajReadlineTrim(mergefile, &line))
     {
         ajStrTokenAssignC(&handle, line, "\t|");
-        ajStrTokenNextParse(handle, &oldid);
-        ajStrTokenNextParse(handle, &newid);
+        ajStrTokenNextParse(&handle, &oldid);
+        ajStrTokenNextParse(&handle, &newid);
         record = ajTableFetchmodS(mergeTable, newid);
         if(!record)
         {

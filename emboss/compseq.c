@@ -539,7 +539,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 
 	/* get the word as the key */
 	key = ajStrNew();
-	ajStrTokenNextParse(tokens, &key);
+	ajStrTokenNextParse( &tokens, &key);
 
 	/*
 	**  get the observed frequency as the value - we'll use this as
@@ -548,8 +548,8 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	value = ajStrNew();
 
 	/* skip the observed count column */
-	ajStrTokenNextParse(tokens, &value);
-	ajStrTokenNextParse(tokens, &value);
+	ajStrTokenNextParse(&tokens, &value);
+	ajStrTokenNextParse(&tokens, &value);
 
 	ajTablePut(*exptable, key, value);
 	ajStrTokenDel(&tokens);

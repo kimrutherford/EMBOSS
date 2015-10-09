@@ -236,22 +236,6 @@ section: additional [
     relations: "EDAM_format:1210 pure nucleotide"
     ]
 
-    range: okleftregion [
-      additional: "Y"
-      default: ""
-      information: "Possible left primer of pair location"
-      help: ""
-    relations: "EDAM_data:1017 Sequence range"
-    ]
-
-    range: okrightregion [
-      additional: "Y"
-      default: ""
-      information: "Possible right primer of pair location"
-      help: ""
-    relations: "EDAM_data:1017 Sequence range"
-    ]
-
   endsection: seqoptsection
 
   section: primersection [
@@ -769,6 +753,19 @@ section: advanced [
            tag (which must be supplied). In addition, if the input tag TASK
            is 1 or 4, Eprimer32 produces a file (sequence-id).int, which lists
            all acceptable internal oligos."
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  integer: firstbaseindex [
+    default: "1"
+    information: "First base index"
+    help: "This parameter is the index of the first base in the input
+           sequence. For input and output using 1-based indexing (such as
+           that used in GenBank and to which many users are accustomed) set
+           this parameter to 1. For input and output using 0-based indexing
+           set this parameter to 0. (This parameter also affects the indexes
+           in the contents of the files produced when the primer file flag is
+           set.)"
     relations: "EDAM_data:2527 Parameter"
   ]
 

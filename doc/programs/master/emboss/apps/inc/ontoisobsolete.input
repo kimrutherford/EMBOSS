@@ -9,14 +9,10 @@ id: EDAM_topic:0195
 name: Virtual PCR
 namespace: topic
 def: Topic concerning simulated polymerase chain reaction (PCR).
-subset: bioinformatics
-subset: edam
 subset: topics
-synonym: "PCR" EXACT []
-synonym: "Polymerase chain reaction" EXACT []
-created_in: "beta12orEarlier"
-obsolete_since: "beta13"
-is_obsolete: true
+synonym: "PCR" EXACT [http://edamontology.org]
+synonym: "Polymerase chain reaction" EXACT [http://edamontology.org]
+is_obsolete: true ! {since=beta13}
 consider: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
@@ -32,12 +28,9 @@ id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
-subset: bioinformatics
-subset: edam
 subset: operations
-created_in: "beta12orEarlier"
-is_a: EDAM_operation:0431 ! Restriction site recognition
 is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
 relationship: has_output EDAM_data:1289 ! Restriction map
 
 </pre>

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.11 $
+** @version $Revision: 1.10 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 10:22:52 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -72,22 +72,6 @@ AJ_BEGIN_DECLS
 ******************************************************************************/
 
 #define EnsPProteinalignfeatureadaptor EnsPFeatureadaptor
-
-
-
-
-/* @const EnsPSupportingfeatureadaptor ****************************************
-**
-** Ensembl Supporting Feature Adaptor.
-** Defined as an alias in EnsPDatabaseadaptor.
-**
-** #alias EnsPDatabaseadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::SupportingFeatureAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPSupportingfeatureadaptor EnsPDatabaseadaptor
 
 
 
@@ -197,11 +181,9 @@ EnsPBasealignfeature ensBasealignfeatureNewIniP(
     EnsPFeaturepair fp,
     AjPStr cigar);
 
-EnsPBasealignfeature ensBasealignfeatureNewRef(
-    EnsPBasealignfeature baf);
+EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf);
 
-void ensBasealignfeatureDel(
-    EnsPBasealignfeature *Pbaf);
+void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf);
 
 AjPStr ensBasealignfeatureGetCigar(
     const EnsPBasealignfeature baf);
@@ -271,16 +253,9 @@ EnsPDnaalignfeatureadaptor ensRegistryGetDnaalignfeatureadaptor(
 EnsPDnaalignfeatureadaptor ensDnaalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDnaalignfeatureadaptorDel(
-    EnsPDnaalignfeatureadaptor *Pdafa);
-
-EnsPBaseadaptor ensDnaalignfeatureadaptorGetBaseadaptor(
-    EnsPDnaalignfeatureadaptor dafa);
+void ensDnaalignfeatureadaptorDel(EnsPDnaalignfeatureadaptor *Pdafa);
 
 EnsPDatabaseadaptor ensDnaalignfeatureadaptorGetDatabaseadaptor(
-    EnsPDnaalignfeatureadaptor dafa);
-
-EnsPFeatureadaptor ensDnaalignfeatureadaptorGetFeatureadaptor(
     EnsPDnaalignfeatureadaptor dafa);
 
 AjBool ensDnaalignfeatureadaptorFetchAllbyHitname(
@@ -333,16 +308,9 @@ EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
 EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensProteinalignfeatureadaptorDel(
-    EnsPProteinalignfeatureadaptor *Ppafa);
-
-EnsPBaseadaptor ensProteinalignfeatureadaptorGetBaseadaptor(
-    EnsPProteinalignfeatureadaptor pafa);
+void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Ppafa);
 
 EnsPDatabaseadaptor ensProteinalignfeatureadaptorGetDatabaseadaptor(
-    EnsPProteinalignfeatureadaptor pafa);
-
-EnsPFeatureadaptor ensProteinalignfeatureadaptorGetFeatureadaptor(
     EnsPProteinalignfeatureadaptor pafa);
 
 AjBool ensProteinalignfeatureadaptorFetchAllbyHitname(
@@ -386,24 +354,6 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
 AjBool ensProteinalignfeatureadaptorRetrieveAllIdentifiers(
     EnsPProteinalignfeatureadaptor pafa,
     AjPList identifiers);
-
-/* Ensembl Supporting Feature Adaptor */
-
-EnsPSupportingfeatureadaptor ensRegistryGetSupportingfeatureadaptor(
-    EnsPDatabaseadaptor dba);
-
-EnsPDatabaseadaptor ensSupportingfeatureadaptorGetDatabaseadaptor(
-    EnsPSupportingfeatureadaptor sfa);
-
-AjBool ensSupportingfeatureadaptorFetchAllbyExon(
-    EnsPSupportingfeatureadaptor sfa,
-    EnsPExon exon,
-    AjPList bafs);
-
-AjBool ensSupportingfeatureadaptorFetchAllbyTranscript(
-    EnsPSupportingfeatureadaptor sfa,
-    EnsPTranscript transcript,
-    AjPList bafs);
 
 /*
 ** End of prototype definitions

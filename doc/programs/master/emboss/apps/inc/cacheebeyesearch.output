@@ -4,107 +4,107 @@
 <p><h3>File: qatests.server.ebeye</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# qatests.server.ebeye 2013-07-15 12:00:00
+# qatests.server.ebeye 2012-07-15 12:00:00
 
-DBNAME arrayexpress_repository [
-  method: "ebeye"
-  dbalias: "arrayexpress-repository"
-  fields: "$facets, acc, author, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, last_update_date, name, release_date, submission_date"
-  return: "acc, description, domain_source, id, name"
+DB arrayexpress_repository [
+  method: ebeye
+  dbalias: arrayexpress-repository
+  fields: "acc, author, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
+  return: "acc, description, domain_source, id, keywords, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME atlas_experiments [
-  method: "ebeye"
-  dbalias: "atlas-experiments"
-  fields: "$facets, creation_date, description, domain_source, id, last_modification_date, name"
+DB atlas_experiments [
+  method: ebeye
+  dbalias: atlas-experiments
+  fields: "creation_date, description, domain_source, id, last_modification_date, name"
   return: "description, domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME atlas_genes [
-  method: "ebeye"
-  dbalias: "atlas-genes"
-  fields: "$facets, cell_line, cell_type, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, gene_biotype, goterm, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_accession_number, mirbase_description, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_matured_mirna, mirbase_pubmedid, mirbase_sequence, name, number_of_experiments, organism_part, otherconditions, pathwayid, pathwayname, phenotype, rgd, rgd_symbol, synonym"
+DB atlas_genes [
+  method: ebeye
+  dbalias: atlas-genes
+  fields: "cell_line, cell_type, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, genesigdbid, goterm, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_accession_number, mirbase_description, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_matured_mirna, mirbase_pubmedid, mirbase_sequence, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, synonym"
   return: "cell_line, cell_type, compound, description, developmental_stage, disease_state, domain_source, id, infect, name, number_of_experiments, organism_part, otherconditions, phenotype"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME biocatalogue [
-  method: "ebeye"
-  dbalias: "biocatalogue"
-  fields: "$facets, acc, creation_date, description, domain_source, id, keywords, last_modification_date, name, provider, service_types"
+DB biocatalogue [
+  method: ebeye
+  dbalias: biocatalogue
+  fields: "acc, creation_date, description, domain_source, id, keywords, last_modification_date, name, provider, service_types"
   return: "description, domain_source, id, keywords, name, provider, service_types"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME biomodels [
-  method: "ebeye"
-  dbalias: "biomodels"
-  fields: "$facets, acc, author, creation_date, curated, description, domain_source, id, keywords, last_modification_date, name, original_model"
-  return: "description, domain_source, id, name"
+DB biomodels [
+  method: ebeye
+  dbalias: biomodels
+  fields: "acc, author, creation_date, curated, description, domain_source, id, keywords, last_modification_date, name, original_model"
+  return: "description, domain_source, id, keywords, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME chebi [
-  method: "ebeye"
-  dbalias: "chebi"
+DB chebi [
+  method: ebeye
+  dbalias: chebi
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-  fields: "$facets, acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_PATRIC_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keyword_id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
+  fields: "EMBLWGS_version, EMBL_CON_version, EMBL_TPA_version, EMBL_version, EPO_version, H_INV_version, IPI_version, REFSEQ_version, USPTO_version, UniProtKB/Swiss-Prot_version, UniProtKB/TrEMBL_version, domain_source, id, uniprotkb_exclusion"
+  return: "domain_source, id"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniprot [
+  method: ebeye
+  dbalias: uniprot
+  fields: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_PATRIC_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
   return: "acc, descAltName, descRecName, descSubName, domain_source, gene_primary_name, id, organism_scientific_name, sequence_length, status"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME uniref100 [
-  method: "ebeye"
-  dbalias: "uniref100"
-  fields: "$facets, dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+DB uniref100 [
+  method: ebeye
+  dbalias: uniref100
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME uniref50 [
-  method: "ebeye"
-  dbalias: "uniref50"
-  fields: "$facets, dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+DB uniref50 [
+  method: ebeye
+  dbalias: uniref50
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME uniref90 [
-  method: "ebeye"
-  dbalias: "uniref90"
-  fields: "$facets, dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+DB uniref90 [
+  method: ebeye
+  dbalias: uniref90
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, id, name"
   format: "text"
   hasaccession: "N"
 ]
 
-DBNAME uspto [
-  method: "ebeye"
-  dbalias: "uspto"
-  fields: "$facets, acc, creation_date, data_class, description, doc_file, domain_source, id, length, offset_end, offset_start, organism, organism_species, references, sequence_version"
-  return: "acc, description, doc_file, domain_source, id, offset_end, offset_start"
-  format: "text"
-  hasaccession: "N"
-]
-
-DBNAME wgs_masters [
-  method: "ebeye"
-  dbalias: "wgs_masters"
-  fields: "$facets, description, domain_source, id, name"
-  return: "description, domain_source, id, name"
+DB wgs_masters [
+  method: ebeye
+  dbalias: wgs_masters
+  fields: "description, domain_source, id, name, scientific_name"
+  return: "description, domain_source, id, name, scientific_name"
   format: "text"
   hasaccession: "N"
 ]

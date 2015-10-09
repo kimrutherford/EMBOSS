@@ -42,11 +42,11 @@ section: required [
   integer: shiftincrement [
     standard: "Y"
     minimum: "1"
-    maximum: "$(windowsize)"
+    maximum: "$(windowSize)"
     failrange: "N"
     trueminimum: "N"
     default: "1"
-    information: "Enter shift increment"
+    information: "Enter Shift Increment"
     help: "This is the amount by which the window is moved at each
            increment in order to find the melting point and other properties
            along the sequence."

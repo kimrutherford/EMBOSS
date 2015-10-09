@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.42 $
+** @version $Revision: 1.40 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -289,13 +289,13 @@ static const char *qcalignmentKQueryCoveragePropertiesQueryQuery[] =
 
 
 
-/* @conststatic qcalignmentadaptorKTablenames *********************************
+/* @conststatic qcalignmentadaptorKTables *************************************
 **
 ** Array of Ensembl Quality Check Alignment Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcalignmentadaptorKTablenames[] =
+static const char *qcalignmentadaptorKTables[] =
 {
     "alignment",
     (const char *) NULL
@@ -304,13 +304,13 @@ static const char *qcalignmentadaptorKTablenames[] =
 
 
 
-/* @conststatic qcalignmentadaptorKColumnnames ********************************
+/* @conststatic qcalignmentadaptorKColumns ************************************
 **
 ** Array of Ensembl Quality Check Alignment Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcalignmentadaptorKColumnnames[] =
+static const char *qcalignmentadaptorKColumns[] =
 {
     "alignment.alignment_id",
     "alignment.analysis_id",
@@ -636,7 +636,14 @@ void ensQcalignmentDel(EnsPQcalignment *Pqca)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pqca) || --pthis->Use)
+    if (!*Pqca)
+        return;
+
+    pthis = *Pqca;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pqca = NULL;
 
@@ -650,7 +657,9 @@ void ensQcalignmentDel(EnsPQcalignment *Pqca)
 
     ajStrDel(&pthis->Vulgar);
 
-    ajMemFree((void **) Pqca);
+    AJFREE(pthis);
+
+    *Pqca = NULL;
 
     return;
 }
@@ -1666,25 +1675,25 @@ AjBool ensQcalignmentTrace(const EnsPQcalignment qca, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Quality Check Alignment object.
 **
 ** @fdata [EnsPQcalignment]
 **
-** @nam3rule Calculate   Calculate Ensembl Quality Check Alignment information
+** @nam3rule Calculate   Calculate Ensembl Quality Check Alignment values
 ** @nam4rule Memsize     Calculate the memory size in bytes
-** @nam4rule Query       Calculate query information
+** @nam4rule Query       Calculate query values
 ** @nam5rule Coordinates Calculate query coordinates
 ** @nam5rule Coverage    Calculate the query coverage
-** @nam6rule Dna         Calculate the query coverage DNA information
+** @nam6rule Dna         Calculate the query coverage DNA values
 ** @nam7rule Dna         Calculate the query coverage DNA to DNA
 ** @nam7rule Genome      Calculate the query coverage DNA to Genome
-** @nam6rule Protein     Calculate the query coverage Protein information
+** @nam6rule Protein     Calculate the query coverage Protein values
 ** @nam7rule Protein     Calculate the query coverage Protein to Protein
-** @nam6rule Query       Calculate the query coverage Query information
+** @nam6rule Query       Calculate the query coverage Query values
 ** @nam7rule Query       Calculate the query coverage Query to Query
 ** @nam7rule Target      Calculate the query coverage Query to Target
-** @nam4rule Target      Calculate target information
+** @nam4rule Target      Calculate target values
 ** @nam5rule Coordinates Calculate target coordinates
 **
 ** @argrule Memsize qca [const EnsPQcalignment] Ensembl Quality Check Alignment
@@ -3423,10 +3432,13 @@ static AjBool qcalignmentadaptorFetchAllbyStatement(
 EnsPQcalignmentadaptor ensQcalignmentadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensBaseadaptorNew(
         dba,
-        qcalignmentadaptorKTablenames,
-        qcalignmentadaptorKColumnnames,
+        qcalignmentadaptorKTables,
+        qcalignmentadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -3479,7 +3491,7 @@ void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor *Pqcaa)
 {
     ensBaseadaptorDel(Pqcaa);
 
-    return;
+	return;
 }
 
 
@@ -3549,8 +3561,7 @@ EnsPBaseadaptor ensQcalignmentadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcalignmentadaptorGetDatabaseadaptor(
     EnsPQcalignmentadaptor qcaa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa));
+    return ensBaseadaptorGetDatabaseadaptor(qcaa);
 }
 
 
@@ -3659,8 +3670,6 @@ AjBool ensQcalignmentadaptorFetchAllbyCoverage(EnsPQcalignmentadaptor qcaa,
                                                ajuint upper,
                                                AjPList qcas)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcaa)
@@ -3674,16 +3683,15 @@ AjBool ensQcalignmentadaptorFetchAllbyCoverage(EnsPQcalignmentadaptor qcaa,
                           "alignment.coverage <= %u",
                           lower, upper);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -3720,8 +3728,6 @@ AjBool ensQcalignmentadaptorFetchAllbyLocationTarget(
     ajuint tend,
     AjPList qcas)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcaa)
@@ -3788,12 +3794,11 @@ AjBool ensQcalignmentadaptorFetchAllbyLocationTarget(
         tstart,
         tend);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
@@ -3820,16 +3825,15 @@ AjBool ensQcalignmentadaptorFetchAllbyLocationTarget(
         tstart,
         tend);
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -3863,8 +3867,6 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabasePair(
     const EnsPQcdatabase tdb,
     AjPList qcas)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcaa)
@@ -3891,16 +3893,15 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabasePair(
                           ensQcdatabaseGetIdentifier(qdb),
                           ensQcdatabaseGetIdentifier(tdb));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -3932,8 +3933,6 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseQuery(
     const EnsPQcdatabase qdb,
     AjPList qcas)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcaa)
@@ -3953,16 +3952,15 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseQuery(
                        " AND alignment.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -3994,8 +3992,6 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseTarget(
     const EnsPQcdatabase tdb,
     AjPList qcas)
 {
-    AjBool result = AJFALSE;
-
     AjPStr constraint = NULL;
 
     if (!qcaa)
@@ -4015,16 +4011,15 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseTarget(
                        " AND alignment.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcas);
+    ensBaseadaptorFetchAllbyConstraint(qcaa,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcas);
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -4052,10 +4047,16 @@ AjBool ensQcalignmentadaptorFetchByIdentifier(EnsPQcalignmentadaptor qcaa,
                                               ajuint identifier,
                                               EnsPQcalignment *Pqca)
 {
-    return ensBaseadaptorFetchByIdentifier(
-        ensQcalignmentadaptorGetBaseadaptor(qcaa),
-        identifier,
-        (void **) Pqca);
+    if (!qcaa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Pqca)
+        return ajFalse;
+
+    return ensBaseadaptorFetchByIdentifier(qcaa, identifier, (void **) Pqca);
 }
 
 
@@ -4120,7 +4121,7 @@ AjBool ensQcalignmentadaptorDelete(EnsPQcalignmentadaptor qcaa,
     if (!ensQcalignmentGetIdentifier(qca))
         return ajFalse;
 
-    dba = ensQcalignmentadaptorGetDatabaseadaptor(qcaa);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
 
     statement = ajFmtStr(
         "DELETE FROM "
@@ -4133,8 +4134,8 @@ AjBool ensQcalignmentadaptorDelete(EnsPQcalignmentadaptor qcaa,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qca->Adaptor    = NULL;
-        qca->Identifier = 0U;
+        qca->Adaptor    = (EnsPQcalignmentadaptor) NULL;
+        qca->Identifier = 0;
 
         result = ajTrue;
     }
@@ -4186,7 +4187,7 @@ AjBool ensQcalignmentadaptorStore(EnsPQcalignmentadaptor qcaa,
         ensQcalignmentGetIdentifier(qca))
         return ajFalse;
 
-    dba = ensQcalignmentadaptorGetDatabaseadaptor(qcaa);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
 
     ensDatabaseadaptorEscapeC(dba, &txtvulgar, qca->Vulgar);
 
@@ -4288,7 +4289,7 @@ AjBool ensQcalignmentadaptorUpdate(EnsPQcalignmentadaptor qcaa,
     if (!ensQcalignmentGetIdentifier(qca))
         return ajFalse;
 
-    dba = ensQcalignmentadaptorGetDatabaseadaptor(qcaa);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
 
     ensDatabaseadaptorEscapeC(dba, &txtvulgar, qca->Vulgar);
 

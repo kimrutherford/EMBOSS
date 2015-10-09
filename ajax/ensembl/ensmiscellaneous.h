@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.24 $
+** @version $Revision: 1.23 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/08/05 11:15:18 $ by $Author: mks $
+** @modified $Date: 2012/04/26 06:39:22 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -244,10 +244,10 @@ AjBool ensMiscellaneoussetadaptorCacheClear(
     EnsPMiscellaneoussetadaptor msa);
 
 EnsPBaseadaptor ensMiscellaneoussetadaptorGetBaseadaptor(
-    EnsPMiscellaneoussetadaptor msa);
+    const EnsPMiscellaneoussetadaptor msa);
 
 EnsPDatabaseadaptor ensMiscellaneoussetadaptorGetDatabaseadaptor(
-    EnsPMiscellaneoussetadaptor msa);
+    const EnsPMiscellaneoussetadaptor msa);
 
 AjBool ensMiscellaneoussetadaptorFetchAll(
     EnsPMiscellaneoussetadaptor msa,
@@ -351,13 +351,7 @@ EnsPMiscellaneousfeatureadaptor ensMiscellaneousfeatureadaptorNew(
 
 void ensMiscellaneousfeatureadaptorDel(EnsPMiscellaneousfeatureadaptor *Pmfa);
 
-EnsPBaseadaptor ensMiscellaneousfeatureadaptorGetBaseadaptor(
-    EnsPMiscellaneousfeatureadaptor mfa);
-
 EnsPDatabaseadaptor ensMiscellaneousfeatureadaptorGetDatabaseadaptor(
-    EnsPMiscellaneousfeatureadaptor mfa);
-
-EnsPFeatureadaptor ensMiscellaneousfeatureadaptorGetFeatureadaptor(
     EnsPMiscellaneousfeatureadaptor mfa);
 
 AjBool ensMiscellaneousfeatureadaptorFetchAllbySlicecodes(

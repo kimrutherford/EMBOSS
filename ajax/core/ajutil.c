@@ -4,8 +4,8 @@
 **
 ** @author Copyright (C) 1998 Ian Longden
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.67 $
-** @modified $Date: 2012/09/03 14:52:38 $ by $Author: rice $
+** @version $Revision: 1.66 $
+** @modified $Date: 2012/03/28 21:11:23 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -47,7 +47,6 @@
 #include "ajtax.h"
 #include "ajurl.h"
 #include "ajvar.h"
-#include "ajxml.h"
 #include "ajresource.h"
 #include "ajphylo.h"
 #include "ajnexus.h"
@@ -258,7 +257,6 @@ void ajReset(void)
     ajTaxExit();
     ajUrlExit();
     ajVarExit();
-    ajXmlExit();
     ajResourceExit();
     ajPhyloExit();
     ajNexusExit();

@@ -1,9 +1,0 @@
-Document: emboss-apps
-Title: EMBOSS Applications
-Author: The EMBOSS Developpers
-Section: Science/Biology
-Abstract: Documentation of the EMBOSS applications sorted in alphabetical order. 
-
-Format: HTML
-Index: /usr/share/doc/emboss-doc/doc/programs/html/index.html
-Files: /usr/share/doc/emboss-doc/doc/programs/html/*.html

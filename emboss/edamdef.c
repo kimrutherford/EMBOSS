@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     }
  
     handle = ajStrTokenNewC(query, ",");
-    while(ajStrTokenNextParse(handle, &qrystr))
+    while(ajStrTokenNextParse(&handle, &qrystr))
     {
         ajFmtPrintS(&oboqry, "edam-des:%S", qrystr);
         ajOboinQryS(oboin, oboqry);

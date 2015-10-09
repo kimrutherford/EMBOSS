@@ -353,11 +353,11 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 	    continue;
 
 	handle = ajStrTokenNewC(rdline, " \t");
-	ajStrTokenNextParse(handle, &name);
+	ajStrTokenNextParse(&handle, &name);
 
-	ajStrTokenNextParse(handle, &five);
+	ajStrTokenNextParse(&handle, &five);
 	ajStrFmtUpper(&five);
-	ajStrTokenNextParse(handle, &three);
+	ajStrTokenNextParse(&handle, &three);
 	ajStrFmtUpper(&three);
 	ajStrTokenDel(&handle);
 

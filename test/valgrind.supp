@@ -69,7 +69,7 @@
    fun:gethostbyname_r@@GLIBC_2.1.2
 }
 {
-   pmr__axis2_svc_client_create2
+   pmr__axis2_svc_client_create
    Memcheck:Leak
    fun:calloc
    fun:_dlerror_run
@@ -96,12 +96,6 @@
    fun:axis2_build_client_conf_ctx
    fun:axis2_svc_client_create_with_conf_ctx_and_svc
    fun:ajSoapAxis2GetClient
-}
-{
-   pmr__dlerror_run_general
-   Memcheck:Leak
-   fun:calloc
-   fun:_dlerror_run
 }
 {
    pmr__strspn

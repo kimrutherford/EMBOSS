@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.49 $
+** @version $Revision: 1.47 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -105,13 +105,13 @@ static const char *qcdatabaseKType[] =
 
 
 
-/* @conststatic qcdatabaseadaptorKTablenames **********************************
+/* @conststatic qcdatabaseadaptorKTables **************************************
 **
 ** Array of Ensembl Quality Check Database Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcdatabaseadaptorKTablenames[] =
+static const char *qcdatabaseadaptorKTables[] =
 {
     "sequence_db",
     (const char *) NULL
@@ -120,13 +120,13 @@ static const char *qcdatabaseadaptorKTablenames[] =
 
 
 
-/* @conststatic qcdatabaseadaptorKColumnnames *********************************
+/* @conststatic qcdatabaseadaptorKColumns *************************************
 **
 ** Array of Ensembl Quality Check Database Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcdatabaseadaptorKColumnnames[] =
+static const char *qcdatabaseadaptorKColumns[] =
 {
     "sequence_db.sequence_db_id",
     "sequence_db.analysis_id",
@@ -503,7 +503,14 @@ void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pqcdb) || --pthis->Use)
+    if (!*Pqcdb)
+        return;
+
+    pthis = *Pqcdb;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pqcdb = NULL;
 
@@ -523,7 +530,9 @@ void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
     ajStrDel(&pthis->UrlExternal);
     ajStrDel(&pthis->UrlInternal);
 
-    ajMemFree((void **) Pqcdb);
+    AJFREE(pthis);
+
+    *Pqcdb = NULL;
 
     return;
 }
@@ -1538,12 +1547,12 @@ AjBool ensQcdatabaseTrace(const EnsPQcdatabase qcdb, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Quality Check Database object.
 **
 ** @fdata [EnsPQcdatabase]
 **
-** @nam3rule Calculate Calculate Ensembl Quality Check Database information
+** @nam3rule Calculate Calculate Ensembl Quality Check Database values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * qcdb [const EnsPQcdatabase] Ensembl Quality Check Database
@@ -1871,10 +1880,9 @@ const char* ensQcdatabaseClassToChar(EnsEQcdatabaseClass qcdbc)
          i++);
 
     if (!qcdatabaseKClass[i])
-        ajDebug("ensQcdatabaseClassToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Quality Check Database Class "
-                "enumeration %d.\n",
+        ajDebug("ensQcdatabaseClassToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Quality Check Database Class enumeration %d.\n",
                 qcdbc);
 
     return qcdatabaseKClass[i];
@@ -1996,10 +2004,9 @@ const char* ensQcdatabaseTypeToChar(EnsEQcdatabaseType qcdbt)
          i++);
 
     if (!qcdatabaseKType[i])
-        ajDebug("ensQcdatabaseTypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Quality Check Database Type "
-                "enumeration %d.\n",
+        ajDebug("ensQcdatabaseTypeToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Quality Check Database Type enumeration %d.\n",
                 qcdbt);
 
     return qcdatabaseKType[i];
@@ -2384,8 +2391,6 @@ static AjBool qcdatabaseadaptorCacheRemove(EnsPQcdatabaseadaptor qcdba,
 
 static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 {
-    AjBool result = AJFALSE;
-
     AjPList qcdbs = NULL;
 
     EnsPQcdatabase qcdb = NULL;
@@ -2397,7 +2402,7 @@ static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
         return ajFalse;
     else
     {
-        qcdba->CacheByIdentifier = ajTableuintNew(0U);
+        qcdba->CacheByIdentifier = ajTableuintNew(0);
 
         ajTableSetDestroyvalue(
             qcdba->CacheByIdentifier,
@@ -2408,7 +2413,7 @@ static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
         return ajFalse;
     else
     {
-        qcdba->CacheByName = ajTablestrNew(0U);
+        qcdba->CacheByName = ajTablestrNew(0);
 
         ajTableSetDestroyvalue(
             qcdba->CacheByName,
@@ -2417,12 +2422,11 @@ static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 
     qcdbs = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensQcdatabaseadaptorGetBaseadaptor(qcdba),
-        (const AjPStr) NULL,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcdbs);
+    ensBaseadaptorFetchAllbyConstraint(qcdba->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcdbs);
 
     while (ajListPop(qcdbs, (void **) &qcdb))
     {
@@ -2433,7 +2437,7 @@ static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 
     ajListFree(&qcdbs);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2497,8 +2501,8 @@ EnsPQcdatabaseadaptor ensQcdatabaseadaptorNew(
 
     qcdba->Adaptor = ensBaseadaptorNew(
         dba,
-        qcdatabaseadaptorKTablenames,
-        qcdatabaseadaptorKColumnnames,
+        qcdatabaseadaptorKTables,
+        qcdatabaseadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -2577,15 +2581,19 @@ void ensQcdatabaseadaptorDel(EnsPQcdatabaseadaptor *Pqcdba)
                 *Pqcdba);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pqcdba))
+    if (!*Pqcdba)
         return;
+
+    pthis = *Pqcdba;
 
     ajTableDel(&pthis->CacheByIdentifier);
     ajTableDel(&pthis->CacheByName);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    ajMemFree((void **) Pqcdba);
+    AJFREE(pthis);
+
+    *Pqcdba = NULL;
 
     return;
 }
@@ -2657,8 +2665,7 @@ EnsPBaseadaptor ensQcdatabaseadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcdatabaseadaptorGetDatabaseadaptor(
     EnsPQcdatabaseadaptor qcdba)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensQcdatabaseadaptorGetBaseadaptor(qcdba));
+    return (qcdba) ? ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor) : NULL;
 }
 
 
@@ -2809,15 +2816,11 @@ AjBool ensQcdatabaseadaptorFetchByIdentifier(EnsPQcdatabaseadaptor qcdba,
                                              ajuint identifier,
                                              EnsPQcdatabase *Pqcdb)
 {
-    AjBool result = AJFALSE;
-
     if (!qcdba)
         return ajFalse;
 
     if (!Pqcdb)
         return ajFalse;
-
-    *Pqcdb = NULL;
 
     if (!qcdba->CacheByIdentifier)
         qcdatabaseadaptorCacheInit(qcdba);
@@ -2838,16 +2841,13 @@ AjBool ensQcdatabaseadaptorFetchByIdentifier(EnsPQcdatabaseadaptor qcdba,
         return ajTrue;
     }
 
-    /* For a cache miss re-query the database. */
-
-    result = ensBaseadaptorFetchByIdentifier(
-        ensQcdatabaseadaptorGetBaseadaptor(qcdba),
-        identifier,
-        (void **) Pqcdb);
+    ensBaseadaptorFetchByIdentifier(qcdba->Adaptor,
+                                    identifier,
+                                    (void **) Pqcdb);
 
     qcdatabaseadaptorCacheInsert(qcdba, Pqcdb);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2877,14 +2877,10 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
     char *txtname    = NULL;
     char *txtrelease = NULL;
 
-    AjBool result = AJFALSE;
-
     AjPList qcdbs = NULL;
 
     AjPStr key        = NULL;
     AjPStr constraint = NULL;
-
-    EnsPBaseadaptor ba = NULL;
 
     EnsPQcdatabase qcdb = NULL;
 
@@ -2899,8 +2895,6 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 
     if (!Pqcdb)
         return ajFalse;
-
-    *Pqcdb = NULL;
 
     if (!qcdba->CacheByName)
         qcdatabaseadaptorCacheInit(qcdba);
@@ -2926,10 +2920,8 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 
     /* In case of a cache miss, query the database. */
 
-    ba = ensQcdatabaseadaptorGetBaseadaptor(qcdba);
-
-    ensBaseadaptorEscapeC(ba, &txtname, name);
-    ensBaseadaptorEscapeC(ba, &txtrelease, release);
+    ensBaseadaptorEscapeC(qcdba->Adaptor, &txtname, name);
+    ensBaseadaptorEscapeC(qcdba->Adaptor, &txtrelease, release);
 
     constraint = ajFmtStr("sequence_db.name = '%s' "
                           "AND "
@@ -2942,12 +2934,11 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 
     qcdbs = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        qcdbs);
+    ensBaseadaptorFetchAllbyConstraint(qcdba->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       qcdbs);
 
     if (ajListGetLength(qcdbs) > 1)
         ajWarn("ensQcdatabaseadaptorFetchByName got more than "
@@ -2969,7 +2960,7 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -3041,7 +3032,7 @@ AjBool ensQcdatabaseadaptorDelete(EnsPQcdatabaseadaptor qcdba,
 
     qcdatabaseadaptorCacheRemove(qcdba, qcdb);
 
-    dba = ensQcdatabaseadaptorGetDatabaseadaptor(qcdba);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
 
     statement = ajFmtStr(
         "DELETE FROM "
@@ -3054,8 +3045,8 @@ AjBool ensQcdatabaseadaptorDelete(EnsPQcdatabaseadaptor qcdba,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qcdb->Adaptor    = NULL;
-        qcdb->Identifier = 0U;
+        qcdb->Adaptor    = (EnsPQcdatabaseadaptor) NULL;
+        qcdb->Identifier = 0;
 
         result = ajTrue;
     }
@@ -3115,7 +3106,7 @@ AjBool ensQcdatabaseadaptorStore(EnsPQcdatabaseadaptor qcdba,
         ensQcdatabaseGetIdentifier(qcdb))
         return ajFalse;
 
-    dba = ensQcdatabaseadaptorGetDatabaseadaptor(qcdba);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
 
     ensDatabaseadaptorEscapeC(dba, &txtname, qcdb->Name);
     ensDatabaseadaptorEscapeC(dba, &txtrelease, qcdb->Release);
@@ -3237,7 +3228,7 @@ AjBool ensQcdatabaseadaptorUpdate(EnsPQcdatabaseadaptor qcdba,
     if (!ensQcdatabaseGetIdentifier(qcdb))
         return ajFalse;
 
-    dba = ensQcdatabaseadaptorGetDatabaseadaptor(qcdba);
+    dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
 
     ensDatabaseadaptorEscapeC(dba, &txtname, qcdb->Name);
     ensDatabaseadaptorEscapeC(dba, &txtrelease, qcdb->Release);

@@ -57,7 +57,7 @@ General log output file [outfile.dbxedam]:
 Command line arguments
 
 Index the EDAM ontology using b+tree indices
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [edam] Basename for index files (Any string
@@ -146,7 +146,7 @@ Entry idlen 15 OK. Maximum ID length was 4 for '0004'.
 Field acc acclen 80 OK. Maximum acc term length was 47 for 'HMMER profile alignm
 ent (sequences versus HMMs)'.
 Field nam namlen 32 OK. Maximum nam term length was 15 for 'semanticscience'.
-Field isa isalen 20 OK. Maximum isa term length was 4 for '0003'.
+Field isa isalen 15 OK. Maximum isa term length was 4 for '0003'.
 Field ns nslen 15 OK. Maximum ns term length was 10 for 'identifier'.
 Field des deslen 30 OK. Maximum des term length was 17 for 'conceptualisation'.
 Field hasin hasinlen 15 OK. Maximum hasin term length was 4 for '0006'.
@@ -172,11 +172,11 @@ Order        87
 Fill         80
 Level        0
 Pagesize     8192
-Cachesize    20000
+Cachesize    2000
 Order2       406
 Fill2        681
 Secpagesize  8192
-Seccachesize 20000
+Seccachesize 2000
 Count        143
 Fullcount    143
 Kwlimit      80
@@ -192,11 +192,11 @@ Order        93
 Fill         80
 Level        0
 Pagesize     4096
-Cachesize    20000
+Cachesize    2000
 Order2       144
 Fill2        204
 Secpagesize  4096
-Seccachesize 20000
+Seccachesize 2000
 Count        562
 Fullcount    2167
 Kwlimit      30
@@ -212,11 +212,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        2
 Fullcount    2
 Kwlimit      15
@@ -232,11 +232,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        2
 Fullcount    2
 Kwlimit      15
@@ -252,11 +252,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        143
 Fullcount    143
 Kwlimit      15
@@ -268,18 +268,18 @@ Type         Secondary
 Compress     Yes
 Pages        4
 Secpages     96
-Order        60
-Fill         49
+Order        71
+Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        90
 Fullcount    225
-Kwlimit      20
+Kwlimit      15
 Idlimit      15
 
   File: edam.pxisfmt
@@ -292,11 +292,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        5
 Fullcount    5
 Kwlimit      15
@@ -312,11 +312,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        1
 Fullcount    1
 Kwlimit      15
@@ -332,11 +332,11 @@ Order        44
 Fill         38
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        323
 Fullcount    725
 Kwlimit      32
@@ -352,11 +352,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    20000
+Cachesize    2000
 Order2       16
 Fill2        24
 Secpagesize  512
-Seccachesize 20000
+Seccachesize 2000
 Count        5
 Fullcount    143
 Kwlimit      15

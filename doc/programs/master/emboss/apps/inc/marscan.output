@@ -6,9 +6,9 @@
 <pre>
 ##gff-version 3
 ##sequence-region U01317 1 65963
-#!Date 2013-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.6.0.0
+#!Source-version EMBOSS 6.5.6.0
 U01317	marscan	regulatory_region	2242	2458	.	+	.	ID=U01317.1;note=*type MAR/SAR recognition site (MRS);note=*start8bp 2451;note=*end8bp 2458;note=*start16bp 2242;note=*end16bp 2257
 U01317	marscan	regulatory_region	17654	17730	.	+	.	ID=U01317.2;note=*type MAR/SAR recognition site (MRS);note=*start8bp 17723;note=*end8bp 17730;note=*start16bp 17654;note=*end16bp 17669
 U01317	marscan	regulatory_region	40956	41123	.	+	.	ID=U01317.3;note=*type MAR/SAR recognition site (MRS);note=*start8bp 40956;note=*end8bp 40963;note=*start16bp 41108;note=*end16bp 41123

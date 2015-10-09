@@ -370,7 +370,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
                 val = ajFalse;
                 tokens = ajStrTokenNewC(matchtype, " \t\n\r,;|");
 
-                while (ajStrTokenNextParse(tokens, &key))
+                while (ajStrTokenNextParse( &tokens, &key))
                 {
                     if (ajFeatTypeMatchWildS(gf, key))
                     {

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.21 $
+** @version $Revision: 1.19 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -105,8 +105,8 @@
 ** 'variation_synonym' table.
 **
 ** @cc Bio::EnsEMBL::Variation::Variation
-** @cc CVS Revision: 1.68
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.67
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -314,7 +314,14 @@ void ensGvsynonymDel(EnsPGvsynonym *Pgvs)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvs) || --pthis->Use)
+    if (!*Pgvs)
+        return;
+
+    pthis = *Pgvs;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvs = NULL;
 
@@ -326,7 +333,9 @@ void ensGvsynonymDel(EnsPGvsynonym *Pgvs)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Moleculetype);
 
-    ajMemFree((void **) Pgvs);
+    AJFREE(pthis);
+
+    *Pgvs = NULL;
 
     return;
 }
@@ -832,12 +841,12 @@ AjBool ensGvsynonymTrace(const EnsPGvsynonym gvs, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Synonym object.
 **
 ** @fdata [EnsPGvsynonym]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Synonym information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Synonym values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvs [const EnsPGvsynonym] Ensembl Genetic Variation Synonym

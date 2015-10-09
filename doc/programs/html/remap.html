@@ -131,7 +131,7 @@ Output file [j01636.remap]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display restriction enzyme binding sites in a nucleotide sequence
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -331,7 +331,6 @@ Version: EMBOSS:6.6.0.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
-   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -752,14 +751,6 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
-<td>Boolean value Yes/No</td>
-<td>N</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<td> -squick1<br>-squick_sequence</td>
-<td>boolean</td>
-<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -1270,8 +1261,8 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                                                       Hin6I 
                  TaqI                                 HinP1I
                  |  BsiYI                             | HhaI 
-                 |  Bsc4I                             | BssKI
-                 |  |   HspAI                         | Bsu6I 
+                 |  Bsc4I                             | Bsu6I
+                 |  |   HspAI                         | BssKI 
                  |  |   Hin6I                         | Ksp632I
                  |  |   HinP1I                        | | HpaII 
                  |  |   | HhaI        AciI            | | BsiSI 
@@ -1342,24 +1333,24 @@ MaeII     NotI
 J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
+                                                                  Ksp632I
+                                                        &gt;.........====
                                                           HpaII
                                                           &gt;===
-                                                         BssKI
-                                                        &gt;=====
-                        HhaI                          HhaI
-                        ==&gt;=                          ==&gt;=
-                 TaqI   Hin6I                         Hin6I
-                 &gt;===   &gt;===                          &gt;===
-              BsiYI                      AciI                     Ksp632I
-              ======&gt;====             &gt;..====           &gt;.........====
+                        HhaI                             BssKI
+                        ==&gt;=                            &gt;=====
+                 TaqI   Hin6I                         HhaI
+                 &gt;===   &gt;===                          ==&gt;=
+              BsiYI                      AciI         Hin6I
+              ======&gt;====             &gt;..====         &gt;===
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
-              ====&lt;======                &lt;===         ===&lt;   .....====
-              BsiYI                      AciI         Hin6I       Ksp632I
-                 ===&lt;   ===&lt;                          =&lt;==
-                 TaqI   Hin6I                         HhaI
+              ====&lt;======                &lt;===         ===&lt;
+              BsiYI                      AciI         Hin6I
+                 ===&lt;   ===&lt;                          =&lt;==  &lt;.....====
+                 TaqI   Hin6I                         HhaI        Ksp632I
                         =&lt;==                             =====&lt;
                         HhaI                             BssKI
                                                           ===&lt;

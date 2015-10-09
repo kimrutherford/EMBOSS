@@ -3,8 +3,8 @@
 ** Functions for patternlist handling.
 **
 ** @author Copyright (C) 2004 Henrikki Almusa, Medicel Oy,Finland
-** @version $Revision: 1.23 $
-** @modified $Date: 2013/06/29 22:38:59 $ by $Author: rice $
+** @version $Revision: 1.22 $
+** @modified $Date: 2011/11/23 09:49:23 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -192,9 +192,6 @@ void embPatlistRegexSearch(AjPFeattable ftable, const AjPSeq seq,
 ** The main search function of patterns. It compiles the patterns and searches
 ** with them. If the pattern fails to compile, it is removed from list.
 **
-** This version of the function calls the DFA version of the regular
-** expression search which returns all matches.
-**
 ** @param [w] ftable [AjPFeattable] Table of found features
 ** @param [r] seq [const AjPSeq] Sequence to search
 ** @param [u] plist [AjPPatlistRegex] List of patterns to search with
@@ -291,7 +288,7 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
         ajStrAssignC(&featMotifNuc, "SO:0000714");
 
     /*ajDebug("embPatternRegexSearch pos: %d adj: %d reverse: %B\n",
-      pos, adj, reverse, isreversed);*/
+	   pos, adj, reverse, isreversed);*/
     /*ajDebug("seqlen:%d len: %d offset: %d offend: %d begin: %d end: %d\n",
 	   seqlen , ajSeqGetLen(seq), ajSeqGetOffset(seq),
 	   ajSeqGetOffend(seq), ajSeqGetBegin(seq), ajSeqGetEnd(seq));*/
@@ -321,7 +318,7 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 	    pos += off;
 
 	    /*ajDebug("match pos: %d adj: %d len: %d off:%d\n",
-              pos, adj, len, off);*/
+                    pos, adj, len, off);*/
             if (reverse)
                 sf = ajFeatNew(ftable, NULL, featMotifNuc,
                                    adj - pos - len + 2,
@@ -372,8 +369,7 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 
 /* @func embPatternRegexSearchAll *********************************************
 **
-** The search function to find all matches for a single
-** regular expression pattern.
+** The search function for a single regular expression pattern.
 **
 ** @param [w] ftable [AjPFeattable] Table of found features
 ** @param [r] seq [const AjPSeq] Sequence to search
@@ -394,7 +390,6 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
     AjPFeature sf    = NULL;
     AjPStr substr    = NULL;
     AjPStr seqstr    = NULL;
-    AjPStr savestr    = NULL;
     AjPStr tmpstr = NULL;
     AjPStr tmp       = ajStrNew();
     AjPRegexp patexp = ajPatternRegexGetCompiled(pat);
@@ -424,7 +419,7 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
         ajStrAssignC(&featMotifNuc, "SO:0000714");
 
     /*ajDebug("embPatternRegexSearch pos: %d adj: %d reverse: %B\n",
-      pos, adj, reverse, isreversed);*/
+	   pos, adj, reverse, isreversed);*/
     /*ajDebug("seqlen:%d len: %d offset: %d offend: %d begin: %d end: %d\n",
 	   seqlen , ajSeqGetLen(seq), ajSeqGetOffset(seq),
 	   ajSeqGetOffend(seq), ajSeqGetBegin(seq), ajSeqGetEnd(seq));*/
@@ -444,9 +439,6 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
     {
         j = ajRegGetMatches(patexp);
 
-        /*ajDebug("found %d matches in last %u at pos %d off %d\n",
-                j, ajStrGetLen(seqstr), pos, ajRegOffsetI(patexp,0));*/
-
         for(k=0; k < j; k++)
         {
             off = ajRegOffsetI(patexp,k);
@@ -457,11 +449,8 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
 
             ajRegSubI(patexp, k, &substr);
             ajRegPost(patexp, &tmp);
-            if(!k)
-            {
-                ajStrAssignS(&savestr, substr);
-                ajStrAppendS(&savestr, tmp);
-            }
+            ajStrAssignS(&seqstr, substr);
+            ajStrAppendS(&seqstr, tmp);
 
             /*ajDebug("match pos: %d adj: %d len: %d off:%d\n",
               pos, adj, len, off);*/
@@ -493,7 +482,6 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
 
         pos++;
 
-        ajStrAssignS(&seqstr, savestr);
         ajStrCutStart(&seqstr, 1);
     }
 
@@ -501,7 +489,6 @@ void embPatternRegexSearchAll(AjPFeattable ftable, const AjPSeq seq,
     ajStrDel(&tmp);
     ajStrDel(&substr);
     ajStrDel(&seqstr);
-    ajStrDel(&savestr);
 
     if(reverse)
 	ajSeqDel(&revseq);

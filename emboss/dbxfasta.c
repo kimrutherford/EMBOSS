@@ -94,16 +94,11 @@ int main(int argc, char **argv)
     ajint i;
     AjPFile inf = NULL;
 
-    ajulong nentries = 0UL;
-    ajulong ientries = 0UL;
+    ajulong nentries = 0L;
+    ajulong ientries = 0L;
     AjPTime starttime = NULL;
     AjPTime begintime = NULL;
-    AjPTime lasttime = NULL;
     AjPTime nowtime = NULL;
-    ajlong  startclock = 0UL;
-    ajlong  beginclock = 0UL;
-    ajlong  lastclock = 0UL;
-    ajlong  nowclock = 0UL;
 
     AjPRegexp typeexp = NULL;
     ajint idtype = 0;
@@ -117,18 +112,6 @@ int main(int argc, char **argv)
     ajulong depricache=0L, depriread = 0L, depriwrite = 0L, deprisize= 0L;
     ajulong deseccache=0L, desecread = 0L, desecwrite = 0L, desecsize= 0L;
 
-    ajulong splitrootid =0l, splitrootnum=0L;
-    ajulong splitrootkey=0L, splitrootsec=0L;
-    ajulong splitleafid =0L, splitleafnum=0L;
-    ajulong splitleafkey=0L, splitleafsec=0L;
-    ajulong reorderid   =0L, reordernum  =0L;
-    ajulong reorderkey  =0L, reordersec  =0L;
-
-    double tdiff = 0.0;
-    ajint days = 0;
-    ajint hours = 0;
-    ajint mins = 0;
-    
     embInit("dbxfasta", argc, argv);
 
     dbtype     = ajAcdGetListSingle("idformat");
@@ -198,9 +181,6 @@ int main(int argc, char **argv)
     for(i=0;i<nfiles;++i)
     {
         begintime = ajTimeNewToday();
-        beginclock = ajClockNow();
-        lasttime = ajTimeNewTime(begintime);
-        lastclock = ajClockNow();
 
 	ajListPop(entry->files,(void **)&thysfile);
 	ajListPushAppend(entry->files,(void *)thysfile);
@@ -237,80 +217,17 @@ int main(int argc, char **argv)
 	    {
                 destot += embBtreeIndexSecondary(desfield, entry);
 	    }
-
-            if(statistics && !(ientries % 10000))
-            {
-                nowtime = ajTimeNewToday();
-                nowclock = ajClockNow();
-                ajFmtPrintF(outf,
-                            "partentries: %Lu (%Lu) "
-                            "time: %.1f/%.1fs (%.1f/%.1fs) "
-                            "id '%S'\n",
-                            nentries+ientries, ientries,
-                            ajClockDiff(lastclock, nowclock),
-                            ajTimeDiff(lasttime, nowtime),
-                            ajClockDiff(beginclock, nowclock),
-                            ajTimeDiff(begintime, nowtime),
-                            entry->id);
-                ajTimeDel(&lasttime);
-                lasttime = ajTimeNewTime(nowtime);
-                lastclock = nowclock;
-
-                ajBtreeStatsOut(outf,
-                                &splitrootid, &splitrootnum,
-                                &splitrootkey, &splitrootsec,
-                                &splitleafid, &splitleafnum,
-                                &splitleafkey, &splitleafsec,
-                                &reorderid, &reordernum,
-                                &reorderkey, &reordersec);
-
-                if(entry->do_id)
-                    ajBtreeCacheStatsOut(outf, entry->idcache,
-                                         &idpricache, &idseccache,
-                                         &idpriread, &idsecread,
-                                         &idpriwrite, &idsecwrite,
-                                         &idprisize, &idsecsize);
-                if(accfield)
-                    ajBtreeCacheStatsOut(outf, accfield->cache,
-                                         &acpricache, &acseccache,
-                                         &acpriread, &acsecread,
-                                         &acpriwrite, &acsecwrite,
-                                         &acprisize, &acsecsize);
-                if(svfield)
-                    ajBtreeCacheStatsOut(outf, svfield->cache,
-                                         &svpricache, &svseccache,
-                                         &svpriread, &svsecread,
-                                         &svpriwrite, &svsecwrite,
-                                         &svprisize, &svsecsize);
-                if(desfield)
-                    ajBtreeCacheStatsOut(outf, desfield->cache,
-                                         &depricache, &deseccache,
-                                         &depriread, &desecread,
-                                         &depriwrite, &desecwrite,
-                                         &deprisize, &desecsize);
-            }
 	}
 	
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1f/%.1fs (%.1f/%.1f)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
 		    nentries, ientries,
-		    ajClockDiff(startclock, nowclock),
 		    ajTimeDiff(starttime, nowtime),
-		    ajClockDiff(beginclock, nowclock),
 		    ajTimeDiff(begintime, nowtime));
-
         if(statistics)
         {
-            ajBtreeStatsOut(outf,
-                            &splitrootid, &splitrootnum,
-                            &splitrootkey, &splitrootsec,
-                            &splitleafid, &splitleafnum,
-                            &splitleafkey, &splitleafsec,
-                            &reorderid, &reordernum,
-                            &reorderkey, &reordersec);
-
             if(entry->do_id)
                 ajBtreeCacheStatsOut(outf, entry->idcache,
                                      &idpricache, &idseccache,
@@ -338,7 +255,6 @@ int main(int argc, char **argv)
         }
 
 	ajTimeDel(&begintime);
-	ajTimeDel(&lasttime);
 	ajTimeDel(&nowtime);
     }
     
@@ -347,24 +263,7 @@ int main(int argc, char **argv)
     embBtreeCloseCaches(entry);
     
     nowtime = ajTimeNewToday();
-
-        tdiff = ajTimeDiff(starttime, nowtime);
-    days = (ajint) (tdiff/(24.0*3600.0));
-    tdiff -= (24.0*3600.0)*(double)days;
-    hours = (ajint) (tdiff/3600.0);
-    tdiff -= 3600.0*(double)hours;
-    mins = (ajint) (tdiff/60.0);
-    tdiff -= 60.0 * (double) mins;
-    if(days)
-        ajFmtPrintF(outf, "Total time: %d %02d:%02d:%04.1f\n",
-                    days, hours, mins, tdiff);
-    else if (hours)
-        ajFmtPrintF(outf, "Total time: %d:%02d:%04.1f\n",
-                    hours, mins, tdiff);
-    else 
-        ajFmtPrintF(outf, "Total time: %d:%04.1f\n",
-                    mins, tdiff);
-
+    ajFmtPrintF(outf, "Total time: %.1fs\n", ajTimeDiff(starttime, nowtime));
     ajTimeDel(&nowtime);
     ajTimeDel(&starttime);
 

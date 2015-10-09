@@ -54,7 +54,7 @@ General log output file [outfile.dbiflat]:
 Command line arguments
 
 Index a flat file database
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -151,10 +151,10 @@ Output file format
 
 ########################################
 # Program: dbiflat
-# Rundate: Mon 15 Jul 2013 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/07/13
+# Date: 15/07/12
 # CurrentDirectory: /homes/user/test/qa/dbiflat-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbiflat-ex-keep/

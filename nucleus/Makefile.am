@@ -23,7 +23,7 @@ libnucleus_la_CPPFLAGS += -I$(top_srcdir)/ajax/acd
 libnucleus_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 libnucleus_la_CPPFLAGS += $(X_CFLAGS)
 
-libnucleus_la_LDFLAGS  = -version-info 6:5:0
+libnucleus_la_LDFLAGS  = -version-info 6:4:0
 if ISCYGWIN
 libnucleus_la_LDFLAGS += -no-undefined
 libnucleus_la_LDFLAGS += -Wl,--add-stdcall-alias

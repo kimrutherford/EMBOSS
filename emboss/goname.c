@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     }
  
     handle = ajStrTokenNewC(query, ",");
-    while(ajStrTokenNextParse(handle, &qrystr))
+    while(ajStrTokenNextParse(&handle, &qrystr))
     {
         if(ajStrIsCharsetC(qrystr, wordchars))
             ajFmtPrintS(&oboqry, "go-nam:%S", qrystr);

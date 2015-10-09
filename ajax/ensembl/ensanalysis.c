@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.59 $
+** @version $Revision: 1.57 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -61,13 +61,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic analysisadaptorKTablenames ************************************
+/* @conststatic analysisadaptorKTables ****************************************
 **
 ** Array of Ensembl Analysis Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const analysisadaptorKTablenames[] =
+static const char *const analysisadaptorKTables[] =
 {
     "analysis",
     "analysis_description",
@@ -77,13 +77,13 @@ static const char *const analysisadaptorKTablenames[] =
 
 
 
-/* @conststatic analysisadaptorKColumnnames ***********************************
+/* @conststatic analysisadaptorKColumns ***************************************
 **
 ** Array of Ensembl Analysis Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const analysisadaptorKColumnnames[] =
+static const char *const analysisadaptorKColumns[] =
 {
     "analysis.analysis_id",
     "analysis.created",
@@ -109,13 +109,13 @@ static const char *const analysisadaptorKColumnnames[] =
 
 
 
-/* @conststatic analysisadaptorKLeftjoins *************************************
+/* @conststatic analysisadaptorKLeftjoin **************************************
 **
-** Array of Ensembl Analysis Adaptor SQL LEFT JOIN conditions
+** Array of Ensembl Analysis Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin analysisadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin analysisadaptorKLeftjoin[] =
 {
     {
         "analysis_description",
@@ -187,12 +187,10 @@ static AjBool analysisadaptorFetchAllbyStatement(
     EnsPSlice slice,
     AjPList analyses);
 
-static AjBool analysisadaptorCacheInit(
-    EnsPAnalysisadaptor aa);
+static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa);
 
-static AjBool analysisadaptorCacheInsert(
-    EnsPAnalysisadaptor aa,
-    EnsPAnalysis *Panalysis);
+static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis *Panalysis);
 
 static void analysisadaptorFetchAll(const void *key,
                                     void **Pvalue,
@@ -222,8 +220,8 @@ static void analysisadaptorFetchAll(const void *key,
 ** @nam2rule Analysis Functions for manipulating Ensembl Analysis objects
 **
 ** @cc Bio::EnsEMBL::Analysis
-** @cc CVS Revision: 1.33
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.32
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -554,7 +552,14 @@ void ensAnalysisDel(EnsPAnalysis *Panalysis)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Panalysis) || --pthis->Use)
+    if (!*Panalysis)
+        return;
+
+    pthis = *Panalysis;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Panalysis = NULL;
 
@@ -578,7 +583,9 @@ void ensAnalysisDel(EnsPAnalysis *Panalysis)
     ajStrDel(&pthis->Displaylabel);
     ajStrDel(&pthis->Webdata);
 
-    ajMemFree((void **) Panalysis);
+    AJFREE(pthis);
+
+    *Panalysis = NULL;
 
     return;
 }
@@ -1759,11 +1766,11 @@ AjBool ensAnalysisTrace(const EnsPAnalysis analysis, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Analysis object.
+** Functions for calculating values of an Ensembl Analysis object.
 **
 ** @fdata [EnsPAnalysis]
 **
-** @nam3rule Calculate Calculate Ensembl Analysis information
+** @nam3rule Calculate Calculate Ensembl Analysis values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * analysis [const EnsPAnalysis] Ensembl Analysis
@@ -2428,8 +2435,8 @@ AjBool ensListAnalysisSortNameDescending(AjPList analyses)
 ** Ensembl Analysis Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor
-** @cc CVS Revision: 1.76
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.75
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2676,9 +2683,9 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
 
     aa->Adaptor = ensBaseadaptorNew(
         dba,
-        analysisadaptorKTablenames,
-        analysisadaptorKColumnnames,
-        analysisadaptorKLeftjoins,
+        analysisadaptorKTables,
+        analysisadaptorKColumns,
+        analysisadaptorKLeftjoin,
         (const char *) NULL,
         (const char *) NULL,
         &analysisadaptorFetchAllbyStatement);
@@ -2736,11 +2743,8 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
 ** @@
 ******************************************************************************/
 
-static AjBool analysisadaptorCacheInit(
-    EnsPAnalysisadaptor aa)
+static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa)
 {
-    AjBool result = AJFALSE;
-
     AjPList analyses = NULL;
 
     EnsPAnalysis analysis = NULL;
@@ -2768,7 +2772,7 @@ static AjBool analysisadaptorCacheInit(
         return ajFalse;
     else
     {
-        aa->CacheByName = ajTablestrNew(0U);
+        aa->CacheByName = ajTablestrNew(0);
 
         ajTableSetDestroyvalue(
             aa->CacheByName,
@@ -2777,12 +2781,11 @@ static AjBool analysisadaptorCacheInit(
 
     analyses = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ensAnalysisadaptorGetBaseadaptor(aa),
-        (const AjPStr) NULL,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        analyses);
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
 
     while (ajListPop(analyses, (void **) &analysis))
     {
@@ -2798,7 +2801,7 @@ static AjBool analysisadaptorCacheInit(
 
     ajListFree(&analyses);
 
-    return result;
+    return ajTrue;
 }
 
 
@@ -2820,9 +2823,8 @@ static AjBool analysisadaptorCacheInit(
 ** @@
 ******************************************************************************/
 
-static AjBool analysisadaptorCacheInsert(
-    EnsPAnalysisadaptor aa,
-    EnsPAnalysis *Panalysis)
+static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis *Panalysis)
 {
     ajuint *Pidentifier = NULL;
 
@@ -2922,9 +2924,8 @@ static AjBool analysisadaptorCacheInsert(
 ** @@
 ******************************************************************************/
 
-static AjBool analysisadaptorCacheRemove(
-    EnsPAnalysisadaptor aa,
-    EnsPAnalysis analysis)
+static AjBool analysisadaptorCacheRemove(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis analysis)
 {
     EnsPAnalysis analysis1 = NULL;
     EnsPAnalysis analysis2 = NULL;
@@ -2979,8 +2980,7 @@ static AjBool analysisadaptorCacheRemove(
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorCacheClear(
-    EnsPAnalysisadaptor aa)
+AjBool ensAnalysisadaptorCacheClear(EnsPAnalysisadaptor aa)
 {
     if (!aa)
         return ajFalse;
@@ -3033,8 +3033,7 @@ AjBool ensAnalysisadaptorCacheClear(
 ** @@
 ******************************************************************************/
 
-void ensAnalysisadaptorDel(
-    EnsPAnalysisadaptor *Paa)
+void ensAnalysisadaptorDel(EnsPAnalysisadaptor *Paa)
 {
     EnsPAnalysisadaptor pthis = NULL;
 
@@ -3048,14 +3047,18 @@ void ensAnalysisadaptorDel(
                 *Paa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Paa))
+    if (!*Paa)
         return;
+
+    pthis = *Paa;
 
     ensAnalysisadaptorCacheClear(pthis);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
-    ajMemFree((void **) Paa);
+    AJFREE(pthis);
+
+    *Paa = NULL;
 
     return;
 }
@@ -3073,7 +3076,7 @@ void ensAnalysisadaptorDel(
 ** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @argrule * aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
@@ -3089,7 +3092,7 @@ void ensAnalysisadaptorDel(
 **
 ** Get the Ensembl Base Adaptor member of an Ensembl Analysis Adaptor.
 **
-** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [r] aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 **
@@ -3098,7 +3101,7 @@ void ensAnalysisadaptorDel(
 ******************************************************************************/
 
 EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
-    EnsPAnalysisadaptor aa)
+    const EnsPAnalysisadaptor aa)
 {
     return (aa) ? aa->Adaptor : NULL;
 }
@@ -3110,7 +3113,7 @@ EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
 **
 ** Get the Ensembl Database Adaptor member of an Ensembl Analysis Adaptor.
 **
-** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [r] aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 **
@@ -3119,10 +3122,9 @@ EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensAnalysisadaptorGetDatabaseadaptor(
-    EnsPAnalysisadaptor aa)
+    const EnsPAnalysisadaptor aa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(
-        ensAnalysisadaptorGetBaseadaptor(aa));
+    return (aa) ? ensBaseadaptorGetDatabaseadaptor(aa->Adaptor) : NULL;
 }
 
 
@@ -3220,9 +3222,8 @@ static void analysisadaptorFetchAll(const void *key,
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorFetchAll(
-    EnsPAnalysisadaptor aa,
-    AjPList analyses)
+AjBool ensAnalysisadaptorFetchAll(EnsPAnalysisadaptor aa,
+                                  AjPList analyses)
 {
     if (!aa)
         return ajFalse;
@@ -3264,10 +3265,9 @@ AjBool ensAnalysisadaptorFetchAll(
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorFetchAllbyFeatureclass(
-    EnsPAnalysisadaptor aa,
-    const AjPStr class,
-    AjPList analyses)
+AjBool ensAnalysisadaptorFetchAllbyFeatureclass(EnsPAnalysisadaptor aa,
+                                                const AjPStr class,
+                                                AjPList analyses)
 {
     register ajuint i = 0U;
     ajuint identifier = 0U;
@@ -3298,12 +3298,12 @@ AjBool ensAnalysisadaptorFetchAllbyFeatureclass(
 
     if (match)
     {
-        dba = ensAnalysisadaptorGetDatabaseadaptor(aa);
+        dba = ensBaseadaptorGetDatabaseadaptor(aa->Adaptor);
 
-        statement = ajFmtStr(
-            "SELECT DISTINCT %s.analysis_id FROM %s",
-            analysisadaptorKFeatureClasses[match],
-            analysisadaptorKFeatureClasses[match]);
+        statement =
+            ajFmtStr("SELECT DISTINCT %s.analysis_id FROM %s",
+                     analysisadaptorKFeatureClasses[match],
+                     analysisadaptorKFeatureClasses[match]);
 
         sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
@@ -3317,7 +3317,9 @@ AjBool ensAnalysisadaptorFetchAllbyFeatureclass(
 
             ajSqlcolumnToUint(sqlr, &identifier);
 
-            ensAnalysisadaptorFetchByIdentifier(aa, identifier, &analysis);
+            ensAnalysisadaptorFetchByIdentifier(aa,
+                                                identifier,
+                                                &analysis);
 
             if (analysis)
                 ajListPushAppend(analyses, (void *) analysis);
@@ -3366,12 +3368,15 @@ AjBool ensAnalysisadaptorFetchAllbyFeatureclass(
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorFetchByIdentifier(
-    EnsPAnalysisadaptor aa,
-    ajuint identifier,
-    EnsPAnalysis *Panalysis)
+AjBool ensAnalysisadaptorFetchByIdentifier(EnsPAnalysisadaptor aa,
+                                           ajuint identifier,
+                                           EnsPAnalysis *Panalysis)
 {
-    AjBool result = AJFALSE;
+    AjPList analyses = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAnalysis analysis = NULL;
 
     if (!aa)
         return ajFalse;
@@ -3403,14 +3408,37 @@ AjBool ensAnalysisadaptorFetchByIdentifier(
 
     /* For a cache miss re-query the database. */
 
-    result = ensBaseadaptorFetchByIdentifier(
-        ensAnalysisadaptorGetBaseadaptor(aa),
-        identifier,
-        (void **) Panalysis);
+    constraint = ajFmtStr("analysis.analysis_id = %u", identifier);
+
+    analyses = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
+
+    if (ajListGetLength(analyses) > 1)
+        ajWarn("ensAnalysisadaptorFetchByIdentifier got more than one "
+               "Ensembl Analysis for (PRIMARY KEY) identifier %u.\n",
+               identifier);
+
+    ajListPop(analyses, (void **) Panalysis);
 
     analysisadaptorCacheInsert(aa, Panalysis);
 
-    return result;
+    while (ajListPop(analyses, (void **) &analysis))
+    {
+        analysisadaptorCacheInsert(aa, &analysis);
+
+        ensAnalysisDel(&analysis);
+    }
+
+    ajListFree(&analyses);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
 }
 
 
@@ -3432,22 +3460,17 @@ AjBool ensAnalysisadaptorFetchByIdentifier(
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorFetchByName(
-    EnsPAnalysisadaptor aa,
-    const AjPStr name,
-    EnsPAnalysis *Panalysis)
+AjBool ensAnalysisadaptorFetchByName(EnsPAnalysisadaptor aa,
+                                     const AjPStr name,
+                                     EnsPAnalysis *Panalysis)
 {
     char *txtname = NULL;
-
-    AjBool result = AJFALSE;
 
     AjPList analyses = NULL;
 
     AjPStr constraint = NULL;
 
     EnsPAnalysis analysis = NULL;
-
-    EnsPBaseadaptor ba = NULL;
 
     if (!aa)
         return ajFalse;
@@ -3478,9 +3501,7 @@ AjBool ensAnalysisadaptorFetchByName(
 
     /* In case of a cache miss, re-query the database. */
 
-    ba = ensAnalysisadaptorGetBaseadaptor(aa);
-
-    ensBaseadaptorEscapeC(ba, &txtname, name);
+    ensBaseadaptorEscapeC(aa->Adaptor, &txtname, name);
 
     constraint = ajFmtStr("analysis.logic_name = '%s'", txtname);
 
@@ -3488,12 +3509,11 @@ AjBool ensAnalysisadaptorFetchByName(
 
     analyses = ajListNew();
 
-    result = ensBaseadaptorFetchAllbyConstraint(
-        ba,
-        constraint,
-        (EnsPAssemblymapper) NULL,
-        (EnsPSlice) NULL,
-        analyses);
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
 
     if (ajListGetLength(analyses) > 1)
         ajWarn("ensAnalysisadaptorFetchByName got more than one "
@@ -3515,5 +3535,5 @@ AjBool ensAnalysisadaptorFetchByName(
 
     ajStrDel(&constraint);
 
-    return result;
+    return ajTrue;
 }

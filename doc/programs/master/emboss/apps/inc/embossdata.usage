@@ -17,9 +17,9 @@ Data file name: <b></b>
 
 .                                                            Exists
 .embossdata                                                  Does not exist
-/homes/user                                                    Exists
-/homes/user/.embossdata                                        Exists
-/homes/user/local/share/EMBOSS/data/                           Exists
+/homes/user                                                   Exists
+/homes/user/.embossdata                                       Exists
+/homes/user/local/share/EMBOSS/data/                          Exists
 
 </pre></td></tr></table><p>
 <p>
@@ -171,7 +171,6 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/
   EnsemblIdentifiers.dat
   Epepcoil.dat
   Epk.dat
-  Epkexpasy.dat
   Epprofile
   Eprior1.plib
   Eprior30.plib
@@ -197,7 +196,6 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/
   Matrices.proteinstructure
   SSSUB
   edialignmat
-  software.obo
   tffungi
   tfinsect
   tfother
@@ -208,7 +206,42 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/
   tp400_trans
 
 
+DIRECTORY: /homes/user/local/share/EMBOSS/data/REBASE
+
+  embossre.enz
+  embossre.equ
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
+
+  dummyfile
+  matrix_list.txt
+
+
 DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_SPLICE
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CNE
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/TAXONOMY
+
+  division.dmp
+  gencode.dmp
+  merged.dmp
+  names.dmp
+  nodes.dmp
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HLH
 
   dummyfile
   matrix_list.txt
@@ -220,37 +253,28 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_FAM
   matrix_list.txt
 
 
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM
+
+  dummyfile
+  matrix_list.txt
+
+
 DIRECTORY: /homes/user/local/share/EMBOSS/data/OBO
 
   chebi.obo
   eco.obo
   evidence_code.obo
   gene_ontology.1_2.obo
-  go.obo
   pathway.obo
   ro.obo
   so.obo
   software.obo
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/REBASE
-
-  embossre.enz
-  embossre.equ
-  embossre.ref
-  embossre.sup
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HLH
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
-
-  dummyfile
-  matrix_list.txt
 
 
 DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CORE
@@ -268,6 +292,35 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CORE
   MA0079.2.pfm
   dummyfile
   matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_POLII
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/AAINDEX
+
+  chop780101
+  chop780201
+  chop780202
+  chop780203
+  chop780204
+  chop780205
+  chop780206
+  chop780207
+  chop780208
+  chop780209
+  chop780210
+  chop780211
+  chop780212
+  chop780213
+  chop780214
+  chop780215
+  chop780216
+  dummyfile
+  kytj820101
 
 
 DIRECTORY: /homes/user/local/share/EMBOSS/data/CODONS
@@ -533,62 +586,6 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/CODONS
   Ezebrafish.cut
   Ezma.cut
 
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/TAXONOMY
-
-  division.dmp
-  gencode.dmp
-  merged.dmp
-  names.dmp
-  nodes.dmp
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/AAINDEX
-
-  chop780101
-  chop780201
-  chop780202
-  chop780203
-  chop780204
-  chop780205
-  chop780206
-  chop780207
-  chop780208
-  chop780209
-  chop780210
-  chop780211
-  chop780212
-  chop780213
-  chop780214
-  chop780215
-  chop780216
-  dummyfile
-  kytj820101
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_POLII
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CNE
-
-  dummyfile
-  matrix_list.txt
-
 </pre></td></tr></table><p>
 <p>
 <p>
@@ -628,9 +625,9 @@ Find and retrieve EMBOSS data files
 
 File ./EPAM60                                                     Does not exist
 File .embossdata/EPAM60                                           Does not exist
-File /homes/user/EPAM60                                             Does not exist
-File /homes/user/.embossdata/EPAM60                                 Does not exist
-File /homes/user/local/share/EMBOSS/data/EPAM60                     Exists
+File /homes/user/EPAM60                                            Does not exist
+File /homes/user/.embossdata/EPAM60                                Does not exist
+File /homes/user/local/share/EMBOSS/data/EPAM60                    Exists
 
 </pre></td></tr></table><p>
 <p>

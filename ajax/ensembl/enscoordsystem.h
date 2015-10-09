@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.22 $
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:04:02 $ by $Author: mks $
+** @modified $Date: 2012/02/20 22:05:59 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -69,18 +69,10 @@ struct EnsSCoordsystem;
 ** @attr CacheByIdentifier [AjPTable] Database identifier cache
 ** @attr CacheByName [AjPTable] Name cache
 ** @attr CacheByRank [AjPTable] Rank cache
-** @attr CacheByDefault [AjPTable] Default Ensembl Coordinate System objects
+** @attr CacheByDefault [AjPTable] Default Ensembl Coordinate Systems
 ** @attr MappingPaths [AjPTable] Mapping paths between coordinate systems
-** @attr ExternalToInternal [AjPTable]
-** AJAX Table of AJAX unsigned integer
-** (external Ensembl Sequence Region identifier) key data and
-** AJAX unsigned integer
-** (internal Ensembl Sequence Region identifier) value data
-** @attr InternalToExternal [AjPTable]
-** AJAX Table of AJAX unsigned integer
-** (internal Ensembl Sequence Region identifier) key data and
-** AJAX unsigned integer
-** (external Ensembl Sequence Region identifier) value data
+** @attr ExternalToInternal [AjPTable] External to internal Sequence Regions
+** @attr InternalToExternal [AjPTable] Internal to external Sequence Regions
 ** @attr Seqlevel [struct EnsSCoordsystem*]
 ** Sequence-level Ensembl Coordinate System
 ** @attr Toplevel [struct EnsSCoordsystem*]
@@ -222,7 +214,7 @@ EnsPCoordsystemadaptor ensCoordsystemadaptorNew(
 void ensCoordsystemadaptorDel(EnsPCoordsystemadaptor *Pcsa);
 
 EnsPDatabaseadaptor ensCoordsystemadaptorGetDatabaseadaptor(
-    EnsPCoordsystemadaptor csa);
+    const EnsPCoordsystemadaptor csa);
 
 AjBool ensCoordsystemadaptorFetchAll(
     const EnsPCoordsystemadaptor csa,

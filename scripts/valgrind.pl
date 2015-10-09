@@ -30,7 +30,6 @@
 		"fretree-qa1" => "cp ../../data/fretree.in ./stdin",
 		"mse-qa1" => "cp ../../qa/mse-ex/stdin ./stdin",
 		"emast-qa1" => "cp ../../data/memenew/crp0.s .",
-		"seqret-qa589" => "cp ../../data/dna.embl ~/seqret-query-filename-home.embl",
 		"" => ""
 		);
 

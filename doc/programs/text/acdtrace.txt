@@ -47,7 +47,7 @@ Command line arguments
    see the documentation for the program of choice.
 
 Trace processing of an application ACD file (for testing)
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-program]           string     Program name, followed by command line (Any

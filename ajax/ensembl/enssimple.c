@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.24 $
+** @version $Revision: 1.22 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -60,13 +60,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic simplefeatureadaptorKTablenames *******************************
+/* @conststatic simplefeatureadaptorKTables ***********************************
 **
 ** Array of Ensembl Simple Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *const simplefeatureadaptorKTablenames[] =
+static const char *const simplefeatureadaptorKTables[] =
 {
     "simple_feature",
     (const char *) NULL
@@ -75,13 +75,13 @@ static const char *const simplefeatureadaptorKTablenames[] =
 
 
 
-/* @conststatic simplefeatureadaptorKColumnnames ******************************
+/* @conststatic simplefeatureadaptorKColumns **********************************
 **
 ** Array of Ensembl Simple Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *const simplefeatureadaptorKColumnnames[] =
+static const char *const simplefeatureadaptorKColumns[] =
 {
     "simple_feature.simple_feature_id",
     "simple_feature.seq_region_id",
@@ -161,7 +161,7 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::SimpleFeature
 ** @cc CVS Revision: 1.14
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -360,7 +360,14 @@ void ensSimplefeatureDel(EnsPSimplefeature *Psf)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Psf) || --pthis->Use)
+    if (!*Psf)
+        return;
+
+    pthis = *Psf;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Psf = NULL;
 
@@ -371,7 +378,9 @@ void ensSimplefeatureDel(EnsPSimplefeature *Psf)
 
     ajStrDel(&pthis->Displaylabel);
 
-    ajMemFree((void **) Psf);
+    AJFREE(pthis);
+
+    *Psf = NULL;
 
     return;
 }
@@ -756,11 +765,11 @@ AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Simple Feature object.
+** Functions for calculating values of an Ensembl Simple Feature object.
 **
 ** @fdata [EnsPSimplefeature]
 **
-** @nam3rule Calculate Calculate Ensembl Simple Feature information
+** @nam3rule Calculate Calculate Ensembl Simple Feature values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * sf [const EnsPSimplefeature] Ensembl Simple Feature
@@ -1280,8 +1289,8 @@ AjBool ensListSimplefeatureSortStartDescending(AjPList sfs)
 ** Ensembl Simple Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor
-** @cc CVS Revision: 1.40
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Revision: 1.38
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1472,10 +1481,13 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
 EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
+    if (!dba)
+        return NULL;
+
     return ensFeatureadaptorNew(
         dba,
-        simplefeatureadaptorKTablenames,
-        simplefeatureadaptorKColumnnames,
+        simplefeatureadaptorKTables,
+        simplefeatureadaptorKColumns,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1535,7 +1547,7 @@ void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa)
 {
     ensFeatureadaptorDel(Psfa);
 
-    return;
+	return;
 }
 
 
@@ -1549,44 +1561,15 @@ void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa)
 ** @fdata [EnsPSimplefeatureadaptor]
 **
 ** @nam3rule Get Return Ensembl Simple Feature Adaptor attribute(s)
-** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
-** @nam4rule Featureadaptor Return teh Ensembl Feature Adaptor
 **
 ** @argrule * sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-** @valrule Featureadaptor [EnsPFeatureadaptor]
-** Ensembl Feature Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensSimplefeatureadaptorGetBaseadaptor ********************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Simple Feature Adaptor.
-**
-** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.4.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensSimplefeatureadaptorGetBaseadaptor(
-    EnsPSimplefeatureadaptor sfa)
-{
-    return ensFeatureadaptorGetBaseadaptor(
-        ensSimplefeatureadaptorGetFeatureadaptor(sfa));
-}
 
 
 
@@ -1607,30 +1590,7 @@ EnsPBaseadaptor ensSimplefeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensSimplefeatureadaptorGetDatabaseadaptor(
     EnsPSimplefeatureadaptor sfa)
 {
-    return ensFeatureadaptorGetDatabaseadaptor(
-        ensSimplefeatureadaptorGetFeatureadaptor(sfa));
-}
-
-
-
-
-/* @func ensSimplefeatureadaptorGetFeatureadaptor *****************************
-**
-** Get the Ensembl Feature Adaptor member of an
-** Ensembl Simple Feature Adaptor.
-**
-** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
-**
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPFeatureadaptor ensSimplefeatureadaptorGetFeatureadaptor(
-    EnsPSimplefeatureadaptor sfa)
-{
-    return sfa;
+    return ensFeatureadaptorGetDatabaseadaptor(sfa);
 }
 
 
@@ -1700,10 +1660,16 @@ AjBool ensSimplefeatureadaptorFetchAllbyAnalysisname(
     const AjPStr anname,
     AjPList sfs)
 {
-    return ensFeatureadaptorFetchAllbyAnalysisname(
-        ensSimplefeatureadaptorGetFeatureadaptor(sfa),
-        anname,
-        sfs);
+    if (!sfa)
+        return ajFalse;
+
+    if (!anname)
+        return ajFalse;
+
+    if (!sfs)
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllbyAnalysisname(sfa, anname, sfs);
 }
 
 
@@ -1730,12 +1696,20 @@ AjBool ensSimplefeatureadaptorFetchAllbySlice(EnsPSimplefeatureadaptor sfa,
                                               const AjPStr anname,
                                               AjPList sfs)
 {
-    return ensFeatureadaptorFetchAllbySlice(
-        ensSimplefeatureadaptorGetFeatureadaptor(sfa),
-        slice,
-        (const AjPStr) NULL,
-        anname,
-        sfs);
+    if (!sfa)
+        return ajFalse;
+
+    if (!slice)
+        return ajFalse;
+
+    if (!sfs)
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllbySlice(sfa,
+                                            slice,
+                                            (const AjPStr) NULL,
+                                            anname,
+                                            sfs);
 }
 
 
@@ -1766,10 +1740,18 @@ AjBool ensSimplefeatureadaptorFetchAllbySlicescore(
     const AjPStr anname,
     AjPList sfs)
 {
-    return ensFeatureadaptorFetchAllbySlicescore(
-        ensSimplefeatureadaptorGetFeatureadaptor(sfa),
-        slice,
-        score,
-        anname,
-        sfs);
+    if (!sfa)
+        return ajFalse;
+
+    if (!slice)
+        return ajFalse;
+
+    if (!sfs)
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllbySlicescore(sfa,
+                                                 slice,
+                                                 score,
+                                                 anname,
+                                                 sfs);
 }

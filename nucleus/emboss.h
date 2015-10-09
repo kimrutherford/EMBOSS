@@ -3,8 +3,8 @@
 ** Master EMBOSS include file for all applications
 ** 
 ** @author: Copyright (C) 1998 Peter Rice and Alan Bleasby
-** @version $Revision: 1.35 $ 
-** @modified $Date: 2012/09/03 14:44:01 $ by $Author: rice $
+** @version $Revision: 1.34 $ 
+** @modified $Date: 2011/09/27 11:19:27 $ by $Author: rice $
 ** @@
 ** 
 **
@@ -42,7 +42,6 @@
 #include "ajtaxdb.h"
 #include "ajurldb.h"
 #include "ajvardb.h"
-#include "ajxmldb.h"
 #include "ajresourcedb.h"
 
 #include "ajmart.h"

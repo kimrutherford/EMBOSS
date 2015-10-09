@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.28 $
+** @version $Revision: 1.26 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -298,14 +298,23 @@ void ensAssemblyDel(EnsPAssembly *Passembly)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Passembly) || --pthis->Use)
+    if (!*Passembly)
+        return;
+
+    pthis = *Passembly;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Passembly = NULL;
 
         return;
     }
 
-    ajMemFree((void **) Passembly);
+    AJFREE(pthis);
+
+    *Passembly = NULL;
 
     return;
 }
@@ -335,7 +344,7 @@ void ensAssemblyDel(EnsPAssembly *Passembly)
 ** @nam4rule End Return the component
 ** Ensembl Sequence Region end
 ** @nam4rule Orientation Return the relative orientation of assembled
-** and component Ensembl Sequence Region objects
+** and component Ensembl Sequence Regions
 **
 ** @argrule * assembly [const EnsPAssembly] Ensembl Assembly
 **
@@ -479,7 +488,7 @@ ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
 /* @func ensAssemblyGetOrientation ********************************************
 **
 ** Get the releative orientation of assembled and component
-** Ensembl Sequence Region objects member of an Ensembl Assembly.
+** Ensembl Sequence Regions member of an Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
@@ -569,11 +578,11 @@ AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an Ensembl Assembly object.
+** Functions for calculating values of an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
 **
-** @nam3rule Calculate Calculate Ensembl Assembly information
+** @nam3rule Calculate Calculate Ensembl Assembly values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * assembly [const EnsPAssembly] Ensembl Assembly

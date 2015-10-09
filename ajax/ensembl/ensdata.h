@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.53 $
+** @version $Revision: 1.51 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:04:31 $ by $Author: mks $
+** @modified $Date: 2012/05/24 16:57:22 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -63,87 +63,19 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsPDatabaseentryadaptor ********************************************
+/* @const EnsPTranscriptadaptor ***********************************************
 **
-** Ensembl Database Entry Adaptor
-**
-** Defined as an alias in EnsPDatabaseadaptor.
-**
-** #alias EnsPDatabaseadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPDatabaseentryadaptor EnsPDatabaseadaptor
-
-
-
-
-/* @const EnsPGeneadaptor *****************************************************
-**
-** Ensembl Gene Adaptor
+** Ensembl Transcript Adaptor
 **
 ** Defined as an alias in EnsPFeatureadaptor.
 **
 ** #alias EnsPFeatureadaptor
 **
-** #cc Bio::EnsEMBL::DBSQL::GeneAdaptor
+** #cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor
 ** ##
 ******************************************************************************/
 
-#define EnsPGeneadaptor EnsPFeatureadaptor
-
-
-
-
-/* @const EnsPIntronsupportingevidenceadaptor *********************************
-**
-** Ensembl Intron Supporting Evidence Adaptor
-**
-** Defined as an alias in EnsPFeatureadaptor.
-**
-** #alias EnsPFeatureadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::IntronsupportingevidenceAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPIntronsupportingevidenceadaptor EnsPFeatureadaptor
-
-
-
-
-/* @const EnsPOperonadaptor ***************************************************
-**
-** Ensembl Operon Adaptor
-**
-** Defined as an alias in EnsPFeatureadaptor.
-**
-** #alias EnsPFeatureadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::OperonAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPOperonadaptor EnsPFeatureadaptor
-
-
-
-
-/* @const EnsPOperontranscriptadaptor *****************************************
-**
-** Ensembl Operon Transcript Adaptor
-**
-** Defined as an alias in EnsPFeatureadaptor.
-**
-** #alias EnsPFeatureadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::OperonTranscriptAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPOperontranscriptadaptor EnsPFeatureadaptor
+#define EnsPTranscriptadaptor EnsPFeatureadaptor
 
 
 
@@ -161,23 +93,6 @@ AJ_BEGIN_DECLS
 ******************************************************************************/
 
 #define EnsPSeqregionsynonymadaptor EnsPBaseadaptor
-
-
-
-
-/* @const EnsPTranscriptadaptor ***********************************************
-**
-** Ensembl Transcript Adaptor
-**
-** Defined as an alias in EnsPFeatureadaptor.
-**
-** #alias EnsPFeatureadaptor
-**
-** #cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor
-** ##
-******************************************************************************/
-
-#define EnsPTranscriptadaptor EnsPFeatureadaptor
 
 
 
@@ -238,8 +153,8 @@ typedef enum EnsOExternaldatabaseStatus
 ** @value ensEExternaldatabaseTypeMisc Miscellaneous
 ** @value ensEExternaldatabaseTypeLit Literature
 ** @value ensEExternaldatabaseTypePrimaryDbSynonym Primary database synonym
-** @value ensEExternaldatabaseTypeEnsembl Ensembl
-** @value ensEExternaldatabaseTypeIgnore Ignore
+** @value ensEExternaldatabaseTypeEnsembl  Ensembl
+** @value ensEExternaldatabaseTypeIgnore  Ignore
 ** @@
 ******************************************************************************/
 
@@ -345,26 +260,6 @@ typedef enum EnsOGeneStatus
 
 
 
-/* @enum EnsEIntronsupportingevidenceType *************************************
-**
-** Ensembl Intron Supporting Evidence Type enumeration
-**
-** @value ensEIntronsupportingevidenceTypeNULL Null
-** @value ensEIntronsupportingevidenceTypeNone None
-** @value ensEIntronsupportingevidenceTypeDepth Depth
-** @@
-******************************************************************************/
-
-typedef enum EnsOIntronsupportingevidenceType
-{
-    ensEIntronsupportingevidenceTypeNULL,
-    ensEIntronsupportingevidenceTypeNone,
-    ensEIntronsupportingevidenceTypeDepth
-} EnsEIntronsupportingevidenceType;
-
-
-
-
 /* @enum EnsESliceTopology ****************************************************
 **
 ** Ensembl Slice Topology enumeration
@@ -447,8 +342,7 @@ typedef enum EnsOTranscriptStatus
 **
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @attr CacheByIdentifier [EnsPCache] Ensembl Cache to store Ensembl Sequence
-** Region objects with AJAX unsigned integer (SQL-database identifier) objects
-** as index
+** Region objects with SQL-database identifiers as index
 ** @attr CacheByName [AjPTable] AJAX Table to cache Ensembl Sequence Region
 ** objects with "Sequence Region Name:Coordinate System Identifier" AJAX String
 ** objects as index
@@ -593,22 +487,21 @@ typedef struct EnsSSlice
 ** @alias EnsOAssemblymapperadaptor
 **
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @attr CacheByIdentifiers [AjPTable]
-** AJAX Table of AJAX String (Ensembl Coordinate System identifiers
-** concatenated by ':' characters) key data and
-** Ensembl Assembly Mapper value data
-** @attr MultipleMappings [AjPTable]
-** AJAX Table of AJAX unsigned integer (Ensembl Sequence Region identifier)
-** key data and Ensembl Sequence Region value data for objects that have more
-** than one entry in the Ensembl Core "assembly" table, i. e. they map to
-** more than one location.
+** @attr AsmMapperCache [AjPTable] Ensembl Assembly Mapper cache
+** @attr MultipleMappings [AjPTable] Sequence Regions that have more than one
+**                                   entry in the Ensembl Core "assembly"
+**                                   table, i. e. they map to more than one
+**                                   location.
 ** @@
+** The Ensembl Assembly Mapper cache is implemented as an AJAX Table with
+** Ensembl Coordinate System identifiers as AJAX String keys and
+** Ensembl Assembly Mapper objects as values.
 ******************************************************************************/
 
 typedef struct EnsSAssemblymapperadaptor
 {
     EnsPDatabaseadaptor Adaptor;
-    AjPTable CacheByIdentifiers;
+    AjPTable AsmMapperCache;
     AjPTable MultipleMappings;
 } EnsOAssemblymapperadaptor;
 
@@ -809,19 +702,19 @@ typedef struct EnsSAssemblymapper
 
 /* @data EnsPBaseadaptorLeftjoin **********************************************
 **
-** Ensembl Base Adaptor SQL LEFT JOIN condition
+** Ensembl Base Adaptor Left Join conditions
 **
 ** @alias EnsSBaseadaptorLeftjoin
 ** @alias EnsOBaseadaptorLeftjoin
 **
-** @attr Tablename [const char*] SQL table name
+** @attr Table [const char*] SQL table name
 ** @attr Condition [const char*] SQL LEFT JOIN condition
 ** @@
 ******************************************************************************/
 
 typedef struct EnsSBaseadaptorLeftjoin
 {
-    const char *Tablename;
+    const char *Table;
     const char *Condition;
 } EnsOBaseadaptorLeftjoin;
 
@@ -843,7 +736,6 @@ typedef struct EnsSBaseadaptorLeftjoin
 ** @alias EnsPGvsampleadaptor
 ** @alias EnsPGvvariationsetadaptor
 ** @alias EnsPMarkeradaptor
-** @alias EnsPOntologytermadaptor
 ** @alias EnsPProteinfeatureadaptor
 ** @alias EnsPQcalignmentadaptor
 ** @alias EnsPQcdasfeatureadaptor
@@ -854,13 +746,13 @@ typedef struct EnsSBaseadaptorLeftjoin
 ** @alias EnsPTranslationadaptor
 **
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @attr Tablenames [const char* const*] SQL table name array
-** @attr Columnnames [const char* const*] SQL column name array
-** @attr Leftjoins [const EnsPBaseadaptorLeftjoin]
-** SQL LEFT JOIN condition array
+** @attr Tables [const char* const*] Table names
+** @attr Columns [const char* const*] Column names
+** @attr Leftjoin [const EnsPBaseadaptorLeftjoin]
+** Ensembl Base Adaptor SQL LEFT JOIN conditions
 ** @attr Defaultcondition [const char*] SQL SELECT default condition
 ** @attr Finalcondition [const char*] SQL SELECT final condition
-** @attr Mysqlstraightjoin [AjBool]
+** @attr StraightJoin [AjBool]
 ** Set the MySQL-specific SQL SELECT STRAIGHT_JOIN option
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr Fstatement [AjBool function] Statement function address
@@ -872,16 +764,16 @@ typedef struct EnsSBaseadaptorLeftjoin
 typedef struct EnsSBaseadaptor
 {
     EnsPDatabaseadaptor Adaptor;
-    const char *const *Tablenames;
-    const char *const *Columnnames;
-    const EnsPBaseadaptorLeftjoin Leftjoins;
+    const char *const *Tables;
+    const char *const *Columns;
+    const EnsPBaseadaptorLeftjoin Leftjoin;
     const char *Defaultcondition;
     const char *Finalcondition;
-    AjBool Mysqlstraightjoin;
+    AjBool StraightJoin;
     ajuint Padding;
     AjBool (*Fstatement) (struct EnsSBaseadaptor *dba,
                           const AjPStr sql,
-                          EnsPAssemblymapper am,
+                          EnsPAssemblymapper mapper,
                           EnsPSlice slice,
                           AjPList objects);
 } EnsOBaseadaptor;
@@ -1238,6 +1130,27 @@ typedef struct EnsSIdentityreference
 
 
 
+/* @data EnsPDatabaseentryadaptor *********************************************
+**
+** Ensembl Database Entry Adaptor
+**
+** @alias EnsSDatabaseentryadaptor
+** @alias EnsODatabaseentryadaptor
+**
+** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @@
+******************************************************************************/
+
+typedef struct EnsSDatabaseentryadaptor
+{
+    EnsPDatabaseadaptor Adaptor;
+} EnsODatabaseentryadaptor;
+
+#define EnsPDatabaseentryadaptor EnsODatabaseentryadaptor*
+
+
+
+
 /* @data EnsPDatabaseentry ****************************************************
 **
 ** Ensembl Database Entry
@@ -1350,13 +1263,9 @@ typedef struct EnsSFeature
 ** @alias EnsPDnaalignfeatureadaptor
 ** @alias EnsPDensityfeatureadaptor
 ** @alias EnsPDitagfeatureadaptor
-** @alias EnsPGeneadaptor
-** @alias EnsPIntronsupportingevidenceadaptor
 ** @alias EnsPKaryotypebandadaptor
 ** @alias EnsPMarkerfeatureadaptor
 ** @alias EnsPMiscellaneousfeatureadaptor
-** @alias EnsPOperonadaptor
-** @alias EnsPOperontranscriptadaptor
 ** @alias EnsPPredictionexonadaptor
 ** @alias EnsPPredictiontranscriptadaptor
 ** @alias EnsPProteinalignfeatureadaptor
@@ -1365,18 +1274,16 @@ typedef struct EnsSFeature
 **
 ** @attr Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @attr Cache [EnsPCache] Ensembl LRU Cache
-** @attr Tablenames [char**] SQL table name array, which is used for
-**                           multi-species databases only.
-**                           The array is dynamically allocated to extend for
-**                           "seq_region" and "coord_system" table names.
-**                           The array is then set in the Ensembl Base Adaptor
-**                           object.
-** @attr Defaultcondition [char*] SQL SELECT default condition, which is used
-**                         for multi-species databases only. This character
-**                         string is dynamically allocated to extend for
-**                         "seq_region" and "coord_system" conditions.
-**                         The string is then set in the Ensembl Base Adaptor
-**                         object.
+** @attr Tables [char**] One-dimensional array of table name character strings,
+**                       which is used for multi-species databases only.
+**                       This array is dynamically allocated to extend for
+**                       "seq_region" and "coord_system" tables. The array is
+**                       then set in the Ensembl Base Adaptor object.
+** @attr Condition [char*] SQL SELECT default condition, which is used for
+**                         multi-species databases only. This character string
+**                         is dynamically allocated to extend for "seq_region"
+**                         and "coord_system" conditions. The string is then
+**                         set in the Ensembl Base Adaptor object.
 ** @attr FobjectGetFeature [EnsPFeature function]
 ** Ensembl Object-specific objectGetFeature member function
 ** @attr Freference [void* function]
@@ -1392,8 +1299,8 @@ typedef struct EnsSFeatureadaptor
 {
     EnsPBaseadaptor Adaptor;
     EnsPCache Cache;
-    char **Tablenames;
-    char *Defaultcondition;
+    char **Tables;
+    char *Condition;
     EnsPFeature (*FobjectGetFeature) (const void *object);
     void *(*Freference) (void *value);
     void (*Fdelete) (void **Pvalue);
@@ -1517,48 +1424,6 @@ typedef struct EnsSIntron
 
 
 
-/* @data EnsPIntronsupportingevidence *****************************************
-**
-** Ensembl Intron Supporting Evidence
-**
-** @alias EnsSIntronsupportingevidence
-** @alias EnsOIntronsupportingevidence
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPIntronsupportingevidenceadaptor]
-** Ensembl Intron Supporting Evidence Adaptor
-** @cc Bio::EnsEMBL::Feature
-** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::IntronSupportingEvidence
-** @attr Intron [EnsPIntron] Ensembl Intron
-** @attr Hitname [AjPStr] Hit name
-** @attr Canonical [AjBool] Canonical splice sites
-** @attr Score [double] Socre
-** @attr Type [EnsEIntronsupportingevidenceType]
-** Ensembl Intron Supporting Evidence Type enumeration
-** @@
-******************************************************************************/
-
-typedef struct EnsSIntronsupportingevidence
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPIntronsupportingevidenceadaptor Adaptor;
-    EnsPFeature Feature;
-    EnsPIntron Intron;
-    AjPStr Hitname;
-    AjBool Canonical;
-    double Score;
-    EnsEIntronsupportingevidenceType Type;
-} EnsOIntronsupportingevidence;
-
-#define EnsPIntronsupportingevidence EnsOIntronsupportingevidence*
-
-
-
-
 /* @data EnsPTranslation ******************************************************
 **
 ** Ensembl Translation
@@ -1656,14 +1521,9 @@ typedef struct EnsSTranslation
 ** @attr Geneidentifier [ajuint] Ensembl Gene identifier
 ** @attr Alternativetranslations [AjPList]
 ** AJAX List of alternative Ensembl Translation objects
-** @attr Attributes [AjPList]
-** AJAX List of Ensembl Attribute objects
-** @attr Databaseentries [AjPList]
-** AJAX List of Ensembl Database Entry objects
-** @attr Exons [AjPList]
-** AJAX List of Ensembl Exon objects
-** @attr Intronsupportingevidences [AjPList]
-** AJAX List of Ensembl Intron Supporting Evidence objects
+** @attr Attributes [AjPList] AJAX List of Ensembl Attribute objects
+** @attr Databaseentries [AjPList] AJAX List of Ensembl Database Entry objects
+** @attr Exons [AjPList] AJAX List of Ensembl Exon objects
 ** @attr Supportingfeatures [AjPList]
 ** AJAX List of Ensembl Base Align Feature objects
 ** @attr Translation [EnsPTranslation] Ensembl Translation
@@ -1695,7 +1555,6 @@ typedef struct EnsSTranscript
     AjPList Attributes;
     AjPList Databaseentries;
     AjPList Exons;
-    AjPList Intronsupportingevidences;
     AjPList Supportingfeatures;
     EnsPTranslation Translation;
     AjBool Sequenceedits;
@@ -1705,6 +1564,28 @@ typedef struct EnsSTranscript
 } EnsOTranscript;
 
 #define EnsPTranscript EnsOTranscript*
+
+
+
+
+/* @data EnsPGeneadaptor ******************************************************
+**
+** Ensembl Gene Adaptor
+**
+** @alias EnsSGeneadaptor
+** @alias EnsOGeneadaptor
+**
+** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor
+** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @@
+******************************************************************************/
+
+typedef struct EnsSGeneadaptor
+{
+    EnsPFeatureadaptor Adaptor;
+} EnsOGeneadaptor;
+
+#define EnsPGeneadaptor EnsOGeneadaptor*
 
 
 
@@ -1769,106 +1650,6 @@ typedef struct EnsSGene
 } EnsOGene;
 
 #define EnsPGene EnsOGene*
-
-
-
-
-/* @data EnsPOperon ***********************************************************
-**
-** Ensembl Operon
-**
-** @alias EnsSOperon
-** @alias EnsOOperon
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] Internal SQL database identifier (primary key)
-** @attr Adaptor [EnsPOperonadaptor] Ensembl Operon Adaptor
-** @cc Bio::EnsEMBL::Feature
-** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::Operon
-** @cc "operon" SQL table
-** @attr Displaylabel [AjPStr] Display Label
-** @attr Stableidentifier [AjPStr] Stable identifier
-** @attr DateCreation [AjPStr] Creation date
-** @attr DateModification [AjPStr] Modification date
-** @attr Version [ajuint] Version
-** @attr Padding [ajuint] Padding to alignment boundary
-** @attr Attributes [AjPList] AJAX List of Ensembl Attribute objects
-** @attr Databaseentries [AjPList] AJAX List of Ensembl Database Entry objects
-** @attr Operontranscripts [AjPList]
-** AJAX List of Ensembl Operon Transcript objects
-** @@
-******************************************************************************/
-
-typedef struct EnsSOperon
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPOperonadaptor Adaptor;
-    EnsPFeature Feature;
-    AjPStr Displaylabel;
-    AjPStr Stableidentifier;
-    AjPStr DateCreation;
-    AjPStr DateModification;
-    ajuint Version;
-    ajuint Padding;
-    AjPList Attributes;
-    AjPList Databaseentries;
-    AjPList Operontranscripts;
-} EnsOOperon;
-
-#define EnsPOperon EnsOOperon*
-
-
-
-
-/* @data EnsPOperontranscript *************************************************
-**
-** Ensembl Operon Transcript
-**
-** @alias EnsSOperontranscript
-** @alias EnsOOperontranscript
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] Internal SQL database identifier (primary key)
-** @attr Adaptor [EnsPOperontranscriptadaptor]
-** Ensembl Operon Transcript Adaptor
-** @cc Bio::EnsEMBL::Feature
-** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::OperonTranscript
-** @cc "operon_transcript" SQL table
-** @attr Displaylabel [AjPStr] Display Label
-** @attr Stableidentifier [AjPStr] Stable identifier
-** @attr DateCreation [AjPStr] Creation date
-** @attr DateModification [AjPStr] Modification date
-** @attr Version [ajuint] Version
-** @attr Padding [ajuint] Padding to alignment boundary
-** @attr Attributes [AjPList] AJAX List of Ensembl Attribute objects
-** @attr Databaseentries [AjPList] AJAX List of Ensembl Database Entry objects
-** @attr Genes [AjPList] AJAX List of Ensembl Gene objects
-** @@
-******************************************************************************/
-
-typedef struct EnsSOperontranscript
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPOperontranscriptadaptor Adaptor;
-    EnsPFeature Feature;
-    AjPStr Displaylabel;
-    AjPStr Stableidentifier;
-    AjPStr DateCreation;
-    AjPStr DateModification;
-    ajuint Version;
-    ajuint Padding;
-    AjPList Attributes;
-    AjPList Databaseentries;
-    AjPList Genes;
-} EnsOOperontranscript;
-
-#define EnsPOperontranscript EnsOOperontranscript*
 
 
 

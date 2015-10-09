@@ -85,7 +85,7 @@ Output file [outfile.profit]:
 Command line arguments
 
 Scan one or more sequences with a simple frequency matrix
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Profile or weight matrix file
@@ -107,7 +107,6 @@ Version: EMBOSS:6.6.0.0
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
    -scircular2         boolean    Sequence is circular
-   -squick2            boolean    Read id and sequence only
    -sformat2           string     Input sequence format
    -iquery2            string     Input query fields or ID list
    -ioffset2           integer    Input start position offset

@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 
     ajDomWriteIndent(doc,outf,0);
 
-    ajDomDocumentDestroyNode(doc, &doc);
+    ajDomDocumentDestroyNode(doc,doc);
 
     ajFileClose(&outf);
 

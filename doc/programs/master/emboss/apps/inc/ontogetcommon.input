@@ -9,25 +9,19 @@ id: EDAM_topic:0640
 name: Nucleic acid sequence analysis
 namespace: topic
 def: Processing and analysis of nucleotide sequences and sequence-based entities such as alignments, motifs and profiles.
-subset: bioinformatics
-subset: edam
 subset: topics
 xref: BioCatalogue:Nucleotide Sequence Analysis
-created_in: "beta12orEarlier"
-is_a: EDAM_topic:0077 ! Nucleic acid analysis
 is_a: EDAM_topic:0080 ! Sequence analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 [Term]
 id: EDAM_topic:0097
 name: Nucleic acid structure analysis
 namespace: topic
 def: The processing and analysis of nucleic acid (secondary or tertiary) structural data.
-subset: bioinformatics
-subset: edam
 subset: topics
-created_in: "beta12orEarlier"
-is_a: EDAM_topic:0077 ! Nucleic acid analysis
 is_a: EDAM_topic:0081 ! Structure analysis
+is_a: EDAM_topic:0077 ! Nucleic acid analysis
 
 </pre>
 </td></tr></table><p>

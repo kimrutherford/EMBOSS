@@ -5,9 +5,9 @@
 ** Hash table functions.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version $Revision: 1.40 $
+** @version $Revision: 1.39 $
 ** @modified 2011 pmr Auto-resizing, destructors, table merges
-** @modified $Date: 2013/02/17 13:39:55 $ by $Author: mks $
+** @modified $Date: 2012/07/02 15:47:30 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -145,7 +145,6 @@ typedef struct AjSTableNode {
 ** @attr Length [ajulong] Number of entries
 ** @attr Timestamp [ajuint] Time stamp
 ** @attr Use [ajuint] Reference count
-** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr Type [AjETableType] AJAX Table Type enumeration
 ** @@
 ******************************************************************************/
@@ -161,7 +160,6 @@ typedef struct AjSTable
     ajulong Length;
     ajuint Timestamp;
     ajuint Use;
-    ajuint Padding;
     AjETableType Type;
 } AjOTable;
 

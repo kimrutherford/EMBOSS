@@ -4,67 +4,6 @@
 <p><h3>File: drfindformat.drcat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ID      UniProtKB_Swiss-Prot
-IDalt   SwissProt
-Name    Universal protein resource knowledge base / Swiss-Prot
-Desc    Section of the UniProt knowledgebase, containing annotated records, which include curator-evaluated computational analysis, as well as, information extracted from the literature
-URL     http://www.uniprot.org
-Taxon   1 | all
-EDAMtpc 0639 | Protein sequence analysis
-EDAMdat 2201 | Sequence record full
-EDAMid  3021 | UniProt accession
-EDAMfmt 1929 | FASTA format
-EDAMfmt 2376 | RDF
-EDAMfmt 2331 | HTML
-EDAMfmt 2332 | XML
-Xref    EMBL_explicit | UniProt accession
-Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
-Query    Sequence record full | Text | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
-Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
-Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
-Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
-Example UniProt accession | P12345
-
-ID      UniProtKB_TrEMBL
-IDalt   TrEMBL
-Name    Universal protein resource knowledge base / Swiss-Prot
-Desc    Section of the UniProt knowledgebase, containing computationally analysed records waiting for full manual annotation
-URL     http://www.uniprot.org/
-Taxon   1 | all
-EDAMtpc 0639 | Protein sequence analysis
-EDAMdat 2201 | Sequence record full
-EDAMid  3021 | UniProt accession
-EDAMfmt 1929 | FASTA format
-EDAMfmt 2376 | RDF
-EDAMfmt 2331 | HTML
-EDAMfmt 2332 | XML
-Xref    SP_FT | None
-Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
-Query    Sequence record full | Text | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
-Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
-Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
-Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
-Example UniProt accession | Q00177
-
-ID      Ensembl
-Acc     DB-0023
-Name    Ensembl eukaryotic genome annotation project
-Desc    Genome databases for vertebrates and other eukaryotic species.
-URL     http://www.ensembl.org/
-Cat     Genome annotation databases
-Taxon   33208 | Metazoa
-EDAMtpc 2818 | Eukaryotes
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
-Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
-Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
-Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
-Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
-Example UniProt accession | P12345
-
 ID      dbEST
 Name    dbEST database of EST sequences
 Desc    dbEST is a division of GenBank that contains sequence data and other information on "single-pass" cDNA sequences, or "Expressed Sequence Tags", from a number of organisms.
@@ -108,6 +47,67 @@ Query    Sequence record lite {REDIdb fasta} | FASTA-HTML | REDIdb ID | http://b
 Query    Sequence alignment (nucleic acid) {REDIdb overview} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/display.py?query=%s
 Query    Sequence alignment (nucleic acid) {REDIdb alignment} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/align.py?query=%s
 Example REDIdb ID  | EDI_000000002
+
+ID      UniProtKB_Swiss-Prot
+IDalt   SwissProt
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing annotated records, which include curator-evaluated computational analysis, as well as, information extracted from the literature
+URL     http://www.uniprot.org
+Taxon   1 | all
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+Cat     Other
+Taxon   1 | all
+EDAMtpc 3052 | Sequence clusters and classification
+EDAMtpc 0114 | Gene structure and RNA splicing
+EDAMdat 1245 | Sequence cluster (protein)
+EDAMid  2347 | Sequence cluster ID (UniRef100)
+EDAMid  2348 | Sequence cluster ID (UniRef90)
+EDAMid  2349 | Sequence cluster ID (UniRef50)
+EDAMfmt 1929 | FASTA format
+EDAMfmt 2376 | RDF
+EDAMfmt 2331 | HTML
+EDAMfmt 2332 | XML
+Xref    SP_implicit | UniProt accession
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.rdf
+Query    Sequence cluster (protein) | FASTA format | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.fasta
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.rdf
+Query    Sequence cluster (protein) | FASTA format | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.fasta
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.rdf
+Query    Sequence cluster (protein) | FASTA format | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.fasta
+Example Sequence cluster ID (UniRef100) | P02930
+Example Sequence cluster ID (UniRef90) | P02930
+Example Sequence cluster ID (UniRef50) | P02930
+
+ID      UniProt
+IDalt   UniProtKB
+Name    Universal protein resource
+Desc    A comprehensive, high-quality and freely accessible resource of protein sequence and functional information.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0639 | Protein sequence analysis
+EDAMdat 2201 | Sequence record full
+EDAMid  3021 | UniProt accession
+EDAMfmt 1929 | FASTA format
+EDAMfmt 2376 | RDF
+EDAMfmt 2188 | uniprot
+EDAMfmt 2331 | HTML
+EDAMfmt 2332 | XML
+Xref    SP_FT | None
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
 
 </pre>
 </td></tr></table><p>

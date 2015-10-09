@@ -3,9 +3,9 @@
 ** AJAX Query data structures
 **
 ** @author Copyright (C) 2011 Peter Rice
-** @version $Revision: 1.22 $
+** @version $Revision: 1.21 $
 ** @modified Jul 15 pmr First version with code from all datatypes merged
-** @modified $Date: 2012/09/03 14:26:04 $ by $Author: rice $
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -121,7 +121,6 @@ typedef enum AjOQryLink
 ** @value AJDATATYPE_TEXT      Text data
 ** @value AJDATATYPE_URL       URL data
 ** @value AJDATATYPE_VARIATION Variation data
-** @value AJDATATYPE_XML       XML data
 ** @value AJDATATYPE_MAX       Above last defined value
 ******************************************************************************/
 
@@ -138,7 +137,6 @@ typedef enum AjODataType
     AJDATATYPE_TEXT,
     AJDATATYPE_URL,
     AJDATATYPE_VARIATION,
-    AJDATATYPE_XML,
     AJDATATYPE_MAX
 } AjEDataType;
 

@@ -3,9 +3,9 @@
 ** AJAX SEQ (sequence) data structures
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.82 $
+** @version $Revision: 1.79 $
 ** @modified Jun 25 pmr First version
-** @modified $Date: 2012/12/07 10:09:13 $ by $Author: rice $
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -98,7 +98,6 @@ typedef enum AjOXrefType
 ** @attr Name [AjPStr] Recommended name (only one per sequence)
 ** @attr Short [AjPList] String list of short names
 ** @attr EC [AjPList] String list of EC numbers
-** @attr Multi [AjPList] String list of multiple description lines
 ** @attr AltNames [AjPList] List of alternate description objects
 ** @attr SubNames [AjPList] List of submitted name objects
 ** @attr Includes [AjPList] List of names for included functional domains
@@ -114,7 +113,6 @@ typedef struct AjSSeqDesc
     AjPStr Name;
     AjPList Short;
     AjPList EC;
-    AjPList Multi;
     AjPList AltNames;
     AjPList SubNames;
     AjPList Includes;
@@ -363,56 +361,54 @@ typedef struct AjSSeqXref
 ** @alias AjOSeq
 ** @alias AjSSeq
 **
-** @attr Name      [AjPStr] Name (ID)
-** @attr Acc       [AjPStr] Accession number (primary only)
-** @attr Sv        [AjPStr] SeqVersion number
-** @attr Gi        [AjPStr] GI NCBI version number
-** @attr Tax       [AjPStr] Main taxonomy (species)
-** @attr Taxcommon [AjPStr] Main taxonomy (species) common name
-** @attr Taxid     [AjPStr] Main taxonomy (species) id in NCBI taxonomy
+** @attr Name [AjPStr] Name (ID)
+** @attr Acc [AjPStr] Accession number (primary only)
+** @attr Sv [AjPStr] SeqVersion number
+** @attr Gi [AjPStr] GI NCBI version number
+** @attr Tax [AjPStr] Main taxonomy (species)
+** @attr Taxid [AjPStr] Main taxonomy (species) id in NCBI taxonomy
 ** @attr Organelle [AjPStr] Organelle taxonomy
-** @attr Type      [AjPStr] Type N or P
-** @attr Molecule  [AjPStr] Molecule type
-** @attr Class     [AjPStr] Class of entry
-** @attr Division  [AjPStr] Database division
-** @attr Evidence  [AjPStr] Experimental evidence (e.g. from UniProt)
-** @attr Db        [AjPStr] Database name from input
-** @attr Setdb     [AjPStr] Database name from command line
-** @attr Full      [AjPStr] Full name
-** @attr Date      [AjPSeqDate] Creation, modification and sequence mod dates
-** @attr Desc      [AjPStr] One-line description
-** @attr Fulldesc  [AjPSeqDesc] Detailed description
-** @attr Doc       [AjPStr] Obsolete - see TextPtr
-** @attr Usa       [AjPStr] USA for re-reading
-** @attr Ufo       [AjPStr] UFO for re-reading
+** @attr Type [AjPStr] Type N or P
+** @attr Molecule [AjPStr] Molecule type
+** @attr Class [AjPStr] Class of entry
+** @attr Division [AjPStr] Database division
+** @attr Evidence [AjPStr] Experimental evidence (e.g. from UniProt)
+** @attr Db [AjPStr] Database name from input
+** @attr Setdb [AjPStr] Database name from command line
+** @attr Full [AjPStr] Full name
+** @attr Date [AjPSeqDate] Creation, modification and sequence mod dates
+** @attr Desc [AjPStr] One-line description
+** @attr Fulldesc [AjPSeqDesc] Detailed description
+** @attr Doc [AjPStr] Obsolete - see TextPtr
+** @attr Usa [AjPStr] USA for re-reading
+** @attr Ufo [AjPStr] UFO for re-reading
 ** @attr Formatstr [AjPStr] Input format name
-** @attr Filename  [AjPStr] Original filename
+** @attr Filename [AjPStr] Original filename
 ** @attr Entryname [AjPStr] Entryname (ID)
-** @attr TextPtr   [AjPStr] Full text
-** @attr Acclist   [AjPList] Secondary accessions
-** @attr Keylist   [AjPList] Keyword list
-** @attr Taxlist   [AjPList] Taxonomy list (organelle, species, taxa)
-** @attr Genelist  [AjPList] Gene names list
-** @attr Reflist   [AjPList] Reference citation list
-** @attr Cmtlist   [AjPList] Comment block list
-** @attr Xreflist  [AjPList] Cross reference list
-** @attr Hostlist  [AjPList] Viral host species list
-** @attr Seq       [AjPStr] The sequence
-** @attr Fttable   [AjPFeattable] Feature table
-** @attr Accuracy  [float*] Accuracy values (one per base) from base calling
-** @attr Fpos      [ajlong] File position (fseek) for USA
-** @attr Rev       [AjBool] true: to be reverse-complemented
-** @attr Reversed  [AjBool] true: has been reverse-complemented
-** @attr Trimmed   [AjBool] true: has been trimmed
-** @attr Circular  [AjBool] true: circular nucleotide molecule
-** @attr Begin     [ajint] start position (processed on reading)
-** @attr End       [ajint] end position (processed on reading)
-** @attr Offset    [ajuint] offset from start
-** @attr Offend    [ajuint] offset from end
-** @attr Qualsize  [ajuint] Size of Accuracy array
-** @attr Weight    [float] Weight from multiple alignment
-** @attr Format    [AjEnum] Input format enum
-** @attr EType     [AjEnum] unused, obsolete
+** @attr TextPtr [AjPStr] Full text
+** @attr Acclist [AjPList] Secondary accessions
+** @attr Keylist [AjPList] Keyword list
+** @attr Taxlist [AjPList] Taxonomy list (organelle, species, taxa)
+** @attr Genelist [AjPList] Gene names list
+** @attr Reflist [AjPList] Reference citation list
+** @attr Cmtlist [AjPList] Comment block list
+** @attr Xreflist [AjPList] Cross reference list
+** @attr Seq [AjPStr] The sequence
+** @attr Fttable [AjPFeattable] Feature table
+** @attr Accuracy [float*] Accuracy values (one per base) from base calling
+** @attr Fpos [ajlong] File position (fseek) for USA
+** @attr Rev [AjBool] true: to be reverse-complemented
+** @attr Reversed [AjBool] true: has been reverse-complemented
+** @attr Trimmed [AjBool] true: has been trimmed
+** @attr Circular [AjBool] true: circular nucleotide molecule
+** @attr Begin [ajint] start position (processed on reading)
+** @attr End [ajint] end position (processed on reading)
+** @attr Offset [ajuint] offset from start
+** @attr Offend [ajuint] offset from end
+** @attr Qualsize [ajuint] Size of Accuracy array
+** @attr Weight [float] Weight from multiple alignment
+** @attr Format [AjEnum] Input format enum
+** @attr EType [AjEnum] unused, obsolete
 **
 ** @@
 ******************************************************************************/
@@ -424,7 +420,6 @@ typedef struct AjSSeq
     AjPStr Sv;
     AjPStr Gi;
     AjPStr Tax;
-    AjPStr Taxcommon;
     AjPStr Taxid;
     AjPStr Organelle;
     AjPStr Type;
@@ -452,7 +447,6 @@ typedef struct AjSSeq
     AjPList Reflist;
     AjPList Cmtlist;
     AjPList Xreflist;
-    AjPList Hostlist;
     AjPStr Seq;
     AjPFeattable Fttable;
     float* Accuracy;
@@ -599,7 +593,6 @@ typedef struct AjSSeqset
 ** @attr Fttable   [AjPFeattable] Input feature table (why in AjPSeqin?)
 ** @attr Ftquery   [AjPFeattabin] Feature table input spec
 ** @attr Entryname [AjPStr]    Entry name
-** @attr Minimal   [AjBool]    true: read minimal information only
 ** @attr Features  [AjBool]    true: read features if any
 ** @attr IsNuc     [AjBool]    true: known to be nucleic
 ** @attr IsProt    [AjBool]    true: known to be protein
@@ -609,6 +602,7 @@ typedef struct AjSSeqset
 ** @attr Upper     [AjBool]    true: convert to upper case -supper
 ** @attr Rev       [AjBool]    Reverse/complement if true
 ** @attr Circular  [AjBool]    Set sequences to be circular
+** @attr Padding   [char[4]]   Padding to alignment boundary
 ** @attr SeqData   [void*]     Format data for reuse,
 **                               e.g. multiple sequence input
 ** @@
@@ -634,7 +628,6 @@ typedef struct AjSSeqin
     AjPFeattable Fttable;
     AjPFeattabin Ftquery;
     AjPStr Entryname;
-    AjBool Minimal;
     AjBool Features;
     AjBool IsNuc;
     AjBool IsProt;
@@ -644,6 +637,7 @@ typedef struct AjSSeqin
     AjBool Upper;
     AjBool Rev;
     AjBool Circular;
+    char Padding[4];
     void *SeqData;
 } AjOSeqin;
 
@@ -770,7 +764,6 @@ typedef struct AjSSeqAccess
 ** @attr Gi [AjPStr] GI NCBI version number
 ** @attr Desc [AjPStr] One-line description
 ** @attr Tax [AjPStr] Main taxonomy (species)
-** @attr Taxcommon [AjPStr] Main taxonomy (species) common name
 ** @attr Taxid [AjPStr] Main taxonomy (species) id in NCBI taxonomy
 ** @attr Organelle [AjPStr] Organelle taxonomy
 ** @attr Type [AjPStr] Type N or P
@@ -845,7 +838,6 @@ typedef struct AjSSeqout
     AjPStr Gi;
     AjPStr Desc;
     AjPStr Tax;
-    AjPStr Taxcommon;
     AjPStr Taxid;
     AjPStr Organelle;
     AjPStr Type;

@@ -12,9 +12,9 @@
 ** that it can be simply freed.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version $Revision: 1.205 $
+** @version $Revision: 1.198 $
 ** @modified 1998-2011 Peter Rice
-** @modified $Date: 2013/06/30 12:03:51 $ by $Author: rice $
+** @modified $Date: 2012/06/26 13:03:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -421,178 +421,6 @@ void ajCharDel(char** Ptxt)
 
 
 
-/* @section filters
-**
-** Functions for creating filters from C-type (char*) strings).
-**
-** @fdata     [char*]
-**
-** @nam3rule  Getfilter   Get a filter array
-** @nam4rule  Case        Case-insensitive filter
-** @nam4rule  Lower       Lower case filter.
-** @nam4rule  Upper       Upper case filter.
-**
-** @argrule   * txt [const char*] Character string
-** @valrule   * [char*] Filter
-** @fcategory use
-*/
-
-
-
-
-/* @func ajCharGetfilter ******************************************************
-**
-** Returns a filter array to test for any character in a string.
-** 
-** @param [r] txt [const char*] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajCharGetfilter(const char *txt)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!txt)
-	return ret;
-
-    if(!*txt)
-        return ret;
-
-    cp = txt;
-
-    while (*cp)
-    {
-        ret[((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajCharGetfilterCase **************************************************
-** Returns a filter array to test for any character in a string.
-** The filter is case-insensitive
-** 
-** @param [r] txt [const char*] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajCharGetfilterCase(const char *txt)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!txt)
-	return ret;
-
-    if(!*txt)
-        return ret;
-
-    cp = txt;
-
-    while (*cp)
-    {
-        ret[tolower((int)*cp)] = 1;
-        ret[toupper((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajCharGetfilterLower *************************************************
-**
-** Returns a filter array to test for any character in a string as lower case.
-** 
-** @param [r] txt [const char*] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajCharGetfilterLower(const char *txt)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!txt)
-	return ret;
-
-    if(!*txt)
-        return ret;
-
-    cp = txt;
-
-    while (*cp)
-    {
-        ret[tolower((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajCharGetfilterUpper ************************************************
-**
-** Returns a filter array to test for any character in a string as upper case.
-** 
-** @param [r] txt [const char*] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajCharGetfilterUpper(const char *txt)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!txt)
-	return ret;
-
-    if(!*txt)
-        return ret;
-
-    cp = txt;
-
-    while (*cp)
-    {
-        ret[toupper((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
 /* @section formatting
 **
 ** Functions for formatting C-type (char*) strings).
@@ -601,7 +429,6 @@ char* ajCharGetfilterUpper(const char *txt)
 ** @fnote     Same namrule as "String formatting functions"
 **
 ** @nam3rule  Fmt         Change the format of a string.
-** @nam4rule  FmtCapital  Convert each word to title case.
 ** @nam4rule  FmtLower    Convert to lower case.
 ** @nam4rule  FmtTitle    Convert to title case.
 ** @nam4rule  FmtUpper    Convert to upper case.
@@ -628,25 +455,20 @@ char* ajCharGetfilterUpper(const char *txt)
 AjBool ajCharFmtLower(char* txt)
 {
     char* cp;
-    size_t ispan;
 
-    ispan = strcspn(txt, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    if(txt[ispan])
+    cp = txt;
+
+    while(*cp)
     {
-        cp = txt;
-
-        while(*cp)
-        {
 	/*
 	 *  AJB: function ajSysItoC was there as some really fussy compilers
 	 *  complained about casting ajint to char. However, for conversion of
 	 *  large databases it's too much of an overhead. Think about a macro
 	 *  later. In the meantime revert to the standard system call
-	 *    *cp = ajSysCastItoc(tolower((int) *cp));
+	 *    *cp = ajSysCastItoc(tolower((ajint) *cp));
 	 */
-            *cp = (char)tolower((int) *cp);
-            cp++;
-        }
+	*cp = (char)tolower((ajint) *cp);
+	cp++;
     }
 
     return ajTrue;
@@ -669,15 +491,11 @@ AjBool ajCharFmtLower(char* txt)
 AjBool ajCharFmtUpper(char* txt)
 {
     char* cp;
-    size_t ispan;
 
-    ispan = strcspn(txt, "abcdefghijklmnopqrstuvwxyz");
-    if(txt[ispan])
+    cp = txt;
+
+    while(*cp)
     {
-        cp = txt;
-
-        while(*cp)
-        {
 	/*
 	 *  AJB: function ajSysItoC was there as some really fussy compilers
 	 *  complained about casting ajint to char. However, for conversion of
@@ -685,9 +503,8 @@ AjBool ajCharFmtUpper(char* txt)
 	 *  later. In the meantime revert to the standard system call
 	 *    *cp = ajSysCastItoc(toupper((ajint) *cp));
 	 */
-            *cp = (char) toupper((int) *cp);
-            cp++;
-        }
+	*cp = (char) toupper((ajint) *cp);
+	cp++;
     }
 
     return ajTrue;
@@ -783,7 +600,7 @@ AjBool ajCharMatchCaseC(const char* txt, const char* txt2)
 	return ajFalse;
 
     while(*cp && *cq)
-	if(toupper((int) *cp++) != toupper((int) *cq++))
+	if(toupper((ajint) *cp++) != toupper((ajint) *cq++))
 	    return ajFalse;
 
     if(*cp || *cq)
@@ -1118,7 +935,7 @@ AjBool ajCharMatchWildNextCaseC(const char* txt, const char* txt2)
 	    /* always returns once '*' is found */
 
 	default:	 /* for all other characters, keep checking */
-	    if(toupper((int) *cp) != toupper((int) *cq))
+	    if(toupper((ajint) *cp) != toupper((ajint) *cq))
 		return ajFalse;
 
 	    cp++;
@@ -1411,7 +1228,7 @@ AjBool ajCharPrefixCaseC(const char* txt, const char* txt2)
 
     while(*cp && *cq)
     {
-	if(toupper((int) *cp) != toupper((int) *cq))
+	if(toupper((ajint) *cp) != toupper((ajint) *cq))
             return ajFalse;
 
 	cp++;cq++;
@@ -1571,7 +1388,7 @@ AjBool ajCharSuffixCaseC(const char* txt, const char* txt2)
 
     while (*cp)
     {
-	if(toupper((int)*cp) != toupper((int)*cq))
+	if(toupper((ajint)*cp) != toupper((ajint)*cq))
             return ajFalse;
 
 	cp++; cq++;
@@ -1620,7 +1437,7 @@ AjBool ajCharSuffixCaseS(const char* txt, const AjPStr str)
 
     while (cp)
     {
-	if(toupper((int)*cp) != toupper((int)*cq)) return ajFalse;
+	if(toupper((ajint)*cp) != toupper((ajint)*cq)) return ajFalse;
 	cp++; cq++;
     }
 
@@ -1675,9 +1492,9 @@ int ajCharCmpCase(const char* txt, const char* txt2)
     const char* cq;
 
     for(cp = txt, cq = txt2; *cp && *cq; cp++, cq++)
-	if(toupper((int) *cp) != toupper((int) *cq))
+	if(toupper((ajint) *cp) != toupper((ajint) *cq))
 	{
-	    if(toupper((int) *cp) > toupper((int) *cq))
+	    if(toupper((ajint) *cp) > toupper((ajint) *cq))
 		return 1;
 	    else
 		return -1;
@@ -1717,9 +1534,9 @@ int ajCharCmpCaseLen(const char* txt, const char* txt2, size_t len)
     size_t i;
 
     for(cp=txt,cq=txt2,i=0;*cp && *cq && i<len;++i,++cp,++cq)
-	if(toupper((int) *cp) != toupper((int) *cq))
+	if(toupper((ajint) *cp) != toupper((ajint) *cq))
 	{
-	    if(toupper((int) *cp) > toupper((int) *cq))
+	    if(toupper((ajint) *cp) > toupper((ajint) *cq))
 		return 1;
 	    else
 		return -1;
@@ -1927,9 +1744,9 @@ int ajCharCmpWildCase(const char* txt, const char* txt2)
 	    /* always returns once '*' is found */
 
 	default:	 /* for all other characters, keep checking */
-	    if(toupper((int) *cp) != toupper((int) *cq))
+	    if(toupper((ajint) *cp) != toupper((ajint) *cq))
 	    {
-		if(toupper((int) *cp) > toupper((int) *cq))
+		if(toupper((ajint) *cp) > toupper((ajint) *cq))
 		    return -1;
 		else
 		    return 1;
@@ -2678,7 +2495,7 @@ void ajStrDelarray(AjPStr** PPstr)
 ** @nam4rule  AssignMax   Copy up to a maximum number of characters only.
 ** @nam4rule  AssignEmpty Copy only if existing string is empty.
 ** @nam4rule  AssignClear Assign an empty string
- **
+**
 ** @argrule   *       Pstr [AjPStr*] Modifiable string
 ** @argrule   Ref     refstr [AjPStr] Master string
 ** @argrule   Res     size [size_t] Reserved maximum size
@@ -3024,10 +2841,10 @@ AjBool ajStrAssignRef(AjPStr* Pstr, AjPStr refstr)
 
     if(*Pstr)
     {
-        if((*Pstr)->Use <= 1)
-            ajStrDel(Pstr);
-        else
-            (*Pstr)->Use--;
+      if((*Pstr)->Use <= 1)
+	ajStrDel(Pstr);
+      else
+	(*Pstr)->Use--;
     }
 
     if(!refstr)
@@ -3392,7 +3209,7 @@ AjBool ajStrAppendK(AjPStr* Pstr, char chr)
 **
 ** Appends a string to the end of another string.
 ** 
-** Uses {ajStrSetResRound} to make sure target string is modifiable.
+** Uses {ajStrSetRes} to make sure target string is modifiable.
 **
 ** @param [w] Pstr [AjPStr*] Target string
 ** @param [r] str [const AjPStr] Source string
@@ -4138,7 +3955,6 @@ AjBool ajStrPasteMaxS(AjPStr* Pstr, ajlong pos, const AjPStr str,
 ** @nam5rule  KeepSetAscii     Keep a range of ASCII characters.
 ** @nam5rule  KeepSetAlpha     Also remove non-alphabetic.
 ** @nam6rule  KeepSetAlphaRest  Also remove non-alphabetic and report non-space
-** @nam5rule  KeepSetFilter    Use a saved filter object
 ** @nam3rule  Quote            Editing quotes in quoted strings
 ** @nam4rule  QuoteStrip       Removing quotes
 ** @nam5rule  QuoteStripAll    Removing internal and external quotes
@@ -4180,7 +3996,6 @@ AjBool ajStrPasteMaxS(AjPStr* Pstr, ajlong pos, const AjPStr str,
 ** @argrule   Len      len   [size_t] Number of characters to process
 ** @argrule   CutEnd   len   [size_t] Number of characters to remove
 ** @argrule   CutStart len   [size_t] Number of characters to remove
-** @argrule   Filter   filter [const char*] Filter array non-zero per character
 ** @argrule   Range    pos1  [ajlong]  Start position in string, negative
 **                                    numbers count from end
 ** @argrule   Range    pos2  [ajlong]  End position in string, negative
@@ -4639,52 +4454,6 @@ AjBool ajStrKeepSetC(AjPStr* Pstr, const char* txt)
 
     if(!thys->Len)
         return ajFalse;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajStrKeepSetFilter ***************************************************
-**
-** Removes all characters from a string that are not defined by a filter
-** 
-** @param [u] Pstr [AjPStr*] String
-** @param [r] filter [const char*] Filter non-zero for each allowed value
-** @return [AjBool] ajTrue if the string is entirely composed of characters
-**                  in the specified set
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrKeepSetFilter(AjPStr *Pstr, const char* filter)
-{
-    const char* cp;
-    char* cq;
-
-    if(!*Pstr)
-        *Pstr = ajStrNewResLenC("", 1, 0);
-    else if((*Pstr)->Use > 1)
-        ajStrGetuniqueStr(Pstr);
-
-    cp = cq = (*Pstr)->Ptr;
-
-    while(*cp)
-    {
-        if(filter[(int)*cp])
-            *cq++ = *cp;
-        cp++;
-    }
-
-    if(cp != cq)
-    {
-        *cq = '\0';
-        (*Pstr)->Len -= (cp - cq);
-
-        return ajFalse;
-    }
 
     return ajTrue;
 }
@@ -5232,7 +5001,6 @@ AjBool ajStrRemoveGap(AjPStr* Pstr)
     size_t  i;
     size_t  len;
     char c;
-    size_t ispan;
     AjPStr thys;
 
     if(!*Pstr)
@@ -5245,23 +5013,18 @@ AjBool ajStrRemoveGap(AjPStr* Pstr)
     p = q = thys->Ptr;
     len = thys->Len;
 
-    ispan = strspn(p, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz*");
-
-    if(p[ispan])
+    for(i=0;i<len;++i)
     {
-        for(i=0;i<len;++i)
-        {
-            c = *(p++);
+	c = *(p++);
 
-            /* O is a gap character for Phylip ... but now valid for proteins */
-            if((c>='A' && c<='Z') || (c>='a' && c<='z') || (c=='*'))
-                *(q++) = c;
-            else
-                --thys->Len;
-        }
-
-        thys->Ptr[thys->Len] = '\0';
+	/* O is a gap character for Phylip ... but now valid for proteins */
+	if((c>='A' && c<='Z') || (c>='a' && c<='z') || (c=='*'))
+	    *(q++) = c;
+	else
+	    --thys->Len;
     }
+
+    thys->Ptr[thys->Len] = '\0';
 
     if(!thys->Len)
         return ajFalse;
@@ -5292,7 +5055,6 @@ AjBool ajStrRemoveGapF(AjPStr* Pstr, float* Pfloat)
     size_t  i;
     size_t  len;
     char c;
-    size_t ispan;
     AjPStr thys;
     float *fp;
     float *fq;
@@ -5309,27 +5071,22 @@ AjBool ajStrRemoveGapF(AjPStr* Pstr, float* Pfloat)
     fp = fq = Pfloat;
     len = thys->Len;
 
-    ispan = strspn(p, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz*");
-
-    if(p[ispan])
+    for(i=0;i<len;++i)
     {
-        for(i=0;i<len;++i)
+	c = *(p++);
+        f = (*fp++);
+
+	/* O is a gap character for Phylip ... but now valid for proteins */
+	if((c>='A' && c<='Z') || (c>='a' && c<='z') || (c=='*'))
         {
-            c = *(p++);
-            f = (*fp++);
-
-            /* O is a gap character for Phylip ... but now valid for proteins */
-            if((c>='A' && c<='Z') || (c>='a' && c<='z') || (c=='*'))
-            {
-                *(q++) = c;
-                *(fq++) = f;
-            }
-            else
-                --thys->Len;
+	    *(q++) = c;
+	    *(fq++) = f;
         }
-
-        thys->Ptr[thys->Len] = '\0';
+	else
+	    --thys->Len;
     }
+
+    thys->Ptr[thys->Len] = '\0';
 
     if(!thys->Len)
         return ajFalse;
@@ -6190,14 +5947,13 @@ AjBool ajStrTruncatePos(AjPStr* Pstr, ajlong pos)
 ******************************************************************************/
 
 AjBool ajStrExchangeCC(AjPStr* Pstr, const char* txt,
-                       const char* txtnew)
+			 const char* txtnew)
 {    
-    ajlong findpos = 0;
+    AjBool cycle = ajTrue;
+    ajlong findpos    = 0;
     size_t tlen;
     size_t newlen;
     ajlong lastpos = 0;			/* make sure we don't loop forever */
-    AjPStr thys;
-    const char* cp;
 
     if(!txt || !txtnew)
         return ajFalse;
@@ -6208,32 +5964,20 @@ AjBool ajStrExchangeCC(AjPStr* Pstr, const char* txt,
     if(!tlen && !newlen)
 	return ajFalse;
 
-    thys = *Pstr;
-
     if(*txt)
     {
-        findpos = ajStrFindC(thys, txt);
-        if(findpos < 0)
-            return ajFalse;
+	while(cycle)
+	{
+	    findpos = ajStrFindC(*Pstr, txt);
 
-        cp = strstr(&thys->Ptr[lastpos], txt);
-
-        while(cp)
-        {
-            findpos = cp - &thys->Ptr[lastpos];
-
-	    if(findpos < ((ajlong)thys->Len - lastpos))
+	    if(findpos >= lastpos)
 	    {
-                lastpos += findpos;
-		ajStrCutRange(Pstr,lastpos,lastpos+tlen-1);
-		ajStrInsertC(Pstr,lastpos,txtnew);
-		lastpos += newlen;
-                ajDebug("new lastpos %Ld len %Ld\n",
-                        lastpos, (ajlong) thys->Len);
+		ajStrCutRange(Pstr,findpos,findpos+tlen-1);
+		ajStrInsertC(Pstr,findpos,txtnew);
+		lastpos = findpos+newlen;
 	    }
-
-            cp = strstr(&thys->Ptr[lastpos], txt);
-
+	    else
+		cycle = ajFalse;
 	}
     }
 
@@ -6494,20 +6238,19 @@ AjBool ajStrExchangeSetCC(AjPStr* Pstr, const char* txt, const char* txtnew)
     if(!txt || !txtnew)
         return ajFalse;
 
-    if(ajStrFindAnyC(*Pstr, txt) < 0)
-        return ajFalse;
-
-    i = strlen(txtnew);
-
-    if(strlen(txt) > i)
-	ajErr("ajStrExchangeSetCC new char set '%s' shorter than old '%s'",
-	       txt, txtnew);
     if(!*Pstr)
         *Pstr = ajStrNewResLenC("", 1, 0);
     else if((*Pstr)->Use > 1)
         ajStrGetuniqueStr(Pstr);
 
     thys = *Pstr;
+
+    i = strlen(txtnew);
+
+    if(strlen(txt) > i)
+	ajErr("ajStrExchangeSetCC new char set '%s' shorter than old '%s'",
+	       txt, txtnew);
+
 
     cp = thys->Ptr;
     ilen = thys->Len;
@@ -6606,8 +6349,8 @@ AjBool ajStrExchangeSetRestCK(AjPStr* Pstr, const char* txt, char chrnew)
 
     while(*co)
     {
-      filter[(ajint)toupper((int)*co)] = '1';
-      filter[(ajint)tolower((int)*co++)] = '1';
+      filter[(ajint)toupper((int)*co)] = chrnew;
+      filter[(ajint)tolower((int)*co++)] = chrnew;
     }
 
     for(cp = thys->Ptr; *cp; cp++)
@@ -6780,7 +6523,6 @@ AjBool ajStrReverse(AjPStr* Pstr)
 ** @nam4rule   IsCharset      Specified characters only.
 ** @nam5rule   IsCharsetCase  Specified characters only.
 ** @nam4rule   IsDouble       Represents double value.
-** @nam4rule   IsFilter       Characters defined in filter only
 ** @nam4rule   IsFloat        Represents float value.
 ** @nam4rule   IsHex          Represents hex value.
 ** @nam4rule   IsInt          Represents integer value.
@@ -6803,7 +6545,6 @@ AjBool ajStrReverse(AjPStr* Pstr)
 ** @argrule IsCharsetS str2 [const AjPStr] Characters to test
 ** @argrule IsCharsetCaseC txt [const char*] Characters to test
 ** @argrule IsCharsetCaseS str2 [const AjPStr] Characters to test
-** @argrule IsFilter filter [const char*] Filter non-zero for characters to test
 **
 ** @valrule * [AjBool] Result of query
 ** @valrule *Count [ajulong] Number of occurrences
@@ -6859,6 +6600,8 @@ ajulong ajStrCalcCountK(const AjPStr str, char chr)
 {
     ajulong ret = 0;
     const char* cp;
+
+    if(!str) return 0;
 
     cp = str->Ptr;
 
@@ -7283,42 +7026,6 @@ AjBool ajStrIsDouble(const AjPStr str)
 
 
 
-/* @func ajStrIsFilter ********************************************************
-**
-** Test whether a string contains only characters defined by a filter
-** 
-** @param [r] str [const AjPStr] String
-** @param [r] filter [const char*] Filter non-zero for each allowed value
-** @return [AjBool] ajTrue if the string is entirely composed of characters
-**                  in the specified set
-** @cre an empty string returns ajFalse
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrIsFilter(const AjPStr str, const char* filter)
-{
-    const char* cp;
-
-    if(!str)
-	return ajFalse;
-
-    if(!str->Len)
-	return ajFalse;
-
-    cp = str->Ptr;
-
-    while(*cp)
-      if(!filter[(int)*cp++])
-	    return ajFalse;
-
-    return ajTrue;
-}
-
-
-
-
 /* @func ajStrIsFloat *********************************************************
 **
 ** Tests whether a string represents a valid floating point value.
@@ -7728,179 +7435,6 @@ AjBool ajStrWhole(const AjPStr str, ajlong pos1, ajlong pos2)
 	return ajFalse;
 
     return ajTrue;
-}
-
-
-
-
-/* @section filters
-**
-** Functions for creating filters from C-type (char*) strings).
-**
-** @fdata     [AjPStr]
-**
-** @nam3rule  Getfilter   Get a filter array
-** @nam4rule  Case        Case-insensitive filter
-** @nam4rule  Lower       Lower case filter.
-** @nam4rule  Upper       Upper case filter.
-**
-** @argrule   * str [const AjPStr] String
-** @valrule   * [char*] Filter
-** @fcategory use
-*/
-
-
-
-
-/* @func ajStrGetfilter *******************************************************
-**
-** Returns a filter array to test for any character in a string.
-** 
-** @param [r] str [const AjPStr] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajStrGetfilter(const AjPStr str)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!str)
-	return ret;
-
-    if(!str->Len)
-        return ret;
-
-    cp = str->Ptr;
-
-    while (*cp)
-    {
-        ret[((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajStrGetfilterCase ***************************************************
-**
-** Returns a filter array to test for any character in a string.
-** The filter is case-insensitive
-** 
-** @param [r] str [const AjPStr] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajStrGetfilterCase(const AjPStr str)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!str)
-	return ret;
-
-    if(!str->Len)
-        return ret;
-
-    cp = str->Ptr;
-
-    while (*cp)
-    {
-        ret[tolower((int)*cp)] = 1;
-        ret[toupper((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajStrGetfilterLower **************************************************
-**
-** Returns a filter array to test for any character in a string as lower case.
-** 
-** @param [r] str [const AjPStr] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajStrGetfilterLower(const AjPStr str)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!str)
-	return ret;
-
-    if(!str->Len)
-        return ret;
-
-    cp = str->Ptr;
-
-    while (*cp)
-    {
-        ret[tolower((int)*cp++)] = 1;
-    }
-
-    return ret;
-}
-
-
-
-
-/* @func ajStrGetfilterUpper **************************************************
-**
-** Returns a filter array to test for any character in a string as upper case.
-** 
-** @param [r] str [const AjPStr] Character set to test
-** @return [char*] Filter array set to 1 for each ascii value accepted
-**                  zero for any character not in the set.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-char* ajStrGetfilterUpper(const AjPStr str)
-{
-    char *ret;
-    const char* cp;
-
-    ret = AJALLOC0(256);
-
-    if(!str)
-	return ret;
-
-    if(!str->Len)
-        return ret;
-
-    cp = str->Ptr;
-
-    while (*cp)
-    {
-        ret[toupper((int)*cp++)] = 1;
-    }
-
-    return ret;
 }
 
 
@@ -8555,11 +8089,7 @@ AjBool ajStrSetClear(AjPStr* Pstr)
     thys = *Pstr;
 
     if(thys->Use > 1)
-    {
-        thys->Use--;
-        *Pstr  = ajStrNew();
-        return ajTrue;
-    }
+      thys  = ajStrGetuniqueStr(Pstr);
 
     thys->Ptr[0] = '\0';
     thys->Len = 0;
@@ -9607,9 +9137,8 @@ AjBool ajStrFromVoid(AjPStr* Pstr, const void* vval)
 ** @fdata      [AjPStr]
 ** @fnote     Same namrule as "String formatting functions: C-type (char*)
 **            strings".
-** @nam3rule  Fmt         Change the format of a string.
+** @nam3rule  Fmt           Change the format of a string.
 ** @nam4rule  FmtBlock    Format in blocks
-** @nam4rule  FmtCapital  Convert to captal for start of each word
 ** @nam4rule  FmtLower    Convert to lower case.
 ** @nam5rule  FmtLowerSub Convert sub-string.
 ** @nam4rule  FmtPercent  URL percent-encoding
@@ -9703,55 +9232,6 @@ AjBool ajStrFmtBlock(AjPStr* Pstr, ajulong len)
 
 
 
-/* @func ajStrFmtCapital ******************************************************
-**
-** Converts the first character of each word in a string to upper case.
-**
-** @param [u] Pstr [AjPStr*] String
-** @return [AjBool] ajTrue if string was reallocated
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrFmtCapital(AjPStr* Pstr)
-{
-    AjPStr thys;
-    char* cp;
-    AjBool wasspace = ajTrue;
-
-    ajStrFmtLower(Pstr);
-
-    if(!*Pstr)
-        *Pstr = ajStrNewResLenC("", 1, 0);
-    else if((*Pstr)->Use > 1)
-        ajStrGetuniqueStr(Pstr);
-
-    thys = *Pstr;
-
-    cp = thys->Ptr;
-
-    while(*cp)
-    {
-        if(wasspace && isalpha((int)*cp))
-	{
-	    *cp = (char) toupper((int)*cp);
-            wasspace = ajFalse;
-
-	}
-
-        if(isspace((int)*cp))
-            wasspace = ajTrue;
-
-	cp++;
-    }
-
-    return ajFalse;
-}
-
-
-
-
 /* @func ajStrFmtLower ********************************************************
 **
 ** Converts a string to lower case. 
@@ -9814,7 +9294,7 @@ AjBool ajStrFmtLowerSub(AjPStr* Pstr, ajlong pos1, ajlong pos2)
     iend = ajCvtSposToPosStart(thys->Len, ibegin, pos2);
 
     for (i=ibegin; i<=iend;i++)
-	thys->Ptr[i] = (char)tolower((int) thys->Ptr[i]);
+	thys->Ptr[i] = (char)tolower((ajint) thys->Ptr[i]);
 
     return ajTrue;
 }
@@ -10232,7 +9712,7 @@ AjBool ajStrFmtUpperSub(AjPStr* Pstr, ajlong pos1, ajlong pos2)
     iend = ajCvtSposToPosStart(thys->Len, ibegin, pos2);
 
     for (i=ibegin; i<=iend;i++)
-	thys->Ptr[i] = (char)toupper((int) thys->Ptr[i]);
+	thys->Ptr[i] = (char)toupper((ajint) thys->Ptr[i]);
 
     return ajTrue;
 }
@@ -10383,7 +9863,7 @@ AjBool ajStrFmtWrap(AjPStr* Pstr, ajuint width)
 ** Newline characters are inserted, at white space if possible,
 ** with a break at whitespace following the preferred character
 ** if found, or at the last whitespace, or just at the line width if there
-** is no whitespace found (it does happen with long hyphenated enzyme names)
+** is no whitespace found (it does happen with long hyphenated  enzyme names)
 **
 ** @param [u] Pstr [AjPStr*] Target string
 ** @param [r] width [ajuint] Line width
@@ -11371,9 +10851,9 @@ int ajStrCmpCaseS(const AjPStr str, const AjPStr str2)
 
     for(cp = MAJSTRGETPTR(str), cq = MAJSTRGETPTR(str2);
         *cp && *cq; cp++, cq++)
-	if(toupper((int) *cp) != toupper((int) *cq))
+	if(toupper((ajint) *cp) != toupper((ajint) *cq))
 	{
-	    if(toupper((int) *cp) > toupper((int) *cq))
+	    if(toupper((ajint) *cp) > toupper((ajint) *cq))
 		return 1;
 	    else
 		return -1;
@@ -11625,34 +11105,6 @@ ajlong ajStrFindC(const AjPStr str, const char* txt2)
     const char* cp;
 
     cp = strstr(MAJSTRGETPTR(str), txt2);
-
-    if(!cp)
-	return -1;
-
-    return(cp - str->Ptr);
-}
-
-
-
-
-/* @func ajStrFindK ***********************************************************
-**
-** Finds the first occurrence in a string of a single character.
-**
-** @param [r] str [const AjPStr] String
-** @param [r] chr [char] Character to find
-** @return [ajlong] Position of the start of text in string if found.
-**                Or -1 for text not found.
-**
-** @release 1.0.0
-** @@
-******************************************************************************/
-
-ajlong ajStrFindK(const AjPStr str, char chr)
-{
-    const char* cp;
-
-    cp = strchr(MAJSTRGETPTR(str), chr);
 
     if(!cp)
 	return -1;
@@ -12494,6 +11946,7 @@ const AjPStr ajStrParseC(const AjPStr str, const char* txtdelim)
 ajuint ajStrParseCount(const AjPStr str)
 {
     AjPStrTok t = NULL;
+    AjPStr tmp  = NULL;
 
     ajuint count;
 
@@ -12506,10 +11959,11 @@ ajuint ajStrParseCount(const AjPStr str)
     count = 0;
     ajStrTokenAssignC(&t, str, " \t\n\r");
 
-    while(ajStrTokenStep(t))
+    while(ajStrTokenNextParse(&t, &tmp))
 	++count;
 
     ajStrTokenDel(&t);
+    ajStrDel(&tmp);
 
     return count;
 }
@@ -12533,6 +11987,7 @@ ajuint ajStrParseCount(const AjPStr str)
 ajuint ajStrParseCountC(const AjPStr str, const char *txtdelim)
 {
     AjPStrTok t = NULL;
+    AjPStr tmp  = NULL;
 
     ajuint count;
 
@@ -12545,10 +12000,11 @@ ajuint ajStrParseCountC(const AjPStr str, const char *txtdelim)
     count = 0;
     ajStrTokenAssignC(&t, str, txtdelim);
 
-    while(ajStrTokenStep(t))
+    while(ajStrTokenNextParse(&t, &tmp))
 	++count;
 
     ajStrTokenDel(&t);
+    ajStrDel(&tmp);
 
     return count;
 }
@@ -12572,6 +12028,7 @@ ajuint ajStrParseCountC(const AjPStr str, const char *txtdelim)
 ajuint ajStrParseCountS(const AjPStr str, const AjPStr strdelim)
 {
     AjPStrTok t = NULL;
+    AjPStr tmp  = NULL;
 
     ajuint count;
 
@@ -12584,10 +12041,11 @@ ajuint ajStrParseCountS(const AjPStr str, const AjPStr strdelim)
     count = 0;
     ajStrTokenAssignS(&t, str, strdelim);
 
-    while(ajStrTokenStep(t))
+    while(ajStrTokenNextParse(&t, &tmp))
 	++count;
 
     ajStrTokenDel(&t);
+    ajStrDel(&tmp);
 
     return count;
 }
@@ -13916,7 +13374,7 @@ AjBool ajStrTokenAssigncharS(AjPStrTok* Ptoken, const char *txt,
 **
 ** @nam4rule Reset Reset the token parser internals
 **
-** @argrule * token [AjPStrTok] String token parser
+** @argrule * Ptoken [AjPStrTok*] String token parser
 **
 ** @valrule * [void]
 **
@@ -13930,21 +13388,27 @@ AjBool ajStrTokenAssigncharS(AjPStrTok* Ptoken, const char *txt,
 **
 ** Clears the strings from a string token parser object.
 **
-** @param [w] token [AjPStrTok] String token object
+** @param [w] Ptoken [AjPStrTok*] String token object
 ** @return [void]
 **
-** @release 6.6.0
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
-void ajStrTokenReset(AjPStrTok token)
+void ajStrTokenReset(AjPStrTok* Ptoken)
 {
-    if(!token)
+    AjPStrTok tok;
+
+    if(!Ptoken)
 	return;
 
-    ajStrDelStatic(&token->String);
-    ajStrDelStatic(&token->Delim);
-    token->Pos = 0;
+    if(!*Ptoken)
+	return;
+
+    tok = *Ptoken;
+
+    ajStrDelStatic(&tok->String);
+    ajStrDelStatic(&tok->Delim);
 
     return;
 }
@@ -14008,13 +13472,11 @@ void ajStrTokenTrace(const AjPStrTok token)
 ** @nam6rule NextParseNoskip Use delimiter as a string, stop at first delimiter
 ** @nam4rule Rest Return remainder of string
 ** @nam5rule RestParse Return remainder of string
-** @nam4rule Step Use delimiter as a set of characters, no string returned
 **
-** @argrule * token [AjPStrTok] String token parser
+** @argrule * Ptoken [AjPStrTok*] String token parser
 ** @argrule C txtdelim [const char*] Delimiter
 ** @argrule S strdelim [const AjPStr] Delimiter
-** @argrule Rest Pstr [AjPStr*] String result
-** @argrule Next Pstr [AjPStr*] String result
+** @argrule * Pstr [AjPStr*] String result
 ** @argrule Delimiters Pdelim [AjPStr*] Delimiter(s) following the token
 **
 ** @valrule * [AjBool] True on success
@@ -14030,7 +13492,7 @@ void ajStrTokenTrace(const AjPStrTok token)
 ** Parses tokens from a string using a string token parser. Treats the 
 ** whole delimiter as a single string between tokens. 
 **
-** @param [u] token [AjPStrTok] Token parser. Updated with the delimiter
+** @param [u] Ptoken [AjPStrTok*] Token parser. Updated with the delimiter
 **        string (if any) in delim.
 ** @param [w] Pstr [AjPStr*] Token found
 **
@@ -14040,13 +13502,16 @@ void ajStrTokenTrace(const AjPStrTok token)
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextFind(AjPStrTok token, AjPStr* Pstr)
+AjBool ajStrTokenNextFind(AjPStrTok* Ptoken, AjPStr* Pstr)
 {
     size_t ilen;
+    AjPStrTok token;
     char* cp;
     char* cq;
 
-    if(!token)
+    token = *Ptoken;
+
+    if(!*Ptoken)
     {					/* token already cleared */
 	ajStrAssignClear(Pstr);
 
@@ -14056,7 +13521,7 @@ AjBool ajStrTokenNextFind(AjPStrTok token, AjPStr* Pstr)
     if(token->Pos >= token->String->Len)
     {					/* all done */
 	ajStrAssignClear(Pstr);
-	ajStrTokenReset(token);
+	ajStrTokenDel(Ptoken);
 
 	return ajFalse;
     }
@@ -14092,7 +13557,7 @@ AjBool ajStrTokenNextFind(AjPStrTok token, AjPStr* Pstr)
 ** Parses tokens from a string using a string token parser. Treats the 
 ** whole delimiter as a single string between tokens. 
 **
-** @param [u] token [AjPStrTok] Token parser. Updated with the delimiter
+** @param [u] Ptoken [AjPStrTok*] Token parser. Updated with the delimiter
 **        string in delim.
 ** @param [r] txtdelim [const char*] Delimiter string.
 ** @param [w] Pstr [AjPStr*] Token found
@@ -14103,12 +13568,16 @@ AjBool ajStrTokenNextFind(AjPStrTok token, AjPStr* Pstr)
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextFindC(AjPStrTok token, const char* txtdelim,
+AjBool ajStrTokenNextFindC(AjPStrTok* Ptoken, const char* txtdelim,
 			   AjPStr* Pstr)
 {
+    AjPStrTok token;
+
+    token = *Ptoken;
+
     ajStrAssignC(&token->Delim, txtdelim);
 
-    return ajStrTokenNextFind(token, Pstr);
+    return ajStrTokenNextFind(Ptoken, Pstr);
 }
 
 
@@ -14122,7 +13591,7 @@ AjBool ajStrTokenNextFindC(AjPStrTok token, const char* txtdelim,
 **
 ** The test uses the C function 'strcspn'.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
 ** @param [w] Pstr [AjPStr*] Next token returned, may be empty if the
 **                           delimiter has changed.
 ** @return [AjBool] True if successfully parsed.
@@ -14133,22 +13602,25 @@ AjBool ajStrTokenNextFindC(AjPStrTok token, const char* txtdelim,
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextParse(AjPStrTok token, AjPStr* Pstr)
+AjBool ajStrTokenNextParse(AjPStrTok* Ptoken, AjPStr* Pstr)
 {
     size_t ilen;
+    AjPStrTok token;
     char* cp;
 
-    if(!token)
+    if(!*Ptoken)
     {					/* token already cleared */
 	ajStrAssignClear(Pstr);
 
 	return ajFalse;
     }
 
+    token = *Ptoken;
+
     if(token->Pos >= token->String->Len)
     {					/* all done */
 	ajStrAssignClear(Pstr);
-	ajStrTokenReset(token);
+	ajStrTokenDel(Ptoken);
 
 	return ajFalse;
     }
@@ -14188,7 +13660,7 @@ AjBool ajStrTokenNextParse(AjPStrTok token, AjPStr* Pstr)
 **
 ** The test uses the C function 'strcspn'.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
 ** @param [r] txtdelim [const char*] Delimiter character set.
 ** @param [w] Pstr [AjPStr*] Next token returned, may be empty if the
 **                           delimiter has changed.
@@ -14200,19 +13672,19 @@ AjBool ajStrTokenNextParse(AjPStrTok token, AjPStr* Pstr)
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextParseC(AjPStrTok token, const char* txtdelim,
+AjBool ajStrTokenNextParseC(AjPStrTok* Ptoken, const char* txtdelim,
 			    AjPStr* Pstr)
 {
-    if(!token)
+    if(!*Ptoken)
     {
 	ajStrAssignClear(Pstr);
 
 	return ajFalse;
     }
 
-    ajStrAssignC(&(token)->Delim, txtdelim);
+    ajStrAssignC(&(*Ptoken)->Delim, txtdelim);
 
-    return ajStrTokenNextParse(token, Pstr);
+    return ajStrTokenNextParse(Ptoken, Pstr);
 }
 
 
@@ -14229,7 +13701,7 @@ AjBool ajStrTokenNextParseC(AjPStrTok token, const char* txtdelim,
 **
 ** The test uses the C function 'strcspn'.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
 ** @param [r] strdelim [const AjPStr] Delimiter character set.
 ** @param [w] Pstr [AjPStr*] Next token returned, may be empty if the
 **                           delimiter has changed.
@@ -14241,19 +13713,19 @@ AjBool ajStrTokenNextParseC(AjPStrTok token, const char* txtdelim,
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextParseS(AjPStrTok token, const AjPStr strdelim,
+AjBool ajStrTokenNextParseS(AjPStrTok* Ptoken, const AjPStr strdelim,
 			    AjPStr* Pstr)
 {
-    if(!token)
+    if(!*Ptoken)
     {
 	ajStrAssignClear(Pstr);
 
 	return ajFalse;
     }
 
-    ajStrAssignS(&(token)->Delim, strdelim);
+    ajStrAssignS(&(*Ptoken)->Delim, strdelim);
 
-    return ajStrTokenNextParse(token, Pstr);
+    return ajStrTokenNextParse(Ptoken, Pstr);
 }
 
 
@@ -14267,7 +13739,7 @@ AjBool ajStrTokenNextParseS(AjPStrTok token, const AjPStr strdelim,
 **
 ** The test uses the C function 'strcspn'.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
 ** @param [w] Pstr [AjPStr*] Next token returned, may be empty if the
 **                           delimiter has changed.
 ** @param [w] Pdelim [AjPStr*] Delimiter(s) following the token.
@@ -14279,13 +13751,16 @@ AjBool ajStrTokenNextParseS(AjPStrTok token, const AjPStr strdelim,
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextParseDelimiters(AjPStrTok token, AjPStr* Pstr,
+AjBool ajStrTokenNextParseDelimiters(AjPStrTok* Ptoken, AjPStr* Pstr,
                                      AjPStr* Pdelim)
 {
     size_t ilen;
+    AjPStrTok token;
     char* cp;
 
-    if(!token)
+    token = *Ptoken;
+
+    if(!*Ptoken)
     {					/* token already cleared */
 	ajStrAssignClear(Pstr);
 
@@ -14295,7 +13770,7 @@ AjBool ajStrTokenNextParseDelimiters(AjPStrTok token, AjPStr* Pstr,
     if(token->Pos >= token->String->Len)
     {					/* all done */
 	ajStrAssignClear(Pstr);
-	ajStrTokenReset(token);
+	ajStrTokenDel(Ptoken);
 
 	return ajFalse;
     }
@@ -14341,7 +13816,7 @@ AjBool ajStrTokenNextParseDelimiters(AjPStrTok token, AjPStr* Pstr,
 **
 ** The test uses the C function 'strcspn'.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
 ** @param [w] Pstr [AjPStr*] Next token returned, may be empty if the
 **                           delimiter has changed or if next character
 **                           was also a delimiter
@@ -14353,12 +13828,15 @@ AjBool ajStrTokenNextParseDelimiters(AjPStrTok token, AjPStr* Pstr,
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenNextParseNoskip(AjPStrTok token, AjPStr* Pstr)
+AjBool ajStrTokenNextParseNoskip(AjPStrTok* Ptoken, AjPStr* Pstr)
 {
     size_t ilen;
+    AjPStrTok token;
     char* cp;
 
-    if(!token)
+    token = *Ptoken;
+
+    if(!*Ptoken)
     {					/* token already cleared */
 	ajStrAssignClear(Pstr);
 
@@ -14368,7 +13846,7 @@ AjBool ajStrTokenNextParseNoskip(AjPStrTok token, AjPStr* Pstr)
     if(token->Pos >= token->String->Len)
     {					/* all done */
 	ajStrAssignClear(Pstr);
-	ajStrTokenReset(token);
+	ajStrTokenDel(Ptoken);
 
 	return ajFalse;
     }
@@ -14399,8 +13877,8 @@ AjBool ajStrTokenNextParseNoskip(AjPStrTok token, AjPStr* Pstr)
 ** Returns the remainder of a string that has been partially parsed using a 
 ** string token parser.
 **
-** @param [u] token [AjPStrTok] String token parsing object.
-** @param [w] Pstr [AjPStr*] Remainder of string
+** @param [u] Ptoken [AjPStrTok*] String token parsing object.
+** @param [w] Pstr [AjPStr*] Next token returned.
 ** @return [AjBool] True if successfully parsed.
 **                  False (and string set to empty) if there is nothing
 **                  more to parse.
@@ -14409,9 +13887,13 @@ AjBool ajStrTokenNextParseNoskip(AjPStrTok token, AjPStr* Pstr)
 ** @@
 ******************************************************************************/
 
-AjBool ajStrTokenRestParse(AjPStrTok token, AjPStr* Pstr)
+AjBool ajStrTokenRestParse(AjPStrTok* Ptoken, AjPStr* Pstr)
 {
-    if(!token)
+    AjPStrTok token;
+
+    token = *Ptoken;
+
+    if(!*Ptoken)
     {					/* token already cleared */
 	ajStrAssignClear(Pstr);
 
@@ -14421,7 +13903,7 @@ AjBool ajStrTokenRestParse(AjPStrTok token, AjPStr* Pstr)
     if(token->Pos >= token->String->Len)
     {					/* all done */
 	ajStrAssignClear(Pstr);
-	ajStrTokenReset(token);
+	ajStrTokenDel(Ptoken);
 
 	return ajFalse;
     }
@@ -14435,118 +13917,6 @@ AjBool ajStrTokenRestParse(AjPStrTok token, AjPStr* Pstr)
     token->Pos = token->String->Len;
 
     return ajTrue;
-}
-
-
-
-
-/* @func ajStrTokenStep *******************************************************
-**
-** Steps to next token from a string using a string token parser. Uses any
-** character defined in the string token parsing object delimiter
-** character set as a delimiter.
-**
-** The test uses the C function 'strcspn'.
-**
-** @param [u] token [AjPStrTok] String token parsing object.
-** @return [AjBool] True if successfully parsed.
-**                  False (and token parser deleted) if there is nothing
-**                  more to parse.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrTokenStep(AjPStrTok token)
-{
-    size_t ilen;
-    char* cp;
-
-    if(!token)
-	return ajFalse;
-
-    if(token->Pos >= token->String->Len)
-    {					/* all done */
-	ajStrTokenReset(token);
-
-	return ajFalse;
-    }
-
-    cp = &token->String->Ptr[token->Pos];
-    ilen = strcspn(cp, token->Delim->Ptr);
-
-    token->Pos += ilen;
-    token->Pos += strspn(&token->String->Ptr[token->Pos], token->Delim->Ptr);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajStrTokenStepC ******************************************************
-**
-**Steps to next token from a string using a string token parser. Uses any
-** character defined in the delimiter character set as a
-** delimiter.
-**
-** Note: This can return "true" without moving in cases where the
-** delimiter has changed since the previous call.
-**
-** The test uses the C function 'strcspn'.
-**
-** @param [u] token [AjPStrTok] String token parsing object.
-** @param [r] txtdelim [const char*] Delimiter character set.
-** @return [AjBool] True if successfully parsed.
-**                  False (and string set to empty) if there is nothing
-**                  more to parse.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrTokenStepC(AjPStrTok token, const char* txtdelim)
-{
-    if(!token)
-	return ajFalse;
-
-    ajStrAssignC(&token->Delim, txtdelim);
-
-    return ajStrTokenStep(token);
-}
-
-
-
-
-/* @func ajStrTokenStepS ******************************************************
-**
-** Parses tokens from a string using a string token parser. Uses any
-** character defined in the delimiter character set as a
-** delimiter.
-**
-** Note: This can return "true" but an empty string in cases where the
-** delimiter has changed since the previous call.
-**
-** The test uses the C function 'strcspn'.
-**
-** @param [u] token [AjPStrTok] String token parsing object.
-** @param [r] strdelim [const AjPStr] Delimiter character set.
-** @return [AjBool] True if successfully parsed.
-**                  False (and string set to empty) if there is nothing
-**                  more to parse.
-**
-** @release 6.6.0
-** @@
-******************************************************************************/
-
-AjBool ajStrTokenStepS(AjPStrTok token, const AjPStr strdelim)
-{
-    if(!token)
-	return ajFalse;
-
-    ajStrAssignS(&token->Delim, strdelim);
-
-    return ajStrTokenStep(token);
 }
 
 

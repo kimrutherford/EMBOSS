@@ -1,5 +1,5 @@
 Find public databases by resource
-Version: EMBOSS:6.6.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-query]             string     List of EDAM data keywords (Any string)

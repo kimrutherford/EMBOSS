@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.57 $
+** @version $Revision: 1.54 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@
 /* ============================= include files ============================= */
 /* ========================================================================= */
 
-#include "ensgvbaseadaptor.h"
 #include "ensgvdatabaseadaptor.h"
 #include "ensgvvariation.h"
 #include "ensvariation.h"
@@ -167,14 +166,14 @@ const char *const gvconsequenceKTranslation[] =
 
 
 
-/* @conststatic gvtranscriptvariationadaptorKTablenames ***********************
+/* @conststatic gvtranscriptvariationadaptorKTables ***************************
 **
 ** Array of Ensembl Genetic Variation Transcript Variation Adaptor
 ** SQL table names
 **
 ******************************************************************************/
 
-static const char *const gvtranscriptvariationadaptorKTablenames[] =
+static const char *const gvtranscriptvariationadaptorKTables[] =
 {
     "transcript_variation",
     "variation_feature",
@@ -186,14 +185,14 @@ static const char *const gvtranscriptvariationadaptorKTablenames[] =
 
 
 
-/* @conststatic gvtranscriptvariationadaptorKColumnnames **********************
+/* @conststatic gvtranscriptvariationadaptorKColumns **************************
 **
 ** Array of Ensembl Genetic Variation Transcript Variation Adaptor
 ** SQL column names
 **
 ******************************************************************************/
 
-static const char *const gvtranscriptvariationadaptorKColumnnames[] =
+static const char *const gvtranscriptvariationadaptorKColumns[] =
 {
     "transcript_variation.transcript_variation_id",
     "transcript_variation.transcript_stable_id",
@@ -212,14 +211,14 @@ static const char *const gvtranscriptvariationadaptorKColumnnames[] =
 
 
 
-/* @conststatic gvtranscriptvariationadaptorKLeftjoins ************************
+/* @conststatic gvtranscriptvariationadaptorKLeftjoin *************************
 **
 ** Array of Ensembl Genetic Variation Transcript Variation Adaptor
-** SQL LEFT JOIN conditions
+** SQL left join conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin gvtranscriptvariationadaptorKLeftjoins[] =
+static const EnsOBaseadaptorLeftjoin gvtranscriptvariationadaptorKLeftjoin[] =
 {
     {
         "failed_variation",
@@ -233,8 +232,7 @@ static const EnsOBaseadaptorLeftjoin gvtranscriptvariationadaptorKLeftjoins[] =
 
 /* @conststatic gvtranscriptvariationadaptorKDefaultcondition *****************
 **
-** Ensembl Genetic Variation Transcript Variation Adaptor
-** SQL SELECT default condition
+** Ensembl Genetic Variation Transcript Variation Adaptor SQL default condition
 **
 ******************************************************************************/
 
@@ -292,7 +290,7 @@ static AjBool gvtranscriptvariationadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::Variation::ConsequenceType
 ** @cc CVS Revision: 1.29
-** @cc CVS Tag: branch-ensembl-68
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -504,7 +502,14 @@ void ensGvconsequenceDel(EnsPGvconsequence *Pgvc)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvc) || --pthis->Use)
+    if (!*Pgvc)
+        return;
+
+    pthis = *Pgvc;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvc = NULL;
 
@@ -514,7 +519,9 @@ void ensGvconsequenceDel(EnsPGvconsequence *Pgvc)
     ajListstrFreeData(&pthis->Alleles);
     ajListstrFreeData(&pthis->Types);
 
-    ajMemFree((void **) Pgvc);
+    AJFREE(pthis);
+
+    *Pgvc = NULL;
 
     return;
 }
@@ -920,13 +927,13 @@ AjBool ensGvconsequenceTrace(const EnsPGvconsequence gvc,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Consequence object.
 **
 ** @fdata [EnsPGvconsequence]
 **
-** @nam3rule Calculate
-** Calculate Ensembl Genetic Variation Consequence information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Consequence
+** values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvc [const EnsPGvconsequence]
@@ -1093,10 +1100,9 @@ const char* ensGvconsequenceTypeToChar(
          i++);
 
     if (!gvconsequenceKType[i])
-        ajDebug("ensGvconsequenceTypeToChar "
-                "encountered an out of boundary error on "
-                "Ensembl Genetic Variation Consequence Type "
-                "enumeration %d.\n",
+        ajDebug("ensGvconsequenceTypeToChar encountered an "
+                "out of boundary error on Ensembl "
+                "Genetic Variation Consequence Type enumeration %d.\n",
                 gvct);
 
     return gvconsequenceKType[i];
@@ -1172,7 +1178,7 @@ ajuint ensGvconsequenceTypesFromSet(const AjPStr gvctset)
 
     gvctstring = ajStrNew();
 
-    while (ajStrTokenNextParse(token, &gvctstring))
+    while (ajStrTokenNextParse(&token, &gvctstring))
         gvctbf |= (1U << ensGvconsequenceTypeFromStr(gvctstring));
 
     ajStrDel(&gvctstring);
@@ -1423,7 +1429,7 @@ EnsPGvtranscriptvariation ensGvtranscriptvariationNewIni(
         token = ajStrTokenNewC(gvctset, ",");
         value = ajStrNew();
 
-        while (ajStrTokenNextParse(token, &value))
+        while (ajStrTokenNextParse(&token, &value))
         {
             match = ajFalse;
 
@@ -1544,7 +1550,14 @@ void ensGvtranscriptvariationDel(EnsPGvtranscriptvariation *Pgvtv)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvtv) || --pthis->Use)
+    if (!*Pgvtv)
+        return;
+
+    pthis = *Pgvtv;
+
+    pthis->Use--;
+
+    if (pthis->Use)
     {
         *Pgvtv = NULL;
 
@@ -1557,7 +1570,9 @@ void ensGvtranscriptvariationDel(EnsPGvtranscriptvariation *Pgvtv)
 
     ajStrDel(&pthis->TranslationAllele);
 
-    ajMemFree((void **) Pgvtv);
+    AJFREE(pthis);
+
+    *Pgvtv = NULL;
 
     return;
 }
@@ -2357,13 +2372,13 @@ AjBool ensGvtranscriptvariationTrace(const EnsPGvtranscriptvariation gvtv,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating information from an
+** Functions for calculating values of an
 ** Ensembl Genetic Variation Transcript Variation object.
 **
 ** @fdata [EnsPGvtranscriptvariation]
 **
-** @nam3rule Calculate
-** Calculate Ensembl Genetic Variation Transcript Variation information
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Transcript Variation
+** values
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvtv [const EnsPGvtranscriptvariation]
@@ -2551,10 +2566,7 @@ static AjBool gvtranscriptvariationadaptorFetchAllbyStatement(
         ajSqlcolumnToStr(sqlr, &translationallele);
         ajSqlcolumnToStr(sqlr, &gvctset);
 
-        /*
-        ** Skip multiple rows, because of the SQL LEFT JOIN condition to
-        ** the "failed_variation" SQL table.
-        */
+        /* Skip multiple rows because of the left join to failed_variation. */
 
         if (lastgvvfid == identifier)
         {
@@ -2689,9 +2701,9 @@ EnsPGvtranscriptvariationadaptor ensGvtranscriptvariationadaptorNew(
 
     ba = ensBaseadaptorNew(
         dba,
-        gvtranscriptvariationadaptorKTablenames,
-        gvtranscriptvariationadaptorKColumnnames,
-        gvtranscriptvariationadaptorKLeftjoins,
+        gvtranscriptvariationadaptorKTables,
+        gvtranscriptvariationadaptorKColumns,
+        gvtranscriptvariationadaptorKLeftjoin,
         gvtranscriptvariationadaptorKDefaultcondition,
         (const char *) NULL,
         &gvtranscriptvariationadaptorFetchAllbyStatement);
@@ -2767,144 +2779,16 @@ void ensGvtranscriptvariationadaptorDel(
                 *Pgvtva);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!(pthis = *Pgvtva))
+    if (!*Pgvtva)
         return;
+
+    pthis = *Pgvtva;
 
     ensBaseadaptorDel(&pthis->Baseadaptor);
 
-    ajMemFree((void **) Pgvtva);
+    AJFREE(pthis);
+
+    *Pgvtva = NULL;
 
     return;
-}
-
-
-
-
-/* @section member retrieval **************************************************
-**
-** Functions for returning members of an
-** Ensembl Genetic Variation Transcript Variation Adaptor object.
-**
-** @fdata [EnsPGvtranscriptvariationadaptor]
-**
-** @nam3rule Get Return Ensembl Genetic Variation Transcript Variation Adaptor
-** attribute(s)
-** @nam4rule Baseadaptor
-** Return the Ensembl Base Adaptor
-** @nam4rule Databaseadaptor
-** Return the Ensembl Database Adaptor
-** @nam4rule Gvbaseadaptor
-** Return the Ensembl Genetic Variation Base Adaptor
-** @nam4rule Gvdatabaseadaptor
-** Return the Ensembl Genetic Variation Database Adaptor
-**
-** @argrule * gvtva [EnsPGvtranscriptvariationadaptor]
-** Ensembl Genetic Variation Variation Adaptor
-**
-** @valrule Baseadaptor [EnsPBaseadaptor]
-** Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor]
-** Ensembl Database Adaptor or NULL
-** @valrule Gvbaseadaptor [EnsPGvbaseadaptor]
-** Ensembl Genetic Variation Base Adaptor or NULL
-** @valrule Gvdatabaseadaptor [EnsPGvdatabaseadaptor]
-** Ensembl Genetic Variation Database Adaptor or NULL
-**
-** @fcategory use
-******************************************************************************/
-
-
-
-
-/* @func ensGvtranscriptvariationadaptorGetBaseadaptor ************************
-**
-** Get the Ensembl Base Adaptor member of an
-** Ensembl Genetic Variation Transcript Variation Adaptor.
-**
-** @param [u] gvtva [EnsPGvtranscriptvariationadaptor]
-** Ensembl Genetic Variation Transcript Variation Adaptor
-**
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPBaseadaptor ensGvtranscriptvariationadaptorGetBaseadaptor(
-    EnsPGvtranscriptvariationadaptor gvtva)
-{
-    return ensGvbaseadaptorGetBaseadaptor(
-        ensGvtranscriptvariationadaptorGetGvbaseadaptor(gvtva));
-}
-
-
-
-
-/* @func ensGvtranscriptvariationadaptorGetDatabaseadaptor ********************
-**
-** Get the Ensembl Database Adaptor member of an
-** Ensembl Genetic Variation Transcript Variation Adaptor.
-**
-** @param [u] gvtva [EnsPGvtranscriptvariationadaptor]
-** Ensembl Genetic Variation Transcript Variation Adaptor
-**
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPDatabaseadaptor ensGvtranscriptvariationadaptorGetDatabaseadaptor(
-    EnsPGvtranscriptvariationadaptor gvtva)
-{
-    return ensGvbaseadaptorGetDatabaseadaptor(
-        ensGvtranscriptvariationadaptorGetGvbaseadaptor(gvtva));
-}
-
-
-
-
-/* @func ensGvtranscriptvariationadaptorGetGvbaseadaptor **********************
-**
-** Get the Ensembl Genetic Variation Base Adaptor member of an
-** Ensembl Genetic Variation Transcript Variation Adaptor.
-**
-** @param [u] gvtva [EnsPGvtranscriptvariationadaptor]
-** Ensembl Genetic Variation Transcript Variation Adaptor
-**
-** @return [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPGvbaseadaptor ensGvtranscriptvariationadaptorGetGvbaseadaptor(
-    EnsPGvtranscriptvariationadaptor gvtva)
-{
-    return gvtva;
-}
-
-
-
-
-/* @func ensGvtranscriptvariationadaptorGetGvdatabaseadaptor ******************
-**
-** Get the Ensembl Genetic Variation Database Adaptor member of an
-** Ensembl Genetic Variation Transcript Variation Adaptor.
-**
-** @param [u] gvtva [EnsPGvtranscriptvariationadaptor]
-** Ensembl Genetic Variation Transcript Variation Adaptor
-**
-** @return [EnsPGvdatabaseadaptor]
-** Ensembl Genetic Variation Database Adaptor or NULL
-**
-** @release 6.5.0
-** @@
-******************************************************************************/
-
-EnsPGvdatabaseadaptor ensGvtranscriptvariationadaptorGetGvdatabaseadaptor(
-    EnsPGvtranscriptvariationadaptor gvtva)
-{
-    return ensGvbaseadaptorGetGvdatabaseadaptor(
-        ensGvtranscriptvariationadaptorGetGvbaseadaptor(gvtva));
 }

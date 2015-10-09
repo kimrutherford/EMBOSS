@@ -3,8 +3,8 @@
 ** General routines for sequence display.
 **
 ** @author Copyright (c) 2000 Gary Williams
-** @version $Revision: 1.52 $
-** @modified $Date: 2013/06/29 22:39:26 $ by $Author: rice $
+** @version $Revision: 1.51 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1805,7 +1805,7 @@ static void showFillComp(const EmbPShow thys,
 	}
 	else
 	    ajListstrPushAppend(lines, ajFmtStr(" %d",
-					     pos+width+thys->offset-1));
+					     pos+thys->width+thys->offset-1));
     }
 
     /* end the output line */
