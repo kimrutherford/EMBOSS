@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.27 $
+** @version $Revision: 1.28 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/03/09 20:33:24 $ by $Author: mks $
+** @modified $Date: 2012/08/05 10:37:32 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -130,8 +130,12 @@ typedef enum EnsODatabaseadaptorGroup
 ** @alias EnsODatabaseadaptor
 **
 ** @alias EnsPAttributeadaptor
+** @alias EnsPDatabaseentryadaptor
 ** @alias EnsPGvgenotypeadaptor
 ** @alias EnsPGvsynonymadaptor
+** @alias EnsPMarkermaplocationadaptor
+** @alias EnsPMarkersynonymadaptor
+** @alias EnsPSupportingfeatureadaptor
 **
 ** @attr Databaseconnection [EnsPDatabaseconnection]
 ** Ensembl Database Connection
@@ -199,11 +203,16 @@ EnsPDatabaseconnection ensDatabaseadaptorGetDatabaseconnection(
 EnsEDatabaseadaptorGroup ensDatabaseadaptorGetGroup(
     const EnsPDatabaseadaptor dba);
 
-ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba);
+ajuint ensDatabaseadaptorGetIdentifier(
+    const EnsPDatabaseadaptor dba);
 
-AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba);
+AjBool ensDatabaseadaptorGetMultispecies(
+    const EnsPDatabaseadaptor dba);
 
-AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba);
+AjPStr ensDatabaseadaptorGetSpecies(
+    const EnsPDatabaseadaptor dba);
+
+const AjPList ensDatabaseadaptorLoadSpeciesnames(EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorSetDatabaseconnection(EnsPDatabaseadaptor dba,
                                                EnsPDatabaseconnection dbc);
@@ -240,8 +249,6 @@ AjBool ensDatabaseadaptorEscapeC(EnsPDatabaseadaptor dba,
 AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
                                  AjPStr *Pstr,
                                  const AjPStr str);
-
-const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
                                          AjPSqlstatement *Psqls);

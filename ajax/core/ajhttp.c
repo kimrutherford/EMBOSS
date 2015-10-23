@@ -6,8 +6,8 @@
 ** via SEND/GET/POST protocols
 **
 ** @author Copyright (C) 2010 Alan Bleasby
-** @version $Revision: 1.24 $
-** @modified $Date: 2011/11/23 09:56:06 $ by $Author: rice $
+** @version $Revision: 1.26 $
+** @modified $Date: 2012/12/07 10:15:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -116,7 +116,7 @@ AjBool ajHttpGetProxyinfo(const AjPStr dbproxy, ajint* proxyport,
     token = ajStrNew();
     
     ajStrTokenAssignC(&handle, proxy, " \n\r\t,");
-    ret = ajStrTokenNextParse(&handle, &token);
+    ret = ajStrTokenNextParse(handle, &token);
     if(!ret || ajStrMatchC(token, ":"))
     {
         ajStrDel(&proxy);
@@ -163,7 +163,7 @@ AjBool ajHttpGetProxyinfo(const AjPStr dbproxy, ajint* proxyport,
 
     /* Check for authentication type */
 
-    ret = ajStrTokenNextParse(&handle, &token);
+    ret = ajStrTokenNextParse(handle, &token);
     if(!ret)
     {
         ajStrTokenDel(&handle);
@@ -177,7 +177,7 @@ AjBool ajHttpGetProxyinfo(const AjPStr dbproxy, ajint* proxyport,
     
     /* Check for authentication credentials */
 
-    ret = ajStrTokenNextParse(&handle, &token);
+    ret = ajStrTokenNextParse(handle, &token);
     if(!ret)
     {
         ajWarn("ajHttpGetProxyinfo: No credentials specified in proxy "
@@ -331,10 +331,9 @@ FILE* ajHttpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
     if(sock.sock == AJBADSOCK)
     {
 	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    dbname);
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S': %s",
+		    dbname, strerror(errno));
 	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
 	ajStrDel(&errstr);
 
 	return NULL;
@@ -439,10 +438,9 @@ FILE* ajHttpOpenProxy(const AjPStr dbname, const AjPStr proxyname,
     if(sock.sock == AJBADSOCK)
     {
 	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    dbname);
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S': %s",
+		    dbname, strerror(errno));
 	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
 	ajStrDel(&errstr);
 
 	return NULL;
@@ -493,7 +491,7 @@ static FILE* httpSend(const AjPStr dbname,
     isendlen = send(sock.sock, ajStrGetPtr(get), ajStrGetLen(get), 0);
 
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(get))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(get), isendlen, ajMessGetSysmessageC());
 
     ajDebug("sending: '%S'\n", get);
@@ -518,7 +516,7 @@ static FILE* httpSend(const AjPStr dbname,
                          ajStrGetLen(gethead), 0);
 
         if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
-            ajErr("send failure, expected %u bytes returned %d : %s\n",
+            ajErr("send failure, expected %u bytes returned %d : %s",
                   ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
         ajDebug("sending: '%S'\n", gethead);
         if(isendlen < 0)
@@ -535,7 +533,7 @@ static FILE* httpSend(const AjPStr dbname,
     isendlen = send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
 
@@ -543,7 +541,7 @@ static FILE* httpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
     if(isendlen < 0)
@@ -557,7 +555,7 @@ static FILE* httpSend(const AjPStr dbname,
                          0);
 
         if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
-            ajErr("send failure, expected %u bytes returned %d : %s\n",
+            ajErr("send failure, expected %u bytes returned %d : %s",
                   ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
 
         ajDebug("sending: '%S'\n", gethead);
@@ -570,7 +568,7 @@ static FILE* httpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(gethead))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", gethead);
     if(isendlen < 0)
@@ -1215,7 +1213,8 @@ AjPFilebuff ajHttpReadPos(const AjPStr dbhttpver, const AjPStr dbname,
 
 	if(!fp)
 	{
-	    ajErr("ajHttpRead: cannot open HTTP connection '%S'\n", get);
+	    ajErr("ajHttpRead: cannot open HTTP connection 'http://%S%S'",
+                  host, path);
 	    buff = NULL;
 	    break;
 	}

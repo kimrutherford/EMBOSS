@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.50 $
+** @version $Revision: 1.52 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -84,13 +84,13 @@ static const char *gvsampleKDisplay[] =
 
 
 
-/* @conststatic gvsampleadaptorKTables ****************************************
+/* @conststatic gvsampleadaptorKTablenames ************************************
 **
 ** Array of Ensembl Genetic Variation Sample Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *gvsampleadaptorKTables[] =
+static const char *gvsampleadaptorKTablenames[] =
 {
     "sample",
     (const char *) NULL
@@ -99,13 +99,13 @@ static const char *gvsampleadaptorKTables[] =
 
 
 
-/* @conststatic gvsampleadaptorKColumns ***************************************
+/* @conststatic gvsampleadaptorKColumnnames ***********************************
 **
 ** Array of Ensembl Genetic Variation Sample Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *gvsampleadaptorKColumns[] =
+static const char *gvsampleadaptorKColumnnames[] =
 {
     "sample.sample_id",
     "sample.name",
@@ -162,7 +162,7 @@ static AjBool gvsampleadaptorFetchAllbyStatement(
 **
 ** @cc Bio::EnsEMBL::Variation::Sample
 ** @cc CVS Revision: 1.4
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -365,14 +365,7 @@ void ensGvsampleDel(EnsPGvsample *Pgvs)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvs)
-        return;
-
-    pthis = *Pgvs;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgvs) || --pthis->Use)
     {
         *Pgvs = NULL;
 
@@ -382,9 +375,7 @@ void ensGvsampleDel(EnsPGvsample *Pgvs)
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Description);
 
-    AJFREE(pthis);
-
-    *Pgvs = NULL;
+    ajMemFree((void **) Pgvs);
 
     return;
 }
@@ -814,12 +805,12 @@ AjBool ensGvsampleTrace(const EnsPGvsample gvs, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Sample object.
 **
 ** @fdata [EnsPGvsample]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Sample values
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Sample information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvs [const EnsPGvsample] Ensembl Genetic Variation Sample
@@ -989,9 +980,10 @@ const char* ensGvsampleDisplayToChar(EnsEGvsampleDisplay gvsd)
          i++);
 
     if (!gvsampleKDisplay[i])
-        ajDebug("ensGvsampleDisplayToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Genetic Variation Sample Display enumeration %d.\n",
+        ajDebug("ensGvsampleDisplayToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Genetic Variation Sample Display "
+                "enumeration %d.\n",
                 gvsd);
 
     return gvsampleKDisplay[i];
@@ -1007,7 +999,7 @@ const char* ensGvsampleDisplayToChar(EnsEGvsampleDisplay gvsd)
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::SampleAdaptor
 ** @cc CVS Revision: 1.10
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1182,8 +1174,8 @@ EnsPGvsampleadaptor ensGvsampleadaptorNew(
 {
     return ensBaseadaptorNew(
         dba,
-        gvsampleadaptorKTables,
-        gvsampleadaptorKColumns,
+        gvsampleadaptorKTablenames,
+        gvsampleadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1237,7 +1229,7 @@ void ensGvsampleadaptorDel(EnsPGvsampleadaptor *Pgvsa)
 {
     ensBaseadaptorDel(Pgvsa);
 
-	return;
+    return;
 }
 
 
@@ -1254,11 +1246,13 @@ void ensGvsampleadaptorDel(EnsPGvsampleadaptor *Pgvsa)
 ** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
 ** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * gvsa [EnsPGvsampleadaptor] Genetic Variation Sample Adaptor
+** @argrule * gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
 **
-** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
-** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**                                                or NULL
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1271,8 +1265,8 @@ void ensGvsampleadaptorDel(EnsPGvsampleadaptor *Pgvsa)
 ** Get the Ensembl Base Adaptor member of an
 ** Ensembl Genetic Variation Sample Adaptor.
 **
-** @param [u] gvsa [EnsPGvsampleadaptor] Ensembl Genetic Variation
-**                                       Sample Adaptor
+** @param [u] gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 **
@@ -1294,8 +1288,8 @@ EnsPBaseadaptor ensGvsampleadaptorGetBaseadaptor(
 ** Get the Ensembl Database Adaptor member of an
 ** Ensembl Genetic Variation Sample Adaptor.
 **
-** @param [u] gvsa [EnsPGvsampleadaptor] Ensembl Genetic Variation
-**                                       Sample Adaptor
+** @param [u] gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 **
@@ -1391,7 +1385,7 @@ AjBool ensGvsampleadaptorFetchAllbyDisplay(
         ensGvsampleDisplayToChar(gvsd));
 
     result = ensBaseadaptorFetchAllbyConstraint(
-        gvsa,
+        ensGvsampleadaptorGetBaseadaptor(gvsa),
         constraint,
         (EnsPAssemblymapper) NULL,
         (EnsPSlice) NULL,
@@ -1431,7 +1425,7 @@ AjBool ensGvsampleadaptorFetchAllbyIdentifiers(
     AjPTable gvss)
 {
     return ensBaseadaptorFetchAllbyIdentifiers(
-        gvsa,
+        ensGvsampleadaptorGetBaseadaptor(gvsa),
         (EnsPSlice) NULL,
         (ajuint (*)(const void *)) &ensGvsampleGetIdentifier,
         gvss);
@@ -1462,13 +1456,10 @@ AjBool ensGvsampleadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPGvsample *Pgvs)
 {
-    if (!gvsa)
-        return ajFalse;
-
-    if (!Pgvs)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(gvsa, identifier, (void **) Pgvs);
+    return ensBaseadaptorFetchByIdentifier(
+        ensGvsampleadaptorGetBaseadaptor(gvsa),
+        identifier,
+        (void **) Pgvs);
 }
 
 
@@ -1484,24 +1475,25 @@ AjBool ensGvsampleadaptorFetchByIdentifier(
 ** @nam3rule Retrieve Retrieve Ensembl Genetic Variation Sample-related
 ** object(s)
 ** @nam4rule All Retrieve all releated objects
-** @nam5rule Identifiers Retrieve all AJAX unsigned integer identifiers
+** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
 ** @nam5rule Synonyms Retrieve all synonyms
 ** @nam6rule By Retrieve by
 ** @nam7rule Identifier
 ** @nam7rule Synonym
 **
-** @argrule * gvsa [EnsPGvsampleadaptor] Ensembl Genetic Variation
-** Sample Adaptor
-** @argrule AllIdentifiersBySynonym synonym [const AjPStr] Ensembl Genetic
-** Variation Sample synonym
+** @argrule * gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
+** @argrule AllIdentifiersBySynonym synonym [const AjPStr]
+** Ensembl Genetic Variation Sample synonym
 ** @argrule AllIdentifiersBySynonym source [const AjPStr] Source
-** @argrule AllIdentifiersBySynonym idlist [AjPList] AJAX List of Ensembl
-** Genetic Variation Sample synonyms
-** @argrule AllSynonymsByIdentifier identifier [ajuint] Ensembl Genetic
-** Variation Sample identifier
+** @argrule AllIdentifiersBySynonym identifiers [AjPList]
+** AJAX List of AJAX unsigned integer
+** (Ensembl Genetic Variation Sample identifier) objects
+** @argrule AllSynonymsByIdentifier identifier [ajuint]
+** Ensembl Genetic Variation Sample identifier
 ** @argrule AllSynonymsByIdentifier source [const AjPStr] Source
 ** @argrule AllSynonymsByIdentifier synonyms [AjPList]
-** AJAX List of (synonym) AJAX String objects
+** AJAX List of AJAX String (synonym) objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1513,16 +1505,18 @@ AjBool ensGvsampleadaptorFetchByIdentifier(
 
 /* @func ensGvsampleadaptorRetrieveAllIdentifiersBySynonym ********************
 **
-** Fetch all Ensembl Genetic Variation Sample identifiers for an
+** Retrieve all Ensembl Genetic Variation Sample identifier objects for an
 ** Ensembl Genetic Variation Sample synonym.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::SampleAdaptor::fetch_sample_by_synonym
-** @param [u] gvsa [EnsPGvsampleadaptor] Ensembl Genetic Variation
-**                                       Sample Adaptor
-** @param [r] synonym [const AjPStr] Ensembl Genetic Variation Sample synonym
+** @param [u] gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
+** @param [r] synonym [const AjPStr]
+** Ensembl Genetic Variation Sample synonym
 ** @param [rN] source [const AjPStr] Source
-** @param [u] idlist [AjPList] AJAX List of Ensembl Genetic Variation
-**                             Sample identifiers
+** @param [u] identifiers [AjPList]
+** AJAX List of AJAX unsigned integer
+** (Ensembl Genetic Variation Sample identifier) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1534,7 +1528,7 @@ AjBool ensGvsampleadaptorRetrieveAllIdentifiersBySynonym(
     EnsPGvsampleadaptor gvsa,
     const AjPStr synonym,
     const AjPStr source,
-    AjPList idlist)
+    AjPList identifiers)
 {
     char *txtsynonym = NULL;
     char *txtsource  = NULL;
@@ -1555,10 +1549,10 @@ AjBool ensGvsampleadaptorRetrieveAllIdentifiersBySynonym(
     if (!synonym)
         return ajFalse;
 
-    if (!idlist)
+    if (!identifiers)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvsa);
+    dba = ensGvsampleadaptorGetDatabaseadaptor(gvsa);
 
     if (!dba)
         return ajFalse;
@@ -1610,7 +1604,7 @@ AjBool ensGvsampleadaptorRetrieveAllIdentifiersBySynonym(
 
         ajSqlcolumnToUint(sqlr, Pidentifier);
 
-        ajListPushAppend(idlist, (void *) Pidentifier);
+        ajListPushAppend(identifiers, (void *) Pidentifier);
     }
 
     ajSqlrowiterDel(&sqli);
@@ -1627,15 +1621,17 @@ AjBool ensGvsampleadaptorRetrieveAllIdentifiersBySynonym(
 
 /* @func ensGvsampleadaptorRetrieveAllSynonymsByIdentifier ********************
 **
-** Fetch all Ensembl Genetic Variation Sample synonyms for an
+** Retrieve all Ensembl Genetic Variation Sample synonym objects for an
 ** Ensembl Genetic Variation Sample identifier.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::SampleAdaptor::fetch_synonyms
-** @param [u] gvsa [EnsPGvsampleadaptor] Ensembl Genetic Variation
-**                                       Sample Adaptor
-** @param [r] identifier [ajuint] Ensembl Genetic Variation Sample identifier
+** @param [u] gvsa [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
+** @param [r] identifier [ajuint]
+** Ensembl Genetic Variation Sample identifier
 ** @param [rN] source [const AjPStr] Source
-** @param [u] synonyms [AjPList] AJAX List of (synonym) AJAX String objects
+** @param [u] synonyms [AjPList]
+** AJAX List of AJAX String (synonym) objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1669,7 +1665,7 @@ AjBool ensGvsampleadaptorRetrieveAllSynonymsByIdentifier(
     if (!synonyms)
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(gvsa);
+    dba = ensGvsampleadaptorGetDatabaseadaptor(gvsa);
 
     if (!dba)
         return ajFalse;

@@ -22,14 +22,14 @@ REFERENCE   2  (bases 1 to 1684)
 COMMENT     Original source text: Xenopus laevis (tissue library: lambda-ZAPII)
             adult retina cDNA to mRNA.
 FEATURES             Location/Qualifiers
-     source          1. .1684
+     source          1..1684
                      /organism="Xenopus laevis"
                      /mol_type="mRNA"
                      /db_xref="taxon:8355"
                      /tissue_type="retina"
                      /dev_stage="adult"
                      /tissue_lib="lambda-ZAPII"
-     CDS             110. .1174
+     CDS             110..1174
                      /note="gene accession number U23808"
                      /codon_start=1
                      /product="rhodopsin"
@@ -42,7 +42,7 @@ FEATURES             Location/Qualifiers
                      IFFCYGRLLCTVKEAAAQQQESATTQKAEKEVTRMVVIMVVFFLICWVPYAYVAFYIF
                      THQGSNFGPVFMTVPAFFAKSSAIYNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGS
                      SAATSKTEASSVSSSQVSPA"
-     misc_feature    189. .1684
+     misc_feature    189..1684
                      /note="sequenced from clone pXOP71"
      variation       1224
                      /note="clone pX0P5 contained deletion from bp 1224-1534"
@@ -107,28 +107,28 @@ REFERENCE   3  (bases 1 to 8914)
   REMARK    Sequence update by submitter
 COMMENT     On Apr 20, 2006 this sequence version replaced gi:773645.
 FEATURES             Location/Qualifiers
-     source          1. .8914
+     source          1..8914
                      /organism="Xenopus laevis"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:8355"
-     promoter        5128. .5360
-     misc_feature    5128. .5158
+     promoter        5128..5360
+     misc_feature    5128..5158
                      /note="XOP4 cis element"
-     misc_feature    5191. .5215
+     misc_feature    5191..5215
                      /note="XOP3 cis element"
-     misc_feature    5225. .5239
+     misc_feature    5225..5239
                      /note="Ret1 cis element"
-     misc_feature    5254. .5270
+     misc_feature    5254..5270
                      /note="Bat1 cis element"
-     misc_feature    5277. .5302
+     misc_feature    5277..5302
                      /note="NRE cis element"
-     misc_feature    5309. .5318
+     misc_feature    5309..5318
                      /note="Ret4 cis element"
-     mRNA            join(5361. .5830,6079. .6247,6849. .7014,7265. .7504,
-                     8210. .8867)
+     mRNA            join(5361..5830,6079..6247,6849..7014,7265..7504,
+                     8210..8867)
                      /product="rhodopsin"
-     CDS             join(5470. .5830,6079. .6247,6849. .7014,7265. .7504,
-                     8210. .8338)
+     CDS             join(5470..5830,6079..6247,6849..7014,7265..7504,
+                     8210..8338)
                      /note="cDNA sequence deposited under GenBank Accession
                      Number L07770"
                      /codon_start=1

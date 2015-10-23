@@ -47,7 +47,7 @@ Output alignment [hba_human.prophet]:
 Command line arguments
 
 Scan one or more sequences with a Gribskov or Henikoff profile
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -74,6 +74,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -364,7 +365,7 @@ Output file format
 
 ########################################
 # Program: prophet
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: prophet
 #    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov

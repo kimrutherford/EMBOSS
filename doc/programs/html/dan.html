@@ -83,7 +83,7 @@ Here is a sample session with <b>dan</b>
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
-Enter Shift Increment [1]: <b></b>
+Enter shift increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
 Enter salt concentration (mM) [50.]: <b></b>
 Output report [x13776.dan]: <b></b>
@@ -104,7 +104,7 @@ An example of producing a plot of Tm:
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Enter window size [20]: <b></b>
-Enter Shift Increment [1]: <b></b>
+Enter shift increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
 Enter salt concentration (mM) [50.]: <b></b>
 Enter minimum temperature [55.]: <b></b>
@@ -123,7 +123,7 @@ Created dan.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculate nucleic acid melting temperature
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -200,6 +200,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -478,6 +479,14 @@ Version: EMBOSS:6.5.6.0
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>
@@ -1040,7 +1049,7 @@ If the <tt>-plot</tt> qualifier is used, graphical output is produced instead.
 <pre>
 ########################################
 # Program: dan
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: dan
 #    -sequence tembl:x13776
 # Report_format: seqtable

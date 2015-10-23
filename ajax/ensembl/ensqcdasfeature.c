@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.17 $
+** @version $Revision: 1.19 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:11 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -114,13 +114,13 @@ static const char *qcdasfeatureKType[] =
 
 
 
-/* @conststatic qcdasfeatureadaptorKTables ************************************
+/* @conststatic qcdasfeatureadaptorKTablenames ********************************
 **
 ** Array of Ensembl Quality Check DAS Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *qcdasfeatureadaptorKTables[] =
+static const char *qcdasfeatureadaptorKTablenames[] =
 {
     "das_feature",
     (const char *) NULL
@@ -129,13 +129,13 @@ static const char *qcdasfeatureadaptorKTables[] =
 
 
 
-/* @conststatic qcdasfeatureadaptorKColumns ***********************************
+/* @conststatic qcdasfeatureadaptorKColumnnames *******************************
 **
 ** Array of Ensembl Quality Check DAS Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *qcdasfeatureadaptorKColumns[] =
+static const char *qcdasfeatureadaptorKColumnnames[] =
 {
     "das_feature.das_feature_id",
     "das_feature.analysis_id",
@@ -459,14 +459,7 @@ void ensQcdasfeatureDel(EnsPQcdasfeature *Pqcdasf)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pqcdasf)
-        return;
-
-    pthis = *Pqcdasf;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pqcdasf) || --pthis->Use)
     {
         *Pqcdasf = NULL;
 
@@ -480,9 +473,7 @@ void ensQcdasfeatureDel(EnsPQcdasfeature *Pqcdasf)
     ensQcsequenceDel(&pthis->SegmentSequence);
     ensQcsequenceDel(&pthis->FeatureSequence);
 
-    AJFREE(pthis);
-
-    *Pqcdasf = NULL;
+    ajMemFree((void **) Pqcdasf);
 
     return;
 }
@@ -1380,12 +1371,12 @@ AjBool ensQcdasfeatureTrace(const EnsPQcdasfeature qcdasf, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Quality Check DAS Feature object.
 **
 ** @fdata [EnsPQcdasfeature]
 **
-** @nam3rule Calculate Calculate Ensembl Quality Check DAS Feature values
+** @nam3rule Calculate Calculate Ensembl Quality Check DAS Feature information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
@@ -1548,9 +1539,10 @@ const char* ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc)
          i++);
 
     if (!qcdasfeatureKCategory[i])
-        ajDebug("ensQcdasfeatureCategoryToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Quality Check DAS Feature Category enumeration %d.\n",
+        ajDebug("ensQcdasfeatureCategoryToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Quality Check DAS Feature Category "
+                "enumeration %d.\n",
                 qcdasfc);
 
     return qcdasfeatureKCategory[i];
@@ -1675,9 +1667,10 @@ const char* ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft)
          i++);
 
     if (!qcdasfeatureKType[i])
-        ajDebug("ensQcdasfeatureTypeToChar encountered an "
-                "out of boundary error on "
-                "Ensembl Quality Check DAS Feature Type enumeration %d.\n",
+        ajDebug("ensQcdasfeatureTypeToChar "
+                "encountered an out of boundary error on "
+                "Ensembl Quality Check DAS Feature Type "
+                "enumeration %d.\n",
                 qcdasft);
 
     return qcdasfeatureKType[i];
@@ -1931,13 +1924,10 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
 EnsPQcdasfeatureadaptor ensQcdasfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if (!dba)
-        return NULL;
-
     return ensBaseadaptorNew(
         dba,
-        qcdasfeatureadaptorKTables,
-        qcdasfeatureadaptorKColumns,
+        qcdasfeatureadaptorKTablenames,
+        qcdasfeatureadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         (const char *) NULL,
         (const char *) NULL,
@@ -1990,7 +1980,7 @@ void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor *Pqcdasfa)
 {
     ensBaseadaptorDel(Pqcdasfa);
 
-	return;
+    return;
 }
 
 
@@ -2060,7 +2050,8 @@ EnsPBaseadaptor ensQcdasfeatureadaptorGetBaseadaptor(
 EnsPDatabaseadaptor ensQcdasfeatureadaptorGetDatabaseadaptor(
     EnsPQcdasfeatureadaptor qcdasfa)
 {
-    return ensBaseadaptorGetDatabaseadaptor(qcdasfa);
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa));
 }
 
 
@@ -2160,6 +2151,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcalignment(
     const EnsPQcalignment qca,
     AjPList qcdasfs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcdasfa)
@@ -2174,15 +2167,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcalignment(
     constraint = ajFmtStr("das_feature.alignment_id = %u",
                           ensQcalignmentGetIdentifier(qca));
 
-    ensBaseadaptorFetchAllbyConstraint(qcdasfa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcdasfs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcdasfs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2217,6 +2211,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceFeature(
     const EnsPQcsequence feature,
     AjPList qcdasfs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcdasfa)
@@ -2236,15 +2232,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceFeature(
                        " AND das_feature.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    ensBaseadaptorFetchAllbyConstraint(qcdasfa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcdasfs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcdasfs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2282,6 +2279,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequencePair(
     const EnsPQcsequence segment,
     AjPList qcdasfs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcdasfa)
@@ -2305,15 +2304,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequencePair(
                           ensQcsequenceGetIdentifier(feature),
                           ensQcsequenceGetIdentifier(segment));
 
-    ensBaseadaptorFetchAllbyConstraint(qcdasfa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcdasfs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcdasfs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2348,6 +2348,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceSegment(
     const EnsPQcsequence segment,
     AjPList qcdasfs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcdasfa)
@@ -2367,15 +2369,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceSegment(
                        " AND das_feature.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
 
-    ensBaseadaptorFetchAllbyConstraint(qcdasfa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcdasfs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcdasfs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2413,6 +2416,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyRegion(
     ajuint end,
     AjPList qcdasfs)
 {
+    AjBool result = AJFALSE;
+
     AjPStr constraint = NULL;
 
     if (!qcdasfa)
@@ -2448,15 +2453,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyRegion(
         start,
         end);
 
-    ensBaseadaptorFetchAllbyConstraint(qcdasfa,
-                                       constraint,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       qcdasfs);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        qcdasfs);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
@@ -2487,18 +2493,10 @@ AjBool ensQcdasfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPQcdasfeature *Pqcdasf)
 {
-    if (!qcdasfa)
-        return ajFalse;
-
-    if (!identifier)
-        return ajFalse;
-
-    if (!Pqcdasf)
-        return ajFalse;
-
-    return ensBaseadaptorFetchByIdentifier(qcdasfa,
-                                           identifier,
-                                           (void **) Pqcdasf);
+    return ensBaseadaptorFetchByIdentifier(
+        ensQcdasfeatureadaptorGetBaseadaptor(qcdasfa),
+        identifier,
+        (void **) Pqcdasf);
 }
 
 
@@ -2566,7 +2564,7 @@ AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
     if (!ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
+    dba = ensQcdasfeatureadaptorGetDatabaseadaptor(qcdasfa);
 
     statement = ajFmtStr(
         "DELETE FROM "
@@ -2579,8 +2577,8 @@ AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
 
     if (ajSqlstatementGetAffectedrows(sqls))
     {
-        qcdasf->Adaptor    = (EnsPQcdasfeatureadaptor) NULL;
-        qcdasf->Identifier = 0;
+        qcdasf->Adaptor    = NULL;
+        qcdasf->Identifier = 0U;
 
         result = ajTrue;
     }
@@ -2630,7 +2628,7 @@ AjBool ensQcdasfeatureadaptorStore(EnsPQcdasfeatureadaptor qcdasfa,
         ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
+    dba = ensQcdasfeatureadaptorGetDatabaseadaptor(qcdasfa);
 
     statement = ajFmtStr(
         "INSERT IGNORE INTO "
@@ -2717,7 +2715,7 @@ AjBool ensQcdasfeatureadaptorUpdate(EnsPQcdasfeatureadaptor qcdasfa,
     if (!ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
-    dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
+    dba = ensQcdasfeatureadaptorGetDatabaseadaptor(qcdasfa);
 
     statement = ajFmtStr(
         "UPDATE IGNORE "

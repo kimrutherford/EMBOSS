@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX refseqdec reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.15 $
+** @version $Revision: 1.17 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:10:18 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1134,35 +1134,35 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 
     ajDebug("seqReadEmbl ID line found\n");
     ajStrTokenAssignC(&handle, refseqinReadLine, " ;\t\n\r");
-    ajStrTokenNextParse(&handle, &token);	/* 'ID' */
-    ajStrTokenNextParse(&handle, &refseq->Id);	/* entry name */
+    ajStrTokenNextParse(handle, &token);	/* 'ID' */
+    ajStrTokenNextParse(handle, &refseq->Id);	/* entry name */
 
     /* seqSetName(thys, token); */
 
-    ajStrTokenNextParse(&handle, &token);	/* SV for new syntax */
+    ajStrTokenNextParse(handle, &token);	/* SV for new syntax */
 
     if(ajStrMatchC(token, "SV"))	/* new post-2006 EMBL line */
     {
-	ajStrTokenNextParse(&handle, &token);	/* SV */
+	ajStrTokenNextParse(handle, &token);	/* SV */
 	ajStrInsertK(&token, 0, '.');
 	/*ajStrInsertS(&token, 0, refseq->Name);*/
 	/* seqSvSave(thys, token); */
 
-	ajStrTokenNextParse(&handle, &token); /* linear or circular */
+	ajStrTokenNextParse(handle, &token); /* linear or circular */
 
-	ajStrTokenNextParseC(&handle, ";\t\n\r", &token);
+	ajStrTokenNextParseC(handle, ";\t\n\r", &token);
 	ajStrTrimWhite(&token);
 	/*ajSeqmolSetEmbl(&thys->Molecule, token);*/
 
-	ajStrTokenNextParse(&handle, &token);
+	ajStrTokenNextParse(handle, &token);
 	ajStrTrimWhite(&token);
 	/*ajStrAssignS(&thys->Class, token);*/
 
-	ajStrTokenNextParse(&handle, &token);
+	ajStrTokenNextParse(handle, &token);
 	ajStrTrimWhite(&token);
 	/*ajStrAssignS(&thys->Division, token);*/
 
-	ajStrTokenNextParse(&handle, &token);
+	ajStrTokenNextParse(handle, &token);
 	ajStrTrimEndC(&token, "BP.");
 	ajStrTrimWhite(&token);
 	ajStrToUint(token, &seqlen);
@@ -1211,7 +1211,7 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	   ajStrPrefixC(refseqinReadLine, "PA   ") ) /* emblcds database format */
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ;\n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'AC' */
+	    ajStrTokenNextParse(handle, &token); /* 'AC' */
 
 	    /* while(ajStrTokenNextParse(&handle, &token))
 		seqAccSave(thys, token); */
@@ -1221,16 +1221,16 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	   ajStrPrefixC(refseqinReadLine, "IV   ") ) /* emblcds database format */
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " \n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'SV' */
-	    ajStrTokenNextParse(&handle, &token); /* version */
-	    /* seqSvSave(thys, token); */
+	    ajStrTokenNextParse(handle, &token); /* 'SV' */
+	    ajStrTokenNextParse(handle, &token); /* version */
+	    /* seqSvSave(thys,token); */
 	}
 
 	else if(ajStrPrefixC(refseqinReadLine, "DE   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'DE' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* desc */
+	    ajStrTokenNextParse(handle, &token); /* 'DE' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* desc */
 
 	    if(ajStrGetLen(refseq->Desc))
 	    {
@@ -1244,9 +1244,9 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	if(ajStrPrefixC(refseqinReadLine, "KW   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " \n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'KW' */
+	    ajStrTokenNextParse(handle, &token); /* 'KW' */
 
-            while(ajStrTokenNextParseC(&handle, ".;\n\r", &token))
+            while(ajStrTokenNextParseC(handle, ".;\n\r", &token))
 	    {
 		liststr = ajStrNewS(token);
 		ajStrTrimWhite(&liststr);
@@ -1257,10 +1257,10 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	else if(ajStrPrefixC(refseqinReadLine, "OS   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " \n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'OS' */
+	    ajStrTokenNextParse(handle, &token); /* 'OS' */
 
 	    /* maybe better remove . from this, and trim from end */
-	    while(ajStrTokenNextParseC(&handle, ".;\n\r", &token))
+	    while(ajStrTokenNextParseC(handle, ".;\n\r", &token))
 	    {
 		ajStrAssignS(&tmpstr, token);
 		ajStrTrimWhite(&tmpstr);
@@ -1272,10 +1272,10 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	else if(ajStrPrefixC(refseqinReadLine, "OC   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " \n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'OC' */
+	    ajStrTokenNextParse(handle, &token); /* 'OC' */
 
 	    /* maybe better remove . from this, and trim from end */
-	    while(ajStrTokenNextParseC(&handle, ".;\n\r", &token))
+	    while(ajStrTokenNextParseC(handle, ".;\n\r", &token))
 	    {
 		ajStrAssignS(&tmpstr, token);
 		ajStrTrimWhite(&tmpstr);
@@ -1287,10 +1287,10 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	else if(ajStrPrefixC(refseqinReadLine, "OG   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " \n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'OG' */
+	    ajStrTokenNextParse(handle, &token); /* 'OG' */
 
 	    /* maybe better remove . from this, and trim from end */
-	    while(ajStrTokenNextParseC(&handle, ".;\n\r", &token))
+	    while(ajStrTokenNextParseC(handle, ".;\n\r", &token))
 	    {
 		ajStrAssignS(&tmpstr, token);
 		ajStrTrimWhite(&tmpstr);
@@ -1302,8 +1302,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	else if(ajStrPrefixC(refseqinReadLine, "CC   "))
 	{
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'CC' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* comment */
+	    ajStrTokenNextParse(handle, &token); /* 'CC' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* comment */
 
 	    if(ajStrGetLen(cmtstr))
 		ajStrAppendC(&cmtstr, "\n");
@@ -1341,14 +1341,14 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	{
             AJNEW0(xref);
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ;\n\r");
-	    ajStrTokenNextParse(&handle, &token); /* 'DR' */
-	    ajStrTokenNextParseC(&handle, ";\n\r", &token); /* dbname */
+	    ajStrTokenNextParse(handle, &token); /* 'DR' */
+	    ajStrTokenNextParseC(handle, ";\n\r", &token); /* dbname */
 	    ajStrAssignS(&xref->Db, token);
             ajStrTrimWhite(&token);
-	    ajStrTokenNextParse(&handle, &token); /* primary */
+	    ajStrTokenNextParse(handle, &token); /* primary */
             ajStrTrimWhite(&token);
 	    ajStrAssignS(&xref->Id, token);
-	    ajStrTokenNextParse(&handle, &token); /* secondary*/
+	    ajStrTokenNextParse(handle, &token); /* secondary*/
 
             if(!ajStrGetLen(token))
             {
@@ -1362,7 +1362,7 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
                 ajStrTrimWhite(&token);
                 ajStrAssignS(&xref->Secid, token);
 
-                ajStrTokenNextParse(&handle, &token); /* secondary*/
+                ajStrTokenNextParse(handle, &token); /* secondary*/
 
                 if(!ajStrGetLen(token))
                 {
@@ -1376,7 +1376,7 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
                     ajStrTrimWhite(&token);
                     ajStrAssignS(&xref->Terid, token);
 
-                    ajStrTokenNextParse(&handle, &token); /* secondary*/
+                    ajStrTokenNextParse(handle, &token); /* secondary*/
 
                     if(!ajStrGetLen(token))
                     {
@@ -1401,8 +1401,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	    if(!seqref)
 		seqref = ajSeqrefNew();
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RN' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* [num] */
+	    ajStrTokenNextParse(handle, &token); /* 'RN' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* [num] */
 	    ajStrAssignSubS(&tmpstr, token, 1, -2);
 	    ajStrToUint(tmpstr, &refnum);
 	    ajSeqrefSetnumNumber(seqref, refnum);
@@ -1414,8 +1414,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RG' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* groupname */
+	    ajStrTokenNextParse(handle, &token); /* 'RG' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* groupname */
 	    ajSeqrefAppendGroupname(seqref, token);
 	}
 
@@ -1425,8 +1425,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RX' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* xref */
+	    ajStrTokenNextParse(handle, &token); /* 'RX' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* xref */
 	    ajSeqrefAppendXref(seqref, token);
 	}
 
@@ -1436,8 +1436,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RP' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* position */
+	    ajStrTokenNextParse(handle, &token); /* 'RP' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* position */
 	    ajSeqrefAppendPosition(seqref, token);
 	}
 
@@ -1447,8 +1447,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RA' */
-	    ajStrTokenNextParseC(&handle, "\n\r;", &token); /* authors */
+	    ajStrTokenNextParse(handle, &token); /* 'RA' */
+	    ajStrTokenNextParseC(handle, "\n\r;", &token); /* authors */
 	    ajSeqrefAppendAuthors(seqref, token);
 	}
 
@@ -1458,8 +1458,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RT' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* title */
+	    ajStrTokenNextParse(handle, &token); /* 'RT' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* title */
 
 	    if(!ajStrMatchC(token, ";"))
 		ajSeqrefAppendTitle(seqref, token);
@@ -1471,8 +1471,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RL' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* authors */
+	    ajStrTokenNextParse(handle, &token); /* 'RL' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* authors */
 	    ajSeqrefAppendLocation(seqref, token);
 	}
 
@@ -1482,8 +1482,8 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 		seqref = ajSeqrefNew();
 
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-	    ajStrTokenNextParse(&handle, &token); /* 'RC' */
-	    ajStrTokenNextParseC(&handle, "\n\r", &token); /* comment */
+	    ajStrTokenNextParse(handle, &token); /* 'RC' */
+	    ajStrTokenNextParseC(handle, "\n\r", &token); /* comment */
 	    ajSeqrefAppendComment(seqref, token);
 	}
 
@@ -1508,7 +1508,7 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 	    ajStrTokenAssignC(&handle, refseqinReadLine, " (),");
 	    icount = 0;
 
-	    while(ajStrTokenNextParse(&handle, &token))
+	    while(ajStrTokenNextParse(handle, &token))
 	    {
 		icount++;
 
@@ -1586,22 +1586,22 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
     if(ajStrPrefixC(refseqinReadLine, "SQ"))
     {
         ajStrTokenAssignC(&handle, refseqinReadLine, " ");
-        ajStrTokenNextParse(&handle, &token); /* 'SQ' */
-        ajStrTokenNextParse(&handle, &token); /* 'Sequence' */
-        ajStrTokenNextParse(&handle, &token); /* len */
+        ajStrTokenNextParse(handle, &token); /* 'SQ' */
+        ajStrTokenNextParse(handle, &token); /* 'Sequence' */
+        ajStrTokenNextParse(handle, &token); /* len */
         ajStrToUint(token, &tmplen);
 
         if(tmplen > seqlen)
             seqlen = tmplen;
 
-        ajStrTokenNextParse(&handle, &token); /* BP; */
+        ajStrTokenNextParse(handle, &token); /* BP; */
         tmplen = 0;
 
         for(i=0;i<4;i++)
         {
-            ajStrTokenNextParse(&handle, &token); /* count */
+            ajStrTokenNextParse(handle, &token); /* count */
             ajStrToUint(token, &itmp);
-            ajStrTokenNextParse(&handle, &token); /* 'A' 'C' 'G' 'T' 'other' */
+            ajStrTokenNextParse(handle, &token); /* 'A' 'C' 'G' 'T' 'other' */
             tmplen += itmp;
         }
 
@@ -1646,7 +1646,7 @@ static AjBool refseqinReadEmblcon(AjPRefseqin refseqin, AjPRefseq refseq)
 
         conlen = 0;
 
-        while(ajStrTokenNextParse(&handle, &token))
+        while(ajStrTokenNextParse(handle, &token))
         {
             if(ajStrPrefixC(token, "gap("))
             {
@@ -2496,10 +2496,11 @@ static AjBool refseqinListProcess(AjPRefseqin refseqin, AjPRefseq refseq,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStrTok handle = NULL;
+    AjPStr rest  = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
+    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -2527,31 +2528,30 @@ static AjBool refseqinListProcess(AjPRefseqin refseqin, AjPRefseq refseq,
 
     while(ajReadlineTrim(file, &refseqinReadLine))
     {
+        ++recnum;
 	refseqinListNoComment(&refseqinReadLine);
 
-	if(ajStrGetLen(refseqinReadLine))
-	{
-	    ajStrTokenAssignC(&handle, refseqinReadLine, " \t\n\r");
-	    ajStrTokenNextParse(&handle, &token);
-	    /* ajDebug("Line  '%S'\n");*/
-	    /* ajDebug("token '%S'\n", refseqinReadLine, token); */
-
-	    if(ajStrGetLen(token))
-	    {
-	        ajDebug("++Add to list: '%S'\n", token);
-	        AJNEW0(node);
-	        ajStrAssignS(&node->Qry, token);
-	        refseqinQrySave(node, refseqin);
-	        ajListPushAppend(list, node);
-	    }
-
-	    ajStrDel(&token);
-	    token = NULL;
-	}
+        if(ajStrExtractWord(refseqinReadLine, &rest, &token))
+        {
+            if(ajStrGetLen(rest)) 
+            {
+                ajErr("Bad record %u in list file '%S'\n'%S'",
+                      recnum, listfile, refseqinReadLine);
+            }
+            else if(ajStrGetLen(token))
+            {
+                ajDebug("++Add to list: '%S'\n", token);
+                AJNEW0(node);
+                ajStrAssignS(&node->Qry, token);
+                refseqinQrySave(node, refseqin);
+                ajListPushAppend(list, node);
+            }
+        }
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
+    ajStrDel(&rest);
 
     ajDebug("Trace refseqin->Input->List\n");
     ajQuerylistTrace(refseqin->Input->List);
@@ -2580,7 +2580,6 @@ static AjBool refseqinListProcess(AjPRefseqin refseqin, AjPRefseq refseq,
 	ret = refseqinQryProcess(refseqin, refseq);
     }
 
-    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++refseqinListProcess depth: %d returns: %B\n", depth, ret);
 

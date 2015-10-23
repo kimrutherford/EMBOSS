@@ -5,11 +5,11 @@
 ** These functions control all aspects of AJAX graphics.
 **
 ** @author Copyright (C) 1999 Ian Longden
-** @version $Revision: 1.134 $
+** @version $Revision: 1.135 $
 ** @modified 1988-11-12 pmr First version
 ** @modified 1999 ajb ANSI
 ** @modified 2000-2011 Peter Rice
-** @modified $Date: 2011/11/08 15:12:19 $ by $Author: rice $
+** @modified $Date: 2012/10/25 13:18:26 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -3248,7 +3248,7 @@ void ajGraphicsCalcRange(const float *array,
     ajuint i;
 
     *min = FLT_MAX;
-    *max = FLT_MIN;
+    *max = -FLT_MAX;
 
     for(i=0;i<npoints;++i)
     {
@@ -5940,8 +5940,8 @@ void ajGraphxySetRanges(AjPGraph thys)
             if(graphdata->minX == graphdata->maxX ||
                graphdata->minY == graphdata->maxY)
             {
-                graphdata->minX = graphdata->minY =  64000;
-                graphdata->maxX = graphdata->maxY =  -64000;
+                graphdata->minX = graphdata->minY =  FLT_MAX;
+                graphdata->maxX = graphdata->maxY = -FLT_MAX;
 
                 for( j = 0 ; j < graphdata->numofpoints; j++)
                 {
@@ -7018,6 +7018,44 @@ void ajGraphdataSetTruescale(AjPGraphdata graphdata, float xmin, float xmax,
     graphdata->tminY = ymin;
     graphdata->tmaxX = xmax;
     graphdata->tmaxY = ymax;
+
+    if(graphdata->tminX == graphdata->tmaxX)
+    {
+        if(!graphdata->tminX)
+        {
+            graphdata->tmaxX = 0.5;
+        }
+        else if (graphdata->tminX > 0)
+        {
+            graphdata->tmaxX *= 1.1F;
+            graphdata->tminX /= 1.1F;
+        }
+        else
+        {
+            graphdata->tmaxX /= 1.1F;
+            graphdata->tminX *= 1.1F;
+        }
+
+    }
+
+    if(graphdata->tminY == graphdata->tmaxY)
+    {
+        if(!graphdata->tminY)
+        {
+            graphdata->tmaxY = 0.5;
+        }
+        else if (graphdata->tminY > 0)
+        {
+            graphdata->tmaxY *= 1.1F;
+            graphdata->tminY /= 1.1F;
+        }
+        else
+        {
+            graphdata->tmaxY /= 1.1F;
+            graphdata->tminY *= 1.1F;
+        }
+
+    }
 
     graphdata->truescale = ajTrue;
 
@@ -8865,10 +8903,10 @@ static void GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
     AjPStr temp;
     AjPTime ajtime;
     ajuint i,j;
-    float minxa = 64000.;
-    float minya = 64000.;
-    float maxxa = -64000.;
-    float maxya = -64000.;
+    float minxa = FLT_MAX;
+    float minya = FLT_MAX;
+    float maxxa = -FLT_MAX;
+    float maxya = -FLT_MAX;
     ajint nfeat = 0;
     ajint istart;
     ajint iend;
@@ -9014,10 +9052,10 @@ static void GraphxyDisplayToWiggle(AjPGraph thys, AjBool closeit,
     AjPStr temp;
     AjPTime ajtime;
     ajuint i,j;
-    float minxa = 64000.;
-    float minya = 64000.;
-    float maxxa = -64000.;
-    float maxya = -64000.;
+    float minxa = FLT_MAX;
+    float minya = FLT_MAX;
+    float maxxa = -FLT_MAX;
+    float maxya = -FLT_MAX;
     ajint istart;
     ajint iend;
 
@@ -9116,10 +9154,10 @@ static void GraphxyDisplayToBedgraph(AjPGraph thys, AjBool closeit,
     AjPStr temp;
     AjPTime ajtime;
     ajuint i,j;
-    float minxa = 64000.;
-    float minya = 64000.;
-    float maxxa = -64000.;
-    float maxya = -64000.;
+    float minxa = FLT_MAX;
+    float minya = FLT_MAX;
+    float maxxa = -FLT_MAX;
+    float maxya = -FLT_MAX;
     ajint istart;
     ajint iend;
     ajint ipos;
@@ -9253,10 +9291,10 @@ static void GraphxyDisplayToData(AjPGraph thys, AjBool closeit,
     AjPStr temp;
     AjPTime ajtime;
     ajuint i,j;
-    float minxa = 64000.;
-    float minya = 64000.;
-    float maxxa = -64000.;
-    float maxya = -64000.;
+    float minxa = FLT_MAX;
+    float minya = FLT_MAX;
+    float maxxa = -FLT_MAX;
+    float maxya = -FLT_MAX;
     ajint type  = 0;
     
     ajDebug("GraphxyDisplayToData '%S' '%s' %d graphs\n",
@@ -9512,8 +9550,8 @@ static void GraphxyNewPlplot(AjPGraph thys)
 
     thys->numofgraphs       = 0;
     thys->numofgraphsmax    = thys->numsets;
-    thys->minX = thys->minY = 64000;
-    thys->maxX = thys->maxY = -64000;
+    thys->minX = thys->minY = FLT_MAX;
+    thys->maxX = thys->maxY = -FLT_MAX;
     thys->flags             = GRAPH_XY;
     thys->minmaxcalc          = 0;
     thys->xstart = thys->xend = 0;

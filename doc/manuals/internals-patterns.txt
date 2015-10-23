@@ -1,0 +1,105 @@
+Pattern matching algorithms
+===========================
+
+EMBOSS uses a set of pattern matching algorithms for sequence motifs,
+testing the pattern definition and the possibility of mismatches when
+choosing the most efficient algorithm.
+
+Patterns are first tested by embPatClassify which records:
+  cleanpat - the cleaned pattern, removing '-' from Prosite patterns
+  amino -    need to match start (of a protein sequence)
+  carboxyl - need to match end (of a protein sequence)
+  fclass -   uses set of required characters [ACD]
+  ajcompl -  uses set of rejected characters {ACD}
+  dontcase - any character at a position N (nucleotide) or X (protein)
+  range -    repeat count (min,max)
+  protein -  protein-specific (false is nucleotide specific)
+
+The tests are defined in embPatGetTypeII and called by embPatternSeqCompile.
+They are also found in embPatVariablePattern.
+
+Two lengths are tested - plen is the overall pattern length including
+the various braces, m is the pattern length measured only in
+characters to be matched.
+
+The choices are:
+
+1. Boyer Moore Horspool
+   --------------------
+
+No mismatches, long (more than 32 positions) exact patterns.
+
+!range, !dontcare, !fclass, !ajcompl !mismatch.
+
+2. Baeza-Yates Perleberg
+   ---------------------
+
+Not too long (up to 128 positions) exact patterns with mismatches
+
+!range, !dontcare, !fclass, !ajcompl
+
+
+3. Shift-OR
+   --------
+
+Shorter exact patterns (1-32) too short for Boyer Moore Horspool
+
+!range, !dontcare, !fclass, !ajcompl !mismatch.
+
+
+4. Baeza-Yates Gonnet classes
+   --------------------------
+
+Patterns up to 32 characters with [required] {rejected} or unknowns (N/X)
+No ranges or mismatches.
+
+5. Regex (Prosite converted to regular expression)
+   -----------------------------------------------
+
+No mismatches, no unknowns but do have a repeat range 
+
+or
+
+No mismatches, no unknowns but are more than 32 characters.
+
+6. Tarhio Ukkonen Bleasby
+   ----------------------
+
+Mismatches, no repeat range, have [required] or [rejected]
+
+7. Brute force processing
+   ----------------------
+
+Any pattern with a mismatch or a repeat range
+
+
+Length  Mis Range N/X Class n Algorithm
+
+1..32    0  N     N   N     3 Shift-OR
+33..     0  N     N   N     1 Boyer Moore Horspool
+..128   1+  N     N   N     2 Baeza-Yates Perleberg
+1..32    0  N     Y   Y     4 Baeza-Yates Gonnet classes
+..       0  Y     .   .     5 Regex
+33..     0  .     .   .     5 Regex
+..      1+  N         Y     6 Tarhio Ukkonen Bleasby
+..      1+  Y     .   .     7 Brute force
+
+..       .  .     .   .     7 Brute force
+
+
+Example patterns for each, testing tsw:hbb_human
+
+1 PEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS
+
+2 PEEK -pmismatch 1
+
+3 PEEK
+
+4 PEE[KR]
+
+5 PE(2,2)K
+5 PEE[KR]S AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS
+
+6 PEE[KR] -pmismatch 1
+
+7 PE(2,2)K -pmismatch 1

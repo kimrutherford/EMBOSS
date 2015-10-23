@@ -34,6 +34,7 @@ static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseSwiss(EmbPBtreeEntry entry, AjPFile inf);
+static AjBool dbxflat_ParseIguspto(EmbPBtreeEntry entry, AjPFile inf);
 
 static AjBool dbxflat_NextEntry(EmbPBtreeEntry entry, AjPFile inf);
 
@@ -82,6 +83,7 @@ static DbxflatOParser parser[] =
     {"GB",     dbxflat_ParseGenbank},
     {"REFSEQ", dbxflat_ParseGenbank},
     {"FASTQ",  dbxflat_ParseFastq},
+    {"USPTO",  dbxflat_ParseIguspto},
     {NULL,     NULL}
 };
 
@@ -124,14 +126,14 @@ int main(int argc, char **argv)
     ajint i;
     AjPFile inf = NULL;
 
-    ajulong nentries = 0L;
-    ajulong ientries = 0L;
+    ajulong nentries = 0UL;
+    ajulong ientries = 0UL;
     AjPTime starttime = NULL;
     AjPTime begintime = NULL;
     AjPTime nowtime = NULL;
-    ajlong startclock = 0;
-    ajlong beginclock = 0;
-    ajlong nowclock = 0;
+    ajlong startclock = 0UL;
+    ajlong beginclock = 0UL;
+    ajlong nowclock = 0UL;
     
     ajulong idpricache=0L, idpriread = 0L, idpriwrite = 0L, idprisize= 0L;
     ajulong idseccache=0L, idsecread = 0L, idsecwrite = 0L, idsecsize= 0L;
@@ -371,6 +373,7 @@ int main(int argc, char **argv)
     else 
         ajFmtPrintF(outf, "Total time: %d:%04.1f\n",
                     mins, tdiff);
+
     ajTimeDel(&nowtime);
     ajTimeDel(&starttime);
 
@@ -659,6 +662,93 @@ static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf)
             ok = ajReadlineTrim(inf,&dbxflatRdline);
         else
             ok = ajFalse;
+    }
+
+    ajStrDel(&de);
+    ajStrDel(&tmpfd);
+    
+    return ajTrue;
+}
+
+
+
+
+
+/* @funcstatic dbxflat_ParseIguspto *******************************************
+**
+** Parse the ID, accession from a USPTO format sequence entry.
+**
+** Reads to the end of the entry and then returns.
+**
+** @param [w] entry [EmbPBtreeEntry] entry
+** @param [u] inf [AjPFile] Input file
+**
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+static AjBool dbxflat_ParseIguspto(EmbPBtreeEntry entry, AjPFile inf)
+{
+    ajlong pos  = 0L;
+    ajuint seqlen = 0;
+    AjPStr tmpfd  = NULL;
+    AjPStr str = NULL;
+    AjPStr de = NULL;
+    AjBool ok = ajTrue;
+
+    if(!dbxflat_wrdexp)
+	dbxflat_wrdexp = ajRegCompC("([A-Za-z0-9.:=]+)");
+
+    pos = ajFileResetPos(inf);
+
+    if(!MAJSTRGETLEN(dbxflatRdline))
+        ok = ajReadlineTrim(inf,&dbxflatRdline);
+
+    if(!ok)
+    {
+        ajStrDel(&dbxflatRdline);
+        return ajFalse;
+    }
+
+    /* first line of entry */
+
+    entry->fpos = pos;
+
+    if(!ajStrPrefixC(dbxflatRdline,";"))
+        return ajFalse;
+
+    while(ok && ajStrPrefixC(dbxflatRdline, ";"))
+    {
+        ajStrAssignSubS(&de, dbxflatRdline, 2, -1);
+
+        if(desfield && ajStrGetLen(de))
+        {
+            while(ajRegExec(dbxflat_wrdexp,de))
+            {
+                ajRegSubI(dbxflat_wrdexp, 1, &tmpfd);
+                str = ajStrNew();
+                ajStrAssignS(&str,tmpfd);
+                ajListstrPushAppend(desfield->data, str);
+                ajRegPost(dbxflat_wrdexp, &de);
+            }
+        }
+
+        ok = ajReadlineTrim(inf,&dbxflatRdline);
+    }
+
+    if(!ok)
+        return ajFalse;
+
+    ajStrAssignS(&entry->id, dbxflatRdline);
+    ajStrRemoveWhite(&entry->id);
+
+/* now read sequence */
+    ok = ajReadlineTrim(inf,&dbxflatRdline);
+    while(ok && !ajStrPrefixC(dbxflatRdline, ";"))
+    {
+        ajStrRemoveWhite(&dbxflatRdline);
+        seqlen += MAJSTRGETLEN(dbxflatRdline);
+        ok = ajReadlineTrim(inf,&dbxflatRdline);
     }
 
     ajStrDel(&de);

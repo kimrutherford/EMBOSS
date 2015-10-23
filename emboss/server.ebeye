@@ -1,8 +1,8 @@
 # server.ebeye 2011-07-15 12:00:00
 
 DB toucan [
-  method: ebeye
-  dbalias: 2can
+  method: "ebeye"
+  dbalias: "2can"
   fields: "description, domain_source, id, name"
   return: "description, domain_source, id, name"
   format: "text"
@@ -10,8 +10,8 @@ DB toucan [
 ]
 
 DB arrayexpress_repository [
-  method: ebeye
-  dbalias: arrayexpress-repository
+  method: "ebeye"
+  dbalias: "arrayexpress-repository"
   fields: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
   return: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
   format: "text"
@@ -19,8 +19,8 @@ DB arrayexpress_repository [
 ]
 
 DB astd [
-  method: ebeye
-  dbalias: astd
+  method: "ebeye"
+  dbalias: "astd"
   fields: "creation_date, description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
   return: "description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
   format: "text"
@@ -28,8 +28,8 @@ DB astd [
 ]
 
 DB atlas_experiments [
-  method: ebeye
-  dbalias: atlas-experiments
+  method: "ebeye"
+  dbalias: "atlas-experiments"
   fields: "creation_date, description, domain_source, id, last_modification_date, name"
   return: "description, domain_source, id, last_modification_date, name"
   format: "text"
@@ -37,8 +37,8 @@ DB atlas_experiments [
 ]
 
 DB atlas_genes [
-  method: ebeye
-  dbalias: atlas-genes
+  method: "ebeye"
+  dbalias: "atlas-genes"
   fields: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_id, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
   return: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_id, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
   format: "text"
@@ -46,8 +46,8 @@ DB atlas_genes [
 ]
 
 DB biocatalogue [
-  method: ebeye
-  dbalias: biocatalogue
+  method: "ebeye"
+  dbalias: "biocatalogue"
   fields: "acc, creation_date, description, domain_source, id, keywords, last_modification_date, name, provider, service_types"
   return: "description, domain_source, id, keywords, last_modification_date, name, provider, service_types"
   format: "text"
@@ -55,8 +55,8 @@ DB biocatalogue [
 ]
 
 DB biomodels [
-  method: ebeye
-  dbalias: biomodels
+  method: "ebeye"
+  dbalias: "biomodels"
   fields: "acc, authors, creation_date, curated, description, domain_source, id, keywords, last_modification_date, name, original_model"
   return: "description, domain_source, id, keywords, last_modification_date, name, original_model"
   format: "text"
@@ -64,8 +64,8 @@ DB biomodels [
 ]
 
 DB chebi [
-  method: ebeye
-  dbalias: chebi
+  method: "ebeye"
+  dbalias: "chebi"
   fields: "acc, charge, description, domain_source, formula, has_functional_parent, has_parent_hydride, has_part, has_role, id, inchi, inchikey, is_a, is_conjugate_acid_of, is_conjugate_base_of, is_enantiomer_of, is_substituent_group_from, is_tautomer_of, iupac_name, mass, name, secondary_accession_number, smiles, synonym"
   return: "description, domain_source, formula, has_functional_parent, has_parent_hydride, has_part, has_role, id, inchi, inchikey, is_a, is_conjugate_acid_of, is_conjugate_base_of, is_enantiomer_of, is_substituent_group_from, is_tautomer_of, iupac_name, mass, name, secondary_accession_number, smiles, synonym"
   format: "text"
@@ -73,8 +73,8 @@ DB chebi [
 ]
 
 DB chembl_activity [
-  method: ebeye
-  dbalias: chembl-activity
+  method: "ebeye"
+  dbalias: "chembl-activity"
   fields: "id, relation, standard_type, standard_unit, standard_value"
   return: "id, relation, standard_type, standard_unit, standard_value"
   format: "text"
@@ -82,8 +82,8 @@ DB chembl_activity [
 ]
 
 DB chembl_assay [
-  method: ebeye
-  dbalias: chembl-assay
+  method: "ebeye"
+  dbalias: "chembl-assay"
   fields: "assay_description, assay_type, id"
   return: "assay_description, assay_type, id"
   format: "text"
@@ -91,8 +91,8 @@ DB chembl_assay [
 ]
 
 DB chembl_compound [
-  method: ebeye
-  dbalias: chembl-compound
+  method: "ebeye"
+  dbalias: "chembl-compound"
   fields: "alogp, canonical_smiles, compound_synonym, domain_source, hydrogen_bond_acceptor_count, hydrogen_bond_donor_count, id, inchi, inchi_key, med_chem_friendly, molecular_formula, molecular_weight, number_rule_of_five_5_violations, polar_surface_area"
   return: "alogp, canonical_smiles, compound_synonym, domain_source, hydrogen_bond_acceptor_count, hydrogen_bond_donor_count, id, inchi, inchi_key, med_chem_friendly, molecular_formula, molecular_weight, number_rule_of_five_5_violations, polar_surface_area"
   format: "text"
@@ -100,8 +100,8 @@ DB chembl_compound [
 ]
 
 DB chembl_target [
-  method: ebeye
-  dbalias: chembl-target
+  method: "ebeye"
+  dbalias: "chembl-target"
   fields: "description, id, name, organism, target_synonym"
   return: "description, id, name, organism, target_synonym"
   format: "text"
@@ -109,8 +109,8 @@ DB chembl_target [
 ]
 
 DB dgva [
-  method: ebeye
-  dbalias: dgva
+  method: "ebeye"
+  dbalias: "dgva"
   fields: "domain_source, ftp_link, id, name, study_accession, study_title, variant_placement, variant_sample, variant_type, variation_level"
   return: "domain_source, ftp_link, id, name, study_accession, study_title, variant_placement, variant_sample, variant_type, variation_level"
   format: "text"
@@ -118,8 +118,8 @@ DB dgva [
 ]
 
 DB ebitools [
-  method: ebeye
-  dbalias: ebitools
+  method: "ebeye"
+  dbalias: "ebitools"
   fields: "category, context_id, context_label, description, domain_source, id, name, parameter_description, parameter_id, parameter_name, parameter_value_description, parameter_value_label"
   return: "category, context_id, context_label, description, domain_source, id, name, parameter_description, parameter_id, parameter_name, parameter_value_description, parameter_value_label"
   format: "text"
@@ -127,8 +127,8 @@ DB ebitools [
 ]
 
 DB ebiweb_main [
-  method: ebeye
-  dbalias: ebiweb_main
+  method: "ebeye"
+  dbalias: "ebiweb_main"
   fields: "authors, breadcrumbs, content, creation_date, description, domain_source, encoding, id, keywords, last_modification_date, menu, mime_type, name"
   return: "breadcrumbs, content, creation_date, description, domain_source, encoding, id, keywords, last_modification_date, menu, mime_type, name"
   format: "text"
@@ -136,8 +136,8 @@ DB ebiweb_main [
 ]
 
 DB ebiweb_staff [
-  method: ebeye
-  dbalias: ebiweb_staff
+  method: "ebeye"
+  dbalias: "ebiweb_staff"
   fields: "domain_source, email, fax, firstName, group, id, lastName, room, tel, thumb, title"
   return: "domain_source, email, fax, firstName, group, id, lastName, room, tel, thumb, title"
   format: "text"
@@ -145,8 +145,8 @@ DB ebiweb_staff [
 ]
 
 DB ega [
-  method: ebeye
-  dbalias: ega
+  method: "ebeye"
+  dbalias: "ega"
   fields: "creation_date, domain_source, id, last_modification_date, name, species"
   return: "domain_source, id, last_modification_date, name, species"
   format: "text"
@@ -154,8 +154,8 @@ DB ega [
 ]
 
 DB emblcds [
-  method: ebeye
-  dbalias: emblcds
+  method: "ebeye"
+  dbalias: "emblcds"
   fields: "bio_material, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, length, molecule_type, organelle, organism, organism_classification, organism_species, sequence_version, specimen_voucher, topology"
   return: "description, division, domain_source, gene, gene_synonym, id, keywords, length, molecule_type, organelle, organism, organism_classification, organism_species, sequence_version, specimen_voucher, topology"
   format: "text"
@@ -163,8 +163,8 @@ DB emblcds [
 ]
 
 DB embldeleted [
-  method: ebeye
-  dbalias: embldeleted
+  method: "ebeye"
+  dbalias: "embldeleted"
   fields: "acc, creation_date, data_class, description, division, domain_source, id, last_modification_date, length, molecule_type, sequence_version, topology"
   return: "acc, creation_date, data_class, description, division, domain_source, id, last_modification_date, length, molecule_type, sequence_version, topology"
   format: "text"
@@ -172,8 +172,8 @@ DB embldeleted [
 ]
 
 DB emblnew_con [
-  method: ebeye
-  dbalias: emblnew_con
+  method: "ebeye"
+  dbalias: "emblnew_con"
   fields: "acc, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, topology"
   return: "acc, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, topology"
   format: "text"
@@ -181,8 +181,8 @@ DB emblnew_con [
 ]
 
 DB emblnew_standard [
-  method: ebeye
-  dbalias: emblnew_standard
+  method: "ebeye"
+  dbalias: "emblnew_standard"
   fields: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   return: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   format: "text"
@@ -190,8 +190,8 @@ DB emblnew_standard [
 ]
 
 DB emblnew_wgs [
-  method: ebeye
-  dbalias: emblnew_wgs
+  method: "ebeye"
+  dbalias: "emblnew_wgs"
   fields: "acc, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, topology"
   return: "acc, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, topology"
   format: "text"
@@ -199,8 +199,8 @@ DB emblnew_wgs [
 ]
 
 DB emblrelease_con [
-  method: ebeye
-  dbalias: emblrelease_con
+  method: "ebeye"
+  dbalias: "emblrelease_con"
   fields: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   return: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   format: "text"
@@ -208,8 +208,8 @@ DB emblrelease_con [
 ]
 
 DB emblrelease_standard [
-  method: ebeye
-  dbalias: emblrelease_standard
+  method: "ebeye"
+  dbalias: "emblrelease_standard"
   fields: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   return: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   format: "text"
@@ -217,8 +217,8 @@ DB emblrelease_standard [
 ]
 
 DB emblrelease_wgs [
-  method: ebeye
-  dbalias: emblrelease_wgs
+  method: "ebeye"
+  dbalias: "emblrelease_wgs"
   fields: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   return: "acc, bio_material, creation_date, culture_collection, data_class, description, division, domain_source, gene, gene_synonym, id, keywords, last_modification_date, length, molecule_type, organelle, organism, organism_classification, organism_species, references, sequence_version, specimen_voucher, topology"
   format: "text"
@@ -226,8 +226,8 @@ DB emblrelease_wgs [
 ]
 
 DB ensemblGenomes_gene [
-  method: ebeye
-  dbalias: ensemblGenomes_gene
+  method: "ebeye"
+  dbalias: "ensemblGenomes_gene"
   fields: "aspgd_gene_synonym, cadre_gene_synonym, collection, description, domain, domain_source, entrezgene_synonym, exon, exon_count, featuretype, flybase_gene_id_synonym, flybase_transcript_id_synonym, flybase_translation_id_synonym, gene_name, gene_synonym, genedb_spombe_synonym, genedb_synonym, genedb_transcript_synonym, genedb_translation_synonym, genomic_unit, germonline_synonym, haplotype, id, id_noversion, name, peptide, sgd_gene_synonym, source, species, system_name, transcript, transcript_count, uniprot_synonym"
   return: "collection, description, domain, domain_source, entrezgene_synonym, exon, exon_count, featuretype, flybase_gene_id_synonym, flybase_transcript_id_synonym, flybase_translation_id_synonym, gene_name, gene_synonym, genedb_spombe_synonym, genedb_synonym, genedb_transcript_synonym, genedb_translation_synonym, genomic_unit, germonline_synonym, haplotype, id, id_noversion, name, peptide, sgd_gene_synonym, source, species, system_name, transcript, transcript_count, uniprot_synonym"
   format: "text"
@@ -235,8 +235,8 @@ DB ensemblGenomes_gene [
 ]
 
 DB ensembl_gene [
-  method: ebeye
-  dbalias: ensembl_gene
+  method: "ebeye"
+  dbalias: "ensembl_gene"
   fields: "dbass3_synonym, dbass5_synonym, description, domain_source, entrezgene_synonym, exon, exon_count, featuretype, flybase_gene_id_synonym, flybase_transcript_id_synonym, flybase_translation_id_synonym, gene_name, gene_synonym, go_synonym, haplotype, hgnc_synonym, id, id_noversion, mgi_synonym, mim_gene_synonym, mim_morbid_synonym, name, ottg_synonym, ottt_synonym, peptide, rgd_synonym, sgd_gene_synonym, shares_cds_and_utr_with_ottt_synonym, shares_cds_with_enst_synonym, shares_cds_with_ottt_synonym, source, species, transcript, transcript_count, uniprot_synonym, vega_gene_synonym, vega_transcript_synonym, vega_translation_synonym, zfin_id_synonym, zfin_xpat_synonym"
   return: "description, domain_source, entrezgene_synonym, exon, exon_count, featuretype, flybase_gene_id_synonym, flybase_transcript_id_synonym, flybase_translation_id_synonym, gene_name, gene_synonym, go_synonym, haplotype, hgnc_synonym, id, id_noversion, mgi_synonym, mim_gene_synonym, mim_morbid_synonym, name, ottg_synonym, ottt_synonym, peptide, rgd_synonym, sgd_gene_synonym, shares_cds_and_utr_with_ottt_synonym, shares_cds_with_enst_synonym, shares_cds_with_ottt_synonym, source, species, transcript, transcript_count, uniprot_synonym, vega_gene_synonym, vega_transcript_synonym, vega_translation_synonym, zfin_id_synonym, zfin_xpat_synonym"
   format: "text"
@@ -244,8 +244,8 @@ DB ensembl_gene [
 ]
 
 DB go [
-  method: ebeye
-  dbalias: go
+  method: "ebeye"
+  dbalias: "go"
   fields: "alt_id, comment, consider, description, disjoint_from, domain_source, id, is_a, is_obsolete, is_root, name, namespace, negatively_regulates, part_of, positively_regulates, regulates, replaced_by, subset, synonym"
   return: "alt_id, comment, consider, description, disjoint_from, domain_source, id, is_a, is_obsolete, is_root, name, namespace, negatively_regulates, part_of, positively_regulates, regulates, replaced_by, subset, synonym"
   format: "text"
@@ -253,8 +253,8 @@ DB go [
 ]
 
 DB gpcrdb [
-  method: ebeye
-  dbalias: gpcrdb
+  method: "ebeye"
+  dbalias: "gpcrdb"
   fields: "description, domain_source, gpcr-family, id, name"
   return: "description, domain_source, gpcr-family, id, name"
   format: "text"
@@ -262,8 +262,8 @@ DB gpcrdb [
 ]
 
 DB groups [
-  method: ebeye
-  dbalias: groups
+  method: "ebeye"
+  dbalias: "groups"
   fields: "description, id, name"
   return: "description, id, name"
   format: "text"
@@ -271,8 +271,8 @@ DB groups [
 ]
 
 DB hgnc [
-  method: ebeye
-  dbalias: hgnc
+  method: "ebeye"
+  dbalias: "hgnc"
   fields: "domain_source, gd_aliases, gd_app_name, gd_app_sym, gd_gene_fam_name, gd_locus_type, gd_prev_sym, gd_pub_chrom_map, gd_status, id, id_without_prefix"
   return: "domain_source, gd_aliases, gd_app_name, gd_app_sym, gd_gene_fam_name, gd_locus_type, gd_prev_sym, gd_pub_chrom_map, gd_status, id, id_without_prefix"
   format: "text"
@@ -280,8 +280,8 @@ DB hgnc [
 ]
 
 DB intact_experiments [
-  method: ebeye
-  dbalias: intact-experiments
+  method: "ebeye"
+  dbalias: "intact-experiments"
   fields: "creation_date, description, domain_source, id, interaction_detection_method, interaction_type, last_modification_date, name, participant_detection_method"
   return: "description, domain_source, id, interaction_detection_method, interaction_type, last_modification_date, name, participant_detection_method"
   format: "text"
@@ -289,8 +289,8 @@ DB intact_experiments [
 ]
 
 DB intact_interactions [
-  method: ebeye
-  dbalias: intact-interactions
+  method: "ebeye"
+  dbalias: "intact-interactions"
   fields: "creation_date, description, domain_source, id, interaction_detection_method, interaction_type, last_modification_date, name, participant_detection_method"
   return: "description, domain_source, id, interaction_detection_method, interaction_type, last_modification_date, name, participant_detection_method"
   format: "text"
@@ -298,8 +298,8 @@ DB intact_interactions [
 ]
 
 DB intact_interactors [
-  method: ebeye
-  dbalias: intact-interactors
+  method: "ebeye"
+  dbalias: "intact-interactors"
   fields: "creation_date, description, domain_source, gene_name, gene_name_synonym, id, interaction_detection_method, interaction_type, isoform_synonym, iupac_name, last_modification_date, locus_name, name, orf_name, participant_detection_method, synonym"
   return: "description, domain_source, gene_name, gene_name_synonym, id, interaction_detection_method, interaction_type, isoform_synonym, iupac_name, last_modification_date, locus_name, name, orf_name, participant_detection_method, synonym"
   format: "text"
@@ -307,8 +307,8 @@ DB intact_interactors [
 ]
 
 DB integr8 [
-  method: ebeye
-  dbalias: integr8
+  method: "ebeye"
+  dbalias: "integr8"
   fields: "component_name, description, domain_source, id, name, protein_name, species, transcript_name"
   return: "description, domain_source, id, name, protein_name, species, transcript_name"
   format: "text"
@@ -316,8 +316,8 @@ DB integr8 [
 ]
 
 DB intenz [
-  method: ebeye
-  dbalias: intenz
+  method: "ebeye"
+  dbalias: "intenz"
   fields: "acc, comment, description, domain_source, id, name, reaction, reference, synonym, systematic_name"
   return: "acc, comment, description, domain_source, id, name, reaction, reference, synonym, systematic_name"
   format: "text"
@@ -325,8 +325,8 @@ DB intenz [
 ]
 
 DB interpro [
-  method: ebeye
-  dbalias: interpro
+  method: "ebeye"
+  dbalias: "interpro"
   fields: "classification_category, classification_description, description, domain_source, id, name, publication, taxonomy_data"
   return: "description, domain_source, id, name, publication, taxonomy_data"
   format: "text"
@@ -334,8 +334,8 @@ DB interpro [
 ]
 
 DB lrg [
-  method: ebeye
-  dbalias: lrg
+  method: "ebeye"
+  dbalias: "lrg"
   fields: "assembly, chr_end, chr_name, chr_start, creation_date, domain_source, gene_longname, gene_nameToDisplay, gene_symbol, gene_synonym, id, last_modification_date, lrg_gene_name, mol_type, organism, protein_product_accession, src_name, status, transcript_comment, transcript_id"
   return: "assembly, chr_end, chr_name, chr_start, creation_date, domain_source, gene_longname, gene_nameToDisplay, gene_symbol, gene_synonym, id, last_modification_date, lrg_gene_name, mol_type, organism, protein_product_accession, src_name, status, transcript_comment, transcript_id"
   format: "text"
@@ -343,8 +343,8 @@ DB lrg [
 ]
 
 DB medline [
-  method: ebeye
-  dbalias: medline
+  method: "ebeye"
+  dbalias: "medline"
   fields: "authors, creation_date, description, domain_source, id, issn, issue, journal, keywords, last_modification_date, mesh_descriptor_name, mesh_qualifier_name, name, pagination, publication_date, volume"
   return: "description, domain_source, id, issn, issue, journal, keywords, last_modification_date, mesh_descriptor_name, mesh_qualifier_name, name, pagination, publication_date, volume"
   format: "text"
@@ -352,8 +352,8 @@ DB medline [
 ]
 
 DB merops_clan [
-  method: ebeye
-  dbalias: merops_clan
+  method: "ebeye"
+  dbalias: "merops_clan"
   fields: "acc, activation_mechanism, catalytic_mechanism, content, description, distribution, domain_source, evidence, evolution, homologous_nonpeptidase, id, inhibitors, name, peptidase_activity, protein_fold, published, reviews, smi, subclans"
   return: "description, distribution, domain_source, evidence, evolution, homologous_nonpeptidase, id, inhibitors, name, peptidase_activity, protein_fold, published, reviews, smi, subclans"
   format: "text"
@@ -361,8 +361,8 @@ DB merops_clan [
 ]
 
 DB merops_family [
-  method: ebeye
-  dbalias: merops_family
+  method: "ebeye"
+  dbalias: "merops_family"
   fields: "acc, active_site, activities_and_specificities, biological_functions, biotech_aspects, clan_assignment, content, description, distribution, history, id, inhibitors, mechanism, molecular_structure, name, peptidases_inhibited, published, reactive_site, reviews, subfamilies"
   return: "description, distribution, history, id, inhibitors, mechanism, molecular_structure, name, peptidases_inhibited, published, reactive_site, reviews, subfamilies"
   format: "text"
@@ -370,8 +370,8 @@ DB merops_family [
 ]
 
 DB merops_id [
-  method: ebeye
-  dbalias: merops_id
+  method: "ebeye"
+  dbalias: "merops_id"
   fields: "acc, activity, biotech, common_name, description, distinguishing_features, gene_name, history, id, id_noversion, inhibitors, knockout, name, other_name, pharma, physiology, smi, species, specificity, structure"
   return: "description, distinguishing_features, gene_name, history, id, id_noversion, inhibitors, knockout, name, other_name, pharma, physiology, smi, species, specificity, structure"
   format: "text"
@@ -379,8 +379,8 @@ DB merops_id [
 ]
 
 DB msdchem [
-  method: ebeye
-  dbalias: msdchem
+  method: "ebeye"
+  dbalias: "msdchem"
   fields: "acc, comp_synonyms, description, domain_source, formula, id, inchi, non_stereo_smiles, stereo_smiles, systematic_name, weight"
   return: "acc, comp_synonyms, description, domain_source, formula, id, inchi, non_stereo_smiles, stereo_smiles, systematic_name, weight"
   format: "text"
@@ -388,8 +388,8 @@ DB msdchem [
 ]
 
 DB patentdb [
-  method: ebeye
-  dbalias: patentdb
+  method: "ebeye"
+  dbalias: "patentdb"
   fields: "application_date, authors, datasource, description, designated_states, domain_source, id, name, publication_date, type"
   return: "description, designated_states, domain_source, id, name, publication_date, type"
   format: "text"
@@ -397,8 +397,8 @@ DB patentdb [
 ]
 
 DB pdbe [
-  method: ebeye
-  dbalias: pdbe
+  method: "ebeye"
+  dbalias: "pdbe"
   fields: "acc, assembly, authors, chain, citation, creation_date, description, domain_source, experiment_type, id, keywords, last_modification_date, ligand, name, resolution, source_organism"
   return: "acc, assembly, authors, chain, citation, creation_date, description, domain_source, experiment_type, id, keywords, last_modification_date, ligand, name, resolution, source_organism"
   format: "text"
@@ -406,8 +406,8 @@ DB pdbe [
 ]
 
 DB pride [
-  method: ebeye
-  dbalias: pride
+  method: "ebeye"
+  dbalias: "pride"
   fields: "description, domain_source, id, name"
   return: "description, domain_source, id, name"
   format: "text"
@@ -415,8 +415,8 @@ DB pride [
 ]
 
 DB project [
-  method: ebeye
-  dbalias: project
+  method: "ebeye"
+  dbalias: "project"
   fields: "acc, description, domain_source, id, name"
   return: "description, domain_source, id, name"
   format: "text"
@@ -424,8 +424,8 @@ DB project [
 ]
 
 DB reactome [
-  method: ebeye
-  dbalias: reactome
+  method: "ebeye"
+  dbalias: "reactome"
   fields: "acc, authors, creation_date, description, domain_source, id, last_modification_date, name, organism"
   return: "acc, authors, creation_date, description, domain_source, id, last_modification_date, name, organism"
   format: "text"
@@ -433,8 +433,8 @@ DB reactome [
 ]
 
 DB resid [
-  method: ebeye
-  dbalias: resid
+  method: "ebeye"
+  dbalias: "resid"
   fields: "acc, alternate_name, creation_date, description, domain_source, formula, id, keywords, last_modification_date, name, references, systematic_name"
   return: "acc, alternate_name, creation_date, description, domain_source, formula, id, keywords, last_modification_date, name, references, systematic_name"
   format: "text"
@@ -442,8 +442,8 @@ DB resid [
 ]
 
 DB rhea [
-  method: ebeye
-  dbalias: rhea
+  method: "ebeye"
+  dbalias: "rhea"
   fields: "acc, chebiidequation, comment, domain_source, id, name"
   return: "acc, chebiidequation, comment, domain_source, id, name"
   format: "text"
@@ -451,8 +451,8 @@ DB rhea [
 ]
 
 DB sbo [
-  method: ebeye
-  dbalias: sbo
+  method: "ebeye"
+  dbalias: "sbo"
   fields: "comment, description, domain_source, id, name, namespace, synonym"
   return: "description, domain_source, id, name, namespace, synonym"
   format: "text"
@@ -460,8 +460,8 @@ DB sbo [
 ]
 
 DB sra_experiment [
-  method: ebeye
-  dbalias: sra-experiment
+  method: "ebeye"
+  dbalias: "sra-experiment"
   fields: "center_name, description, domain_source, id, instrument_model, library_name, library_selection, library_source, library_strategy, name, platform"
   return: "description, domain_source, id, instrument_model, library_name, library_selection, library_source, library_strategy, name, platform"
   format: "text"
@@ -469,8 +469,8 @@ DB sra_experiment [
 ]
 
 DB sra_run [
-  method: ebeye
-  dbalias: sra-run
+  method: "ebeye"
+  dbalias: "sra-run"
   fields: "center_name, description, domain_source, id, name"
   return: "description, domain_source, id, name"
   format: "text"
@@ -478,8 +478,8 @@ DB sra_run [
 ]
 
 DB sra_sample [
-  method: ebeye
-  dbalias: sra-sample
+  method: "ebeye"
+  dbalias: "sra-sample"
   fields: "center_name, common_name, description, domain_source, id, name, scientific_name"
   return: "common_name, description, domain_source, id, name, scientific_name"
   format: "text"
@@ -487,8 +487,8 @@ DB sra_sample [
 ]
 
 DB sra_study [
-  method: ebeye
-  dbalias: sra-study
+  method: "ebeye"
+  dbalias: "sra-study"
   fields: "center_name, description, domain_source, existing_study_type, id, name, new_study_type"
   return: "description, domain_source, existing_study_type, id, name, new_study_type"
   format: "text"
@@ -496,8 +496,8 @@ DB sra_study [
 ]
 
 DB sra_submission [
-  method: ebeye
-  dbalias: sra-submission
+  method: "ebeye"
+  dbalias: "sra-submission"
   fields: "center_name, description, domain_source, id, name"
   return: "description, domain_source, id, name"
   format: "text"
@@ -505,8 +505,8 @@ DB sra_submission [
 ]
 
 DB taxonomy [
-  method: ebeye
-  dbalias: taxonomy
+  method: "ebeye"
+  dbalias: "taxonomy"
   fields: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
   return: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
   format: "text"
@@ -514,8 +514,8 @@ DB taxonomy [
 ]
 
 DB uniparc [
-  method: ebeye
-  dbalias: uniparc
+  method: "ebeye"
+  dbalias: "uniparc"
   fields: "domain_source, id, uniprotkb_exclusion"
   return: "domain_source, id, uniprotkb_exclusion"
   format: "text"
@@ -523,8 +523,8 @@ DB uniparc [
 ]
 
 DB uniprot [
-  method: ebeye
-  dbalias: uniprot
+  method: "ebeye"
+  dbalias: "uniprot"
   fields: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
   return: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
   format: "text"
@@ -532,8 +532,8 @@ DB uniprot [
 ]
 
 DB uniref100 [
-  method: ebeye
-  dbalias: uniref100
+  method: "ebeye"
+  dbalias: "uniref100"
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, entry_common_taxon, id, last_modification_date, name"
   format: "text"
@@ -541,8 +541,8 @@ DB uniref100 [
 ]
 
 DB uniref50 [
-  method: ebeye
-  dbalias: uniref50
+  method: "ebeye"
+  dbalias: "uniref50"
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, entry_common_taxon, id, last_modification_date, name"
   format: "text"
@@ -550,8 +550,8 @@ DB uniref50 [
 ]
 
 DB uniref90 [
-  method: ebeye
-  dbalias: uniref90
+  method: "ebeye"
+  dbalias: "uniref90"
   fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
   return: "domain_source, entry_common_taxon, id, last_modification_date, name"
   format: "text"

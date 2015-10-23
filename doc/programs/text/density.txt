@@ -55,7 +55,7 @@ Created density.ps
 Command line arguments
 
 Draw a nucleic acid density plot
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -86,6 +86,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -280,7 +281,7 @@ Output file format
 
 ########################################
 # Program: density
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: density
 #    [-seqall] tembl:x13776
 # Report_format: table

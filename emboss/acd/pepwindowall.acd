@@ -40,7 +40,10 @@ section: additional [
     information: "Window size"
     default: "19"
     minimum: "1"
-    maximum: "200"
+    maximum: "$(sequence.length)"
+    warnrange: "N"
+    failrange: "N"
+    trueminimum: "N"
     relations: "EDAM_data:1251 Window size"
   ]
 

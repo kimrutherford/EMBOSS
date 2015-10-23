@@ -53,7 +53,7 @@ Taxon output file [9606.excel]:
 Command line arguments
 
 Get parents of taxon(s)
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-taxons]            taxon      Taxon filename and optional format, or

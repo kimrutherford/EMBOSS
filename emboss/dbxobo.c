@@ -383,6 +383,31 @@ static AjBool dbxobo_ParseObo(EmbPBtreeEntry entry, const AjPStr line,
         return ajTrue;
     }
 
+    /*
+    ** software ontology is a mess
+    ** namespace: IAO
+    ** namespace: OBI
+    ** namespace: OBO_REL
+    ** namespace: http
+    ** namespace: owl
+    ** namespace: snap
+    ** namespace: span
+    ** parse ID formats
+    ** IAO:nnnnnnn
+    ** OBI:nnnnnnn
+    ** OBO_REL:xxx_xxx
+    ** owl:xxxx
+    ** snap:xxxx
+    ** span:xxxx
+    ** http://www.ebi.ac.uk/efo/swo/SWO_nnnnnnn
+    ** http://www.ebi.ac.uk/swo/data/SWO_nnnnnnn
+    ** http://www.ebi.ac.uk/swo/SWO_nnnnnnn
+    ** http://www.ebi.ac.uk/swo/objective/SWO_nnnnnnn
+    ** http://www.ebi.ac.uk/swo/organisation/SWO_nnnnnnn
+    ** http://www.ebi.ac.uk/swo/version/SWO_nnnnnnn
+    ** http://kt.ijs.si/panovp/OntoDM#OntoDM_953101          (urgh!!!!)
+    ** http://www.ebi.ac.uk/EDAM/EDAM:0001478
+    */
     if(ajStrMatchC(name, "id:"))
     {
         if(ajStrPrefixS(rest, dbprefix))

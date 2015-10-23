@@ -5,8 +5,8 @@
 ** These functions control all aspects of AJAX ftp access
 **
 ** @author Copyright (C) 2010 Alan Bleasby
-** @version $Revision: 1.4 $
-** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
+** @version $Revision: 1.5 $
+** @modified $Date: 2012/08/21 10:55:30 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -152,10 +152,9 @@ FILE* ajFtpOpen(const AjPStr dbname, const AjPStr host, ajint iport,
     if(sock.sock == AJBADSOCK)
     {
 	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    dbname);
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S': %s",
+		    dbname, strerror(errno));
 	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
 	ajStrDel(&errstr);
 
 	return NULL;
@@ -241,7 +240,7 @@ static FILE* ftpSend(const AjPStr dbname,
                          ajStrGetLen(ftpcmd), 0);
 
         if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-            ajErr("send failure, expected %u bytes returned %d : %s\n",
+            ajErr("send failure, expected %u bytes returned %d : %s",
                   ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
         ajDebug("sending: '%S'\n", ftpcmd);
         if(isendlen < 0)
@@ -260,7 +259,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     ftpResponse(ftpfile, &ftpresponse);
@@ -269,7 +268,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     ftpResponse(ftpfile, &ftpresponse);
@@ -279,7 +278,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     ftpResponse(ftpfile, &ftpresponse);
@@ -288,7 +287,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     ftpResponse(ftpfile, &pasvresponse);
@@ -297,7 +296,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     ftpResponse(ftpfile, &ftpresponse);
@@ -314,7 +313,7 @@ static FILE* ftpSend(const AjPStr dbname,
         isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                          ajStrGetLen(ftpcmd), 0);
         if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-            ajErr("send failure, expected %u bytes returned %d : %s\n",
+            ajErr("send failure, expected %u bytes returned %d : %s",
                   ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
         ajDebug("sending: '%S'\n", ftpcmd);
         ftpResponse(ftpfile, &ftpresponse);
@@ -324,7 +323,7 @@ static FILE* ftpSend(const AjPStr dbname,
     isendlen =  send(sock.sock, ajStrGetPtr(ftpcmd),
                      ajStrGetLen(ftpcmd), 0);
     if(isendlen < 0 || isendlen != (ajint) ajStrGetLen(ftpcmd))
-	ajErr("send failure, expected %u bytes returned %d : %s\n",
+	ajErr("send failure, expected %u bytes returned %d : %s",
 	      ajStrGetLen(ftpcmd), isendlen, ajMessGetSysmessageC());
     ajDebug("sending: '%S'\n", ftpcmd);
     /*ftpResponse(sock, &ftpresponse);*/
@@ -411,10 +410,9 @@ static FILE* ftpSend(const AjPStr dbname,
     if(filesock.sock == AJBADSOCK)
     {
 	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    dbname);
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S': %s",
+		    dbname, strerror(errno));
 	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
 	ajStrDel(&errstr);
 
 	return NULL;

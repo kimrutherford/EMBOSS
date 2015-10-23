@@ -53,7 +53,7 @@ General log output file [outfile.dbxfasta]:
 Command line arguments
 
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -138,8 +138,8 @@ Output file format
 
 Processing directory: /homes/user/test/data/
 Processing file: emrod
-entries: 6 (6) time: 0.0s (0.0s)
-Total time: 0.0s
+entries: 6 (6) time: 0.0/0.0s (-0.0/0.0)
+Total time: 0:00.0
 Entry idlen 15 OK. Maximum ID length was 6 for 'L48662'.
 Field acc acclen 15 OK. Maximum acc term length was 6 for 'L48662'.
 
@@ -161,11 +161,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        6
 Fullcount    6
 Kwlimit      15
@@ -181,11 +181,11 @@ Order        71
 Fill         56
 Level        0
 Pagesize     2048
-Cachesize    2000
+Cachesize    20000
 Order2       22
 Fill2        41
 Secpagesize  512
-Seccachesize 2000
+Seccachesize 20000
 Count        6
 Fullcount    6
 Kwlimit      15

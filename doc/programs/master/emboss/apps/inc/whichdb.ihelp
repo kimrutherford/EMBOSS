@@ -1,5 +1,5 @@
 Search all sequence databases for an entry and retrieve it
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-entry]             string     ID or Accession number (Any string)

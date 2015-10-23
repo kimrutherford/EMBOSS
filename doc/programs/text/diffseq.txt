@@ -58,7 +58,7 @@ Second features output [AY411291.diffgff]:
 Command line arguments
 
 Compare and report features of two similar sequences
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -114,6 +114,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -133,6 +134,7 @@ Version: EMBOSS:6.5.6.0
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
    -scircular2         boolean    Sequence is circular
+   -squick2            boolean    Read id and sequence only
    -sformat2           string     Input sequence format
    -iquery2            string     Input query fields or ID list
    -ioffset2           integer    Input start position offset
@@ -394,7 +396,7 @@ Output file format
 
 ########################################
 # Program: diffseq
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: diffseq
 #    [-asequence] tembl:x65923
 #    [-bsequence] tembl:ay411291
@@ -454,9 +456,9 @@ AY411291 228-228 Length: 1
 
 ##gff-version 3
 ##sequence-region AY411291 1 402
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 AY411291        diffseq sequence_conflict       228     228     1       +
 .       ID=AY411291.1;note=SNP in X65923;replace=t
 
@@ -464,9 +466,9 @@ AY411291        diffseq sequence_conflict       228     228     1       +
 
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2012-07-15
+#!Date 2013-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.5.6.0
+#!Source-version EMBOSS 6.6.0.0
 X65923  diffseq sequence_conflict       284     284     1       +       .
 ID=X65923.1;note=SNP in AY411291;replace=c
 

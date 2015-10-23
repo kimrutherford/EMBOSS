@@ -264,4 +264,6 @@ wossoperation.txt \
 wossoutput.txt \
 wossparam.txt \
 wosstopic.txt \
+xmlget.txt \
+xmltext.txt \
 yank.txt

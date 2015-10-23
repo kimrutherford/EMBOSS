@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.14 $
+** @version $Revision: 1.15 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:28:48 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -90,44 +90,49 @@ EnsPSequenceadaptor ensRegistryGetSequenceadaptor(
 EnsPSequenceadaptor ensSequenceadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSequenceadaptorDel(EnsPSequenceadaptor *Psa);
+void ensSequenceadaptorDel(EnsPSequenceadaptor *Psqa);
 
-AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorCacheClear(EnsPSequenceadaptor sqa);
+
+EnsPDatabaseadaptor ensSequenceadaptorGetDatabaseadaptor(
+    EnsPSequenceadaptor sqa);
+
+AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sqa,
                                               const EnsPSeqregion sr,
                                               AjPSeq *Psequence);
 
-AjBool ensSequenceadaptorFetchSeqregionAllStr(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSeqregionAllStr(EnsPSequenceadaptor sqa,
                                               const EnsPSeqregion sr,
                                               AjPStr *Psequence);
 
-AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sqa,
                                               const EnsPSeqregion sr,
                                               ajuint start,
                                               ajuint length,
                                               AjPSeq *Psequence);
 
-AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sqa,
                                               const EnsPSeqregion sr,
                                               ajuint start,
                                               ajuint length,
                                               AjPStr *Psequence);
 
-AjBool ensSequenceadaptorFetchSliceAllSeq(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSliceAllSeq(EnsPSequenceadaptor sqa,
                                           EnsPSlice slice,
                                           AjPSeq *Psequence);
 
-AjBool ensSequenceadaptorFetchSliceAllStr(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSliceAllStr(EnsPSequenceadaptor sqa,
                                           EnsPSlice slice,
                                           AjPStr *Psequence);
 
-AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sqa,
                                           EnsPSlice slice,
                                           ajint start,
                                           ajint end,
                                           ajint strand,
                                           AjPSeq *Psequence);
 
-AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
+AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sqa,
                                           EnsPSlice slice,
                                           ajint start,
                                           ajint end,

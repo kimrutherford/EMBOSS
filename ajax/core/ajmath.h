@@ -3,8 +3,8 @@
 ** AJAX maths functions
 **
 ** @author Copyright (C) 1998 Alan Bleasby
-** @version $Revision: 1.15 $
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @version $Revision: 1.16 $
+** @modified $Date: 2012/12/07 09:56:21 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -94,8 +94,8 @@ double             ajRandomDouble(void);
 void               ajRandomSeed(void);
 void               ajCvtRecToPol(float x, float y,
                                  float *radius, float *angle);
-ajint              ajRound(ajint i, ajint vround);
-float              ajRoundFloat(float a, ajint nbits);
+ajint              ajRound(ajuint i, ajuint vround);
+float              ajRoundFloat(float a, ajuint nbits);
 unsigned long long ajMathCrc64(const AjPStr thys);
 ajuint             ajMathCrc32(const AjPStr thys);
 ajuint             ajNumLengthDouble(double dnumber);

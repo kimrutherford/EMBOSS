@@ -3,8 +3,8 @@
 ** Prepares an EMBOSS cache file for an Ensembl server
 **
 ** @author Copyright (C) 2011 Michael Schuster
-** @version $Revision: 1.7 $
-** @modified $Date: 2012/03/09 20:37:58 $ by $Author: mks $
+** @version $Revision: 1.8 $
+** @modified $Date: 2013/02/17 13:11:22 $ by $Author: mks $
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -88,7 +88,6 @@ int main(int argc, char** argv)
     AjPStr spname  = NULL;
     AjPStr svrname = NULL;
     AjPStr svrurl  = NULL;
-    AjPStr dbcurl  = NULL;
     AjPStr special = NULL;
     AjPStr prefix  = NULL;
 
@@ -107,7 +106,6 @@ int main(int argc, char** argv)
     outf    = ajAcdGetOutfile("outfile");
     cachef  = ajAcdGetOutfile("cachefile");
 
-    dbcurl  = ajStrNew();
     svrurl  = ajStrNew();
     dbname  = ajStrNew();
     special = ajStrNew();
@@ -203,17 +201,20 @@ int main(int argc, char** argv)
 
             dbc = ensDatabaseadaptorGetDatabaseconnection(dba);
 
-            ensDatabaseconnectionFetchUrl(dbc, &dbcurl);
-
             if(outf)
                 ajFmtPrintF(outf, "%S\n", dbname);
 
-            ajFmtPrintF(cachef, "DBNAME %S [\n", dbname);
-
-            ajFmtPrintF(cachef, "  release: \"%s\"\n", ensSoftwareGetVersion());
-            ajFmtPrintF(cachef, "  server:  \"%S\"\n", svrname);
-            ajFmtPrintF(cachef, "  special: \"%S\"\n", special);
-            ajFmtPrintF(cachef, "  url:     \"%S\"\n", dbcurl);
+            ajFmtPrintF(cachef, "DBNAME %S [\n",
+                        dbname);
+            ajFmtPrintF(cachef, "  dbalias: \"%S\"\n",
+                        ensDatabaseconnectionGetDatabasename(dbc));
+            ajFmtPrintF(cachef, "  release: \"%s\"\n",
+                        ensSoftwareGetVersion());
+            ajFmtPrintF(cachef, "  server:  \"%S\"\n",
+                        svrname);
+            if (ajStrGetLen(special))
+                ajFmtPrintF(cachef, "  special: \"%S\"\n",
+                            special);
             ajFmtPrintF(cachef, "]\n");
             ajFmtPrintF(cachef, "\n");
 
@@ -273,7 +274,6 @@ int main(int argc, char** argv)
     ajListstrFree(&species);
     ajListFree(&dbas);
 
-    ajStrDel(&dbcurl);
     ajStrDel(&svrurl);
     ajStrDel(&dbname);
     ajStrDel(&special);

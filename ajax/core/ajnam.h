@@ -6,9 +6,9 @@
 ** via the routines ajNamDatabase and ajNamGetValueS.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version $Revision: 1.46 $
+** @version $Revision: 1.49 $
 ** @modified 2000-2011 Peter Rice
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @modified $Date: 2013/01/24 15:31:46 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -75,11 +75,16 @@ AjBool ajNamServer(const AjPStr name);
 AjBool ajNamAliasServer(AjPStr *Pname, const AjPStr server);
 AjBool ajNamDatabaseServer(const AjPStr name, const AjPStr server);
 AjPList ajNamDbGetAttrlist(const AjPStr name);
+AjPList ajNamDbGetAttrlistSvr(const AjPStr name, const AjPStr svrname);
 AjBool ajNamDbGetAttrC(const AjPStr name, const char *attribute,
                        AjPStr *value);
 AjBool ajNamDbGetAttrS(const AjPStr name, const AjPStr attribute,
                        AjPStr *value);
 AjBool ajNamDbDetails(const AjPStr name, AjPStr* type,
+                      AjBool* id, AjBool* qry, AjBool* all,
+                      AjPStr* comment, AjPStr* release,
+                      AjPStr* methods, AjPStr* defined);
+AjBool ajNamDbDetailsSvr(const AjPStr name,const AjPStr svrname,  AjPStr* type,
                       AjBool* id, AjBool* qry, AjBool* all,
                       AjPStr* comment, AjPStr* release,
                       AjPStr* methods, AjPStr* defined);
@@ -115,6 +120,7 @@ AjBool ajNamSvrDetails(const AjPStr name, AjPStr* type, AjPStr *scope,
                        AjPStr* cachedirectory, AjPStr* cachefile,
                        AjPStr* url);
 AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias);
+AjBool ajNamDbGetDbaliasTest(const AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetIndexdir(const AjPStr dbname, AjPStr* indexdir);
 AjBool ajNamDbGetType(const AjPStr dbname, ajuint *itype);
 AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url);
@@ -132,6 +138,9 @@ AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...);
 AjBool ajNamSvrQuery(AjPQuery qry);
 AjBool ajNamSvrTest(const AjPStr svrname);
 ajuint ajNamSvrCount(const AjPStr svrname);
+void   ajNamSvrListFindAliases(const AjPStr server, const AjPStr dbname,
+                               AjPList dbnames);
+void   ajNamSvrListListAliases(const AjPStr server, AjPList dbnames);
 void   ajNamSvrListListDatabases(const AjPStr server, AjPList dbnames);
 
 void   ajNamDebugOrigin(void);
@@ -152,9 +161,11 @@ AjBool ajNamGetValueC(const char *name, AjPStr* value);
 AjBool ajNamGetValueS(const AjPStr name, AjPStr* value);
 void   ajNamInit(const char* prefix);
 AjBool ajNamIsDbname(const AjPStr name);
-void   ajNamListListServers(AjPList svrnames);
+void   ajNamListFindAliases(const AjPStr dbname, AjPList dbnames);
+void   ajNamListListAliases(AjPList dbnames);
 void   ajNamListListDatabases(AjPList dbnames);
 void   ajNamListListResources(AjPList dbnames);
+void   ajNamListListServers(AjPList svrnames);
 void   ajNamPrintSvrAttr(AjPFile outf, AjBool full);
 void   ajNamPrintDbAttr(AjPFile outf, AjBool full);
 void   ajNamPrintRsAttr(AjPFile outf, AjBool full);

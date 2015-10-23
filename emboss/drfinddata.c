@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
 
     handle = ajStrTokenNewC(query, ",");
-    while(ajStrTokenNextParse(&handle, &qrystr))
+    while(ajStrTokenNextParse(handle, &qrystr))
     {
         for(i=0;i<imax;i++)
         {

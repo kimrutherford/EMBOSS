@@ -57,7 +57,7 @@ protein output sequence(s) [makeseq.fasta]:
 Command line arguments
 
 Create random protein sequences
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.
@@ -123,7 +123,7 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 
 Molecular weight = 38590.16             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
-Isoelectric Point = 6.8820
+Isoelectric Point = 6.8385
 A280 Molar Extinction Coefficients  = 22920 (reduced)   23045 (cystine bridges)
 A280 Extinction Coefficients 1mg/ml = 0.594 (reduced)   0.597 (cystine bridges)
 Improbability of expression in inclusion bodies = 0.660

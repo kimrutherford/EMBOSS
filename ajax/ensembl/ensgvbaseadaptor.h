@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.10 $
+** @version $Revision: 1.12 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/20 22:09:38 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:16:34 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -66,11 +66,11 @@ AJ_BEGIN_DECLS
 
 EnsPGvbaseadaptor ensGvbaseadaptorNew(
     EnsPGvdatabaseadaptor gvdba,
-    const char *const *Ptables,
-    const char *const *Pcolumns,
-    const EnsPBaseadaptorLeftjoin leftjoin,
-    const char *condition,
-    const char *final,
+    const char *const *Ptablenames,
+    const char *const *Pcolumnnames,
+    const EnsPBaseadaptorLeftjoin leftjoins,
+    const char *defaultcondition,
+    const char *finalcondition,
     AjBool (*Fstatement) (EnsPBaseadaptor ba,
                           const AjPStr statement,
                           EnsPAssemblymapper am,
@@ -80,16 +80,16 @@ EnsPGvbaseadaptor ensGvbaseadaptorNew(
 void ensGvbaseadaptorDel(EnsPGvbaseadaptor *Pgvba);
 
 EnsPBaseadaptor ensGvbaseadaptorGetBaseadaptor(
-    const EnsPGvbaseadaptor gvba);
+    EnsPGvbaseadaptor gvba);
 
 EnsPDatabaseadaptor ensGvbaseadaptorGetDatabaseadaptor(
-    const EnsPGvbaseadaptor gvba);
+    EnsPGvbaseadaptor gvba);
 
 AjBool ensGvbaseadaptorGetFailedvariations(
-    const EnsPGvbaseadaptor gvba);
+    EnsPGvbaseadaptor gvba);
 
 EnsPGvdatabaseadaptor ensGvbaseadaptorGetGvdatabaseadaptor(
-    const EnsPGvbaseadaptor gvba);
+    EnsPGvbaseadaptor gvba);
 
 ajuint ensGvbaseadaptorLoadPloidy(
     EnsPGvbaseadaptor gvba);

@@ -19,10 +19,10 @@
 ** @author Copyright (C) 1998 Ian Longden
 ** @author Copyright (C) 1998 Peter Rice
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version $Revision: 1.81 $
+** @version $Revision: 1.82 $
 ** @modified Copyright (C) 2001 Alan Bleasby. Added ajFmtScanS functions
 ** @modified Copyright (C) 2003 Jon Ison. Added ajFmtScanC functions
-** @modified $Date: 2012/07/14 16:51:04 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:15:22 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2331,7 +2331,7 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 
     handle = ajStrTokenNewC(str, delim);
 
-    while(ajStrTokenNextParse(&handle, &token))
+    while(ajStrTokenNextParse(handle, &token))
     {
         if(!c)
             ajFmtPrintF(outf, "%s", prefix);

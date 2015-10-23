@@ -34,7 +34,7 @@ Usage
    Here is a sample session with pepstats
 
 
-% pepstats
+% pepstats -pkdata Epkexpasy.dat
 Calculate statistics of protein properties
 Input protein sequence(s): tsw:laci_ecoli
 Pepstats program output file [laci_ecoli.pepstats]:
@@ -43,10 +43,21 @@ Pepstats program output file [laci_ecoli.pepstats]:
    Go to the input files for this example
    Go to the output files for this example
 
+   Example 2
+
+
+% pepstats
+Calculate statistics of protein properties
+Input protein sequence(s): tsw:laci_ecoli
+Pepstats program output file [laci_ecoli.pepstats]:
+
+
+   Go to the output files for this example
+
 Command line arguments
 
 Calculate statistics of protein properties
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -58,6 +69,7 @@ Version: EMBOSS:6.5.6.0
    -aadata             datafile   [Eamino.dat] Amino acid properties
    -mwdata             datafile   [Emolwt.dat] Molecular weight data for amino
                                   acids
+   -pkdata             datafile   [Epk.dat] Values of pKa for amino acids
    -[no]termini        boolean    [Y] Include charge at N and C terminus
    -mono               boolean    [N] Use monoisotopic weights
 
@@ -73,6 +85,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -247,7 +260,60 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 
 Molecular weight = 38590.16             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
-Isoelectric Point = 6.8820
+Isoelectric Point = 6.3901
+A280 Molar Extinction Coefficients  = 22920 (reduced)   23045 (cystine bridges)
+A280 Extinction Coefficients 1mg/ml = 0.594 (reduced)   0.597 (cystine bridges)
+Improbability of expression in inclusion bodies = 0.660
+
+Residue         Number          Mole%           DayhoffStat
+A = Ala         44              12.222          1.421
+B = Asx         0               0.000           0.000
+C = Cys         3               0.833           0.287
+D = Asp         17              4.722           0.859
+E = Glu         15              4.167           0.694
+F = Phe         4               1.111           0.309
+G = Gly         22              6.111           0.728
+H = His         7               1.944           0.972
+I = Ile         18              5.000           1.111
+J = ---         0               0.000           0.000
+K = Lys         11              3.056           0.463
+L = Leu         41              11.389          1.539
+M = Met         10              2.778           1.634
+N = Asn         12              3.333           0.775
+O = ---         0               0.000           0.000
+P = Pro         14              3.889           0.748
+Q = Gln         28              7.778           1.994
+R = Arg         19              5.278           1.077
+S = Ser         32              8.889           1.270
+T = Thr         19              5.278           0.865
+U = ---         0               0.000           0.000
+V = Val         34              9.444           1.431
+W = Trp         2               0.556           0.427
+X = Xaa         0               0.000           0.000
+Y = Tyr         8               2.222           0.654
+Z = Glx         0               0.000           0.000
+
+Property        Residues                Number          Mole%
+Tiny            (A+C+G+S+T)             120             33.333
+Small           (A+B+C+D+G+N+P+S+T+V)   197             54.722
+Aliphatic       (A+I+L+V)               137             38.056
+Aromatic        (F+H+W+Y)               21               5.833
+Non-polar       (A+C+F+G+I+L+M+P+V+W+Y) 200             55.556
+Polar           (D+E+H+K+N+Q+R+S+T+Z)   160             44.444
+Charged         (B+D+E+H+K+R+Z)         69              19.167
+Basic           (H+K+R)                 37              10.278
+Acidic          (B+D+E+Z)               32               8.889
+
+
+  Output files for usage example 2
+
+  File: laci_ecoli.pepstats
+
+PEPSTATS of LACI_ECOLI from 1 to 360
+
+Molecular weight = 38590.16             Residues = 360
+Average Residue Weight  = 107.195       Charge   = 1.5
+Isoelectric Point = 6.8385
 A280 Molar Extinction Coefficients  = 22920 (reduced)   23045 (cystine bridges)
 A280 Extinction Coefficients 1mg/ml = 0.594 (reduced)   0.597 (cystine bridges)
 Improbability of expression in inclusion bodies = 0.660

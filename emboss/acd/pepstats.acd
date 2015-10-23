@@ -33,6 +33,14 @@ section: input [
     relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
+  datafile: pkdata [
+    information: "Amino acid pKa data file"
+    help: "Values of pKa for amino acids"
+    default: "Epk.dat"
+    knowntype: "amino acid pka"
+    relations: "EDAM_data:1529 Protein pKa value"
+  ]
+
 endsection: input
 
 section: advanced [

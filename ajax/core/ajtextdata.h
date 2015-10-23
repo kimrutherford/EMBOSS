@@ -3,9 +3,9 @@
 ** AJAX TEXT data structures
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.15 $
+** @version $Revision: 1.16 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @modified $Date: 2013/07/15 20:56:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -162,7 +162,8 @@ typedef struct AjSText
 ** @attr Filename [AjPStr] Original filename
 ** @attr List [AjPList] List of USAs to be read
 ** @attr Filebuff [AjPFilebuff] Input buffered file
-** @attr Fpos [ajlong] File position (fseek) for building USA
+** @attr Fpos [ajlong] Initial file position (fseek) for building USA
+** @attr Curpos [ajlong] Current file position (fseek) for latest read
 ** @attr Query [AjPQuery] Query data
 ** @attr TextData [void*] Format data for reuse, e.g. multiple entry input
 ** @attr Search [AjBool] Search for more entries (always true?)
@@ -180,9 +181,9 @@ typedef struct AjSText
 ** @attr Entrycount [ajuint] Number of entries in file
 ** @attr Datacount [ajuint] Number of data values read in current entry
 ** @attr Records [ajuint] Records processed
+** @attr TotRecords [ajuint] Records processed
 ** @attr Format [AjEnum] Text input format enum
 ** @attr TextFormat [AjEnum] Text input format enum
-** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -196,6 +197,7 @@ typedef struct AjSTextin
     AjPList List;
     AjPFilebuff Filebuff;
     ajlong Fpos;
+    ajlong Curpos;
     AjPQuery Query;
     void *TextData;
     AjBool Search;
@@ -211,9 +213,9 @@ typedef struct AjSTextin
     ajuint Entrycount;
     ajuint Datacount;
     ajuint Records;
+    ajuint TotRecords;
     AjEnum Format;
     AjEnum TextFormat;
-    ajuint Padding;
 } AjOTextin;
 
 #define AjPTextin AjOTextin*

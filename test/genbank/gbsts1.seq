@@ -25,7 +25,7 @@ REFERENCE   2  (bases 1 to 389)
             E-mail: Jean.Weissenbach@genethon.fr
 COMMENT     full automatic.
 FEATURES             Location/Qualifiers
-     source          1. .389
+     source          1..389
                      /organism="Homo sapiens"
                      /mol_type="genomic DNA"
                      /db_xref="taxon:9606"

@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.16 $
+** @version $Revision: 1.18 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:04:02 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@
 **
 ******************************************************************************/
 
-const char *ensKSoftwareVersion = "66";
+const char *ensKSoftwareVersion = "68";
 
 
 
@@ -108,8 +108,8 @@ const char *ensKSoftwareVersion = "66";
 ** Functions to control Ensembl Software Internals
 **
 ** @cc Bio::EnsEMBL::ApiVersion
-** @cc CVS Revision: 1.13
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.15
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 

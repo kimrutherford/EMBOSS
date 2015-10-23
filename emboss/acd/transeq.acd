@@ -122,6 +122,16 @@ section: advanced [
     relations: "EDAM_data:2527 Parameter"
   ]
 
+  boolean: methionine [
+    default: "Y"
+    information: "Change initial START codons to Methionine"
+    help: "START codons at the beginning of protein products will
+           usually code for Methionine, despite what the codon will code for
+           when it is internal to a protein. This qualifier sets all such
+           START codons to code for Methionine by default."
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
 endsection: advanced
 
 section: output [

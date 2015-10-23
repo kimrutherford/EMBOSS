@@ -97,10 +97,47 @@ section: additional [
     relations: "EDAM_data:2527 Parameter"
   ]
 
+  boolean: xml [
+    additional: "Y"
+    default: "Y"
+    information: "Display XML databases"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: standard [
+    additional: "Y"
+    default: "Y"
+    information: "Display standard databases"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: user [
+    additional: "Y"
+    default: "Y"
+    information: "Display user-defined databases"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: include [
+    additional: "Y"
+    default: "Y"
+    information: "Display databases defined in included files"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
   boolean: full [
     additional: "Y"
     default: "N"
     information: "Display all columns"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: access [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'id, qry, all' access column"
+    help: "This displays the levels of access that can be used on this
+           database"
     relations: "EDAM_data:2527 Parameter"
   ]
 
@@ -113,12 +150,65 @@ section: additional [
     relations: "EDAM_data:2527 Parameter"
   ]
 
+  boolean: taxscope [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'taxon' column"
+    help: "This displays the taxons covered by this database"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
   boolean: fields [
     additional: "Y"
     default: "$(full)"
     information: "Display 'fields' column"
     help: "This displays the search fields that can be used on this
-           database, other than the standard 'id' or 'acc' fields."
+           database, including the standard 'id' or 'acc' fields"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: numfields [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display count in 'fields' column"
+    help: "This displays the number of search fields that can be used on this
+           database, including the standard 'id' or 'acc' fields"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: aliases [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'alias' column"
+    help: "This displays the alias names that can be used for this
+           database"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: numaliases [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display count in 'alias' column"
+    help: "This displays the number of alias names that can be used for this
+           database"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: examples [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'example queries' column"
+    help: "This displays the example queries that can be used to test this
+           database"
+    relations: "EDAM_data:2527 Parameter"
+  ]
+
+  boolean: numexamples [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display count in 'example queries' column"
+    help: "This displays the number of example queries that can be used
+           to test this database"
     relations: "EDAM_data:2527 Parameter"
   ]
 
@@ -171,19 +261,19 @@ section: advanced [
 
   boolean: id [
     default: "@(!$(only))"
-    information: "Display 'id' column"
+    information: "Display 'id' access column"
     relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: query [
     default: "@(!$(only))"
-    information: "Display 'qry' column"
+    information: "Display 'qry' access column"
     relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: all [
     default: "@(!$(only))"
-    information: "Display 'all' column"
+    information: "Display 'all' access column"
     relations: "EDAM_data:2527 Parameter"
   ]
 

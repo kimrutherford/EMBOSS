@@ -43,7 +43,7 @@
 <td>-window</td>
 <td>integer</td>
 <td>Window size</td>
-<td>Integer from 1 to 200</td>
+<td>Integer 1 or more</td>
 <td>19</td>
 </tr>
 
@@ -140,6 +140,14 @@
 <td> -scircular1<br>-scircular_sequences</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequences</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

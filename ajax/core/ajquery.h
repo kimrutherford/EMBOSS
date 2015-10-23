@@ -3,9 +3,9 @@
 ** AJAX Query parsing functions
 **
 ** @author Copyright (C) 2011 Peter Rice
-** @version $Revision: 1.9 $
+** @version $Revision: 1.10 $
 ** @modified Jul 15 pmr First version with code from all datatypes merged
-** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @modified $Date: 2012/09/03 14:26:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -84,6 +84,8 @@ AjBool        ajQuerystrParseRead(AjPStr *Pqry,
                                                     ajint *iformat),
                                   AjBool *Pnontext);
 void          ajQueryStarclear(AjPQuery thys);
+AjBool        ajQueryDefinedFieldC(const AjPQuery qry, const char* fieldtxt);
+AjBool        ajQueryDefinedFieldS(const AjPQuery qry, const AjPStr field);
 AjBool        ajQueryKnownFieldC(const AjPQuery qry, const char* fieldtxt);
 AjBool        ajQueryKnownFieldS(const AjPQuery qry, const AjPStr field);
 AjBool        ajQueryAddFieldAndC(AjPQuery qry, const char* fieldtxt,

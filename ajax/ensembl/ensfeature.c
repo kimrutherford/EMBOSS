@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.72 $
+** @version $Revision: 1.74 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:05:33 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -68,8 +68,9 @@
 /* @conststatic featureadaptorKMaxSplitQuerySeqregions ************************
 **
 ** Maximum number of Ensembl Mapper Result objects for which multiple regional
-** constraints for Feature objects on Sequence Regions are used. Above this
-** number of regions, it is faster to limit by start and end coordinates.
+** constraints for Ensembl Feature objects on Ensembl Sequence Region objects
+** are used. Above this number of regions, it is faster to limit by
+** start and end coordinates.
 **
 ******************************************************************************/
 
@@ -245,8 +246,8 @@ static AjBool assemblyexceptionfeatureadaptorRemap(
 ** @nam2rule Feature Functions for manipulating Ensembl Feature objects
 **
 ** @cc Bio::EnsEMBL::Feature
-** @cc CVS Revision: 1.66
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.70
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -365,8 +366,8 @@ EnsPFeature ensFeatureNewIniN(EnsPAnalysis analysis,
 
     if (start && end && (start > (end + 1)))
     {
-        ajDebug("ensFeatureNewIniN start (%u) must be less than or equal to "
-                "end (%u) + 1.\n", start, end);
+        ajDebug("ensFeatureNewIniN start (%d) must be less than or equal to "
+                "end (%d) + 1.\n", start, end);
 
         return NULL;
     }
@@ -433,8 +434,8 @@ EnsPFeature ensFeatureNewIniS(EnsPAnalysis analysis,
 
     if (start && end && (start > (end + 1)))
     {
-        ajDebug("ensFeatureNewIniS start (%u) must be less than or equal to "
-                "end (%u) + 1.\n", start, end);
+        ajDebug("ensFeatureNewIniS start (%d) must be less than or equal to "
+                "end (%d) + 1.\n", start, end);
 
         return NULL;
     }
@@ -538,14 +539,7 @@ void ensFeatureDel(EnsPFeature *Pfeature)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pfeature)
-        return;
-
-    pthis = *Pfeature;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pfeature) || --pthis->Use)
     {
         *Pfeature = NULL;
 
@@ -558,9 +552,7 @@ void ensFeatureDel(EnsPFeature *Pfeature)
 
     ajStrDel(&pthis->Sequencename);
 
-    AJFREE(pthis);
-
-    *Pfeature = NULL;
+    ajMemFree((void **) Pfeature);
 
     return;
 }
@@ -995,11 +987,11 @@ AjBool ensFeatureTrace(const EnsPFeature feature, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Feature object.
+** Functions for calculating information from an Ensembl Feature object.
 **
 ** @fdata [EnsPFeature]
 **
-** @nam3rule Calculate Calculate Ensembl Feature values
+** @nam3rule Calculate Calculate Ensembl Feature information
 ** @nam4rule Length  Calculate the length
 ** @nam4rule Memsize Calculate the memory size in bytes
 ** @nam4rule Strand  Calculate the strand
@@ -1402,8 +1394,8 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
     AjPList haps = NULL;
     AjPList alts = NULL;
 
-    EnsPAssemblyexceptionfeature aef         = NULL;
-    EnsPAssemblyexceptionfeature naef        = NULL;
+    EnsPAssemblyexceptionfeature        aef  = NULL;
+    EnsPAssemblyexceptionfeature       naef  = NULL;
     EnsPAssemblyexceptionfeatureadaptor aefa = NULL;
 
     EnsPDatabaseadaptor dba = NULL;
@@ -1411,11 +1403,11 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
     EnsPFeature afeature = NULL;
     EnsPFeature nfeature = NULL;
 
-    EnsPSlice fslice    = NULL;
-    EnsPSlice rslice    = NULL;
-    EnsPSlice aslice    = NULL;
-    EnsPSlice nslice    = NULL;
-    EnsPSliceadaptor sa = NULL;
+    EnsPSlice fslice     = NULL;
+    EnsPSlice rslice     = NULL;
+    EnsPSlice aslice     = NULL;
+    EnsPSlice nslice     = NULL;
+    EnsPSliceadaptor sla = NULL;
 
     if (!feature)
         return ajFalse;
@@ -1425,9 +1417,9 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
     if (!fslice)
         return ajTrue;
 
-    sa = ensSliceGetAdaptor(fslice);
+    sla = ensSliceGetAdaptor(fslice);
 
-    if (!sa)
+    if (!sla)
         return ajTrue;
 
     /*
@@ -1435,17 +1427,20 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
     ** full-length Slice of the Ensembl Sequence Region member.
     */
 
-    dba = ensSliceadaptorGetDatabaseadaptor(sa);
-
-    aefa = ensRegistryGetAssemblyexceptionfeatureadaptor(dba);
+    dba = ensSliceadaptorGetDatabaseadaptor(sla);
 
     srid = ensSliceGetSeqregionIdentifier(fslice);
 
-    ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &rslice);
+    ensSliceadaptorFetchBySeqregionIdentifier(sla, srid, 0, 0, 0, &rslice);
+
+    aefa = ensRegistryGetAssemblyexceptionfeatureadaptor(dba);
 
     aefs = ajListNew();
 
-    ensAssemblyexceptionfeatureadaptorFetchAllbySlice(aefa, rslice, aefs);
+    ensAssemblyexceptionfeatureadaptorFetchAllbySlice(
+        aefa,
+        rslice,
+        aefs);
 
     /*
     ** Group Ensembl Assembly Exception Feature objects based on their
@@ -1495,8 +1490,8 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
 
     /*
     ** Regions surrounding haplotypes are those of interest, not the haplotype
-    ** itself. Convert haplotype Assembly Exception Feature objects to regions
-    ** around haplotypes instead.
+    ** itself. Convert haplotype Ensembl Assembly Exception Feature objects to
+    ** regions around haplotypes instead.
     */
 
     while (ajListPop(haps, (void **) &aef))
@@ -1517,7 +1512,7 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
             ensFeatureSetEnd(nfeature, ensFeatureGetStart(afeature) - 1);
 
             ensSliceadaptorFetchBySeqregionIdentifier(
-                sa,
+                sla,
                 ensSliceGetSeqregionIdentifier(aslice),
                 1,
                 ensSliceGetStart(aslice) - 1,
@@ -1538,13 +1533,13 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
             ensFeatureDel(&nfeature);
         }
 
-        /* Check that Slice lengths are within range. */
+        /* Check that Ensembl Slice lengths are within range. */
 
         if (ensSliceGetSeqregionLength(rslice) <= INT_MAX)
             rlength = ensSliceGetSeqregionLength(rslice);
         else
             ajFatal("ensFeatureFetchAllAlternativelocations got "
-                    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
+                    "Sequence Region length (%d) exceeding MAX_INT (%d).\n",
                     ensSliceGetSeqregionLength(rslice),
                     INT_MAX);
 
@@ -1552,7 +1547,7 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
             alength = ensSliceGetSeqregionLength(aslice);
         else
             ajFatal("ensFeatureFetchAllAlternativelocations got "
-                    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
+                    "Sequence Region length (%d) exceeding MAX_INT (%d).\n",
                     ensSliceGetSeqregionLength(aslice),
                     INT_MAX);
 
@@ -1568,7 +1563,7 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
             ensFeatureSetEnd(nfeature, ensFeatureGetSeqregionLength(afeature));
 
             ensSliceadaptorFetchBySeqregionIdentifier(
-                sa,
+                sla,
                 ensSliceGetSeqregionIdentifier(aslice),
                 ensSliceGetEnd(aslice) + 1,
                 ensSliceGetSeqregionLength(aslice),
@@ -1632,7 +1627,7 @@ AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
         */
 
         ensSliceadaptorFetchBySeqregionIdentifier(
-            sa,
+            sla,
             ensSliceGetSeqregionIdentifier(aslice),
             0,
             0,
@@ -1699,7 +1694,7 @@ AjBool ensFeatureFetchSequencename(const EnsPFeature feature, AjPStr *Pname)
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Feature objects between
-** Ensembl Coordinate Systems.
+** Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPFeature]
 **
@@ -1770,8 +1765,8 @@ AjBool ensFeatureMove(EnsPFeature feature,
 
     if (start && end && (end < start))
     {
-        ajDebug("ensFeatureMove start (%u) must be less than or equal to the "
-                "end coordinate (%u).\n", start, end);
+        ajDebug("ensFeatureMove start (%d) must be less than or equal to the "
+                "end coordinate (%d).\n", start, end);
 
         return ajFalse;
     }
@@ -2212,8 +2207,7 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
     AjIList iterator = NULL;
     AjPList pss      = NULL;
 
-    EnsPCoordsystem        cs  = NULL;
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPCoordsystem cs = NULL;
 
     EnsPDatabaseadaptor dba = NULL;
 
@@ -2276,9 +2270,11 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
 
     dba = ensSliceadaptorGetDatabaseadaptor(sla);
 
-    csa = ensRegistryGetCoordsystemadaptor(dba);
-
-    ensCoordsystemadaptorFetchByName(csa, csname, csversion, &cs);
+    ensCoordsystemadaptorFetchByName(
+        ensRegistryGetCoordsystemadaptor(dba),
+        csname,
+        csversion,
+        &cs);
 
     if (!cs)
         ajFatal("ensFeatureTransform cannot transform to an unknown "
@@ -2381,7 +2377,7 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
     }
 
     if ((match == ajFalse) && (ajListGetLength(pss) > 1))
-        ajWarn("ensFeatureTransform got %d Ensembl Projection Segment "
+        ajWarn("ensFeatureTransform got %Lu Ensembl Projection Segment "
                "objects, but no Ensembl Slice was specified.",
                ajListGetLength(pss));
 
@@ -2512,8 +2508,8 @@ AjBool ensFeatureOverlap(const EnsPFeature feature1,
 
     if ((name1 && name2) && (!ajStrMatchCaseS(name1, name2)))
     {
-        ajDebug("ensFeatureOverlap got Feature objects on different "
-                "Ensembl Sequence Regions.\n");
+        ajDebug("ensFeatureOverlap got Ensembl Feature objects on different "
+                "Ensembl Sequence Region objects.\n");
 
         ajStrDel(&name1);
         ajStrDel(&name2);
@@ -3354,7 +3350,7 @@ AjBool ensListFeatureSortStartDescending(AjPList features)
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor
 ** @cc CVS Revision: 1.119
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3373,12 +3369,12 @@ AjBool ensListFeatureSortStartDescending(AjPList features)
 ** @nam3rule New Constructor
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule New Ptables [const char* const*] Table names
-** @argrule New Pcolumns [const char* const*] Column names
-** @argrule New leftjoin [const EnsPBaseadaptorLeftjoin]
-** Ensembl Base Adaptor Left Join conditions
-** @argrule New condition [const char*] SQL SELECT default condition
-** @argrule New final [const char*] SQL SELECT final condition
+** @argrule New Ptablenames [const char* const*] SQL table name array
+** @argrule New Pcolumnnames [const char* const*] SQL column name aray
+** @argrule New leftjoins [const EnsPBaseadaptorLeftjoin]
+** SQL LEFT JOIN condition array
+** @argrule New defaultcondition [const char*] SQL SELECT default condition
+** @argrule New finalcondition [const char*] SQL SELECT final condition
 ** @argrule New Fstatement [AjBool function] Statement function address
 ** @argrule New Fread [void* function] Read function address
 ** @argrule New Freference [void* function] Reference function address
@@ -3409,12 +3405,12 @@ AjBool ensListFeatureSortStartDescending(AjPList features)
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::new
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @param [r] Ptables [const char* const*] Table names
-** @param [r] Pcolumns [const char* const*] Column names
-** @param [rN] leftjoin [const EnsPBaseadaptorLeftjoin]
-** Ensembl Base Adaptor Left Join conditions
-** @param [rN] condition [const char*] SQL SELECT default condition
-** @param [rN] final [const char*] SQL SELECT final condition
+** @param [r] Ptablenames [const char* const*] SQL table name array
+** @param [r] Pcolumnnames [const char* const*] SQL column name array
+** @param [rN] leftjoins [const EnsPBaseadaptorLeftjoin]
+** SQL LEFT JOIN condition array
+** @param [rN] defaultcondition [const char*] SQL SELECT default condition
+** @param [rN] finalcondition [const char*] SQL SELECT final condition
 ** @param [f] Fstatement [AjBool function] Statement function address
 ** @param [fN] Fread [void* function] Read function address
 ** @param [fN] Freference [void* function] Reference function address
@@ -3445,11 +3441,11 @@ AjBool ensListFeatureSortStartDescending(AjPList features)
 
 EnsPFeatureadaptor ensFeatureadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char* const* Ptables,
-    const char* const* Pcolumns,
-    const EnsPBaseadaptorLeftjoin leftjoin,
-    const char *condition,
-    const char *final,
+    const char* const* Ptablenames,
+    const char* const* Pcolumnnames,
+    const EnsPBaseadaptorLeftjoin leftjoins,
+    const char *defaultcondition,
+    const char *finalcondition,
     AjBool (*Fstatement) (EnsPBaseadaptor ba,
                           const AjPStr statement,
                           EnsPAssemblymapper am,
@@ -3470,11 +3466,11 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
     if (ajDebugTest("ensFeatureadaptorNew"))
         ajDebug("ensFeatureadaptorNew\n"
                 "  dba %p\n"
-                "  Ptables %p\n"
-                "  Pcolumns %p\n"
-                "  leftjoin %p\n"
-                "  condition %p\n"
-                "  final %p\n"
+                "  Ptablenames %p\n"
+                "  Pcolumnnames %p\n"
+                "  leftjoins %p\n"
+                "  defaultcondition %p\n"
+                "  finalcondition %p\n"
                 "  Fstatement %p\n"
                 "  Fread %p\n"
                 "  Freference %p\n"
@@ -3484,11 +3480,11 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
                 "  Fgetfeature %p\n"
                 "  label '%s'\n",
                 dba,
-                Ptables,
-                Pcolumns,
-                leftjoin,
-                condition,
-                final,
+                Ptablenames,
+                Pcolumnnames,
+                leftjoins,
+                defaultcondition,
+                finalcondition,
                 Fstatement,
                 Fread,
                 Freference,
@@ -3501,10 +3497,10 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
     if (!dba)
         return NULL;
 
-    if (!Ptables)
+    if (!Ptablenames)
         return NULL;
 
-    if (!Pcolumns)
+    if (!Pcolumnnames)
         return NULL;
 
     if (!Fstatement)
@@ -3518,37 +3514,37 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
     if (ensDatabaseadaptorGetMultispecies(dba))
     {
         /*
-        ** For Ensembl collection (multi-species) databases, allocate an array
-        ** of SQL table names extended with 'seq_region' and 'coord_system'.
+        ** For Ensembl collection (multi-species) databases, allocate a
+        ** SQL table name array extended with 'seq_region' and 'coord_system'.
         ** This array, instead of the one provided as parameter
-        ** (const char *const *Ptables) will then be passed into the
+        ** (const char *const *Ptablenames) will then be passed into the
         ** Ensembl Base Adaptor via the ensBaseadaptorNew function.
         */
 
-        for (i = 0U; Ptables[i]; i++);
+        for (i = 0U; Ptablenames[i]; i++);
 
-        fa->Tables = AJCALLOC0(i + 1U + 2U, sizeof (char *));
+        fa->Tablenames = AJCALLOC0(i + 1U + 2U, sizeof (char *));
 
-        for (i = 0U; Ptables[i]; i++)
-            fa->Tables[i] = ajCharNewC(Ptables[i]);
+        for (i = 0U; Ptablenames[i]; i++)
+            fa->Tablenames[i] = ajCharNewC(Ptablenames[i]);
 
-        fa->Tables[i] = ajCharNewC("seq_region");
+        fa->Tablenames[i] = ajCharNewC("seq_region");
         i++;
-        fa->Tables[i] = ajCharNewC("coord_system");
+        fa->Tablenames[i] = ajCharNewC("coord_system");
         i++;
-        fa->Tables[i] = (char *) NULL;
+        fa->Tablenames[i] = NULL;
 
-        Ptables = (const char* const *) fa->Tables;
+        Ptablenames = (const char* const *) fa->Tablenames;
 
         /*
-        ** Allocate the default SQL condition and extend for 'seq_region' and
-        ** 'coord_system' conditions. This character string, instead of the one
-        ** provided here (const char *condition) will then be used by the
-        ** Ensembl Base Adaptor via ensBaseadaptorNew.
+        ** Allocate the SQL SELECT default condition and extend for
+        ** "seq_region" and "coord_system" conditions. This character string,
+        ** instead of the one provided here (const char *defaultcondition) will
+        ** then be used by the Ensembl Base Adaptor via ensBaseadaptorNew.
         */
 
-        if (condition)
-            fa->Condition = ajFmtString(
+        if (defaultcondition)
+            fa->Defaultcondition = ajFmtString(
                 "%s "
                 "AND "
                 "%s.seq_region_id = seq_region.seq_region_id "
@@ -3556,30 +3552,30 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
                 "seq_region.coord_system_id = coord_system.coord_system_id "
                 "AND "
                 "coord_system.species_id = %u",
-                condition,
-                Ptables[0],
+                defaultcondition,
+                Ptablenames[0],
                 ensDatabaseadaptorGetIdentifier(dba));
         else
-            fa->Condition = ajFmtString(
+            fa->Defaultcondition = ajFmtString(
                 "%s.seq_region_id = "
                 "seq_region.seq_region_id "
                 "AND "
                 "seq_region.coord_system_id = coord_system.coord_system_id "
                 "AND "
                 "coord_system.species_id = %u",
-                Ptables[0],
+                Ptablenames[0],
                 ensDatabaseadaptorGetIdentifier(dba));
 
-        condition = (const char *) fa->Condition;
+        defaultcondition = (const char *) fa->Defaultcondition;
     }
 
     fa->Adaptor = ensBaseadaptorNew(
         dba,
-        Ptables,
-        Pcolumns,
-        leftjoin,
-        condition,
-        final,
+        Ptablenames,
+        Pcolumnnames,
+        leftjoins,
+        defaultcondition,
+        finalcondition,
         Fstatement);
 
     fa->Cache = ensCacheNew(
@@ -3655,10 +3651,8 @@ void ensFeatureadaptorDel(EnsPFeatureadaptor *Pfa)
                 *Pfa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pfa)
+    if (!(pthis = *Pfa))
         return;
-
-    pthis = *Pfa;
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
@@ -3666,22 +3660,19 @@ void ensFeatureadaptorDel(EnsPFeatureadaptor *Pfa)
 
     /* Clear the array of SQL table names. */
 
-    if (pthis->Tables)
+    if (pthis->Tablenames)
     {
-        for (i = 0U; pthis->Tables[i]; i++)
-            ajCharDel(&pthis->Tables[i]);
+        for (i = 0U; pthis->Tablenames[i]; i++)
+            ajCharDel(&pthis->Tablenames[i]);
 
-        AJFREE(pthis->Tables);
+        AJFREE(pthis->Tablenames);
     }
 
-    /* Clear the default SQL condition. */
+    /* Clear the SQL SELECT default condition. */
 
-    if (pthis->Condition)
-        ajCharDel(&pthis->Condition);
+    ajCharDel(&pthis->Defaultcondition);
 
-    AJFREE(pthis);
-
-    *Pfa = NULL;
+    ajMemFree((void **) Pfa);
 
     return;
 }
@@ -3775,7 +3766,8 @@ EnsPCache ensFeatureadaptorGetCache(
 EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
     const EnsPFeatureadaptor fa)
 {
-    return (fa) ? ensBaseadaptorGetDatabaseadaptor(fa->Adaptor) : NULL;
+    return ensBaseadaptorGetDatabaseadaptor(
+        ensFeatureadaptorGetBaseadaptor(fa));
 }
 
 
@@ -3830,22 +3822,23 @@ AjBool ensFeatureadaptorGetStartequalsend(
 ** @fdata [EnsPFeatureadaptor]
 **
 ** @nam3rule Set Set one member of an Ensembl Feature Adaptor
-** @nam4rule Columns Set the column names
+** @nam4rule Columnnames Set the SQL column name array
 ** @nam4rule Defaultcondition Set the SQL SELECT default condition
 ** @nam4rule Finalcondition Set the SQL SELECT final condition
 ** @nam4rule Maximumlength Set the maximum Feature length
 ** @nam4rule Startequalsend Set the start-equals-end flag
-** @nam4rule Tables Set the table names
+** @nam4rule Tablenames Set the SQL table name array
 **
 ** @argrule * fa [EnsPFeatureadaptor] Ensembl Feature Adaptor object
-** @argrule Columns Pcolumns [const char* const*] Column names
-** @argrule Defaultcondition condition [const char*]
+** @argrule Columnnames Pcolumnnames [const char* const*]
+** SQL column name array
+** @argrule Defaultcondition defaultcondition [const char*]
 ** SQL SELECT default condition
-** @argrule Finalcondition final [const char*]
+** @argrule Finalcondition finalcondition [const char*]
 ** SQL SELECT final condition
 ** @argrule Maximumlength length [ajint] Maximum length
 ** @argrule Startequalsend flag [AjBool] Start-equals-end flag
-** @argrule Tables Ptables [const char* const*] Table names
+** @argrule Tablenames Ptablenames [const char* const*] SQL table name array
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3855,13 +3848,14 @@ AjBool ensFeatureadaptorGetStartequalsend(
 
 
 
-/* @func ensFeatureadaptorSetColumns ******************************************
+/* @func ensFeatureadaptorSetColumnnames **************************************
 **
-** Set the columns member of the Ensembl Base Adaptor member of an
+** Set the SQL column name array member of the
+** Ensembl Base Adaptor member of an
 ** Ensembl Feature Adaptor.
 **
 ** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] Pcolumns [const char* const*] Column names
+** @param [r] Pcolumnnames [const char* const*] SQL column name array
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3869,16 +3863,12 @@ AjBool ensFeatureadaptorGetStartequalsend(
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
-                                   const char* const* Pcolumns)
+AjBool ensFeatureadaptorSetColumnnames(EnsPFeatureadaptor fa,
+                                       const char* const* Pcolumnnames)
 {
-    if (!fa)
-        return ajFalse;
-
-    if (!Pcolumns)
-        return ajFalse;
-
-    return ensBaseadaptorSetColumns(fa->Adaptor, Pcolumns);
+    return ensBaseadaptorSetColumnnames(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        Pcolumnnames);
 }
 
 
@@ -3894,10 +3884,10 @@ AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
 ** the Ensembl Database Adaptor need to be selected.
 ** This is achieved by automatically adding additional joins to the
 ** 'seq_region' and the 'coord_system' table, which contains the
-** 'coord_system.species_id' field to the default SQL condition.
+** 'coord_system.species_id' field to the SQL SELECT default condition.
 **
 ** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] condition [const char*] SQL SELECT default condition
+** @param [rN] defaultcondition [const char*] SQL SELECT default condition
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3906,30 +3896,34 @@ AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
 ******************************************************************************/
 
 AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
-                                            const char *condition)
+                                            const char *defaultcondition)
 {
     EnsPDatabaseadaptor dba = NULL;
 
     if (!fa)
         return ajFalse;
 
+    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
+    if (!dba)
+        return ajFalse;
+
     if (ensDatabaseadaptorGetMultispecies(dba))
     {
         /* Clear the SQL SELECT default condition. */
 
-        if (fa->Condition)
-            ajCharDel(&fa->Condition);
+        ajCharDel(&fa->Defaultcondition);
 
         /*
         ** Allocate the SQL SELECT default condition and extend for
-        ** 'seq_region' and 'coord_system' conditions. This character string,
-        ** instead of the one provided here (const char *condition) will then
-        ** be set in the Ensembl Base Adaptor via
+        ** "seq_region" and "coord_system" conditions. This character string,
+        ** instead of the one provided here (const char *defaultcondition) will
+        ** then be set in the Ensembl Base Adaptor via
         ** ensBaseadaptorSetDefaultcondition.
         */
 
-        if (condition)
-            fa->Condition = ajFmtString(
+        if (defaultcondition)
+            fa->Defaultcondition = ajFmtString(
                 "%s "
                 "AND "
                 "%s.seq_region_id = seq_region.seq_region_id "
@@ -3937,23 +3931,27 @@ AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
                 "seq_region.coord_system_id = coord_system.coord_system_id "
                 "AND "
                 "coord_system.species_id = %u",
-                condition,
-                ensBaseadaptorGetPrimarytable(fa->Adaptor),
+                defaultcondition,
+                ensBaseadaptorGetPrimarytable(
+                    ensFeatureadaptorGetBaseadaptor(fa)),
                 ensDatabaseadaptorGetIdentifier(dba));
         else
-            fa->Condition = ajFmtString(
+            fa->Defaultcondition = ajFmtString(
                 "%s.seq_region_id = seq_region.seq_region_id "
                 "AND "
                 "seq_region.coord_system_id = coord_system.coord_system_id "
                 "AND "
                 "coord_system.species_id = %u",
-                ensBaseadaptorGetPrimarytable(fa->Adaptor),
+                ensBaseadaptorGetPrimarytable(
+                    ensFeatureadaptorGetBaseadaptor(fa)),
                 ensDatabaseadaptorGetIdentifier(dba));
 
-        condition = (const char *) fa->Condition;
+        defaultcondition = (const char *) fa->Defaultcondition;
     }
 
-    return ensBaseadaptorSetDefaultcondition(fa->Adaptor, condition);
+    return ensBaseadaptorSetDefaultcondition(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        defaultcondition);
 }
 
 
@@ -3961,11 +3959,11 @@ AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
 
 /* @func ensFeatureadaptorSetFinalcondition ***********************************
 **
-** Set the final condition (SQL SELECT) member of the
+** Set the SQL SELECT final condition member of the
 ** Ensembl Base Adaptor member of an Ensembl Base Adaptor.
 **
 ** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] final [const char*] Final SQL condition
+** @param [r] finalcondition [const char*] SQL SELECT final condition
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -3974,12 +3972,14 @@ AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
 ******************************************************************************/
 
 AjBool ensFeatureadaptorSetFinalcondition(EnsPFeatureadaptor fa,
-                                          const char *final)
+                                          const char *finalcondition)
 {
     if (!fa)
         return ajFalse;
 
-    return ensBaseadaptorSetFinalcondition(fa->Adaptor, final);
+    return ensBaseadaptorSetFinalcondition(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        finalcondition);
 }
 
 
@@ -4039,20 +4039,21 @@ AjBool ensFeatureadaptorSetStartequalsend(EnsPFeatureadaptor fa,
 
 
 
-/* @func ensFeatureadaptorSetTables *******************************************
+/* @func ensFeatureadaptorSetTablenames ***************************************
 **
-** Set the tables member of the Ensembl Base Adaptor member of an
+** Set the SQL table name array member of the
+** Ensembl Base Adaptor member of an
 ** Ensembl Feature Adaptor.
 **
 ** For Ensembl Collection Core databases storing information about multiple
 ** species, only Ensembl Feature objects for a particular species encoded in
 ** the Ensembl Database Adaptor need to be selected.
 ** This is achieved by automatically adding additional joins to the
-** 'seq_region' and the 'coord_system' table, which contains the
-** 'coord_system.species_id' field to the SQL SELECT default condition.
+** "seq_region" and the "coord_system" table, which contains the
+** "coord_system.species_id" field to the SQL SELECT default condition.
 **
 ** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] Ptables [const char* const*] Table names
+** @param [r] Ptablenames [const char* const*] SQL table name array
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4060,8 +4061,8 @@ AjBool ensFeatureadaptorSetStartequalsend(EnsPFeatureadaptor fa,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
-                                  const char* const* Ptables)
+AjBool ensFeatureadaptorSetTablenames(EnsPFeatureadaptor fa,
+                                      const char* const* Ptablenames)
 {
     register ajuint i = 0U;
 
@@ -4070,47 +4071,52 @@ AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
     if (!fa)
         return ajFalse;
 
-    if (!Ptables)
+    if (!Ptablenames)
         return ajFalse;
 
     dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
+    if (!dba)
+        return ajFalse;
 
     if (ensDatabaseadaptorGetMultispecies(dba))
     {
         /* Clear the array of table names. */
 
-        if (fa->Tables)
+        if (fa->Tablenames)
         {
-            for (i = 0U; fa->Tables[i]; i++)
-                ajCharDel(&fa->Tables[i]);
+            for (i = 0U; fa->Tablenames[i]; i++)
+                ajCharDel(&fa->Tablenames[i]);
 
-            AJFREE(fa->Tables);
+            AJFREE(fa->Tablenames);
         }
 
         /*
-        ** Allocate an array of SQL table names extended for 'seq_region' and
-        ** 'coord_system' tables. This array, instead of the one provided here
-        ** (const char *const *Ptables) will then be set in the
-        ** Ensembl Base Adaptor via ensBaseadaptorSetTables.
+        ** Allocate an SQL table name array extended for 'seq_region' and
+        ** 'coord_system' table names. This array, instead of the one provided
+        ** here (const char *const *Ptablenames) will then be set in the
+        ** Ensembl Base Adaptor via ensBaseadaptorSetTablenames.
         */
 
-        for (i = 0U; Ptables[i]; i++);
+        for (i = 0U; Ptablenames[i]; i++);
 
-        fa->Tables = AJCALLOC0(i + 1U + 2U, sizeof (char *));
+        fa->Tablenames = AJCALLOC0(i + 1U + 2U, sizeof (char *));
 
-        for (i = 0U; Ptables[i]; i++)
-            fa->Tables[i] = ajCharNewC(Ptables[i]);
+        for (i = 0U; Ptablenames[i]; i++)
+            fa->Tablenames[i] = ajCharNewC(Ptablenames[i]);
 
-        fa->Tables[i] = ajCharNewC("seq_region");
+        fa->Tablenames[i] = ajCharNewC("seq_region");
         i++;
-        fa->Tables[i] = ajCharNewC("coord_system");
+        fa->Tablenames[i] = ajCharNewC("coord_system");
         i++;
-        fa->Tables[i] = (char *) NULL;
+        fa->Tablenames[i] = NULL;
 
-        Ptables = (const char* const *) fa->Tables;
+        Ptablenames = (const char* const *) fa->Tablenames;
     }
 
-    return ensBaseadaptorSetTables(fa->Adaptor, Ptables);
+    return ensBaseadaptorSetTablenames(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        Ptablenames);
 }
 
 
@@ -4163,12 +4169,7 @@ AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
                                 char **Ptxt,
                                 const AjPStr str)
 {
-    if (!fa)
-        return ajFalse;
-
-    if (!str)
-        return ajFalse;
-
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("ensFeatureadaptorEscapeC"))
         ajDebug("ensFeatureadaptorEscapeC\n"
                 "  fa %p\n"
@@ -4177,8 +4178,12 @@ AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
                 fa,
                 Ptxt,
                 str);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    return ensBaseadaptorEscapeC(fa->Adaptor, Ptxt, str);
+    return ensBaseadaptorEscapeC(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        Ptxt,
+        str);
 }
 
 
@@ -4206,12 +4211,7 @@ AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor fa,
                                 AjPStr *Pstr,
                                 const AjPStr str)
 {
-    if (!fa)
-        return ajFalse;
-
-    if (!str)
-        return ajFalse;
-
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
     if (ajDebugTest("ensFeatureadaptorEscapeS"))
         ajDebug("ensFeatureadaptorEscapeS\n"
                 "  fa %p\n"
@@ -4220,8 +4220,12 @@ AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor fa,
                 fa,
                 Pstr,
                 str);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    return ensBaseadaptorEscapeS(fa->Adaptor, Pstr, str);
+    return ensBaseadaptorEscapeS(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        Pstr,
+        str);
 }
 
 
@@ -4308,13 +4312,14 @@ AjBool ensFeatureadaptorConstraintAppendAnalysisname(
 
     /*
     ** Check that the primary table, which is the first one in the list of
-    ** tables (fa->Adaptor->Tables[0]), actually contains an 'analysis_id'
-    ** column.
+    ** tables, actually contains an 'analysis_id' column.
     */
 
-    columns = ensBaseadaptorGetColumns(fa->Adaptor);
+    columns = ensBaseadaptorGetColumnnames(
+        ensFeatureadaptorGetBaseadaptor(fa));
 
-    table = ensBaseadaptorGetPrimarytable(fa->Adaptor);
+    table = ensBaseadaptorGetPrimarytable(
+        ensFeatureadaptorGetBaseadaptor(fa));
 
     while (columns[i])
     {
@@ -4486,19 +4491,22 @@ static AjBool featureadaptorRemap(EnsPFeatureadaptor fa,
             if (!am)
                 ajFatal("featureadaptorRemap requires an "
                         "Ensembl Assembly Mapper, when "
-                        "Coordinate Systems of Feature objects and Slice "
-                        "differ.\n");
+                        "Ensembl Coordinate System objects of "
+                        "Ensembl Feature objects and "
+                        "Ensembl Slice differ.\n");
 
-            ensAssemblymapperFastmap(am,
-                                     ensSliceGetSeqregion(feature->Slice),
-                                     feature->Start,
-                                     feature->End,
-                                     feature->Strand,
-                                     mrs);
+            ensAssemblymapperMapSeqregion(am,
+                                          ensSliceGetSeqregion(feature->Slice),
+                                          feature->Start,
+                                          feature->End,
+                                          feature->Strand,
+                                          ajTrue,
+                                          mrs);
 
             /*
-            ** The ensMapperFastmap function returns at maximum one Ensembl
-            ** Mapper Result. An empty AJAX List of Ensembl Mapper Results
+            ** The ensAssemblymapperMapSeqregion function in fastmap mode
+            ** returns at maximum one Ensembl Mapper Result.
+            ** An empty AJAX List of Ensembl Mapper Result objects
             ** means a gap, so remove the Ensembl Object from the AJAX List
             ** of Ensembl Objects and delete it.
             */
@@ -4635,6 +4643,8 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
     EnsPAssemblymapper am         = NULL;
     EnsPAssemblymapperadaptor ama = NULL;
 
+    EnsPBaseadaptor ba = NULL;
+
     EnsPCoordsystem cs         = NULL;
     EnsPCoordsystemadaptor csa = NULL;
 
@@ -4670,15 +4680,9 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
     if (!objects)
         return ajFalse;
 
-    if (!fa->Adaptor)
-    {
-        ajDebug("featureadaptorSliceFetch got Ensembl Feature Adaptor "
-                "without an Ensembl Base Adaptor.\n");
+    ba = ensFeatureadaptorGetBaseadaptor(fa);
 
-        return ajFalse;
-    }
-
-    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     if (!dba)
     {
@@ -4718,7 +4722,7 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
     ** in which Coordinate System this particular Feature has been annotated.
     */
 
-    table = ensBaseadaptorGetPrimarytable(fa->Adaptor);
+    table = ensBaseadaptorGetPrimarytable(ba);
 
     key = ajFmtStr("%sbuild.level", table);
 
@@ -4736,7 +4740,7 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
             (void *) ensCoordsystemNewRef(
                 ensSliceGetCoordsystemObject(slice)));
     else
-        ensMetacoordinateadaptorFetchAllCoordsystems(mca, key, css);
+        ensMetacoordinateadaptorRetrieveAllCoordsystems(mca, key, css);
 
     while (ajListPop(mis, (void **) &mi))
         ensMetainformationDel(&mi);
@@ -4757,16 +4761,19 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
         if (ensCoordsystemMatch(cs, ensSliceGetCoordsystemObject(slice)))
         {
             /*
-            ** No mapping is required as the Coordinate Systems of Feature
-            ** and Slice are identical.
+            ** No mapping is required as the Ensembl Coordinate System objects
+            ** of Ensembl Feature and Ensembl Slice are identical.
             */
 
             if (!fa->Maximumlength)
             {
                 key = ajStrNewC(table);
 
-                fa->Maximumlength =
-                    ensMetacoordinateadaptorGetMaximumlength(mca, cs, key);
+                ensMetacoordinateadaptorRetrieveMaximumlength(
+                    mca,
+                    cs,
+                    key,
+                    &fa->Maximumlength);
 
                 ajStrDel(&key);
             }
@@ -4892,11 +4899,12 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
 
             pos = ajListNew();
 
-            ensBaseadaptorFetchAllbyConstraint(fa->Adaptor,
-                                               tmpconstr,
-                                               (EnsPAssemblymapper) NULL,
-                                               slice,
-                                               pos);
+            ensBaseadaptorFetchAllbyConstraint(
+                ba,
+                tmpconstr,
+                (EnsPAssemblymapper) NULL,
+                slice,
+                pos);
 
             /*
             ** Feature objects may still have to have coordinates made relative
@@ -4906,10 +4914,10 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
             /*
             ** FIXME: The following mapper does not seem to be defined in the
             ** Perl API, when no mapping is needed. Why is there no error?
-            ** _remap tests whether Coordinate Systems are not equal and only
-            ** executes the mapper code when the Coordinate Systems are not
-            ** equal, but that is exactly not the case when no mapping is
-            ** required.
+            ** _remap tests whether Ensembl Coordinate System objects are not
+            ** equal and only executes the mapper code when the
+            ** Ensembl Coordinate System objects are not equal, but that is
+            ** exactly not the case when no mapping is required.
             */
 
             featureadaptorRemap(fa,
@@ -4924,8 +4932,8 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
         else
         {
             /*
-            ** Mapping is required as the Coordinate Systems of Feature and
-            ** Slice Coordinate Systems differ.
+            ** Mapping is required as the Coordinate System objects of
+            ** Ensembl Feature and Ensembl Slice differ.
             */
 
             ensAssemblymapperadaptorFetchByCoordsystems(
@@ -4948,7 +4956,7 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
             ** identifiers for the regions the Slice spans.
             */
 
-            ensAssemblymapperMapSlice(am, slice, mrs);
+            ensAssemblymapperMapSlice(am, slice, ajFalse, mrs);
 
             iter = ajListIterNew(mrs);
 
@@ -5015,11 +5023,12 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
 
                 pos = ajListNew();
 
-                ensBaseadaptorFetchAllbyConstraint(fa->Adaptor,
-                                                   tmpconstr,
-                                                   am,
-                                                   slice,
-                                                   pos);
+                ensBaseadaptorFetchAllbyConstraint(
+                    ba,
+                    tmpconstr,
+                    am,
+                    slice,
+                    pos);
 
                 featureadaptorRemap(fa, pos, am, slice);
 
@@ -5038,10 +5047,11 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
                 {
                     key = ajStrNewC(table);
 
-                    fa->Maximumlength =
-                        ensMetacoordinateadaptorGetMaximumlength(mca,
-                                                                 cs,
-                                                                 key);
+                    ensMetacoordinateadaptorRetrieveMaximumlength(
+                        mca,
+                        cs,
+                        key,
+                        &fa->Maximumlength);
 
                     ajStrDel(&key);
                 }
@@ -5076,11 +5086,12 @@ static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
 
                     pos = ajListNew();
 
-                    ensBaseadaptorFetchAllbyConstraint(fa->Adaptor,
-                                                       tmpconstr,
-                                                       am,
-                                                       slice,
-                                                       pos);
+                    ensBaseadaptorFetchAllbyConstraint(
+                        ba,
+                        tmpconstr,
+                        am,
+                        slice,
+                        pos);
 
                     ajStrDel(&tmpconstr);
 
@@ -5182,18 +5193,21 @@ AjBool ensFeatureadaptorFetchAllbyAnalysisname(EnsPFeatureadaptor fa,
 
     constraint = ajStrNew();
 
-    if (!ensFeatureadaptorConstraintAppendAnalysisname(fa, &constraint, anname))
+    if (!ensFeatureadaptorConstraintAppendAnalysisname(fa,
+                                                       &constraint,
+                                                       anname))
     {
         ajStrDel(&constraint);
 
         return ajFalse;
     }
 
-    result = ensBaseadaptorFetchAllbyConstraint(fa->Adaptor,
-                                                constraint,
-                                                (EnsPAssemblymapper) NULL,
-                                                (EnsPSlice) NULL,
-                                                objects);
+    result = ensBaseadaptorFetchAllbyConstraint(
+        ensFeatureadaptorGetBaseadaptor(fa),
+        constraint,
+        (EnsPAssemblymapper) NULL,
+        (EnsPSlice) NULL,
+        objects);
 
     ajStrDel(&constraint);
 
@@ -5258,9 +5272,9 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
     EnsPProjectionsegment slps = NULL; /* Slice Projection Segment */
     EnsPProjectionsegment srps = NULL; /* Sequence Region Projection Segment */
 
-    EnsPSlice psslice   = NULL;
-    EnsPSlice srslice   = NULL;
-    EnsPSliceadaptor sa = NULL;
+    EnsPSlice psslice    = NULL;
+    EnsPSlice srslice    = NULL;
+    EnsPSliceadaptor sla = NULL;
 
     debug = ajDebugTest("ensFeatureadaptorFetchAllbySlice");
 
@@ -5287,14 +5301,8 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
     if (!slice)
         return ajFalse;
 
-    if (!fa->Adaptor)
-    {
-        ajDebug("ensFeatureadaptorFetchAllbySlice got an "
-                "Ensembl Feature Adaptor without an "
-                "Ensembl Base Adaptor.\n");
-
+    if (!objects)
         return ajFalse;
-    }
 
     dba = ensFeatureadaptorGetDatabaseadaptor(fa);
 
@@ -5324,11 +5332,11 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
     ** regions (PARs) and haplotypes (HAPs).
     */
 
-    sa = ensRegistryGetSliceadaptor(dba);
+    sla = ensRegistryGetSliceadaptor(dba);
 
     slpss = ajListNew();
 
-    ensSliceadaptorRetrieveNormalisedprojection(sa, slice, slpss);
+    ensSliceadaptorRetrieveNormalisedprojection(sla, slice, slpss);
 
     if (!ajListGetLength(slpss))
         ajFatal("ensFeatureadaptorFetchAllbySlice could not get "
@@ -5377,7 +5385,7 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
     ** the entire Sequence Region.
     */
 
-    ensSliceadaptorFetchBySeqregionIdentifier(sa,
+    ensSliceadaptorFetchBySeqregionIdentifier(sla,
                                               srid,
                                               0,
                                               0,
@@ -5386,7 +5394,7 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
 
     srpss = ajListNew();
 
-    ensSliceadaptorRetrieveNormalisedprojection(sa, srslice, srpss);
+    ensSliceadaptorRetrieveNormalisedprojection(sla, srslice, srpss);
 
     ensSliceDel(&srslice);
 
@@ -5470,7 +5478,7 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
 
                         (*fa->Fdelete) (&Pobject);
 
-                        feature = (EnsPFeature) NULL;
+                        feature = NULL;
 
                         break;
                     }
@@ -5512,7 +5520,7 @@ AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
 ** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] score [double] Score
-** @param [r] anname [const AjPStr] Ensembl Analysis name
+** @param [rN] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
 **                              Ensembl Feature objects
 **
@@ -5540,15 +5548,20 @@ AjBool ensFeatureadaptorFetchAllbySlicescore(EnsPFeatureadaptor fa,
     if (!slice)
         return ajFalse;
 
-    table = ensBaseadaptorGetPrimarytable(fa->Adaptor);
+    if (!objects)
+        return ajFalse;
 
-    constraint = ajFmtStr("%s.score > %lf", table, score);
+    table = ensBaseadaptorGetPrimarytable(
+        ensFeatureadaptorGetBaseadaptor(fa));
 
-    result = ensFeatureadaptorFetchAllbySlice(fa,
-                                              slice,
-                                              constraint,
-                                              anname,
-                                              objects);
+    constraint = ajFmtStr("%s.score > %f", table, score);
+
+    result = ensFeatureadaptorFetchAllbySlice(
+        fa,
+        slice,
+        constraint,
+        anname,
+        objects);
 
     ajStrDel(&constraint);
 
@@ -5565,7 +5578,7 @@ AjBool ensFeatureadaptorFetchAllbySlicescore(EnsPFeatureadaptor fa,
 **
 ** @cc Bio::EnsEMBL::FeaturePair
 ** @cc CVS Revision: 1.68
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -5813,14 +5826,7 @@ void ensFeaturepairDel(EnsPFeaturepair *Pfp)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pfp)
-        return;
-
-    pthis = *Pfp;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pfp) || --pthis->Use)
     {
         *Pfp = NULL;
 
@@ -5836,9 +5842,7 @@ void ensFeaturepairDel(EnsPFeaturepair *Pfp)
     ajStrDel(&pthis->SourceSpecies);
     ajStrDel(&pthis->TargetSpecies);
 
-    AJFREE(pthis);
-
-    *Pfp = NULL;
+    ajMemFree((void **) Pfp);
 
     return;
 }
@@ -6729,11 +6733,11 @@ AjBool ensFeaturepairTrace(const EnsPFeaturepair fp, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Feature Pair object.
+** Functions for calculating information from an Ensembl Feature Pair object.
 **
 ** @fdata [EnsPFeaturepair]
 **
-** @nam3rule Calculate Calculate Ensembl Feature Pair values
+** @nam3rule Calculate Calculate Ensembl Feature Pair information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * fp [const EnsPFeaturepair] Ensembl Feature Pair
@@ -6800,7 +6804,7 @@ size_t ensFeaturepairCalculateMemsize(const EnsPFeaturepair fp)
 /* @section map ***************************************************************
 **
 ** Functions for mapping Ensembl Feature Pair objects between
-** Ensembl Coordinate Systems.
+** Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPFeaturepair]
 **
@@ -7702,7 +7706,7 @@ AjBool ensListFeaturepairSortSourceStartDescending(AjPList fps)
 **
 ** @cc Bio::EnsEMBL::AssemblyExceptionFeature
 ** @cc CVS Revision: 1.9
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -7910,14 +7914,7 @@ void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature *Paef)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Paef)
-        return;
-
-    pthis = *Paef;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Paef) || --pthis->Use)
     {
         *Paef = NULL;
 
@@ -7928,9 +7925,7 @@ void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature *Paef)
 
     ensSliceDel(&pthis->ExceptionSlice);
 
-    AJFREE(pthis);
-
-    *Paef = NULL;
+    ajMemFree((void **) Paef);
 
     return;
 }
@@ -8335,17 +8330,17 @@ AjBool ensAssemblyexceptionfeatureTrace(const EnsPAssemblyexceptionfeature aef,
     ajDebug("ensAssemblyexceptionfeatureTrace %p\n"
             "%S  Use %u\n"
             "%S  Identifier %u\n"
-            "%S  EnsPAssemblyexceptionfeatureadaptor %p\n"
+            "%S  Adaptor %p\n"
             "%S  Feature %p\n"
             "%S  ExceptionSlice %p\n"
-            "%S  Type %d\n",
+            "%S  Type '%s'\n",
             indent, aef,
             indent, aef->Use,
             indent, aef->Identifier,
             indent, aef->Adaptor,
             indent, aef->Feature,
             indent, aef->ExceptionSlice,
-            indent, aef->Type);
+            indent, ensAssemblyexceptionTypeToChar(aef->Type));
 
     ensFeatureTrace(aef->Feature, level + 1);
 
@@ -8361,12 +8356,12 @@ AjBool ensAssemblyexceptionfeatureTrace(const EnsPAssemblyexceptionfeature aef,
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Assembly Exception Feature object.
 **
 ** @fdata [EnsPAssemblyexceptionfeature]
 **
-** @nam3rule Calculate Calculate Ensembl Assembly Exception Feature values
+** @nam3rule Calculate Calculate Ensembl Assembly Exception Feature information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * aef [const EnsPAssemblyexceptionfeature]
@@ -8486,7 +8481,7 @@ AjBool ensAssemblyexceptionfeatureFetchDisplayidentifier(
 **
 ** @cc Bio::EnsEMBL::DBSQL::AssemblyExceptionFeatureAdaptor
 ** @cc CVS Revision: 1.21
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -8527,11 +8522,13 @@ static AjBool assemblyexceptionfeatureadaptorCacheInit(
     EnsPAssemblyexceptionfeature refaef = NULL;
     EnsPAssemblyexceptionfeature excaef = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPFeature feature = NULL;
 
-    EnsPSlice excslice  = NULL;
-    EnsPSlice refslice  = NULL;
-    EnsPSliceadaptor sa = NULL;
+    EnsPSlice excslice   = NULL;
+    EnsPSlice refslice   = NULL;
+    EnsPSliceadaptor sla = NULL;
 
     if (!aefa)
         return ajFalse;
@@ -8544,9 +8541,10 @@ static AjBool assemblyexceptionfeatureadaptorCacheInit(
         return ajFalse;
     }
 
-    aea = ensRegistryGetAssemblyexceptionadaptor(aefa->Adaptor);
+    dba = ensAssemblyexceptionfeatureadaptorGetDatabaseadaptor(aefa);
 
-    sa = ensRegistryGetSliceadaptor(aefa->Adaptor);
+    aea = ensRegistryGetAssemblyexceptionadaptor(dba);
+    sla = ensRegistryGetSliceadaptor(dba);
 
     aes = ajListNew();
 
@@ -8577,14 +8575,14 @@ static AjBool assemblyexceptionfeatureadaptorCacheInit(
 
         /* For the reference Slice ... */
 
-        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+        ensSliceadaptorFetchBySeqregionIdentifier(sla,
                                                   srid,
                                                   0,
                                                   0,
                                                   0,
                                                   &refslice);
 
-        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+        ensSliceadaptorFetchBySeqregionIdentifier(sla,
                                                   erid,
                                                   erstart,
                                                   erend,
@@ -8624,14 +8622,14 @@ static AjBool assemblyexceptionfeatureadaptorCacheInit(
 
         /* For the exception Slice ... */
 
-        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+        ensSliceadaptorFetchBySeqregionIdentifier(sla,
                                                   erid,
                                                   0,
                                                   0,
                                                   0,
                                                   &excslice);
 
-        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+        ensSliceadaptorFetchBySeqregionIdentifier(sla,
                                                   srid,
                                                   srstart,
                                                   srend,
@@ -8738,7 +8736,7 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureadaptorNew(
 
     aefa->Cache = ajListNew();
 
-    aefa->CacheByIdentifier = ajTableuintNew(0);
+    aefa->CacheByIdentifier = ajTableuintNew(0U);
 
     ajTableSetDestroyvalue(
         aefa->CacheByIdentifier,
@@ -8749,9 +8747,12 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureadaptorNew(
         assemblyexceptionfeatureadaptorKCacheMaxBytes,
         assemblyexceptionfeatureadaptorKCacheMaxCount,
         assemblyexceptionfeatureadaptorKCacheMaxSize,
-        (void *(*)(void *value)) NULL,
-        (void (*)(void **Pvalue)) NULL,
-        (size_t (*)(const void *value)) NULL,
+        (void *(*)(void *value))
+        &ensAssemblyexceptionfeatureNewRef,
+        (void (*)(void **Pvalue))
+        &ensAssemblyexceptionfeatureDel,
+        (size_t (*)(const void *value))
+        &ensAssemblyexceptionfeatureCalculateMemsize,
         (void *(*)(const void *key)) NULL,
         (AjBool (*)(const void *value)) NULL,
         ajFalse,
@@ -8821,21 +8822,65 @@ void ensAssemblyexceptionfeatureadaptorDel(
                 *Paefa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Paefa)
+    if (!(pthis = *Paefa))
         return;
-
-    pthis = *Paefa;
 
     while (ajListPop(pthis->Cache, (void **) &aef))
         ensAssemblyexceptionfeatureDel(&aef);
 
     ajTableClearDelete(pthis->CacheByIdentifier);
 
-    AJFREE(pthis);
-
-    *Paefa = NULL;
+    ajMemFree((void **) Paefa);
 
     return;
+}
+
+
+
+
+/* @section member retrieval **************************************************
+**
+** Functions for returning members of an
+** Ensembl Assembly Exception Feature Adaptor object.
+**
+** @fdata [EnsPAssemblyexceptionfeatureadaptor]
+**
+** @nam3rule Get Return Ensembl Assembly Exception Feature Adaptor attribute(s)
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+**
+** @argrule * aefa [EnsPAssemblyexceptionfeatureadaptor]
+** Ensembl Assembly Exception Feature Adaptor
+**
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensAssemblyexceptionfeatureadaptorGetDatabaseadaptor *****************
+**
+** Get the Ensembl Database Adaptor member of an
+** Ensembl Assembly Exception Feature Adaptor.
+**
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor]
+** Ensembl Assembly Exception Feature Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensAssemblyexceptionfeatureadaptorGetDatabaseadaptor(
+    EnsPAssemblyexceptionfeatureadaptor aefa)
+{
+    return (aefa) ? aefa->Adaptor : NULL;
 }
 
 
@@ -9039,16 +9084,18 @@ static AjBool assemblyexceptionfeatureadaptorRemap(
                         "Coordinate System objects of Feature objects and "
                         "Slice differ.\n");
 
-            ensAssemblymapperFastmap(am,
-                                     ensSliceGetSeqregion(feature->Slice),
-                                     feature->Start,
-                                     feature->End,
-                                     feature->Strand,
-                                     mrs);
+            ensAssemblymapperMapSeqregion(am,
+                                          ensSliceGetSeqregion(feature->Slice),
+                                          feature->Start,
+                                          feature->End,
+                                          feature->Strand,
+                                          ajTrue,
+                                          mrs);
 
             /*
-            ** The ensMapperFastmap function returns at maximum one Ensembl
-            ** Mapper Result. An empty AJAX List of Ensembl Mapper Results
+            ** The ensAssemblymapperMapSeqregion function in fastmap mode
+            ** returns at maximum one Ensembl Mapper Result.
+            ** An empty AJAX List of Ensembl Mapper Result objects
             ** means a gap, so remove the Ensembl Object from the AJAX List
             ** of Ensembl Objects and delete it.
             */
@@ -9160,6 +9207,8 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAllbySlice(
     EnsPCoordsystem mcs = NULL;
     EnsPCoordsystem scs = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPMetacoordinateadaptor mca = NULL;
 
     if (!aefa)
@@ -9196,15 +9245,17 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAllbySlice(
 
     ensAssemblyexceptionfeatureadaptorFetchAll(aefa, aefs);
 
-    mca = ensRegistryGetMetacoordinateadaptor(aefa->Adaptor);
+    dba = ensAssemblyexceptionfeatureadaptorGetDatabaseadaptor(aefa);
+
+    mca = ensRegistryGetMetacoordinateadaptor(dba);
 
     name = ajStrNewC("assembly_exception");
 
     css = ajListNew();
 
-    ensMetacoordinateadaptorFetchAllCoordsystems(mca, name, css);
+    ensMetacoordinateadaptorRetrieveAllCoordsystems(mca, name, css);
 
-    ama = ensRegistryGetAssemblymapperadaptor(aefa->Adaptor);
+    ama = ensRegistryGetAssemblymapperadaptor(dba);
 
     scs = ensSliceGetCoordsystemObject(slice);
 
@@ -9259,14 +9310,42 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchByIdentifier(
     ajuint identifier,
     EnsPAssemblyexceptionfeature *Paef)
 {
+    AjBool result = AJFALSE;
+
     if (!aefa)
+        return ajFalse;
+
+    if (!identifier)
+        return ajFalse;
+
+    if (!Paef)
         return ajFalse;
 
     *Paef = (EnsPAssemblyexceptionfeature) ajTableFetchmodV(
         aefa->CacheByIdentifier,
         (const void *) &identifier);
 
-    ensAssemblyexceptionfeatureNewRef(*Paef);
+    if (*Paef)
+    {
+        ensAssemblyexceptionfeatureNewRef(*Paef);
 
-    return ajTrue;
+        return ajTrue;
+    }
+
+    /* For a cache miss re-query the database. */
+
+    /*
+    ** TODO: This needs to use the Ensembl Feature Adaptor.
+    result = ensBaseadaptorFetchByIdentifier(
+    ensAssemblyexceptionfeatureadaptorGetBaseadaptor(aefa),
+    identifier,
+    (void **) Paef);
+    */
+
+    /*
+    ** TODO: Implement
+    assemblyexceptionfeatureadaptorCacheInsert(dta, Pdt);
+    */
+
+    return result;
 }

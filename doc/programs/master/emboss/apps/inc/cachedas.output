@@ -4,13 +4,13 @@
 <p><h3>File: qatests.server.dasregistry</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# qatests.server.dasregistry 2012-07-15 12:00:00
+# qatests.server.dasregistry 2013-07-15 12:00:00
 
-DB DS_114_signalp [
-  method: das
+DBNAME DS_114_signalp [
+  method: "das"
   type: "Protfeatures"
   format: "dasgff"
-  url: http://das.cbs.dtu.dk:9000/das/signalp
+  url: "http://das.cbs.dtu.dk:9000/das/signalp"
   example: "P15498"
   comment: "SignalP (http://www.cbs.dtu.dk/services/SignalP) predictions for UniProt."
   hasaccession: "N"
@@ -18,11 +18,11 @@ DB DS_114_signalp [
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB netphos [
-  method: das
+DBNAME netphos [
+  method: "das"
   type: "Protfeatures"
   format: "dasgff"
-  url: http://das.cbs.dtu.dk:9000/das/netphos
+  url: "http://das.cbs.dtu.dk:9000/das/netphos"
   example: "P15498"
   comment: "NetPhos (http://www.cbs.dtu.dk/services/NetPhos) predictions for UniProt."
   hasaccession: "N"
@@ -30,11 +30,11 @@ DB netphos [
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB prop [
-  method: das
+DBNAME prop [
+  method: "das"
   type: "Protfeatures"
   format: "dasgff"
-  url: http://das.cbs.dtu.dk:9000/das/prop
+  url: "http://das.cbs.dtu.dk:9000/das/prop"
   example: "P15498"
   comment: "ProP (http://www.cbs.dtu.dk/services/ProP) predictions for UniProt."
   hasaccession: "N"
@@ -42,11 +42,11 @@ DB prop [
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB transmem_pred [
-  method: das
+DBNAME transmem_pred [
+  method: "das"
   type: "Protfeatures"
   format: "dasgff"
-  url: http://pongo.biocomp.unibo.it/das/dasdb
+  url: "http://pongo.biocomp.unibo.it/das/dasdb"
   example: "P15498"
   comment: "Membrane protein annotation. Presenty This DAS server contains UNIPROT and IPI human proteins. The annotation si done using 4 different predictors: TMHMM2.0, MEMSAT, ENSEMBLE_1.0 and PRODIV_TMHMM_0.91"
   hasaccession: "N"
@@ -58,52 +58,52 @@ DB transmem_pred [
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-  method: das
+  method: "das"
   type: "Nucfeatures"
-  taxon: "6334"
+  taxon: "9606"
   format: "dasgff"
-  url: http://metazoa.ensembl.org/das/Trichinella_spiralis.Tspiralis1.translation
-  example: ""
-  comment: "Annotation source for Trichinella_spiralis translation"
+  url: "http://genomernai.de/DASGenomeRNAi/das/GenomeRNAiHumanPhenotypeDatasource"
+  example: "2[100000:500000]"
+  comment: "RNAi knockdown phenotypes from the GenomeRNAi database for Homo Sapiens"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB Trichoplax_adhaerens_TRIAD1_reference [
-  method: das
-  type: "Nucleotide, Nucfeatures"
-  taxon: "10228"
-  format: "das, dasgff"
-  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.reference
-  example: ""
-  comment: "Trichoplax_adhaerens Reference server based on TRIAD1 assembly. Contains 1415 top level entries."
+DBNAME DS_6755_GenomeRNAi_Reagents [
+  method: "das"
+  type: "Nucfeatures"
+  taxon: "9606"
+  format: "dasgff"
+  url: "http://genomernai.de/DASGenomeRNAi/das/GenomeRNAiHumanReagentDatasource"
+  example: "2[100000:500000]"
+  comment: "RNAi reagents from the GenomeRNAi database for Homo Sapiens"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB Trichoplax_adhaerens_TRIAD1_transcript [
-  method: das
+DBNAME DS_6756_GenomeRNAi_Reagents [
+  method: "das"
   type: "Nucfeatures"
-  taxon: "10228"
+  taxon: "7227"
   format: "dasgff"
-  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.transcript
-  example: ""
-  comment: "Annotation source for Trichoplax_adhaerens transcript"
+  url: "http://genomernai.de/DASGenomeRNAi/das/GenomeRNAiDrosoReagentDatasource"
+  example: "2L[100000:101999]"
+  comment: "RNAi reagents from the GenomeRNAi database for Drosophila Melanogaster"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB Trichoplax_adhaerens_TRIAD1_translation [
-  method: das
+DBNAME DS_6757_GenomeRNAi_Phenotypes [
+  method: "das"
   type: "Nucfeatures"
-  taxon: "10228"
+  taxon: "7227"
   format: "dasgff"
-  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.translation
-  example: ""
-  comment: "Annotation source for Trichoplax_adhaerens translation"
+  url: "http://genomernai.de/DASGenomeRNAi/das/GenomeRNAiDrosoPhenotypeDatasource"
+  example: "2L[100000:101999]"
+  comment: "RNAi knockdown phenotypes from the GenomeRNAi database for Drosophila Melanogaster"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"

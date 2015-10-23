@@ -1,0 +1,17 @@
+Type         Secondary
+Compress     Yes
+Pages        22
+Secpages     695
+Order        64
+Fill         57
+Level        0
+Pagesize     4096
+Cachesize    20000
+Order2       55
+Fill2        62
+Secpagesize  4096
+Seccachesize 20000
+Count        691
+Fullcount    1631
+Kwlimit      50
+Idlimit      60

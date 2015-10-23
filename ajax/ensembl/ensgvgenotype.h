@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.7 $
+** @version $Revision: 1.9 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/03/04 12:31:51 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:07:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -62,6 +62,12 @@ AJ_BEGIN_DECLS
 ** Prototype definitions
 */
 
+AjBool ensUtilityCharSort(char *string);
+
+char ensUtilityBaseAmbiguityFromString(const char *basestr);
+
+const char* ensUtilityBaseAmbiguityToString(char ambiguitychar);
+
 /* Ensembl Genetic Variation Genotype */
 
 EnsPGvgenotype ensGvgenotypeNewCpy(const EnsPGvgenotype gvg);
@@ -107,10 +113,17 @@ AjBool ensGvgenotypeSetSubidentifier(EnsPGvgenotype gvg,
 AjBool ensGvgenotypeAddAllele(EnsPGvgenotype gvg,
                               AjPStr allele);
 
+AjBool ensGvgenotypeAddAllelenumber(EnsPGvgenotype gvg,
+                                    ajuint number,
+                                    AjPStr allele);
+
 AjBool ensGvgenotypeAddGvgenotypecode(EnsPGvgenotype gvg,
                                       EnsPGvgenotypecode gvgc);
 
 AjBool ensGvgenotypeTrace(const EnsPGvgenotype gvg, ajuint level);
+
+const AjPStr ensGvgenotypeCalculateAllelenumber(const EnsPGvgenotype gvg,
+                                                ajuint number);
 
 size_t ensGvgenotypeCalculateMemsize(const EnsPGvgenotype gvg);
 
@@ -169,6 +182,15 @@ EnsPGvgenotypecodeadaptor ensGvgenotypecodeadaptorNew(
 
 void ensGvgenotypecodeadaptorDel(
     EnsPGvgenotypecodeadaptor *Pgvgca);
+
+EnsPBaseadaptor ensGvgenotypecodeadaptorGetBaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca);
+
+EnsPDatabaseadaptor ensGvgenotypecodeadaptorGetDatabaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca);
+
+EnsPGvbaseadaptor ensGvgenotypecodeadaptorGetGvbaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca);
 
 AjBool ensGvgenotypecodeadaptorFetchAllbyIdentifiers(
     EnsPGvgenotypecodeadaptor gvgca,

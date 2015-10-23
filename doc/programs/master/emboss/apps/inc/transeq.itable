@@ -93,6 +93,14 @@ Note: you should not try to use this option with any other frame than the defaul
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-[no]methionine</td>
+<td>boolean</td>
+<td>START codons at the beginning of protein products will usually code for Methionine, despite what the codon will code for when it is internal to a protein. This qualifier sets all such START codons to code for Methionine by default.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Associated qualifiers</th>
 </tr>
 
@@ -169,6 +177,14 @@ Note: you should not try to use this option with any other frame than the defaul
 <td> -scircular1<br>-scircular_sequence</td>
 <td>boolean</td>
 <td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -squick1<br>-squick_sequence</td>
+<td>boolean</td>
+<td>Read id and sequence only</td>
 <td>Boolean value Yes/No</td>
 <td>N</td>
 </tr>

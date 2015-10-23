@@ -112,10 +112,11 @@ public class JembossAuthServer
     StringBuffer acdText = new StringBuffer();
     final String acdToParse = new String(jp.getAcdDirToParse() + appName + ".acd");
 
+    BufferedReader in = null;
     try
     {
       String line;
-      BufferedReader in = new BufferedReader(new FileReader(acdToParse));
+      in = new BufferedReader(new FileReader(acdToParse));
       while((line = in.readLine()) != null )
       {
         if(!line.startsWith("#") && !line.equals(""))
@@ -129,6 +130,13 @@ public class JembossAuthServer
     catch (IOException e)
     {
       appendToLogFile("Cannot open EMBOSS acd file "+acdToParse,errorLog);
+    }
+    finally
+    {
+    	if(in!=null)
+			try {
+				in.close();
+			} catch (IOException e) {}
     }
 
     acd.add("status");

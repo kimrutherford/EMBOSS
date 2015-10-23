@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX text data reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.37 $
+** @version $Revision: 1.40 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
+** @modified $Date: 2013/07/15 20:54:52 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -62,6 +62,7 @@ static AjBool    textinReadText(AjPTextin thys, AjPText text);
 static AjBool    textinReadXml(AjPTextin thys, AjPText text);
 static AjBool    textinReadObo(AjPTextin thys, AjPText text);
 static AjBool    textinReadEmbl(AjPTextin thys, AjPText text);
+static AjBool    textinReadGenbank(AjPTextin thys, AjPText text);
 static AjBool    textinReadPdb(AjPTextin thys, AjPText text);
 
 
@@ -116,6 +117,9 @@ static TextOInFormat textinFormatDef[] =
     {"embl",        "1927", "EMBL data",
        AJFALSE, AJFALSE,
        &textinReadEmbl},
+    {"genbank",     "1936", "Genbank data",
+       AJFALSE, AJFALSE,
+       &textinReadGenbank},
     {"swissprot",   "1963", "SwissProt data",
        AJTRUE, AJFALSE,
        &textinReadEmbl},
@@ -131,12 +135,84 @@ static TextOInFormat textinFormatDef[] =
     {"ipi",         "2189", "UniProt-like data",
        AJTRUE, AJFALSE,
        &textinReadEmbl},
-    {"uniprotxml",  "0000", "Uniprot XML data",
-       AJTRUE, AJFALSE,
-       &textinReadXml},
     {"pdb",         "1476", "PDB data",
        AJFALSE, AJFALSE,
        &textinReadPdb},
+    {"mmcif",       "0000", "mmCIF structure data",
+       AJFALSE, AJFALSE,
+       &textinReadPdb},
+    {"csv",         "0000", "Comma separated values",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"tab",         "0000", "Tab separated values",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"tsv",         "0000", "Tab separated values",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"iprmctab",    "0000", "IPRMC tab separated values",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"iprmc",       "0000", "IPRMC text",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"interpro",    "0000", "InterPRO format",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"livelists",   "0000", "EBI livelists format",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"hgbase",      "0000", "HGBASE format",
+       AJFALSE, AJFALSE,
+       &textinReadText},
+    {"annot",       "0000", "General annotation",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"entrysize",   "0000", "Entry size",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"tinyseq",   "0000", "Refseq tinyseq format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"uniref50",   "0000", "UniRef50 format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"uniref90",   "0000", "UniRef90 format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"uniref100",   "0000", "UniRef100 format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"uniparc",   "0000", "UniParc format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"resid",   "0000", "ResId format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"nrl1",   "0000", "Patent non-redundant level 1 format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"nrl2",   "0000", "Patent non-redundant level 2 format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"ris",   "0000", "MedLine RIS format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"isi",   "0000", "MedLine ISI format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"bibtex",   "0000", "MedLine BibTex format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"endnote",   "0000", "MedLine EndNote format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"medlineref",   "0000", "MedLine ref format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
+    {"medlinefull",   "0000", "MedLine full format",
+       AJTRUE,  AJFALSE,
+       &textinReadText},
   {NULL, NULL, NULL, 0, 0, NULL}
 };
 
@@ -397,6 +473,8 @@ void ajTextinDelNofile(AjPTextin* pthis)
 **
 ** @nam3rule Clear Clear all values
 ** @nam3rule Qry Reset using a query string
+** @nam4rule Newfile Starting a new file to continue input
+** @nam4rule Newinput Continue input from same file
 ** @nam4rule Nofile File buffer is a copy, do not delete
 ** @suffix C Character string input
 ** @suffix S String input
@@ -467,7 +545,60 @@ void ajTextinClear(AjPTextin thys)
     /* preserve thys->Entrycount */
 
     thys->Records = 0;
+    thys->TotRecords = 0;
     thys->Fpos = 0L;
+    thys->Curpos = 0L;
+
+    return;
+}
+
+
+
+
+/* @func ajTextinClearNewfile *************************************************
+**
+** Clears a text input object statistics for continued input with a new file
+**
+** @param [w] thys [AjPTextin] Text input
+** @return [void]
+** @category modify [AjPTextin] Resets ready for reuse.
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajTextinClearNewfile(AjPTextin thys)
+{
+    ajDebug("ajTextinClearNewfile called\n");
+
+    thys->Filecount++;
+    thys->Records = 0;
+    thys->Fpos = 0L;
+    thys->Curpos = 0L;
+
+    return;
+}
+
+
+
+
+/* @func ajTextinClearNewinput ************************************************
+**
+** Clears a text input object statistics for continued input with same file
+**
+** @param [w] thys [AjPTextin] Text input
+** @return [void]
+** @category modify [AjPTextin] Resets ready for reuse.
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+void ajTextinClearNewinput(AjPTextin thys)
+{
+    ajDebug("ajTextinClearNewinput called\n");
+
+    thys->Records = 0;
 
     return;
 }
@@ -517,7 +648,9 @@ void ajTextinClearNofile(AjPTextin thys)
     /* preserve thys->Entrycount */
 
     thys->Records = 0;
+    thys->TotRecords = 0;
     thys->Fpos = 0L;
+    thys->Curpos = 0L;
 
     return;
 }
@@ -574,25 +707,199 @@ void ajTextinQryS(AjPTextin thys, const AjPStr str)
 
 
 
+/* @section store ************************************************************
+**
+** Read text data using a text input object and if saved text is
+** defined, maintain a text argument.
+**
+** @fdata [AjPTextin]
+**
+** @nam3rule Store Manage a text buffer for all input to date
+** @nam4rule Clear Reset the text buffer to the end if the last text input
+** @nam4rule Readline Read the next line of input
+**           and store in buffer if required
+** @nam4rule Reset Reset the file buffer and any buffered text.
+**
+** @argrule * thys [AjPTextin] Text input object
+** @argrule Clear lines [ajint] Number of lines to keep in buffer
+** @argrule Clear rdline [const AjPStr] Most recent input line to trim
+**                                      from buffer
+** @argrule Readline pdest [AjPStr*] Latest input line
+** @argrule Store astr [AjPStr*] Buffered text data
+**
+** @valrule * [void]
+** @valrule *Readline [AjBool] True on success
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTextinStoreClear ***************************************************
+**
+** Clear the latest record from a text input buffer and any saved buffered text
+**
+** @param [u] thys [AjPTextin] Text input object
+** @param [r] lines [ajint] Number of lines to keep
+** @param [r] rdline [const AjPStr] Last input record to trim
+** @param [u] astr [AjPStr*] Current text buffer
+** @return [void]
+******************************************************************************/
+
+void ajTextinStoreClear(AjPTextin thys,
+                        ajint lines, const AjPStr rdline,
+                        AjPStr* astr)
+{
+    ajDebug("ajTextinStoreClear Records: %u lines: %d len: %Lu\n",
+            thys->Records, lines, (ajulong) ajStrGetLen(rdline));
+
+    ajFilebuffClearStore(thys->Filebuff, lines, rdline, thys->Text, astr);
+
+    if(lines < 0)
+    {
+        thys->TotRecords -= thys->Records;
+        thys->Records = 0;
+    }
+
+    if(lines > 0)
+    {
+        if((ajint) thys->Records >= lines)
+            thys->Records -= lines;
+        else
+            thys->Records = 0;
+
+        if((ajint) thys->TotRecords >= lines)
+            thys->TotRecords -= lines;
+        else
+            thys->TotRecords = 0;
+    }
+
+    return;
+}
+
+
+
+
+/* @func ajTextinStoreReadline ************************************************
+**
+** Read the next line of input and if required store in buffer
+**
+** @param [u] thys [AjPTextin] Text input object
+** @param [w] pdest [AjPStr*] Next input record
+** @param [u] astr [AjPStr*] Current text buffer
+** @return [AjBool] True on success
+******************************************************************************/
+
+AjBool ajTextinStoreReadline(AjPTextin thys,
+                             AjPStr* pdest, AjPStr* astr)
+{
+    AjBool ret;
+    
+    ret = ajBuffreadLinePosStore(thys->Filebuff, pdest,
+                                 &thys->Curpos, thys->Text,
+                                 astr);
+    if(ret)
+    {
+        thys->Records++;
+        thys->TotRecords++;
+    }
+
+    return ret;
+}
+
+
+
+
+/* @func ajTextinStoreReset ***************************************************
+**
+** Reset a text input object buffer and any saved buffered text
+**
+** @param [u] thys [AjPTextin] Text input object
+** @param [u] astr [AjPStr*] Current text buffer
+** @return [void]
+******************************************************************************/
+
+void ajTextinStoreReset(AjPTextin thys, AjPStr* astr)
+{
+    ajDebug("ajTextinStoreReset Records: %u\n", thys->Records);
+
+    ajFilebuffResetStore(thys->Filebuff, thys->Text, astr);
+
+    thys->Records = 0;
+
+    return;
+}
+
+
+
+
 /* @section casts *************************************************************
 **
 ** Return values
 **
 ** @fdata [AjPTextin]
 **
-** @nam3rule Get Get obo input stream values
-** @nam4rule GetQry Get obo query
+** @nam3rule Get Get text input stream values
+** @nam4rule GetCount Get text input count
+** @nam4rule GetFpos Get text input file position for latest record
+** @nam4rule GetQry Get text query
+** @nam4rule GetRecords get text input records count for this file
+** @nam4rule GetTotrecords Get text input total record count
 ** @nam3rule Trace Write debugging output
 ** @suffix S Return as a string object
 **
 ** @argrule * thys [const AjPTextin] Text input object
 **
 ** @valrule * [void]
+** @valrule *Count [ajuint] Count
+** @valrule *Fpos [ajlong] File position
+** @valrule *Records [ajuint] Record count
+** @valrule *Totrecords [ajuint] Totalecord count
 ** @valrule *S [const AjPStr] String value
 **
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
+
+/* @func ajTextinGetCount *****************************************************
+**
+** Returns the input count of a text input object
+**
+** @param [r] thys [const AjPTextin] Text input object.
+** @return [ajuint] Input count
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+ajuint ajTextinGetCount(const AjPTextin thys)
+{
+    return thys->Count;
+}
+
+
+
+
+/* @func ajTextinGetFpos ******************************************************
+**
+** Returns the file position of a text input object
+**
+** @param [r] thys [const AjPTextin] Text input object.
+** @return [ajlong] File position
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+ajlong ajTextinGetFpos(const AjPTextin thys)
+{
+    return thys->Curpos;
+}
 
 
 
@@ -611,6 +918,44 @@ void ajTextinQryS(AjPTextin thys, const AjPStr str)
 const AjPStr ajTextinGetQryS(const AjPTextin thys)
 {
     return thys->Qry;
+}
+
+
+
+
+/* @func ajTextinGetRecords ***************************************************
+**
+** Returns the record count of a text input object
+**
+** @param [r] thys [const AjPTextin] Text input object.
+** @return [ajuint] Record count
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+ajuint ajTextinGetRecords(const AjPTextin thys)
+{
+    return thys->Records;
+}
+
+
+
+
+/* @func ajTextinGetTotrecords ************************************************
+**
+** Returns the total record count of a text input object
+**
+** @param [r] thys [const AjPTextin] Text input object.
+** @return [ajuint] Total record count
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+ajuint ajTextinGetTotrecords(const AjPTextin thys)
+{
+    return thys->TotRecords;
 }
 
 
@@ -681,6 +1026,9 @@ void ajTextinTrace(const AjPTextin thys)
 
     if(thys->Fpos)
 	ajDebug( "  Fpos: %Ld\n", thys->Fpos);
+
+    if(thys->Curpos)
+	ajDebug( "Curpos: %Ld\n", thys->Curpos);
 
     if(thys->Query)
 	ajQueryTrace(thys->Query);
@@ -1363,7 +1711,6 @@ static AjBool textinReadText(AjPTextin textin, AjPText text)
 {
     AjPFilebuff buff;
 
-    ajlong fpos     = 0;
     ajuint linecnt = 0;
 
     ajDebug("textinReadText\n");
@@ -1372,7 +1719,8 @@ static AjBool textinReadText(AjPTextin textin, AjPText text)
 
     /* ajFilebuffTrace(buff); */
 
-    while (ajBuffreadLinePos(buff, &textinReadLine, &fpos))
+    textin->Curpos = 0L;
+    while (ajBuffreadLinePos(buff, &textinReadLine, &textin->Curpos))
     {
         linecnt++;
         ajStrTrimEndC(&textinReadLine, "\r\n");
@@ -1409,8 +1757,6 @@ static AjBool textinReadText(AjPTextin textin, AjPText text)
 static AjBool textinReadXml(AjPTextin textin, AjPText text)
 {
     AjPFilebuff buff;
-
-    ajlong fpos     = 0;
     ajuint linecnt = 0;
 
     ajDebug("textinReadXml\n");
@@ -1419,7 +1765,8 @@ static AjBool textinReadXml(AjPTextin textin, AjPText text)
 
     /* ajFilebuffTrace(buff); */
 
-    while (ajBuffreadLinePos(buff, &textinReadLine, &fpos))
+    textin->Curpos = 0L;
+    while (ajBuffreadLinePos(buff, &textinReadLine, &textin->Curpos))
     {
         linecnt++;
         ajStrTrimEndC(&textinReadLine, "\r\n");
@@ -1442,7 +1789,7 @@ static AjBool textinReadXml(AjPTextin textin, AjPText text)
 
 /* @funcstatic textinReadEmbl *************************************************
 **
-** Given data in an obo structure, tries to read everything needed
+** Given data in a text input stream, tries to read text
 ** using the EMBL format.
 **
 ** @param [u] textin [AjPTextin] Text input object
@@ -1511,9 +1858,80 @@ static AjBool textinReadEmbl(AjPTextin textin, AjPText text)
 
 
 
+/* @funcstatic textinReadGenbank **********************************************
+**
+** Given data in a text inpur stream, tries to read text
+** using the GENBANK format.
+**
+** @param [u] textin [AjPTextin] Text input object
+** @param [w] text [AjPText] Text object
+** @return [AjBool] ajTrue on success
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+static AjBool textinReadGenbank(AjPTextin textin, AjPText text)
+{
+    AjPFilebuff buff;
+    ajuint linecnt  = 0;
+    AjBool ok = ajFalse;
+
+    ajDebug("textinReadObo\n");
+    ajTextClear(text);
+    buff = textin->Filebuff;
+
+    /* ajFilebuffTrace(buff); */
+    ok = ajBuffreadLine(buff, &textinReadLine);
+    while(ok && !ajStrPrefixC(textinReadLine, "LOCUS     "))
+        ok = ajBuffreadLine(buff, &textinReadLine);
+
+    if(!ok)
+        return ajFalse;
+
+    ajStrTrimEndC(&textinReadLine, "\r\n");
+
+    ajDebug("line %u:%S\n", linecnt, textinReadLine);
+
+    /* add line to AjPText object */
+    ajListPushAppend(text->Lines, ajStrNewS(textinReadLine));
+
+    ajFilebuffClear(buff, 1);
+    ok = ajBuffreadLine(buff, &textinReadLine);
+    if(ok)
+        ok = ajBuffreadLine(buff, &textinReadLine);
+
+    while (ok)
+    {
+        ajStrTrimWhite(&textinReadLine);
+
+        if(!ajStrGetLen(textinReadLine))
+            break;
+
+
+        linecnt++;
+        ajStrTrimEndC(&textinReadLine, "\r\n");
+
+        ajDebug("line %u:%S\n", linecnt, textinReadLine);
+
+        /* add line to AjPText object */
+        ajListPushAppend(text->Lines, ajStrNewS(textinReadLine));
+
+        if(ajStrMatchC(textinReadLine, "//"))
+            break;
+
+        ok = ajBuffreadLine(buff, &textinReadLine);
+    }
+
+    return ajTrue;
+}
+
+
+
+
 /* @funcstatic textinReadObo **************************************************
 **
-** Given data in an obo structure, tries to read everything needed
+** Given data in a text input stream, tries to read text
 ** using the OBO format.
 **
 ** @param [u] textin [AjPTextin] Text input object
@@ -1583,7 +2001,7 @@ static AjBool textinReadObo(AjPTextin textin, AjPText text)
 
 /* @funcstatic textinReadPdb * ************************************************
 **
-** Given data in an obo structure, tries to read everything needed
+** Given data in a text input stream, tries to read text
 ** using the PDB format.
 **
 ** @param [u] textin [AjPTextin] Text input object
@@ -2568,6 +2986,7 @@ static void textinQryRestore(AjPTextin textin, const AjPQueryList node)
 {
     textin->Format = node->Format;
     textin->Fpos   = node->Fpos;
+    textin->Curpos = node->Fpos;
     ajStrAssignS(&textin->Formatstr, node->Formatstr);
     ajStrAssignS(&textin->QryFields, node->QryFields);
 
@@ -2731,10 +3150,11 @@ static AjBool textinListProcess(AjPTextin textin, AjPText text,
     AjPList list  = NULL;
     AjPFile file  = NULL;
     AjPStr token  = NULL;
-    AjPStrTok handle = NULL;
+    AjPStr rest  = NULL;
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
 
+    ajuint recnum = 0;
     static ajint depth    = 0;
     static ajint MAXDEPTH = 16;
 
@@ -2762,31 +3182,30 @@ static AjBool textinListProcess(AjPTextin textin, AjPText text,
 
     while(ajReadlineTrim(file, &textinReadLine))
     {
+        ++recnum;
 	textinListNoComment(&textinReadLine);
 
-	if(ajStrGetLen(textinReadLine))
-	{
-	    ajStrTokenAssignC(&handle, textinReadLine, " \t\n\r");
-	    ajStrTokenNextParse(&handle, &token);
-	    /* ajDebug("Line  '%S'\n");*/
-	    /* ajDebug("token '%S'\n", textinReadLine, token); */
-
-	    if(ajStrGetLen(token))
-	    {
-	        ajDebug("++Add to list: '%S'\n", token);
-	        AJNEW0(node);
-	        ajStrAssignS(&node->Qry, token);
-	        textinQrySave(node, textin);
-	        ajListPushAppend(list, node);
-	    }
-
-	    ajStrDel(&token);
-	    token = NULL;
-	}
+        if(ajStrExtractWord(textinReadLine, &rest, &token))
+        {
+            if(ajStrGetLen(rest)) 
+            {
+                ajErr("Bad record %u in list file '%S'\n'%S'",
+                      recnum, listfile, textinReadLine);
+            }
+            else if(ajStrGetLen(token))
+            {
+                ajDebug("++Add to list: '%S'\n", token);
+                AJNEW0(node);
+                ajStrAssignS(&node->Qry, token);
+                textinQrySave(node, textin);
+                ajListPushAppend(list, node);
+            }
+        }
     }
 
     ajFileClose(&file);
     ajStrDel(&token);
+    ajStrDel(&rest);
 
     ajDebug("Trace textin->List\n");
     ajQuerylistTrace(textin->List);
@@ -2815,7 +3234,6 @@ static AjBool textinListProcess(AjPTextin textin, AjPText text,
 	ret = textinQryProcess(textin, text);
     }
 
-    ajStrTokenDel(&handle);
     depth--;
     ajDebug("++textListProcess depth: %d returns: %B\n", depth, ret);
 
@@ -3086,7 +3504,7 @@ void ajTextallClear(AjPTextall thys)
 
 /* @section Text input ********************************************************
 **
-** These functions use a text input stream object to read data
+** These functions use a text input stream object to read text
 **
 ** @fdata [AjPTextall]
 **

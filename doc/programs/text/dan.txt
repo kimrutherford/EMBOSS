@@ -48,7 +48,7 @@ Usage
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): tembl:x13776
 Enter window size [20]:
-Enter Shift Increment [1]:
+Enter shift increment [1]:
 Enter DNA concentration (nM) [50.]:
 Enter salt concentration (mM) [50.]:
 Output report [x13776.dan]:
@@ -66,7 +66,7 @@ Output report [x13776.dan]:
 Calculate nucleic acid melting temperature
 Input nucleotide sequence(s): tembl:x13776
 Enter window size [20]:
-Enter Shift Increment [1]:
+Enter shift increment [1]:
 Enter DNA concentration (nM) [50.]:
 Enter salt concentration (mM) [50.]:
 Enter minimum temperature [55.]:
@@ -79,7 +79,7 @@ Created dan.ps
 Command line arguments
 
 Calculate nucleic acid melting temperature
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -156,6 +156,7 @@ Version: EMBOSS:6.5.6.0
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
    -scircular1         boolean    Sequence is circular
+   -squick1            boolean    Read id and sequence only
    -sformat1           string     Input sequence format
    -iquery1            string     Input query fields or ID list
    -ioffset1           integer    Input start position offset
@@ -386,7 +387,7 @@ Output file format
 
 ########################################
 # Program: dan
-# Rundate: Sun 15 Jul 2012 12:00:00
+# Rundate: Mon 15 Jul 2013 12:00:00
 # Commandline: dan
 #    -sequence tembl:x13776
 # Report_format: seqtable

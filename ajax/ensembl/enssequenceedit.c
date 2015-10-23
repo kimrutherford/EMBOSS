@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.33 $
+** @version $Revision: 1.35 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -108,7 +108,7 @@ static int listSequenceeditCompareStartDescending(
 **
 ** @cc Bio::EnsEMBL::SeqEdit
 ** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -406,14 +406,7 @@ void ensSequenceeditDel(EnsPSequenceedit *Pse)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pse)
-        return;
-
-    pthis = *Pse;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pse) || --pthis->Use)
     {
         *Pse = NULL;
 
@@ -424,9 +417,7 @@ void ensSequenceeditDel(EnsPSequenceedit *Pse)
 
     ajStrDel(&pthis->Sequence);
 
-    AJFREE(pthis);
-
-    *Pse = NULL;
+    ajMemFree((void **) Pse);
 
     return;
 }
@@ -625,11 +616,11 @@ AjBool ensSequenceeditTrace(const EnsPSequenceedit se, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Sequence Edit object.
+** Functions for calculating information from an Ensembl Sequence Edit object.
 **
 ** @fdata [EnsPSequenceedit]
 **
-** @nam3rule Calculate Calculate Ensembl Sequence Edit values
+** @nam3rule Calculate Calculate Ensembl Sequence Edit information
 ** @nam4rule Difference Calculate the length difference
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
@@ -791,6 +782,7 @@ AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
                 "which start position (%d) corrected for the offset (%d) lies "
                 "beyond the sequence end (%lu).",
                 se->Start, offset, ajStrGetLen(*Psequence));
+        /* FIXME: size_t can be shorter than ajulong */
 
         return ajFalse;
     }

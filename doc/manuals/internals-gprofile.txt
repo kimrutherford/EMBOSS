@@ -1,0 +1,8 @@
+GPROF run-time profiling
+========================
+
+Build EMBOSS with configure option --with-gccprofile and --disable-shared
+
+Run an application. It will generate a file gmon.out
+
+gprof `where appname` gmon.out 

@@ -378,5 +378,7 @@ wossoperation.html \
 wossoutput.html \
 wossparam.html \
 wosstopic.html \
+xmlget.html \
+xmltext.html \
 yank.html
 

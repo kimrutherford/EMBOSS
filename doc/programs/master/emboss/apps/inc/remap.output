@@ -124,8 +124,8 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                                                       Hin6I 
                  TaqI                                 HinP1I
                  |  BsiYI                             | HhaI 
-                 |  Bsc4I                             | Bsu6I
-                 |  |   HspAI                         | BssKI 
+                 |  Bsc4I                             | BssKI
+                 |  |   HspAI                         | Bsu6I 
                  |  |   Hin6I                         | Ksp632I
                  |  |   HinP1I                        | | HpaII 
                  |  |   | HhaI        AciI            | | BsiSI 
@@ -196,24 +196,24 @@ MaeII     NotI
 J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                                  Ksp632I
-                                                        &gt;.........====
                                                           HpaII
                                                           &gt;===
-                        HhaI                             BssKI
-                        ==&gt;=                            &gt;=====
-                 TaqI   Hin6I                         HhaI
-                 &gt;===   &gt;===                          ==&gt;=
-              BsiYI                      AciI         Hin6I
-              ======&gt;====             &gt;..====         &gt;===
+                                                         BssKI
+                                                        &gt;=====
+                        HhaI                          HhaI
+                        ==&gt;=                          ==&gt;=
+                 TaqI   Hin6I                         Hin6I
+                 &gt;===   &gt;===                          &gt;===
+              BsiYI                      AciI                     Ksp632I
+              ======&gt;====             &gt;..====           &gt;.........====
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
-              ====&lt;======                &lt;===         ===&lt;
-              BsiYI                      AciI         Hin6I
-                 ===&lt;   ===&lt;                          =&lt;==  &lt;.....====
-                 TaqI   Hin6I                         HhaI        Ksp632I
+              ====&lt;======                &lt;===         ===&lt;   .....====
+              BsiYI                      AciI         Hin6I       Ksp632I
+                 ===&lt;   ===&lt;                          =&lt;==
+                 TaqI   Hin6I                         HhaI
                         =&lt;==                             =====&lt;
                         HhaI                             BssKI
                                                           ===&lt;

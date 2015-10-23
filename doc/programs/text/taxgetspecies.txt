@@ -44,7 +44,7 @@ Taxon output file [9604.excel]:
 Command line arguments
 
 Get all species under taxon(s)
-Version: EMBOSS:6.5.6.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-taxons]            taxon      Taxon filename and optional format, or
@@ -135,12 +135,11 @@ Output file format
 
   File: 9604.excel
 
-9598    9596    species Y       Pan troglodytes
-9597    9596    species Y       Pan paniscus
-741158  9605    species Y       Homo sp. Altai
 9606    9605    species Y       Homo sapiens
-9593    9592    species Y       Gorilla gorilla
+9597    9596    species Y       Pan paniscus
+9598    9596    species Y       Pan troglodytes
 499232  9592    species Y       Gorilla beringei
+9593    9592    species Y       Gorilla gorilla
 9603    9599    species Y       Pongo sp.
 9600    9599    species Y       Pongo pygmaeus
 9601    9599    species Y       Pongo abelii

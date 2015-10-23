@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.50 $
+** @version $Revision: 1.52 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:02:40 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -129,7 +129,7 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 **
 ** @cc Bio::EnsEMBL::Mapper::Unit
 ** @cc CVS Revision: 1.12
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -308,23 +308,14 @@ void ensMapperunitDel(EnsPMapperunit *Pmu)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmu)
-        return;
-
-    pthis = *Pmu;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmu) || --pthis->Use)
     {
         *Pmu = NULL;
 
         return;
     }
 
-    AJFREE(pthis);
-
-    *Pmu = NULL;
+    ajMemFree((void **) Pmu);
 
     return;
 }
@@ -590,11 +581,11 @@ AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Mapper Unit object.
+** Functions for calculating information from an Ensembl Mapper Unit object.
 **
 ** @fdata [EnsPMapperunit]
 **
-** @nam3rule Calculate Calculate Ensembl Mapper Unit values
+** @nam3rule Calculate Calculate Ensembl Mapper Unit information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * mu [const EnsPMapperunit] Ensembl Mapper Unit
@@ -640,11 +631,11 @@ size_t ensMapperunitCalculateMemsize(const EnsPMapperunit mu)
 **
 ** @cc Bio::EnsEMBL::Mapper::IndelPair
 ** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::Mapper::Pair
 ** @cc CVS Revision: 1.13
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -899,14 +890,7 @@ void ensMapperpairDel(EnsPMapperpair *Pmp)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmp)
-        return;
-
-    pthis = *Pmp;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmp) || --pthis->Use)
     {
         *Pmp = NULL;
 
@@ -916,9 +900,7 @@ void ensMapperpairDel(EnsPMapperpair *Pmp)
     ensMapperunitDel(&pthis->Source);
     ensMapperunitDel(&pthis->Target);
 
-    AJFREE(pthis);
-
-    *Pmp = NULL;
+    ajMemFree((void **) Pmp);
 
     return;
 }
@@ -1104,11 +1086,11 @@ AjBool ensMapperpairTrace(const EnsPMapperpair mp, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Mapper Pair object.
+** Functions for calculating information from an Ensembl Mapper Pair object.
 **
 ** @fdata [EnsPMapperpair]
 **
-** @nam3rule Calculate Calculate Ensembl Mapper Pair values
+** @nam3rule Calculate Calculate Ensembl Mapper Pair information
 ** @nam4rule Mapperunit Calculate the Ensembl Mapper Unit
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
@@ -1450,15 +1432,15 @@ AjBool ensListMapperpairSortTargetStartAscending(AjPList mps)
 **
 ** @cc Bio::EnsEMBL::Mapper::Coordinate
 ** @cc CVS Revision: 1.16
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::Mapper::Gap
 ** @cc CVS Revision: 1.14
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::Mapper::IndelCoordinate
 ** @cc CVS Revision: 1.9
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1636,7 +1618,7 @@ EnsPMapperresult ensMapperresultNewGap(ajint gapstart,
     mr->CoordinateStart  = 0;
     mr->CoordinateEnd    = 0;
     mr->CoordinateStrand = 0;
-    mr->Coordsystem      = (EnsPCoordsystem) NULL;
+    mr->Coordsystem      = NULL;
     mr->GapStart         = gapstart;
     mr->GapEnd           = gapend;
     mr->Rank             = rank;
@@ -1843,14 +1825,7 @@ void ensMapperresultDel(EnsPMapperresult *Pmr)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmr)
-        return;
-
-    pthis = *Pmr;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmr) || --pthis->Use)
     {
         *Pmr = NULL;
 
@@ -1859,9 +1834,7 @@ void ensMapperresultDel(EnsPMapperresult *Pmr)
 
     ensCoordsystemDel(&pthis->Coordsystem);
 
-    AJFREE(pthis);
-
-    *Pmr = NULL;
+    ajMemFree((void **) Pmr);
 
     return;
 }
@@ -2463,11 +2436,11 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Mapper Result object.
+** Functions for calculating information from an Ensembl Mapper Result object.
 **
 ** @fdata [EnsPMapperresult]
 **
-** @nam3rule Calculate Calculate Ensembl Mapper Result values
+** @nam3rule Calculate Calculate Ensembl Mapper Result information
 ** @nam4rule Length Calculate the length
 ** @nam5rule Coordinate Ensembl Mapper Result Type
 ** ensEMapperresultTypeCoordinate
@@ -2772,23 +2745,14 @@ void ensMapperrangeDel(EnsPMapperrange *Pmr)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmr)
-        return;
-
-    pthis = *Pmr;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmr) || --pthis->Use)
     {
         *Pmr = NULL;
 
         return;
     }
 
-    AJFREE(pthis);
-
-    *Pmr = NULL;
+    ajMemFree((void **) Pmr);
 
     return;
 }
@@ -2919,11 +2883,11 @@ AjBool ensMapperrangeTrace(const EnsPMapperrange mr, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Mapper Range object.
+** Functions for calculating information from an Ensembl Mapper Range object.
 **
 ** @fdata [EnsPMapperrange]
 **
-** @nam3rule Calculate Calculate Ensembl Mapper Range values
+** @nam3rule Calculate Calculate Ensembl Mapper Range information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * mr [const EnsPMapperrange] Ensembl Mapper Range
@@ -2970,7 +2934,7 @@ size_t ensMapperrangeCalculateMemsize(const EnsPMapperrange mr)
 **
 ** @cc Bio::EnsEMBL::Mapper::RangeRegistry
 ** @cc CVS Revision: 1.18
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3052,7 +3016,7 @@ static void mapperrangeregistryListMapperrangeValdel(void **Pvalue)
 ** The Ensembl Mapper Range Registry maintains an internal list of registered
 ** regions and is used to quickly ascertain if and what regions of a provided
 ** range need registration. It is implemented as a first-level AJAX Table with
-** Ensembl Object identifers as keys and second-level AJAX Lists of
+** Ensembl Object identifers as keys and second-level AJAX List objects of
 ** Ensembl Mapper Range objects as values.
 ******************************************************************************/
 
@@ -3065,7 +3029,7 @@ EnsPMapperrangeregistry ensMapperrangeregistryNew(void)
 
     AJNEW0(mrr);
 
-    mrr->Registry = ajTableuintNew(0);
+    mrr->Registry = ajTableuintNew(0U);
 
     ajTableSetDestroyvalue(
         mrr->Registry,
@@ -3108,7 +3072,7 @@ EnsPMapperrangeregistry ensMapperrangeregistryNewRef(
 
 /* @section clear *************************************************************
 **
-** Clear all internal data structures and frees the
+** Clear internal data structures and frees the
 ** memory allocated for Ensembl Mapper Range Registry internals.
 **
 ** @fdata [EnsPMapperrangeregistry]
@@ -3205,14 +3169,7 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
                 *Pmrr);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmrr)
-        return;
-
-    pthis = *Pmrr;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmrr) || --pthis->Use)
     {
         *Pmrr = NULL;
 
@@ -3221,9 +3178,7 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
 
     ajTableDel(&pthis->Registry);
 
-    AJFREE(pthis);
-
-    *Pmrr = NULL;
+    ajMemFree((void **) Pmrr);
 
     return;
 }
@@ -3277,8 +3232,8 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
 ** Checks the Ensembl Mapper Range Registry to see if the entire range denoted
 ** by (oid:chkstart-chkend) is already registered. If it already is, an empty
 ** AJAX List is returned. If it is not, then the range specified by regstart
-** and regend is registered and an AJAX List of Ensembl Mapper Regions that
-** were required to completely register this region is returned.
+** and regend is registered and an AJAX List of Ensembl Mapper Region objects
+** that were required to completely register this region is returned.
 **
 ** If regstart and regend are not defined, they default to chkstart and chkend,
 ** respectively.
@@ -3788,7 +3743,7 @@ ajuint ensMapperrangeregistryCalculateOverlap(
 **
 ** @cc Bio::EnsEMBL::Mapper
 ** @cc CVS Revision: 1.60
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -3919,8 +3874,8 @@ EnsPMapper ensMapperNewIni(AjPStr srctype,
     mapper->TypeTarget        = ajStrNewRef(trgtype);
     mapper->CoordsystemSource = ensCoordsystemNewRef(srccs);
     mapper->CoordsystemTarget = ensCoordsystemNewRef(trgcs);
-    mapper->Mapperpairs       = ajTablestrNew(0);
-    mapper->Count             = 0;
+    mapper->Mapperpairs       = ajTablestrNew(0U);
+    mapper->Count             = 0U;
     mapper->Sorted            = ajFalse;
     mapper->Use               = 1U;
 
@@ -3934,7 +3889,7 @@ EnsPMapper ensMapperNewIni(AjPStr srctype,
     ** source and target types.
     */
 
-    table = ajTableuintNew(0);
+    table = ajTableuintNew(0U);
 
     ajTableSetDestroyvalue(
         table,
@@ -3942,7 +3897,7 @@ EnsPMapper ensMapperNewIni(AjPStr srctype,
 
     ajTablePut(mapper->Mapperpairs, (void *) ajStrNewS(srctype), (void *) table);
 
-    table = ajTableuintNew(0);
+    table = ajTableuintNew(0U);
 
     ajTableSetDestroyvalue(
         table,
@@ -4147,14 +4102,7 @@ void ensMapperDel(EnsPMapper *Pmapper)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pmapper)
-        return;
-
-    pthis = *Pmapper;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pmapper) || --pthis->Use)
     {
         *Pmapper = NULL;
 
@@ -4169,9 +4117,7 @@ void ensMapperDel(EnsPMapper *Pmapper)
     ensCoordsystemDel(&pthis->CoordsystemSource);
     ensCoordsystemDel(&pthis->CoordsystemTarget);
 
-    AJFREE(pthis);
-
-    *Pmapper = NULL;
+    ajMemFree((void **) Pmapper);
 
     return;
 }
@@ -4824,8 +4770,8 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
                 "Target Mapper Unit.\n");
 
     /*
-    ** Check for the matching Mapper Unit lengths if this is not a Mapper Pair
-    ** reflecting an insertion or deletion.
+    ** Check for matching Ensembl Mapper Unit lengths if this is not an
+    ** Ensembl Mapper Pair reflecting an insertion or deletion.
     */
 
     if ((!mp->Indel) &&
@@ -4835,10 +4781,12 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
                 "mappings so far.\n");
 
     /*
-    ** Insert the Mapper Pair into the source branch of the Mapper.
+    ** Insert the Ensembl Mapper Pair into the source branch of the
+    ** Ensembl Mapper.
     **
-    ** Search the first-level AJAX Table of (Ensembl Mapper type) AJAX String
-    ** objects for the second-level AJAX Table of Ensembl Object identifers.
+    ** Search the first-level AJAX Table of AJAX String (Ensembl Mapper type)
+    ** objects for the second-level AJAX Table of AJAX unsigned integer
+    ** (Ensembl identifer) objects.
     */
 
     table = (AjPTable) ajTableFetchmodS(mapper->Mapperpairs,
@@ -4847,8 +4795,9 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
     if (table)
     {
         /*
-        ** Search the second-level AJAX Table of Ensembl Object identifiers
-        ** for the third-level AJAX List of Ensembl Mapper Pair objects.
+        ** Search the second-level AJAX Table of AJAX unsigned integer
+        ** (Ensembl identifier) objects for the third-level
+        ** AJAX List of Ensembl Mapper Pair objects.
         */
 
         list = (AjPList) ajTableFetchmodV(
@@ -4874,10 +4823,12 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
                 mapper->TypeSource);
 
     /*
-    ** Insert the Mapper Pair into the target branch of the Mapper.
+    ** Insert the Ensembl Mapper Pair into the target branch of the
+    ** Ensembl Mapper.
     **
-    ** Search the first-level AJAX Table of (Ensembl Mapper type) AJAX String
-    ** objects for the second-level AJAX Table of Ensembl Object identifers.
+    ** Search the first-level AJAX Table of AJAX String (Ensembl Mapper type)
+    ** objects for the second-level AJAX Table of AJAX unsigned integer
+    ** (Ensembl identifer) objects.
     */
 
     table = (AjPTable) ajTableFetchmodS(mapper->Mapperpairs,
@@ -4886,8 +4837,9 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
     if (table)
     {
         /*
-        ** Search the second-level AJAX Table of Ensembl Object identifiers
-        ** for the third-level AJAX List of Ensembl Mapper Pair objects.
+        ** Search the second-level AJAX Table of AJAX unsigned integer
+        ** (Ensembl identifier) objects for the third-level AJAX List of
+        ** Ensembl Mapper Pair objects.
         */
 
         list = (AjPList) ajTableFetchmodV(
@@ -4992,9 +4944,9 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
                 mapper2->TypeSource);
 
     /*
-    ** Convert the second-level AJAX Table with Ensembl Object
-    ** identifiers as key data and AJAX List value data for the second
-    ** Ensembl Mapper.
+    ** Convert the second-level AJAX Table with AJAX unsigned integer
+    ** (Ensembl identifier) objects as key data and AJAX List value data
+    ** for the second Ensembl Mapper.
     */
 
     ajTableToarrayKeysValues(table2, &keyarray, &valarray);
@@ -5002,8 +4954,8 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
     for (i = 0U; keyarray[i]; i++)
     {
         /*
-        ** Get the third-level AJAX Lists for corresponding
-        ** Ensembl Object identifiers.
+        ** Get third-level AJAX List objects for corresponding
+        ** AJAX unsigned integer (Ensembl identifier) objects.
         */
 
         list1 = (AjPList) ajTableFetchmodV(table1, (const void *) &keyarray[i]);
@@ -5019,7 +4971,7 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
 
         /*
         ** Remove the entry from the AJAX Table and free the
-        ** Object identifier and the AJAX List.
+        ** AJAX unsigned integer (Ensembl identifier) and the AJAX List.
         */
 
         ajTableRemove(table2, (const void *) keyarray[i]);
@@ -5054,8 +5006,9 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
                 mapper2->TypeTarget);
 
     /*
-    ** Convert the second-level AJAX Table with Ensembl Object identifiers
-    ** as key data and AJAX List value data for the second Ensembl Mapper.
+    ** Convert the second-level AJAX Table with AJAX unsigned integer
+    ** (Ensembl identifier) objects as key data and
+    ** AJAX List value data for the second Ensembl Mapper.
     */
 
     ajTableToarrayKeysValues(table2, &keyarray, &valarray);
@@ -5063,8 +5016,8 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
     for (i = 0U; keyarray[i]; i++)
     {
         /*
-        ** Get the third-level AJAX Lists for corresponding
-        ** Ensembl Object identifiers.
+        ** Get third-level AJAX List objects for corresponding
+        ** AJAX unsigned integer (Ensembl identifier) objects.
         */
 
         list1 = (AjPList) ajTableFetchmodV(table1, (const void *) &keyarray[i]);
@@ -5080,7 +5033,7 @@ AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
 
         /*
         ** Remove the entry from the AJAX Table and free the
-        ** Ensembl Object identifier and the AJAX List.
+        ** AJAX unsigned integer (Ensembl identifier) object and the AJAX List.
         */
 
         ajTableRemove(table2, (const void *) keyarray[i]);
@@ -5425,11 +5378,11 @@ AjBool ensMapperTrace(const EnsPMapper mapper, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an Ensembl Mapper object.
+** Functions for calculating information from an Ensembl Mapper object.
 **
 ** @fdata [EnsPMapper]
 **
-** @nam3rule Calculate Calculate Ensembl Mapper values
+** @nam3rule Calculate Calculate Ensembl Mapper information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * mapper [const EnsPMapper] Ensembl Mapper
@@ -5702,7 +5655,7 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
 /* @section map ***************************************************************
 **
-** Map coordinates between Ensembl Coordinate Systems.
+** Map coordinates between Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPMapper]
 **
@@ -5729,7 +5682,9 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 /* @func ensMapperFastmap *****************************************************
 **
 ** Inferior mapping function, which will only perform ungapped,
-** unsplit mapping.
+** unsplit mapping. This function will return at most one Ensembl Mapper Result
+** of type ensEMapperresultTypeCoordinate upon success and an empty AJAX List
+** otherwise.
 **
 ** The caller is responsible for deleting the Ensembl Mapper Result objects
 ** before deleting the AJAX List.
@@ -5856,7 +5811,7 @@ AjBool ensMapperFastmap(EnsPMapper mapper,
 
         if (debug)
             ajDebug("ensMapperFastmap could not find an AJAX List for "
-                    "Ensembl Object identifier %u or the List is empty "
+                    "Ensembl Object identifier %u or the AJAX List is empty "
                     "--> one big gap!\n",
                     oid);
 
@@ -5874,6 +5829,7 @@ AjBool ensMapperFastmap(EnsPMapper mapper,
 
         /* Only super easy mapping is done! */
 
+        /* Continue, as long as an overlap has not been found. */
         if ((start < srcmu->Start) || (end > srcmu->End))
             continue;
 
@@ -6135,12 +6091,15 @@ AjBool ensMapperMap(EnsPMapper mapper,
         else
             trgoid = trgmu->Objectidentifier;
 
-        /* In case the loop hasn't even reached the start, move on. */
+        /*
+        ** In case the Ensembl Mapper Unit loop has not even reached the start,
+        ** move on.
+        */
 
         if (srcmu->End < start)
             continue;
 
-        /* In case the loop has over-run, break. */
+        /* In case the Ensembl Mapper Unit loop has over-run, break. */
 
         if (srcmu->Start > srcend)
             break;
@@ -6180,7 +6139,7 @@ AjBool ensMapperMap(EnsPMapper mapper,
             if (mp->Orientation >= 0)
                 trgstart = trgmu->Start + (srcstart - srcmu->Start);
             else
-                trgend = trgmu->End - (srcstart - srcmu->Start);
+                trgend   = trgmu->End   - (srcstart - srcmu->Start);
 
             /*
             ** Either we are enveloping this map or not. If yes, then the end
@@ -6190,7 +6149,10 @@ AjBool ensMapperMap(EnsPMapper mapper,
 
             if (srcend > srcmu->End)
             {
-                /* enveloped */
+                /*
+                ** Enveloped, i.e. the source Ensembl Mapper Unit is
+                ** contained within the end coordinate.
+                */
 
                 if (mp->Orientation >= 0)
                     trgend = trgmu->End;
@@ -6199,12 +6161,15 @@ AjBool ensMapperMap(EnsPMapper mapper,
             }
             else
             {
-                /* The end needs to be adjusted. */
+                /*
+                ** The end needs to be adjusted, i.e. it is somehwere within
+                ** the source Ensembl Mapper Unit.
+                */
 
                 if (mp->Orientation >= 0)
-                    trgend = trgmu->Start + (srcend - srcmu->Start);
+                    trgend   = trgmu->Start + (srcend - srcmu->Start);
                 else
-                    trgstart = trgmu->End - (srcend - srcmu->Start);
+                    trgstart = trgmu->End   - (srcend - srcmu->Start);
             }
 
             mr = ensMapperresultNewCoordinate(trgmu->Objectidentifier,
@@ -6225,7 +6190,7 @@ AjBool ensMapperMap(EnsPMapper mapper,
     if (lastmp)
     {
         /*
-        ** Previously, a Mapper Pair has been found,
+        ** Previously, an Ensembl Mapper Pair has been found,
         ** check for a gap inbetween.
         */
 
@@ -6242,7 +6207,10 @@ AjBool ensMapperMap(EnsPMapper mapper,
     }
     else
     {
-        /* Since no Mapper Pair has been found the entire region is a gap. */
+        /*
+        ** Since an Ensembl Mapper Pair has not been found,
+        ** the entire region is just one gap.
+        */
 
         mr = ensMapperresultNewGap(srcstart, srcend, 0);
 

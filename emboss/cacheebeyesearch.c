@@ -578,9 +578,9 @@ static void cacheebeyesearch_PrintDBdefinition(AjPFile cachef,
     ajStrRemoveWhiteExcess(&comment);
 
     ajFmtPrintF(cachef,
-	    "DB %S [\n"
-	    "  method: ebeye\n"
-	    "  dbalias: %S\n"
+	    "DBNAME %S [\n"
+	    "  method: \"ebeye\"\n"
+	    "  dbalias: \"%S\"\n"
 	    "  fields: \"%S\"\n"
 	    "  return: \"%S\"\n"
 	    "  format: \"text\"\n"

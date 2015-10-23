@@ -11,7 +11,7 @@ DB pubmed [
   format: "text"
   comment: "PubMed bibliographic record"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TITL Title ! Words in title of publication"
   field: "WORD Text_Word ! Free text associated with publication"
@@ -64,7 +64,7 @@ DB protein [
   format: "genpept,fasta"
   comment: "Protein sequence record"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -75,7 +75,7 @@ DB protein [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -97,7 +97,7 @@ DB nuccore [
   format: "genbank,fasta"
   comment: "Core Nucleotide db"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -108,7 +108,7 @@ DB nuccore [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -130,7 +130,7 @@ DB nucleotide [
   format: "genbank,fasta"
   comment: "Nucleotide Umbrella db"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -141,7 +141,7 @@ DB nucleotide [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -163,7 +163,7 @@ DB nucgss [
   format: "genbank,fasta"
   comment: "GSS db"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -174,7 +174,7 @@ DB nucgss [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -201,7 +201,7 @@ DB nucest [
   format: "genbank,fasta"
   comment: "EST db"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -212,7 +212,7 @@ DB nucest [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -234,13 +234,13 @@ DB nucest [
 ]
 
 DB structure [
-  type: ""
+  type: "text"
   format: ""
   comment: "Three-dimensional molecular model"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! mmdbId"
+  field: "UID id ! mmdbId"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN PdbAcc ! PdbAcc"
+  field: "ACCN acc PdbAcc ! PdbAcc"
   field: "ECNO EC_RN_Number ! EC"
   field: "RESO Resolution ! Resolution"
   field: "EXPM ExpMethod ! ExpMethod"
@@ -287,7 +287,7 @@ DB genome [
   format: ""
   comment: "Genomic sequences, contigs, and maps"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -298,7 +298,7 @@ DB genome [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -318,17 +318,17 @@ DB genome [
 ]
 
 DB genomeprj [
-  type: ""
+  type: "text"
   format: ""
   comment: "Genome Project Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! Organism"
   field: "CEN Sequencing_Center ! Sequencing Center(s)"
   field: "SEQS Sequencing_status ! Sequencing status"
   field: "GSIZ Genome_Size ! Genome Size"
-  field: "ACCN Accession ! Space delimited GenBank or RefSeq Accessions"
+  field: "ACCN acc Accession ! Space delimited GenBank or RefSeq Accessions"
   field: "CHGI Chromosome_GI ! Uid of a chromosome in Genome DB"
   field: "WORD Description ! Organism/Project Description"
   field: "PROP Properties ! Project/Organism Properties"
@@ -349,11 +349,11 @@ DB genomeprj [
 ]
 
 DB bioproject [
-  type: ""
+  type: "text"
   format: ""
   comment: "BioProject Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! Organism"
   field: "PRJA Project_Accession ! Project Accession"
@@ -362,7 +362,7 @@ DB bioproject [
   field: "DATE Registration_Date ! Registration Date"
   field: "TITL Title ! Title"
   field: "CEN Submitter_Organization ! Submitter Organization(s)"
-  field: "ACCN Replicon_accession ! Space delimited GenBank or RefSeq Replicon Accessions"
+  field: "ACCN acc Replicon_accession ! Space delimited GenBank or RefSeq Replicon Accessions"
   field: "RTYP Replicon_type ! Replicon Type"
   field: "RNME Replicon_name ! Replicon Name"
   field: "LTP Locus_Tag_Prefix ! Locus Tag Prefix"
@@ -383,13 +383,13 @@ DB bioproject [
 ]
 
 DB biosample [
-  type: ""
+  type: "text"
   format: ""
   comment: "BioSample Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "TITL Title ! Words in definition line"
   field: "PROP Properties ! Classification by source qualifiers and molecule type"
   field: "WORD Text_Word ! Free text associated with record"
@@ -402,11 +402,11 @@ DB biosample [
 ]
 
 DB biosystems [
-  type: ""
+  type: "text"
   format: ""
   comment: "BioSystems Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "SRC Source_Name ! Name of the organization that is the source of the record"
   field: "SRID Source_ID ! A numerical id that is assigned to a particular source of biosystem records"
@@ -427,7 +427,7 @@ DB biosystems [
   field: "CID CID ! PubChem compound identifiers (cid) found in a biosystem"
   field: "GID Gene_ID ! NCBI gene ids found in a biosystem"
   field: "SID SID ! PubChem substance ids (sid) found in a biosystem"
-  field: "ACCN Accession ! The biosystem accession (bsid plus version)"
+  field: "ACCN acc Accession ! The biosystem accession (bsid plus version)"
   field: "SCT SID_Count ! Total Count of PubChem substance ids (sid) found in a biosystem"
   field: "CCT CID_Count ! Total Count of PubChem compound ids (cid) found in a biosystem"
   field: "GCT Gene_Count ! Total Count of NCBI Gene records (geneid) found in a biosystem"
@@ -435,11 +435,11 @@ DB biosystems [
 ]
 
 DB blastdbinfo [
-  type: ""
+  type: "text"
   format: ""
   comment: "BlastdbInfo Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "DB Database_Name ! Official name of the database"
   field: "TITL Database_Title ! Words in the title of database (e.g., &quot;NCBI Transcript Reference Sequences&quot;)"
@@ -456,11 +456,11 @@ DB blastdbinfo [
 ]
 
 DB books [
-  type: ""
+  type: "text"
   format: ""
   comment: "Books Index Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "AUTH Author ! Section's author"
   field: "CA Corporate_Author ! Corporate Author of publication"
@@ -488,11 +488,11 @@ DB books [
 ]
 
 DB cancerchromosomes [
-  type: ""
+  type: "text"
   format: ""
   comment: "SKYCGH Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TXID Organism ! Taxonomy ID"
   field: "GEND Gender ! Gender"
@@ -524,13 +524,13 @@ DB cancerchromosomes [
 ]
 
 DB cdd [
-  type: ""
+  type: "text"
   format: ""
   comment: "Conserved Domain Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Unique text identifier for a CD"
+  field: "ACCN acc Accession ! Unique text identifier for a CD"
   field: "DB Database ! Which database CD is from (pfam, smart ...)"
   field: "TITL Title ! The short descriptive name of a CD, e.g. Rho"
   field: "STTL Subtitle ! A short description of the CD"
@@ -546,11 +546,11 @@ DB cdd [
 ]
 
 DB gap [
-  type: ""
+  type: "text"
   format: ""
   comment: "dbGaP Data"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "DISC Discriminator ! Discriminator"
   field: "OBJ Object_Type ! Object Type"
@@ -588,11 +588,11 @@ DB gap [
 ]
 
 DB dbvar [
-  type: ""
+  type: "text"
   format: ""
   comment: "dbVar records"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ACC Accession ! Accession of any internal or external identifier. Versions removed from GENBANK accessions."
   field: "ACCV Accession_Version ! Accession and version of GENBANK accessions used in variant sequence or support."
@@ -667,16 +667,16 @@ DB dbvar [
 ]
 
 DB epigenomics [
-  type: ""
+  type: "text"
   format: ""
   comment: "Epigenomics Entrez Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Text"
   field: "TITL Title ! Title"
   field: "TXID Taxonomy_ID ! TaxId"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "KYWD Keyword ! Keyword"
   field: "AUTH Author ! Author"
   field: "PRID Project_ID ! ProjectId"
@@ -691,7 +691,7 @@ DB gene [
   format: ""
   comment: "Gene database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to a gene record"
+  field: "UID id ! Unique number assigned to a gene record"
   field: "FILT Filter ! Limits the records"
   field: "TITL Gene_Protein_Name ! gene or protein name"
   field: "WORD Text_Word ! Free text associated with record"
@@ -703,7 +703,7 @@ DB gene [
   field: "ECNO EC_RN_Number ! EC number for enzyme or CAS registry number"
   field: "MIM MIM ! MIM number from OMIM"
   field: "DIS Disease_Phenotype ! Name(s) of diseases associated with this gene. When available, OMIM name will be used"
-  field: "ACCN Nucleotide_Protein_Accession ! Nucleotide or protein accession(s) associated with this gene"
+  field: "ACCN acc Nucleotide_Protein_Accession ! Nucleotide or protein accession(s) associated with this gene"
   field: "UGEN UniGene_Cluster_Number ! UniGene cluster number for this gene"
   field: "PROP Properties ! Properties of Gene record"
   field: "CDAT Creation_Date ! The date on which this record first appeared"
@@ -726,18 +726,18 @@ DB gene [
 ]
 
 DB gensat [
-  type: ""
+  type: "text"
   format: ""
   comment: "GENSAT Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "IMID Image_ID ! Image ID"
   field: "GENE Gene_Name ! Gene Name"
   field: "GSYM Gene_Symbol ! Gene Symbol"
   field: "GALI Gene_Alias ! Gene Alias or Synonym"
   field: "GI GenBank_ID ! Gi"
-  field: "ACCN GenBank_Accession ! GenBank Accession"
+  field: "ACCN acc GenBank_Accession ! GenBank Accession"
   field: "ORGN Organism ! Exploded organism names"
   field: "BAC BAC_Address ! BAC Address"
   field: "BCMK BAC_Marker ! BAC Marker"
@@ -756,14 +756,14 @@ DB gensat [
 ]
 
 DB gds [
-  type: ""
+  type: "text"
   format: ""
   comment: "GEO DataSets"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! exploded organism names"
-  field: "ACCN GEO_Accession ! accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
+  field: "ACCN acc GEO_Accession ! accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
   field: "TITL Title ! Words in title of record"
   field: "DESC Description ! Text from description, summary and other similar fields"
   field: "SFIL Supplementary_Files ! Supplementary Files"
@@ -790,14 +790,14 @@ DB gds [
 ]
 
 DB geo [
-  type: ""
+  type: "text"
   format: ""
   comment: "Genes Expression Omnibus"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! Exploded organism names"
-  field: "ACCN GEO_Accession ! Accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
+  field: "ACCN acc GEO_Accession ! Accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
   field: "GDST GDS_Text ! GDS text from title and description"
   field: "GEOT GEO_Description_Title_Text ! Sample titles"
   field: "RTYP Platform_Reporter_Type ! Platform reporter type, e.g. genbank, clone, orf"
@@ -822,14 +822,14 @@ DB geo [
 ]
 
 DB geoprofiles [
-  type: ""
+  type: "text"
   format: ""
   comment: "Genes Expression Omnibus"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! Exploded organism names"
-  field: "ACCN GEO_Accession ! Accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
+  field: "ACCN acc GEO_Accession ! Accession for GDS (DataSet), GPL (Platform), GSM (Sample), GSE (Series)"
   field: "GDST GDS_Text ! GDS text from title and description"
   field: "GEOT GEO_Description_Title_Text ! Sample titles"
   field: "RTYP Platform_Reporter_Type ! Platform reporter type, e.g. genbank, clone, orf"
@@ -854,11 +854,11 @@ DB geoprofiles [
 ]
 
 DB homologene [
-  type: ""
+  type: "text"
   format: ""
   comment: "HomoloGene Entrez Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TITL Title ! Words in title of publication"
   field: "WORD Text_Word ! Free text associated with record"
@@ -881,7 +881,7 @@ DB journals [
   format: "text"
   comment: "Journals Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TITL Title ! Document title"
   field: "ESSN eISSN ! eISSN"
@@ -902,11 +902,11 @@ DB journals [
 ]
 
 DB mesh [
-  type: ""
+  type: "text"
   format: ""
   comment: "MeSH Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TN Tree_Number ! Tree Number"
   field: "MESH MeSH_Terms ! MeSH Terms"
@@ -921,11 +921,11 @@ DB mesh [
 ]
 
 DB ncbisearch [
-  type: ""
+  type: "text"
   format: ""
   comment: "Index of NCBI web pages"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "TITL Title ! Document title"
   field: "KYWD Keyword ! Keyword from meta tag"
@@ -942,11 +942,11 @@ DB ncbisearch [
 ]
 
 DB nlmcatalog [
-  type: ""
+  type: "text"
   format: ""
   comment: "NLM Catalog Entrez Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ITAG Abstract_Index_Tags ! Abstract/Index Tags"
   field: "AUTH Author ! Author(s) of publication"
@@ -990,11 +990,11 @@ DB nlmcatalog [
 ]
 
 DB omia [
-  type: ""
+  type: "text"
   format: ""
   comment: "OMIA records"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "OMIA Group_ID ! Group ID"
   field: "PNID Phene_ID ! Phene ID is species-specific identifier"
@@ -1013,7 +1013,7 @@ DB omim [
   format: "text"
   comment: "OMIM records"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID MIM ! Unique number assigned to OMIM record"
+  field: "UID id MIM ! Unique number assigned to OMIM record"
   field: "FILT Filter ! Limits the records"
   field: "TITL Title ! Words in title of record"
   field: "WORD Text_Word ! Free text associated with record"
@@ -1041,7 +1041,7 @@ DB pmc [
   format: "text"
   comment: "PubMed Central"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "PMID PubMed_ID ! Unique identifier from PubMed"
   field: "AUTH Author ! Author(s) of publication"
@@ -1071,7 +1071,7 @@ DB pmc [
   field: "LDAT PMC_Live_Date ! PMC live date"
   field: "ORGN Organism ! scientific and common names of organism"
   field: "ONSN Organism_Unsynonymized ! Unsynonymized organism names"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "EDAT Entrez_Date ! Entrez date"
   field: "DOI DOI ! Digital Object Identifier"
   field: "FULL Full_Author_Name ! Full Author Name(s) of publication"
@@ -1085,7 +1085,7 @@ DB popset [
   format: ""
   comment: "PopSet sequence record"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to each sequence"
+  field: "UID id ! Unique number assigned to each sequence"
   field: "FILT Filter ! Limits the records"
   field: "WORD Text_Word ! Free text associated with record"
   field: "TITL Title ! Words in definition line"
@@ -1096,7 +1096,7 @@ DB popset [
   field: "ISS Issue ! Issue number of publication"
   field: "PAGE Page_Number ! Page number(s) of publication"
   field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "PACC Primary_Accession ! Does not include retired secondary accessions"
   field: "GENE Gene_Name ! Name of gene associated with sequence"
   field: "PROT Protein_Name ! Name of protein associated with sequence"
@@ -1113,11 +1113,11 @@ DB popset [
 ]
 
 DB probe [
-  type: ""
+  type: "text"
   format: ""
   comment: "Entrez Probe Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "AUTH Author ! Author"
   field: "DIST Distributor ! Distributor"
@@ -1137,13 +1137,13 @@ DB probe [
 ]
 
 DB proteinclusters [
-  type: ""
+  type: "text"
   format: ""
   comment: "Protein Cluster record"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Accession"
+  field: "ACCN acc Accession ! Accession"
   field: "PMID PubMed_ID ! PubMed ID"
   field: "TITL Title ! Title"
   field: "GENE Gene_Name ! Gene Name"
@@ -1174,11 +1174,11 @@ DB proteinclusters [
 ]
 
 DB pcassay [
-  type: ""
+  type: "text"
   format: ""
   comment: "PubChem BioAssay Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID AssayID ! Assay ID"
+  field: "UID id AssayID ! Assay ID"
   field: "FILT Filter ! Limits the records"
   field: "ANAM AssayName ! AssayName"
   field: "ADES AssayDescription ! AssayDescription"
@@ -1258,11 +1258,11 @@ DB pcassay [
 ]
 
 DB pccompound [
-  type: ""
+  type: "text"
   format: ""
   comment: "PubChem Compound Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID CompoundID ! Compound ID"
+  field: "UID id CompoundID ! Compound ID"
   field: "FILT Filter ! Limits the records"
   field: "SRC SourceName ! SourceName"
   field: "SRID SourceID ! SourceID"
@@ -1331,11 +1331,11 @@ DB pccompound [
 ]
 
 DB pcsubstance [
-  type: ""
+  type: "text"
   format: ""
   comment: "PubChem Substance Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID SubstanceID ! Substance ID"
+  field: "UID id SubstanceID ! Substance ID"
   field: "FILT Filter ! Limits the records"
   field: "SRC SourceName ! SourceName"
   field: "CSN CurrentSourceName ! CurrentSourceName"
@@ -1400,9 +1400,9 @@ DB seqannot [
   format: ""
   comment: "SeqAnnot Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "TITL Title ! Words in definition line"
   field: "PROP Properties ! Classification by source qualifiers and molecule type"
   field: "WORD Text_Word ! Free text associated with record"
@@ -1420,13 +1420,13 @@ DB snp [
   format: "chr,flt,rsr,brief,docset"
   comment: "Single Nucleotide Polymorphisms"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "RS Reference_SNP_ID ! Clustered SNP ID (rs)"
   field: "CHR Chromosome ! chromosomes"
   field: "GENE Gene_Name ! locus link symbol"
   field: "HAN Submitter_Handle ! Submitter Handle"
-  field: "ACCN Accession ! nucleotide accessions"
+  field: "ACCN acc Accession ! nucleotide accessions"
   field: "LLID LocusLink_ID ! locus link UID"
   field: "ORGN Organism ! Organism"
   field: "FXN Function_Class ! Function class"
@@ -1465,9 +1465,9 @@ DB sra [
   format: "ftplist,asperalist"
   comment: "SRA Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Accession number of sequence"
+  field: "ACCN acc Accession ! Accession number of sequence"
   field: "TITL Title ! Words in definition line"
   field: "PROP Properties ! Classification by source qualifiers and molecule type"
   field: "WORD Text_Word ! Free text associated with record"
@@ -1478,11 +1478,11 @@ DB sra [
 ]
 
 DB taxonomy [
-  type: ""
-  format: ""
+  type: "text"
+  format: "unknown"
   comment: "TAXONOMY records"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID Taxonomy_ID ! Unique number assigned to publication"
+  field: "UID id Taxonomy_ID ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "SCIN Scientific_Name ! Scientific name of organism"
   field: "COMN Common_Name ! Common name of organism"
@@ -1501,11 +1501,11 @@ DB taxonomy [
 ]
 
 DB toolkit [
-  type: ""
+  type: "text"
   format: ""
   comment: "ToolKit database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "DID Dox_ID ! This is the doxygen id for this entity"
   field: "DEF Definition ! Definition"
@@ -1522,11 +1522,11 @@ DB toolkit [
 ]
 
 DB toolkitall [
-  type: ""
+  type: "text"
   format: ""
   comment: "ToolKitAll database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "DID Dox_ID ! This is the doxygen id for this entity"
   field: "DEF Definition ! Definition"
@@ -1543,11 +1543,11 @@ DB toolkitall [
 ]
 
 DB unigene [
-  type: ""
+  type: "text"
   format: ""
   comment: "UniGene database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "ORGN Organism ! scientific and common names of organism"
   field: "TITL Title ! title of cluster"
@@ -1576,11 +1576,11 @@ DB unigene [
 ]
 
 DB unists [
-  type: ""
+  type: "text"
   format: ""
   comment: "Unique Sequence Tagged Sites database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
   field: "USID UniSTS_ID ! UniSTS ID"
   field: "MRKN Marker_Name ! marker name"
@@ -1603,13 +1603,13 @@ DB unists [
 ]
 
 DB gencoll [
-  type: ""
+  type: "text"
   format: ""
   comment: "GenColl Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Chromosome accessions"
+  field: "ACCN acc Accession ! Chromosome accessions"
   field: "ASAC Assembly_Accession ! Space delimited assembly accessions w/ &amp; w/o versions"
   field: "CAT Category ! Assembly Set type or &quot;assembly-unit&quot;"
   field: "TXID Taxonomy_Id ! Taxonomy Id"
@@ -1631,13 +1631,13 @@ DB gencoll [
 ]
 
 DB gcassembly [
-  type: ""
+  type: "text"
   format: ""
   comment: "GCAssembly Database"
   field: "ALL All_Fields ! All terms from all searchable fields"
-  field: "UID UID ! Unique number assigned to publication"
+  field: "UID id ! Unique number assigned to publication"
   field: "FILT Filter ! Limits the records"
-  field: "ACCN Accession ! Chromosome accessions"
+  field: "ACCN acc Accession ! Chromosome accessions"
   field: "ASAC Assembly_accession ! Space delimited assembly accessions w/ &amp; w/o versions"
   field: "STAS Assembly_Status ! How assembled is this assembly. 'contigs only' to 'complete sequence genome'"
   field: "TXID Taxonomy_ID ! Taxonomy ID"

@@ -4,8 +4,8 @@
 ** Includes functions for writing a Pdb object (defined in ajpdb.h).
 **
 ** @author Copyright (c) 2004 Jon Ison
-** @version $Revision: 1.47 $
-** @modified $Date: 2012/07/02 17:21:23 $ by $Author: rice $
+** @version $Revision: 1.48 $
+** @modified $Date: 2012/12/07 10:16:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1621,7 +1621,7 @@ static AjBool pdbioWriteText(AjPFile outf, const AjPStr str,
 
     handle = ajStrTokenNewC(str, " \t\r\n");
 
-    while (ajStrTokenNextParse(&handle, &token))
+    while (ajStrTokenNextParse(handle, &token))
     {
         if (!c)
             ajFmtPrintF(outf, "%-11s", prefix);

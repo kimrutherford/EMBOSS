@@ -20,12 +20,12 @@ REFERENCE   2  (bases 1 to 561)
             Japan (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587,
             Fax:0852-32-6499)
 FEATURES             Location/Qualifiers
-     source          1. .561
+     source          1..561
                      /organism="Schizosaccharomyces pombe"
                      /mol_type="mRNA"
                      /db_xref="taxon:4896"
                      /clone_lib="pGAD GH"
-     CDS             <1. .275
+     CDS             <1..275
                      /codon_start=3
                      /product="MET1 homolog"
                      /protein_id="BAA23999.1"

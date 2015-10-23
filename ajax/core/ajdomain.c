@@ -6,8 +6,8 @@
 ** reading and writing dcf (domain classification file) format.
 **
 ** @author Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
-** @version $Revision: 1.49 $
-** @modified $Date: 2012/07/02 16:48:15 $ by $Author: rice $
+** @version $Revision: 1.50 $
+** @modified $Date: 2012/12/07 10:13:25 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -607,7 +607,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
 
     for(i = 0U; i < n; i++)
     {
-        ajStrTokenNextParse(&handle, &domainGStrtoken);
+        ajStrTokenNextParse(handle, &domainGStrtoken);
         p = ajStrGetPtr(domainGStrtoken);
 
         if(sscanf(p, "%d-%d", &from, &to) == 2)
@@ -653,7 +653,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
     /* Read SCOP sunid's from classification string */
     bhandle = ajStrTokenNewC(domainGStrclass, ",\n");
 
-    while(ajStrTokenNextParse(&bhandle, &domainGStrtoken))
+    while(ajStrTokenNextParse(bhandle, &domainGStrtoken))
     {
         if(ajStrPrefixC(domainGStrtoken, "cl"))
             ajFmtScanS(domainGStrtoken, "cl=%d", &scopcla->Class);
@@ -1305,15 +1305,15 @@ AjPList ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 
         /*1st token is classification index e.g 0002.0160 */
         handle = ajStrTokenNewC(CathNameLine, " \t");
-        ajStrTokenNextParseC(&handle, " \t", &(CathNamePtr)->Id);
+        ajStrTokenNextParseC(handle, " \t", &(CathNamePtr)->Id);
 
 
         /*2nd token is domain code and should be discarded */
-        ajStrTokenNextParseC(&handle, " \t", &tmptok);
+        ajStrTokenNextParseC(handle, " \t", &tmptok);
 
 
         /*3rd token is classification text */
-        ajStrTokenRestParse(&handle, &(CathNamePtr)->Desc);
+        ajStrTokenRestParse(handle, &(CathNamePtr)->Desc);
 
         if(CathNamePtr->Desc->Ptr[0] == ':')
             ajStrCutStart(&(CathNamePtr)->Desc, 1);

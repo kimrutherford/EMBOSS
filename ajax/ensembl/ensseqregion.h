@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.22 $
+** @version $Revision: 1.23 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/02/20 22:14:40 $ by $Author: mks $
+** @modified $Date: 2012/08/05 11:27:31 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -141,7 +141,7 @@ EnsPSeqregionadaptor ensSeqregionadaptorNew(
 void ensSeqregionadaptorDel(EnsPSeqregionadaptor *Psra);
 
 EnsPDatabaseadaptor ensSeqregionadaptorGetDatabaseadaptor(
-    const EnsPSeqregionadaptor sra);
+    EnsPSeqregionadaptor sra);
 
 const AjPList ensSeqregionadaptorLoadLocusreferencegenomic(
     EnsPSeqregionadaptor sra);
@@ -254,7 +254,7 @@ EnsPBaseadaptor ensSeqregionsynonymadaptorGetBaseadaptor(
     EnsPSeqregionsynonymadaptor srsa);
 
 EnsPDatabaseadaptor ensSeqregionsynonymadaptorGetDatabaseadaptor(
-    const EnsPSeqregionsynonymadaptor srsa);
+    EnsPSeqregionsynonymadaptor srsa);
 
 AjBool ensSeqregionsynonymadaptorFetchAllbySeqregion(
     EnsPSeqregionsynonymadaptor srsa,

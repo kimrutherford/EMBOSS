@@ -6,9 +6,9 @@
 ** of formats.
 **
 ** @author Copyright (C) 2000 Peter Rice, LION Bioscience Ltd.
-** @version  $Revision: 1.107 $
+** @version  $Revision: 1.108 $
 ** @modified Nov 10 First version
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/10/25 13:22:32 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -128,6 +128,8 @@ static void reportWriteSrs(AjPReport outrpt, const AjPFeattable ftable,
 			   const AjPSeq seq);
 static void reportWriteSrsFlags(AjPReport outrpt, const AjPFeattable ftable,
 				const AjPSeq seq, AjBool withSeq);
+static void reportWriteSummary(AjPReport outrpt, const AjPFeattable ftable,
+                               const AjPSeq seq);
 static void reportWriteTable(AjPReport outrpt, const AjPFeattable ftable,
 			     const AjPSeq seq);
 
@@ -200,6 +202,8 @@ static ReportOFormat reportFormat[] =
 	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSeqTable},
     {"srs",       "Simple report format for SRS",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSrs},
+    {"summary",   "Summary of hits",
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSummary},
     {"table",     "Simple table",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteTable},
     {"tagseq",    "Sequence with features marked below",
@@ -2290,6 +2294,53 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
     AJFREE(tagprints);
     AJFREE(tagsizes);
 
+    return;
+}
+
+
+
+
+/* @funcstatic reportWriteSummary *********************************************
+**
+** Writes a report in Summary format. The output includes the name of
+** any sequence with at least one feature, and a count of the number of features
+**
+** Format:<br>
+**   USA    Count
+**   [name] [count]
+**
+** Data reported:
+**
+** Tags required: None
+**
+** Tags used: None
+**
+** Tags reported:
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] ftable [const AjPFeattable] Feature table object
+** @param [r] seq [const AjPSeq] Sequence object
+** @return [void]
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+static void reportWriteSummary(AjPReport thys,
+                               const AjPFeattable ftable, const AjPSeq seq)
+{
+    if(!ajFeattableGetSize(ftable))
+    {
+        return;
+    }
+
+    ajReportWriteHeader(thys, ftable, seq);
+
+    /*
+    ** The header has all the information we need, and can include USA
+    ** and accession
+    */
+    
     return;
 }
 

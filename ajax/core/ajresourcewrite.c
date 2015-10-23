@@ -3,9 +3,9 @@
 ** AJAX data resource handling functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.18 $
+** @version $Revision: 1.19 $
 ** @modified Oct 25 2010 pmr First AJAX version
-** @modified $Date: 2011/10/19 14:52:21 $ by $Author: rice $
+** @modified $Date: 2012/12/07 10:18:08 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -660,9 +660,9 @@ static AjBool resourceoutWriteWebpage(AjPFile outf, const AjPResource resource)
         while((tmpstr = ajListstrIterGet(iter)))
         {
             ajStrTokenAssignC(&handle, tmpstr, "|");
-            ajStrTokenNextParse(&handle, &tmpid);
+            ajStrTokenNextParse(handle, &tmpid);
             ajStrRemoveWhiteExcess(&tmpid);
-            ajStrTokenNextParse(&handle, &tmpname);
+            ajStrTokenNextParse(handle, &tmpname);
             ajStrRemoveWhiteExcess(&tmpname);
             
             iterq = ajListIterNew(resource->Query);
@@ -705,10 +705,10 @@ static AjBool resourceoutWriteWebpage(AjPFile outf, const AjPResource resource)
                 ajFmtPrintF(outf,
                             "       <td>");
 
-                while(ajStrTokenNextParse(&handle, &tmpqid))
+                while(ajStrTokenNextParse(handle, &tmpqid))
                 {
-                    ajStrTokenNextParse(&namehandle, &tmpqname);
-                    ajStrTokenNextParse(&termhandle, &tmpqterm);
+                    ajStrTokenNextParse(namehandle, &tmpqname);
+                    ajStrTokenNextParse(termhandle, &tmpqterm);
 
                     if(i)
                         ajFmtPrintF(outf,

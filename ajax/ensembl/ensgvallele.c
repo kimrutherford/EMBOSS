@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.21 $
+** @version $Revision: 1.23 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @modified $Date: 2013/02/17 13:02:10 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -64,13 +64,13 @@
 /* =========================== private constants =========================== */
 /* ========================================================================= */
 
-/* @conststatic gvalleleadaptorKTables ****************************************
+/* @conststatic gvalleleadaptorKTablenames ************************************
 **
 ** Array of Ensembl Genetic Variation Allele Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *gvalleleadaptorKTables[] =
+static const char *gvalleleadaptorKTablenames[] =
 {
     "allele",
     "allele_code",
@@ -80,13 +80,13 @@ static const char *gvalleleadaptorKTables[] =
 
 
 
-/* @conststatic gvalleleadaptorKColumns ***************************************
+/* @conststatic gvalleleadaptorKColumnnames ***********************************
 **
 ** Array of Ensembl Genetic Variation Allele Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *gvalleleadaptorKColumns[] =
+static const char *gvalleleadaptorKColumnnames[] =
 {
     "allele.allele_id",
     "allele.variation_id",
@@ -101,13 +101,13 @@ static const char *gvalleleadaptorKColumns[] =
 
 
 
-/* @conststatic gvalleleadaptorKLeftjoin **************************************
+/* @conststatic gvalleleadaptorKLeftjoins *************************************
 **
-** Array of Ensembl Genetic Variation Allele Adaptor SQL left join conditions
+** Array of Ensembl Genetic Variation Allele Adaptor SQL LEFT JOIN conditions
 **
 ******************************************************************************/
 
-static const EnsOBaseadaptorLeftjoin gvalleleadaptorKLeftjoin[] =
+static const EnsOBaseadaptorLeftjoin gvalleleadaptorKLeftjoins[] =
 {
     {"failed_allele", "allele.allele_id = failed_allele.allele_id"},
     {(const char *) NULL, (const char *) NULL}
@@ -118,7 +118,7 @@ static const EnsOBaseadaptorLeftjoin gvalleleadaptorKLeftjoin[] =
 
 /* @conststatic gvalleleadaptorKDefaultcondition ******************************
 **
-** Ensembl Genetic Variation Allele Adaptor default SQL condition
+** Ensembl Genetic Variation Allele Adaptor SQL SELECT default condition
 **
 ******************************************************************************/
 
@@ -128,13 +128,13 @@ static const char *gvalleleadaptorKDefaultcondition =
 
 
 
-/* @conststatic gvalleleadaptorfailedvariationKTables *************************
+/* @conststatic gvalleleadaptorfailedvariationKTablenames *********************
 **
 ** Array of Ensembl Genetic Variation Allele Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *gvalleleadaptorfailedvariationKTables[] =
+static const char *gvalleleadaptorfailedvariationKTablenames[] =
 {
     "allele",
     "allele_code",
@@ -188,12 +188,12 @@ static AjBool gvalleleadaptorFetchAllbyStatement(
 ** Ensembl Genetic Variation Allele objects
 **
 ** @cc Bio::EnsEMBL::Variation::Allele
-** @cc CVS Revision: 1.19
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.20
+** @cc CVS Tag: branch-ensembl-68
 **
 ** @cc Bio::EnsEMBL::Variation::Failable
 ** @cc CVS Revision: 1.2
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ** TODO: Lazy loading of Ensembl Genetic Variation Population objects and
 ** Ensembl Genetic Variation Variation objects is not implemented yet.
@@ -452,14 +452,7 @@ void ensGvalleleDel(EnsPGvallele *Pgva)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgva)
-        return;
-
-    pthis = *Pgva;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgva) || --pthis->Use)
     {
         *Pgva = NULL;
 
@@ -474,9 +467,7 @@ void ensGvalleleDel(EnsPGvallele *Pgva)
 
     ajListstrFreeData(&pthis->Faileddescriptions);
 
-    AJFREE(pthis);
-
-    *Pgva = NULL;
+    ajMemFree((void **) Pgva);
 
     return;
 }
@@ -750,9 +741,10 @@ const AjPList ensGvalleleLoadAllFaileddescriptions(EnsPGvallele gva)
 
     gva->Faileddescriptions = ajListstrNew();
 
-    ensGvalleleadaptorRetrieveAllFaileddescriptions(gva->Adaptor,
-                                                    gva,
-                                                    gva->Faileddescriptions);
+    ensGvalleleadaptorRetrieveAllFaileddescriptions(
+        gva->Adaptor,
+        gva,
+        gva->Faileddescriptions);
 
     return gva->Faileddescriptions;
 }
@@ -795,9 +787,10 @@ AjPStr ensGvalleleLoadSubhandle(EnsPGvallele gva)
 
     gva->Subhandle = ajStrNew();
 
-    ensGvalleleadaptorRetrieveSubhandle(gva->Adaptor,
-                                        gva,
-                                        &gva->Subhandle);
+    ensGvalleleadaptorRetrieveSubhandle(
+        gva->Adaptor,
+        gva,
+        &gva->Subhandle);
 
     return gva->Subhandle;
 }
@@ -1157,8 +1150,8 @@ AjBool ensGvalleleTrace(const EnsPGvallele gva, ajuint level)
             indent, gva->Adaptor,
             indent, gva->Gvpopulation,
             indent, gva->Allele,
-            indent, gva->Faileddescriptions,
             indent, gva->Subhandle,
+            indent, gva->Faileddescriptions,
             indent, gva->Counter,
             indent, gva->Gvvariationidentifier,
             indent, gva->Subidentifier,
@@ -1196,12 +1189,12 @@ AjBool ensGvalleleTrace(const EnsPGvallele gva, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Allele object.
 **
 ** @fdata [EnsPGvallele]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Allele values
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Allele information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gva [const EnsPGvallele] Ensembl Genetic Variation Allele
@@ -1324,8 +1317,8 @@ AjBool ensGvalleleIsFailed(EnsPGvallele gva, AjBool *Presult)
 ** Ensembl Genetic Variation Allele Adaptor objects
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::AlleleAdaptor
-** @cc CVS Revision: 1.7
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.12
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1531,22 +1524,22 @@ EnsPGvalleleadaptor ensGvalleleadaptorNew(
 
     gvaa->Excludeadaptor = ensGvbaseadaptorNew(
         gvdba,
-        gvalleleadaptorKTables,
-        gvalleleadaptorKColumns,
-        gvalleleadaptorKLeftjoin,
+        gvalleleadaptorKTablenames,
+        gvalleleadaptorKColumnnames,
+        gvalleleadaptorKLeftjoins,
         gvalleleadaptorKDefaultcondition,
         (const char *) NULL,
         &gvalleleadaptorFetchAllbyStatement);
 
     /*
-    ** If failed Variation objects are included, add the failed_variation SQL
-    ** table, but skip the LEFT JOIN.
+    ** If failed Variation objects are included, add the "failed_variation"
+    ** SQL table name, but skip the SQL LEFT JOIN.
     */
 
     gvaa->Includeadaptor = ensGvbaseadaptorNew(
         gvdba,
-        gvalleleadaptorfailedvariationKTables,
-        gvalleleadaptorKColumns,
+        gvalleleadaptorfailedvariationKTablenames,
+        gvalleleadaptorKColumnnames,
         (const EnsPBaseadaptorLeftjoin) NULL,
         gvalleleadaptorKDefaultcondition,
         (const char *) NULL,
@@ -1612,17 +1605,13 @@ void ensGvalleleadaptorDel(EnsPGvalleleadaptor *Pgvaa)
                 *Pgvaa);
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvaa)
+    if (!(pthis = *Pgvaa))
         return;
-
-    pthis = *Pgvaa;
 
     ensGvbaseadaptorDel(&pthis->Excludeadaptor);
     ensGvbaseadaptorDel(&pthis->Includeadaptor);
 
-    AJFREE(pthis);
-
-    *Pgvaa = NULL;
+    ajMemFree((void **) Pgvaa);
 
     return;
 }
@@ -1675,8 +1664,6 @@ void ensGvalleleadaptorDel(EnsPGvalleleadaptor *Pgvaa)
 EnsPDatabaseadaptor ensGvalleleadaptorGetDatabaseadaptor(
     const EnsPGvalleleadaptor gvaa)
 {
-    EnsPGvdatabaseadaptor gvdba = NULL;
-
     if (!gvaa)
         return NULL;
 
@@ -1686,9 +1673,8 @@ EnsPDatabaseadaptor ensGvalleleadaptorGetDatabaseadaptor(
     ** link to the same object.
     */
 
-    gvdba = ensGvbaseadaptorGetGvdatabaseadaptor(gvaa->Excludeadaptor);
-
-    return ensGvdatabaseadaptorGetDatabaseadaptor(gvdba);
+    return ensGvdatabaseadaptorGetDatabaseadaptor(
+        ensGvbaseadaptorGetGvdatabaseadaptor(gvaa->Excludeadaptor));
 }
 
 
@@ -1912,7 +1898,7 @@ AjBool ensGvalleleadaptorFetchAllbySubidentifier(
     else
         ba = ensGvbaseadaptorGetBaseadaptor(gvaa->Excludeadaptor);
 
-    constraint = ajFmtStr("allele.subsnp_id = %u");
+    constraint = ajFmtStr("allele.subsnp_id = %u", subidentifier);
 
     result = ensBaseadaptorFetchAllbyConstraint(
         ba,
@@ -1931,7 +1917,8 @@ AjBool ensGvalleleadaptorFetchAllbySubidentifier(
 
 /* @section accessory object retrieval ****************************************
 **
-** Functions for fetching objects releated to Ensembl Genetic Variation Allele
+** Functions for retrieving objects releated to
+** Ensembl Genetic Variation Allele
 ** objects from an Ensembl SQL database.
 **
 ** @fdata [EnsPGvalleleadaptor]
@@ -1940,14 +1927,14 @@ AjBool ensGvalleleadaptorFetchAllbySubidentifier(
 ** Retrieve Ensembl Genetic Variation Allele-releated object(s)
 ** @nam4rule All
 ** Retrieve all Ensembl Genetic Variation Allele-releated objects
-** @nam5rule Identifiers Fetch all SQL database-internal identifiers
-** @nam5rule Faileddescriptions Fetch all failed descriptions
+** @nam5rule Identifiers Retrieve all SQL database-internal identifier objects
+** @nam5rule Faileddescriptions Retrieve all failed descriptions
 ** @nam4rule Subhandle Retrieve the Subhandle
 **
 ** @argrule * gvaa [EnsPGvalleleadaptor]
 ** Ensembl Genetic Variation Allele Adaptor
 ** @argrule AllIdentifiers identifiers [AjPList]
-** AJAX List of AJAX unsigned integer identifiers
+** AJAX List of AJAX unsigned integer objects
 ** @argrule AllFaileddescriptions gva [const EnsPGvallele]
 ** Ensembl Genetic Variation Allele
 ** @argrule AllFaileddescriptions descriptions [AjPList]

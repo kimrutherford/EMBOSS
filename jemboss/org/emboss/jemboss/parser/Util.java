@@ -83,8 +83,13 @@ public class Util
       if( (new File(fname)).exists() && withSoap )   // Sequence file
       {
         BufferedReader in = new BufferedReader(new FileReader(fname));
-        while((line = in.readLine()) != null)
-          fc = fc.concat(line + "\n");
+        try {
+			while((line = in.readLine()) != null)
+			  fc = fc.concat(line + "\n");
+		}
+        finally {
+			in.close();
+		}
       }
       else                                   // Database or remote file
       {

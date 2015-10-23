@@ -4,9 +4,9 @@
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
-** @version $Revision: 1.18 $
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @modified $Date: 2013/02/17 13:07:04 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -42,13 +42,13 @@
 /* =============================== constants =============================== */
 /* ========================================================================= */
 
-/* @conststatic gvgenotypecodeadaptorKTables ***********************************
+/* @conststatic gvgenotypecodeadaptorKTablenames ******************************
 **
 ** Array of Ensembl Genetic Variation Genotype Code Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *gvgenotypecodeadaptorKTables[] =
+static const char *gvgenotypecodeadaptorKTablenames[] =
 {
     "genotype_code",
     "allele_code",
@@ -58,13 +58,13 @@ static const char *gvgenotypecodeadaptorKTables[] =
 
 
 
-/* @conststatic gvgenotypecodeadaptorKColumns *********************************
+/* @conststatic gvgenotypecodeadaptorKColumnnames *****************************
 **
 ** Array of Ensembl Genetic Variation Genotype Code Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char *gvgenotypecodeadaptorKColumns[] =
+static const char *gvgenotypecodeadaptorKColumnnames[] =
 {
     "genotype_code.genotype_code_id",
     "genotype_code.haplotype_id",
@@ -77,7 +77,7 @@ static const char *gvgenotypecodeadaptorKColumns[] =
 
 /* @conststatic gvgenotypecodeadaptorKDefaultcondition ************************
 **
-** Ensembl Genetic Variation Genotype Code Adaptor SQL default condition
+** Ensembl Genetic Variation Genotype Code Adaptor SQL SELECT default condition
 **
 ******************************************************************************/
 
@@ -107,7 +107,7 @@ static const char *gvgenotypecodeadaptorKDefaultcondition =
 ** @alias GvSHaplotype
 ** @alias GvOHaplotype
 **
-** @attr Haplotypeidentifier [ajuint] Haplotype identifier
+** @attr Identifier [ajuint] Identifier
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr Allele [AjPStr] Allele
 ** @@
@@ -115,7 +115,7 @@ static const char *gvgenotypecodeadaptorKDefaultcondition =
 
 typedef struct GvSHaplotype
 {
-    ajuint Haplotypeidentifier;
+    ajuint Identifier;
     ajuint Padding;
     AjPStr Allele;
 } GvOHaplotype;
@@ -147,11 +147,15 @@ static GvPHaplotype gvHaplotypeNewIni(ajuint haplotypeid, AjPStr allele);
 
 static void gvHaplotypeDel(GvPHaplotype *Pgvh);
 
-static int listGvhaplotypeCompareHaplotypeidentifierAscending(
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+static AjBool gvhaplotypeTrace(const GvPHaplotype gvh, ajuint level);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+static int listGvhaplotypeCompareIdentifierAscending(
     const void *item1,
     const void *item2);
 
-static AjBool listGvhaplotypeSortHaplotypeidentifierAscending(AjPList gvhs);
+static AjBool listGvhaplotypeSortIdentifierAscending(AjPList gvhs);
 
 static AjBool gvgenotypecodeadaptorFetchAllbyStatement(
     EnsPBaseadaptor ba,
@@ -204,7 +208,7 @@ static GvPHaplotype gvHaplotypeNewIni(ajuint haplotypeid, AjPStr allele)
 
     AJNEW0(gvh);
 
-    gvh->Haplotypeidentifier = haplotypeid;
+    gvh->Identifier = haplotypeid;
 
     gvh->Allele = ajStrNewRef(allele);
 
@@ -233,13 +237,23 @@ static void gvHaplotypeDel(GvPHaplotype *Pgvh)
     if (!Pgvh)
         return;
 
-    pthis = *Pgvh;
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("gvHaplotypeDel"))
+    {
+        ajDebug("gvHaplotypeDel\n"
+                "  *Pgvh %p\n",
+                *Pgvh);
+
+        gvhaplotypeTrace(*Pgvh, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!(pthis = *Pgvh))
+        return;
 
     ajStrDel(&pthis->Allele);
 
-    AJFREE(pthis);
-
-    *Pgvh = NULL;
+    ajMemFree((void **) Pgvh);
 
     return;
 }
@@ -247,7 +261,48 @@ static void gvHaplotypeDel(GvPHaplotype *Pgvh)
 
 
 
-/* @funcstatic listGvhaplotypeCompareHaplotypeidentifierAscending *************
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+/* @funcstatic gvhaplotypeTrace ***********************************************
+**
+** Trace an Ensembl Genetic Variation Haplotype.
+**
+** @param [r] gvh [const GvPHaplotype] Ensembl Genetic Variation Haplotype
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool gvhaplotypeTrace(const GvPHaplotype gvh, ajuint level)
+{
+    AjPStr indent = NULL;
+
+    if (!gvh)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SgvhaplotypeTrace %p\n"
+            "%S  Identifier %u\n"
+            "%S  Allele '%S'\n",
+            indent, gvh,
+            indent, gvh->Identifier,
+            indent, gvh->Allele);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+
+
+
+/* @funcstatic listGvhaplotypeCompareIdentifierAscending **********************
 **
 ** AJAX List of Genetic Variation Haplotype objects comparison function
 ** to sort by haplotype identifier in ascending order.
@@ -265,7 +320,7 @@ static void gvHaplotypeDel(GvPHaplotype *Pgvh)
 ** @@
 ******************************************************************************/
 
-static int listGvhaplotypeCompareHaplotypeidentifierAscending(
+static int listGvhaplotypeCompareIdentifierAscending(
     const void *item1,
     const void *item2)
 {
@@ -273,8 +328,8 @@ static int listGvhaplotypeCompareHaplotypeidentifierAscending(
     GvPHaplotype gvh2 = *(GvOHaplotype *const *) item2;
 
 #if defined(AJ_DEBUG) && AJ_DEBUG >= 2
-    if (ajDebugTest("listGvhaplotypeCompareHaplotypeidentifierAscending"))
-        ajDebug("listGvhaplotypeCompareHaplotypeidentifierAscending\n"
+    if (ajDebugTest("listGvhaplotypeCompareIdentifierAscending"))
+        ajDebug("listGvhaplotypeCompareIdentifierAscending\n"
                 "  gvh1 %p\n"
                 "  gvh2 %p\n",
                 gvh1,
@@ -292,10 +347,10 @@ static int listGvhaplotypeCompareHaplotypeidentifierAscending(
     if ((!gvh1) && gvh2)
         return +1;
 
-    if (gvh1->Haplotypeidentifier < gvh2->Haplotypeidentifier)
+    if (gvh1->Identifier < gvh2->Identifier)
         return -1;
 
-    if (gvh1->Haplotypeidentifier > gvh2->Haplotypeidentifier)
+    if (gvh1->Identifier > gvh2->Identifier)
         return +1;
 
     return 0;
@@ -304,7 +359,7 @@ static int listGvhaplotypeCompareHaplotypeidentifierAscending(
 
 
 
-/* @funcstatic listGvhaplotypeSortHaplotypeidentifierAscending ****************
+/* @funcstatic listGvhaplotypeSortIdentifierAscending *************************
 **
 ** Sort an AJAX List of Genetic Variation Haplotype objects by their
 ** haplotype identifier in ascending order.
@@ -317,14 +372,124 @@ static int listGvhaplotypeCompareHaplotypeidentifierAscending(
 ** @@
 ******************************************************************************/
 
-static AjBool listGvhaplotypeSortHaplotypeidentifierAscending(AjPList gvhs)
+static AjBool listGvhaplotypeSortIdentifierAscending(AjPList gvhs)
 {
     if (!gvhs)
         return ajFalse;
 
-    ajListSort(gvhs, &listGvhaplotypeCompareHaplotypeidentifierAscending);
+    ajListSort(gvhs, &listGvhaplotypeCompareIdentifierAscending);
 
     return ajTrue;
+}
+
+
+
+/* FIXME: Move to strCharCmp in ajstr.c */
+
+static int gvCharCmp(const void *arg1, const void *arg2)
+{
+    /* Sort empty values towards the end of the array. */
+
+    if (arg1 && (!arg2))
+        return -1;
+
+    if ((!arg1) && (!arg2))
+        return 0;
+
+    if ((!arg1) && arg2)
+        return +1;
+
+    if(toupper(*((const int *)arg1)) < toupper(*((const int *)arg2)))
+        return -1;
+
+    if(toupper((*(const int *) arg1)) > toupper(*((const int *) arg2)))
+        return 1;
+
+    return 0;
+}
+
+/* FIXME: Move to ajCharSort in ajstr.c */
+
+AjBool ensUtilityCharSort(char *string)
+{
+    if (!string)
+        return ajFalse;
+
+    qsort(string, strlen(string), sizeof (char), &gvCharCmp);
+
+    return ajTrue;
+}
+
+/* FIXME: Move to baseAmbiguity in ajbase.c */
+
+static const char* gvBaseAmbiguity[] =
+{
+    "AC",   "M", /* Amino */
+    "ACG",  "V", /* Not U */
+    "ACGT", "N", /* Any */
+    "ACT",  "H", /* Not G */
+    "AG",   "R", /* Purine */
+    "AGT",  "D", /* Not C */
+    "AT",   "W", /* Weak */
+    "CG",   "S", /* Strong */
+    "CGT",  "B", /* Not A */
+    "CT",   "Y", /* Pyrimidine */
+    "GT",   "K", /* Keto */
+    "C",    "C", /* C */
+    "A",    "A", /* A */
+    "T",    "T", /* T */
+    "G",    "G", /* G */
+    "-",    "-", /* - */
+    NULL,   NULL
+};
+
+/* FIXME: Move to ajBaseAmbiguityCharFromString in ajbase.c */
+
+char ensUtilityBaseAmbiguityFromString(const char *basestr)
+{
+    char ambiguitychar = '\0';
+
+    char *temporary = NULL;
+
+    register ajuint i = 0U;
+
+    if (!basestr)
+        return '\0';
+
+    temporary = ajCharNewC(basestr);
+
+    ensUtilityCharSort(temporary);
+
+    for (i = 0U; gvBaseAmbiguity[i]; i += 2)
+        if (strcmp(gvBaseAmbiguity[i], temporary))
+        {
+            ambiguitychar = *gvBaseAmbiguity[i + 1];
+
+            break;
+        }
+
+    AJFREE(temporary);
+
+    return ambiguitychar;
+}
+
+/* FIXME: Move to ajBaseAmbiguityCharToString in ajbase.c */
+
+const char* ensUtilityBaseAmbiguityToString(char ambiguitychar)
+{
+    const char *basestr = NULL;
+
+    register ajuint i = 0U;
+
+    for (i = 0U; gvBaseAmbiguity[i + 1]; i += 2)
+        if ((int) *gvBaseAmbiguity[i + 1] == toupper((int) ambiguitychar))
+        {
+            basestr = gvBaseAmbiguity[i];
+
+            break;
+        }
+
+    return basestr;
 }
 
 
@@ -336,8 +501,8 @@ static AjBool listGvhaplotypeSortHaplotypeidentifierAscending(AjPList gvhs)
 ** Ensembl Genetic Variation Genotype objects
 **
 ** @cc Bio::EnsEMBL::Variation::Genotype
-** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Revision: 1.8.10.1
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -580,14 +745,7 @@ void ensGvgenotypeDel(EnsPGvgenotype *Pgvg)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvg)
-        return;
-
-    pthis = *Pgvg;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgvg) || --pthis->Use)
     {
         *Pgvg = NULL;
 
@@ -600,9 +758,7 @@ void ensGvgenotypeDel(EnsPGvgenotype *Pgvg)
 
     ajStrDel(&pthis->Subhandle);
 
-    AJFREE(pthis);
-
-    *Pgvg = NULL;
+    ajMemFree((void **) Pgvg);
 
     return;
 }
@@ -647,6 +803,7 @@ void ensGvgenotypeDel(EnsPGvgenotype *Pgvg)
 ** Get the Ensembl Genetic Variation Genotype Adaptor member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
 ** @return [EnsPGvgenotypeadaptor] Ensembl Genetic Variation Genotype Adaptor
@@ -690,6 +847,7 @@ const AjPList ensGvgenotypeGetAlleles(const EnsPGvgenotype gvg)
 ** Get the Ensembl Genetic Variation Variation member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::variation
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
 ** @return [EnsPGvvariation] Ensembl Genetic Variation Variation or NULL
@@ -711,6 +869,7 @@ EnsPGvvariation ensGvgenotypeGetGvvariation(const EnsPGvgenotype gvg)
 ** Get the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
 ** @return [ajuint] SQL database-internal identifier or 0U
@@ -731,6 +890,7 @@ ajuint ensGvgenotypeGetIdentifier(const EnsPGvgenotype gvg)
 **
 ** Get the subhandle of an Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::subsnp_handle
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
 ** @return [AjPStr] Subhandle or NULL
@@ -752,6 +912,7 @@ AjPStr ensGvgenotypeGetSubhandle(const EnsPGvgenotype gvg)
 ** Get the subidentifier member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::subsnp
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
 ** @return [ajuint] subidentifier or 0U
@@ -804,6 +965,7 @@ ajuint ensGvgenotypeGetSubidentifier(const EnsPGvgenotype gvg)
 ** Set the Ensembl Genetic Variation Genotype Adaptor member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [u] gvga [EnsPGvgenotypeadaptor]
 ** Ensembl Genetic Variation Genotype Adaptor
@@ -833,6 +995,7 @@ AjBool ensGvgenotypeSetAdaptor(EnsPGvgenotype gvg,
 ** Set the Ensembl Genetic Variation Variation member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::variation
 ** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 **
@@ -863,6 +1026,7 @@ AjBool ensGvgenotypeSetGvvariation(EnsPGvgenotype gvg,
 ** Set the SQL database-internal identifier member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
@@ -891,6 +1055,7 @@ AjBool ensGvgenotypeSetIdentifier(EnsPGvgenotype gvg,
 ** Set the subhandle member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::subsnp_handle
 ** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [u] subhandle [AjPStr] Subhandle
 **
@@ -921,6 +1086,7 @@ AjBool ensGvgenotypeSetSubhandle(EnsPGvgenotype gvg,
 ** Set the subidentifier member of an
 ** Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::subsnp
 ** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [r] subidentifier [ajuint] Subidentifier
 **
@@ -953,11 +1119,14 @@ AjBool ensGvgenotypeSetSubidentifier(EnsPGvgenotype gvg,
 **
 ** @nam3rule Add Add one object to an Ensembl Genetic Variation Genotype
 ** @nam4rule Allele Add an allele
+** @nam4rule Allelenumber Add a numbered allele
 ** @nam4rule Gvgenotypecode Add all alleles of an
 ** Ensembl Genetic Variation Genotype Code
 **
 ** @argrule * gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @argrule Allele allele [AjPStr] Allele
+** @argrule Allelenumber number [ajuint] Number
+** @argrule Allelenumber allele [AjPStr] Allele
 ** @argrule Gvgenotypecode gvgc [EnsPGvgenotypecode]
 ** Ensembl Genetic Variation Genotype Code
 **
@@ -995,6 +1164,52 @@ AjBool ensGvgenotypeAddAllele(EnsPGvgenotype gvg,
         gvg->Alleles = ajListstrNew();
 
     ajListstrPushAppend(gvg->Alleles, ajStrNewRef(allele));
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvgenotypeAddAllelenumber *****************************************
+**
+** Add a numbered allele to an Ensembl Genetic Variation Genotype.
+**
+** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
+** @param [r] number [ajuint] Number
+** @param [u] allele [AjPStr] Allele
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ensGvgenotypeAddAllelenumber(EnsPGvgenotype gvg,
+                                    ajuint number,
+                                    AjPStr allele)
+{
+    register ajulong i = 0U;
+
+    AjPStr string = NULL;
+
+    if (!gvg)
+        return ajFalse;
+
+    if (!allele)
+        return ajFalse;
+
+    if (!gvg->Alleles)
+        gvg->Alleles = ajListstrNew();
+
+    for (i = ajListGetLength(gvg->Alleles); i <= number; i++)
+        ajListPushAppend(gvg->Alleles, NULL);
+
+    ajListPeekNumber(gvg->Alleles, number - 1, (void **) &string);
+
+    ajStrDel(&string);
+
+    string = ajStrNewRef(allele);
 
     return ajTrue;
 }
@@ -1139,20 +1354,55 @@ AjBool ensGvgenotypeTrace(const EnsPGvgenotype gvg, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Genotype object.
 **
 ** @fdata [EnsPGvgenotype]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Genotype values
+** @nam3rule Calculate Calculate Ensembl Genetic Variation Genotype information
+** @nam4rule Allelenumber Calculate a numbered allele
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
+** @argrule Allelenumber number [ajuint] Allele number
 **
+** @valrule Allelenumber [const AjPStr] Allele or NULL
 ** @valrule Memsize [size_t] Memory size in bytes or 0
 **
 ** @fcategory misc
 ******************************************************************************/
+
+
+
+
+/* @func ensGvgenotypeCalculateAllelenumber ***********************************
+**
+** Calculate a numbered allele of an Ensembl Genetic Variation Genotype.
+**
+** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
+** @param [r] number [ajuint] Allele number
+**
+** @return [const AjPStr] Allele or NULL
+**
+** @release 6.6.0
+** @@
+******************************************************************************/
+
+const AjPStr ensGvgenotypeCalculateAllelenumber(const EnsPGvgenotype gvg,
+                                                ajuint number)
+{
+    AjPStr allele = NULL;
+
+    if (!gvg)
+        return NULL;
+
+    if (!number)
+        return NULL;
+
+    ajListPeekNumber(gvg->Alleles, number, (void **) &allele);
+
+    return (const AjPStr) allele;
+}
 
 
 
@@ -1216,12 +1466,12 @@ size_t ensGvgenotypeCalculateMemsize(const EnsPGvgenotype gvg)
 
 /* @section fetch *********************************************************
 **
-** Functions for fetching values of an
+** Functions for fetching information from an
 ** Ensembl Genetic Variation Genotype object.
 **
 ** @fdata [EnsPGvgenotype]
 **
-** @nam3rule Fetch Fetch Ensembl Genetic Variation Genotype values
+** @nam3rule Fetch Fetch Ensembl Genetic Variation Genotype information
 ** @nam4rule Allele Fetch an allele
 ** @nam5rule Number Fetch the allele with number
 ** @nam5rule String Fetch the allel string
@@ -1243,6 +1493,7 @@ size_t ensGvgenotypeCalculateMemsize(const EnsPGvgenotype gvg)
 **
 ** Fetch the allele with number of an Ensembl Genetic Variation Genotype.
 **
+** @cc Bio::EnsEMBL::Variation::Genotype::allele
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [r] number [ajuint] Number
 ** @param [u] Pallele [AjPStr*] Allele
@@ -1339,7 +1590,7 @@ AjBool ensGvgenotypeFetchAlleleString(const EnsPGvgenotype gvg,
 **
 ** @cc Bio::EnsEMBL::Variation::GenotypeCode
 ** @cc CVS Revision: 1.2
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -1574,14 +1825,7 @@ void ensGvgenotypecodeDel(EnsPGvgenotypecode *Pgvgc)
     }
 #endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
 
-    if (!*Pgvgc)
-        return;
-
-    pthis = *Pgvgc;
-
-    pthis->Use--;
-
-    if (pthis->Use)
+    if (!(pthis = *Pgvgc) || --pthis->Use)
     {
         *Pgvgc = NULL;
 
@@ -1590,9 +1834,7 @@ void ensGvgenotypecodeDel(EnsPGvgenotypecode *Pgvgc)
 
     ajListstrFreeData(&pthis->Alleles);
 
-    AJFREE(pthis);
-
-    *Pgvgc = NULL;
+    ajMemFree((void **) Pgvgc);
 
     return;
 }
@@ -1921,12 +2163,13 @@ AjBool ensGvgenotypecodeTrace(const EnsPGvgenotypecode gvgc, ajuint level)
 
 /* @section calculate *********************************************************
 **
-** Functions for calculating values of an
+** Functions for calculating information from an
 ** Ensembl Genetic Variation Genotype Code object.
 **
 ** @fdata [EnsPGvgenotypecode]
 **
-** @nam3rule Calculate Calculate Ensembl Genetic Variation Genotype Code values
+** @nam3rule Calculate
+** Calculate Ensembl Genetic Variation Genotype Code information
 ** @nam4rule Memsize Calculate the memory size in bytes
 **
 ** @argrule * gvgc [const EnsPGvgenotypecode]
@@ -1999,7 +2242,7 @@ size_t ensGvgenotypecodeCalculateMemsize(const EnsPGvgenotypecode gvgc)
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::GenotypeCodeAdaptor
 ** @cc CVS Revision: 1.3
-** @cc CVS Tag: branch-ensembl-66
+** @cc CVS Tag: branch-ensembl-68
 **
 ******************************************************************************/
 
@@ -2104,7 +2347,7 @@ static AjBool gvgenotypecodeadaptorFetchAllbyStatement(
         {
             /* Deal with haplotypes of the previous object. */
 
-            listGvhaplotypeSortHaplotypeidentifierAscending(gvhs);
+            listGvhaplotypeSortIdentifierAscending(gvhs);
 
             i = 0U;
 
@@ -2141,7 +2384,7 @@ static AjBool gvgenotypecodeadaptorFetchAllbyStatement(
 
     /* Add allele strings to the last object. */
 
-    listGvhaplotypeSortHaplotypeidentifierAscending(gvhs);
+    listGvhaplotypeSortIdentifierAscending(gvhs);
 
     i = 0U;
 
@@ -2229,13 +2472,14 @@ EnsPGvgenotypecodeadaptor ensGvgenotypecodeadaptorNew(
     if (!gvdba)
         return NULL;
 
-    return ensGvbaseadaptorNew(gvdba,
-                               gvgenotypecodeadaptorKTables,
-                               gvgenotypecodeadaptorKColumns,
-                               (const EnsPBaseadaptorLeftjoin) NULL,
-                               gvgenotypecodeadaptorKDefaultcondition,
-                               (const char *) NULL,
-                               &gvgenotypecodeadaptorFetchAllbyStatement);
+    return ensGvbaseadaptorNew(
+        gvdba,
+        gvgenotypecodeadaptorKTablenames,
+        gvgenotypecodeadaptorKColumnnames,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        gvgenotypecodeadaptorKDefaultcondition,
+        (const char *) NULL,
+        &gvgenotypecodeadaptorFetchAllbyStatement);
 }
 
 
@@ -2288,7 +2532,107 @@ void ensGvgenotypecodeadaptorDel(
 {
     ensGvbaseadaptorDel(Pgvgca);
 
-	return;
+    return;
+}
+
+
+
+
+/* @section member retrieval **************************************************
+**
+** Functions for returning members of an
+** Ensembl Genetic Variation Genotype Code Adaptor object.
+**
+** @fdata [EnsPGvgenotypecodeadaptor]
+**
+** @nam3rule Get
+** Return Ensembl Genetic Variation Genotype Code Adaptor attribute(s)
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Gvbaseadaptor Return the Ensembl Genetic Variation Base Adaptor
+**
+** @argrule * gvgca [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor
+**
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+** @valrule Gvbaseadaptor [EnsPGvbaseadaptor]
+** Ensembl Genetic Variation Base Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensGvgenotypecodeadaptorGetBaseadaptor *******************************
+**
+** Get the Ensembl Base Adaptor member of an
+** Ensembl Genetic Variation Genotype Code Adaptor.
+**
+** @param [u] gvgca [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensGvgenotypecodeadaptorGetBaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca)
+{
+    return ensGvbaseadaptorGetBaseadaptor(
+        ensGvgenotypecodeadaptorGetGvbaseadaptor(gvgca));
+}
+
+
+
+
+/* @func ensGvgenotypecodeadaptorGetDatabaseadaptor ***************************
+**
+** Get the Ensembl Database Adaptor member of an
+** Ensembl Genetic Variation Genotype Code Adaptor.
+**
+** @param [u] gvgca [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensGvgenotypecodeadaptorGetDatabaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca)
+{
+    return ensGvbaseadaptorGetDatabaseadaptor(
+        ensGvgenotypecodeadaptorGetGvbaseadaptor(gvgca));
+}
+
+
+
+
+/* @func ensGvgenotypecodeadaptorGetGvbaseadaptor *****************************
+**
+** Get the Ensembl Genetic Variation Base Adaptor member of an
+** Ensembl Genetic Variation Genotype Code Adaptor.
+**
+** @param [u] gvgca [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor
+**
+** @return [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor or NULL
+**
+** @release 6.5.1
+** @@
+******************************************************************************/
+
+EnsPGvbaseadaptor ensGvgenotypecodeadaptorGetGvbaseadaptor(
+    EnsPGvgenotypecodeadaptor gvgca)
+{
+    return gvgca;
 }
 
 
@@ -2359,18 +2703,8 @@ AjBool ensGvgenotypecodeadaptorFetchAllbyIdentifiers(
     EnsPGvgenotypecodeadaptor gvgca,
     AjPTable gvgcs)
 {
-    EnsPBaseadaptor ba = NULL;
-
-    if (!gvgca)
-        return ajFalse;
-
-    if (!gvgcs)
-        return ajFalse;
-
-    ba = ensGvbaseadaptorGetBaseadaptor(gvgca);
-
     return ensBaseadaptorFetchAllbyIdentifiers(
-        ba,
+        ensGvgenotypecodeadaptorGetBaseadaptor(gvgca),
         (EnsPSlice) NULL,
         (ajuint (*)(const void *)) &ensGvgenotypecodeGetIdentifier,
         gvgcs);

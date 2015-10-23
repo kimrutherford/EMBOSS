@@ -158,9 +158,9 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 	    continue;
 	token = ajStrTokenNewC(line," \n\t\r");
 	key   = ajStrNew();
-	ajStrTokenNextParseC(&token," \n\t\r",&key);
+	ajStrTokenNextParseC(token," \n\t\r",&key);
 	valstr = ajStrNew();
-	ajStrTokenNextParseC(&token," \n\t\r",&valstr);
+	ajStrTokenNextParseC(token," \n\t\r",&valstr);
 	ajTablePut(table,(void *)key,(void *) valstr);
 	ajStrTokenDel(&token);
     }
