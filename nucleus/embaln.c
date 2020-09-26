@@ -406,6 +406,10 @@ float embAlignPathCalcWithEndGapPenalties(const char *a, const char *b,
             if(xpos==lenb)
             {
         	testog = m[++cursorp] - endgapopen;
+            	
+            if (testog<ix[cursorp]-endgapopen)
+                testog = ix[cursorp]-endgapopen;
+            	
         	testeg = iy[cursorp] - endgapextend;
             }
             else
@@ -430,6 +434,10 @@ float embAlignPathCalcWithEndGapPenalties(const char *a, const char *b,
             if(ypos==lena)
             {
         	testog = m[--cursorp] - endgapopen;
+            	
+            if (testog<iy[cursorp]-endgapopen)
+                testog = iy[cursorp]-endgapopen;
+            	
         	testeg = ix[cursorp] - endgapextend;
             }
             else
