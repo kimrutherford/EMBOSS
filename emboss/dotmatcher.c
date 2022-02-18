@@ -144,8 +144,8 @@ int main(int argc, char **argv)
 
     embInit("dotmatcher", argc, argv);
     
-    seq2       = ajAcdGetSeq("asequence");
-    seq        = ajAcdGetSeq("bsequence");
+    seq       = ajAcdGetSeq("asequence");
+    seq2        = ajAcdGetSeq("bsequence");
     stretch    = ajAcdGetToggle("stretch");
     graph      = ajAcdGetGraph("graph");
     xygraph    = ajAcdGetGraphxy("xygraph");
